@@ -7,8 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPayment, Payment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
@@ -40,7 +38,7 @@ import {
   dealerPaymentSelectedDealer,
   dealerPaymentStatus
 } from "../../../../store/selectors/dealer-workflows-status.selectors";
-import {Dealer} from "../../../dealers/dealer/dealer.model";
+import { Dealer, IDealer } from '../../../dealers/dealer/dealer.model';
 import {
   paymentToDealerCompleted,
   paymentToDealerReset
@@ -58,6 +56,7 @@ import {
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {InvoiceService} from "../../invoice/service/invoice.service";
 import {NGXLogger} from "ngx-logger";
+import { DealerService } from '../../../dealers/dealer/service/dealer.service';
 
 @Component({
   selector: 'jhi-payment-update',

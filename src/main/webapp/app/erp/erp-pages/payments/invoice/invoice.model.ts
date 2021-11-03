@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
+import { IPaymentLabel } from '../../payment-label/payment-label.model';
 
 export interface IInvoice {
   id?: number;

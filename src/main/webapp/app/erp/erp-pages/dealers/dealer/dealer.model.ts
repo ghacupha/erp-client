@@ -1,6 +1,6 @@
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { IPaymentRequisition } from 'app/entities/payments/payment-requisition/payment-requisition.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../payment-label/payment-label.model';
+import { IPaymentRequisition } from '../../payments/payment-requisition/payment-requisition.model';
 
 export interface IDealer {
   id?: number;

@@ -7,12 +7,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
 import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
+import { DealerService } from '../../../dealers/dealer/service/dealer.service';
+import { IDealer } from '../../../dealers/dealer/dealer.model';
 
 @Component({
   selector: 'jhi-payment-requisition-update',
