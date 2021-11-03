@@ -57,6 +57,9 @@ import {
 import {InvoiceService} from "../../invoice/service/invoice.service";
 import {NGXLogger} from "ngx-logger";
 import { DealerService } from '../../../dealers/dealer/service/dealer.service';
+import { ISignedPayment, SignedPayment } from '../../../signed-payment/signed-payment.model';
+import * as dayjs from 'dayjs';
+import { SignedPaymentService } from '../../../signed-payment/service/signed-payment.service';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -120,6 +123,7 @@ export class PaymentUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     protected store: Store<State>,
     protected invoiceService: InvoiceService,
+    protected signedPaymentService: SignedPaymentService,
     protected router: Router,
     protected log: NGXLogger
   ) {
@@ -205,18 +209,44 @@ export class PaymentUpdateComponent implements OnInit {
   onInvoiceDealerUpdateSuccess(result: HttpResponse<IPayment>): void {
     this.isSaving = false;
 
+    const payment: IPayment = {
+      ...result.body
+    };
+
     if (!this.weArePayingAnInvoiceDealer) {
       this.store.dispatch(paymentSaveButtonClicked());
     }
 
     this.selectedInvoice = {
       ...this.selectedInvoice,
-      paymentId: result.body?.id,
+      paymentId: payment.id,
     };
 
     this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
       this.router.navigate(['/erp/invoice', invoice.body?.id, 'view']);
+       this.signedPaymentService.create(this.createSignedPayment(payment, this.invoiceDealer)).subscribe();
     });
+  }
+
+  createSignedPayment(payment: IPayment, invoiceDealer: IDealer): ISignedPayment {
+    let signedPayment: ISignedPayment = {
+      ... new SignedPayment(),
+    };
+
+    signedPayment = {
+      ...signedPayment,
+      transactionNumber: payment.paymentNumber ?? '',
+      transactionDate: payment.paymentDate ?? dayjs(),
+      transactionCurrency: payment.settlementCurrency,
+      transactionAmount: payment.paymentAmount ?? 0,
+      dealerName: invoiceDealer.dealerName,
+      paymentLabels: payment.paymentLabels,
+      paymentCategory: payment.paymentCategory,
+      placeholders: payment.placeholders,
+      signedPaymentGroup: payment.paymentGroup
+    };
+
+    return signedPayment;
   }
 
   edit(): void {
