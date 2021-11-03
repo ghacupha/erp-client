@@ -16,8 +16,8 @@ import {PlaceholderService} from 'app/entities/erpService/placeholder/service/pl
 
 import {PaymentUpdateComponent} from './payment-update.component';
 import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
-import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
-import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
+// import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
+// import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
 import {IPaymentCategory} from '../../payment-category/payment-category.model';
 import {initialState} from '../../../../store/global-store.definition';
@@ -32,8 +32,8 @@ describe('Component Tests', () => {
     let paymentService: PaymentService;
     let paymentLabelService: PaymentLabelService;
     let paymentCategoryService: PaymentCategoryService;
-    let taxRuleService: TaxRuleService;
-    let paymentCalculationService: PaymentCalculationService;
+    // let taxRuleService: TaxRuleService;
+    // let paymentCalculationService: PaymentCalculationService;
     let placeholderService: PlaceholderService;
     let store: MockStore;
 

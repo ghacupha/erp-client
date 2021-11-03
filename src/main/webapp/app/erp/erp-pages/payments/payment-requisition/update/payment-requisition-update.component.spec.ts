@@ -11,13 +11,13 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PaymentRequisitionUpdateComponent } from './payment-requisition-update.component';
 import {IPaymentLabel} from '../../../payment-label/payment-label.model';
+import { DealerService } from '../../../dealers/dealer/service/dealer.service';
+import { IDealer } from '../../../dealers/dealer/dealer.model';
 
 describe('Component Tests', () => {
   describe('PaymentRequisition Management Update Component', () => {
