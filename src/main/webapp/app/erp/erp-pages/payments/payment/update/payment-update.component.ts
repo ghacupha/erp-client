@@ -197,27 +197,25 @@ export class PaymentUpdateComponent implements OnInit {
 
   subscribeToInvoiceDealerUpdate(result: Observable<HttpResponse<IPayment>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onInvoiceDealerUpdateSuccess(result),
+      (response: HttpResponse<IPayment>) => this.onInvoiceDealerUpdateSuccess(response),
       () => this.onSaveError()
     );
   }
 
-  onInvoiceDealerUpdateSuccess(result: Observable<HttpResponse<IPayment>>): void {
+  onInvoiceDealerUpdateSuccess(result: HttpResponse<IPayment>): void {
     this.isSaving = false;
-    result.subscribe(res => {
 
-      if (!this.weArePayingAnInvoiceDealer) {
-        this.store.dispatch(paymentSaveButtonClicked());
-      }
+    if (!this.weArePayingAnInvoiceDealer) {
+      this.store.dispatch(paymentSaveButtonClicked());
+    }
 
-      this.selectedInvoice = {
-        ...this.selectedInvoice,
-        paymentId: res.body?.id,
-      };
+    this.selectedInvoice = {
+      ...this.selectedInvoice,
+      paymentId: result.body?.id,
+    };
 
-      this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
-        this.router.navigate(['/erp/invoice', invoice.body?.id, 'view']);
-      });
+    this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
+      this.router.navigate(['/erp/invoice', invoice.body?.id, 'view']);
     });
   }
 
