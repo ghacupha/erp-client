@@ -73,7 +73,6 @@ const _dealerWorkflowStateReducer= createReducer(
     ...state,
     dealerWorkflowState: {
       ...state.dealerWorkflowState,
-      selectedDealer: {},
       paymentDealerCategory: {},
       weArePayingADealer: false
     }

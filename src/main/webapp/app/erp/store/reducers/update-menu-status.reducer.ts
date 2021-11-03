@@ -23,8 +23,12 @@ import {
   newPaymentButtonClicked,
   paymentCopyButtonClicked,
   paymentCopyInitiated,
-  paymentEditInitiated, paymentSaveButtonClicked,
-  paymentUpdateButtonClicked, paymentUpdateCancelButtonClicked, paymentUpdateConcluded, paymentUpdateErrorHasOccurred
+  paymentEditInitiated,
+  paymentSaveButtonClicked,
+  paymentUpdateButtonClicked,
+  paymentUpdateCancelButtonClicked,
+  paymentUpdateConcluded,
+  paymentUpdateErrorHasOccurred
 } from "../actions/update-menu-status.actions";
 
 export const paymentUpdateFormStateSelector = 'paymentUpdateForm';

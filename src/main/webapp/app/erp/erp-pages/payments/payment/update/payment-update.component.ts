@@ -224,11 +224,11 @@ export class PaymentUpdateComponent implements OnInit {
 
     this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
       this.router.navigate(['/erp/invoice', invoice.body?.id, 'view']);
-       this.signedPaymentService.create(this.createSignedPayment(payment, this.invoiceDealer)).subscribe();
+       this.createSignedPayment(payment, this.invoiceDealer).subscribe();
     });
   }
 
-  createSignedPayment(payment: IPayment, invoiceDealer: IDealer): ISignedPayment {
+  createSignedPayment(payment: IPayment, invoiceDealer: IDealer): Observable<HttpResponse<ISignedPayment>> {
     let signedPayment: ISignedPayment = {
       ... new SignedPayment(),
     };
@@ -246,7 +246,7 @@ export class PaymentUpdateComponent implements OnInit {
       signedPaymentGroup: payment.paymentGroup
     };
 
-    return signedPayment;
+    return this.signedPaymentService.create(signedPayment)
   }
 
   edit(): void {
@@ -439,14 +439,14 @@ export class PaymentUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      (response: HttpResponse<IPayment>) => this.onSaveSuccess(response, this.selectedDealer),
       () => this.onSaveError()
     );
   }
 
   protected subscribeToCopyResponse(result: Observable<HttpResponse<IPayment>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      (response: HttpResponse<IPayment>) => this.onSaveSuccess(response, this.selectedDealer),
       () => this.onSaveError()
     );
   }
@@ -457,8 +457,9 @@ export class PaymentUpdateComponent implements OnInit {
     this.previousState();
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(response: HttpResponse<IPayment>, invoiceDealer: IDealer): void {
     this.isSaving = false;
+    this.createSignedPayment({...response.body}, invoiceDealer).subscribe();
     this.previousState();
   }
 
