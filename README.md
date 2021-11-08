@@ -1,5 +1,7 @@
 # erpSystem
 
+Current work-in-progress app for ERP system, built to reduce build times while resolving the liquibase issues coming from the configuration of the spring-batch workflows which power multiple data loaders. This was necessary as the build times on maven were unbearable. The challenge however is that once this app is containerised, it then loses the ability to connect to the ERP-System backend; a phenomenon most likely caused by the nginx server configuration (or misconfiguration). A several ongoing project runs the same implementation but built on the stable jhipster version 6.10.5
+
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
 ## Development
