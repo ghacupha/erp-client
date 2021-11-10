@@ -9,8 +9,8 @@ export interface IInvoice {
   invoiceDate?: dayjs.Dayjs | null;
   invoiceAmount?: number | null;
   currency?: CurrencyTypes;
-  paymentId?: number | null;
-  dealerId?: number | null;
+  paymentReference?: string | null;
+  dealerName?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
@@ -24,8 +24,8 @@ export class Invoice implements IInvoice {
     public invoiceDate?: dayjs.Dayjs | null,
     public invoiceAmount?: number | null,
     public currency?: CurrencyTypes,
-    public paymentId?: number | null,
-    public dealerId?: number | null,
+    public paymentReference?: string | null,
+    public dealerName?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,

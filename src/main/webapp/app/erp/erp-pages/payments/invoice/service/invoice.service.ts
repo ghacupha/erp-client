@@ -60,7 +60,7 @@ export class InvoiceService {
     // Update the payment in the invoice
     acquiredInvoice = {
       ...acquiredInvoice,
-      paymentId: this.selectedPayment.id,
+      paymentReference: `${this.selectedPayment.id};${this.selectedPayment.paymentDate}`,
     }
 
     this.update(acquiredInvoice).subscribe(res => {

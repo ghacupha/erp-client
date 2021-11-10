@@ -55,8 +55,8 @@
         <th scope="col" jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
         <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
         <th scope="col" jhiSortBy="currency"><span>Currency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-        <th scope="col" jhiSortBy="paymentId"><span>Payment Id</span> <fa-icon icon="sort"></fa-icon></th>
-        <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="paymentReference"><span>Payment Ref</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon icon="sort"></fa-icon></th>
         <th scope="col"></th>
       </tr>
       </thead>
@@ -70,10 +70,10 @@
         <td>{{ invoice.invoiceAmount }}</td>
         <td>{{ invoice.currency }}</td>
         <td>
-          <a [routerLink]="['/erp/payment', invoice.paymentId, 'view']">{{ invoice.paymentId }}</a>
+          {{ invoice.paymentReference }}
         </td>
         <td>
-          <a [routerLink]="['/erp/dealer', invoice.dealerId, 'view']">{{ invoice.dealerId }}</a>
+          {{ invoice.dealerName }}
         </td>
         <td class="text-right">
           <div class="btn-group">

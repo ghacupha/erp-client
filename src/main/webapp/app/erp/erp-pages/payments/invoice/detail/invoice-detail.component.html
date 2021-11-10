@@ -30,24 +30,16 @@
         <dd>
           <span>{{ invoice.currency }}</span>
         </dd>
-        <!--<dt><span>Conversion Rate</span></dt>-->
-        <!--<dd>
-          <span>{{ invoice.conversionRate }}</span>
-        </dd>-->
         <dt><span>Payment Id</span></dt>
         <dd>
           <span>
-            <a [routerLink]="['/erp/payment', invoice?.paymentId, 'view']">
-             {{ invoice.paymentId }}
-            </a>
+             {{ invoice.paymentReference }}
           </span>
         </dd>
         <dt><span>Dealer Id</span></dt>
         <dd>
           <span>
-            <a [routerLink]="['/erp/dealer', invoice?.dealerId, 'view']">
-             {{ invoice.dealerId }}
-            </a>
+             {{ invoice.dealerName }}
           </span>
         </dd>
         <dt><span>Payment Label</span></dt>

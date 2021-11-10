@@ -35,8 +35,8 @@ export class InvoiceUpdateComponent implements OnInit {
     invoiceAmount: [],
     currency: [null, [Validators.required]],
     conversionRate: [null, [Validators.required, Validators.min(1.0)]],
-    paymentId: [],
-    dealerId: [],
+    paymentReference: [],
+    dealerName: [],
     paymentLabels: [],
     placeholders: [],
   });
@@ -161,8 +161,8 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceAmount: invoice.invoiceAmount,
       currency: invoice.currency,
       // conversionRate: invoice.conversionRate,
-      paymentId: invoice.paymentId,
-      dealerId: invoice.dealerId,
+      paymentReference: invoice.paymentReference,
+      dealerName: invoice.dealerName,
       paymentLabels: invoice.paymentLabels,
       placeholders: invoice.placeholders,
     });
@@ -208,8 +208,8 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       currency: this.editForm.get(['currency'])!.value,
       // conversionRate: this.editForm.get(['conversionRate'])!.value,
-      paymentId: this.editForm.get(['paymentId'])!.value,
-      dealerId: this.editForm.get(['dealerId'])!.value,
+      paymentReference: this.editForm.get(['paymentReference'])!.value,
+      dealerName: this.editForm.get(['dealerName'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
@@ -222,8 +222,8 @@ export class InvoiceUpdateComponent implements OnInit {
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       currency: this.editForm.get(['currency'])!.value,
       // conversionRate: this.editForm.get(['conversionRate'])!.value,
-      paymentId: this.editForm.get(['paymentId'])!.value,
-      dealerId: this.editForm.get(['dealerId'])!.value,
+      paymentReference: this.editForm.get(['paymentReference'])!.value,
+      dealerName: this.editForm.get(['dealerName'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

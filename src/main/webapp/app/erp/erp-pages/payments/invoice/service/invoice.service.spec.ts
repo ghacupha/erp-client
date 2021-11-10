@@ -38,8 +38,8 @@ describe('Service Tests', () => {
         invoiceDate: currentDate,
         invoiceAmount: 0,
         currency: CurrencyTypes.KES,
-        paymentId: 0,
-        dealerId: 0,
+        paymentReference: 'AAAAAAA',
+        dealerName: 'AAAAAAA',
         fileUploadToken: 'AAAAAAA',
         compilationToken: 'AAAAAAA',
       };

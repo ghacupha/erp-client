@@ -27,7 +27,7 @@ export class DealerInvoiceRoutingResolveService implements Resolve<IInvoice>  {
     invoiceDealer.subscribe(dealer => {
       invoice = {
         ...invoice,
-        dealerId: dealer.id,
+        dealerName: dealer.dealerName,
         paymentLabels: dealer.paymentLabels,
         placeholders: dealer.placeholders,
       }
