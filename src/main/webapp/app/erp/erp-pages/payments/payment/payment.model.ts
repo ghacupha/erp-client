@@ -12,7 +12,7 @@ export interface IPayment {
   paymentAmount?: number | null;
   description?: string | null;
   settlementCurrency?: CurrencyTypes;
-  dealerId?: number | null;
+  dealerName?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
@@ -30,7 +30,7 @@ export class Payment implements IPayment {
     public paymentAmount?: number | null,
     public description?: string | null,
     public settlementCurrency?: CurrencyTypes,
-    public dealerId?: number | null,
+    public dealerName?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,

@@ -52,7 +52,7 @@ export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {
     dealer.subscribe(dealr => {
       payment = {
         ...payment,
-        dealerId: dealr.id,
+        dealerName: dealr.dealerName,
         paymentLabels: dealr.paymentLabels,
         placeholders: dealr.placeholders,
       };

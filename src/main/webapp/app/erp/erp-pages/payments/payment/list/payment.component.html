@@ -78,7 +78,7 @@
           <span>Settlement Currency</span>
           <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
         </th>
-        <th scope="col" jhiSortBy="dealerId"><span>Dealer Id</span>
+        <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span>
           <fa-icon icon="sort"></fa-icon>
         </th>
         <!--<th scope="col" jhiSortBy="fileUploadToken">
@@ -112,9 +112,7 @@
         <td>{{ payment.description }}</td>
         <td>{{ payment.settlementCurrency }}</td>
         <td>
-          <a [routerLink]="['/erp/dealer', payment.dealerId, 'view']">
-           {{ payment.dealerId }}
-          </a>
+           {{ payment.dealerName }}
         </td>
         <!--<td>{{ payment.fileUploadToken }}</td>
         <td>{{ payment.compilationToken }}</td>-->

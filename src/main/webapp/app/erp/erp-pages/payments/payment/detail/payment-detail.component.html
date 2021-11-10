@@ -46,12 +46,10 @@
         <dd>
           <span>{{ payment.settlementCurrency }}</span>
         </dd>
-        <dt><span>Dealer Id</span></dt>
+        <dt><span>Dealer Name</span></dt>
         <dd>
           <span>
-            <a [routerLink]="['/erp/dealer', payment.dealerId, 'view']">
-             {{ payment.dealerId }}
-            </a>
+             {{ payment.dealerName }}
           </span>
         </dd>
         <dt><span>File Upload Token</span></dt>
