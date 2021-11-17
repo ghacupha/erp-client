@@ -12,6 +12,63 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_receptionDate">Reception Date</label>
+          <div class="input-group">
+            <input
+              id="field_receptionDate"
+              data-cy="receptionDate"
+              type="text"
+              class="form-control"
+              name="receptionDate"
+              ngbDatepicker
+              #receptionDateDp="ngbDatepicker"
+              formControlName="receptionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="receptionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="dealerName"
+            id="field_dealerName"
+            data-cy="dealerName"
+            formControlName="dealerName"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_briefDescription">Brief Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="briefDescription"
+            id="field_briefDescription"
+            data-cy="briefDescription"
+            formControlName="briefDescription"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requisitionNumber">Requisition Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="requisitionNumber"
+            id="field_requisitionNumber"
+            data-cy="requisitionNumber"
+            formControlName="requisitionNumber"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_invoicedAmount">Invoiced Amount</label>
           <input
             type="number"
@@ -36,14 +93,50 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_vatableAmount">Vatable Amount</label>
+          <label class="form-control-label" for="field_taxableAmount">Taxable Amount</label>
           <input
             type="number"
             class="form-control"
-            name="vatableAmount"
-            id="field_vatableAmount"
-            data-cy="vatableAmount"
-            formControlName="vatableAmount"
+            name="taxableAmount"
+            id="field_taxableAmount"
+            data-cy="taxableAmount"
+            formControlName="taxableAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_requisitionProcessed">Requisition Processed</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="requisitionProcessed"
+            id="field_requisitionProcessed"
+            data-cy="requisitionProcessed"
+            formControlName="requisitionProcessed"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
           />
         </div>
 
@@ -62,19 +155,6 @@
               *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
             >
               {{ paymentLabelOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.id }}
             </option>
           </select>
         </div>

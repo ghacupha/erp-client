@@ -150,6 +150,50 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_calculationFile">Calculation File</label>
+          <div>
+            <div *ngIf="editForm.get('calculationFile')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('calculationFile')!.value, editForm.get('calculationFileContentType')!.value)"
+              >open</a
+              ><br />
+              <span class="pull-left"
+              >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ calculationFile: null }); editForm.patchValue({ calculationFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_calculationFile"
+              data-cy="calculationFile"
+              (change)="setFileData($event, 'calculationFile', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="calculationFile"
+            id="field_calculationFile"
+            data-cy="calculationFile"
+            formControlName="calculationFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="calculationFileContentType"
+            id="field_calculationFileContentType"
+            formControlName="calculationFileContentType"
+          />
+        </div>
+
         <!--<div class="form-group">
           <label class="form-control-label" for="field_conversionRate">Conversion Rate</label>
           <input
@@ -210,6 +254,18 @@
         <div class="form-group">
           <label class="form-control-label" for="field_dealerName">Dealer Name</label>
           <input type="text" class="form-control" name="dealerName" id="field_dealerName" data-cy="dealerName" formControlName="dealerName" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseOrderNumber">Purchase Order Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="purchaseOrderNumber"
+            id="field_purchaseOrderNumber"
+            data-cy="purchaseOrderNumber"
+            formControlName="purchaseOrderNumber"
+          />
         </div>
 
         <div class="form-group">

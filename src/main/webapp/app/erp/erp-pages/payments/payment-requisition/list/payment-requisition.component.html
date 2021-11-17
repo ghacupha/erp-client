@@ -49,28 +49,44 @@
   <div class="table-responsive" id="entities" *ngIf="paymentRequisitions && paymentRequisitions.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="invoicedAmount"><span>Invoiced Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="vatableAmount"><span>Vatable Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.id"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="receptionDate"><span>Reception Date</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="briefDescription">
+          <span>Brief Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="requisitionNumber">
+          <span>Requisition Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="invoicedAmount"><span>Invoiced Amount</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="disbursementCost"><span>Disbursement Cost</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="taxableAmount"><span>Taxable Amount</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="requisitionProcessed"><span>Requisition Processed</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="fileUploadToken">
+          <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="compilationToken">
+          <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col"></th>
+      </tr>
       </thead>
       <tbody>
         <tr *ngFor="let paymentRequisition of paymentRequisitions; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/erp/payment-requisition', paymentRequisition.id, 'view']">{{ paymentRequisition.id }}</a>
           </td>
+          <td>{{ paymentRequisition.receptionDate | formatMediumDate }}</td>
+          <td>{{ paymentRequisition.dealerName }}</td>
+          <td>{{ paymentRequisition.briefDescription }}</td>
+          <td>{{ paymentRequisition.requisitionNumber }}</td>
           <td>{{ paymentRequisition.invoicedAmount }}</td>
           <td>{{ paymentRequisition.disbursementCost }}</td>
-          <td>{{ paymentRequisition.vatableAmount }}</td>
-          <td>
-            <div *ngIf="paymentRequisition.dealer">
-              <a [routerLink]="['/erp/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>
-            </div>
-          </td>
+          <td>{{ paymentRequisition.taxableAmount }}</td>
+          <td>{{ paymentRequisition.requisitionProcessed }}</td>
+          <td>{{ paymentRequisition.fileUploadToken }}</td>
+          <td>{{ paymentRequisition.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

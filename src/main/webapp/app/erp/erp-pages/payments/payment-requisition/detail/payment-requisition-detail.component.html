@@ -14,6 +14,22 @@
         <dd>
           <span>{{ paymentRequisition.id }}</span>
         </dd>
+        <dt><span>Reception Date</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.receptionDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Dealer Name</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.dealerName }}</span>
+        </dd>
+        <dt><span>Brief Description</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.briefDescription }}</span>
+        </dd>
+        <dt><span>Requisition Number</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.requisitionNumber }}</span>
+        </dd>
         <dt><span>Invoiced Amount</span></dt>
         <dd>
           <span>{{ paymentRequisition.invoicedAmount }}</span>
@@ -22,10 +38,21 @@
         <dd>
           <span>{{ paymentRequisition.disbursementCost }}</span>
         </dd>
-        <dt><span>Vatable Amount</span></dt>
+        <dt><span>Taxable Amount</span></dt>
         <dd>
-          <span>{{ paymentRequisition.vatableAmount }}</span>
+          <span>{{ paymentRequisition.taxableAmount }}</span>
         </dd>
+        <dt><span>Requisition Processed</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.requisitionProcessed }}</span>
+        </dd>
+        <dt><span>File Upload Token</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.fileUploadToken }}</span>
+        </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ paymentRequisition.compilationToken }}</span>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentRequisition.paymentLabels; let last = last">
@@ -33,12 +60,12 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Dealer</span></dt>
+        <!--<dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="paymentRequisition.dealer">
             <a [routerLink]="['/erp/dealer', paymentRequisition.dealer?.id, 'view']">{{ paymentRequisition.dealer?.id }}</a>
           </div>
-        </dd>
+        </dd>-->
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of paymentRequisition.placeholders; let last = last">

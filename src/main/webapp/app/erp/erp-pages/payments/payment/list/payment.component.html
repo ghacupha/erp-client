@@ -81,6 +81,9 @@
         <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span>
           <fa-icon icon="sort"></fa-icon>
         </th>
+        <th scope="col" jhiSortBy="purchaseOrderNumber"><span>Order Number</span>
+          <fa-icon icon="sort"></fa-icon>
+        </th>
         <!--<th scope="col" jhiSortBy="fileUploadToken">
           <span>File Upload Token</span>
           <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
@@ -111,9 +114,8 @@
         <td>{{ payment.paymentAmount }}</td>
         <td>{{ payment.description }}</td>
         <td>{{ payment.settlementCurrency }}</td>
-        <td>
-           {{ payment.dealerName }}
-        </td>
+        <td>{{ payment.dealerName }}</td>
+        <td>{{ payment.purchaseOrderNumber }}</td>
         <!--<td>{{ payment.fileUploadToken }}</td>
         <td>{{ payment.compilationToken }}</td>-->
         <td>

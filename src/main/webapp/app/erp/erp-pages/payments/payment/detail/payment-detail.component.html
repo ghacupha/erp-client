@@ -1,7 +1,7 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="payment">
-      <h2 data-cy="paymentDetailsHeading"><span>Payment</span></h2>
+<div class='row justify-content-center'>
+  <div class='col-8'>
+    <div *ngIf='payment'>
+      <h2 data-cy='paymentDetailsHeading'><span>Payment</span></h2>
 
       <hr />
 
@@ -9,7 +9,7 @@
 
       <jhi-alert></jhi-alert>
 
-      <dl class="row-md jh-entity-details">
+      <dl class='row-md jh-entity-details'>
         <dt><span>ID</span></dt>
         <dd>
           <span>{{ payment.id }}</span>
@@ -26,14 +26,6 @@
         <dd>
           <span>{{ payment.invoicedAmount }}</span>
         </dd>
-        <!--<dt><span>Disbursement Cost</span></dt>
-        <dd>
-          <span>{{ payment.disbursementCost }}</span>
-        </dd>
-        <dt><span>Vatable Amount</span></dt>
-        <dd>
-          <span>{{ payment.vatableAmount }}</span>
-        </dd>-->
         <dt><span>Payment Amount</span></dt>
         <dd>
           <span>{{ payment.paymentAmount }}</span>
@@ -46,11 +38,20 @@
         <dd>
           <span>{{ payment.settlementCurrency }}</span>
         </dd>
+        <dt><span>Calculation File</span></dt>
+        <dd>
+          <div *ngIf='payment.calculationFile'>
+            <a (click)='openFile(payment.calculationFile, payment.calculationFileContentType)'>open</a>
+            {{ payment.calculationFileContentType }}, {{ byteSize(payment.calculationFile) }}
+          </div>
+        </dd>
         <dt><span>Dealer Name</span></dt>
         <dd>
-          <span>
-             {{ payment.dealerName }}
-          </span>
+          <span>{{ payment.dealerName }}</span>
+        </dd>
+        <dt><span>Purchase Order Number</span></dt>
+        <dd>
+          <span>{{ payment.purchaseOrderNumber }}</span>
         </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>
@@ -62,38 +63,40 @@
         </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
-          <span *ngFor="let paymentLabel of payment.paymentLabels; let last = last">
+
+          <span *ngFor='let paymentLabel of payment.paymentLabels; let last = last'>
             <a [routerLink]="['/erp/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
-          <div *ngIf="payment.paymentCategory">
-            <a [routerLink]="['/erp/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
+          <div *ngIf='payment.paymentCategory'>
+            <a
+              [routerLink]="['/erp/payment-category', payment.paymentCategory?.id, 'view']">{{ payment.paymentCategory?.categoryName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
-          <span *ngFor="let placeholder of payment.placeholders; let last = last">
+          <span *ngFor='let placeholder of payment.placeholders; let last = last'>
             <a [routerLink]="['/erp/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Group</span></dt>
         <dd>
-          <div *ngIf="payment.paymentGroup">
+          <div *ngIf='payment.paymentGroup'>
             <a [routerLink]="['/erp/payment', payment.paymentGroup?.id, 'view']">{{ payment.paymentGroup?.id }}</a>
           </div>
         </dd>
       </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      <button type='submit' (click)='previousState()' class='btn btn-info' data-cy='entityDetailsBackButton'>
+        <fa-icon icon='arrow-left'></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/erp/payment', payment.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      <button type='button' [routerLink]="['/erp/payment', payment.id, 'edit']" class='btn btn-primary'>
+        <fa-icon icon='pencil-alt'></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

@@ -27,11 +27,17 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
+    receptionDate: [],
+    dealerName: [],
+    briefDescription: [],
+    requisitionNumber: [],
     invoicedAmount: [],
     disbursementCost: [],
-    vatableAmount: [],
+    taxableAmount: [],
+    requisitionProcessed: [],
+    fileUploadToken: [],
+    compilationToken: [],
     paymentLabels: [],
-    dealer: [],
     placeholders: [],
   });
 
@@ -122,21 +128,23 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
   protected updateForm(paymentRequisition: IPaymentRequisition): void {
     this.editForm.patchValue({
       id: paymentRequisition.id,
+      receptionDate: paymentRequisition.receptionDate,
+      dealerName: paymentRequisition.dealerName,
+      briefDescription: paymentRequisition.briefDescription,
+      requisitionNumber: paymentRequisition.requisitionNumber,
       invoicedAmount: paymentRequisition.invoicedAmount,
       disbursementCost: paymentRequisition.disbursementCost,
-      vatableAmount: paymentRequisition.vatableAmount,
+      taxableAmount: paymentRequisition.taxableAmount,
+      requisitionProcessed: paymentRequisition.requisitionProcessed,
+      fileUploadToken: paymentRequisition.fileUploadToken,
+      compilationToken: paymentRequisition.compilationToken,
       paymentLabels: paymentRequisition.paymentLabels,
-      dealer: paymentRequisition.dealer,
       placeholders: paymentRequisition.placeholders,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
       this.paymentLabelsSharedCollection,
       ...(paymentRequisition.paymentLabels ?? [])
-    );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      paymentRequisition.dealer
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -176,11 +184,17 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
     return {
       ...new PaymentRequisition(),
       id: this.editForm.get(['id'])!.value,
+      receptionDate: this.editForm.get(['receptionDate'])!.value,
+      dealerName: this.editForm.get(['dealerName'])!.value,
+      briefDescription: this.editForm.get(['briefDescription'])!.value,
+      requisitionNumber: this.editForm.get(['requisitionNumber'])!.value,
       invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
       disbursementCost: this.editForm.get(['disbursementCost'])!.value,
-      vatableAmount: this.editForm.get(['vatableAmount'])!.value,
+      taxableAmount: this.editForm.get(['taxableAmount'])!.value,
+      requisitionProcessed: this.editForm.get(['requisitionProcessed'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

@@ -60,6 +60,9 @@ import { DealerService } from '../../../dealers/dealer/service/dealer.service';
 import { ISignedPayment, SignedPayment } from '../../../signed-payment/signed-payment.model';
 import * as dayjs from 'dayjs';
 import { SignedPaymentService } from '../../../signed-payment/service/signed-payment.service';
+import { DataUtils, FileLoadError } from '../../../../../core/util/data-util.service';
+import { EventManager, EventWithContent } from '../../../../../core/util/event-manager.service';
+import { AlertError } from '../../../../../shared/alert/alert-error.model';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -97,12 +100,13 @@ export class PaymentUpdateComponent implements OnInit {
     paymentNumber: [],
     paymentDate: [],
     invoicedAmount: [],
-    disbursementCost: [],
-    vatableAmount: [],
     paymentAmount: [],
     description: [],
     settlementCurrency: [null, [Validators.required]],
+    calculationFile: [],
+    calculationFileContentType: [],
     dealerName: [],
+    purchaseOrderNumber: [],
     fileUploadToken: [],
     compilationToken: [],
     paymentLabels: [],
@@ -112,6 +116,8 @@ export class PaymentUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected paymentService: PaymentService,
     protected paymentLabelService: PaymentLabelService,
     protected dealerService: DealerService,
@@ -176,6 +182,21 @@ export class PaymentUpdateComponent implements OnInit {
       });
     }
     this.loadRelationshipsOptions();
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
+    });
   }
 
   previousState(): void {
@@ -329,6 +350,9 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
+      calculationFile: payment.calculationFile,
+      calculationFileContentType: payment.calculationFileContentType,
+      purchaseOrderNumber: payment.purchaseOrderNumber,
       paymentLabels: [...(dealer.paymentLabels ?? paymentLabels)],
       dealerName: dealer.dealerName,
       paymentCategory,
@@ -367,6 +391,9 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
+      calculationFile: payment.calculationFile,
+      calculationFileContentType: payment.calculationFileContentType,
+      purchaseOrderNumber: payment.purchaseOrderNumber,
       paymentLabels: payment.paymentLabels,
       dealerName: dealer.dealerName,
       paymentCategory,
@@ -403,6 +430,9 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: payment.paymentAmount,
       description: payment.description,
       settlementCurrency: payment.settlementCurrency,
+      calculationFile: payment.calculationFile,
+      calculationFileContentType: payment.calculationFileContentType,
+      purchaseOrderNumber: payment.purchaseOrderNumber,
       dealerName: payment.dealerName,
       fileUploadToken: payment.fileUploadToken,
       compilationToken: payment.compilationToken,
@@ -554,6 +584,9 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      calculationFile: this.editForm.get(['calculationFile'])!.value,
+      calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
+      purchaseOrderNumber: this.editForm.get(['purchaseOrderNumber'])!.value,
       dealerName: this.editForm.get(['dealerName'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
@@ -573,6 +606,9 @@ export class PaymentUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      calculationFile: this.editForm.get(['calculationFile'])!.value,
+      calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
+      purchaseOrderNumber: this.editForm.get(['purchaseOrderNumber'])!.value,
       dealerName: this.editForm.get(['dealerName'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,

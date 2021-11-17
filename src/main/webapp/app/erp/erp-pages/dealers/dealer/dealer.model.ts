@@ -1,6 +1,5 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IPaymentLabel } from '../../payment-label/payment-label.model';
-import { IPaymentRequisition } from '../../payments/payment-requisition/payment-requisition.model';
 
 export interface IDealer {
   id?: number;
@@ -17,7 +16,6 @@ export interface IDealer {
   compilationToken?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealerGroup?: IDealer | null;
-  paymentRequisitions?: IPaymentRequisition[] | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -37,7 +35,6 @@ export class Dealer implements IDealer {
     public compilationToken?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealerGroup?: IDealer | null,
-    public paymentRequisitions?: IPaymentRequisition[] | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }
