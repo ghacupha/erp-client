@@ -30,14 +30,18 @@ export class PaymentRequisitionUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
+  receptionDateInput = element(by.id('field_receptionDate'));
+  dealerNameInput = element(by.id('field_dealerName'));
+  briefDescriptionInput = element(by.id('field_briefDescription'));
+  requisitionNumberInput = element(by.id('field_requisitionNumber'));
   invoicedAmountInput = element(by.id('field_invoicedAmount'));
   disbursementCostInput = element(by.id('field_disbursementCost'));
-  vatableAmountInput = element(by.id('field_vatableAmount'));
+  taxableAmountInput = element(by.id('field_taxableAmount'));
+  requisitionProcessedInput = element(by.id('field_requisitionProcessed'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
-  dealerSelect = element(by.id('field_dealer'));
   placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
@@ -50,6 +54,38 @@ export class PaymentRequisitionUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
+  }
+
+  async setReceptionDateInput(receptionDate: string): Promise<void> {
+    await this.receptionDateInput.sendKeys(receptionDate);
+  }
+
+  async getReceptionDateInput(): Promise<string> {
+    return await this.receptionDateInput.getAttribute('value');
+  }
+
+  async setDealerNameInput(dealerName: string): Promise<void> {
+    await this.dealerNameInput.sendKeys(dealerName);
+  }
+
+  async getDealerNameInput(): Promise<string> {
+    return await this.dealerNameInput.getAttribute('value');
+  }
+
+  async setBriefDescriptionInput(briefDescription: string): Promise<void> {
+    await this.briefDescriptionInput.sendKeys(briefDescription);
+  }
+
+  async getBriefDescriptionInput(): Promise<string> {
+    return await this.briefDescriptionInput.getAttribute('value');
+  }
+
+  async setRequisitionNumberInput(requisitionNumber: string): Promise<void> {
+    await this.requisitionNumberInput.sendKeys(requisitionNumber);
+  }
+
+  async getRequisitionNumberInput(): Promise<string> {
+    return await this.requisitionNumberInput.getAttribute('value');
   }
 
   async setInvoicedAmountInput(invoicedAmount: string): Promise<void> {
@@ -68,12 +104,16 @@ export class PaymentRequisitionUpdatePage {
     return await this.disbursementCostInput.getAttribute('value');
   }
 
-  async setVatableAmountInput(vatableAmount: string): Promise<void> {
-    await this.vatableAmountInput.sendKeys(vatableAmount);
+  async setTaxableAmountInput(taxableAmount: string): Promise<void> {
+    await this.taxableAmountInput.sendKeys(taxableAmount);
   }
 
-  async getVatableAmountInput(): Promise<string> {
-    return await this.vatableAmountInput.getAttribute('value');
+  async getTaxableAmountInput(): Promise<string> {
+    return await this.taxableAmountInput.getAttribute('value');
+  }
+
+  getRequisitionProcessedInput(): ElementFinder {
+    return this.requisitionProcessedInput;
   }
 
   async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
@@ -106,22 +146,6 @@ export class PaymentRequisitionUpdatePage {
 
   async getPaymentLabelSelectedOption(): Promise<string> {
     return await this.paymentLabelSelect.element(by.css('option:checked')).getText();
-  }
-
-  async dealerSelectLastOption(): Promise<void> {
-    await this.dealerSelect.all(by.tagName('option')).last().click();
-  }
-
-  async dealerSelectOption(option: string): Promise<void> {
-    await this.dealerSelect.sendKeys(option);
-  }
-
-  getDealerSelect(): ElementFinder {
-    return this.dealerSelect;
-  }
-
-  async getDealerSelectedOption(): Promise<string> {
-    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {

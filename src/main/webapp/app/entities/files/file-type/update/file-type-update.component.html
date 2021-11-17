@@ -104,6 +104,9 @@
             <option [ngValue]="null"></option>
             <option *ngFor="let fileModelType of fileModelTypeValues" [value]="fileModelType">fileModelType</option>
           </select>
+          <div *ngIf="editForm.get('fileType')!.invalid && (editForm.get('fileType')!.dirty || editForm.get('fileType')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('fileType')?.errors?.required"> This field is required. </small>
+          </div>
         </div>
 
         <div class="form-group">

@@ -33,7 +33,7 @@ export class FileTypeUpdateComponent implements OnInit {
     description: [],
     fileTemplate: [],
     fileTemplateContentType: [],
-    fileType: [],
+    fileType: [null, [Validators.required]],
     placeholders: [],
   });
 

@@ -9,7 +9,7 @@ export interface IFileType {
   description?: string | null;
   fileTemplateContentType?: string | null;
   fileTemplate?: string | null;
-  fileType?: FileModelType | null;
+  fileType?: FileModelType;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -21,7 +21,7 @@ export class FileType implements IFileType {
     public description?: string | null,
     public fileTemplateContentType?: string | null,
     public fileTemplate?: string | null,
-    public fileType?: FileModelType | null,
+    public fileType?: FileModelType,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

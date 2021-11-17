@@ -36,7 +36,9 @@ export class PaymentUpdatePage {
   paymentAmountInput = element(by.id('field_paymentAmount'));
   descriptionInput = element(by.id('field_description'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
-  dealerIdInput = element(by.id('field_dealerId'));
+  calculationFileInput = element(by.id('file_calculationFile'));
+  dealerNameInput = element(by.id('field_dealerName'));
+  purchaseOrderNumberInput = element(by.id('field_purchaseOrderNumber'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
 
@@ -109,12 +111,28 @@ export class PaymentUpdatePage {
     await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
   }
 
-  async setDealerIdInput(dealerId: string): Promise<void> {
-    await this.dealerIdInput.sendKeys(dealerId);
+  async setCalculationFileInput(calculationFile: string): Promise<void> {
+    await this.calculationFileInput.sendKeys(calculationFile);
   }
 
-  async getDealerIdInput(): Promise<string> {
-    return await this.dealerIdInput.getAttribute('value');
+  async getCalculationFileInput(): Promise<string> {
+    return await this.calculationFileInput.getAttribute('value');
+  }
+
+  async setDealerNameInput(dealerName: string): Promise<void> {
+    await this.dealerNameInput.sendKeys(dealerName);
+  }
+
+  async getDealerNameInput(): Promise<string> {
+    return await this.dealerNameInput.getAttribute('value');
+  }
+
+  async setPurchaseOrderNumberInput(purchaseOrderNumber: string): Promise<void> {
+    await this.purchaseOrderNumberInput.sendKeys(purchaseOrderNumber);
+  }
+
+  async getPurchaseOrderNumberInput(): Promise<string> {
+    return await this.purchaseOrderNumberInput.getAttribute('value');
   }
 
   async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {

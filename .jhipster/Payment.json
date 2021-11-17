@@ -27,8 +27,17 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "dealerId",
-      "fieldType": "Long"
+      "fieldName": "calculationFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "dealerName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "purchaseOrderNumber",
+      "fieldType": "String"
     },
     {
       "fieldName": "fileUploadToken",

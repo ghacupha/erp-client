@@ -2,6 +2,7 @@ import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import { PaymentComponentsPage, PaymentDeleteDialog, PaymentUpdatePage } from './payment.page-object';
+import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -11,6 +12,9 @@ describe('Payment e2e test', () => {
   let paymentComponentsPage: PaymentComponentsPage;
   let paymentUpdatePage: PaymentUpdatePage;
   let paymentDeleteDialog: PaymentDeleteDialog;
+  const fileNameToUpload = 'logo-jhipster.png';
+  const fileToUpload = '../../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  const absolutePath = path.resolve(__dirname, fileToUpload);
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -49,7 +53,9 @@ describe('Payment e2e test', () => {
       paymentUpdatePage.setPaymentAmountInput('5'),
       paymentUpdatePage.setDescriptionInput('description'),
       paymentUpdatePage.settlementCurrencySelectLastOption(),
-      paymentUpdatePage.setDealerIdInput('5'),
+      paymentUpdatePage.setCalculationFileInput(absolutePath),
+      paymentUpdatePage.setDealerNameInput('dealerName'),
+      paymentUpdatePage.setPurchaseOrderNumberInput('purchaseOrderNumber'),
       paymentUpdatePage.setFileUploadTokenInput('fileUploadToken'),
       paymentUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentUpdatePage.paymentLabelSelectLastOption(),

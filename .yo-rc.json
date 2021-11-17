@@ -11,7 +11,7 @@
     "jhiPrefix": "jhi",
     "entitySuffix": "",
     "dtoSuffix": "DTO",
-    "testFrameworks": ["protractor", "gatling", "cucumber"],
+    "testFrameworks": ["cypress","protractor", "gatling", "cucumber"],
     "blueprints": [],
     "otherModules": [],
     "pages": [],

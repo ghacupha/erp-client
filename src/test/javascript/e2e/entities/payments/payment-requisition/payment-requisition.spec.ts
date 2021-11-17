@@ -50,13 +50,17 @@ describe('PaymentRequisition e2e test', () => {
     await paymentRequisitionComponentsPage.clickOnCreateButton();
 
     await promise.all([
+      paymentRequisitionUpdatePage.setReceptionDateInput('2000-12-31'),
+      paymentRequisitionUpdatePage.setDealerNameInput('dealerName'),
+      paymentRequisitionUpdatePage.setBriefDescriptionInput('briefDescription'),
+      paymentRequisitionUpdatePage.setRequisitionNumberInput('requisitionNumber'),
       paymentRequisitionUpdatePage.setInvoicedAmountInput('5'),
       paymentRequisitionUpdatePage.setDisbursementCostInput('5'),
-      paymentRequisitionUpdatePage.setVatableAmountInput('5'),
+      paymentRequisitionUpdatePage.setTaxableAmountInput('5'),
+      paymentRequisitionUpdatePage.getRequisitionProcessedInput().click(),
       paymentRequisitionUpdatePage.setFileUploadTokenInput('fileUploadToken'),
       paymentRequisitionUpdatePage.setCompilationTokenInput('compilationToken'),
       // paymentRequisitionUpdatePage.paymentLabelSelectLastOption(),
-      paymentRequisitionUpdatePage.dealerSelectLastOption(),
       // paymentRequisitionUpdatePage.placeholderSelectLastOption(),
     ]);
 
