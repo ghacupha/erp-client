@@ -1,7 +1,5 @@
 # erpSystem
 
-Current work-in-progress app for ERP system, built to reduce build times while resolving the liquibase issues coming from the configuration of the spring-batch workflows which power multiple data loaders. This was necessary as the build times on maven were unbearable. The challenge however is that once this app is containerised, it then loses the ability to connect to the ERP-System backend; a phenomenon most likely caused by the nginx server configuration (or misconfiguration). A several ongoing project runs the same implementation but built on the stable jhipster version 6.10.5
-
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
 ## Development
@@ -155,6 +153,14 @@ npm test
 
 UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in [src/test/javascript/e2e](src/test/javascript/e2e)
 and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
+UI end-to-end tests are powered by [Cypress][]. They're located in [src/test/javascript/cypress](src/test/javascript/cypress)
+and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`) in a second one.
+
+#### Lighthouse audits
+
+You can execute automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by running `npm run e2e:cypress:audits`.
+You should only run the audits when your application is packaged with the production profile.
+The lighthouse report is created in `target/cypress/lhreport.html`
 
 ### Other tests
 
@@ -239,6 +245,7 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 [browsersync]: https://www.browsersync.io/
 [jest]: https://facebook.github.io/jest/
 [protractor]: https://angular.github.io/protractor/
+[cypress]: https://www.cypress.io/
 [leaflet]: https://leafletjs.com/
 [definitelytyped]: https://definitelytyped.org/
 [angular cli]: https://cli.angular.io/
