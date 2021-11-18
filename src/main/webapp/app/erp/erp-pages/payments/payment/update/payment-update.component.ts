@@ -240,7 +240,7 @@ export class PaymentUpdateComponent implements OnInit {
 
     this.selectedInvoice = {
       ...this.selectedInvoice,
-      paymentReference: `${payment.id};${payment.paymentDate?.format("YYYY-MM-DD")}`,
+      paymentReference: `${payment.paymentNumber};${payment.paymentDate?.format("YYYY-MM-DD")}`,
     };
 
     this.invoiceService.update(this.selectedInvoice).subscribe( invoice => {
