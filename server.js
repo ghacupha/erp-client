@@ -15,11 +15,11 @@ app.use(morgan('dev'));
 app.use(express.static(__dirname + '/dist'));
 
 // Proxy endpoints
-app.use('/api', createProxyMiddleware({
+app.use('/*', createProxyMiddleware({
   target: API_SERVICE_URL,
   changeOrigin: true,
 }),
-  function(req, res) {
+function(req, res) {
   res.sendFile(path.join(__dirname + '/dist/index.html'));
 });
 
