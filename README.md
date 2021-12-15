@@ -2,6 +2,17 @@
 
 This application was generated using JHipster 7.3.1, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.3.1](https://www.jhipster.tech/documentation-archive/v7.3.1).
 
+## Deployment
+
+At present the deployment process is generally ran in the following way:
+
+```
+   ng build --prod --output-path ./dist
+   
+   forever start server.js
+
+```
+
 ## Development
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
