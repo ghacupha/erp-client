@@ -167,51 +167,53 @@
           </select>
         </div>-->
 
-        <mat-form-field >
-          <label for="field_placeholders">Placeholder</label>
-          <input
-            matInput
-            class="form-control"
-            id="field_placeholders"
-            [matAutocomplete]='auto'
-            formControlName="placeholders"
-          >
-          <button
-            *ngIf='selectedPlaceholder'
-            matSuffix
-            mat-icon-button
-            aria-label="Clear"
-            (click)="clearPlaceholderSelection()">
-          >
-            <mat-icon>Close</mat-icon>
-          </button>
-          <mat-autocomplete
-            [panelWidth]="400"
-            #auto="matAutocomplete"
-            (optionSelected)="onPlaceholderSelected()"
-            [displayWith]="displayPlaceholderWith"
-          >
-            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-            <ng-container *ngIf="!isLoading">
-              <mat-option *ngFor="let placeholder of filteredPlaceholders" [value]="placeholder">
-                <span><b>{{placeholder.description}}</b> ({{placeholder.id}})</span>
-              </mat-option>
-            </ng-container>
-          </mat-autocomplete>
-        </mat-form-field>
+        <div class="form-group">
+          <label class="form-control-label" for="field_placeholders">Placeholder</label>
+          <mat-form-field class="form-control">
+            <input
+              matInput
+              id="field_placeholders"
+              [matAutocomplete]='auto'
+              formControlName="placeholders"
+            >
+            <button
+              *ngIf='selectedPlaceholder'
+              matSuffix
+              mat-icon-button
+              aria-label="Clear"
+              (click)="clearPlaceholderSelection()"
+            >
+              <mat-icon>Close</mat-icon>
+            </button>
+            <mat-autocomplete
+              [panelWidth]="400"
+              class="form-control"
+              #auto="matAutocomplete"
+              (optionSelected)="onPlaceholderSelected()"
+              [displayWith]="displayPlaceholderWith"
+            >
+              <mat-option *ngIf="isLoading">Loading...</mat-option>
+              <ng-container *ngIf="!isLoading">
+                <mat-option class="form-control" *ngFor="let placeholder of filteredPlaceholders" [value]="placeholder">
+                  <span><b>{{placeholder.description}}</b> ({{placeholder.id}})</span>
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </mat-form-field>
 
-        <br>
-        <ng-container *ngIf="errorMsg; else elseTemplate">
-          {{errorMsg}}
-        </ng-container>
-        <ng-template #elseTemplate>
-          <div class="mat-select-placeholder" *ngIf="selectedPlaceholder?.description">
-            <div>
-              Selected Placeholder: {{selectedPlaceholder?.description}}
-              <span >Id: {{selectedPlaceholder?.id}}</span>
+          <ng-container *ngIf="errorMsg; else elseTemplate">
+            {{errorMsg}}
+          </ng-container>
+          <ng-template #elseTemplate>
+            <div class="mat-select-placeholder" *ngIf="selectedPlaceholder?.description">
+              <div>
+                Selected Placeholder: {{selectedPlaceholder?.description}}
+                <span >Id: {{selectedPlaceholder?.id}}</span>
+              </div>
             </div>
-          </div>
-        </ng-template>
+          </ng-template>
+
+        </div>
 
       </div>
 
