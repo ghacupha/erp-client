@@ -28,6 +28,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ErpStoreModule } from './erp/store/erp-store.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ErpSystemModule } from './erp/erp-system.module';
+import { ErpMaterialModule } from './erp-material.module';
+import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 
 @NgModule({
   imports: [
@@ -37,6 +39,8 @@ import { ErpSystemModule } from './erp/erp-system.module';
     ErpSystemModule,
     NgSelectModule,
     ErpStoreModule,
+    ErpMaterialModule,
+    ErpFormsModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
