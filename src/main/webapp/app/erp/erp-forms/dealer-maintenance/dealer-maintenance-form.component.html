@@ -176,14 +176,6 @@
             [matAutocomplete]='auto'
             formControlName="placeholders"
           >
-          <!--<input
-            matInput
-            id="field_placeholders"
-            placeholder='Apply Placeholder'
-            [(ngModel)]='selectedPlaceholder'
-            [matAutocomplete]='auto'
-            formControlName="placeholders"
-          >-->
           <button
             *ngIf='selectedPlaceholder'
             matSuffix
@@ -215,10 +207,8 @@
         <ng-template #elseTemplate>
           <div class="mat-select-placeholder" *ngIf="selectedPlaceholder?.description">
             <div>
-              <h3>Selected Placeholder: {{selectedPlaceholder?.description}}</h3>
-              <ul>
-                <li>Id: {{selectedPlaceholder?.id}}</li>
-              </ul>
+              Selected Placeholder: {{selectedPlaceholder?.description}}
+              <span >Id: {{selectedPlaceholder?.id}}</span>
             </div>
           </div>
         </ng-template>
