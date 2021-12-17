@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { IPlaceholder } from '../../../entities/erpService/placeholder/placeholder.model';
 import { FormBuilder, Validators } from '@angular/forms';
-import { PlaceholderService } from '../../../entities/erpService/placeholder/service/placeholder.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { Dealer, IDealer } from './dealer.model';
 import { IPaymentLabel } from './payment-label.model';
-import { DealerService, EntityArrayResponseType } from './dealer.service';
+import { DealerService } from './dealer.service';
 import { PaymentLabelService } from './payment-label.service';
-import { coerceStringArray } from '@angular/cdk/coercion';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
-import { createRequestOption } from '../../../core/request/request-util';
+import { PlaceholderService } from './placeholder.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",
@@ -88,7 +86,7 @@ export class DealerMaintenanceFormComponent implements OnInit {
         )
       )
       .subscribe(data => {
-        if (data.length > 0) {
+        if (data.length <= 0) {
           this.errorMsg = "Search results could not be retrieved";
           this.filteredPlaceholders = [];
         } else {
