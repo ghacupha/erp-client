@@ -148,7 +148,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -165,7 +165,64 @@
               {{ placeholderOption.id }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <mat-form-field >
+          <label for="field_placeholders">Placeholder</label>
+          <input
+            matInput
+            class="form-control"
+            id="field_placeholders"
+            [matAutocomplete]='auto'
+            formControlName="placeholders"
+          >
+          <!--<input
+            matInput
+            id="field_placeholders"
+            placeholder='Apply Placeholder'
+            [(ngModel)]='selectedPlaceholder'
+            [matAutocomplete]='auto'
+            formControlName="placeholders"
+          >-->
+          <button
+            *ngIf='selectedPlaceholder'
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="clearPlaceholderSelection()">
+          >
+            <mat-icon>Close</mat-icon>
+          </button>
+          <mat-autocomplete
+            [panelWidth]="400"
+            #auto="matAutocomplete"
+            (optionSelected)="onPlaceholderSelected()"
+            [displayWith]="displayPlaceholderWith"
+          >
+            <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+            <ng-container *ngIf="!isLoading">
+              <mat-option *ngFor="let placeholder of filteredPlaceholders" [value]="placeholder">
+                <span><b>{{placeholder.description}}</b> ({{placeholder.id}})</span>
+              </mat-option>
+            </ng-container>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <br>
+        <ng-container *ngIf="errorMsg; else elseTemplate">
+          {{errorMsg}}
+        </ng-container>
+        <ng-template #elseTemplate>
+          <div class="mat-select-placeholder" *ngIf="selectedPlaceholder?.description">
+            <div>
+              <h3>Selected Placeholder: {{selectedPlaceholder?.description}}</h3>
+              <ul>
+                <li>Id: {{selectedPlaceholder?.id}}</li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+
       </div>
 
       <div>

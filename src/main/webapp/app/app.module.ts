@@ -30,10 +30,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ErpSystemModule } from './erp/erp-system.module';
 import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     SharedModule,
     HomeModule,
     ErpSystemModule,

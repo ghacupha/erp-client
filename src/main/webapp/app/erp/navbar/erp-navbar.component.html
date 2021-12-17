@@ -34,19 +34,19 @@
       <jhi-erp-files-nav></jhi-erp-files-nav>
 
       <li
-        *ngSwitchCase="true"
+        *jhiHasAnyAuthority="'ROLE_ADMIN'"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
-        <!-- <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
-          <span>
-            <fa-icon icon="th-list"></fa-icon>
-            <span>Entities</span>
-          </span>
-        </a> -->
+       <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+        <span>
+          <fa-icon icon="th-list"></fa-icon>
+          <span>Entities</span>
+        </span>
+      </a>
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
           <li>
             <a
