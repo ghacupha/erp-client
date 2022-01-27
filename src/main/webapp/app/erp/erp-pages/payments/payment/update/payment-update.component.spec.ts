@@ -1,28 +1,26 @@
-import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
 
 jest.mock('@angular/router');
 
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {HttpResponse} from '@angular/common/http';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {FormBuilder} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {of, Subject} from 'rxjs';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpResponse } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, Subject } from 'rxjs';
 
-import {PaymentService} from '../service/payment.service';
-import {IPayment, Payment} from '../payment.model';
-import {IPlaceholder} from 'app/entities/erpService/placeholder/placeholder.model';
-import {PlaceholderService} from 'app/entities/erpService/placeholder/service/placeholder.service';
-
-import {PaymentUpdateComponent} from './payment-update.component';
-import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
-// import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
-// import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
-import {IPaymentLabel} from '../../../payment-label/payment-label.model';
-import {IPaymentCategory} from '../../payment-category/payment-category.model';
-import {initialState} from '../../../../store/global-store.definition';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {LoggerTestingModule} from "ngx-logger/testing";
+import { PaymentUpdateComponent } from './payment-update.component';
+import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
+import { IPaymentCategory } from '../../../../erp-common/models/payment-category.model';
+import { initialState } from '../../../../store/global-store.definition';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
 
 describe('Component Tests', () => {
   describe('Payment Management Update Component', () => {
@@ -32,21 +30,19 @@ describe('Component Tests', () => {
     let paymentService: PaymentService;
     let paymentLabelService: PaymentLabelService;
     let paymentCategoryService: PaymentCategoryService;
-    // let taxRuleService: TaxRuleService;
-    // let paymentCalculationService: PaymentCalculationService;
     let placeholderService: PlaceholderService;
     let store: MockStore;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, LoggerTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentUpdateComponent],
         providers: [
           Router,
           FormBuilder,
           ActivatedRoute,
-          provideMockStore({initialState})
-        ],
+          provideMockStore({ initialState })
+        ]
       })
         .overrideTemplate(PaymentUpdateComponent, '')
         .compileComponents();
@@ -123,10 +119,7 @@ describe('Component Tests', () => {
         comp.ngOnInit();
 
         expect(placeholderService.query).toHaveBeenCalled();
-        expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
-          placeholderCollection,
-          ...additionalPlaceholders
-        );
+        expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
         expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
       });
 
@@ -324,4 +317,3 @@ describe('Component Tests', () => {
     });
   });
 });
-

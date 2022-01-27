@@ -1,6 +1,5 @@
 
 import {ActivatedRouteSnapshot, Resolve} from "@angular/router";
-import {IPayment, Payment} from "../payment.model";
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {Observable, of} from "rxjs";
@@ -13,6 +12,7 @@ import {
   DEFAULT_TRANSACTION_AMOUNT,
 } from "../default-values.constants";
 import {Injectable} from "@angular/core";
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
 
 /**
  * Provides the New Payment form with default values

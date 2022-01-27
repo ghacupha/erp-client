@@ -9,12 +9,13 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ISignedPayment, getSignedPaymentIdentifier } from '../signed-payment.model';
+import { ISignedPayment, getSignedPaymentIdentifier } from '../models/signed-payment.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 export type EntityResponseType = HttpResponse<ISignedPayment>;
 export type EntityArrayResponseType = HttpResponse<ISignedPayment[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class SignedPaymentService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/signed-payments');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/signed-payments');

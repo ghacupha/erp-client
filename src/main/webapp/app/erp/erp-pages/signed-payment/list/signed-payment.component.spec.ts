@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { SignedPaymentService } from '../service/signed-payment.service';
+import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
 
 import { SignedPaymentComponent } from './signed-payment.component';
 

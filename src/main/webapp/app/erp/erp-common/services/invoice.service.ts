@@ -9,19 +9,20 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import {IInvoice, getInvoiceIdentifier, Invoice} from '../invoice.model';
 import {Store} from "@ngrx/store";
-import {State} from "../../../../store/global-store.definition";
+import {State} from "../../store/global-store.definition";
 import {
   dealerInvoiceSelectedPayment
-} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
-import {IPayment, Payment} from "../../payment/payment.model";
+} from "../../store/selectors/dealer-invoice-worklows-status.selectors";
 import {NGXLogger} from "ngx-logger";
+import { ErpCommonModule } from '../erp-common.module';
+import { getInvoiceIdentifier, IInvoice, Invoice } from '../models/invoice.model';
+import { IPayment, Payment } from '../models/payment.model';
 
 export type EntityResponseType = HttpResponse<IInvoice>;
 export type EntityArrayResponseType = HttpResponse<IInvoice[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class InvoiceService {
   selectedPayment: IPayment = {...new Payment()}
 

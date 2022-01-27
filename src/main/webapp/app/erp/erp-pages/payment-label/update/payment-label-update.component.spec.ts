@@ -7,12 +7,12 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentLabelService } from '../service/payment-label.service';
-import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-
 import { PaymentLabelUpdateComponent } from './payment-label-update.component';
+import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-common/models/payment-label.model';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { ErpCommonModule } from 'app/erp/erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('PaymentLabel Management Update Component', () => {
@@ -24,7 +24,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentLabelUpdateComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { TaxReferenceService } from '../service/tax-reference.service';
+import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 
 import { TaxReferenceDeleteDialogComponent } from './tax-reference-delete-dialog.component';
 

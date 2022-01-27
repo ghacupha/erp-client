@@ -2,19 +2,19 @@ import {Injectable} from "@angular/core";
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {Resolve} from "@angular/router";
-import {IPayment, Payment} from "../payment.model";
 import {Observable, of} from "rxjs";
 import {
   dealerInvoiceSelected,
   dealerInvoiceSelectedDealer,
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
-import {IInvoice} from "../../invoice/invoice.model";
 import {
   DEFAULT_DATE,
   DEFAULT_DESCRIPTION,
 } from "../default-values.constants";
-import {IDealer} from "../../../dealers/dealer/dealer.model";
 import {dealerAcquiredForInvoicedPayment} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { IInvoice } from '../../../../erp-common/models/invoice.model';
+import { IDealer } from '../../../../erp-common/models/dealer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {

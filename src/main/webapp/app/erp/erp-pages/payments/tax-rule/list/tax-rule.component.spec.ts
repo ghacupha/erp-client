@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { TaxRuleService } from '../service/tax-rule.service';
+import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
 
 import { TaxRuleComponent } from './tax-rule.component';
 

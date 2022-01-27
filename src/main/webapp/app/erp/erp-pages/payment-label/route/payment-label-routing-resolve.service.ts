@@ -3,9 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-
-import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
-import { PaymentLabelService } from '../service/payment-label.service';
+import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-common/models/payment-label.model';
+import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentLabelRoutingResolveService implements Resolve<IPaymentLabel> {

@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -6,8 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
-import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
+import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
 
 import { PaymentCalculationRoutingResolveService } from './payment-calculation-routing-resolve.service';
 
@@ -21,7 +23,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         providers: [Router, ActivatedRouteSnapshot],
       });
       mockRouter = TestBed.inject(Router);

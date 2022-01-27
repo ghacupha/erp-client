@@ -7,8 +7,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { TaxRuleService } from '../service/tax-rule.service';
-import { ITaxRule, TaxRule } from '../tax-rule.model';
+import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
+import { ITaxRule, TaxRule } from '../../../../erp-common/models/tax-rule.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IPaymentCalculation } from '../payment-calculation.model';
+import { IPaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
 
 @Component({
   selector: 'jhi-payment-calculation-detail',

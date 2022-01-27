@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITaxReference } from '../tax-reference.model';
+import { ITaxReference } from '../../../../erp-common/models/tax-reference.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { TaxReferenceService } from '../service/tax-reference.service';
+import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 import { TaxReferenceDeleteDialogComponent } from '../delete/tax-reference-delete-dialog.component';
 
 @Component({

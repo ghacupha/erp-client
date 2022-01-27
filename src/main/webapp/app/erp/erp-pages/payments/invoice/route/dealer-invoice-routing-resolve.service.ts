@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {InvoiceService} from "../service/invoice.service";
+import {InvoiceService} from "../../../../erp-common/services/invoice.service";
 import {Resolve, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {IInvoice, Invoice} from "../invoice.model";

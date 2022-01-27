@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
-import { ITaxReference, TaxReference } from '../tax-reference.model';
+import { ITaxReference, TaxReference } from '../models/tax-reference.model';
 
 import { TaxReferenceService } from './tax-reference.service';
+import { ErpCommonModule } from '../erp-common.module';
 
 describe('Service Tests', () => {
   describe('TaxReference Service', () => {
@@ -15,7 +16,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(TaxReferenceService);

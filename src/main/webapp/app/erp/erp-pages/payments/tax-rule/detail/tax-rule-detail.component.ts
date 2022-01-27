@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ITaxRule } from '../tax-rule.model';
+import { ITaxRule } from '../../../../erp-common/models/tax-rule.model';
 
 @Component({
   selector: 'jhi-tax-rule-detail',

@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { TaxRuleService } from '../service/tax-rule.service';
+import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
 
 import { TaxRuleDeleteDialogComponent } from './tax-rule-delete-dialog.component';
 

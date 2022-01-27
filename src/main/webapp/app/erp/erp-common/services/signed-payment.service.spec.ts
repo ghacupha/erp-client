@@ -4,9 +4,10 @@ import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
-import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { ISignedPayment, SignedPayment } from '../models/signed-payment.model';
 
 import { SignedPaymentService } from './signed-payment.service';
+import { ErpCommonModule } from '../erp-common.module';
 
 describe('Service Tests', () => {
   describe('SignedPayment Service', () => {
@@ -18,7 +19,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(SignedPaymentService);

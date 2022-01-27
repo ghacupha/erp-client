@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITaxRule } from '../tax-rule.model';
+import { ITaxRule } from '../../../../erp-common/models/tax-rule.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { TaxRuleService } from '../service/tax-rule.service';
+import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
 import { TaxRuleDeleteDialogComponent } from '../delete/tax-rule-delete-dialog.component';
 
 @Component({

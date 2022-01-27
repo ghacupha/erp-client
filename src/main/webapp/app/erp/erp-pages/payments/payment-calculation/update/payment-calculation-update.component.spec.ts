@@ -1,4 +1,3 @@
-import {PaymentLabelService} from "../../../payment-label/service/payment-label.service";
 
 jest.mock('@angular/router');
 
@@ -9,15 +8,17 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentCalculationService } from '../service/payment-calculation.service';
-import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
+import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PaymentCalculationUpdateComponent } from './payment-calculation-update.component';
-import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
-import {IPaymentLabel} from '../../../payment-label/payment-label.model';
-import {IPaymentCategory} from '../../payment-category/payment-category.model';
+import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
+import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
 
 describe('Component Tests', () => {
   describe('PaymentCalculation Management Update Component', () => {
@@ -31,7 +32,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentCalculationUpdateComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

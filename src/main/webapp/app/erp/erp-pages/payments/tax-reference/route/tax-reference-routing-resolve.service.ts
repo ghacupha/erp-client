@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ITaxReference, TaxReference } from '../tax-reference.model';
-import { TaxReferenceService } from '../service/tax-reference.service';
+import { ITaxReference, TaxReference } from '../../../../erp-common/models/tax-reference.model';
+import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 
 @Injectable({ providedIn: 'root' })
 export class TaxReferenceRoutingResolveService implements Resolve<ITaxReference> {

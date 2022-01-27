@@ -5,18 +5,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPayment, Payment } from '../payment.model';
-import { PaymentService } from '../service/payment.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import {IPaymentLabel} from '../../../payment-label/payment-label.model';
-import {IPaymentCategory} from '../../payment-category/payment-category.model';
-import {IPaymentCalculation} from '../../payment-calculation/payment-calculation.model';
-import {ITaxRule} from '../../tax-rule/tax-rule.model';
-import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
-import {PaymentCategoryService} from '../../payment-category/service/payment-category.service';
-import {TaxRuleService} from '../../tax-rule/service/tax-rule.service';
-import {PaymentCalculationService} from '../../payment-calculation/service/payment-calculation.service';
+import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
+import {IPaymentCalculation} from '../../../../erp-common/models/payment-calculation.model';
+import {ITaxRule} from '../../../../erp-common/models/tax-rule.model';
+import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
+import {TaxRuleService} from '../../../../erp-common/services/tax-rule.service';
+import {PaymentCalculationService} from '../../../../erp-common/services/payment-calculation.service';
 import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {
@@ -38,7 +32,6 @@ import {
   dealerPaymentSelectedDealer,
   dealerPaymentStatus
 } from "../../../../store/selectors/dealer-workflows-status.selectors";
-import { Dealer, IDealer } from '../../../dealers/dealer/dealer.model';
 import {
   paymentToDealerCompleted,
   paymentToDealerReset
@@ -50,19 +43,26 @@ import {
   dealerInvoiceSelected,
   dealerInvoiceSelectedDealer
 } from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
-import {IInvoice, Invoice} from "../../invoice/invoice.model";
 import {
   dealerInvoiceStateReset,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
-import {InvoiceService} from "../../invoice/service/invoice.service";
+import {InvoiceService} from "../../../../erp-common/services/invoice.service";
 import {NGXLogger} from "ngx-logger";
-import { DealerService } from '../../../dealers/dealer/service/dealer.service';
-import { ISignedPayment, SignedPayment } from '../../../signed-payment/signed-payment.model';
+import { ISignedPayment, SignedPayment } from '../../../../erp-common/models/signed-payment.model';
 import * as dayjs from 'dayjs';
-import { SignedPaymentService } from '../../../signed-payment/service/signed-payment.service';
+import { SignedPaymentService } from '../../../../erp-common/services/signed-payment.service';
 import { DataUtils, FileLoadError } from '../../../../../core/util/data-util.service';
 import { EventManager, EventWithContent } from '../../../../../core/util/event-manager.service';
 import { AlertError } from '../../../../../shared/alert/alert-error.model';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
+import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -139,6 +139,7 @@ export class PaymentUpdateComponent implements OnInit {
     this.store.pipe(select(creatingPaymentStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
     this.store.pipe(select(updateSelectedPayment)).subscribe(pyt => this.selectedPayment = pyt);
     this.store.pipe(select(dealerPaymentStatus)).subscribe(payingDealer => this.weArePayingADealer = payingDealer);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     this.store.pipe(select(dealerPaymentSelectedDealer)).subscribe(dealer => this.selectedDealer = dealer);
     this.store.pipe(select(dealerCategory)).subscribe(category => {
       if (category) {

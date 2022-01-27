@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -6,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PaymentCategoryService } from '../service/payment-category.service';
+import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
 
 import { PaymentCategoryComponent } from './payment-category.component';
 
@@ -18,7 +20,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentCategoryComponent],
         providers: [
           Router,

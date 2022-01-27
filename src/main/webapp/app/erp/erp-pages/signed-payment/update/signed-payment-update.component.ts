@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISignedPayment, SignedPayment } from '../signed-payment.model';
-import { SignedPaymentService } from '../service/signed-payment.service';
+import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
+import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IPaymentLabel } from '../../payment-label/payment-label.model';
-import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
+import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
 import { PaymentLabelService } from '../../payment-label/service/payment-label.service';
-import { PaymentCategoryService } from '../../payments/payment-category/service/payment-category.service';
+import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
 
 @Component({
   selector: 'jhi-signed-payment-update',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ITaxReference } from '../tax-reference.model';
+import { ITaxReference } from '../../../../erp-common/models/tax-reference.model';
 
 @Component({
   selector: 'jhi-tax-reference-detail',

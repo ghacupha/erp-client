@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Resolve} from '@angular/router';
-import {IPayment, Payment} from '../payment.model';
 import {Store} from '@ngrx/store';
 import {State} from '../../../../store/global-store.definition';
 import {Observable, of} from 'rxjs';
@@ -11,6 +10,7 @@ import {
   DEFAULT_INVOICE_AMOUNT,
   DEFAULT_TRANSACTION_AMOUNT,
 } from '../default-values.constants';
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerPaymentResolveService implements Resolve<IPayment> {

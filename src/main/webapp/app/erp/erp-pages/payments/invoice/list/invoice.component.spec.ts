@@ -8,11 +8,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { InvoiceService } from '../service/invoice.service';
+import { InvoiceService } from '../../../../erp-common/services/invoice.service';
 
 import { InvoiceComponent } from './invoice.component';
 import {initialState} from "../../../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('Invoice Management Component', () => {
@@ -23,7 +24,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, LoggerTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
         declarations: [InvoiceComponent],
         providers: [
           Router,

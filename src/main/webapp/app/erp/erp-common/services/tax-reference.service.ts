@@ -6,12 +6,13 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ITaxReference, getTaxReferenceIdentifier } from '../tax-reference.model';
+import { ITaxReference, getTaxReferenceIdentifier } from '../models/tax-reference.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 export type EntityResponseType = HttpResponse<ITaxReference>;
 export type EntityArrayResponseType = HttpResponse<ITaxReference[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class TaxReferenceService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tax-references');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/tax-references');

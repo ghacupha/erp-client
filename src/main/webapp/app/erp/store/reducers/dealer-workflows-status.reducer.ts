@@ -1,4 +1,3 @@
-import {IDealer} from '../../erp-pages/dealers/dealer/dealer.model';
 import {Action, createReducer, on} from '@ngrx/store';
 import {initialState, State} from '../global-store.definition';
 import {
@@ -6,8 +5,9 @@ import {
   payDealerButtonClicked, paymentCategoryAcquiredForPayment,
   paymentToDealerCompleted, paymentToDealerReset,
 } from '../actions/dealer-workflows-status.actions';
-import {IPayment} from '../../erp-pages/payments/payment/payment.model';
-import {IPaymentCategory} from '../../erp-pages/payments/payment-category/payment-category.model';
+import {IPaymentCategory} from '../../erp-common/models/payment-category.model';
+import { IDealer } from '../../erp-common/models/dealer.model';
+import { IPayment } from '../../erp-common/models/payment.model';
 
 export const paymentToDealerWorkflowStateSelector = 'paymentToDealerWorkflows'
 

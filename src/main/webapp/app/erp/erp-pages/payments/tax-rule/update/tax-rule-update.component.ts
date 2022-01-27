@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ITaxRule, TaxRule } from '../tax-rule.model';
-import { TaxRuleService } from '../service/tax-rule.service';
+import { ITaxRule, TaxRule } from '../../../../erp-common/models/tax-rule.model';
+import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 

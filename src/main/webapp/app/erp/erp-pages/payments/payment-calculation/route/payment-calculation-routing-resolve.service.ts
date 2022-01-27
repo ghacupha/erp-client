@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
-import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
+import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentCalculationRoutingResolveService implements Resolve<IPaymentCalculation> {

@@ -6,12 +6,13 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ITaxRule, getTaxRuleIdentifier } from '../tax-rule.model';
+import { ITaxRule, getTaxRuleIdentifier } from '../models/tax-rule.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 export type EntityResponseType = HttpResponse<ITaxRule>;
 export type EntityArrayResponseType = HttpResponse<ITaxRule[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class TaxRuleService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tax-rules');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/tax-rules');

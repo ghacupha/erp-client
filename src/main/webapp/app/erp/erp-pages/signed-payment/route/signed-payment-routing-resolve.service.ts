@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISignedPayment, SignedPayment } from '../signed-payment.model';
-import { SignedPaymentService } from '../service/signed-payment.service';
+import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
+import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
 
 @Injectable({ providedIn: 'root' })
 export class SignedPaymentRoutingResolveService implements Resolve<ISignedPayment> {

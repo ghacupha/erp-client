@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
-import { PaymentRequisitionService } from '../service/payment-requisition.service';
+import { IPaymentRequisition, PaymentRequisition } from '../../../../erp-common/models/payment-requisition.model';
+import { PaymentRequisitionService } from '../../../../erp-common/services/payment-requisition.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import {IPaymentLabel} from '../../../payment-label/payment-label.model';
-import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
-import { DealerService } from '../../../dealers/dealer/service/dealer.service';
-import { IDealer } from '../../../dealers/dealer/dealer.model';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
 
 @Component({
   selector: 'jhi-payment-requisition-update',

@@ -6,8 +6,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { ITaxReference, TaxReference } from '../tax-reference.model';
-import { TaxReferenceService } from '../service/tax-reference.service';
+import { ITaxReference, TaxReference } from '../../../../erp-common/models/tax-reference.model';
+import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 
 import { TaxReferenceRoutingResolveService } from './tax-reference-routing-resolve.service';
 

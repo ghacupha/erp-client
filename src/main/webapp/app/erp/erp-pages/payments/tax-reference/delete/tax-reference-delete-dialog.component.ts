@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITaxReference } from '../tax-reference.model';
-import { TaxReferenceService } from '../service/tax-reference.service';
+import { ITaxReference } from '../../../../erp-common/models/tax-reference.model';
+import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 
 @Component({
   templateUrl: './tax-reference-delete-dialog.component.html',

@@ -1,3 +1,5 @@
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -5,8 +7,6 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { PaymentLabelService } from '../service/payment-label.service';
 
 import { PaymentLabelDeleteDialogComponent } from './payment-label-delete-dialog.component';
 

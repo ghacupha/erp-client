@@ -8,9 +8,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaymentService } from '../service/payment.service';
-
 import { PaymentDeleteDialogComponent } from './payment-delete-dialog.component';
+import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('Payment Management Delete Component', () => {
@@ -21,7 +21,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, LoggerTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

@@ -3,9 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { IPaymentRequisition, PaymentRequisition } from '../models/payment-requisition.model';
 
 import { PaymentRequisitionService } from './payment-requisition.service';
+import { ErpCommonModule } from '../erp-common.module';
 
 describe('PaymentRequisition Service', () => {
   let service: PaymentRequisitionService;
@@ -16,7 +17,7 @@ describe('PaymentRequisition Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
     });
     expectedResult = null;
     service = TestBed.inject(PaymentRequisitionService);

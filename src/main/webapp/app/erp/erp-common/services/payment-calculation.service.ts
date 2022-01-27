@@ -6,12 +6,13 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPaymentCalculation, getPaymentCalculationIdentifier } from '../payment-calculation.model';
+import { IPaymentCalculation, getPaymentCalculationIdentifier } from '../models/payment-calculation.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 export type EntityResponseType = HttpResponse<IPaymentCalculation>;
 export type EntityArrayResponseType = HttpResponse<IPaymentCalculation[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class PaymentCalculationService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payment-calculations');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-calculations');

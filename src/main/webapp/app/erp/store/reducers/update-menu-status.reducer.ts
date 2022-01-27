@@ -17,7 +17,6 @@
 ///
 
 import {Action, createReducer, on} from "@ngrx/store";
-import {IPayment} from "../../erp-pages/payments/payment/payment.model";
 import {initialState, State} from "../global-store.definition";
 import {
   newPaymentButtonClicked,
@@ -30,6 +29,7 @@ import {
   paymentUpdateConcluded,
   paymentUpdateErrorHasOccurred
 } from "../actions/update-menu-status.actions";
+import { IPayment } from '../../erp-common/models/payment.model';
 
 export const paymentUpdateFormStateSelector = 'paymentUpdateForm';
 

@@ -9,12 +9,13 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPaymentRequisition, getPaymentRequisitionIdentifier } from '../payment-requisition.model';
+import { IPaymentRequisition, getPaymentRequisitionIdentifier } from '../models/payment-requisition.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 export type EntityResponseType = HttpResponse<IPaymentRequisition>;
 export type EntityArrayResponseType = HttpResponse<IPaymentRequisition[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class PaymentRequisitionService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payment-requisitions');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-requisitions');

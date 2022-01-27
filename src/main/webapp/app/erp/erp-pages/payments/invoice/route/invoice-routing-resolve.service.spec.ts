@@ -8,12 +8,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IInvoice, Invoice } from '../invoice.model';
-import { InvoiceService } from '../service/invoice.service';
+import { InvoiceService } from '../../../../erp-common/services/invoice.service';
 
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
 import {initialState} from "../../../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
+import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
 
 describe('Service Tests', () => {
   describe('Invoice routing resolve service', () => {

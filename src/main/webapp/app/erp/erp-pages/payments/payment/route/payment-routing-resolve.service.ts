@@ -3,9 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-
-import { IPayment, Payment } from '../payment.model';
-import { PaymentService } from '../service/payment.service';
+import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { PaymentService } from '../../../../erp-common/services/payment.service';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentRoutingResolveService implements Resolve<IPayment> {

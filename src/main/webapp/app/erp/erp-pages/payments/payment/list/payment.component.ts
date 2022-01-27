@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPayment } from '../payment.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentService } from '../service/payment.service';
 import { PaymentDeleteDialogComponent } from '../delete/payment-delete-dialog.component';
+import { IPayment } from '../../../../erp-common/models/payment.model';
+import { PaymentService } from '../../../../erp-common/services/payment.service';
 
 @Component({
   selector: 'jhi-payment',

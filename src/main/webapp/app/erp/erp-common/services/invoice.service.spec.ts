@@ -3,13 +3,14 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
-import { IInvoice, Invoice } from '../invoice.model';
 
 import { InvoiceService } from './invoice.service';
 import {MockStore, provideMockStore} from "@ngrx/store/testing";
-import {initialState} from "../../../../store/global-store.definition";
+import {initialState} from "../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
+import { ErpCommonModule } from '../erp-common.module';
+import { IInvoice, Invoice } from '../models/invoice.model';
+import { CurrencyTypes } from '../enumerations/currency-types.model';
 
 describe('Service Tests', () => {
   describe('Invoice Service', () => {
@@ -22,7 +23,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, LoggerTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
         providers: [provideMockStore({initialState})]
       });
       expectedResult = null;

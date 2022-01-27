@@ -4,13 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IInvoice } from '../invoice.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { InvoiceService } from '../service/invoice.service';
+import { InvoiceService } from '../../../../erp-common/services/invoice.service';
 import { InvoiceDeleteDialogComponent } from '../delete/invoice-delete-dialog.component';
 import {State} from "../../../../store/global-store.definition";
 import {Store} from "@ngrx/store";
+import { IInvoice } from '../../../../erp-common/models/invoice.model';
 
 @Component({
   selector: 'jhi-invoice',

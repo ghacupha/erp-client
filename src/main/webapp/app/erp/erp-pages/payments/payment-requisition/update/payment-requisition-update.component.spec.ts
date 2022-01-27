@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -7,14 +9,14 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentRequisitionService } from '../service/payment-requisition.service';
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { PaymentRequisitionService } from '../../../../erp-common/services/payment-requisition.service';
+import { IPaymentRequisition, PaymentRequisition } from '../../../../erp-common/models/payment-requisition.model';
 
 import { PaymentRequisitionUpdateComponent } from './payment-requisition-update.component';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
 
 describe('PaymentRequisition Management Update Component', () => {
   let comp: PaymentRequisitionUpdateComponent;
@@ -26,7 +28,7 @@ describe('PaymentRequisition Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [PaymentRequisitionUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

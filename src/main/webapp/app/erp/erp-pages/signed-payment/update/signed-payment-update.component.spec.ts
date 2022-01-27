@@ -9,15 +9,15 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { SignedPaymentService } from '../service/signed-payment.service';
-import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
+import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { SignedPaymentUpdateComponent } from './signed-payment-update.component';
-import { PaymentCategoryService } from '../../payments/payment-category/service/payment-category.service';
+import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
 import { IPaymentLabel } from '../../payment-label/payment-label.model';
-import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
+import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
 
 describe('Component Tests', () => {
   describe('SignedPayment Management Update Component', () => {

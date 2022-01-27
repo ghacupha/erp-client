@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IInvoice } from '../invoice.model';
-import { InvoiceService } from '../service/invoice.service';
+import { InvoiceService } from '../../../../erp-common/services/invoice.service';
+import { IInvoice } from '../../../../erp-common/models/invoice.model';
 
 @Component({
   templateUrl: './invoice-delete-dialog.component.html',

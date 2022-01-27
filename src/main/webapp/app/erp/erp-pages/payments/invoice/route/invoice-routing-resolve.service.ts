@@ -5,7 +5,7 @@ import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
 import { IInvoice, Invoice } from '../invoice.model';
-import { InvoiceService } from '../service/invoice.service';
+import { InvoiceService } from '../../../../erp-common/services/invoice.service';
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceRoutingResolveService implements Resolve<IInvoice> {

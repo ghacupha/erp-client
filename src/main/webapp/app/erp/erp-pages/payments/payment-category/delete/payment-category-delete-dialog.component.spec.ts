@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -6,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaymentCategoryService } from '../service/payment-category.service';
+import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
 
 import { PaymentCategoryDeleteDialogComponent } from './payment-category-delete-dialog.component';
 
@@ -19,7 +21,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentCategoryDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

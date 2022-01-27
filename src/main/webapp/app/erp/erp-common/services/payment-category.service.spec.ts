@@ -1,10 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { CategoryTypes } from 'app/entities/enumerations/category-types.model';
-import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
+import { IPaymentCategory, PaymentCategory } from '../models/payment-category.model';
 
 import { PaymentCategoryService } from './payment-category.service';
+import { ErpCommonModule } from '../erp-common.module';
+import { CategoryTypes } from '../enumerations/category-types.model';
 
 describe('Service Tests', () => {
   describe('PaymentCategory Service', () => {
@@ -15,7 +16,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(PaymentCategoryService);

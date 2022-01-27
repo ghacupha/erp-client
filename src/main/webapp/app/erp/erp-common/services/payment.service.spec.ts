@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 
 import { PaymentService } from './payment.service';
 import { IPayment, Payment } from '../models/payment.model';
 import { ErpCommonModule } from '../erp-common.module';
+import { CurrencyTypes } from '../enumerations/currency-types.model';
 
 describe('Payment Service', () => {
   let service: PaymentService;
