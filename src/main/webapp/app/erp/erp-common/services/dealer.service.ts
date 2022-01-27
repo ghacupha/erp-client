@@ -6,12 +6,13 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { getDealerIdentifier, IDealer } from './dealer.model';
+import { ErpCommonModule } from '../erp-common.module';
+import { getDealerIdentifier, IDealer } from '../models/dealer.model';
 
 export type EntityResponseType = HttpResponse<IDealer>;
 export type EntityArrayResponseType = HttpResponse<IDealer[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class DealerService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dealers');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');

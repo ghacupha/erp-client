@@ -3,32 +3,19 @@ import { IPlaceholder } from '../../../entities/erpService/placeholder/placehold
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
-import { Dealer, IDealer } from './dealer.model';
-import { IPaymentLabel } from './payment-label.model';
-import { DealerService } from './dealer.service';
-import { PaymentLabelService } from './payment-label.service';
-import { ApplicationConfigService } from '../../../core/config/application-config.service';
-import { PlaceholderService } from './placeholder.service';
+import { HttpResponse } from '@angular/common/http';
+import { finalize, map} from 'rxjs/operators';
+import { DealerService } from '../../erp-common/services/dealer.service';
+import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
+import { Dealer, IDealer } from '../../erp-common/models/dealer.model';
+import { PaymentLabelService } from '../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../erp-common/services/placeholder.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",
   templateUrl: './dealer-maintenance-form.component.html'
 })
 export class DealerMaintenanceFormComponent implements OnInit {
-
-  filteredPlaceholders: IPlaceholder[] = [];
-  isLoading = false;
-  errorMsg!: string;
-  minLengthTerm = 3;
-  selectedPlaceholder!: IPlaceholder | null;
-
-  selectedPlaceholders: IPlaceholder [] = [];
-
-  placeholderSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/placeholders?query=');
-
-
   isSaving = false;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
@@ -56,8 +43,6 @@ export class DealerMaintenanceFormComponent implements OnInit {
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected http: HttpClient,
-    protected applicationConfigService: ApplicationConfigService,
     protected fb: FormBuilder
   ) {}
 
@@ -66,57 +51,6 @@ export class DealerMaintenanceFormComponent implements OnInit {
       this.updateForm(dealer);
       this.loadRelationshipsOptions();
     });
-
-    this.editForm.get(['placeholders'])!.valueChanges
-      .pipe(
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(1000),
-        tap(() => {
-          this.errorMsg = "";
-          this.filteredPlaceholders = [];
-          this.isLoading = true;
-        }),
-        switchMap((value: string) => this.http.get<IPlaceholder[]>(this.placeholderSearchUrl + value)
-          .pipe(
-            finalize(() => {
-              this.isLoading = false
-            }),
-          )
-        )
-      )
-      .subscribe(data => {
-        if (data.length <= 0) {
-          this.errorMsg = "Search results could not be retrieved";
-          this.filteredPlaceholders = [];
-        } else {
-          this.errorMsg = "";
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-          this.filteredPlaceholders.push(...data ?? []);
-        }
-
-
-
-        // eslint-disable-next-line no-console
-        console.log(this.filteredPlaceholders)
-      });
-  }
-
-  onPlaceholderSelected(): void {
-    this.selectedPlaceholder = this.editForm.get(['placeholders'])!.value;
-
-    if (this.selectedPlaceholder) {
-      this.selectedPlaceholders = [...this.selectedPlaceholders, this.selectedPlaceholder];
-    }
-  }
-
-  displayPlaceholderWith(value: IPlaceholder): string {
-    return value.description ?? "";
-  }
-
-  clearPlaceholderSelection(): void {
-    this.selectedPlaceholder = null;
-    this.filteredPlaceholders = [];
   }
 
   previousState(): void {
@@ -259,8 +193,7 @@ export class DealerMaintenanceFormComponent implements OnInit {
       bankersSwiftCode: this.editForm.get(['bankersSwiftCode'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       dealerGroup: this.editForm.get(['dealerGroup'])!.value,
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      placeholders: this.selectedPlaceholders ?? []
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

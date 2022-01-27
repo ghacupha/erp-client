@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { DealerService } from './dealer.service';
-import { Dealer, IDealer } from './dealer.model';
+import { Dealer, IDealer } from '../models/dealer.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 describe('Service Tests', () => {
   describe('Dealer Service', () => {
@@ -12,7 +13,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(DealerService);

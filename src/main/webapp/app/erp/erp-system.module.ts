@@ -7,6 +7,7 @@ import {ErpNavbarModule} from "./navbar/erp-navbar.module";
 import {ErpNavigationModule} from "./erp-nav/erp-navigation.module";
 import {ErpPagesModule} from "./erp-pages/erp-pages.module";
 import { ErpFormsModule } from './erp-forms/erp-forms.module';
+import { ErpCommonModule } from './erp-common/erp-common.module';
 
 export const routes: Routes = [];
 
@@ -19,7 +20,8 @@ export const routes: Routes = [];
     ErpNavbarModule,
     ErpNavigationModule,
     ErpPagesModule,
-    ErpFormsModule
+    ErpFormsModule,
+    ErpCommonModule,
   ],
   exports: [
     ErpNavbarModule,

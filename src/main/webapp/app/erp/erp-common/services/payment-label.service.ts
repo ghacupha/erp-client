@@ -6,12 +6,13 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { getPaymentLabelIdentifier, IPaymentLabel } from './payment-label.model';
+import { ErpCommonModule } from '../erp-common.module';
+import { getPaymentLabelIdentifier, IPaymentLabel } from '../models/payment-label.model';
 
 export type EntityResponseType = HttpResponse<IPaymentLabel>;
 export type EntityArrayResponseType = HttpResponse<IPaymentLabel[]>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class PaymentLabelService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payment-labels');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-labels');

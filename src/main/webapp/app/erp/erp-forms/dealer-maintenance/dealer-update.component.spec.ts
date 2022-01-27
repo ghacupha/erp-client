@@ -1,5 +1,3 @@
-import { PaymentLabelService } from './payment-label.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -8,12 +6,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
-import { IPlaceholder } from '../../../entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../entities/erpService/placeholder/service/placeholder.service';
 import { DealerMaintenanceFormComponent } from './dealer-maintenance-form.component';
-import { DealerService } from './dealer.service';
-import { Dealer, IDealer } from './dealer.model';
-import { IPaymentLabel } from './payment-label.model';
+import { PaymentLabelService } from '../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../erp-common/services/placeholder.service';
+import { Dealer, IDealer } from '../../erp-common/models/dealer.model';
+import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { DealerService } from '../../erp-common/services/dealer.service';
+
 
 describe('Component Tests', () => {
   describe('Dealer Maintenance Update Component', () => {
@@ -26,7 +27,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [DealerMaintenanceFormComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

@@ -3,7 +3,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 
 import { PaymentLabelService } from './payment-label.service';
-import { IPaymentLabel, PaymentLabel } from './payment-label.model';
+import { IPaymentLabel, PaymentLabel } from '../models/payment-label.model';
+import { ErpCommonModule } from '../erp-common.module';
 
 describe('Service Tests', () => {
   describe('PaymentLabel Service', () => {
@@ -14,7 +15,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
       });
       expectedResult = null;
       service = TestBed.inject(PaymentLabelService);
