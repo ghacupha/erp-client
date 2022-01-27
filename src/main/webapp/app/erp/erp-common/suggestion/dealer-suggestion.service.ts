@@ -11,7 +11,7 @@ import { IDealer } from '../models/dealer.model';
 export class DealerSuggestionService {
 
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
-  
+
   constructor(
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService

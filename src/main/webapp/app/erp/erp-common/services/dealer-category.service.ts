@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
-import {PaymentService} from '../../../payments/payment/service/payment.service';
-import {IDealer} from '../dealer.model';
 import {Store} from '@ngrx/store';
-import {State} from '../../../../store/global-store.definition';
-import {IPaymentCategory, PaymentCategory} from '../../../payments/payment-category/payment-category.model';
+import {State} from '../../store/global-store.definition';
 import {EMPTY, Observable, of} from "rxjs";
 import { EntityArrayResponseType } from 'app/erp/erp-pages/payments/payment/service/payment.service';
+import { ErpCommonModule } from '../erp-common.module';
+import { IPaymentCategory, PaymentCategory } from '../models/payment-category.model';
+import { IDealer } from '../models/dealer.model';
+import { PaymentService } from './payment.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: ErpCommonModule })
 export class DealerCategoryService {
 
   constructor(protected paymentService: PaymentService, protected store: Store<State>) {

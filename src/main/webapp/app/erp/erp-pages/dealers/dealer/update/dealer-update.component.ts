@@ -5,12 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IDealer, Dealer } from '../dealer.model';
-import { DealerService } from '../service/dealer.service';
-import {IPaymentLabel} from '../../../payment-label/payment-label.model';
-import {IPlaceholder} from '../../../../../entities/erpService/placeholder/placeholder.model';
-import {PaymentLabelService} from '../../../payment-label/service/payment-label.service';
-import {PlaceholderService} from '../../../../../entities/erpService/placeholder/service/placeholder.service';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
 
 @Component({
   selector: 'jhi-dealer-update',

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { IDealer } from '../dealer.model';
-import { DealerService } from '../service/dealer.service';
+import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
 
 @Component({
   templateUrl: './dealer-delete-dialog.component.html',

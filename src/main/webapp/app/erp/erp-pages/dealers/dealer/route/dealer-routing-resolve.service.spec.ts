@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -6,10 +8,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IDealer, Dealer } from '../dealer.model';
-import { DealerService } from '../service/dealer.service';
-
 import { DealerRoutingResolveService } from './dealer-routing-resolve.service';
+import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
 
 describe('Service Tests', () => {
   describe('Dealer routing resolve service', () => {
@@ -21,7 +22,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         providers: [Router, ActivatedRouteSnapshot],
       });
       mockRouter = TestBed.inject(Router);

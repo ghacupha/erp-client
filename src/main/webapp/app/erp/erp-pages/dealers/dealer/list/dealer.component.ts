@@ -4,19 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IDealer } from '../dealer.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from '../delete/dealer-delete-dialog.component';
 import {Store} from '@ngrx/store';
 import {State} from '../../../../store/global-store.definition';
-import {DealerCategoryService} from '../service/dealer-category.service';
+import {DealerCategoryService} from '../../../../erp-common/services/dealer-category.service';
 import {
   dealerAcquiredForPayment, requisitionForDealerCategoryInitiated
 } from "../../../../store/actions/dealer-workflows-status.actions";
 import {recordDealerInvoiceButtonClicked} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
 import {NGXLogger} from "ngx-logger";
+import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { DealerService } from '../../../../erp-common/services/dealer.service';
 
 @Component({
   selector: 'jhi-dealer',
