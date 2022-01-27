@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { PlaceholderService } from './placeholder.service';
 import { IPlaceholder, Placeholder } from '../models/placeholder.model';
-import { ErpCommonModule } from '../erp-common.module';
+
+import { PlaceholderService } from './placeholder.service';
 
 describe('Placeholder Service', () => {
   let service: PlaceholderService;
@@ -13,7 +13,7 @@ describe('Placeholder Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ErpCommonModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule],
     });
     expectedResult = null;
     service = TestBed.inject(PlaceholderService);

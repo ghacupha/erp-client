@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ITaxRule, TaxRule } from '../../../../erp-common/models/tax-rule.model';
 import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-tax-rule-update',

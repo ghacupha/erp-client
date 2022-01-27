@@ -1,5 +1,3 @@
-import { PaymentLabelService } from '../../payment-label/service/payment-label.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -11,13 +9,13 @@ import { of, Subject } from 'rxjs';
 
 import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
 import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
 import { SignedPaymentUpdateComponent } from './signed-payment-update.component';
 import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
-import { IPaymentLabel } from '../../payment-label/payment-label.model';
 import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 describe('Component Tests', () => {
   describe('SignedPayment Management Update Component', () => {

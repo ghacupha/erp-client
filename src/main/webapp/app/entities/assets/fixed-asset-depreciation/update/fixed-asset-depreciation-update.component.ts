@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFixedAssetDepreciation, FixedAssetDepreciation } from '../fixed-asset-depreciation.model';
 import { FixedAssetDepreciationService } from '../service/fixed-asset-depreciation.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regime.model';
 
 @Component({

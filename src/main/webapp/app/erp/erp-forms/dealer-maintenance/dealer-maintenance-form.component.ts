@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IPlaceholder } from '../../../entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';

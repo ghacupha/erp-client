@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PlaceholderService } from '../service/placeholder.service';
+import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
 
 import { PlaceholderDeleteDialogComponent } from './placeholder-delete-dialog.component';
 

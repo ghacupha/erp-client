@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPlaceholder } from '../placeholder.model';
+import { IPlaceholder } from '../../../../erp/erp-common/models/placeholder.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PlaceholderService } from '../service/placeholder.service';
+import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
 import { PlaceholderDeleteDialogComponent } from '../delete/placeholder-delete-dialog.component';
 
 @Component({

@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
 import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
 import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
 import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';

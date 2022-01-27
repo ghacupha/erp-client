@@ -11,8 +11,8 @@ import { of, Subject } from 'rxjs';
 import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
 import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
 import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 import { PaymentCalculationUpdateComponent } from './payment-calculation-update.component';
 import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';

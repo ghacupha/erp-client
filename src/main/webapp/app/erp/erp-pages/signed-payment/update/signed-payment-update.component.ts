@@ -7,12 +7,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
 import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPaymentLabel } from '../../payment-label/payment-label.model';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
-import { PaymentLabelService } from '../../payment-label/service/payment-label.service';
 import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
 
 @Component({
   selector: 'jhi-signed-payment-update',

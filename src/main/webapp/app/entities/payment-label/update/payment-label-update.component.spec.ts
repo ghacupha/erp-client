@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentLabelService } from '../service/payment-label.service';
 import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 import { PaymentLabelUpdateComponent } from './payment-label-update.component';
 

@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,8 +11,8 @@ import { of, Subject } from 'rxjs';
 
 import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
 import { ITaxReference, TaxReference } from '../../../../erp-common/models/tax-reference.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 import { TaxReferenceUpdateComponent } from './tax-reference-update.component';
 
@@ -24,7 +26,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [TaxReferenceUpdateComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

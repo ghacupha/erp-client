@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { FileTypeService } from '../service/file-type.service';
 import { IFileType, FileType } from '../file-type.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 import { FileTypeUpdateComponent } from './file-type-update.component';
 

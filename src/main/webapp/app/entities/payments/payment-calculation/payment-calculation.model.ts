@@ -1,6 +1,6 @@
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
 
 export interface IPaymentCalculation {
   id?: number;

@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -19,7 +21,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [TaxReferenceDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

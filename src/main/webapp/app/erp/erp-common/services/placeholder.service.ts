@@ -6,13 +6,12 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ErpCommonModule } from '../erp-common.module';
-import { getPlaceholderIdentifier, IPlaceholder } from '../models/placeholder.model';
+import { IPlaceholder, getPlaceholderIdentifier } from '../models/placeholder.model';
 
 export type EntityResponseType = HttpResponse<IPlaceholder>;
 export type EntityArrayResponseType = HttpResponse<IPlaceholder[]>;
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class PlaceholderService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/placeholders');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/placeholders');
