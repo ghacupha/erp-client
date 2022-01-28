@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPaymentLabel } from '../payment-label.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentLabelService } from '../service/payment-label.service';
 import { PaymentLabelDeleteDialogComponent } from '../delete/payment-label-delete-dialog.component';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
 
 @Component({
   selector: 'jhi-payment-label',
