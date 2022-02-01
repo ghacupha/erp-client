@@ -11,6 +11,7 @@ import { Dealer, IDealer } from '../../erp-common/models/dealer.model';
 import { PaymentLabelService } from '../../erp-common/services/payment-label.service';
 import { PlaceholderService } from '../../erp-common/services/placeholder.service';
 import { DealerSuggestionService } from '../../erp-common/suggestion/dealer-suggestion.service';
+import { LabelSuggestionService } from '../../erp-common/suggestion/label-suggestion.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",
@@ -41,6 +42,10 @@ export class DealerMaintenanceFormComponent implements OnInit {
 
   minAccountLengthTerm = 3;
 
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
   dealersLoading = false;
   dealerGroupInput$ = new Subject<string>();
   dealerLookups$: Observable<IDealer[]> = of([]);
@@ -51,7 +56,8 @@ export class DealerMaintenanceFormComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected dealerSuggestionService: DealerSuggestionService
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +66,9 @@ export class DealerMaintenanceFormComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    // fire-up typeahead items
     this.loadDealers();
+    this.loadLabels();
   }
 
   loadDealers(): void {
@@ -79,6 +87,28 @@ export class DealerMaintenanceFormComponent implements OnInit {
         ))
       )
     );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      )
+    );
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   trackDealerGroupByFn(item: IDealer): number {
