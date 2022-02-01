@@ -449,6 +449,8 @@
         />
       </div>
 
+      <pre *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm!.value|json}}</pre>
+
       <div>
         <!--<button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
