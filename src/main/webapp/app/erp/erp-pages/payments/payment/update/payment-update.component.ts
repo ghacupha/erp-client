@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
 import {IPaymentCalculation} from '../../../../erp-common/models/payment-calculation.model';
@@ -63,6 +63,8 @@ import { PaymentService } from '../../../../erp-common/services/payment.service'
 import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
 import { DealerService } from '../../../../erp-common/services/dealer.service';
 import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -115,6 +117,16 @@ export class PaymentUpdateComponent implements OnInit {
     paymentGroup: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -131,7 +143,9 @@ export class PaymentUpdateComponent implements OnInit {
     protected invoiceService: InvoiceService,
     protected signedPaymentService: SignedPaymentService,
     protected router: Router,
-    protected log: NGXLogger
+    protected log: NGXLogger,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
   ) {
 
     this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
@@ -183,6 +197,56 @@ export class PaymentUpdateComponent implements OnInit {
       });
     }
     this.loadRelationshipsOptions();
+
+    // fire-up typeahead items
+    this.loadLabels();
+    this.loadPlaceholders();
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {
