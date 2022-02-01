@@ -9,6 +9,7 @@ import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PaymentLabelDeleteDialogComponent } from './payment-label-delete-dialog.component';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('PaymentLabel Management Delete Component', () => {
@@ -19,7 +20,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentLabelDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

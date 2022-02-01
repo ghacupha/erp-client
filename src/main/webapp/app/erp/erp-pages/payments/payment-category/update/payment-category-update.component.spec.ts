@@ -16,6 +16,7 @@ import { PaymentCategoryUpdateComponent } from './payment-category-update.compon
 import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
 import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
 import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('PaymentCategory Management Update Component', () => {
@@ -28,7 +29,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule],
         declarations: [PaymentCategoryUpdateComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

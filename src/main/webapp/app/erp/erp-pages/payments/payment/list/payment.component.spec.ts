@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 
 import { PaymentComponent } from './payment.component';
 import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('Payment Management Component', () => {
@@ -19,7 +20,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, LoggerTestingModule],
+        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
         declarations: [PaymentComponent],
         providers: [
           Router,
