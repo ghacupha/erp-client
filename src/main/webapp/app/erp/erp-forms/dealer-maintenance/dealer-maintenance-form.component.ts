@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { concat, Observable, of, Subject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { finalize, map} from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { DealerService } from '../../erp-common/services/dealer.service';
 import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
 import { Dealer, IDealer } from '../../erp-common/models/dealer.model';
 import { PaymentLabelService } from '../../erp-common/services/payment-label.service';
 import { PlaceholderService } from '../../erp-common/services/placeholder.service';
+import { DealerSuggestionService } from '../../erp-common/suggestion/dealer-suggestion.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",
@@ -38,12 +39,19 @@ export class DealerMaintenanceFormComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  dealersLoading = false;
+  dealerGroupInput$ = new Subject<string>();
+  dealerLookups$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected dealerService: DealerService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected dealerSuggestionService: DealerSuggestionService
   ) {}
 
   ngOnInit(): void {
@@ -51,6 +59,30 @@ export class DealerMaintenanceFormComponent implements OnInit {
       this.updateForm(dealer);
       this.loadRelationshipsOptions();
     });
+
+    this.loadDealers();
+  }
+
+  loadDealers(): void {
+    this.dealerLookups$ = concat(
+      of([]), // default items
+      this.dealerGroupInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.dealersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.dealersLoading = false)
+        ))
+      )
+    );
+  }
+
+  trackDealerGroupByFn(item: IDealer): number {
+    return item.id!;
   }
 
   previousState(): void {

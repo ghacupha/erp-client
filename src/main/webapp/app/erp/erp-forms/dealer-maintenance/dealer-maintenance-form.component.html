@@ -136,6 +136,23 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label">Dealer Group</label>
+          <ng-select
+            [items]="dealerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerGroupByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="dealersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="dealerGroupInput$"
+            formControlName="dealerGroup"
+          >
+            <option [ngValue]="editForm.get('dealerGroup')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['dealerGroup'])!.value|formatDealerId}}</div>
+        </div>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_dealerGroup">Dealer Group</label>
           <select class="form-control" id="field_dealerGroup" data-cy="dealerGroup" name="dealerGroup" formControlName="dealerGroup">
             <option [ngValue]="null"></option>
@@ -146,7 +163,7 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label for="field_placeholders">Placeholder</label>

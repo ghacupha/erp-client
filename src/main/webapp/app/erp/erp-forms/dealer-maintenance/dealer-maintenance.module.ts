@@ -6,10 +6,11 @@ import { ErpMaterialModule } from '../../../erp-material.module';
 import { UserRouteAccessService } from '../../../core/auth/user-route-access.service';
 import { RouterModule, Routes } from '@angular/router';
 import { DealerMaintenanceFormComponent } from './dealer-maintenance-form.component';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 const dealerMaintenanceRoute: Routes = [
   {
-    path: '',
+    path: 'dealer-maintenance',
     component: DealerMaintenanceFormComponent,
     canActivate: [UserRouteAccessService],
   },
@@ -26,6 +27,7 @@ const dealerMaintenanceRoute: Routes = [
     ErpMaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(dealerMaintenanceRoute),
+    ErpCommonModule
   ]
 })
 export class DealerMaintenanceModule {}
