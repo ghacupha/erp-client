@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
 import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
@@ -11,6 +11,9 @@ import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
 import { DealerService } from '../../../../erp-common/services/dealer.service';
 import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
 import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { DealerSuggestionService } from '../../../../erp-common/suggestion/dealer-suggestion.service';
+import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
 
 @Component({
   selector: 'jhi-dealer-update',
@@ -39,12 +42,29 @@ export class DealerUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  dealersLoading = false;
+  dealerGroupInput$ = new Subject<string>();
+  dealerLookups$: Observable<IDealer[]> = of([]);
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
   constructor(
     protected dealerService: DealerService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -53,6 +73,80 @@ export class DealerUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadDealers();
+    this.loadLabels();
+    this.loadPlaceholders();
+  }
+
+  loadDealers(): void {
+    this.dealerLookups$ = concat(
+      of([]), // default items
+      this.dealerGroupInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.dealersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.dealersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackDealerGroupByFn(item: IDealer): number {
+    return item.id!;
   }
 
   previousState(): void {
