@@ -12,6 +12,7 @@ import { PaymentLabelService } from '../../erp-common/services/payment-label.ser
 import { PlaceholderService } from '../../erp-common/services/placeholder.service';
 import { DealerSuggestionService } from '../../erp-common/suggestion/dealer-suggestion.service';
 import { LabelSuggestionService } from '../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../erp-common/suggestion/placeholder-suggestion.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",
@@ -50,6 +51,10 @@ export class DealerMaintenanceFormComponent implements OnInit {
   dealerGroupInput$ = new Subject<string>();
   dealerLookups$: Observable<IDealer[]> = of([]);
 
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
   constructor(
     protected dealerService: DealerService,
     protected paymentLabelService: PaymentLabelService,
@@ -58,6 +63,7 @@ export class DealerMaintenanceFormComponent implements OnInit {
     protected fb: FormBuilder,
     protected dealerSuggestionService: DealerSuggestionService,
     protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +75,7 @@ export class DealerMaintenanceFormComponent implements OnInit {
     // fire-up typeahead items
     this.loadDealers();
     this.loadLabels();
+    this.loadPlaceholders();
   }
 
   loadDealers(): void {
@@ -85,7 +92,8 @@ export class DealerMaintenanceFormComponent implements OnInit {
           catchError(() => of([])),
           tap(() => this.dealersLoading = false)
         ))
-      )
+      ),
+      of([...this.dealersSharedCollection])
     );
   }
 
@@ -103,8 +111,32 @@ export class DealerMaintenanceFormComponent implements OnInit {
           catchError(() => of([])),
           tap(() => this.labelsLoading = false)
         ))
-      )
+      ),
+      of([...this.paymentLabelsSharedCollection])
     );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   trackLabelByFn(item: IPaymentLabel): number {
