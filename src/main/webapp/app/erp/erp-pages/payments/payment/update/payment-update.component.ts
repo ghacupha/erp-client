@@ -65,6 +65,7 @@ import { DealerService } from '../../../../erp-common/services/dealer.service';
 import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
 import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
+import { CategorySuggestionService } from '../../../../erp-common/suggestion/category-suggestion.service';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -119,6 +120,10 @@ export class PaymentUpdateComponent implements OnInit {
 
   minAccountLengthTerm = 3;
 
+  categoriesLoading = false;
+  categoryControlInput$ = new Subject<string>();
+  categoryLookups$: Observable<IPaymentCategory[]> = of([]);
+
   labelsLoading = false;
   labelControlInput$ = new Subject<string>();
   labelLookups$: Observable<IPaymentLabel[]> = of([]);
@@ -144,6 +149,7 @@ export class PaymentUpdateComponent implements OnInit {
     protected signedPaymentService: SignedPaymentService,
     protected router: Router,
     protected log: NGXLogger,
+    protected categorySuggestionService: CategorySuggestionService,
     protected labelSuggestionService: LabelSuggestionService,
     protected placeholderSuggestionService: PlaceholderSuggestionService,
   ) {
@@ -201,6 +207,26 @@ export class PaymentUpdateComponent implements OnInit {
     // fire-up typeahead items
     this.loadLabels();
     this.loadPlaceholders();
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.categoryLookups$ = concat(
+      of([]), // default items
+      this.categoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.categoriesLoading = true),
+        switchMap(term => this.categorySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.categoriesLoading = false)
+        ))
+      ),
+      of([...this.paymentCategoriesSharedCollection])
+    );
   }
 
   loadLabels(): void {
@@ -242,6 +268,10 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackCategoryByFn(item: IPaymentCategory): number {
     return item.id!;
   }
 

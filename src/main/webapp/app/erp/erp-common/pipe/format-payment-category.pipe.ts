@@ -13,11 +13,17 @@ export class FormatPaymentCategoryPipe implements PipeTransform {
 
     if (value.categoryDescription) {
 
-      const limit = args.length > 0 ? parseInt(args[0], 10) : 20;
+      const limit = args.length > 0 ? parseInt(args[0], 10) : 30;
       const trail = args.length > 1 ? args[1] : '...';
 
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      const desc = value.categoryDescription.length > limit ? value.categoryDescription.substring(0, limit) + trail : value;
+      let desc = '';
+
+      if (value.categoryDescription.length > limit) {
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+         desc = value.categoryDescription.substring(0, limit) + trail;
+      } else {
+        desc = value.categoryDescription;
+      }
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       categoryDetail = `Id: ${value.id} | Name: ${value.categoryName} |${desc}`;

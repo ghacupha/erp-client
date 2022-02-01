@@ -268,7 +268,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
@@ -289,6 +289,23 @@
               {{ paymentCategoryOption.categoryName }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Category</label>
+          <ng-select
+            [items]="categoryLookups$ | async"
+            bindLabel="categoryName"
+            [trackByFn]="trackCategoryByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="categoriesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="categoryControlInput$"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['paymentCategory'])!.value|formatPaymentCategory: [35, '...']}}</div>
         </div>
 
         <!--<div class="form-group">
