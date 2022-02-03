@@ -23,7 +23,7 @@ export class FormatPaymentPipe implements PipeTransform {
       const desc = value.description!.length > limit ? value.description.substing(0, limit) + trail : value.description;
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      detail = `Id: ${value.id} | #: ${value.paymentNumber} | dd: ${value.paymentDate} |${desc}`;
+      detail = `id: ${value.id} | #: ${value.paymentNumber} | dd: ${value.paymentDate} |${desc}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
