@@ -66,6 +66,7 @@ import { PlaceholderService } from '../../../../erp-common/services/placeholder.
 import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
 import { CategorySuggestionService } from '../../../../erp-common/suggestion/category-suggestion.service';
+import { PaymentSuggestionService } from '../../../../erp-common/suggestion/payment-suggestion.service';
 
 @Component({
   selector: 'jhi-payment-update',
@@ -132,6 +133,10 @@ export class PaymentUpdateComponent implements OnInit {
   placeholderControlInput$ = new Subject<string>();
   placeholderLookups$: Observable<IPlaceholder[]> = of([]);
 
+  paymentsLoading = false;
+  paymentControlInput$ = new Subject<string>();
+  paymentLookups$: Observable<IPayment[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -152,6 +157,7 @@ export class PaymentUpdateComponent implements OnInit {
     protected categorySuggestionService: CategorySuggestionService,
     protected labelSuggestionService: LabelSuggestionService,
     protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected paymentSuggestionService: PaymentSuggestionService,
   ) {
 
     this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
@@ -208,6 +214,7 @@ export class PaymentUpdateComponent implements OnInit {
     this.loadLabels();
     this.loadPlaceholders();
     this.loadCategories();
+    this.loadPayments();
   }
 
   loadCategories(): void {
@@ -265,6 +272,29 @@ export class PaymentUpdateComponent implements OnInit {
       ),
       of([...this.placeholdersSharedCollection])
     );
+  }
+
+  loadPayments(): void {
+    this.paymentLookups$ = concat(
+      of([]), // default items
+      this.paymentControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.paymentsLoading = true),
+        switchMap(term => this.paymentSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.paymentsLoading = false)
+        ))
+      ),
+      of([...this.paymentsSharedCollection])
+    );
+  }
+
+  trackPaymentByFn(item: IPayment): number {
+    return item.id!;
   }
 
   trackPlaceholdersByFn(item: IPaymentLabel): number {

@@ -411,7 +411,7 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_paymentGroup">Payment Group</label>
           <select class="form-control" id="field_paymentGroup" data-cy="paymentGroup" name="paymentGroup" formControlName="paymentGroup">
             <option [ngValue]="null"></option>
@@ -422,6 +422,27 @@
               {{ paymentOption.id }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Group</label>
+          <ng-select
+            [items]="paymentLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPaymentByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="paymentsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="paymentControlInput$"
+            formControlName="paymentGroup"
+          >
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <span class="ng-value-label">{{item.paymentNumber + ' ' + item.paymentDate + ' ' + item.settlementCurrency + ' ' + item.paymentAmount }}</span>
+              <span class="ng-value-icon right" (click)="clear(item)">×</span>
+            </ng-template>
+            <option [ngValue]="editForm.get('paymentGroup')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['paymentGroup'])!.value|formatPayment: [35, '...']}}</div>
         </div>
       </div>
 
