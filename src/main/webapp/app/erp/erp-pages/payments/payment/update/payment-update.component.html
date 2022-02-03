@@ -437,7 +437,7 @@
             formControlName="paymentGroup"
           >
             <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <span class="ng-value-label">{{item.paymentNumber + ' ' + item.paymentDate + ' ' + item.settlementCurrency + ' ' + item.paymentAmount }}</span>
+              <span class="ng-value-label">{{item.paymentNumber + ' ' + item.paymentDate + ' ' + item.settlementCurrency + ' ' + item.paymentAmount}}</span>
               <span class="ng-value-icon right" (click)="clear(item)">×</span>
             </ng-template>
             <option [ngValue]="editForm.get('paymentGroup')!.value"></option>
