@@ -96,6 +96,31 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'SignedPayments' },
         loadChildren: () => import('./signed-payment/signed-payment.module').then(m => m.SignedPaymentModule),
       },
+      {
+        path: 'payment-invoice',
+        data: { pageTitle: 'PaymentInvoices' },
+        loadChildren: () => import('./payment-invoice/payment-invoice.module').then(m => m.PaymentInvoiceModule),
+      },
+      {
+        path: 'settlement-currency',
+        data: { pageTitle: 'SettlementCurrencies' },
+        loadChildren: () => import('./settlement-currency/settlement-currency.module').then(m => m.SettlementCurrencyModule),
+      },
+      {
+        path: 'purchase-order',
+        data: { pageTitle: 'PurchaseOrders' },
+        loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule),
+      },
+      {
+        path: 'settlement',
+        data: { pageTitle: 'Settlements' },
+        loadChildren: () => import('./settlement/settlement.module').then(m => m.SettlementModule),
+      },
+      {
+        path: 'agency-notice',
+        data: { pageTitle: 'AgencyNotices' },
+        loadChildren: () => import('./agency-notice/agency-notice.module').then(m => m.AgencyNoticeModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

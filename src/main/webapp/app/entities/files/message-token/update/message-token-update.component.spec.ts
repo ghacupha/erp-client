@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { MessageTokenService } from '../service/message-token.service';
 import { IMessageToken, MessageToken } from '../message-token.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { MessageTokenUpdateComponent } from './message-token-update.component';
 

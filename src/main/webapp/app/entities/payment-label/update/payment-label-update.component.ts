@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
 import { PaymentLabelService } from '../service/payment-label.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-payment-label-update',

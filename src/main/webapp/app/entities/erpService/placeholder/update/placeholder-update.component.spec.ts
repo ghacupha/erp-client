@@ -7,8 +7,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
-import { IPlaceholder, Placeholder } from '../../../../erp/erp-common/models/placeholder.model';
+import { PlaceholderService } from '../service/placeholder.service';
+import { IPlaceholder, Placeholder } from '../placeholder.model';
 
 import { PlaceholderUpdateComponent } from './placeholder-update.component';
 

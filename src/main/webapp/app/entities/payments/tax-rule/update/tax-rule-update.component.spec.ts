@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { TaxRuleService } from '../service/tax-rule.service';
 import { ITaxRule, TaxRule } from '../tax-rule.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { TaxRuleUpdateComponent } from './tax-rule-update.component';
 

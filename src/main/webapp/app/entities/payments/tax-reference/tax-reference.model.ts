@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
 
 export interface ITaxReference {

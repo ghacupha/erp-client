@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ITaxReference, TaxReference } from '../tax-reference.model';
 import { TaxReferenceService } from '../service/tax-reference.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
 
 @Component({

@@ -13,8 +13,8 @@ import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { SignedPaymentUpdateComponent } from './signed-payment-update.component';
 

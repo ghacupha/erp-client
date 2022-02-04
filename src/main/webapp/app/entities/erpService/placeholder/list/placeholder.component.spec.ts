@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
+import { PlaceholderService } from '../service/placeholder.service';
 
 import { PlaceholderComponent } from './placeholder.component';
 

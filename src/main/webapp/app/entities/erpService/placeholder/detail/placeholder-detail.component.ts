@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IPlaceholder } from '../../../../erp/erp-common/models/placeholder.model';
+import { IPlaceholder } from '../placeholder.model';
 
 @Component({
   selector: 'jhi-placeholder-detail',

@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPlaceholder, Placeholder } from '../../../../erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
+import { IPlaceholder, Placeholder } from '../placeholder.model';
+import { PlaceholderService } from '../service/placeholder.service';
 
 @Injectable({ providedIn: 'root' })
 export class PlaceholderRoutingResolveService implements Resolve<IPlaceholder> {

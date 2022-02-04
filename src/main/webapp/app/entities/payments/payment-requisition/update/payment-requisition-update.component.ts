@@ -9,8 +9,8 @@ import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-payment-requisition-update',

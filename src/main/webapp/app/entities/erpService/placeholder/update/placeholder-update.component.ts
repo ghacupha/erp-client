@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPlaceholder, Placeholder } from '../../../../erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
+import { IPlaceholder, Placeholder } from '../placeholder.model';
+import { PlaceholderService } from '../service/placeholder.service';
 
 @Component({
   selector: 'jhi-placeholder-update',

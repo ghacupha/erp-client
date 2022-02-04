@@ -6,8 +6,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IPlaceholder, Placeholder } from '../../../../erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../../erp/erp-common/services/placeholder.service';
+import { IPlaceholder, Placeholder } from '../placeholder.model';
+import { PlaceholderService } from '../service/placeholder.service';
 
 import { PlaceholderRoutingResolveService } from './placeholder-routing-resolve.service';
 

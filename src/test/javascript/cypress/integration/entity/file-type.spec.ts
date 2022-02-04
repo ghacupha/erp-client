@@ -16,7 +16,7 @@ describe('FileType e2e test', () => {
   const fileTypePageUrlPattern = new RegExp('/file-type(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const fileTypeSample = { fileTypeName: 'Strategist', fileMediumType: 'EXCEL_XLS', fileType: 'PAYMENT' };
+  const fileTypeSample = { fileTypeName: 'Strategist', fileMediumType: 'EXCEL_XLS', fileType: 'SIGNED_PAYMENT' };
 
   let fileType: any;
 
@@ -161,7 +161,7 @@ describe('FileType e2e test', () => {
 
       cy.setFieldImageAsBytesOfEntity('fileTemplate', 'integration-test.png', 'image/png');
 
-      cy.get(`[data-cy="fileType"]`).select('FIXED_ASSET_NBV');
+      cy.get(`[data-cy="fileType"]`).select('PAYMENT_LABEL');
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
