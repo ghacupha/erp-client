@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
-import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';

@@ -7,7 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IPaymentInvoice } from '../payment-invoice.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
 import { PaymentInvoiceDeleteDialogComponent } from '../delete/payment-invoice-delete-dialog.component';
 
 @Component({

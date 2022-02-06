@@ -7,7 +7,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';

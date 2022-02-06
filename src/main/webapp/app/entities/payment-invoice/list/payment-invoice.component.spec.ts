@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
 
 import { PaymentInvoiceComponent } from './payment-invoice.component';
 

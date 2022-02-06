@@ -21,7 +21,7 @@ import { PaymentCategoryService } from 'app/entities/payments/payment-category/s
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/entities/payment-invoice/service/payment-invoice.service';
+import { PaymentInvoiceService } from 'app/erp/erp-common/services/payment-invoice.service';
 
 @Component({
   selector: 'jhi-settlement-update',
