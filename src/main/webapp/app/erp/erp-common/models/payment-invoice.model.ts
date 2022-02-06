@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
+import { IPurchaseOrder } from './purchase-order.model';
 
 export interface IPaymentInvoice {
   id?: number;

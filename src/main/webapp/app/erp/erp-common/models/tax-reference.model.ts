@@ -1,5 +1,5 @@
-import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
 import {IPlaceholder} from './placeholder.model';
+import { taxReferenceTypes } from '../enumerations/tax-reference-types.model';
 
 export interface ITaxReference {
   id?: number;

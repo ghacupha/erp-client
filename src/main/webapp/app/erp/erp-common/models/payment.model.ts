@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
+import { CurrencyTypes } from '../enumerations/currency-types.model';
 
 export interface IPayment {
   id?: number;
