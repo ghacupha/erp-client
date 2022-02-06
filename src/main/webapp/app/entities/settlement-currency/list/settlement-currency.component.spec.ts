@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 
 import { SettlementCurrencyComponent } from './settlement-currency.component';
 

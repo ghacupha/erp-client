@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';

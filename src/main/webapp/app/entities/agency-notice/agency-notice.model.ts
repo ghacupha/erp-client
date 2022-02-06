@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.model';
 
 export interface IAgencyNotice {

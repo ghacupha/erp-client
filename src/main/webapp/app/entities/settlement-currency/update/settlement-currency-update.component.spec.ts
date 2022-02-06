@@ -7,8 +7,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
-import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ISettlementCurrency } from '../settlement-currency.model';
+import { ISettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
 
 @Component({
   selector: 'jhi-settlement-currency-detail',

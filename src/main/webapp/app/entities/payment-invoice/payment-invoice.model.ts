@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 
 export interface IPaymentInvoice {
   id?: number;

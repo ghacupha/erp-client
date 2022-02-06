@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 
 import { SettlementCurrencyDeleteDialogComponent } from './settlement-currency-delete-dialog.component';
 

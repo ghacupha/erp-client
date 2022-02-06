@@ -15,8 +15,8 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
 
 import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
 

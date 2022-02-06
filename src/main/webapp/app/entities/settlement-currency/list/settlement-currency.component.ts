@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ISettlementCurrency } from '../settlement-currency.model';
+import { ISettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 import { SettlementCurrencyDeleteDialogComponent } from '../delete/settlement-currency-delete-dialog.component';
 
 @Component({

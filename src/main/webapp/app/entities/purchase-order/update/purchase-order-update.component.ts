@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';

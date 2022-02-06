@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 
 @Injectable({ providedIn: 'root' })
 export class SettlementCurrencyRoutingResolveService implements Resolve<ISettlementCurrency> {

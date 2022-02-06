@@ -6,8 +6,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
-import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 
 import { SettlementCurrencyRoutingResolveService } from './settlement-currency-routing-resolve.service';
 

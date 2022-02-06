@@ -11,8 +11,8 @@ import { AgencyNoticeService } from '../service/agency-notice.service';
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
 
 import { AgencyNoticeUpdateComponent } from './agency-notice-update.component';
 

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
+import { ISettlementCurrency, SettlementCurrency } from '../models/settlement-currency.model';
 
 import { SettlementCurrencyService } from './settlement-currency.service';
 

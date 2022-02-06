@@ -6,7 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ISettlementCurrency, getSettlementCurrencyIdentifier } from '../settlement-currency.model';
+import { ISettlementCurrency, getSettlementCurrencyIdentifier } from '../models/settlement-currency.model';
 
 export type EntityResponseType = HttpResponse<ISettlementCurrency>;
 export type EntityArrayResponseType = HttpResponse<ISettlementCurrency[]>;
