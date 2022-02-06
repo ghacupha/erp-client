@@ -1,3 +1,5 @@
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -6,7 +8,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 
 import { SettlementCurrencyDeleteDialogComponent } from './settlement-currency-delete-dialog.component';
 

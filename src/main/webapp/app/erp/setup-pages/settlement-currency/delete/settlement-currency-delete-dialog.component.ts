@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { ISettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
+import { ISettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
 
 @Component({
   templateUrl: './settlement-currency-delete-dialog.component.html',

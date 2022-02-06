@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
 
 @Component({
   selector: 'jhi-settlement-currency-update',

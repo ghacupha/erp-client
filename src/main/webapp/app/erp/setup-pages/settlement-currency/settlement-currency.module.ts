@@ -5,9 +5,14 @@ import { SettlementCurrencyDetailComponent } from './detail/settlement-currency-
 import { SettlementCurrencyUpdateComponent } from './update/settlement-currency-update.component';
 import { SettlementCurrencyDeleteDialogComponent } from './delete/settlement-currency-delete-dialog.component';
 import { SettlementCurrencyRoutingModule } from './route/settlement-currency-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SettlementCurrencyRoutingModule],
+  imports: [
+    SharedModule,
+    SettlementCurrencyRoutingModule,
+    ErpCommonModule,
+  ],
   declarations: [
     SettlementCurrencyComponent,
     SettlementCurrencyDetailComponent,

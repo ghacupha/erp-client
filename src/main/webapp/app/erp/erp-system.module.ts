@@ -8,6 +8,7 @@ import {ErpNavigationModule} from "./erp-nav/erp-navigation.module";
 import {ErpPagesModule} from "./erp-pages/erp-pages.module";
 import { ErpFormsModule } from './erp-forms/erp-forms.module';
 import { ErpCommonModule } from './erp-common/erp-common.module';
+import { ErpSetupPagesModule } from './setup-pages/erp-setup-pages.module';
 
 export const routes: Routes = [];
 
@@ -22,11 +23,13 @@ export const routes: Routes = [];
     ErpPagesModule,
     ErpFormsModule,
     ErpCommonModule,
+    ErpSetupPagesModule,
   ],
   exports: [
     ErpNavbarModule,
     ErpPagesModule,
-    ErpFormsModule
+    ErpFormsModule,
+    ErpSetupPagesModule,
   ]
 })
 export class ErpSystemModule {}

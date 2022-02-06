@@ -1,3 +1,5 @@
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -6,10 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
-
 import { SettlementCurrencyRoutingResolveService } from './settlement-currency-routing-resolve.service';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
 
 describe('SettlementCurrency routing resolve service', () => {
   let mockRouter: Router;

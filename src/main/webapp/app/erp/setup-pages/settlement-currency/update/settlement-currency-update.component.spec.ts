@@ -1,3 +1,5 @@
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -7,12 +9,11 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { SettlementCurrencyService } from '../../../erp/erp-common/services/settlement-currency.service';
-import { ISettlementCurrency, SettlementCurrency } from '../../../erp/erp-common/models/settlement-currency.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { SettlementCurrencyUpdateComponent } from './settlement-currency-update.component';
+import { ISettlementCurrency, SettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
 
 describe('SettlementCurrency Management Update Component', () => {
   let comp: SettlementCurrencyUpdateComponent;
