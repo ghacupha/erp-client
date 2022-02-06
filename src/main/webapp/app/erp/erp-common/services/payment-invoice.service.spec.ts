@@ -3,9 +3,9 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 
 import { PaymentInvoiceService } from './payment-invoice.service';
+import { IPaymentInvoice, PaymentInvoice } from '../models/payment-invoice.model';
 
 describe('PaymentInvoice Service', () => {
   let service: PaymentInvoiceService;
