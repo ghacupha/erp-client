@@ -9,7 +9,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAgencyNotice, getAgencyNoticeIdentifier } from '../agency-notice.model';
+import { getAgencyNoticeIdentifier, IAgencyNotice } from '../models/agency-notice.model';
 
 export type EntityResponseType = HttpResponse<IAgencyNotice>;
 export type EntityArrayResponseType = HttpResponse<IAgencyNotice[]>;

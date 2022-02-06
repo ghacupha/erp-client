@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.model';
-import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 
 import { AgencyNoticeService } from './agency-notice.service';
+import { AgencyNotice, IAgencyNotice } from '../models/agency-notice.model';
+import { AgencyStatusType } from '../enumerations/agency-status-type.model';
 
 describe('AgencyNotice Service', () => {
   let service: AgencyNoticeService;
