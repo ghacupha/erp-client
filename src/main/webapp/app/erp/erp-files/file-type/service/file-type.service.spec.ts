@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { FileMediumTypes } from 'app/entities/enumerations/file-medium-types.model';
-import { FileModelType } from 'app/entities/enumerations/file-model-type.model';
 import { IFileType, FileType } from '../file-type.model';
 
 import { FileTypeService } from './file-type.service';
+import { FileMediumTypes } from '../../../erp-common/enumerations/file-medium-types.model';
+import { FileModelType } from '../../../erp-common/enumerations/file-model-type.model';
 
 describe('Service Tests', () => {
   describe('FileType Service', () => {

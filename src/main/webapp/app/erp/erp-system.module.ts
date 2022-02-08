@@ -9,6 +9,7 @@ import {ErpPagesModule} from "./erp-pages/erp-pages.module";
 import { ErpFormsModule } from './erp-forms/erp-forms.module';
 import { ErpCommonModule } from './erp-common/erp-common.module';
 import { ErpSetupPagesModule } from './setup-pages/erp-setup-pages.module';
+import { ErpAssetsModule } from './erp-assets/erp-assets.module';
 
 export const routes: Routes = [];
 
@@ -24,12 +25,14 @@ export const routes: Routes = [];
     ErpFormsModule,
     ErpCommonModule,
     ErpSetupPagesModule,
+    ErpAssetsModule
   ],
   exports: [
     ErpNavbarModule,
     ErpPagesModule,
     ErpFormsModule,
     ErpSetupPagesModule,
+    ErpAssetsModule
   ]
 })
 export class ErpSystemModule {}
