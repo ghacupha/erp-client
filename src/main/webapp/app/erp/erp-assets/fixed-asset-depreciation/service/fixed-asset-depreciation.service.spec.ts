@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regime.model';
 import { IFixedAssetDepreciation, FixedAssetDepreciation } from '../fixed-asset-depreciation.model';
 
 import { FixedAssetDepreciationService } from './fixed-asset-depreciation.service';
+import { DepreciationRegime } from '../../../erp-common/enumerations/depreciation-regime.model';
 
 describe('FixedAssetDepreciation Service', () => {
   let service: FixedAssetDepreciationService;
