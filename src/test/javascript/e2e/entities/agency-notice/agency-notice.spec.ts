@@ -58,6 +58,7 @@ describe('AgencyNotice e2e test', () => {
             // agencyNoticeUpdatePage.correspondentsSelectLastOption(),
             agencyNoticeUpdatePage.settlementCurrencySelectLastOption(),
             agencyNoticeUpdatePage.assessorSelectLastOption(),
+            // agencyNoticeUpdatePage.placeholderSelectLastOption(),
         ]);
 
         await agencyNoticeUpdatePage.save();

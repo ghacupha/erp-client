@@ -8,7 +8,6 @@ import {ErpNavigationModule} from "./erp-nav/erp-navigation.module";
 import {ErpPagesModule} from "./erp-pages/erp-pages.module";
 import { ErpFormsModule } from './erp-forms/erp-forms.module';
 import { ErpCommonModule } from './erp-common/erp-common.module';
-import { ErpSetupPagesModule } from './setup-pages/erp-setup-pages.module';
 import { ErpAssetsModule } from './erp-assets/erp-assets.module';
 import { ErpTaxesModule } from './erp-taxes/erp-taxes.module';
 import { ErpSettlementsModule } from './erp-settlements/erp-settlements.module';
@@ -26,7 +25,6 @@ export const routes: Routes = [];
     ErpPagesModule,
     ErpFormsModule,
     ErpCommonModule,
-    ErpSetupPagesModule,
     ErpAssetsModule,
     ErpTaxesModule,
     ErpSettlementsModule
@@ -35,7 +33,6 @@ export const routes: Routes = [];
     ErpNavbarModule,
     ErpPagesModule,
     ErpFormsModule,
-    ErpSetupPagesModule,
     ErpAssetsModule,
     ErpTaxesModule,
     ErpSettlementsModule

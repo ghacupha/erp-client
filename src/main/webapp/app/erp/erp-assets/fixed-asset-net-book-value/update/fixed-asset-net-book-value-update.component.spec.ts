@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
 import { IFixedAssetNetBookValue, FixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
-import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/erp/entities/erpService/placeholder/service/placeholder.service';
 
 import { FixedAssetNetBookValueUpdateComponent } from './fixed-asset-net-book-value-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('FixedAssetNetBookValue Management Update Component', () => {
   let comp: FixedAssetNetBookValueUpdateComponent;

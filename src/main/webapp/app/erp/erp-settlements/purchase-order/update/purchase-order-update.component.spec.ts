@@ -18,6 +18,7 @@ import { PlaceholderService } from '../../../erp-common/services/placeholder.ser
 
 import { PurchaseOrderUpdateComponent } from './purchase-order-update.component';
 import { IDealer } from '../../../erp-common/models/dealer.model';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('PurchaseOrder Management Update Component', () => {
   let comp: PurchaseOrderUpdateComponent;
@@ -30,7 +31,7 @@ describe('PurchaseOrder Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [PurchaseOrderUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

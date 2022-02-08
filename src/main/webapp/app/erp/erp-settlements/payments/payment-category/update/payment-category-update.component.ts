@@ -7,11 +7,11 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
 import { PaymentCategoryService } from '../service/payment-category.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { CategoryTypes } from 'app/erp/erp-settlements/enumerations/category-types.model';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { CategoryTypes } from '../../../../erp-common/enumerations/category-types.model';
 
 @Component({
   selector: 'jhi-payment-category-update',

@@ -1,6 +1,6 @@
 import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { FileMediumTypes } from 'app/erp/entities/enumerations/file-medium-types.model';
-import { FileModelType } from 'app/erp/entities/enumerations/file-model-type.model';
+import { FileMediumTypes } from '../../erp-common/enumerations/file-medium-types.model';
+import { FileModelType } from '../../erp-common/enumerations/file-model-type.model';
 
 export interface IFileType {
   id?: number;

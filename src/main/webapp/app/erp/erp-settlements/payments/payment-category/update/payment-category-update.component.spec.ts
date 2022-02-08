@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,10 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentCategoryService } from '../service/payment-category.service';
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
 
 import { PaymentCategoryUpdateComponent } from './payment-category-update.component';
 
@@ -26,7 +28,7 @@ describe('PaymentCategory Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [PaymentCategoryUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

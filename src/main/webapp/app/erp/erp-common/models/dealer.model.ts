@@ -1,5 +1,5 @@
-import { IPaymentLabel } from 'app/erp/entities/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { IPaymentLabel } from './payment-label.model';
 
 export interface IDealer {
   id?: number;

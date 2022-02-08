@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { CategoryTypes } from 'app/erp/erp-settlements/enumerations/category-types.model';
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
 
 import { PaymentCategoryService } from './payment-category.service';
+import { CategoryTypes } from '../../../../erp-common/enumerations/category-types.model';
 
 describe('PaymentCategory Service', () => {
   let service: PaymentCategoryService;

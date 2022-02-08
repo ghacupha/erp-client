@@ -7,9 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFixedAssetNetBookValue, FixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
-import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/erp/entities/erpService/placeholder/service/placeholder.service';
-import { DepreciationRegime } from 'app/erp/entities/enumerations/depreciation-regime.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { DepreciationRegime } from '../../../erp-common/enumerations/depreciation-regime.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-fixed-asset-net-book-value-update',

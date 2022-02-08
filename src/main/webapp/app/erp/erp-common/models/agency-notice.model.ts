@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
-import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { AgencyStatusType } from '../enumerations/agency-status-type.model';
+import { IDealer } from './dealer.model';
 
 export interface IAgencyNotice {
   id?: number;
@@ -10,7 +10,7 @@ export interface IAgencyNotice {
   taxCode?: string | null;
   assessmentAmount?: number;
   agencyStatus?: AgencyStatusType;
-  correspondents?: IDealer[] | null;
+  correspondents?: IDealer [] | null;
   settlementCurrency?: ISettlementCurrency;
   assessor?: IDealer;
 }

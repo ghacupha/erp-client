@@ -1,10 +1,10 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
-import { IPaymentLabel } from 'app/erp/entities/payment-label/payment-label.model';
-import { IPaymentCategory } from 'app/erp/entities/payments/payment-category/payment-category.model';
-import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
 import { IPaymentInvoice } from './payment-invoice.model';
+import { IPlaceholder } from './placeholder.model';
+import { IPaymentLabel } from './payment-label.model';
+import { IPaymentCategory } from './payment-category.model';
+import { IDealer } from './dealer.model';
 
 export interface ISettlement {
   id?: number;

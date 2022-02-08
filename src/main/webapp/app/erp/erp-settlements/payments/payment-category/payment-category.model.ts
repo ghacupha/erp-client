@@ -1,7 +1,7 @@
 import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { IPaymentCalculation } from 'app/erp/erp-settlements/payments/payment-calculation/payment-calculation.model';
 import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { CategoryTypes } from 'app/erp/erp-settlements/enumerations/category-types.model';
+import { CategoryTypes } from '../../../erp-common/enumerations/category-types.model';
+import { IPaymentCalculation } from '../../../erp-common/models/payment-calculation.model';
 
 export interface IPaymentCategory {
   id?: number;

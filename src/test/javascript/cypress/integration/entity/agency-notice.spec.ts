@@ -85,6 +85,11 @@ describe('AgencyNotice e2e test', () => {
       statusCode: 200,
       body: [settlementCurrency],
     });
+
+    cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
   });
 
   afterEach(() => {

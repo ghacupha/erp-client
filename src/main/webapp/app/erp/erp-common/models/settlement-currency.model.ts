@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from './placeholder.model';
 
 export interface ISettlementCurrency {
   id?: number;
