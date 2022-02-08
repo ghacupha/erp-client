@@ -6,27 +6,27 @@ import { RouterModule } from '@angular/router';
     RouterModule.forChild([
       {
         path: 'settlement',
-        data: { pageTitle: 'Settlements' },
+        data: { pageTitle: 'ERP-Payments | Settlements' },
         loadChildren: () => import('./settlement/settlement.module').then(m => m.SettlementModule),
       },
       {
         path: 'payment-category',
-        data: { pageTitle: 'PaymentCategories' },
+        data: { pageTitle: 'ERP-Payments | PaymentCategories' },
         loadChildren: () => import('./payments/payment-category/payment-category.module').then(m => m.ErpServicePaymentCategoryModule),
       },
       {
         path: 'settlement-currency',
-        data: { pageTitle: 'SettlementCurrencies' },
+        data: { pageTitle: 'ERP-Payments | SettlementCurrencies' },
         loadChildren: () => import('./settlement-currency/settlement-currency.module').then(m => m.SettlementCurrencyModule),
       },
       {
         path: 'purchase-order',
-        data: { pageTitle: 'PurchaseOrders' },
+        data: { pageTitle: 'ERP-Payments | PurchaseOrders' },
         loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule),
       },
       {
         path: 'payment-invoice',
-        data: { pageTitle: 'PaymentInvoices' },
+        data: { pageTitle: 'ERP-Payments | PaymentInvoices' },
         loadChildren: () => import('./payment-invoice/payment-invoice.module').then(m => m.PaymentInvoiceModule),
       },
     ]),
