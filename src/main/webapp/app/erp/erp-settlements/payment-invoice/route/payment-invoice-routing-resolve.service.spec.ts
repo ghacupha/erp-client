@@ -7,7 +7,7 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
-import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
+import { PaymentInvoiceService } from '../service/payment-invoice.service';
 
 import { PaymentInvoiceRoutingResolveService } from './payment-invoice-routing-resolve.service';
 

@@ -9,8 +9,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/erp/entities/dealers/dealer/service/dealer.service';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
 

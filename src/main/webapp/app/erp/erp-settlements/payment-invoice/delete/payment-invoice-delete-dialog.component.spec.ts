@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
+import { PaymentInvoiceService } from '../service/payment-invoice.service';
 
 import { PaymentInvoiceDeleteDialogComponent } from './payment-invoice-delete-dialog.component';
 

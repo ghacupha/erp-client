@@ -4,11 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { IPurchaseOrder } from '../purchase-order.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PurchaseOrderService } from '../service/purchase-order.service';
 import { PurchaseOrderDeleteDialogComponent } from '../delete/purchase-order-delete-dialog.component';
-import { IPurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
 
 @Component({
   selector: 'jhi-purchase-order',

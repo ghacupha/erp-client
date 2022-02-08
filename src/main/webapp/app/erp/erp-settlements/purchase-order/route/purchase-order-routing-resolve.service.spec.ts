@@ -1,5 +1,3 @@
-import { IPurchaseOrder, PurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
-
 jest.mock('@angular/router');
 
 import { TestBed } from '@angular/core/testing';
@@ -8,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
+import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
 
 import { PurchaseOrderRoutingResolveService } from './purchase-order-routing-resolve.service';

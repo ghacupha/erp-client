@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { AgencyStatusType } from '../enumerations/agency-status-type.model';
 

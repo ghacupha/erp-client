@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
-import { ISettlement } from '../../../erp/erp-common/models/settlement.model';
+import { ISettlement } from '../settlement.model';
+import { SettlementService } from '../service/settlement.service';
 
 @Component({
   templateUrl: './settlement-delete-dialog.component.html',

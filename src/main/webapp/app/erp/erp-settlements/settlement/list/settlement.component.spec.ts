@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
+import { SettlementService } from '../service/settlement.service';
 
 import { SettlementComponent } from './settlement.component';
 

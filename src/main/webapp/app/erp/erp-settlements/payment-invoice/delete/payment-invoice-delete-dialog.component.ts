@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IPaymentInvoice } from '../payment-invoice.model';
-import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
+import { PaymentInvoiceService } from '../service/payment-invoice.service';
 
 @Component({
   templateUrl: './payment-invoice-delete-dialog.component.html',

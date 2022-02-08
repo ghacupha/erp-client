@@ -6,8 +6,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
-import { ISettlement } from '../../../erp/erp-common/models/settlement.model';
+import { ISettlement, Settlement } from '../settlement.model';
+import { SettlementService } from '../service/settlement.service';
+
 import { SettlementRoutingResolveService } from './settlement-routing-resolve.service';
 
 describe('Settlement routing resolve service', () => {

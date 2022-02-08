@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
+import { taxReferenceTypes } from 'app/erp/entities/enumerations/tax-reference-types.model';
 import { ITaxReference, TaxReference } from '../models/tax-reference.model';
 
 import { TaxReferenceService } from './tax-reference.service';

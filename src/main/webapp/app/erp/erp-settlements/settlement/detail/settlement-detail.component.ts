@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { ISettlement } from '../settlement.model';
 import { DataUtils } from 'app/core/util/data-util.service';
-import { ISettlement } from '../../../erp/erp-common/models/settlement.model';
 
 @Component({
   selector: 'jhi-settlement-detail',

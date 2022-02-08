@@ -9,7 +9,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { getPurchaseOrderIdentifier, IPurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
+import { IPurchaseOrder, getPurchaseOrderIdentifier } from '../purchase-order.model';
 
 export type EntityResponseType = HttpResponse<IPurchaseOrder>;
 export type EntityArrayResponseType = HttpResponse<IPurchaseOrder[]>;

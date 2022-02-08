@@ -18,7 +18,7 @@
 
 import {Dayjs} from "dayjs";
 import * as dayjs from "dayjs";
-import {CurrencyTypes} from "../../../../entities/enumerations/currency-types.model";
+import {CurrencyTypes} from "../../../entities/enumerations/currency-types.model";
 
 export const DEFAULT_CATEGORY = "CATEGORY0";
 export const DEFAULT_DATE: Dayjs = dayjs();

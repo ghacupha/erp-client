@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { IPaymentLabel } from 'app/erp/entities/payment-label/payment-label.model';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { IPurchaseOrder } from './purchase-order.model';
 

@@ -1,5 +1,3 @@
-import { IPaymentInvoice, PaymentInvoice } from '../../../erp/erp-common/models/payment-invoice.model';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,17 +7,18 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
+import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
+import { IPurchaseOrder } from 'app/erp/erp-settlements/purchase-order/purchase-order.model';
+import { PurchaseOrderService } from 'app/erp/erp-settlements/purchase-order/service/purchase-order.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
-import { IPurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
 
 describe('PaymentInvoice Management Update Component', () => {
   let comp: PaymentInvoiceUpdateComponent;

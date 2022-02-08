@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/erp/entities/erpService/placeholder/service/placeholder.service';
 import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
 import { ISettlementCurrency, SettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
 

@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
 import { IFixedAssetNetBookValue, FixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/erp/entities/erpService/placeholder/service/placeholder.service';
 
 import { FixedAssetNetBookValueUpdateComponent } from './fixed-asset-net-book-value-update.component';
 

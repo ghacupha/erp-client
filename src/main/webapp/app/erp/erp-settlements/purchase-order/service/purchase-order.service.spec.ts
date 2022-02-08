@@ -3,13 +3,17 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
+import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 
 import { PurchaseOrderService } from './purchase-order.service';
-import { IPurchaseOrder, PurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
 
 describe('PurchaseOrder Service', () => {
-  let service: PurchaseOrderService, httpMock: HttpTestingController, elemDefault: IPurchaseOrder,
-    expectedResult: IPurchaseOrder | IPurchaseOrder[] | boolean | null, currentDate: dayjs.Dayjs;
+  let service: PurchaseOrderService;
+  let httpMock: HttpTestingController;
+  let elemDefault: IPurchaseOrder;
+  let expectedResult: IPurchaseOrder | IPurchaseOrder[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],

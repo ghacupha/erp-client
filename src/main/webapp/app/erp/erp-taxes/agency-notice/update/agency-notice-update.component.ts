@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/erp/entities/dealers/dealer/service/dealer.service';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
 import { AgencyStatusType } from '../../../erp/erp-common/enumerations/agency-status-type.model';

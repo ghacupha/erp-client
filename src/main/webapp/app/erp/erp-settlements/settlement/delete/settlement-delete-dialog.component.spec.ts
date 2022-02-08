@@ -6,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
+import { SettlementService } from '../service/settlement.service';
 
 import { SettlementDeleteDialogComponent } from './settlement-delete-dialog.component';
 

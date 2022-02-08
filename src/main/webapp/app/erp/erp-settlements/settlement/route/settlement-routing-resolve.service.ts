@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
-import { ISettlement, Settlement } from '../../../erp/erp-common/models/settlement.model';
+import { ISettlement, Settlement } from '../settlement.model';
+import { SettlementService } from '../service/settlement.service';
 
 @Injectable({ providedIn: 'root' })
 export class SettlementRoutingResolveService implements Resolve<ISettlement> {

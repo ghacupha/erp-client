@@ -7,22 +7,22 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { ISettlement, Settlement } from '../../../erp/erp-common/models/settlement.model';
-import { IPaymentInvoice } from '../../../erp/erp-common/models/payment-invoice.model';
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPaymentCategory } from 'app/entities/payments/payment-category/payment-category.model';
-import { PaymentCategoryService } from 'app/entities/payments/payment-category/service/payment-category.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { PaymentInvoiceService } from 'app/erp/erp-common/services/payment-invoice.service';
+import { SettlementService } from '../service/settlement.service';
+import { ISettlement, Settlement } from '../settlement.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { IPaymentCategory } from 'app/erp/erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from 'app/erp/erp-settlements/payments/payment-category/service/payment-category.service';
+import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment-invoice.model';
+import { PaymentInvoiceService } from 'app/erp/erp-settlements/payment-invoice/service/payment-invoice.service';
+import { DealerService } from '../../../erp-common/services/dealer.service';
 
 import { SettlementUpdateComponent } from './settlement-update.component';
+import { IDealer } from '../../../erp-common/models/dealer.model';
 
 describe('Settlement Management Update Component', () => {
   let comp: SettlementUpdateComponent;

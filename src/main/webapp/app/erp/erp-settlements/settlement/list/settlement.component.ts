@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { ISettlement } from '../settlement.model';
+
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { SettlementService } from '../../../erp/erp-common/services/settlement.service';
+import { SettlementService } from '../service/settlement.service';
 import { SettlementDeleteDialogComponent } from '../delete/settlement-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
-import { ISettlement } from '../../../erp/erp-common/models/settlement.model';
 
 @Component({
   selector: 'jhi-settlement',

@@ -9,8 +9,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/erp/entities/erpService/placeholder/service/placeholder.service';
 
 import { SettlementCurrencyUpdateComponent } from './settlement-currency-update.component';
 import { ISettlementCurrency, SettlementCurrency } from '../../../erp-common/models/settlement-currency.model';

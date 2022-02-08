@@ -5,16 +5,16 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { PaymentInvoiceService } from '../../../erp/erp-common/services/payment-invoice.service';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-common/services/settlement-currency.service';
-import { IPurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
-import { IPaymentInvoice, PaymentInvoice } from '../../../erp/erp-common/models/payment-invoice.model';
+import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
+import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { IPurchaseOrder } from 'app/erp/erp-settlements/purchase-order/purchase-order.model';
+import { PurchaseOrderService } from 'app/erp/erp-settlements/purchase-order/service/purchase-order.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',

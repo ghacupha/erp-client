@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
+import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
-import { IPurchaseOrder, PurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
 
 @Injectable({ providedIn: 'root' })
 export class PurchaseOrderRoutingResolveService implements Resolve<IPurchaseOrder> {

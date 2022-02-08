@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
 import { ISettlementCurrency } from 'app/erp/erp-common/models/settlement-currency.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { IPlaceholder } from 'app/erp/entities/erpService/placeholder/placeholder.model';
+import { IDealer } from 'app/erp/entities/dealers/dealer/dealer.model';
 
 export interface IPurchaseOrder {
   id?: number;

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IPurchaseOrder } from '../../../erp/erp-common/models/purchase-order.model';
+
+import { IPurchaseOrder } from '../purchase-order.model';
 
 @Component({
   selector: 'jhi-purchase-order-detail',
