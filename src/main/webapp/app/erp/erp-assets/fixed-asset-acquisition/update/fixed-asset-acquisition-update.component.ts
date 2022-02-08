@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFixedAssetAcquisition, FixedAssetAcquisition } from '../fixed-asset-acquisition.model';
 import { FixedAssetAcquisitionService } from '../service/fixed-asset-acquisition.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-fixed-asset-acquisition-update',

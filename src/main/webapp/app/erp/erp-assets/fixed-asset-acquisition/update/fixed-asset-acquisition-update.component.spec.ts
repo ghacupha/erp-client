@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { FixedAssetAcquisitionService } from '../service/fixed-asset-acquisition.service';
 import { IFixedAssetAcquisition, FixedAssetAcquisition } from '../fixed-asset-acquisition.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { FixedAssetAcquisitionUpdateComponent } from './fixed-asset-acquisition-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('FixedAssetAcquisition Management Update Component', () => {
   let comp: FixedAssetAcquisitionUpdateComponent;
