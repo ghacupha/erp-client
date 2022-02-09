@@ -16,10 +16,11 @@ describe('PaymentInvoice e2e test', () => {
   const paymentInvoicePageUrlPattern = new RegExp('/payment-invoice(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const paymentInvoiceSample = { invoiceNumber: 'Account copying Grocery' };
+  const paymentInvoiceSample = { invoiceNumber: 'Kansas' };
 
   let paymentInvoice: any;
   let settlementCurrency: any;
+  let dealer: any;
 
   before(() => {
     cy.window().then(win => {
@@ -44,6 +45,26 @@ describe('PaymentInvoice e2e test', () => {
       },
     }).then(({ body }) => {
       settlementCurrency = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/dealers',
+      body: {
+        dealerName: 'Cambridgeshire Pataca',
+        taxNumber: 'Cotton Account Cotton',
+        postalAddress: 'Borders even-keeled mindshare',
+        physicalAddress: 'up uniform',
+        accountName: 'Investment Account',
+        accountNumber: 'back-end Assistant',
+        bankersName: 'fuchsia',
+        bankersBranch: 'grid-enabled',
+        bankersSwiftCode: 'primary',
+        fileUploadToken: 'asymmetric',
+        compilationToken: 'lime',
+      },
+    }).then(({ body }) => {
+      dealer = body;
     });
   });
 
@@ -74,6 +95,11 @@ describe('PaymentInvoice e2e test', () => {
       statusCode: 200,
       body: [settlementCurrency],
     });
+
+    cy.intercept('GET', '/api/dealers', {
+      statusCode: 200,
+      body: [dealer],
+    });
   });
 
   afterEach(() => {
@@ -94,6 +120,14 @@ describe('PaymentInvoice e2e test', () => {
         url: `/api/settlement-currencies/${settlementCurrency.id}`,
       }).then(() => {
         settlementCurrency = undefined;
+      });
+    }
+    if (dealer) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/dealers/${dealer.id}`,
+      }).then(() => {
+        dealer = undefined;
       });
     }
   });
@@ -141,6 +175,7 @@ describe('PaymentInvoice e2e test', () => {
           body: {
             ...paymentInvoiceSample,
             settlementCurrency: settlementCurrency,
+            biller: dealer,
           },
         }).then(({ body }) => {
           paymentInvoice = body;
@@ -215,15 +250,12 @@ describe('PaymentInvoice e2e test', () => {
 
       cy.get(`[data-cy="invoiceAmount"]`).type('40309').should('have.value', '40309');
 
-      cy.get(`[data-cy="paymentReference"]`).type('deposit Ouguiya composite').should('have.value', 'deposit Ouguiya composite');
+      cy.get(`[data-cy="fileUploadToken"]`).type('deposit Ouguiya composite').should('have.value', 'deposit Ouguiya composite');
 
-      cy.get(`[data-cy="dealerName"]`).type('software Towels').should('have.value', 'software Towels');
-
-      cy.get(`[data-cy="fileUploadToken"]`).type('Kansas').should('have.value', 'Kansas');
-
-      cy.get(`[data-cy="compilationToken"]`).type('Rican').should('have.value', 'Rican');
+      cy.get(`[data-cy="compilationToken"]`).type('software Towels').should('have.value', 'software Towels');
 
       cy.get(`[data-cy="settlementCurrency"]`).select(1);
+      cy.get(`[data-cy="biller"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

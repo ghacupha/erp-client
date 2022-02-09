@@ -26,14 +26,6 @@
         <dd>
           <span>{{ paymentInvoice.invoiceAmount }}</span>
         </dd>
-        <dt><span>Payment Reference</span></dt>
-        <dd>
-          <span>{{ paymentInvoice.paymentReference }}</span>
-        </dd>
-        <dt><span>Dealer Name</span></dt>
-        <dd>
-          <span>{{ paymentInvoice.dealerName }}</span>
-        </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>
           <span>{{ paymentInvoice.fileUploadToken }}</span>
@@ -69,6 +61,12 @@
             <a [routerLink]="['/settlement-currency', paymentInvoice.settlementCurrency?.id, 'view']">{{
               paymentInvoice.settlementCurrency?.iso4217CurrencyCode
             }}</a>
+          </div>
+        </dd>
+        <dt><span>Biller</span></dt>
+        <dd>
+          <div *ngIf="paymentInvoice.biller">
+            <a [routerLink]="['/dealer', paymentInvoice.biller?.id, 'view']">{{ paymentInvoice.biller?.dealerName }}</a>
           </div>
         </dd>
       </dl>

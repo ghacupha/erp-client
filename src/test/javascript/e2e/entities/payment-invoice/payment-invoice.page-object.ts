@@ -33,8 +33,6 @@ export class PaymentInvoiceUpdatePage {
   invoiceNumberInput = element(by.id('field_invoiceNumber'));
   invoiceDateInput = element(by.id('field_invoiceDate'));
   invoiceAmountInput = element(by.id('field_invoiceAmount'));
-  paymentReferenceInput = element(by.id('field_paymentReference'));
-  dealerNameInput = element(by.id('field_dealerName'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
 
@@ -42,6 +40,7 @@ export class PaymentInvoiceUpdatePage {
   placeholderSelect = element(by.id('field_placeholder'));
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
+  billerSelect = element(by.id('field_biller'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -77,22 +76,6 @@ export class PaymentInvoiceUpdatePage {
 
   async getInvoiceAmountInput(): Promise<string> {
     return await this.invoiceAmountInput.getAttribute('value');
-  }
-
-  async setPaymentReferenceInput(paymentReference: string): Promise<void> {
-    await this.paymentReferenceInput.sendKeys(paymentReference);
-  }
-
-  async getPaymentReferenceInput(): Promise<string> {
-    return await this.paymentReferenceInput.getAttribute('value');
-  }
-
-  async setDealerNameInput(dealerName: string): Promise<void> {
-    await this.dealerNameInput.sendKeys(dealerName);
-  }
-
-  async getDealerNameInput(): Promise<string> {
-    return await this.dealerNameInput.getAttribute('value');
   }
 
   async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
@@ -173,6 +156,22 @@ export class PaymentInvoiceUpdatePage {
 
   async getSettlementCurrencySelectedOption(): Promise<string> {
     return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
+  }
+
+  async billerSelectLastOption(): Promise<void> {
+    await this.billerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async billerSelectOption(option: string): Promise<void> {
+    await this.billerSelect.sendKeys(option);
+  }
+
+  getBillerSelect(): ElementFinder {
+    return this.billerSelect;
+  }
+
+  async getBillerSelectedOption(): Promise<string> {
+    return await this.billerSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

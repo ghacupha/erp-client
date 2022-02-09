@@ -54,10 +54,6 @@
           <th scope="col" jhiSortBy="invoiceNumber"><span>Invoice Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="invoiceDate"><span>Invoice Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="invoiceAmount"><span>Invoice Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentReference">
-            <span>Payment Reference</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
@@ -67,6 +63,7 @@
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="biller.dealerName"><span>Biller</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -78,8 +75,6 @@
           <td>{{ paymentInvoice.invoiceNumber }}</td>
           <td>{{ paymentInvoice.invoiceDate | formatMediumDate }}</td>
           <td>{{ paymentInvoice.invoiceAmount }}</td>
-          <td>{{ paymentInvoice.paymentReference }}</td>
-          <td>{{ paymentInvoice.dealerName }}</td>
           <td>{{ paymentInvoice.fileUploadToken }}</td>
           <td>{{ paymentInvoice.compilationToken }}</td>
           <td>
@@ -87,6 +82,11 @@
               <a [routerLink]="['/settlement-currency', paymentInvoice.settlementCurrency?.id, 'view']">{{
                 paymentInvoice.settlementCurrency?.iso4217CurrencyCode
               }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="paymentInvoice.biller">
+              <a [routerLink]="['/dealer', paymentInvoice.biller?.id, 'view']">{{ paymentInvoice.biller?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

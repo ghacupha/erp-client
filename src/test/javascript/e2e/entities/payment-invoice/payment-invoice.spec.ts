@@ -53,14 +53,13 @@ describe('PaymentInvoice e2e test', () => {
             paymentInvoiceUpdatePage.setInvoiceNumberInput('invoiceNumber'),
             paymentInvoiceUpdatePage.setInvoiceDateInput('2000-12-31'),
             paymentInvoiceUpdatePage.setInvoiceAmountInput('5'),
-            paymentInvoiceUpdatePage.setPaymentReferenceInput('paymentReference'),
-            paymentInvoiceUpdatePage.setDealerNameInput('dealerName'),
             paymentInvoiceUpdatePage.setFileUploadTokenInput('fileUploadToken'),
             paymentInvoiceUpdatePage.setCompilationTokenInput('compilationToken'),
             // paymentInvoiceUpdatePage.purchaseOrderSelectLastOption(),
             // paymentInvoiceUpdatePage.placeholderSelectLastOption(),
             // paymentInvoiceUpdatePage.paymentLabelSelectLastOption(),
             paymentInvoiceUpdatePage.settlementCurrencySelectLastOption(),
+            paymentInvoiceUpdatePage.billerSelectLastOption(),
         ]);
 
         await paymentInvoiceUpdatePage.save();

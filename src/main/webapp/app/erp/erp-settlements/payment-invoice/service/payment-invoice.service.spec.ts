@@ -28,8 +28,6 @@ describe('PaymentInvoice Service', () => {
       invoiceNumber: 'AAAAAAA',
       invoiceDate: currentDate,
       invoiceAmount: 0,
-      paymentReference: 'AAAAAAA',
-      dealerName: 'AAAAAAA',
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
     };
@@ -81,8 +79,6 @@ describe('PaymentInvoice Service', () => {
           invoiceNumber: 'BBBBBB',
           invoiceDate: currentDate.format(DATE_FORMAT),
           invoiceAmount: 1,
-          paymentReference: 'BBBBBB',
-          dealerName: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
         },
@@ -107,7 +103,6 @@ describe('PaymentInvoice Service', () => {
       const patchObject = Object.assign(
         {
           invoiceNumber: 'BBBBBB',
-          fileUploadToken: 'BBBBBB',
         },
         new PaymentInvoice()
       );
@@ -135,8 +130,6 @@ describe('PaymentInvoice Service', () => {
           invoiceNumber: 'BBBBBB',
           invoiceDate: currentDate.format(DATE_FORMAT),
           invoiceAmount: 1,
-          paymentReference: 'BBBBBB',
-          dealerName: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
         },
@@ -195,7 +188,7 @@ describe('PaymentInvoice Service', () => {
       });
 
       it('should add only unique PaymentInvoice to an array', () => {
-        const paymentInvoiceArray: IPaymentInvoice[] = [{ id: 123 }, { id: 456 }, { id: 7327 }];
+        const paymentInvoiceArray: IPaymentInvoice[] = [{ id: 123 }, { id: 456 }, { id: 69659 }];
         const paymentInvoiceCollection: IPaymentInvoice[] = [{ id: 123 }];
         expectedResult = service.addPaymentInvoiceToCollectionIfMissing(paymentInvoiceCollection, ...paymentInvoiceArray);
         expect(expectedResult).toHaveLength(3);

@@ -15,6 +15,8 @@ import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { DealerService } from '../../../erp-common/services/dealer.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -27,20 +29,20 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  dealersSharedCollection: IDealer[] = [];
 
   editForm = this.fb.group({
     id: [],
     invoiceNumber: [null, [Validators.required]],
     invoiceDate: [],
     invoiceAmount: [],
-    paymentReference: [],
-    dealerName: [],
     fileUploadToken: [],
     compilationToken: [],
     purchaseOrders: [],
     placeholders: [],
     paymentLabels: [],
     settlementCurrency: [null, Validators.required],
+    biller: [null, Validators.required],
   });
 
   constructor(
@@ -49,6 +51,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected paymentLabelService: PaymentLabelService,
     protected settlementCurrencyService: SettlementCurrencyService,
+    protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -88,6 +91,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackDealerById(index: number, item: IDealer): number {
     return item.id!;
   }
 
@@ -149,14 +156,13 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       invoiceNumber: paymentInvoice.invoiceNumber,
       invoiceDate: paymentInvoice.invoiceDate,
       invoiceAmount: paymentInvoice.invoiceAmount,
-      paymentReference: paymentInvoice.paymentReference,
-      dealerName: paymentInvoice.dealerName,
       fileUploadToken: paymentInvoice.fileUploadToken,
       compilationToken: paymentInvoice.compilationToken,
       purchaseOrders: paymentInvoice.purchaseOrders,
       placeholders: paymentInvoice.placeholders,
       paymentLabels: paymentInvoice.paymentLabels,
       settlementCurrency: paymentInvoice.settlementCurrency,
+      biller: paymentInvoice.biller,
     });
 
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
@@ -175,6 +181,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       this.settlementCurrenciesSharedCollection,
       paymentInvoice.settlementCurrency
     );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -223,6 +230,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
         )
       )
       .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.dealerService
+      .query()
+      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('biller')!.value)))
+      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
   }
 
   protected createFromForm(): IPaymentInvoice {
@@ -232,14 +245,13 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
       invoiceDate: this.editForm.get(['invoiceDate'])!.value,
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
-      paymentReference: this.editForm.get(['paymentReference'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      biller: this.editForm.get(['biller'])!.value,
     };
   }
 }

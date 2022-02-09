@@ -19,8 +19,10 @@ import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
 import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
-import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
 import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+
+import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
+import { DealerService } from '../../../erp-common/services/dealer.service';
 
 describe('PaymentInvoice Management Update Component', () => {
   let comp: PaymentInvoiceUpdateComponent;
@@ -31,6 +33,7 @@ describe('PaymentInvoice Management Update Component', () => {
   let placeholderService: PlaceholderService;
   let paymentLabelService: PaymentLabelService;
   let settlementCurrencyService: SettlementCurrencyService;
+  let dealerService: DealerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,6 +51,7 @@ describe('PaymentInvoice Management Update Component', () => {
     placeholderService = TestBed.inject(PlaceholderService);
     paymentLabelService = TestBed.inject(PaymentLabelService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
+    dealerService = TestBed.inject(DealerService);
 
     comp = fixture.componentInstance;
   });
@@ -138,6 +142,25 @@ describe('PaymentInvoice Management Update Component', () => {
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Dealer query and add missing value', () => {
+      const paymentInvoice: IPaymentInvoice = { id: 456 };
+      const biller: IDealer = { id: 60282 };
+      paymentInvoice.biller = biller;
+
+      const dealerCollection: IDealer[] = [{ id: 2613 }];
+      jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
+      const additionalDealers = [biller];
+      const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
+      jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ paymentInvoice });
+      comp.ngOnInit();
+
+      expect(dealerService.query).toHaveBeenCalled();
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(comp.dealersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const paymentInvoice: IPaymentInvoice = { id: 456 };
       const purchaseOrders: IPurchaseOrder = { id: 92226 };
@@ -148,6 +171,8 @@ describe('PaymentInvoice Management Update Component', () => {
       paymentInvoice.paymentLabels = [paymentLabels];
       const settlementCurrency: ISettlementCurrency = { id: 20996 };
       paymentInvoice.settlementCurrency = settlementCurrency;
+      const biller: IDealer = { id: 64409 };
+      paymentInvoice.biller = biller;
 
       activatedRoute.data = of({ paymentInvoice });
       comp.ngOnInit();
@@ -157,6 +182,7 @@ describe('PaymentInvoice Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
+      expect(comp.dealersSharedCollection).toContain(biller);
     });
   });
 
@@ -253,6 +279,14 @@ describe('PaymentInvoice Management Update Component', () => {
       it('Should return tracked SettlementCurrency primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackSettlementCurrencyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDealerById', () => {
+      it('Should return tracked Dealer primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDealerById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

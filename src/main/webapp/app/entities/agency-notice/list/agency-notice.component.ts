@@ -4,18 +4,18 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPaymentInvoice } from '../payment-invoice.model';
+import { IAgencyNotice } from '../agency-notice.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentInvoiceService } from '../service/payment-invoice.service';
-import { PaymentInvoiceDeleteDialogComponent } from '../delete/payment-invoice-delete-dialog.component';
+import { AgencyNoticeService } from '../service/agency-notice.service';
+import { AgencyNoticeDeleteDialogComponent } from '../delete/agency-notice-delete-dialog.component';
 
 @Component({
-  selector: 'jhi-payment-invoice',
-  templateUrl: './payment-invoice.component.html',
+  selector: 'jhi-agency-notice',
+  templateUrl: './agency-notice.component.html',
 })
-export class PaymentInvoiceComponent implements OnInit {
-  paymentInvoices?: IPaymentInvoice[];
+export class AgencyNoticeComponent implements OnInit {
+  agencyNotices?: IAgencyNotice[];
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
@@ -26,7 +26,7 @@ export class PaymentInvoiceComponent implements OnInit {
   ngbPaginationPage = 1;
 
   constructor(
-    protected paymentInvoiceService: PaymentInvoiceService,
+    protected agencyNoticeService: AgencyNoticeService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected modalService: NgbModal
@@ -39,7 +39,7 @@ export class PaymentInvoiceComponent implements OnInit {
     const pageToLoad: number = page ?? this.page ?? 1;
 
     if (this.currentSearch) {
-      this.paymentInvoiceService
+      this.agencyNoticeService
         .search({
           page: pageToLoad - 1,
           query: this.currentSearch,
@@ -47,7 +47,7 @@ export class PaymentInvoiceComponent implements OnInit {
           sort: this.sort(),
         })
         .subscribe(
-          (res: HttpResponse<IPaymentInvoice[]>) => {
+          (res: HttpResponse<IAgencyNotice[]>) => {
             this.isLoading = false;
             this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
           },
@@ -59,14 +59,14 @@ export class PaymentInvoiceComponent implements OnInit {
       return;
     }
 
-    this.paymentInvoiceService
+    this.agencyNoticeService
       .query({
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
       })
       .subscribe(
-        (res: HttpResponse<IPaymentInvoice[]>) => {
+        (res: HttpResponse<IAgencyNotice[]>) => {
           this.isLoading = false;
           this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
         },
@@ -78,7 +78,7 @@ export class PaymentInvoiceComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['invoiceNumber', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
+    if (query && ['referenceNumber', 'taxCode', 'agencyStatus'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -90,13 +90,13 @@ export class PaymentInvoiceComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(index: number, item: IPaymentInvoice): number {
+  trackId(index: number, item: IAgencyNotice): number {
     return item.id!;
   }
 
-  delete(paymentInvoice: IPaymentInvoice): void {
-    const modalRef = this.modalService.open(PaymentInvoiceDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.paymentInvoice = paymentInvoice;
+  delete(agencyNotice: IAgencyNotice): void {
+    const modalRef = this.modalService.open(AgencyNoticeDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.agencyNotice = agencyNotice;
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
@@ -128,12 +128,12 @@ export class PaymentInvoiceComponent implements OnInit {
     });
   }
 
-  protected onSuccess(data: IPaymentInvoice[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+  protected onSuccess(data: IAgencyNotice[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     this.ngbPaginationPage = this.page;
     if (navigate) {
-      this.router.navigate(['/payment-invoice'], {
+      this.router.navigate(['/agency-notice'], {
         queryParams: {
           page: this.page,
           size: this.itemsPerPage,
@@ -142,7 +142,7 @@ export class PaymentInvoiceComponent implements OnInit {
         },
       });
     }
-    this.paymentInvoices = data ?? [];
+    this.agencyNotices = data ?? [];
     this.ngbPaginationPage = this.page;
   }
 
