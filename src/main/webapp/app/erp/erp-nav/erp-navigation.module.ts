@@ -5,22 +5,25 @@ import {ErpFilesNavigationComponent} from "./files/erp-files-navigation.componen
 import {RouterModule} from "@angular/router";
 import {PaymentsNavComponent} from "./payment-nav/payments-nav.component";
 import {AssetsNavComponent} from "./assets-nav/assets-nav.component";
+import { TaxesNavComponent } from './taxes-nav/taxes-nav.component';
 
 @NgModule({
   declarations: [
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
-    AssetsNavComponent
+    AssetsNavComponent,
+    TaxesNavComponent
   ],
   imports: [
     SharedModule,
     CommonModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
-    AssetsNavComponent
+    AssetsNavComponent,
+    TaxesNavComponent
   ]
 })
 export class ErpNavigationModule {}

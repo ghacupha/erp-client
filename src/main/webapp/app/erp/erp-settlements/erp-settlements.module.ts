@@ -27,7 +27,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'settlement-currency',
         data: {
           pageTitle: 'ERP-Payments | SettlementCurrencies',
-          authorities: ['ROLE_PAYMENTS_USER'],
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_TAX_MODULE_USER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./settlement-currency/settlement-currency.module').then(m => m.SettlementCurrencyModule),

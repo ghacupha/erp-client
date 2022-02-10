@@ -6,7 +6,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
   imports: [
     RouterModule.forChild([
       {
-        path: 'erp/taxes/agency-notice',
+        path: 'agency-notice',
         data: {
           pageTitle: 'ERP-Taxes | Agency Notice',
           authorities: ['ROLE_TAX_MODULE_USER'],
