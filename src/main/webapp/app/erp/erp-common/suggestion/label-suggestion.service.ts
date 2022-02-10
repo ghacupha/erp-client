@@ -10,7 +10,7 @@ import { IPaymentLabel } from '../models/payment-label.model';
 @Injectable({ providedIn: ErpCommonModule })
 export class LabelSuggestionService {
 
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-labels');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-labels');
 
   constructor(
     protected http: HttpClient,

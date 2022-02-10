@@ -26,8 +26,8 @@ export type EntityArrayResponseType = HttpResponse<IInvoice[]>;
 export class InvoiceService {
   selectedPayment: IPayment = {...new Payment()}
 
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/invoices');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/invoices');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/invoices');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/invoices');
 
   constructor(
     protected http: HttpClient,

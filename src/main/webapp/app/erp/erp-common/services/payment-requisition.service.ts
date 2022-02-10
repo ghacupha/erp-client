@@ -17,8 +17,8 @@ export type EntityArrayResponseType = HttpResponse<IPaymentRequisition[]>;
 
 @Injectable({ providedIn: ErpCommonModule })
 export class PaymentRequisitionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payment-requisitions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-requisitions');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/payment-requisitions');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-requisitions');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

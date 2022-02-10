@@ -9,7 +9,7 @@ import { IPaymentCategory } from '../models/payment-category.model';
 
 @Injectable({ providedIn: ErpCommonModule })
 export class CategorySuggestionService {
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payment-categories');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-categories');
 
   constructor(
     protected http: HttpClient,

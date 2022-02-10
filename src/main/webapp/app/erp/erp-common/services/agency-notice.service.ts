@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IAgencyNotice[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AgencyNoticeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/agency-notices');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/agency-notices');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/taxes/agency-notices');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/taxes/_search/agency-notices');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

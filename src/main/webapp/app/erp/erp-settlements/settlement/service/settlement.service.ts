@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<ISettlement[]>;
 
 @Injectable({ providedIn: 'root' })
 export class SettlementService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/settlements');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/settlements');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/settlements');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/settlements');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

@@ -9,7 +9,7 @@ import { IPayment } from '../models/payment.model';
 
 @Injectable({ providedIn: ErpCommonModule })
 export class PaymentSuggestionService {
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/payments');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payments');
 
   constructor(
     protected http: HttpClient,

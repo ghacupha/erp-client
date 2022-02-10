@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IFixedAssetNetBookValue[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FixedAssetNetBookValueService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset-net-book-values');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/fixed-asset-net-book-values');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/fixed-asset-net-book-values');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/fixed-asset-net-book-values');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

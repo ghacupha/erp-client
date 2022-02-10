@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IPurchaseOrder[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PurchaseOrderService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/purchase-orders');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/purchase-orders');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/purchase-orders');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/purchase-orders');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

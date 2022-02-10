@@ -14,8 +14,8 @@ export type EntityArrayResponseType = HttpResponse<ITaxReference[]>;
 
 @Injectable({ providedIn: ErpCommonModule })
 export class TaxReferenceService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/tax-references');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/tax-references');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/tax-references');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/tax-references');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
