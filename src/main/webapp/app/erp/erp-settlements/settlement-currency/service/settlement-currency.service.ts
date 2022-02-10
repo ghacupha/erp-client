@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<ISettlementCurrency[]>;
 
 @Injectable({ providedIn: 'root' })
 export class SettlementCurrencyService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/settlement-currencies');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/settlement-currencies');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/settlement-currencies');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/settlement-currencies');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
