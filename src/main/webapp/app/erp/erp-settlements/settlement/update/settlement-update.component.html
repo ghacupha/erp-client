@@ -378,7 +378,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_paymentInvoices">Payment Invoice</label>
           <select
             class="form-control"
@@ -395,6 +395,30 @@
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Invoice</label>
+          <ng-select
+            [items]="paymentInvoiceLookups$ | async"
+            bindLabel="invoiceNumber"
+            [trackByFn]="trackPaymentInvoiceByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="paymentInvoicesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="paymentInvoiceControlInput$"
+            formControlName="paymentInvoices"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of paymentInvoiceLookups$ | async" [value]="option">
+              {{ option.invoiceNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.invoiceNumber}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
 
         <!--<div class="form-group">

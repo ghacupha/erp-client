@@ -29,6 +29,7 @@ import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/pla
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -96,6 +97,10 @@ export class SettlementUpdateComponent implements OnInit {
   signatoryControlInput$ = new Subject<string>();
   signatoryLookups$: Observable<IDealer[]> = of([]);
 
+  paymentInvoicesLoading = false;
+  paymentInvoiceControlInput$ = new Subject<string>();
+  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -113,6 +118,7 @@ export class SettlementUpdateComponent implements OnInit {
     protected settlementSuggestionService: SettlementSuggestionService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
     protected fb: FormBuilder
   ) {}
 
@@ -131,6 +137,26 @@ export class SettlementUpdateComponent implements OnInit {
     this.loadCurrencies();
     this.loadBillers();
     this.loadSignatories();
+    this.loadPaymentInvoices();
+  }
+
+  loadPaymentInvoices(): void {
+    this.paymentInvoiceLookups$ = concat(
+      of([]), // default items
+      this.paymentInvoiceControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.paymentInvoicesLoading = true),
+        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.paymentInvoicesLoading = false)
+        ))
+      ),
+      of([...this.paymentInvoicesSharedCollection])
+    );
   }
 
   loadSignatories(): void {
@@ -264,6 +290,10 @@ export class SettlementUpdateComponent implements OnInit {
       ),
       of([...this.settlementsSharedCollection])
     );
+  }
+
+  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
+    return item.id!;
   }
 
   trackBillerByFn(item: IDealer): number {
