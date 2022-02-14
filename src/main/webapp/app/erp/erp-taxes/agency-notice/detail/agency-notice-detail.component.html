@@ -37,7 +37,7 @@
         <dt><span>Correspondents</span></dt>
         <dd>
           <span *ngFor="let correspondents of agencyNotice.correspondents; let last = last">
-            <a [routerLink]="['/dealer', correspondents?.id, 'view']">{{ correspondents.dealerName }}</a
+            <a [routerLink]="['/erp/dealer', correspondents?.id, 'view']">{{ correspondents.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
@@ -52,7 +52,7 @@
         <dt><span>Assessor</span></dt>
         <dd>
           <div *ngIf="agencyNotice.assessor">
-            <a [routerLink]="['/dealer', agencyNotice.assessor?.id, 'view']">{{ agencyNotice.assessor?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', agencyNotice.assessor?.id, 'view']">{{ agencyNotice.assessor?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
