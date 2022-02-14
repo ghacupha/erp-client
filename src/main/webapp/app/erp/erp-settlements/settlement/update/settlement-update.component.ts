@@ -92,6 +92,10 @@ export class SettlementUpdateComponent implements OnInit {
   billersInput$ = new Subject<string>();
   billerLookups$: Observable<IDealer[]> = of([]);
 
+  signatoriesLoading = false;
+  signatoryControlInput$ = new Subject<string>();
+  signatoryLookups$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -126,6 +130,26 @@ export class SettlementUpdateComponent implements OnInit {
     this.loadSettlements();
     this.loadCurrencies();
     this.loadBillers();
+    this.loadSignatories();
+  }
+
+  loadSignatories(): void {
+    this.signatoryLookups$ = concat(
+      of([]), // default items
+      this.signatoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.signatoriesLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.signatoriesLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
   }
 
   loadBillers(): void {
