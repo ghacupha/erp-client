@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
@@ -17,6 +17,16 @@ import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
 import { IDealer } from '../../../erp-common/models/dealer.model';
 import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
+import { ISettlement } from '../../settlement/settlement.model';
+import { IPayment } from '../../../erp-common/models/payment.model';
+import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
+import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -45,6 +55,28 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     biller: [null, Validators.required],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  purchaseOrdersLoading = false;
+  purchaseOrderControlInput$ = new Subject<string>();
+  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
+
+  settlementCurrenciesLoading = false;
+  settlementCurrencyControlInput$ = new Subject<string>();
+  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
+
+  billersLoading = false;
+  billersInput$ = new Subject<string>();
+  billerLookups$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected paymentInvoiceService: PaymentInvoiceService,
     protected purchaseOrderService: PurchaseOrderService,
@@ -53,7 +85,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected settlementCurrencyService: SettlementCurrencyService,
     protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected categorySuggestionService: CategorySuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +101,138 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadLabels();
+    this.loadPlaceholders();
+    this.loadCurrencies();
+    this.loadBillers();
+    this.loadPurchaseOrders();
+  }
+
+  loadPurchaseOrders(): void {
+    this.purchaseOrderLookups$ = concat(
+      of([]), // default items
+      this.purchaseOrderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this. purchaseOrdersLoading = true),
+        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this. purchaseOrdersLoading = false)
+        ))
+      ),
+      of([...this.purchaseOrdersSharedCollection])
+    );
+  }
+
+
+  loadBillers(): void {
+    this.billerLookups$ = concat(
+      of([]), // default items
+      this.billersInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.billersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.billersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadCurrencies(): void {
+    this.settlementCurrencyLookups$ = concat(
+      of([]), // default items
+      this.settlementCurrencyControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementCurrenciesLoading = true),
+        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementCurrenciesLoading = false)
+        ))
+      ),
+      of([...this.settlementCurrenciesSharedCollection])
+    );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackBillerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackCurrencyByFn(item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackPaymentByFn(item: IPayment): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackCategoryByFn(item: IPaymentCategory): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+
+  trackSettlementByFn(item: ISettlement): number {
+    return item.id!;
   }
 
   previousState(): void {
