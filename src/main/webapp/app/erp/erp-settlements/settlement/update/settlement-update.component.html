@@ -117,7 +117,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
@@ -148,9 +148,9 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
 
-        <!--<div class="form-group">
+        <div class="form-group">
           <label class="form-control-label">Settlement Currency</label>
           <ng-select
             [items]="settlementCurrencyLookups$ | async"
@@ -175,7 +175,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
             This field is required.
           </small>
-        </div>-->
+        </div>
 
         <!--<div class="form-group">
           <label for="field_paymentLabels">Payment Label</label>
@@ -363,7 +363,7 @@
           <div>{{editForm.get(['groupSettlement'])!.value|formatSettlement: [35, '...']}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_biller">Biller</label>
           <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
             <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
@@ -374,6 +374,26 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Biller</label>
+          <ng-select
+            [items]="billerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackBillerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="billersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="billersInput$"
+            formControlName="biller"
+          >
+            <option [ngValue]="editForm.get('biller')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
         </div>
         <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>

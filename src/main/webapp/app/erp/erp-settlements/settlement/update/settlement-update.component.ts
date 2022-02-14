@@ -28,6 +28,7 @@ import { LabelSuggestionService } from '../../../erp-common/suggestion/label-sug
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -85,7 +86,11 @@ export class SettlementUpdateComponent implements OnInit {
 
   settlementCurrenciesLoading = false;
   settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlement[]> = of([]);
+  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
+
+  billersLoading = false;
+  billersInput$ = new Subject<string>();
+  billerLookups$: Observable<IDealer[]> = of([]);
 
   constructor(
     protected dataUtils: DataUtils,
@@ -103,6 +108,7 @@ export class SettlementUpdateComponent implements OnInit {
     protected placeholderSuggestionService: PlaceholderSuggestionService,
     protected settlementSuggestionService: SettlementSuggestionService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
     protected fb: FormBuilder
   ) {}
 
@@ -119,12 +125,32 @@ export class SettlementUpdateComponent implements OnInit {
     this.loadCategories();
     this.loadSettlements();
     this.loadCurrencies();
+    this.loadBillers();
+  }
+
+  loadBillers(): void {
+    this.billerLookups$ = concat(
+      of([]), // default items
+      this.billersInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.billersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.billersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
   }
 
   loadCurrencies(): void {
     this.settlementCurrencyLookups$ = concat(
       of([]), // default items
-      this.settlementControlInput$.pipe(
+      this.settlementCurrencyControlInput$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filter(res => res !== null),
@@ -214,6 +240,10 @@ export class SettlementUpdateComponent implements OnInit {
       ),
       of([...this.settlementsSharedCollection])
     );
+  }
+
+  trackBillerByFn(item: IDealer): number {
+    return item.id!;
   }
 
   trackCurrencyByFn(item: ISettlementCurrency): number {
