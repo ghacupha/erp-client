@@ -55,10 +55,8 @@
           <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="calculationFile">
-            <span>Calculation File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
+          <!--<th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>-->
+
           <!--<th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
@@ -71,6 +69,9 @@
           <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="groupSettlement.id"><span>Group Settlement</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="biller.dealerName"><span>Biller</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="calculationFile">
+            <span>Calculation File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -83,15 +84,7 @@
           <td>{{ settlement.paymentDate | formatMediumDate }}</td>
           <td>{{ settlement.paymentAmount }}</td>
           <td>{{ settlement.description }}</td>
-          <td>{{ settlement.notes }}</td>
-          <td>
-            <a *ngIf="settlement.calculationFile" (click)="openFile(settlement.calculationFile, settlement.calculationFileContentType)"
-              >open</a
-            >
-            <span *ngIf="settlement.calculationFile"
-              >{{ settlement.calculationFileContentType }}, {{ byteSize(settlement.calculationFile) }}</span
-            >
-          </td>
+          <!--<td>{{ settlement.notes }}</td>-->
           <!--<td>{{ settlement.fileUploadToken }}</td>
           <td>{{ settlement.compilationToken }}</td>-->
           <td>
@@ -117,6 +110,14 @@
             <div *ngIf="settlement.biller">
               <a [routerLink]="['/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
             </div>
+          </td>
+          <td>
+            <a *ngIf="settlement.calculationFile" (click)="openFile(settlement.calculationFile, settlement.calculationFileContentType)"
+            >open</a
+            >
+            <span *ngIf="settlement.calculationFile"
+            >{{ settlement.calculationFileContentType }}, {{ byteSize(settlement.calculationFile) }}</span
+            >
           </td>
           <td class="text-right">
             <div class="btn-group">
