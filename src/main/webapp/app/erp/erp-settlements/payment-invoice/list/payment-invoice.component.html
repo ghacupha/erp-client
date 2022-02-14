@@ -57,12 +57,12 @@
           <th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="compilationToken">
+          <!--<th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          </th>-->
           <th scope="col" jhiSortBy="biller.dealerName"><span>Biller</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -75,8 +75,8 @@
           <td>{{ paymentInvoice.invoiceNumber }}</td>
           <td>{{ paymentInvoice.invoiceDate | formatMediumDate }}</td>
           <td>{{ paymentInvoice.invoiceAmount }}</td>
-          <td>{{ paymentInvoice.fileUploadToken }}</td>
-          <td>{{ paymentInvoice.compilationToken }}</td>
+          <!--<td>{{ paymentInvoice.fileUploadToken }}</td>
+          <td>{{ paymentInvoice.compilationToken }}</td>-->
           <td>
             <div *ngIf="paymentInvoice.settlementCurrency">
               <a [routerLink]="['/settlement-currency', paymentInvoice.settlementCurrency?.id, 'view']">{{
