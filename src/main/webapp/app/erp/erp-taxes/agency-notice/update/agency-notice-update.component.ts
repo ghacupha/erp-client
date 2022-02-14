@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 import { AgencyNoticeService } from '../service/agency-notice.service';
@@ -14,6 +14,14 @@ import { SettlementCurrencyService } from 'app/entities/settlement-currency/serv
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.model';
+import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
+import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
 
 @Component({
   selector: 'jhi-agency-notice-update',
@@ -40,12 +48,37 @@ export class AgencyNoticeUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  correspondentsLoading = false;
+  correspondentControlInput$ = new Subject<string>();
+  correspondentLookups$: Observable<IDealer[]> = of([]);
+
+  settlementCurrenciesLoading = false;
+  settlementCurrencyControlInput$ = new Subject<string>();
+  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
+
+  assessorsLoading = false;
+  assessorInput$ = new Subject<string>();
+  assessorLookup$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected agencyNoticeService: AgencyNoticeService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
+    protected categorySuggestionService: CategorySuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
     protected fb: FormBuilder
   ) {}
 
@@ -55,6 +88,108 @@ export class AgencyNoticeUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadPlaceholders();
+    this.loadCurrencies();
+    this.loadAssessors();
+    this.loadCorrespondents();
+  }
+
+  loadAssessors(): void {
+    this.assessorLookup$ = concat(
+      of([]), // default items
+      this.assessorInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.assessorsLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.assessorsLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadCurrencies(): void {
+    this.settlementCurrencyLookups$ = concat(
+      of([]), // default items
+      this.settlementCurrencyControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementCurrenciesLoading = true),
+        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementCurrenciesLoading = false)
+        ))
+      ),
+      of([...this.settlementCurrenciesSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadCorrespondents(): void {
+    this.correspondentLookups$ = concat(
+      of([]), // default items
+      this.correspondentControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.correspondentsLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.correspondentsLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  trackPlaceholdersByFn(item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
+    return item.id!;
+  }
+
+  trackAssessorByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackCorrespondentByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackCurrencyByFn(item: ISettlementCurrency): number {
+    return item.id!;
   }
 
   previousState(): void {

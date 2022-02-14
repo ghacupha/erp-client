@@ -82,11 +82,15 @@
           </div>
         </div>
 
+        <!-- // TODO use typical drop-down values as this approach has failed to take-off in chrome ver 98-->
         <div class="form-group">
           <label class="form-control-label" for="field_agencyStatus">Agency Status</label>
           <select class="form-control" name="agencyStatus" formControlName="agencyStatus" id="field_agencyStatus" data-cy="agencyStatus">
+            <!--<option [ngValue]="null"></option>
+            <option *ngFor="let agencyStatusType of agencyStatusTypeValues" [value]="agencyStatusType">agencyStatusType</option>-->
             <option [ngValue]="null"></option>
-            <option *ngFor="let agencyStatusType of agencyStatusTypeValues" [value]="agencyStatusType">agencyStatusType</option>
+            <option value="CLEARED">CLEARED</option>
+            <option value="NOT_CLEARED">NOT CLEARED</option>
           </select>
           <div
             *ngIf="editForm.get('agencyStatus')!.invalid && (editForm.get('agencyStatus')!.dirty || editForm.get('agencyStatus')!.touched)"
@@ -96,45 +100,44 @@
         </div>
 
         <div class="form-group">
-          <label for="field_correspondents">Correspondents</label>
-          <select
-            class="form-control"
-            id="field_correspondents"
-            data-cy="correspondents"
-            multiple
-            name="correspondents"
+          <label class="form-control-label">Correspondents</label>
+          <ng-select
+            [items]="correspondentLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackCorrespondentByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="correspondentsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="correspondentControlInput$"
             formControlName="correspondents"
+            [multiple]='true'
           >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('correspondents')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
+            <ng-option *ngFor="let option of correspondentLookups$ | async" [value]="option">
+              {{ option.dealerName }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
-          <select
-            class="form-control"
-            id="field_settlementCurrency"
-            data-cy="settlementCurrency"
-            name="settlementCurrency"
+          <label class="form-control-label">Settlement Currency</label>
+          <ng-select
+            [items]="settlementCurrencyLookups$ | async"
+            bindLabel="iso4217CurrencyCode"
+            [trackByFn]="trackCurrencyByFn"
+            [minTermLength]="3"
+            [loading]="settlementCurrenciesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementCurrencyControlInput$"
             formControlName="settlementCurrency"
           >
-            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
+            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
         </div>
         <div
           *ngIf="
@@ -148,39 +151,48 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_assessor">Assessor</label>
-          <select class="form-control" id="field_assessor" data-cy="assessor" name="assessor" formControlName="assessor">
-            <option *ngIf="!editForm.get('assessor')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('assessor')!.value?.id ? editForm.get('assessor')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
+          <label class="form-control-label">Assessor</label>
+          <ng-select
+            [items]="assessorLookup$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackAssessorByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="assessorsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="assessorInput$"
+            formControlName="assessor"
+          >
+            <option [ngValue]="editForm.get('assessor')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['assessor'])!.value|formatDealerId}}</div>
         </div>
         <div *ngIf="editForm.get(['assessor'])!.invalid && (editForm.get(['assessor'])!.dirty || editForm.get(['assessor'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['assessor'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+      <div class="form-group">
+        <label class="form-control-label">Placeholders</label>
+        <ng-select
+          [items]="placeholderLookups$ | async"
+          bindLabel="description"
+          [trackByFn]="trackPlaceholdersByFn"
+          [minTermLength]="minAccountLengthTerm"
+          [loading]="placeholdersLoading"
+          typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+          [typeahead]="placeholderControlInput$"
+          formControlName="placeholders"
+          [multiple]='true'
+        >
+          <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+            {{ option.description }}
+          </ng-option>
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+            <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+          </ng-template>
+        </ng-select>
+        <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+      </div>
       </div>
 
       <div>

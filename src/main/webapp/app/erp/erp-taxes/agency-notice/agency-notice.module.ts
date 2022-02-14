@@ -5,9 +5,10 @@ import { AgencyNoticeDetailComponent } from './detail/agency-notice-detail.compo
 import { AgencyNoticeUpdateComponent } from './update/agency-notice-update.component';
 import { AgencyNoticeDeleteDialogComponent } from './delete/agency-notice-delete-dialog.component';
 import { AgencyNoticeRoutingModule } from './route/agency-notice-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AgencyNoticeRoutingModule],
+  imports: [SharedModule, AgencyNoticeRoutingModule, ErpCommonModule],
   declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent],
   entryComponents: [AgencyNoticeDeleteDialogComponent],
 })
