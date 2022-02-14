@@ -59,12 +59,12 @@
           <th scope="col" jhiSortBy="calculationFile">
             <span>Calculation File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="fileUploadToken">
+          <!--<th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
+          </th>-->
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -92,8 +92,8 @@
               >{{ settlement.calculationFileContentType }}, {{ byteSize(settlement.calculationFile) }}</span
             >
           </td>
-          <td>{{ settlement.fileUploadToken }}</td>
-          <td>{{ settlement.compilationToken }}</td>
+          <!--<td>{{ settlement.fileUploadToken }}</td>
+          <td>{{ settlement.compilationToken }}</td>-->
           <td>
             <div *ngIf="settlement.settlementCurrency">
               <a [routerLink]="['/settlement-currency', settlement.settlementCurrency?.id, 'view']">{{
