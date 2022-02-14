@@ -60,14 +60,14 @@
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of purchaseOrder.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Vendor</span></dt>
         <dd>
           <div *ngIf="purchaseOrder.vendor">
-            <a [routerLink]="['/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
           </div>
         </dd>
       </dl>

@@ -86,7 +86,7 @@
           </td>
           <td>
             <div *ngIf="paymentInvoice.biller">
-              <a [routerLink]="['/dealer', paymentInvoice.biller?.id, 'view']">{{ paymentInvoice.biller?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', paymentInvoice.biller?.id, 'view']">{{ paymentInvoice.biller?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

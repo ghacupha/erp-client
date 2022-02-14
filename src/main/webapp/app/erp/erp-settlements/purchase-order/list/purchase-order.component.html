@@ -92,7 +92,7 @@
           </td>
           <td>
             <div *ngIf="purchaseOrder.vendor">
-              <a [routerLink]="['/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

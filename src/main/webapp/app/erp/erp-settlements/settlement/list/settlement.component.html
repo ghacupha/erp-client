@@ -108,7 +108,7 @@
           </td>
           <td>
             <div *ngIf="settlement.biller">
-              <a [routerLink]="['/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
             </div>
           </td>
           <td>

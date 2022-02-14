@@ -88,7 +88,7 @@
         <dt><span>Biller</span></dt>
         <dd>
           <div *ngIf="settlement.biller">
-            <a [routerLink]="['/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Payment Invoice</span></dt>
@@ -101,7 +101,7 @@
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of settlement.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
