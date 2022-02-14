@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ISettlement, Settlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
@@ -22,6 +22,12 @@ import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment
 import { PaymentInvoiceService } from 'app/erp/erp-settlements/payment-invoice/service/payment-invoice.service';
 import { DealerService } from '../../../erp-common/services/dealer.service';
 import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IPayment } from '../../../erp-common/models/payment.model';
+import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
+import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -59,6 +65,28 @@ export class SettlementUpdateComponent implements OnInit {
     signatories: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  categoriesLoading = false;
+  categoryControlInput$ = new Subject<string>();
+  categoryLookups$: Observable<IPaymentCategory[]> = of([]);
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  settlementsLoading = false;
+  settlementControlInput$ = new Subject<string>();
+  settlementLookups$: Observable<ISettlement[]> = of([]);
+
+  settlementCurrenciesLoading = false;
+  settlementCurrencyControlInput$ = new Subject<string>();
+  settlementCurrencyLookups$: Observable<ISettlement[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -70,6 +98,11 @@ export class SettlementUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected activatedRoute: ActivatedRoute,
+    protected categorySuggestionService: CategorySuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected fb: FormBuilder
   ) {}
 
@@ -79,6 +112,133 @@ export class SettlementUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadLabels();
+    this.loadPlaceholders();
+    this.loadCategories();
+    this.loadSettlements();
+    this.loadCurrencies();
+  }
+
+  loadCurrencies(): void {
+    this.settlementCurrencyLookups$ = concat(
+      of([]), // default items
+      this.settlementControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementCurrenciesLoading = true),
+        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementCurrenciesLoading = false)
+        ))
+      ),
+      of([...this.settlementCurrenciesSharedCollection])
+    );
+  }
+
+  loadCategories(): void {
+    this.categoryLookups$ = concat(
+      of([]), // default items
+      this.categoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.categoriesLoading = true),
+        switchMap(term => this.categorySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.categoriesLoading = false)
+        ))
+      ),
+      of([...this.paymentCategoriesSharedCollection])
+    );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadSettlements(): void {
+    this.settlementLookups$ = concat(
+      of([]), // default items
+      this.settlementControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementsLoading = true),
+        switchMap(term => this.settlementSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementsLoading = false)
+        ))
+      ),
+      of([...this.settlementsSharedCollection])
+    );
+  }
+
+  trackCurrencyByFn(item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackPaymentByFn(item: IPayment): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackCategoryByFn(item: IPaymentCategory): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+
+  trackSettlementByFn(item: ISettlement): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {

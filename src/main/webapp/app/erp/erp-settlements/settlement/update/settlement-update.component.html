@@ -118,49 +118,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
-          <input
-            type="text"
-            class="form-control"
-            name="fileUploadToken"
-            id="field_fileUploadToken"
-            data-cy="fileUploadToken"
-            formControlName="fileUploadToken"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
-          <input
-            type="text"
-            class="form-control"
-            name="compilationToken"
-            id="field_compilationToken"
-            data-cy="compilationToken"
-            formControlName="compilationToken"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
@@ -193,7 +150,34 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
+          <label class="form-control-label">Settlement Currency</label>
+          <ng-select
+            [items]="settlementCurrencyLookups$ | async"
+            bindLabel="iso4217CurrencyCode"
+            [trackByFn]="trackCurrencyByFn"
+            [minTermLength]="3"
+            [loading]="settlementCurrenciesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementCurrencyControlInput$"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>-->
+
+        <!--<div class="form-group">
           <label for="field_paymentLabels">Payment Label</label>
           <select
             class="form-control"
@@ -213,6 +197,73 @@
         </div>
 
         <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Labels</label>
+          <ng-select
+            [items]="labelLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackLabelByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="labelsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="labelControlInput$"
+            formControlName="paymentLabels"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of labelLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['paymentLabels'])!.value|json}}</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
@@ -241,9 +292,34 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
         <div class="form-group">
+          <label class="form-control-label">Payment Category</label>
+          <ng-select
+            [items]="categoryLookups$ | async"
+            bindLabel="categoryName"
+            [trackByFn]="trackCategoryByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="categoriesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="categoryControlInput$"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['paymentCategory'])!.value|formatPaymentCategory: [35, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['paymentCategory'])!.invalid &&
+            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_groupSettlement">Group Settlement</label>
           <select
             class="form-control"
@@ -264,6 +340,27 @@
               {{ settlementOption.id }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Settlement Group</label>
+          <ng-select
+            [items]="settlementLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPaymentByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="settlementsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementControlInput$"
+            formControlName="groupSettlement"
+          >
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <span class="ng-value-label">{{item.paymentNumber + ' ' + item.paymentDate + ' ' + item.settlementCurrency.iso4217CurrencyCode + ' ' + item.paymentAmount}}</span>
+              <span class="ng-value-icon right" (click)="clear(item)">×</span>
+            </ng-template>
+            <option [ngValue]="editForm.get('groupSettlement')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['groupSettlement'])!.value|formatSettlement: [35, '...']}}</div>
         </div>
 
         <div class="form-group">
@@ -319,6 +416,31 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileUploadToken"
+            id="field_fileUploadToken"
+            data-cy="fileUploadToken"
+            formControlName="fileUploadToken"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+          <input
+            type="text"
+            class="form-control"
+            name="compilationToken"
+            id="field_compilationToken"
+            data-cy="compilationToken"
+            formControlName="compilationToken"
+          />
+        </div>
+
       </div>
 
       <div>
