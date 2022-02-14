@@ -11,7 +11,7 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/payment"
@@ -95,7 +95,7 @@
           </span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'" >
           <a
             class="dropdown-item"
             routerLink="/erp/invoice"
@@ -109,7 +109,7 @@
           </span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/signed-payment"
@@ -133,7 +133,7 @@
             <span>Payment Label</span>
           </a>
         </li>
-        <!--<li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/payment-calculation"
@@ -144,8 +144,8 @@
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Payment Calculation</span>
           </a>
-        </li>-->
-        <li>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/payment-requisition"
@@ -157,7 +157,7 @@
             <span>Payment Requisition</span>
           </a>
         </li>
-        <!--<li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/tax-reference"
@@ -168,8 +168,8 @@
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Tax Reference</span>
           </a>
-        </li>-->
-        <!--<li>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="/erp/tax-rule"
@@ -180,7 +180,7 @@
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Tax Rule</span>
           </a>
-        </li>-->
+        </li>
         <li>
           <a
             class="dropdown-item"
