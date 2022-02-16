@@ -23,6 +23,7 @@ import { PaymentLabelService } from '../../../erp-common/services/payment-label.
 
 import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
 import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
 
 describe('PaymentInvoice Management Update Component', () => {
   let comp: PaymentInvoiceUpdateComponent;
