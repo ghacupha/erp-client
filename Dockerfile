@@ -55,4 +55,6 @@ RUN ng build --prod --output-path ./dist
 # Am assuming the /dist is created inside the container
 # COPY /dist /opt/app/dist
 
+EXPOSE 8981
+
 CMD ["forever", "server.js"]
