@@ -113,6 +113,7 @@
     "eslint-plugin-cypress": "2.12.1",
     "eslint-webpack-plugin": "3.0.1",
     "express": "^4.17.1",
+    "forever": "^4.0.3",
     "generator-jhipster": "7.3.1",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^2.0.1",

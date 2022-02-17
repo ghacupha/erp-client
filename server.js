@@ -16,12 +16,12 @@ app.use(express.static(__dirname + '/dist'));
 
 // Proxy endpoints
 app.use('/*', createProxyMiddleware({
-  target: API_SERVICE_URL,
-  changeOrigin: true,
-}),
-function(req, res) {
-  res.sendFile(path.join(__dirname + '/dist/index.html'));
-});
+    target: API_SERVICE_URL,
+    changeOrigin: true,
+  }),
+  function(req, res) {
+    res.sendFile(path.join(__dirname + '/dist/index.html'));
+  });
 
 // Start the Proxy
 app.listen(PORT, HOST, () => {
