@@ -52,6 +52,7 @@ ENV PATH="./node_modules/.bin:$PATH"
 
 RUN ng build --prod --output-path ./dist
 
-COPY /dist /opt/app/dist
+# Am assuming the /dist is created inside the container
+# COPY /dist /opt/app/dist
 
 CMD ["forever start", "server.js"]
