@@ -49,73 +49,84 @@
   <div class="table-responsive" id="entities" *ngIf="agencyNotices && agencyNotices.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="referenceNumber">
-            <span>Reference Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="referenceDate"><span>Reference Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxCode"><span>Tax Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assessmentAmount"><span>Assessment Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="agencyStatus"><span>Agency Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="assessor.dealerName"><span>Assessor</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col"></th>
-        </tr>
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="referenceNumber">
+          <span>Reference Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="referenceDate"><span>Reference Date</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="assessmentAmount"><span>Assessment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="agencyStatus"><span>Agency Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <th scope="col" jhiSortBy="assessmentNotice">
+          <span>Assessment Notice</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+          <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+        </th>
+        <th scope="col" jhiSortBy="assessor.dealerName"><span>Assessor</span> <fa-icon icon="sort"></fa-icon></th>
+        <th scope="col"></th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let agencyNotice of agencyNotices; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/agency-notice', agencyNotice.id, 'view']">{{ agencyNotice.id }}</a>
-          </td>
-          <td>{{ agencyNotice.referenceNumber }}</td>
-          <td>{{ agencyNotice.referenceDate | formatMediumDate }}</td>
-          <td>{{ agencyNotice.taxCode }}</td>
-          <td>{{ agencyNotice.assessmentAmount }}</td>
-          <td>{{ agencyNotice.agencyStatus }}</td>
-          <td>
-            <div *ngIf="agencyNotice.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', agencyNotice.settlementCurrency?.id, 'view']">{{
-                agencyNotice.settlementCurrency?.iso4217CurrencyCode
+      <tr *ngFor="let agencyNotice of agencyNotices; trackBy: trackId" data-cy="entityTable">
+        <td>
+          <a [routerLink]="['/agency-notice', agencyNotice.id, 'view']">{{ agencyNotice.id }}</a>
+        </td>
+        <td>{{ agencyNotice.referenceNumber }}</td>
+        <td>{{ agencyNotice.referenceDate | formatMediumDate }}</td>
+        <td>{{ agencyNotice.assessmentAmount }}</td>
+        <td>{{ agencyNotice.agencyStatus }}</td>
+        <td>
+          <a
+            *ngIf="agencyNotice.assessmentNotice"
+            (click)="openFile(agencyNotice.assessmentNotice, agencyNotice.assessmentNoticeContentType)"
+          >open</a
+          >
+          <span *ngIf="agencyNotice.assessmentNotice"
+          >{{ agencyNotice.assessmentNoticeContentType }}, {{ byteSize(agencyNotice.assessmentNotice) }}</span
+          >
+        </td>
+        <td>
+          <div *ngIf="agencyNotice.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', agencyNotice.settlementCurrency?.id, 'view']">{{
+              agencyNotice.settlementCurrency?.iso4217CurrencyCode
               }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="agencyNotice.assessor">
-              <a [routerLink]="['/erp/dealer', agencyNotice.assessor?.id, 'view']">{{ agencyNotice.assessor?.dealerName }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/agency-notice', agencyNotice.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
-              </button>
+          </div>
+        </td>
+        <td>
+          <div *ngIf="agencyNotice.assessor">
+            <a [routerLink]="['/erp/dealer', agencyNotice.assessor?.id, 'view']">{{ agencyNotice.assessor?.dealerName }}</a>
+          </div>
+        </td>
+        <td class="text-right">
+          <div class="btn-group">
+            <button
+              type="submit"
+              [routerLink]="['/agency-notice', agencyNotice.id, 'view']"
+              class="btn btn-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline">View</span>
+            </button>
 
-              <button
-                type="submit"
-                [routerLink]="['/agency-notice', agencyNotice.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
-              </button>
+            <button
+              type="submit"
+              [routerLink]="['/agency-notice', agencyNotice.id, 'edit']"
+              class="btn btn-primary btn-sm"
+              data-cy="entityEditButton"
+            >
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline">Edit</span>
+            </button>
 
-              <button type="submit" (click)="delete(agencyNotice)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
+            <button type="submit" (click)="delete(agencyNotice)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline">Delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
   </div>

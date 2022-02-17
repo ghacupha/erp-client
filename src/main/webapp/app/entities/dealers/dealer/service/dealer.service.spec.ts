@@ -23,6 +23,10 @@ describe('Dealer Service', () => {
       id: 0,
       dealerName: 'AAAAAAA',
       taxNumber: 'AAAAAAA',
+      identificationDocumentNumber: 'AAAAAAA',
+      organizationName: 'AAAAAAA',
+      department: 'AAAAAAA',
+      position: 'AAAAAAA',
       postalAddress: 'AAAAAAA',
       physicalAddress: 'AAAAAAA',
       accountName: 'AAAAAAA',
@@ -69,6 +73,10 @@ describe('Dealer Service', () => {
           id: 1,
           dealerName: 'BBBBBB',
           taxNumber: 'BBBBBB',
+          identificationDocumentNumber: 'BBBBBB',
+          organizationName: 'BBBBBB',
+          department: 'BBBBBB',
+          position: 'BBBBBB',
           postalAddress: 'BBBBBB',
           physicalAddress: 'BBBBBB',
           accountName: 'BBBBBB',
@@ -95,10 +103,12 @@ describe('Dealer Service', () => {
       const patchObject = Object.assign(
         {
           dealerName: 'BBBBBB',
+          identificationDocumentNumber: 'BBBBBB',
+          organizationName: 'BBBBBB',
+          department: 'BBBBBB',
           postalAddress: 'BBBBBB',
-          physicalAddress: 'BBBBBB',
-          accountName: 'BBBBBB',
-          bankersName: 'BBBBBB',
+          bankersBranch: 'BBBBBB',
+          fileUploadToken: 'BBBBBB',
         },
         new Dealer()
       );
@@ -120,6 +130,10 @@ describe('Dealer Service', () => {
           id: 1,
           dealerName: 'BBBBBB',
           taxNumber: 'BBBBBB',
+          identificationDocumentNumber: 'BBBBBB',
+          organizationName: 'BBBBBB',
+          department: 'BBBBBB',
+          position: 'BBBBBB',
           postalAddress: 'BBBBBB',
           physicalAddress: 'BBBBBB',
           accountName: 'BBBBBB',
@@ -180,7 +194,7 @@ describe('Dealer Service', () => {
       });
 
       it('should add only unique Dealer to an array', () => {
-        const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 88743 }];
+        const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 99794 }];
         const dealerCollection: IDealer[] = [{ id: 123 }];
         expectedResult = service.addDealerToCollectionIfMissing(dealerCollection, ...dealerArray);
         expect(expectedResult).toHaveLength(3);

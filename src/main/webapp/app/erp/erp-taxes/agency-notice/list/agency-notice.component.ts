@@ -9,6 +9,7 @@ import { IAgencyNotice } from '../agency-notice.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { AgencyNoticeService } from '../service/agency-notice.service';
 import { AgencyNoticeDeleteDialogComponent } from '../delete/agency-notice-delete-dialog.component';
+import { DataUtils } from '../../../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-agency-notice',
@@ -28,6 +29,7 @@ export class AgencyNoticeComponent implements OnInit {
   constructor(
     protected agencyNoticeService: AgencyNoticeService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -78,7 +80,7 @@ export class AgencyNoticeComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['referenceNumber', 'taxCode', 'agencyStatus'].includes(this.predicate)) {
+    if (query && ['referenceNumber', 'agencyStatus', 'assessmentNotice'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -92,6 +94,14 @@ export class AgencyNoticeComponent implements OnInit {
 
   trackId(index: number, item: IAgencyNotice): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(agencyNotice: IAgencyNotice): void {

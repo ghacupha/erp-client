@@ -52,10 +52,10 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_taxCode">Tax Code</label>
           <input type="text" class="form-control" name="taxCode" id="field_taxCode" data-cy="taxCode" formControlName="taxCode" />
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label class="form-control-label" for="field_assessmentAmount">Assessment Amount</label>
@@ -97,6 +97,50 @@
           >
             <small class="form-text text-danger" *ngIf="editForm.get('agencyStatus')?.errors?.required"> This field is required. </small>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assessmentNotice">Assessment Notice</label>
+          <div>
+            <div *ngIf="editForm.get('assessmentNotice')!.value" class="form-text text-danger clearfix">
+              <a
+                class="pull-left"
+                (click)="openFile(editForm.get('assessmentNotice')!.value, editForm.get('assessmentNoticeContentType')!.value)"
+              >open</a
+              ><br />
+              <span class="pull-left"
+              >{{ editForm.get('assessmentNoticeContentType')!.value }}, {{ byteSize(editForm.get('assessmentNotice')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ assessmentNotice: null }); editForm.patchValue({ assessmentNoticeContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input
+              type="file"
+              id="file_assessmentNotice"
+              data-cy="assessmentNotice"
+              (change)="setFileData($event, 'assessmentNotice', false)"
+            />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="assessmentNotice"
+            id="field_assessmentNotice"
+            data-cy="assessmentNotice"
+            formControlName="assessmentNotice"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="assessmentNoticeContentType"
+            id="field_assessmentNoticeContentType"
+            formControlName="assessmentNoticeContentType"
+          />
         </div>
 
         <div class="form-group">

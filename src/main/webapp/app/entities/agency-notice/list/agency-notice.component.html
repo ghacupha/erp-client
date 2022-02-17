@@ -55,9 +55,11 @@
             <span>Reference Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="referenceDate"><span>Reference Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxCode"><span>Tax Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assessmentAmount"><span>Assessment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="agencyStatus"><span>Agency Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assessmentNotice">
+            <span>Assessment Notice</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -72,9 +74,18 @@
           </td>
           <td>{{ agencyNotice.referenceNumber }}</td>
           <td>{{ agencyNotice.referenceDate | formatMediumDate }}</td>
-          <td>{{ agencyNotice.taxCode }}</td>
           <td>{{ agencyNotice.assessmentAmount }}</td>
           <td>{{ agencyNotice.agencyStatus }}</td>
+          <td>
+            <a
+              *ngIf="agencyNotice.assessmentNotice"
+              (click)="openFile(agencyNotice.assessmentNotice, agencyNotice.assessmentNoticeContentType)"
+              >open</a
+            >
+            <span *ngIf="agencyNotice.assessmentNotice"
+              >{{ agencyNotice.assessmentNoticeContentType }}, {{ byteSize(agencyNotice.assessmentNotice) }}</span
+            >
+          </td>
           <td>
             <div *ngIf="agencyNotice.settlementCurrency">
               <a [routerLink]="['/settlement-currency', agencyNotice.settlementCurrency?.id, 'view']">{{

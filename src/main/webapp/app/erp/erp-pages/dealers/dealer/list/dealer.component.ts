@@ -93,6 +93,10 @@ export class DealerComponent implements OnInit {
       [
         'dealerName',
         'taxNumber',
+        'identificationDocumentNumber',
+        'organizationName',
+        'department',
+        'position',
         'postalAddress',
         'physicalAddress',
         'accountName',

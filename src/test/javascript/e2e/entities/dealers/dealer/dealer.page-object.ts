@@ -32,6 +32,10 @@ export class DealerUpdatePage {
   idInput = element(by.id('field_id'));
   dealerNameInput = element(by.id('field_dealerName'));
   taxNumberInput = element(by.id('field_taxNumber'));
+  identificationDocumentNumberInput = element(by.id('field_identificationDocumentNumber'));
+  organizationNameInput = element(by.id('field_organizationName'));
+  departmentInput = element(by.id('field_department'));
+  positionInput = element(by.id('field_position'));
   postalAddressInput = element(by.id('field_postalAddress'));
   physicalAddressInput = element(by.id('field_physicalAddress'));
   accountNameInput = element(by.id('field_accountName'));
@@ -72,6 +76,38 @@ export class DealerUpdatePage {
 
   async getTaxNumberInput(): Promise<string> {
     return await this.taxNumberInput.getAttribute('value');
+  }
+
+  async setIdentificationDocumentNumberInput(identificationDocumentNumber: string): Promise<void> {
+    await this.identificationDocumentNumberInput.sendKeys(identificationDocumentNumber);
+  }
+
+  async getIdentificationDocumentNumberInput(): Promise<string> {
+    return await this.identificationDocumentNumberInput.getAttribute('value');
+  }
+
+  async setOrganizationNameInput(organizationName: string): Promise<void> {
+    await this.organizationNameInput.sendKeys(organizationName);
+  }
+
+  async getOrganizationNameInput(): Promise<string> {
+    return await this.organizationNameInput.getAttribute('value');
+  }
+
+  async setDepartmentInput(department: string): Promise<void> {
+    await this.departmentInput.sendKeys(department);
+  }
+
+  async getDepartmentInput(): Promise<string> {
+    return await this.departmentInput.getAttribute('value');
+  }
+
+  async setPositionInput(position: string): Promise<void> {
+    await this.positionInput.sendKeys(position);
+  }
+
+  async getPositionInput(): Promise<string> {
+    return await this.positionInput.getAttribute('value');
   }
 
   async setPostalAddressInput(postalAddress: string): Promise<void> {

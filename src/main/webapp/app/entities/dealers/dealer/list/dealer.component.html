@@ -53,6 +53,14 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="taxNumber"><span>Tax Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="identificationDocumentNumber">
+            <span>Identification Document Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="organizationName">
+            <span>Organization Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="department"><span>Department</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="position"><span>Position</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="postalAddress"><span>Postal Address</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="physicalAddress">
             <span>Physical Address</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
@@ -81,6 +89,10 @@
           </td>
           <td>{{ dealer.dealerName }}</td>
           <td>{{ dealer.taxNumber }}</td>
+          <td>{{ dealer.identificationDocumentNumber }}</td>
+          <td>{{ dealer.organizationName }}</td>
+          <td>{{ dealer.department }}</td>
+          <td>{{ dealer.position }}</td>
           <td>{{ dealer.postalAddress }}</td>
           <td>{{ dealer.physicalAddress }}</td>
           <td>{{ dealer.accountName }}</td>

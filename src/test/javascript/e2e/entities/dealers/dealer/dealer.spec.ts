@@ -45,6 +45,10 @@ describe('Dealer e2e test', () => {
     await promise.all([
       dealerUpdatePage.setDealerNameInput('dealerName'),
       dealerUpdatePage.setTaxNumberInput('taxNumber'),
+      dealerUpdatePage.setIdentificationDocumentNumberInput('identificationDocumentNumber'),
+      dealerUpdatePage.setOrganizationNameInput('organizationName'),
+      dealerUpdatePage.setDepartmentInput('department'),
+      dealerUpdatePage.setPositionInput('position'),
       dealerUpdatePage.setPostalAddressInput('postalAddress'),
       dealerUpdatePage.setPhysicalAddressInput('physicalAddress'),
       dealerUpdatePage.setAccountNameInput('accountName'),

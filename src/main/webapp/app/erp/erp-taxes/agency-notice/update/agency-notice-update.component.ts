@@ -22,6 +22,9 @@ import { SettlementCurrencySuggestionService } from '../../../erp-common/suggest
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
+import { DataUtils, FileLoadError } from '../../../../core/util/data-util.service';
+import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
+import { AlertError } from '../../../../shared/alert/alert-error.model';
 
 @Component({
   selector: 'jhi-agency-notice-update',
@@ -39,12 +42,13 @@ export class AgencyNoticeUpdateComponent implements OnInit {
     id: [],
     referenceNumber: [null, [Validators.required]],
     referenceDate: [],
-    taxCode: [],
     assessmentAmount: [null, [Validators.required]],
     agencyStatus: [null, [Validators.required]],
+    assessmentNotice: [],
+    assessmentNoticeContentType: [],
     correspondents: [],
-    settlementCurrency: [null, Validators.required],
-    assessor: [null, Validators.required],
+    settlementCurrency: [],
+    assessor: [],
     placeholders: [],
   });
 
@@ -67,6 +71,8 @@ export class AgencyNoticeUpdateComponent implements OnInit {
   assessorLookup$: Observable<IDealer[]> = of([]);
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected agencyNoticeService: AgencyNoticeService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
@@ -94,6 +100,21 @@ export class AgencyNoticeUpdateComponent implements OnInit {
     this.loadCurrencies();
     this.loadAssessors();
     this.loadCorrespondents();
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
+    });
   }
 
   loadAssessors(): void {
@@ -264,9 +285,11 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       id: agencyNotice.id,
       referenceNumber: agencyNotice.referenceNumber,
       referenceDate: agencyNotice.referenceDate,
-      taxCode: agencyNotice.taxCode,
+      /* taxCode: agencyNotice.taxCode, */
       assessmentAmount: agencyNotice.assessmentAmount,
       agencyStatus: agencyNotice.agencyStatus,
+      assessmentNotice: agencyNotice.assessmentNotice,
+      assessmentNoticeContentType: agencyNotice.assessmentNoticeContentType,
       correspondents: agencyNotice.correspondents,
       settlementCurrency: agencyNotice.settlementCurrency,
       assessor: agencyNotice.assessor,
@@ -333,9 +356,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       referenceNumber: this.editForm.get(['referenceNumber'])!.value,
       referenceDate: this.editForm.get(['referenceDate'])!.value,
-      taxCode: this.editForm.get(['taxCode'])!.value,
       assessmentAmount: this.editForm.get(['assessmentAmount'])!.value,
       agencyStatus: this.editForm.get(['agencyStatus'])!.value,
+      assessmentNoticeContentType: this.editForm.get(['assessmentNoticeContentType'])!.value,
+      assessmentNotice: this.editForm.get(['assessmentNotice'])!.value,
       correspondents: this.editForm.get(['correspondents'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       assessor: this.editForm.get(['assessor'])!.value,

@@ -8,12 +8,13 @@ export interface IAgencyNotice {
   id?: number;
   referenceNumber?: string;
   referenceDate?: dayjs.Dayjs | null;
-  taxCode?: string | null;
   assessmentAmount?: number;
   agencyStatus?: AgencyStatusType;
+  assessmentNoticeContentType?: string | null;
+  assessmentNotice?: string | null;
   correspondents?: IDealer[] | null;
-  settlementCurrency?: ISettlementCurrency;
-  assessor?: IDealer;
+  settlementCurrency?: ISettlementCurrency | null;
+  assessor?: IDealer | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -22,12 +23,13 @@ export class AgencyNotice implements IAgencyNotice {
     public id?: number,
     public referenceNumber?: string,
     public referenceDate?: dayjs.Dayjs | null,
-    public taxCode?: string | null,
     public assessmentAmount?: number,
     public agencyStatus?: AgencyStatusType,
+    public assessmentNoticeContentType?: string | null,
+    public assessmentNotice?: string | null,
     public correspondents?: IDealer[] | null,
-    public settlementCurrency?: ISettlementCurrency,
-    public assessor?: IDealer,
+    public settlementCurrency?: ISettlementCurrency | null,
+    public assessor?: IDealer | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }
@@ -35,3 +37,4 @@ export class AgencyNotice implements IAgencyNotice {
 export function getAgencyNoticeIdentifier(agencyNotice: IAgencyNotice): number | undefined {
   return agencyNotice.id;
 }
+

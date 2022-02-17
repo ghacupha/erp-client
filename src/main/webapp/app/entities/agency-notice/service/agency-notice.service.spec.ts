@@ -28,9 +28,10 @@ describe('AgencyNotice Service', () => {
       id: 0,
       referenceNumber: 'AAAAAAA',
       referenceDate: currentDate,
-      taxCode: 'AAAAAAA',
       assessmentAmount: 0,
       agencyStatus: AgencyStatusType.CLEARED,
+      assessmentNoticeContentType: 'image/png',
+      assessmentNotice: 'AAAAAAA',
     };
   });
 
@@ -79,9 +80,9 @@ describe('AgencyNotice Service', () => {
           id: 1,
           referenceNumber: 'BBBBBB',
           referenceDate: currentDate.format(DATE_FORMAT),
-          taxCode: 'BBBBBB',
           assessmentAmount: 1,
           agencyStatus: 'BBBBBB',
+          assessmentNotice: 'BBBBBB',
         },
         elemDefault
       );
@@ -105,8 +106,8 @@ describe('AgencyNotice Service', () => {
         {
           referenceNumber: 'BBBBBB',
           referenceDate: currentDate.format(DATE_FORMAT),
-          taxCode: 'BBBBBB',
           assessmentAmount: 1,
+          agencyStatus: 'BBBBBB',
         },
         new AgencyNotice()
       );
@@ -133,9 +134,9 @@ describe('AgencyNotice Service', () => {
           id: 1,
           referenceNumber: 'BBBBBB',
           referenceDate: currentDate.format(DATE_FORMAT),
-          taxCode: 'BBBBBB',
           assessmentAmount: 1,
           agencyStatus: 'BBBBBB',
+          assessmentNotice: 'BBBBBB',
         },
         elemDefault
       );

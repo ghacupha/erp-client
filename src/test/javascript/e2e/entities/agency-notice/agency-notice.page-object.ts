@@ -32,9 +32,9 @@ export class AgencyNoticeUpdatePage {
   idInput = element(by.id('field_id'));
   referenceNumberInput = element(by.id('field_referenceNumber'));
   referenceDateInput = element(by.id('field_referenceDate'));
-  taxCodeInput = element(by.id('field_taxCode'));
   assessmentAmountInput = element(by.id('field_assessmentAmount'));
   agencyStatusSelect = element(by.id('field_agencyStatus'));
+  assessmentNoticeInput = element(by.id('file_assessmentNotice'));
 
   correspondentsSelect = element(by.id('field_correspondents'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
@@ -69,14 +69,6 @@ export class AgencyNoticeUpdatePage {
     return await this.referenceDateInput.getAttribute('value');
   }
 
-  async setTaxCodeInput(taxCode: string): Promise<void> {
-    await this.taxCodeInput.sendKeys(taxCode);
-  }
-
-  async getTaxCodeInput(): Promise<string> {
-    return await this.taxCodeInput.getAttribute('value');
-  }
-
   async setAssessmentAmountInput(assessmentAmount: string): Promise<void> {
     await this.assessmentAmountInput.sendKeys(assessmentAmount);
   }
@@ -95,6 +87,14 @@ export class AgencyNoticeUpdatePage {
 
   async agencyStatusSelectLastOption(): Promise<void> {
     await this.agencyStatusSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setAssessmentNoticeInput(assessmentNotice: string): Promise<void> {
+    await this.assessmentNoticeInput.sendKeys(assessmentNotice);
+  }
+
+  async getAssessmentNoticeInput(): Promise<string> {
+    return await this.assessmentNoticeInput.getAttribute('value');
   }
 
   async correspondentsSelectLastOption(): Promise<void> {

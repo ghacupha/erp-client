@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 import { AgencyNoticeService } from '../service/agency-notice.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
@@ -31,16 +34,19 @@ export class AgencyNoticeUpdateComponent implements OnInit {
     id: [],
     referenceNumber: [null, [Validators.required]],
     referenceDate: [],
-    taxCode: [],
     assessmentAmount: [null, [Validators.required]],
     agencyStatus: [null, [Validators.required]],
+    assessmentNotice: [],
+    assessmentNoticeContentType: [],
     correspondents: [],
-    settlementCurrency: [null, Validators.required],
-    assessor: [null, Validators.required],
+    settlementCurrency: [],
+    assessor: [],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected agencyNoticeService: AgencyNoticeService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
@@ -54,6 +60,21 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       this.updateForm(agencyNotice);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -129,9 +150,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       id: agencyNotice.id,
       referenceNumber: agencyNotice.referenceNumber,
       referenceDate: agencyNotice.referenceDate,
-      taxCode: agencyNotice.taxCode,
       assessmentAmount: agencyNotice.assessmentAmount,
       agencyStatus: agencyNotice.agencyStatus,
+      assessmentNotice: agencyNotice.assessmentNotice,
+      assessmentNoticeContentType: agencyNotice.assessmentNoticeContentType,
       correspondents: agencyNotice.correspondents,
       settlementCurrency: agencyNotice.settlementCurrency,
       assessor: agencyNotice.assessor,
@@ -198,9 +220,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       referenceNumber: this.editForm.get(['referenceNumber'])!.value,
       referenceDate: this.editForm.get(['referenceDate'])!.value,
-      taxCode: this.editForm.get(['taxCode'])!.value,
       assessmentAmount: this.editForm.get(['assessmentAmount'])!.value,
       agencyStatus: this.editForm.get(['agencyStatus'])!.value,
+      assessmentNoticeContentType: this.editForm.get(['assessmentNoticeContentType'])!.value,
+      assessmentNotice: this.editForm.get(['assessmentNotice'])!.value,
       correspondents: this.editForm.get(['correspondents'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       assessor: this.editForm.get(['assessor'])!.value,

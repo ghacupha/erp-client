@@ -16,7 +16,7 @@ describe('Dealer e2e test', () => {
   const dealerPageUrlPattern = new RegExp('/dealer(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const dealerSample = { dealerName: 'synthesize e-commerce' };
+  const dealerSample = { dealerName: 'productize reboot' };
 
   let dealer: any;
 
@@ -157,25 +157,31 @@ describe('Dealer e2e test', () => {
 
       cy.get(`[data-cy="taxNumber"]`).type('circuit').should('have.value', 'circuit');
 
-      cy.get(`[data-cy="postalAddress"]`).type('Granite Account').should('have.value', 'Granite Account');
+      cy.get(`[data-cy="identificationDocumentNumber"]`).type('Granite Account').should('have.value', 'Granite Account');
 
-      cy.get(`[data-cy="physicalAddress"]`).type('customized innovate').should('have.value', 'customized innovate');
+      cy.get(`[data-cy="organizationName"]`).type('customized innovate').should('have.value', 'customized innovate');
 
-      cy.get(`[data-cy="accountName"]`).type('Credit Card Account').should('have.value', 'Credit Card Account');
+      cy.get(`[data-cy="department"]`).type('value-added Orchestrator matrix').should('have.value', 'value-added Orchestrator matrix');
 
-      cy.get(`[data-cy="accountNumber"]`).type('Baby Account').should('have.value', 'Baby Account');
+      cy.get(`[data-cy="position"]`).type('Garden').should('have.value', 'Garden');
 
-      cy.get(`[data-cy="bankersName"]`)
-        .type('Implementation transparent content')
-        .should('have.value', 'Implementation transparent content');
+      cy.get(`[data-cy="postalAddress"]`).type('content Gorgeous').should('have.value', 'content Gorgeous');
 
-      cy.get(`[data-cy="bankersBranch"]`).type('empowering').should('have.value', 'empowering');
+      cy.get(`[data-cy="physicalAddress"]`).type('Executive').should('have.value', 'Executive');
 
-      cy.get(`[data-cy="bankersSwiftCode"]`).type('Practical Unbranded end-to-end').should('have.value', 'Practical Unbranded end-to-end');
+      cy.get(`[data-cy="accountName"]`).type('Personal Loan Account').should('have.value', 'Personal Loan Account');
 
-      cy.get(`[data-cy="fileUploadToken"]`).type('structure Vanuatu blockchains').should('have.value', 'structure Vanuatu blockchains');
+      cy.get(`[data-cy="accountNumber"]`).type('Customer').should('have.value', 'Customer');
 
-      cy.get(`[data-cy="compilationToken"]`).type('connecting Administrator').should('have.value', 'connecting Administrator');
+      cy.get(`[data-cy="bankersName"]`).type('Frozen').should('have.value', 'Frozen');
+
+      cy.get(`[data-cy="bankersBranch"]`).type('blue Lakes Analyst').should('have.value', 'blue Lakes Analyst');
+
+      cy.get(`[data-cy="bankersSwiftCode"]`).type('mobile Grocery').should('have.value', 'mobile Grocery');
+
+      cy.get(`[data-cy="fileUploadToken"]`).type('Practical Argentina Berkshire').should('have.value', 'Practical Argentina Berkshire');
+
+      cy.get(`[data-cy="compilationToken"]`).type('Illinois').should('have.value', 'Illinois');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

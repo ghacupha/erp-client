@@ -16,11 +16,9 @@ describe('AgencyNotice e2e test', () => {
   const agencyNoticePageUrlPattern = new RegExp('/agency-notice(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const agencyNoticeSample = { referenceNumber: 'generating sensor', assessmentAmount: 27835, agencyStatus: 'CLEARED' };
+  const agencyNoticeSample = { referenceNumber: 'communities Regional needs-based', assessmentAmount: 64325, agencyStatus: 'NOT_CLEARED' };
 
   let agencyNotice: any;
-  let settlementCurrency: any;
-  let dealer: any;
 
   before(() => {
     cy.window().then(win => {
@@ -32,64 +30,9 @@ describe('AgencyNotice e2e test', () => {
   });
 
   beforeEach(() => {
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/settlement-currencies',
-      body: {
-        iso4217CurrencyCode: 'Erg',
-        currencyName: 'Iraqi Dinar',
-        country: 'Estonia',
-        fileUploadToken: 'didactic matrix',
-        compilationToken: 'cross-media',
-      },
-    }).then(({ body }) => {
-      settlementCurrency = body;
-    });
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/dealers',
-      body: {
-        dealerName: 'Program New',
-        taxNumber: 'Investor',
-        postalAddress: 'Village Customer',
-        physicalAddress: 'generating',
-        accountName: 'Money Market Account',
-        accountNumber: 'New',
-        bankersName: 'Rustic programming',
-        bankersBranch: 'Incredible',
-        bankersSwiftCode: 'Loan Concrete strategize',
-        fileUploadToken: 'Integrated',
-        compilationToken: 'Shoes',
-      },
-    }).then(({ body }) => {
-      dealer = body;
-    });
-  });
-
-  beforeEach(() => {
     cy.intercept('GET', '/api/agency-notices+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/agency-notices').as('postEntityRequest');
     cy.intercept('DELETE', '/api/agency-notices/*').as('deleteEntityRequest');
-  });
-
-  beforeEach(() => {
-    // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/dealers', {
-      statusCode: 200,
-      body: [dealer],
-    });
-
-    cy.intercept('GET', '/api/settlement-currencies', {
-      statusCode: 200,
-      body: [settlementCurrency],
-    });
-
-    cy.intercept('GET', '/api/placeholders', {
-      statusCode: 200,
-      body: [],
-    });
   });
 
   afterEach(() => {
@@ -99,25 +42,6 @@ describe('AgencyNotice e2e test', () => {
         url: `/api/agency-notices/${agencyNotice.id}`,
       }).then(() => {
         agencyNotice = undefined;
-      });
-    }
-  });
-
-  afterEach(() => {
-    if (settlementCurrency) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/settlement-currencies/${settlementCurrency.id}`,
-      }).then(() => {
-        settlementCurrency = undefined;
-      });
-    }
-    if (dealer) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/dealers/${dealer.id}`,
-      }).then(() => {
-        dealer = undefined;
       });
     }
   });
@@ -161,12 +85,7 @@ describe('AgencyNotice e2e test', () => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/agency-notices',
-
-          body: {
-            ...agencyNoticeSample,
-            settlementCurrency: settlementCurrency,
-            assessor: dealer,
-          },
+          body: agencyNoticeSample,
         }).then(({ body }) => {
           agencyNotice = body;
 
@@ -238,15 +157,14 @@ describe('AgencyNotice e2e test', () => {
 
       cy.get(`[data-cy="referenceDate"]`).type('2022-02-03').should('have.value', '2022-02-03');
 
-      cy.get(`[data-cy="taxCode"]`).type('Fish Centralized implement').should('have.value', 'Fish Centralized implement');
+      cy.get(`[data-cy="assessmentAmount"]`).type('80085').should('have.value', '80085');
 
-      cy.get(`[data-cy="assessmentAmount"]`).type('69287').should('have.value', '69287');
+      cy.get(`[data-cy="agencyStatus"]`).select('CLEARED');
 
-      cy.get(`[data-cy="agencyStatus"]`).select('NOT_CLEARED');
+      cy.setFieldImageAsBytesOfEntity('assessmentNotice', 'integration-test.png', 'image/png');
 
-      cy.get(`[data-cy="settlementCurrency"]`).select(1);
-      cy.get(`[data-cy="assessor"]`).select(1);
-
+      // since cypress clicks submit too fast before the blob fields are validated
+      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

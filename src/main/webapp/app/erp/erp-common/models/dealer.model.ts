@@ -5,6 +5,10 @@ export interface IDealer {
   id?: number;
   dealerName?: string;
   taxNumber?: string | null;
+  identificationDocumentNumber?: string | null;
+  organizationName?: string | null;
+  department?: string | null;
+  position?: string | null;
   postalAddress?: string | null;
   physicalAddress?: string | null;
   accountName?: string | null;
@@ -24,6 +28,10 @@ export class Dealer implements IDealer {
     public id?: number,
     public dealerName?: string,
     public taxNumber?: string | null,
+    public identificationDocumentNumber?: string | null,
+    public organizationName?: string | null,
+    public department?: string | null,
+    public position?: string | null,
     public postalAddress?: string | null,
     public physicalAddress?: string | null,
     public accountName?: string | null,

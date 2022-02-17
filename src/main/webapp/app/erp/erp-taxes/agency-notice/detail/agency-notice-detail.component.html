@@ -22,10 +22,6 @@
         <dd>
           <span>{{ agencyNotice.referenceDate | formatMediumDate }}</span>
         </dd>
-        <dt><span>Tax Code</span></dt>
-        <dd>
-          <span>{{ agencyNotice.taxCode }}</span>
-        </dd>
         <dt><span>Assessment Amount</span></dt>
         <dd>
           <span>{{ agencyNotice.assessmentAmount }}</span>
@@ -33,6 +29,13 @@
         <dt><span>Agency Status</span></dt>
         <dd>
           <span>{{ agencyNotice.agencyStatus }}</span>
+        </dd>
+        <dt><span>Assessment Notice</span></dt>
+        <dd>
+          <div *ngIf="agencyNotice.assessmentNotice">
+            <a (click)="openFile(agencyNotice.assessmentNotice, agencyNotice.assessmentNoticeContentType)">open</a>
+            {{ agencyNotice.assessmentNoticeContentType }}, {{ byteSize(agencyNotice.assessmentNotice) }}
+          </div>
         </dd>
         <dt><span>Correspondents</span></dt>
         <dd>
@@ -46,7 +49,7 @@
           <div *ngIf="agencyNotice.settlementCurrency">
             <a [routerLink]="['/settlement-currency', agencyNotice.settlementCurrency?.id, 'view']">{{
               agencyNotice.settlementCurrency?.iso4217CurrencyCode
-            }}</a>
+              }}</a>
           </div>
         </dd>
         <dt><span>Assessor</span></dt>
