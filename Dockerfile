@@ -36,25 +36,25 @@
 
 # Stage 1
 # FROM node:14.18-alpine3.12 AS compile-image
-FROM node:14.18-alpine3.12
+# Stage 1
+FROM node:14.18-alpine3.12 AS compile-image
 
 WORKDIR /opt/app
 # Enable the line below for local dev behind proxy
 COPY .npmrc /opt/app
 COPY package.json /opt/app
 COPY package-lock.json /opt/app
-COPY server.js /opt/app
 
 COPY . /opt/app
 RUN npm install
 
 ENV PATH="./node_modules/.bin:$PATH"
 
-RUN ng build --prod --output-path ./dist
+RUN npm run build --prod
 
-# Am assuming the /dist is created inside the container
-# COPY /dist /opt/app/dist
+# Stage 2
+FROM nginx
+COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
-EXPOSE 8981
-
-CMD ["forever", "server.js"]
+CMD ["nginx", "-g", "daemon off;"]

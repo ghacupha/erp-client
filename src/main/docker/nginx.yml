@@ -24,4 +24,4 @@ services:
     - ./../../../target/static:/usr/share/nginx/html
     - ./nginx/site.conf:/etc/nginx/conf.d/default.conf
     ports:
-    - "8000:80"
+    - "8981:80"
