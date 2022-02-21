@@ -20,12 +20,12 @@
 # FROM node:14.18-alpine3.12 AS compile-image
 FROM gmathieu/node-browsers:3.0.0 AS compile-image
 
-COPY package.json /opt/app
-COPY .npmrc /opt/app
-WORKDIR /opt/app
+COPY package.json /usr/angular-workdir/
+COPY .npmrc /usr/angular-workdir/
+WORKDIR /usr/angular-workdir/
 RUN npm install
 
-COPY ./ /opt/app
+COPY ./ /usr/angular-workdir/
 
 RUN npm run build
 
@@ -35,7 +35,7 @@ FROM nginx:1.15.8-alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
+COPY --from=compile-image /usr/angular-workdir//target/classes/static /usr/share/nginx/html
 
 RUN echo "mainFileName=\"\$(ls /usr/share/nginx/html/main*.js)\" && \
           envsubst '\$SERVER_API_URL \$DEFAULT_LANGUAGE ' < \${mainFileName} > main.tmp && \
