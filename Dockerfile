@@ -38,7 +38,7 @@ COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
 RUN echo "mainFileName=\"\$(ls /usr/share/nginx/html/main*.js)\" && \
-          envsubst '\$BACKEND_API_URL \$DEFAULT_LANGUAGE ' < \${mainFileName} > main.tmp && \
+          envsubst '\$SERVER_API_URL \$DEFAULT_LANGUAGE ' < \${mainFileName} > main.tmp && \
           mv main.tmp  \${mainFileName} && nginx -g 'daemon off;'" > run.sh
 
 ENTRYPOINT ["sh", "run.sh"]
