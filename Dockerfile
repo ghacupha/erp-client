@@ -57,4 +57,7 @@ FROM nginx
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
+# Exposing ports.
+EXPOSE 80
+
 CMD ["nginx", "-g", "daemon off;"]
