@@ -17,8 +17,8 @@
 #
 
 # Stage 1
-# FROM node:14.18-alpine3.12 AS compile-image
-FROM gmathieu/node-browsers:3.0.0 AS compile-image
+FROM node:14.18-alpine3.12 AS compile-image
+#FROM gmathieu/node-browsers:3.0.0 AS compile-image
 
 COPY package.json /usr/angular-workdir/
 COPY .npmrc /usr/angular-workdir/
@@ -29,7 +29,7 @@ COPY ./ /usr/angular-workdir/
 
 RUN npm run build
 
-FROM nginx:1.15.8-alpine
+FROM nginx:alpine
 
 ## Remove default Nginx website
 RUN rm -rf /usr/share/nginx/html/*
@@ -37,8 +37,4 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY --from=compile-image /usr/angular-workdir//target/classes/static /usr/share/nginx/html
 
-RUN echo "mainFileName=\"\$(ls /usr/share/nginx/html/main*.js)\" && \
-          envsubst '\$SERVER_API_URL \$DEFAULT_LANGUAGE ' < \${mainFileName} > main.tmp && \
-          mv main.tmp  \${mainFileName} && nginx -g 'daemon off;'" > run.sh
-
-ENTRYPOINT ["sh", "run.sh"]
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/content/js/env.template.js > /usr/share/nginx/html/content/js/env.js && exec nginx -g 'daemon off;'"]
