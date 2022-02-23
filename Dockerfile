@@ -18,23 +18,23 @@
 
 # Stage 1
 FROM node:14.18-alpine3.12 AS compile-image
-#FROM gmathieu/node-browsers:3.0.0 AS compile-image
 
-COPY package.json /usr/angular-workdir/
-COPY .npmrc /usr/angular-workdir/
-WORKDIR /usr/angular-workdir/
+WORKDIR /opt/app
+# Enable the line below for local dev behind proxy
+COPY .npmrc /opt/app
+COPY package.json /opt/app
+COPY package-lock.json /opt/app
+
+COPY . /opt/app
 RUN npm install
 
-COPY ./ /usr/angular-workdir/
+ENV PATH="./node_modules/.bin:$PATH"
 
-RUN npm run build
+RUN npm run build --prod
 
-FROM nginx:alpine
-
-## Remove default Nginx website
-RUN rm -rf /usr/share/nginx/html/*
-
+# Stage 2
+FROM nginx
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=compile-image /usr/angular-workdir//target/classes/static /usr/share/nginx/html
+COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
-CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/content/js/env.template.js > /usr/share/nginx/html/content/js/env.js && exec nginx -g 'daemon off;'"]
+CMD ["nginx", "-g", "daemon off;"]
