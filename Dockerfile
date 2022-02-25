@@ -30,8 +30,8 @@ COPY . /opt/app
 RUN cd /opt/app && npm install @angular/cli && npm install && npm run build
 
 #ENV PATH="./node_modules/.bin:$PATH"
-
-RUN #npm run build --prod
+#
+#RUN #npm run build --prod
 
 FROM node:14.18-alpine3.12 as serve-image
 WORKDIR /root/
