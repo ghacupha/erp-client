@@ -35,7 +35,7 @@ RUN #npm run build --prod
 
 FROM node:14.18-alpine3.12 as serve-image
 WORKDIR /root/
-COPY --from=compile-image /opt/app/dist ./dist
+COPY --from=compile-image /opt/app/target/classes/static ./dist
 COPY package*.json ./
 RUN npm install
 COPY server.js .
