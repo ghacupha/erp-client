@@ -38,6 +38,6 @@ EXPOSE 8981
 ## Stage 2
 #FROM nginx
 #COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-#COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
+COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
 CMD ["node", "server.js"]

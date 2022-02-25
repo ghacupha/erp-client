@@ -12,7 +12,7 @@ const API_SERVICE_URL = "http://localhost:8980";
 // Logging
 app.use(morgan('dev'));
 
-app.use(express.static(__dirname + '/dist'));
+app.use(express.static(__dirname + '/usr/share/nginx/html'));
 
 // Proxy endpoints
 app.use('/*', createProxyMiddleware({
@@ -20,7 +20,7 @@ app.use('/*', createProxyMiddleware({
     changeOrigin: true,
   }),
   function(req, res) {
-    res.sendFile(path.join(__dirname + '/dist/index.html'));
+    res.sendFile(path.join(__dirname + '/usr/share/nginx/html/index.html'));
   });
 
 // Start the Proxy
