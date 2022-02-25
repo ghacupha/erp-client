@@ -1,6 +1,4 @@
 .git
-/node_modules
 /target
 /.jhipster
 /.github
-/dist
