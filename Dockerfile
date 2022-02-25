@@ -27,7 +27,7 @@ WORKDIR /opt/app
 #COPY server.js /opt/app
 
 COPY . /opt/app
-RUN cd opt/app && npm install @angular/cli && npm install && ng build --prod --output-path ./dist
+RUN cd /opt/app && npm install @angular/cli && npm install && ng build --prod --output-path ./dist
 
 #ENV PATH="./node_modules/.bin:$PATH"
 
