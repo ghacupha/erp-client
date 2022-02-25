@@ -17,7 +17,7 @@
 #
 
 # Stage 1
-FROM node:14.18-alpine3.12 AS compile-image
+FROM node:14.18-alpine3.12
 
 WORKDIR /opt/app
 # Enable the line below for local dev behind proxy
@@ -38,6 +38,6 @@ EXPOSE 8981
 ## Stage 2
 #FROM nginx
 #COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=compile-image /opt/app/target/classes/static /opt/app/html
+#COPY --from=compile-image /opt/app/target/classes/static /opt/app/html
 
 CMD ["node", "server.js"]
