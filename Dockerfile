@@ -17,21 +17,28 @@
 #
 
 # Stage 1
-FROM node:14.18-alpine3.12
+FROM node:14.18-alpine3.12 as compile-image
 
 WORKDIR /opt/app
 # Enable the line below for local dev behind proxy
-COPY .npmrc /opt/app
-COPY package.json /opt/app
-COPY package-lock.json /opt/app
-COPY server.js /opt/app
+#COPY .npmrc /opt/app
+#COPY package.json /opt/app
+#COPY package-lock.json /opt/app
+#COPY server.js /opt/app
 
 COPY . /opt/app
+RUN cd opt/app && npm install @angular/cli && npm install && ng build --prod --output-path ./dist
+
+#ENV PATH="./node_modules/.bin:$PATH"
+
+RUN #npm run build --prod
+
+FROM node:14.18-alpine3.12 as serve-image
+WORKDIR /root/
+COPY --from=compile-image /opt/app/dist ./dist
+COPY package*.json ./
 RUN npm install
-
-ENV PATH="./node_modules/.bin:$PATH"
-
-RUN npm run build --prod
+COPY server.js .
 
 EXPOSE 8981
 
