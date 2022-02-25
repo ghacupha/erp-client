@@ -33,6 +33,8 @@ ENV PATH="./node_modules/.bin:$PATH"
 
 RUN npm run build --prod
 
+EXPOSE 8981
+
 ## Stage 2
 #FROM nginx
 #COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
