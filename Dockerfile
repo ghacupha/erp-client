@@ -24,6 +24,7 @@ WORKDIR /opt/app
 COPY .npmrc /opt/app
 COPY package.json /opt/app
 COPY package-lock.json /opt/app
+COPY server.js /opt/app
 
 COPY . /opt/app
 RUN npm install
@@ -32,9 +33,9 @@ ENV PATH="./node_modules/.bin:$PATH"
 
 RUN npm run build --prod
 
-# Stage 2
-FROM nginx
-COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
+## Stage 2
+#FROM nginx
+#COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
+#COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "server.js"]
