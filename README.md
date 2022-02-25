@@ -13,6 +13,27 @@ At present the deployment process is generally ran in the following way:
 
 ```
 
+To run with  debugger:
+
+```
+  set DEBUG=express:* & node index.js
+
+```
+
+To run the most recent setup from the deployment repo run the following:
+
+```
+   git clone https://github.com/ghacupha/erp-client-deployment.git
+   
+   cd erp-client-deployment
+   
+   npm install
+   
+   forever start server.js
+
+```
+
+
 ## Development
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
