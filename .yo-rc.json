@@ -65,7 +65,14 @@
       "SettlementCurrency",
       "PurchaseOrder",
       "PaymentInvoice",
-      "AgencyNotice"
+      "AgencyNotice",
+      "ServiceOutlet",
+      "DepreciationMethod",
+      "AssetCategory",
+      "BankBranchCode",
+      "OutletStatus",
+      "OutletType",
+      "CountyCode"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

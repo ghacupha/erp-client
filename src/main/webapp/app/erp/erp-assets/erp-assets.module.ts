@@ -37,6 +37,26 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./fixed-asset-acquisition/fixed-asset-acquisition.module').then(m => m.ErpServiceFixedAssetAcquisitionModule),
       },
+      {
+        path: 'asset-category',
+        data: {
+          pageTitle: 'ERP | Asset Categories',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-category/asset-category.module').then(m => m.AssetCategoryModule),
+      },
+      {
+        path: 'depreciation-method',
+        data: {
+          pageTitle: 'ERP | Depreciation Methods',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-method/depreciation-method.module').then(m => m.DepreciationMethodModule),
+      },
     ])
   ]
 })

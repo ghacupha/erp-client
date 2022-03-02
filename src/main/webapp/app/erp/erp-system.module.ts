@@ -11,6 +11,7 @@ import { ErpCommonModule } from './erp-common/erp-common.module';
 import { ErpAssetsModule } from './erp-assets/erp-assets.module';
 import { ErpTaxesModule } from './erp-taxes/erp-taxes.module';
 import { ErpSettlementsModule } from './erp-settlements/erp-settlements.module';
+import { ErpGranularModule } from './erp-granular/erp-granular.module';
 
 export const routes: Routes = [];
 
@@ -27,6 +28,7 @@ export const routes: Routes = [];
     ErpCommonModule,
     ErpAssetsModule,
     ErpTaxesModule,
+    ErpGranularModule,
     ErpSettlementsModule
   ],
   exports: [
@@ -35,6 +37,7 @@ export const routes: Routes = [];
     ErpFormsModule,
     ErpAssetsModule,
     ErpTaxesModule,
+    ErpGranularModule,
     ErpSettlementsModule
   ]
 })
