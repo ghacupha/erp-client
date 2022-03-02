@@ -4,6 +4,49 @@
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
           <span>
+              <fa-icon icon="dochub"></fa-icon>
+              <span>
+                  Business Docs
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="payment-invoice"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Payment Invoice</span>
+          </span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="purchase-order"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Purchase Order</span>
+          </span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!--Payment records-->
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
               <fa-icon icon="cash-register"></fa-icon>
               <span>
                   Payments
@@ -39,34 +82,45 @@
           </span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
-            routerLink="payment-invoice"
+            routerLink="/erp/signed-payment"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="collapseNavbar()"
           >
-          <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span>Payment Invoice</span>
-          </span>
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Signed-payment</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
-            routerLink="purchase-order"
+            routerLink="/erp/payment-requisition"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="collapseNavbar()"
           >
-          <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span>Purchase Order</span>
-          </span>
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Payment Requisition</span>
           </a>
         </li>
+      </ul>
+    </li>
+
+    <!--Maintenance modules navigation-->
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
+          <span>
+              <fa-icon icon="wrench"></fa-icon>
+              <span>
+                  Maintenance
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
         <li>
           <a
             class="dropdown-item"
@@ -95,32 +149,6 @@
           </span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'" >
-          <a
-            class="dropdown-item"
-            routerLink="/erp/invoice"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-          <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-              <span>Invoice</span>
-          </span>
-          </a>
-        </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'">
-          <a
-            class="dropdown-item"
-            routerLink="/erp/signed-payment"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Signed-payment</span>
-          </a>
-        </li>
         <li>
           <a
             class="dropdown-item"
@@ -131,54 +159,6 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Payment Label</span>
-          </a>
-        </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'">
-          <a
-            class="dropdown-item"
-            routerLink="/erp/payment-calculation"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Payment Calculation</span>
-          </a>
-        </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'">
-          <a
-            class="dropdown-item"
-            routerLink="/erp/payment-requisition"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Payment Requisition</span>
-          </a>
-        </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'">
-          <a
-            class="dropdown-item"
-            routerLink="/erp/tax-reference"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Tax Reference</span>
-          </a>
-        </li>
-        <li *jhiHasAnyAuthority="'ROLE_DEV'">
-          <a
-            class="dropdown-item"
-            routerLink="/erp/tax-rule"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Tax Rule</span>
           </a>
         </li>
         <li>
