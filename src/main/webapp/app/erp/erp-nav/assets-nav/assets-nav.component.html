@@ -161,6 +161,20 @@
             <span>Fixed Asset Depreciation</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/erp/dealer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Dealers</span>
+          </span>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>
