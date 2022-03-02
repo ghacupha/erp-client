@@ -1,4 +1,5 @@
 import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { DepreciationTypes } from '../../erp-common/enumerations/depreciation-types.model';
 
 export interface IDepreciationMethod {
   id?: number;

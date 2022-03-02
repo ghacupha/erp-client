@@ -9,7 +9,7 @@ import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { DepreciationTypes } from 'app/entities/enumerations/depreciation-types.model';
+import { DepreciationTypes } from '../../../erp-common/enumerations/depreciation-types.model';
 
 @Component({
   selector: 'jhi-depreciation-method-update',

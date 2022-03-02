@@ -1,4 +1,5 @@
 import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { BranchStatusType } from '../../erp-common/enumerations/branch-status-type.model';
 
 export interface IOutletStatus {
   id?: number;
