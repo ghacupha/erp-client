@@ -8,7 +8,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
       {
         path: 'fixed-asset-net-book-value',
         data: {
-          pageTitle: 'FixedAssetNetBookValue',
+          pageTitle: 'ERP | Fixed Asset NetBookValue',
           authorities: ['ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
@@ -20,7 +20,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
       {
         path: 'fixed-asset-depreciation',
         data: {
-          pageTitle: 'FixedAssetDepreciation',
+          pageTitle: 'ERP | Fixed Asset Depreciation',
           authorities: ['ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
@@ -30,7 +30,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
       {
         path: 'fixed-asset-acquisition',
         data: {
-          pageTitle: 'FixedAssetAcquisition',
+          pageTitle: 'ERP | Fixed Asset Acquisition',
           authorities: ['ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
