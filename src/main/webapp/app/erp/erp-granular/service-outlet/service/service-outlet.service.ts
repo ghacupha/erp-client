@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IServiceOutlet[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ServiceOutletService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/service-outlets');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/service-outlets');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/granular-data/service-outlets');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/granular-data/_search/service-outlets');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

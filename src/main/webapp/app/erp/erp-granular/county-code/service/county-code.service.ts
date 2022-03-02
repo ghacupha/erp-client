@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<ICountyCode[]>;
 
 @Injectable({ providedIn: 'root' })
 export class CountyCodeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/county-codes');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/county-codes');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/granular-data/county-codes');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/granular-data/_search/county-codes');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

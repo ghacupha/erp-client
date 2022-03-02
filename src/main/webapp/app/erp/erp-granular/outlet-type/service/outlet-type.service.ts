@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<IOutletType[]>;
 
 @Injectable({ providedIn: 'root' })
 export class OutletTypeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/outlet-types');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/outlet-types');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/granular-data/outlet-types');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/granular-data/_search/outlet-types');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

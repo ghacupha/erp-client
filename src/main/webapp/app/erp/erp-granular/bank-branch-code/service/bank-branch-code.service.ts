@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<IBankBranchCode[]>;
 
 @Injectable({ providedIn: 'root' })
 export class BankBranchCodeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/bank-branch-codes');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/bank-branch-codes');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/granular-data/bank-branch-codes');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/granular-data/_search/bank-branch-codes');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
