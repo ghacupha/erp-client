@@ -72,7 +72,9 @@
       "BankBranchCode",
       "OutletStatus",
       "OutletType",
-      "CountyCode"
+      "CountyCode",
+      "BusinessStamp",
+      "DeliveryNote"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

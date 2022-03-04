@@ -42,7 +42,10 @@ import {RouterModule} from '@angular/router';
     },
     {
       path: 'erp/payment-label',
-      data: { pageTitle: 'ERP | Payment Labels' },
+      data: {
+        pageTitle: 'ERP | Payment Labels',
+        authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+      },
       loadChildren: () => import('./payment-label/payment-label.module').then(m => m.PaymentLabelModule),
     },
     {

@@ -7,13 +7,6 @@ import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, 
 
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 import { AgencyNoticeService } from '../service/agency-notice.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.model';
 import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
 import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
@@ -25,6 +18,13 @@ import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/paymen
 import { DataUtils, FileLoadError } from '../../../../core/util/data-util.service';
 import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
 import { AlertError } from '../../../../shared/alert/alert-error.model';
+import { AgencyStatusType } from 'app/erp/erp-common/enumerations/agency-status-type.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IDealer } from 'app/erp/erp-common/models/dealer.model';
+import { ISettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+import { DealerService } from '../../../erp-common/services/dealer.service';
 
 @Component({
   selector: 'jhi-agency-notice-update',

@@ -50,6 +50,24 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./payment-invoice/payment-invoice.module').then(m => m.PaymentInvoiceModule),
       },
+      {
+        path: 'delivery-note',
+        data: {
+          pageTitle: 'ERP-Payments | Delivery Notes',
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./delivery-note/delivery-note.module').then(m => m.DeliveryNoteModule),
+      },
+      {
+        path: 'business-stamp',
+        data: {
+          pageTitle: 'ERP-Payments | Business Stamps',
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./business-stamp/business-stamp.module').then(m => m.BusinessStampModule),
+      },
     ]),
   ],
 })

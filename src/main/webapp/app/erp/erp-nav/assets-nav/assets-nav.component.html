@@ -35,6 +35,30 @@
             <span>Asset Category</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="delivery-note"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Delivery Note</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="business-stamp"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Business Stamp</span>
+          </a>
+        </li>
       </ul>
     </li>
 

@@ -11,14 +11,14 @@ import { of, Subject } from 'rxjs';
 
 import { AgencyNoticeService } from '../service/agency-notice.service';
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { AgencyNoticeUpdateComponent } from './agency-notice-update.component';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { ISettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('AgencyNotice Management Update Component', () => {
   let comp: AgencyNoticeUpdateComponent;
