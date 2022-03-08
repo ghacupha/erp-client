@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { DepreciationTypes } from '../../../erp-common/enumerations/depreciation-types.model';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-depreciation-method-update',
@@ -29,8 +31,15 @@ export class DepreciationMethodUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
   constructor(
     protected depreciationMethodService: DepreciationMethodService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -42,6 +51,31 @@ export class DepreciationMethodUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.loadPlaceholders();
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   previousState(): void {
