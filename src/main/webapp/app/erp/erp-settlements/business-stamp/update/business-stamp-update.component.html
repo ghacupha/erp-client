@@ -42,7 +42,7 @@
           <input type="text" class="form-control" name="details" id="field_details" data-cy="details" formControlName="details" />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_stampHolder">Stamp Holder</label>
           <select class="form-control" id="field_stampHolder" data-cy="stampHolder" name="stampHolder" formControlName="stampHolder">
             <option *ngIf="!editForm.get('stampHolder')!.value" [ngValue]="null" selected></option>
@@ -58,9 +58,30 @@
           *ngIf="editForm.get(['stampHolder'])!.invalid && (editForm.get(['stampHolder'])!.dirty || editForm.get(['stampHolder'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['stampHolder'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!-- StampHolder Field-->
+        <div class="form-group">
+          <label class="form-control-label">Stamp Holder</label>
+          <ng-select
+            [items]="stampHolderLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="stampHoldersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="stampHolderControlInput$"
+            formControlName="stampHolder"
+          >
+            <option [ngValue]="editForm.get('stampHolder')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['stampHolder'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['stampHolder'])!.invalid && (editForm.get(['stampHolder'])!.dirty || editForm.get(['stampHolder'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['stampHolder'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -77,7 +98,33 @@
               {{ placeholderOption.description }}
             </option>
           </select>
+        </div>-->
+
+        <!-- Placeholders field-->
+        <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
+
       </div>
 
       <div>

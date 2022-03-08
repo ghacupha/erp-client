@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
@@ -11,6 +11,9 @@ import { IDealer } from '../../../erp-common/models/dealer.model';
 import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 import { DealerService } from '../../../erp-common/services/dealer.service';
 import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-business-stamp-update',
@@ -31,12 +34,24 @@ export class BusinessStampUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  stampHoldersLoading = false;
+  stampHolderControlInput$ = new Subject<string>();
+  stampHolderLookups$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected businessStampService: BusinessStampService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +60,55 @@ export class BusinessStampUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.loadStampHolders();
+    this.loadPlaceholders();
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadStampHolders(): void {
+    this.stampHolderLookups$ = concat(
+      of([]), // default items
+      this.stampHolderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.stampHoldersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.stampHoldersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  trackDealerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   previousState(): void {

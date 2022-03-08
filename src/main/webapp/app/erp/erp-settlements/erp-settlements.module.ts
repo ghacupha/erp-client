@@ -9,7 +9,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'settlement',
         data: {
           pageTitle: 'ERP-Payments | Settlements',
-          authorities: ['ROLE_PAYMENTS_USER'],
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./settlement/settlement.module').then(m => m.SettlementModule),
@@ -36,7 +36,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'purchase-order',
         data: {
           pageTitle: 'ERP-Payments | PurchaseOrders',
-          authorities: ['ROLE_PAYMENTS_USER'],
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule),
@@ -45,7 +45,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'payment-invoice',
         data: {
           pageTitle: 'ERP-Payments | PaymentInvoices',
-          authorities: ['ROLE_PAYMENTS_USER'],
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./payment-invoice/payment-invoice.module').then(m => m.PaymentInvoiceModule),

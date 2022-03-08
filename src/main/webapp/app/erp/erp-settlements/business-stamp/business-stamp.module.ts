@@ -5,9 +5,10 @@ import { BusinessStampDetailComponent } from './detail/business-stamp-detail.com
 import { BusinessStampUpdateComponent } from './update/business-stamp-update.component';
 import { BusinessStampDeleteDialogComponent } from './delete/business-stamp-delete-dialog.component';
 import { BusinessStampRoutingModule } from './route/business-stamp-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessStampRoutingModule],
+  imports: [SharedModule, BusinessStampRoutingModule, ErpCommonModule],
   declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent],
   entryComponents: [BusinessStampDeleteDialogComponent],
 })

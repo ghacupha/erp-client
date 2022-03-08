@@ -5,9 +5,10 @@ import { DeliveryNoteDetailComponent } from './detail/delivery-note-detail.compo
 import { DeliveryNoteUpdateComponent } from './update/delivery-note-update.component';
 import { DeliveryNoteDeleteDialogComponent } from './delete/delivery-note-delete-dialog.component';
 import { DeliveryNoteRoutingModule } from './route/delivery-note-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, DeliveryNoteRoutingModule],
+  imports: [SharedModule, DeliveryNoteRoutingModule, ErpCommonModule],
   declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent],
   entryComponents: [DeliveryNoteDeleteDialogComponent],
 })

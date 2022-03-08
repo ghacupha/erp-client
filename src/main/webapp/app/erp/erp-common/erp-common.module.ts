@@ -6,6 +6,7 @@ import { FormatPaymentPipe } from './pipe/format-payment.pipe';
 import { FormatSettlementCurrencyPipe } from './pipe/format-settlement-currency.pipe';
 import { FormatSettlementPipe } from './pipe/format-settlement.pipe';
 import { FormatDepreciationMethodPipe } from './pipe/format-depreciation-method.pipe';
+import { FormatPurchaseOrderPipe } from './pipe/format-purchase-order.pipe';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FormatDepreciationMethodPipe } from './pipe/format-depreciation-method.
     FormatPaymentPipe,
     FormatSettlementCurrencyPipe,
     FormatSettlementPipe,
-    FormatDepreciationMethodPipe
+    FormatDepreciationMethodPipe,
+    FormatPurchaseOrderPipe
   ],
   exports: [
     FormatDealerIdPipe,
@@ -24,7 +26,8 @@ import { FormatDepreciationMethodPipe } from './pipe/format-depreciation-method.
     FormatPaymentPipe,
     FormatSettlementCurrencyPipe,
     FormatSettlementPipe,
-    FormatDepreciationMethodPipe
+    FormatDepreciationMethodPipe,
+    FormatPurchaseOrderPipe
   ]
 })
 export class ErpCommonModule {}

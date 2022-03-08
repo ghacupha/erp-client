@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IDeliveryNote[]>;
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryNoteService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/delivery-notes');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/delivery-notes');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/delivery-notes');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/delivery-notes');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

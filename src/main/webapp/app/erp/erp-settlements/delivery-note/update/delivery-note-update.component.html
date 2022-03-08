@@ -88,7 +88,7 @@
           <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -105,9 +105,33 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
         <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_receivedBy">Received By</label>
           <select class="form-control" id="field_receivedBy" data-cy="receivedBy" name="receivedBy" formControlName="receivedBy">
             <option *ngIf="!editForm.get('receivedBy')!.value" [ngValue]="null" selected></option>
@@ -123,9 +147,29 @@
           *ngIf="editForm.get(['receivedBy'])!.invalid && (editForm.get(['receivedBy'])!.dirty || editForm.get(['receivedBy'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['receivedBy'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
         <div class="form-group">
+          <label class="form-control-label">Received By</label>
+          <ng-select
+            [items]="receivedByLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="receivedBysLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="receivedByInput$"
+            formControlName="receivedBy"
+          >
+            <option [ngValue]="editForm.get('receivedBy')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['receivedBy'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['receivedBy'])!.invalid && (editForm.get(['receivedBy'])!.dirty || editForm.get(['receivedBy'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['receivedBy'])?.errors?.required"> This field is required.</small>
+        </div>
+
+        <!--<div class="form-group">
           <label for="field_deliveryStamps">Delivery Stamps</label>
           <select
             class="form-control"
@@ -142,9 +186,34 @@
               {{ businessStampOption.details }}
             </option>
           </select>
+        </div>-->
+
+        <!-- Delivery Stamps-->
+        <div class="form-group">
+          <label class="form-control-label">Delivery Stamps</label>
+          <ng-select
+            [items]="deliveryStampLookups$ | async"
+            bindLabel="details"
+            [trackByFn]="trackDeliveryStampsByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="deliveryStampsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="deliveryStampsControlInput$"
+            formControlName="deliveryStamps"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of deliveryStampLookups$ | async" [value]="option">
+              {{ option.details }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.details}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['deliveryStamps'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_purchaseOrder">Purchase Order</label>
           <select
             class="form-control"
@@ -165,9 +234,30 @@
               {{ purchaseOrderOption.purchaseOrderNumber }}
             </option>
           </select>
+        </div>-->
+
+        <!-- Purchase Order Field-->
+        <div class="form-group">
+          <label class="form-control-label">Purchase Order</label>
+          <ng-select
+            [items]="purchaseOrderLookups$ | async"
+            bindLabel="purchaseOrderNumber"
+            [trackByFn]="trackPurchaseOrderByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="purchaseOrderLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="purchaseOrderControlInput$"
+            formControlName="purchaseOrder"
+          >
+            <option [ngValue]="editForm.get('purchaseOrder')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get(['purchaseOrder'])!.value | formatPurchaseOrder}}</div>
+        </div>
+        <div *ngIf="editForm.get(['purchaseOrder'])!.invalid && (editForm.get(['purchaseOrder'])!.dirty || editForm.get(['purchaseOrder'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['purchaseOrder'])?.errors?.required"> This field is required.</small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_supplier">Supplier</label>
           <select class="form-control" id="field_supplier" data-cy="supplier" name="supplier" formControlName="supplier">
             <option *ngIf="!editForm.get('supplier')!.value" [ngValue]="null" selected></option>
@@ -181,9 +271,30 @@
         </div>
         <div *ngIf="editForm.get(['supplier'])!.invalid && (editForm.get(['supplier'])!.dirty || editForm.get(['supplier'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['supplier'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!--Supplier field-->
+        <div class="form-group">
+          <label class="form-control-label">Supplier</label>
+          <ng-select
+            [items]="supplierLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="suppliersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="supplierInput$"
+            formControlName="supplier"
+          >
+            <option [ngValue]="editForm.get('supplier')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['supplier'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['supplier'])!.invalid && (editForm.get(['supplier'])!.dirty || editForm.get(['supplier'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['supplier'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_signatories">Signatories</label>
           <select
             class="form-control"
@@ -200,7 +311,32 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Signatories</label>
+          <ng-select
+            [items]="signatoryLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="signatoriesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="signatoryControlInput$"
+            formControlName="signatories"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of signatoryLookups$ | async" [value]="option">
+              {{ option.dealerName }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['signatories'])!.value|json}}</div>
         </div>
+
       </div>
 
       <div>

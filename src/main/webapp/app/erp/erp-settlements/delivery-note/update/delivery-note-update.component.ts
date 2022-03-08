@@ -2,19 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
 import { DeliveryNoteService } from '../service/delivery-note.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IBusinessStamp } from 'app/entities/business-stamp/business-stamp.model';
 import { BusinessStampService } from 'app/entities/business-stamp/service/business-stamp.service';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { BusinessStampSuggestionService } from '../../../erp-common/suggestion/business-stamp-suggestion.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
+import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
 
 @Component({
   selector: 'jhi-delivery-note-update',
@@ -43,6 +48,32 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     signatories: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  signatoriesLoading = false;
+  signatoryControlInput$ = new Subject<string>();
+  signatoryLookups$: Observable<IDealer[]> = of([]);
+
+  suppliersLoading = false;
+  supplierInput$ = new Subject<string>();
+  supplierLookups$: Observable<IDealer[]> = of([]);
+
+  receivedBysLoading = false;
+  receivedByInput$ = new Subject<string>();
+  receivedByLookups$: Observable<IDealer[]> = of([]);
+
+  deliveryStampsLoading = false;
+  deliveryStampsControlInput$ = new Subject<string>();
+  deliveryStampLookups$: Observable<IBusinessStamp[]> = of([]);
+
+  purchaseOrderLoading = false;
+  purchaseOrderControlInput$ = new Subject<string>();
+  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
+
   constructor(
     protected deliveryNoteService: DeliveryNoteService,
     protected placeholderService: PlaceholderService,
@@ -50,7 +81,11 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     protected businessStampService: BusinessStampService,
     protected purchaseOrderService: PurchaseOrderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected businessStampSuggestionService: BusinessStampSuggestionService,
+    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService
   ) {}
 
   ngOnInit(): void {
@@ -59,6 +94,143 @@ export class DeliveryNoteUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.loadSignatories();
+    this.loadSuppliers();
+    this.loadReceivedBy();
+    this.loadPlaceholders();
+    this.loadDeliveryStamps();
+    this.loadPurchaseOrders();
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadSignatories(): void {
+    this.signatoryLookups$ = concat(
+      of([]), // default items
+      this.signatoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.signatoriesLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.signatoriesLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadSuppliers(): void {
+    this.supplierLookups$ = concat(
+      of([]), // default items
+      this.supplierInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.suppliersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.suppliersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadReceivedBy(): void {
+    this.receivedByLookups$ = concat(
+      of([]), // default items
+      this.receivedByInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.receivedBysLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.receivedBysLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadDeliveryStamps(): void {
+    this.deliveryStampLookups$ = concat(
+      of([]), // default items
+      this.deliveryStampsControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.deliveryStampsLoading = true),
+        switchMap(term => this.businessStampSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.deliveryStampsLoading = false)
+        ))
+      ),
+      of([...this.businessStampsSharedCollection])
+    );
+  }
+
+  loadPurchaseOrders(): void {
+    this.purchaseOrderLookups$ = concat(
+      of([]), // default items
+      this.purchaseOrderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.purchaseOrderLoading = true),
+        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.purchaseOrderLoading = false)
+        ))
+      ),
+      of([...this.businessStampsSharedCollection])
+    );
+  }
+
+  trackDealerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackDeliveryStampsByFn(item: IBusinessStamp): number {
+    return item.id!;
+  }
+
+  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
   }
 
   previousState(): void {
