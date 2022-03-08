@@ -5,9 +5,10 @@ import { AssetCategoryDetailComponent } from './detail/asset-category-detail.com
 import { AssetCategoryUpdateComponent } from './update/asset-category-update.component';
 import { AssetCategoryDeleteDialogComponent } from './delete/asset-category-delete-dialog.component';
 import { AssetCategoryRoutingModule } from './route/asset-category-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetCategoryRoutingModule],
+  imports: [SharedModule, AssetCategoryRoutingModule, ErpCommonModule],
   declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent],
   entryComponents: [AssetCategoryDeleteDialogComponent],
 })

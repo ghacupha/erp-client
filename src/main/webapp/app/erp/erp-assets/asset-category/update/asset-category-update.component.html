@@ -50,7 +50,7 @@
           <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_depreciationMethod">Depreciation Method</label>
           <select
             class="form-control"
@@ -71,6 +71,22 @@
               {{ depreciationMethodOption.depreciationMethodName }}
             </option>
           </select>
+        </div>-->
+        <div class="form-group">
+          <label class="form-control-label">Depreciation Method</label>
+          <ng-select
+            [items]="depreciationMethodLookups$ | async"
+            bindLabel="depreciationMethodName"
+            [trackByFn]="trackDepreciationMethodsByFn"
+            [minTermLength]="3"
+            [loading]="depreciationMethodsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="depreciationMethodsControlInput$"
+            formControlName="depreciationMethod"
+          >
+            <option [ngValue]="editForm.get('depreciationMethod')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['depreciationMethod'])!.value|formatDepreciationMethod: [2, '...']}}</div>
         </div>
         <div
           *ngIf="
@@ -83,7 +99,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -100,7 +116,31 @@
               {{ placeholderOption.description }}
             </option>
           </select>
+        </div>-->
+        <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
+
       </div>
 
       <div>
