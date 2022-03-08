@@ -16,6 +16,7 @@ import { AssetCategoryUpdateComponent } from './asset-category-update.component'
 import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 import { IDepreciationMethod } from '../../depreciation-method/depreciation-method.model';
 import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('AssetCategory Management Update Component', () => {
   let comp: AssetCategoryUpdateComponent;
@@ -27,7 +28,7 @@ describe('AssetCategory Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [AssetCategoryUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })
