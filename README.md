@@ -9,6 +9,11 @@ At present the deployment process is generally ran in the following way:
 ```
    ng build --prod --output-path ./dist
    
+```
+The code in the dist directory is copied into the deployment repo and the following script is ran
+
+```
+   
    forever start server.js
 
 ```
