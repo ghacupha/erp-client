@@ -1,3 +1,5 @@
+import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,16 +11,16 @@ import { of, Subject } from 'rxjs';
 
 import { CreditNoteService } from '../service/credit-note.service';
 import { ICreditNote, CreditNote } from '../credit-note.model';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
-import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/entities/payment-invoice/service/payment-invoice.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { CreditNoteUpdateComponent } from './credit-note-update.component';
+import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
+import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
+import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('CreditNote Management Update Component', () => {
   let comp: CreditNoteUpdateComponent;
@@ -32,7 +34,7 @@ describe('CreditNote Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [CreditNoteUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { IBusinessStamp } from 'app/entities/business-stamp/business-stamp.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
+import { IDealer } from '../../erp-common/models/dealer.model';
+import { IBusinessStamp } from '../business-stamp/business-stamp.model';
+import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 
 export interface IJobSheet {
   id?: number;

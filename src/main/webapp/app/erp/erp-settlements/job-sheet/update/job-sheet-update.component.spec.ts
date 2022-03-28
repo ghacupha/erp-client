@@ -9,16 +9,16 @@ import { of, Subject } from 'rxjs';
 
 import { JobSheetService } from '../service/job-sheet.service';
 import { IJobSheet, JobSheet } from '../job-sheet.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IBusinessStamp } from 'app/entities/business-stamp/business-stamp.model';
-import { BusinessStampService } from 'app/entities/business-stamp/service/business-stamp.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 
 import { JobSheetUpdateComponent } from './job-sheet-update.component';
+import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { DealerService } from '../../../erp-common/services/dealer.service';
 
 describe('JobSheet Management Update Component', () => {
   let comp: JobSheetUpdateComponent;

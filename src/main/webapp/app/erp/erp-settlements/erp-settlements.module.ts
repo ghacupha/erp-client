@@ -68,6 +68,24 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./business-stamp/business-stamp.module').then(m => m.BusinessStampModule),
       },
+      {
+        path: 'credit-note',
+        data: {
+          pageTitle: 'ERP-Payments | Credit Notes',
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./credit-note/credit-note.module').then(m => m.CreditNoteModule),
+      },
+      {
+        path: 'job-sheet',
+        data: {
+          pageTitle: 'ERP-Payments | Job Sheet',
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./job-sheet/job-sheet.module').then(m => m.JobSheetModule),
+      },
     ]),
   ],
 })
