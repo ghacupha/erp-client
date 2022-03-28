@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IJobSheet[]>;
 
 @Injectable({ providedIn: 'root' })
 export class JobSheetService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/job-sheets');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/job-sheets');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/job-sheets');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/job-sheets');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

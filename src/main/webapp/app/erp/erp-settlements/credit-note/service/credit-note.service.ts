@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<ICreditNote[]>;
 
 @Injectable({ providedIn: 'root' })
 export class CreditNoteService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/credit-notes');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/credit-notes');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/credit-notes');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/credit-notes');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
