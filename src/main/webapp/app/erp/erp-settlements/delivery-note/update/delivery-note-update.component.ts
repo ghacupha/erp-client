@@ -213,7 +213,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
           tap(() => this.purchaseOrderLoading = false)
         ))
       ),
-      of([...this.businessStampsSharedCollection])
+      of([...this.purchaseOrdersSharedCollection])
     );
   }
 
