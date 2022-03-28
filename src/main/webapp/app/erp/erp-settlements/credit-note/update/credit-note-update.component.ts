@@ -2,22 +2,33 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { ICreditNote, CreditNote } from '../credit-note.model';
 import { CreditNoteService } from '../service/credit-note.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
-import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/entities/payment-invoice/service/payment-invoice.service';
-import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
-import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
+import { BusinessStampSuggestionService } from '../../../erp-common/suggestion/business-stamp-suggestion.service';
+import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
+import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
+import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
+import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
+import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
+import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-credit-note-update',
@@ -43,6 +54,40 @@ export class CreditNoteUpdateComponent implements OnInit {
     placeholders: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  billersLoading = false;
+  billersInput$ = new Subject<string>();
+  billerLookups$: Observable<IDealer[]> = of([]);
+
+  contactPersonsLoading = false;
+  contactPersonInput$ = new Subject<string>();
+  contactPersonLookups$: Observable<IDealer[]> = of([]);
+
+  signatoriesLoading = false;
+  signatoryControlInput$ = new Subject<string>();
+  signatoryLookups$: Observable<IDealer[]> = of([]);
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  businessStampsLoading = false;
+  businessStampsControlInput$ = new Subject<string>();
+  businessStampLookups$: Observable<IBusinessStamp[]> = of([]);
+
+  purchaseOrderLoading = false;
+  purchaseOrderControlInput$ = new Subject<string>();
+  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
+
+  paymentInvoicesLoading = false;
+  paymentInvoiceControlInput$ = new Subject<string>();
+  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -52,7 +97,16 @@ export class CreditNoteUpdateComponent implements OnInit {
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected businessStampSuggestionService: BusinessStampSuggestionService,
+    protected categorySuggestionService: CategorySuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
+    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +115,103 @@ export class CreditNoteUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.loadPurchaseOrders();
+    this.loadLabels();
+    this.loadPlaceholders();
+    this.loadPaymentInvoices();
+  }
+
+  loadPaymentInvoices(): void {
+    this.paymentInvoiceLookups$ = concat(
+      of([]), // default items
+      this.paymentInvoiceControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.paymentInvoicesLoading = true),
+        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.paymentInvoicesLoading = false)
+        ))
+      ),
+      of([...this.paymentInvoicesSharedCollection])
+    );
+  }
+
+  loadPurchaseOrders(): void {
+    this.purchaseOrderLookups$ = concat(
+      of([]), // default items
+      this.purchaseOrderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.purchaseOrderLoading = true),
+        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.purchaseOrderLoading = false)
+        ))
+      ),
+      of([...this.purchaseOrdersSharedCollection])
+    );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
+    return item.id!;
+  }
+
+  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {
