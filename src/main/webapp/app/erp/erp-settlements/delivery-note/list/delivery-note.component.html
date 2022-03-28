@@ -58,6 +58,7 @@
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="quantity"><span>Quantity</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="receivedBy.dealerName"><span>Received By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="purchaseOrder.purchaseOrderNumber"><span>Purchase Order</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="supplier.dealerName"><span>Supplier</span> <fa-icon icon="sort"></fa-icon></th>
@@ -74,6 +75,7 @@
           <td>{{ deliveryNote.description }}</td>
           <td>{{ deliveryNote.serialNumber }}</td>
           <td>{{ deliveryNote.quantity }}</td>
+          <td>{{ deliveryNote.remarks }}</td>
           <td>
             <div *ngIf="deliveryNote.receivedBy">
               <a [routerLink]="['/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>

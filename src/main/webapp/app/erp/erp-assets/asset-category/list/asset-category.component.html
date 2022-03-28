@@ -55,6 +55,7 @@
             <span>Asset Category Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationMethod.depreciationMethodName">
             <span>Depreciation Method</span> <fa-icon icon="sort"></fa-icon>
@@ -70,6 +71,7 @@
           <td>{{ assetCategory.assetCategoryName }}</td>
           <td>{{ assetCategory.description }}</td>
           <td>{{ assetCategory.notes }}</td>
+          <td>{{ assetCategory.remarks }}</td>
           <td>
             <div *ngIf="assetCategory.depreciationMethod">
               <a [routerLink]="['/depreciation-method', assetCategory.depreciationMethod?.id, 'view']">{{

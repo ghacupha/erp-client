@@ -54,6 +54,7 @@
           <th scope="col" jhiSortBy="stampDate"><span>Stamp Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="purpose"><span>Purpose</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="details"><span>Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="stampHolder.dealerName"><span>Stamp Holder</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -66,6 +67,7 @@
           <td>{{ businessStamp.stampDate | formatMediumDate }}</td>
           <td>{{ businessStamp.purpose }}</td>
           <td>{{ businessStamp.details }}</td>
+          <td>{{ businessStamp.remarks }}</td>
           <td>
             <div *ngIf="businessStamp.stampHolder">
               <a [routerLink]="['/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>

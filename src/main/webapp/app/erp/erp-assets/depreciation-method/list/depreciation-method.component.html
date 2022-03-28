@@ -58,6 +58,9 @@
           <th scope="col" jhiSortBy="depreciationType">
             <span>Depreciation Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="remarks">
+            <span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -69,6 +72,7 @@
           <td>{{ depreciationMethod.depreciationMethodName }}</td>
           <td>{{ depreciationMethod.description }}</td>
           <td>{{ depreciationMethod.depreciationType }}</td>
+          <td>{{ depreciationMethod.remarks }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

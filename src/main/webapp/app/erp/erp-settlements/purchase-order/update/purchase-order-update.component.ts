@@ -43,6 +43,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     notes: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     settlementCurrency: [],
     placeholders: [],
     signatories: [],

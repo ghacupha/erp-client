@@ -55,6 +55,7 @@ export class SettlementUpdateComponent implements OnInit {
     notes: [],
     calculationFile: [],
     calculationFileContentType: [],
+    remarks: [],
     fileUploadToken: [],
     compilationToken: [],
     placeholders: [],

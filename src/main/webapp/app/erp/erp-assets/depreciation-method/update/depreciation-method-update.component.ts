@@ -28,6 +28,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
     depreciationMethodName: [null, [Validators.required]],
     description: [],
     depreciationType: [null, [Validators.required]],
+    remarks: [],
     placeholders: [],
   });
 

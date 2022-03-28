@@ -11,6 +11,7 @@ export interface IDeliveryNote {
   description?: string | null;
   serialNumber?: string | null;
   quantity?: number | null;
+  remarks?: string | null;
   placeholders?: IPlaceholder[] | null;
   receivedBy?: IDealer;
   deliveryStamps?: IBusinessStamp[] | null;
@@ -27,6 +28,7 @@ export class DeliveryNote implements IDeliveryNote {
     public description?: string | null,
     public serialNumber?: string | null,
     public quantity?: number | null,
+    public remarks?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public receivedBy?: IDealer,
     public deliveryStamps?: IBusinessStamp[] | null,

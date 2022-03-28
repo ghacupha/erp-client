@@ -34,6 +34,10 @@
         <dd>
           <span>{{ deliveryNote.quantity }}</span>
         </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ deliveryNote.remarks }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of deliveryNote.placeholders; let last = last">

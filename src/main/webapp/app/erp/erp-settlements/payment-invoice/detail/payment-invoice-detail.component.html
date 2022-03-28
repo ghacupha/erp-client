@@ -34,6 +34,10 @@
         <dd>
           <span>{{ paymentInvoice.compilationToken }}</span>
         </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ paymentInvoice.remarks }}</span>
+        </dd>
         <dt><span>Purchase Order</span></dt>
         <dd>
           <span *ngFor="let purchaseOrder of paymentInvoice.purchaseOrders; let last = last">

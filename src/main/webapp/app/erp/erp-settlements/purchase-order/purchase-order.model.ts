@@ -12,6 +12,7 @@ export interface IPurchaseOrder {
   notes?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
+  remarks?: string | null;
   settlementCurrency?: ISettlementCurrency | null;
   placeholders?: IPlaceholder[] | null;
   signatories?: IDealer[] | null;
@@ -28,6 +29,7 @@ export class PurchaseOrder implements IPurchaseOrder {
     public notes?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
+    public remarks?: string | null,
     public settlementCurrency?: ISettlementCurrency | null,
     public placeholders?: IPlaceholder[] | null,
     public signatories?: IDealer[] | null,

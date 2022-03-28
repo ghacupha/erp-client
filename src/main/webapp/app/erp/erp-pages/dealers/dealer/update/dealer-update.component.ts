@@ -42,6 +42,7 @@ export class DealerUpdateComponent implements OnInit {
     bankersBranch: [],
     bankersSwiftCode: [],
     paymentLabels: [],
+    remarks: [],
     dealerGroup: [],
     placeholders: [],
   });

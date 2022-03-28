@@ -25,6 +25,7 @@ export class PaymentLabelUpdateComponent implements OnInit {
     id: [],
     description: [null, [Validators.required]],
     comments: [],
+    remarks: [],
     containingPaymentLabel: [],
     placeholders: [],
   });

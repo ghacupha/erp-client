@@ -48,6 +48,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     invoiceAmount: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     purchaseOrders: [],
     placeholders: [],
     paymentLabels: [],

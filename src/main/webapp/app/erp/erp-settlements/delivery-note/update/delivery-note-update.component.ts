@@ -40,6 +40,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     description: [],
     serialNumber: [],
     quantity: [],
+    remarks: [],
     placeholders: [],
     receivedBy: [null, Validators.required],
     deliveryStamps: [],
