@@ -50,6 +50,7 @@ describe('PaymentLabel e2e test', () => {
       paymentLabelUpdatePage.setCommentsInput('comments'),
       paymentLabelUpdatePage.setFileUploadTokenInput('fileUploadToken'),
       paymentLabelUpdatePage.setCompilationTokenInput('compilationToken'),
+      paymentLabelUpdatePage.setRemarksInput('remarks'),
       paymentLabelUpdatePage.containingPaymentLabelSelectLastOption(),
       // paymentLabelUpdatePage.placeholderSelectLastOption(),
     ]);

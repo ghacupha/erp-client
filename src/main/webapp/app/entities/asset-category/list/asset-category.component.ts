@@ -8,6 +8,7 @@ import { IAssetCategory } from '../asset-category.model';
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { AssetCategoryService } from '../service/asset-category.service';
 import { AssetCategoryDeleteDialogComponent } from '../delete/asset-category-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 
 @Component({
@@ -26,6 +27,7 @@ export class AssetCategoryComponent implements OnInit {
 
   constructor(
     protected assetCategoryService: AssetCategoryService,
+    protected dataUtils: DataUtils,
     protected modalService: NgbModal,
     protected parseLinks: ParseLinks,
     protected activatedRoute: ActivatedRoute
@@ -97,7 +99,7 @@ export class AssetCategoryComponent implements OnInit {
       last: 0,
     };
     this.page = 0;
-    if (query && ['assetCategoryName', 'description', 'notes'].includes(this.predicate)) {
+    if (query && ['assetCategoryName', 'description', 'notes', 'remarks'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -111,6 +113,14 @@ export class AssetCategoryComponent implements OnInit {
 
   trackId(index: number, item: IAssetCategory): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(assetCategory: IAssetCategory): void {

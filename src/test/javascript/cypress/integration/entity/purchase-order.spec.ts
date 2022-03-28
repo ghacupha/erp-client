@@ -51,6 +51,7 @@ describe('PurchaseOrder e2e test', () => {
         bankersSwiftCode: 'orchestration 1080p efficient',
         fileUploadToken: 'National navigating flexibility',
         compilationToken: 'cross-platform',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -227,6 +228,11 @@ describe('PurchaseOrder e2e test', () => {
       cy.get(`[data-cy="fileUploadToken"]`).type('Sharable optimal silver').should('have.value', 'Sharable optimal silver');
 
       cy.get(`[data-cy="compilationToken"]`).type('proactive Finland').should('have.value', 'proactive Finland');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="vendor"]`).select(1);
 

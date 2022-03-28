@@ -55,6 +55,7 @@ describe('PaymentInvoice e2e test', () => {
             paymentInvoiceUpdatePage.setInvoiceAmountInput('5'),
             paymentInvoiceUpdatePage.setFileUploadTokenInput('fileUploadToken'),
             paymentInvoiceUpdatePage.setCompilationTokenInput('compilationToken'),
+            paymentInvoiceUpdatePage.setRemarksInput('remarks'),
             // paymentInvoiceUpdatePage.purchaseOrderSelectLastOption(),
             // paymentInvoiceUpdatePage.placeholderSelectLastOption(),
             // paymentInvoiceUpdatePage.paymentLabelSelectLastOption(),

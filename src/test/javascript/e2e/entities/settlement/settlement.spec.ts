@@ -59,6 +59,7 @@ describe('Settlement e2e test', () => {
             settlementUpdatePage.setCalculationFileInput(absolutePath),
             settlementUpdatePage.setFileUploadTokenInput('fileUploadToken'),
             settlementUpdatePage.setCompilationTokenInput('compilationToken'),
+            settlementUpdatePage.setRemarksInput('remarks'),
             // settlementUpdatePage.placeholderSelectLastOption(),
             settlementUpdatePage.settlementCurrencySelectLastOption(),
             // settlementUpdatePage.paymentLabelSelectLastOption(),

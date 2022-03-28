@@ -35,6 +35,7 @@ export class DeliveryNoteUpdatePage {
   descriptionInput = element(by.id('field_description'));
   serialNumberInput = element(by.id('field_serialNumber'));
   quantityInput = element(by.id('field_quantity'));
+  remarksInput = element(by.id('field_remarks'));
 
   placeholderSelect = element(by.id('field_placeholder'));
   receivedBySelect = element(by.id('field_receivedBy'));
@@ -93,6 +94,14 @@ export class DeliveryNoteUpdatePage {
 
   async getQuantityInput(): Promise<string> {
     return await this.quantityInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

@@ -78,6 +78,7 @@
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerGroup.dealerName"><span>Dealer Group</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -102,6 +103,7 @@
           <td>{{ dealer.bankersSwiftCode }}</td>
           <td>{{ dealer.fileUploadToken }}</td>
           <td>{{ dealer.compilationToken }}</td>
+          <td>{{ dealer.remarks }}</td>
           <td>
             <div *ngIf="dealer.dealerGroup">
               <a [routerLink]="['/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>

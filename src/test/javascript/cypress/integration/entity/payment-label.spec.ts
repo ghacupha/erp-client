@@ -161,6 +161,11 @@ describe('PaymentLabel e2e test', () => {
 
       cy.get(`[data-cy="compilationToken"]`).type('Function-based viral').should('have.value', 'Function-based viral');
 
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

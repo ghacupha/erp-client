@@ -25,6 +25,7 @@ describe('DepreciationMethod Service', () => {
       depreciationMethodName: 'AAAAAAA',
       description: 'AAAAAAA',
       depreciationType: DepreciationTypes.STRAIGHT_LINE,
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -63,6 +64,7 @@ describe('DepreciationMethod Service', () => {
           depreciationMethodName: 'BBBBBB',
           description: 'BBBBBB',
           depreciationType: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -103,6 +105,7 @@ describe('DepreciationMethod Service', () => {
           depreciationMethodName: 'BBBBBB',
           description: 'BBBBBB',
           depreciationType: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -154,7 +157,7 @@ describe('DepreciationMethod Service', () => {
       });
 
       it('should add only unique DepreciationMethod to an array', () => {
-        const depreciationMethodArray: IDepreciationMethod[] = [{ id: 123 }, { id: 456 }, { id: 11604 }];
+        const depreciationMethodArray: IDepreciationMethod[] = [{ id: 123 }, { id: 456 }, { id: 93665 }];
         const depreciationMethodCollection: IDepreciationMethod[] = [{ id: 123 }];
         expectedResult = service.addDepreciationMethodToCollectionIfMissing(depreciationMethodCollection, ...depreciationMethodArray);
         expect(expectedResult).toHaveLength(3);

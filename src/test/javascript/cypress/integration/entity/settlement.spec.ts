@@ -81,6 +81,7 @@ describe('Settlement e2e test', () => {
         bankersSwiftCode: 'Rubber encompassing',
         fileUploadToken: 'Future',
         compilationToken: 'Nevada Account',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -297,6 +298,11 @@ describe('Settlement e2e test', () => {
       cy.get(`[data-cy="fileUploadToken"]`).type('back').should('have.value', 'back');
 
       cy.get(`[data-cy="compilationToken"]`).type('Dynamic Reverse-engineered').should('have.value', 'Dynamic Reverse-engineered');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="settlementCurrency"]`).select(1);
       cy.get(`[data-cy="paymentCategory"]`).select(1);

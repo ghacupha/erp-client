@@ -33,6 +33,7 @@ export class AssetCategoryUpdatePage {
   assetCategoryNameInput = element(by.id('field_assetCategoryName'));
   descriptionInput = element(by.id('field_description'));
   notesInput = element(by.id('field_notes'));
+  remarksInput = element(by.id('field_remarks'));
 
   depreciationMethodSelect = element(by.id('field_depreciationMethod'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -71,6 +72,14 @@ export class AssetCategoryUpdatePage {
 
   async getNotesInput(): Promise<string> {
     return await this.notesInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async depreciationMethodSelectLastOption(): Promise<void> {

@@ -51,6 +51,7 @@ describe('BusinessStamp e2e test', () => {
         bankersSwiftCode: 'quantify Function-based',
         fileUploadToken: 'quantifying',
         compilationToken: 'Oregon quantifying',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -214,6 +215,11 @@ describe('BusinessStamp e2e test', () => {
       cy.get(`[data-cy="purpose"]`).type('1080p Taiwan').should('have.value', '1080p Taiwan');
 
       cy.get(`[data-cy="details"]`).type('red').should('have.value', 'red');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="stampHolder"]`).select(1);
 

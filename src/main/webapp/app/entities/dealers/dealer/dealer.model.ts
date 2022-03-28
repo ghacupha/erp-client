@@ -18,6 +18,7 @@ export interface IDealer {
   bankersSwiftCode?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
+  remarks?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealerGroup?: IDealer | null;
   placeholders?: IPlaceholder[] | null;
@@ -41,6 +42,7 @@ export class Dealer implements IDealer {
     public bankersSwiftCode?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
+    public remarks?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealerGroup?: IDealer | null,
     public placeholders?: IPlaceholder[] | null

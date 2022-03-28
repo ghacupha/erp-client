@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IBusinessStamp[]>;
 
 @Injectable({ providedIn: 'root' })
 export class BusinessStampService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/business-stamps');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/business-stamps');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/business-stamps');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/business-stamps');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

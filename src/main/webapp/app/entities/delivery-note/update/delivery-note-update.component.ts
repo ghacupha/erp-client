@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
 import { DeliveryNoteService } from '../service/delivery-note.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
@@ -35,6 +38,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     description: [],
     serialNumber: [],
     quantity: [],
+    remarks: [],
     placeholders: [],
     receivedBy: [null, Validators.required],
     deliveryStamps: [],
@@ -44,6 +48,8 @@ export class DeliveryNoteUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected deliveryNoteService: DeliveryNoteService,
     protected placeholderService: PlaceholderService,
     protected dealerService: DealerService,
@@ -58,6 +64,21 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       this.updateForm(deliveryNote);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -151,6 +172,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       description: deliveryNote.description,
       serialNumber: deliveryNote.serialNumber,
       quantity: deliveryNote.quantity,
+      remarks: deliveryNote.remarks,
       placeholders: deliveryNote.placeholders,
       receivedBy: deliveryNote.receivedBy,
       deliveryStamps: deliveryNote.deliveryStamps,
@@ -238,6 +260,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       description: this.editForm.get(['description'])!.value,
       serialNumber: this.editForm.get(['serialNumber'])!.value,
       quantity: this.editForm.get(['quantity'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       receivedBy: this.editForm.get(['receivedBy'])!.value,
       deliveryStamps: this.editForm.get(['deliveryStamps'])!.value,

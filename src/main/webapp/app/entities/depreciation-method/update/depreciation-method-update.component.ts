@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { DepreciationTypes } from 'app/entities/enumerations/depreciation-types.model';
@@ -26,10 +29,13 @@ export class DepreciationMethodUpdateComponent implements OnInit {
     depreciationMethodName: [null, [Validators.required]],
     description: [],
     depreciationType: [null, [Validators.required]],
+    remarks: [],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected depreciationMethodService: DepreciationMethodService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
@@ -41,6 +47,21 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       this.updateForm(depreciationMethod);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -98,6 +119,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       depreciationMethodName: depreciationMethod.depreciationMethodName,
       description: depreciationMethod.description,
       depreciationType: depreciationMethod.depreciationType,
+      remarks: depreciationMethod.remarks,
       placeholders: depreciationMethod.placeholders,
     });
 
@@ -126,6 +148,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       depreciationMethodName: this.editForm.get(['depreciationMethodName'])!.value,
       description: this.editForm.get(['description'])!.value,
       depreciationType: this.editForm.get(['depreciationType'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

@@ -30,6 +30,7 @@ describe('PaymentInvoice Service', () => {
       invoiceAmount: 0,
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -81,6 +82,7 @@ describe('PaymentInvoice Service', () => {
           invoiceAmount: 1,
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -103,6 +105,7 @@ describe('PaymentInvoice Service', () => {
       const patchObject = Object.assign(
         {
           invoiceNumber: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         new PaymentInvoice()
       );
@@ -132,6 +135,7 @@ describe('PaymentInvoice Service', () => {
           invoiceAmount: 1,
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -188,7 +192,7 @@ describe('PaymentInvoice Service', () => {
       });
 
       it('should add only unique PaymentInvoice to an array', () => {
-        const paymentInvoiceArray: IPaymentInvoice[] = [{ id: 123 }, { id: 456 }, { id: 69659 }];
+        const paymentInvoiceArray: IPaymentInvoice[] = [{ id: 123 }, { id: 456 }, { id: 17769 }];
         const paymentInvoiceCollection: IPaymentInvoice[] = [{ id: 123 }];
         expectedResult = service.addPaymentInvoiceToCollectionIfMissing(paymentInvoiceCollection, ...paymentInvoiceArray);
         expect(expectedResult).toHaveLength(3);

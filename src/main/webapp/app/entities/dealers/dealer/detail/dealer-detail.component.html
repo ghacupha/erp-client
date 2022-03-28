@@ -74,6 +74,10 @@
         <dd>
           <span>{{ dealer.compilationToken }}</span>
         </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ dealer.remarks }}</span>
+        </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of dealer.paymentLabels; let last = last">

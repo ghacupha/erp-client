@@ -64,6 +64,7 @@
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -83,6 +84,7 @@
           <td>{{ purchaseOrder.notes }}</td>
           <td>{{ purchaseOrder.fileUploadToken }}</td>
           <td>{{ purchaseOrder.compilationToken }}</td>
+          <td>{{ purchaseOrder.remarks }}</td>
           <td>
             <div *ngIf="purchaseOrder.settlementCurrency">
               <a [routerLink]="['/settlement-currency', purchaseOrder.settlementCurrency?.id, 'view']">{{

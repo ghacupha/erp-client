@@ -53,6 +53,7 @@ describe('BusinessStamp e2e test', () => {
             businessStampUpdatePage.setStampDateInput('2000-12-31'),
             businessStampUpdatePage.setPurposeInput('purpose'),
             businessStampUpdatePage.setDetailsInput('details'),
+            businessStampUpdatePage.setRemarksInput('remarks'),
             businessStampUpdatePage.stampHolderSelectLastOption(),
             // businessStampUpdatePage.placeholderSelectLastOption(),
         ]);

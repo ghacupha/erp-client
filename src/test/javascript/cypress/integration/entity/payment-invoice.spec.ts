@@ -66,6 +66,7 @@ describe('PaymentInvoice e2e test', () => {
         bankersSwiftCode: 'Bacon',
         fileUploadToken: 'Village Mouse',
         compilationToken: 'Hat',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -257,6 +258,11 @@ describe('PaymentInvoice e2e test', () => {
       cy.get(`[data-cy="fileUploadToken"]`).type('deposit Ouguiya composite').should('have.value', 'deposit Ouguiya composite');
 
       cy.get(`[data-cy="compilationToken"]`).type('software Towels').should('have.value', 'software Towels');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="settlementCurrency"]`).select(1);
       cy.get(`[data-cy="biller"]`).select(1);

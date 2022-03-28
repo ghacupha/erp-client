@@ -57,6 +57,7 @@ describe('PurchaseOrder e2e test', () => {
             purchaseOrderUpdatePage.setNotesInput('notes'),
             purchaseOrderUpdatePage.setFileUploadTokenInput('fileUploadToken'),
             purchaseOrderUpdatePage.setCompilationTokenInput('compilationToken'),
+            purchaseOrderUpdatePage.setRemarksInput('remarks'),
             purchaseOrderUpdatePage.settlementCurrencySelectLastOption(),
             // purchaseOrderUpdatePage.placeholderSelectLastOption(),
             // purchaseOrderUpdatePage.signatoriesSelectLastOption(),

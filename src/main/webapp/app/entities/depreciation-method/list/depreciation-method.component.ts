@@ -9,6 +9,7 @@ import { IDepreciationMethod } from '../depreciation-method.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { DepreciationMethodDeleteDialogComponent } from '../delete/depreciation-method-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-depreciation-method',
@@ -28,6 +29,7 @@ export class DepreciationMethodComponent implements OnInit {
   constructor(
     protected depreciationMethodService: DepreciationMethodService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -78,7 +80,7 @@ export class DepreciationMethodComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['depreciationMethodName', 'description', 'depreciationType'].includes(this.predicate)) {
+    if (query && ['depreciationMethodName', 'description', 'depreciationType', 'remarks'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -92,6 +94,14 @@ export class DepreciationMethodComponent implements OnInit {
 
   trackId(index: number, item: IDepreciationMethod): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(depreciationMethod: IDepreciationMethod): void {

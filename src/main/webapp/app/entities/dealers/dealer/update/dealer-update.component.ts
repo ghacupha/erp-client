@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IDealer, Dealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -40,12 +43,15 @@ export class DealerUpdateComponent implements OnInit {
     bankersSwiftCode: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     paymentLabels: [],
     dealerGroup: [],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected dealerService: DealerService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
@@ -58,6 +64,21 @@ export class DealerUpdateComponent implements OnInit {
       this.updateForm(dealer);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -146,6 +167,7 @@ export class DealerUpdateComponent implements OnInit {
       bankersSwiftCode: dealer.bankersSwiftCode,
       fileUploadToken: dealer.fileUploadToken,
       compilationToken: dealer.compilationToken,
+      remarks: dealer.remarks,
       paymentLabels: dealer.paymentLabels,
       dealerGroup: dealer.dealerGroup,
       placeholders: dealer.placeholders,
@@ -211,6 +233,7 @@ export class DealerUpdateComponent implements OnInit {
       bankersSwiftCode: this.editForm.get(['bankersSwiftCode'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       dealerGroup: this.editForm.get(['dealerGroup'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,

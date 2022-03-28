@@ -33,6 +33,7 @@ export class DepreciationMethodUpdatePage {
   depreciationMethodNameInput = element(by.id('field_depreciationMethodName'));
   descriptionInput = element(by.id('field_description'));
   depreciationTypeSelect = element(by.id('field_depreciationType'));
+  remarksInput = element(by.id('field_remarks'));
 
   placeholderSelect = element(by.id('field_placeholder'));
 
@@ -74,6 +75,14 @@ export class DepreciationMethodUpdatePage {
 
   async depreciationTypeSelectLastOption(): Promise<void> {
     await this.depreciationTypeSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

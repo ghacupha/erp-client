@@ -45,6 +45,7 @@ export class DealerUpdatePage {
   bankersSwiftCodeInput = element(by.id('field_bankersSwiftCode'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
+  remarksInput = element(by.id('field_remarks'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   dealerGroupSelect = element(by.id('field_dealerGroup'));
@@ -180,6 +181,14 @@ export class DealerUpdatePage {
 
   async getCompilationTokenInput(): Promise<string> {
     return await this.compilationTokenInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

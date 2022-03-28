@@ -53,6 +53,7 @@ describe('DepreciationMethod e2e test', () => {
       depreciationMethodUpdatePage.setDepreciationMethodNameInput('depreciationMethodName'),
       depreciationMethodUpdatePage.setDescriptionInput('description'),
       depreciationMethodUpdatePage.depreciationTypeSelectLastOption(),
+      depreciationMethodUpdatePage.setRemarksInput('remarks'),
       // depreciationMethodUpdatePage.placeholderSelectLastOption(),
     ]);
 

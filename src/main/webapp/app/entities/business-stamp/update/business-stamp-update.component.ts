@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -27,11 +30,14 @@ export class BusinessStampUpdateComponent implements OnInit {
     stampDate: [],
     purpose: [],
     details: [],
+    remarks: [],
     stampHolder: [null, Validators.required],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected businessStampService: BusinessStampService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
@@ -44,6 +50,21 @@ export class BusinessStampUpdateComponent implements OnInit {
       this.updateForm(businessStamp);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -105,6 +126,7 @@ export class BusinessStampUpdateComponent implements OnInit {
       stampDate: businessStamp.stampDate,
       purpose: businessStamp.purpose,
       details: businessStamp.details,
+      remarks: businessStamp.remarks,
       stampHolder: businessStamp.stampHolder,
       placeholders: businessStamp.placeholders,
     });
@@ -146,6 +168,7 @@ export class BusinessStampUpdateComponent implements OnInit {
       stampDate: this.editForm.get(['stampDate'])!.value,
       purpose: this.editForm.get(['purpose'])!.value,
       details: this.editForm.get(['details'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       stampHolder: this.editForm.get(['stampHolder'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

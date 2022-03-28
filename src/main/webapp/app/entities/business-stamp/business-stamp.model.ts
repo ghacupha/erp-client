@@ -7,6 +7,7 @@ export interface IBusinessStamp {
   stampDate?: dayjs.Dayjs | null;
   purpose?: string | null;
   details?: string | null;
+  remarks?: string | null;
   stampHolder?: IDealer;
   placeholders?: IPlaceholder[] | null;
 }
@@ -17,6 +18,7 @@ export class BusinessStamp implements IBusinessStamp {
     public stampDate?: dayjs.Dayjs | null,
     public purpose?: string | null,
     public details?: string | null,
+    public remarks?: string | null,
     public stampHolder?: IDealer,
     public placeholders?: IPlaceholder[] | null
   ) {}

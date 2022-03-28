@@ -32,6 +32,7 @@ describe('PurchaseOrder Service', () => {
       notes: 'AAAAAAA',
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -85,6 +86,7 @@ describe('PurchaseOrder Service', () => {
           notes: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -142,6 +144,7 @@ describe('PurchaseOrder Service', () => {
           notes: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -198,7 +201,7 @@ describe('PurchaseOrder Service', () => {
       });
 
       it('should add only unique PurchaseOrder to an array', () => {
-        const purchaseOrderArray: IPurchaseOrder[] = [{ id: 123 }, { id: 456 }, { id: 41997 }];
+        const purchaseOrderArray: IPurchaseOrder[] = [{ id: 123 }, { id: 456 }, { id: 26 }];
         const purchaseOrderCollection: IPurchaseOrder[] = [{ id: 123 }];
         expectedResult = service.addPurchaseOrderToCollectionIfMissing(purchaseOrderCollection, ...purchaseOrderArray);
         expect(expectedResult).toHaveLength(3);

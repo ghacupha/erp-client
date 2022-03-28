@@ -74,7 +74,9 @@
       "OutletType",
       "CountyCode",
       "BusinessStamp",
-      "DeliveryNote"
+      "DeliveryNote",
+      "JobSheet",
+      "CreditNote"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

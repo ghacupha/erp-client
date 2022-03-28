@@ -30,6 +30,7 @@ describe('DeliveryNote Service', () => {
       description: 'AAAAAAA',
       serialNumber: 'AAAAAAA',
       quantity: 0,
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -81,6 +82,7 @@ describe('DeliveryNote Service', () => {
           description: 'BBBBBB',
           serialNumber: 'BBBBBB',
           quantity: 1,
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -134,6 +136,7 @@ describe('DeliveryNote Service', () => {
           description: 'BBBBBB',
           serialNumber: 'BBBBBB',
           quantity: 1,
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -190,7 +193,7 @@ describe('DeliveryNote Service', () => {
       });
 
       it('should add only unique DeliveryNote to an array', () => {
-        const deliveryNoteArray: IDeliveryNote[] = [{ id: 123 }, { id: 456 }, { id: 41149 }];
+        const deliveryNoteArray: IDeliveryNote[] = [{ id: 123 }, { id: 456 }, { id: 56476 }];
         const deliveryNoteCollection: IDeliveryNote[] = [{ id: 123 }];
         expectedResult = service.addDeliveryNoteToCollectionIfMissing(deliveryNoteCollection, ...deliveryNoteArray);
         expect(expectedResult).toHaveLength(3);

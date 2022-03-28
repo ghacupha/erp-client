@@ -35,7 +35,7 @@ describe('AssetCategory e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/depreciation-methods',
-      body: { depreciationMethodName: 'optical', description: 'green ADP' },
+      body: { depreciationMethodName: 'optical', description: 'green ADP', remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=' },
     }).then(({ body }) => {
       depreciationMethod = body;
     });
@@ -198,6 +198,11 @@ describe('AssetCategory e2e test', () => {
       cy.get(`[data-cy="description"]`).type('CSS SSL Argentina').should('have.value', 'CSS SSL Argentina');
 
       cy.get(`[data-cy="notes"]`).type('Loan').should('have.value', 'Loan');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="depreciationMethod"]`).select(1);
 

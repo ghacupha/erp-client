@@ -53,6 +53,7 @@ describe('AssetCategory e2e test', () => {
             assetCategoryUpdatePage.setAssetCategoryNameInput('assetCategoryName'),
             assetCategoryUpdatePage.setDescriptionInput('description'),
             assetCategoryUpdatePage.setNotesInput('notes'),
+            assetCategoryUpdatePage.setRemarksInput('remarks'),
             assetCategoryUpdatePage.depreciationMethodSelectLastOption(),
             // assetCategoryUpdatePage.placeholderSelectLastOption(),
         ]);

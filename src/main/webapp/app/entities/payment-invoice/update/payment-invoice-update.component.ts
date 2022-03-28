@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -38,6 +41,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     invoiceAmount: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     purchaseOrders: [],
     placeholders: [],
     paymentLabels: [],
@@ -46,6 +50,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected purchaseOrderService: PurchaseOrderService,
     protected placeholderService: PlaceholderService,
@@ -61,6 +67,21 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       this.updateForm(paymentInvoice);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -158,6 +179,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       invoiceAmount: paymentInvoice.invoiceAmount,
       fileUploadToken: paymentInvoice.fileUploadToken,
       compilationToken: paymentInvoice.compilationToken,
+      remarks: paymentInvoice.remarks,
       purchaseOrders: paymentInvoice.purchaseOrders,
       placeholders: paymentInvoice.placeholders,
       paymentLabels: paymentInvoice.paymentLabels,
@@ -247,6 +269,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,

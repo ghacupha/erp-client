@@ -9,6 +9,7 @@ import { IBusinessStamp } from '../business-stamp.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { BusinessStampService } from '../service/business-stamp.service';
 import { BusinessStampDeleteDialogComponent } from '../delete/business-stamp-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-business-stamp',
@@ -28,6 +29,7 @@ export class BusinessStampComponent implements OnInit {
   constructor(
     protected businessStampService: BusinessStampService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -78,7 +80,7 @@ export class BusinessStampComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['purpose', 'details'].includes(this.predicate)) {
+    if (query && ['purpose', 'details', 'remarks'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -92,6 +94,14 @@ export class BusinessStampComponent implements OnInit {
 
   trackId(index: number, item: IBusinessStamp): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(businessStamp: IBusinessStamp): void {

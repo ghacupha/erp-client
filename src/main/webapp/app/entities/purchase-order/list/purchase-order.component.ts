@@ -9,6 +9,7 @@ import { IPurchaseOrder } from '../purchase-order.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PurchaseOrderService } from '../service/purchase-order.service';
 import { PurchaseOrderDeleteDialogComponent } from '../delete/purchase-order-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-purchase-order',
@@ -28,6 +29,7 @@ export class PurchaseOrderComponent implements OnInit {
   constructor(
     protected purchaseOrderService: PurchaseOrderService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -78,7 +80,10 @@ export class PurchaseOrderComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['purchaseOrderNumber', 'description', 'notes', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
+    if (
+      query &&
+      ['purchaseOrderNumber', 'description', 'notes', 'fileUploadToken', 'compilationToken', 'remarks'].includes(this.predicate)
+    ) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -92,6 +97,14 @@ export class PurchaseOrderComponent implements OnInit {
 
   trackId(index: number, item: IPurchaseOrder): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(purchaseOrder: IPurchaseOrder): void {

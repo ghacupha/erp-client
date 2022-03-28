@@ -51,6 +51,7 @@ describe('DeliveryNote e2e test', () => {
         bankersSwiftCode: 'Slovenia Avon',
         fileUploadToken: 'and Gabon',
         compilationToken: '4th Lakes Litas',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -229,6 +230,11 @@ describe('DeliveryNote e2e test', () => {
       cy.get(`[data-cy="serialNumber"]`).type('Personal up Markets').should('have.value', 'Personal up Markets');
 
       cy.get(`[data-cy="quantity"]`).type('3912').should('have.value', '3912');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="receivedBy"]`).select(1);
       cy.get(`[data-cy="supplier"]`).select(1);

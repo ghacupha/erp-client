@@ -12,6 +12,7 @@ export interface IPaymentInvoice {
   invoiceAmount?: number | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
+  remarks?: string | null;
   purchaseOrders?: IPurchaseOrder[] | null;
   placeholders?: IPlaceholder[] | null;
   paymentLabels?: IPaymentLabel[] | null;
@@ -27,6 +28,7 @@ export class PaymentInvoice implements IPaymentInvoice {
     public invoiceAmount?: number | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
+    public remarks?: string | null,
     public purchaseOrders?: IPurchaseOrder[] | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentLabels?: IPaymentLabel[] | null,

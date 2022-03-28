@@ -82,7 +82,9 @@ export class SettlementComponent implements OnInit {
   search(query: string): void {
     if (
       query &&
-      ['paymentNumber', 'description', 'notes', 'calculationFile', 'fileUploadToken', 'compilationToken'].includes(this.predicate)
+      ['paymentNumber', 'description', 'notes', 'calculationFile', 'fileUploadToken', 'compilationToken', 'remarks'].includes(
+        this.predicate
+      )
     ) {
       this.predicate = 'id';
       this.ascending = true;

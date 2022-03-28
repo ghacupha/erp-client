@@ -159,6 +159,11 @@ describe('DepreciationMethod e2e test', () => {
 
       cy.get(`[data-cy="depreciationType"]`).select('DECLINING_BALANCE');
 
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

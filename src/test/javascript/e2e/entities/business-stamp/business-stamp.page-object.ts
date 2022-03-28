@@ -33,6 +33,7 @@ export class BusinessStampUpdatePage {
   stampDateInput = element(by.id('field_stampDate'));
   purposeInput = element(by.id('field_purpose'));
   detailsInput = element(by.id('field_details'));
+  remarksInput = element(by.id('field_remarks'));
 
   stampHolderSelect = element(by.id('field_stampHolder'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -71,6 +72,14 @@ export class BusinessStampUpdatePage {
 
   async getDetailsInput(): Promise<string> {
     return await this.detailsInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async stampHolderSelectLastOption(): Promise<void> {

@@ -17,6 +17,7 @@ export interface ISettlement {
   calculationFile?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
+  remarks?: string | null;
   placeholders?: IPlaceholder[] | null;
   settlementCurrency?: ISettlementCurrency;
   paymentLabels?: IPaymentLabel[] | null;
@@ -39,6 +40,7 @@ export class Settlement implements ISettlement {
     public calculationFile?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
+    public remarks?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public settlementCurrency?: ISettlementCurrency,
     public paymentLabels?: IPaymentLabel[] | null,

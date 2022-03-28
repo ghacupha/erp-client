@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAssetCategory, AssetCategory } from '../asset-category.model';
 import { AssetCategoryService } from '../service/asset-category.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IDepreciationMethod } from 'app/entities/depreciation-method/depreciation-method.model';
 import { DepreciationMethodService } from 'app/entities/depreciation-method/service/depreciation-method.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -27,11 +30,14 @@ export class AssetCategoryUpdateComponent implements OnInit {
     assetCategoryName: [null, [Validators.required]],
     description: [],
     notes: [],
+    remarks: [],
     depreciationMethod: [null, Validators.required],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected assetCategoryService: AssetCategoryService,
     protected depreciationMethodService: DepreciationMethodService,
     protected placeholderService: PlaceholderService,
@@ -44,6 +50,21 @@ export class AssetCategoryUpdateComponent implements OnInit {
       this.updateForm(assetCategory);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -105,6 +126,7 @@ export class AssetCategoryUpdateComponent implements OnInit {
       assetCategoryName: assetCategory.assetCategoryName,
       description: assetCategory.description,
       notes: assetCategory.notes,
+      remarks: assetCategory.remarks,
       depreciationMethod: assetCategory.depreciationMethod,
       placeholders: assetCategory.placeholders,
     });
@@ -151,6 +173,7 @@ export class AssetCategoryUpdateComponent implements OnInit {
       assetCategoryName: this.editForm.get(['assetCategoryName'])!.value,
       description: this.editForm.get(['description'])!.value,
       notes: this.editForm.get(['notes'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       depreciationMethod: this.editForm.get(['depreciationMethod'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

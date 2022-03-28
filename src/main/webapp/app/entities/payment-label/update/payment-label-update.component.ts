@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
 import { PaymentLabelService } from '../service/payment-label.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -26,11 +29,14 @@ export class PaymentLabelUpdateComponent implements OnInit {
     comments: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     containingPaymentLabel: [],
     placeholders: [],
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
@@ -42,6 +48,21 @@ export class PaymentLabelUpdateComponent implements OnInit {
       this.updateForm(paymentLabel);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -104,6 +125,7 @@ export class PaymentLabelUpdateComponent implements OnInit {
       comments: paymentLabel.comments,
       fileUploadToken: paymentLabel.fileUploadToken,
       compilationToken: paymentLabel.compilationToken,
+      remarks: paymentLabel.remarks,
       containingPaymentLabel: paymentLabel.containingPaymentLabel,
       placeholders: paymentLabel.placeholders,
     });
@@ -148,6 +170,7 @@ export class PaymentLabelUpdateComponent implements OnInit {
       comments: this.editForm.get(['comments'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       containingPaymentLabel: this.editForm.get(['containingPaymentLabel'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

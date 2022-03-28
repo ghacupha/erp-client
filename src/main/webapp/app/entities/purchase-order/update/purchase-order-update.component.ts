@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -34,6 +37,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     notes: [],
     fileUploadToken: [],
     compilationToken: [],
+    remarks: [],
     settlementCurrency: [],
     placeholders: [],
     signatories: [],
@@ -41,6 +45,8 @@ export class PurchaseOrderUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected purchaseOrderService: PurchaseOrderService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
@@ -54,6 +60,21 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       this.updateForm(purchaseOrder);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -134,6 +155,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       notes: purchaseOrder.notes,
       fileUploadToken: purchaseOrder.fileUploadToken,
       compilationToken: purchaseOrder.compilationToken,
+      remarks: purchaseOrder.remarks,
       settlementCurrency: purchaseOrder.settlementCurrency,
       placeholders: purchaseOrder.placeholders,
       signatories: purchaseOrder.signatories,
@@ -205,6 +227,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       notes: this.editForm.get(['notes'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
       compilationToken: this.editForm.get(['compilationToken'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       signatories: this.editForm.get(['signatories'])!.value,

@@ -28,6 +28,7 @@ describe('BusinessStamp Service', () => {
       stampDate: currentDate,
       purpose: 'AAAAAAA',
       details: 'AAAAAAA',
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -77,6 +78,7 @@ describe('BusinessStamp Service', () => {
           stampDate: currentDate.format(DATE_FORMAT),
           purpose: 'BBBBBB',
           details: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -126,6 +128,7 @@ describe('BusinessStamp Service', () => {
           stampDate: currentDate.format(DATE_FORMAT),
           purpose: 'BBBBBB',
           details: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -182,7 +185,7 @@ describe('BusinessStamp Service', () => {
       });
 
       it('should add only unique BusinessStamp to an array', () => {
-        const businessStampArray: IBusinessStamp[] = [{ id: 123 }, { id: 456 }, { id: 11034 }];
+        const businessStampArray: IBusinessStamp[] = [{ id: 123 }, { id: 456 }, { id: 22896 }];
         const businessStampCollection: IBusinessStamp[] = [{ id: 123 }];
         expectedResult = service.addBusinessStampToCollectionIfMissing(businessStampCollection, ...businessStampArray);
         expect(expectedResult).toHaveLength(3);

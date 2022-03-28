@@ -55,6 +55,7 @@ describe('DeliveryNote e2e test', () => {
             deliveryNoteUpdatePage.setDescriptionInput('description'),
             deliveryNoteUpdatePage.setSerialNumberInput('serialNumber'),
             deliveryNoteUpdatePage.setQuantityInput('5'),
+            deliveryNoteUpdatePage.setRemarksInput('remarks'),
             // deliveryNoteUpdatePage.placeholderSelectLastOption(),
             deliveryNoteUpdatePage.receivedBySelectLastOption(),
             // deliveryNoteUpdatePage.deliveryStampsSelectLastOption(),

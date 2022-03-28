@@ -37,6 +37,7 @@ export class PurchaseOrderUpdatePage {
   notesInput = element(by.id('field_notes'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
+  remarksInput = element(by.id('field_remarks'));
 
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -109,6 +110,14 @@ export class PurchaseOrderUpdatePage {
 
   async getCompilationTokenInput(): Promise<string> {
     return await this.compilationTokenInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async settlementCurrencySelectLastOption(): Promise<void> {

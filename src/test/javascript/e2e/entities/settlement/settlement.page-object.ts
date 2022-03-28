@@ -38,6 +38,7 @@ export class SettlementUpdatePage {
   calculationFileInput = element(by.id('file_calculationFile'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
+  remarksInput = element(by.id('field_remarks'));
 
   placeholderSelect = element(by.id('field_placeholder'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
@@ -122,6 +123,14 @@ export class SettlementUpdatePage {
 
   async getCompilationTokenInput(): Promise<string> {
     return await this.compilationTokenInput.getAttribute('value');
+  }
+
+  async setRemarksInput(remarks: string): Promise<void> {
+    await this.remarksInput.sendKeys(remarks);
+  }
+
+  async getRemarksInput(): Promise<string> {
+    return await this.remarksInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

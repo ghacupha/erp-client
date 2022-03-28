@@ -59,6 +59,7 @@
           <th scope="col" jhiSortBy="compilationToken">
             <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="containingPaymentLabel.description">
             <span>Containing Payment Label</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -74,6 +75,7 @@
           <td>{{ paymentLabel.comments }}</td>
           <td>{{ paymentLabel.fileUploadToken }}</td>
           <td>{{ paymentLabel.compilationToken }}</td>
+          <td>{{ paymentLabel.remarks }}</td>
           <td>
             <div *ngIf="paymentLabel.containingPaymentLabel">
               <a [routerLink]="['/payment-label', paymentLabel.containingPaymentLabel?.id, 'view']">{{

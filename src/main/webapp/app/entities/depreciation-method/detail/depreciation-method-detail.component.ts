@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IDepreciationMethod } from '../depreciation-method.model';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-depreciation-method-detail',
@@ -10,12 +11,20 @@ import { IDepreciationMethod } from '../depreciation-method.model';
 export class DepreciationMethodDetailComponent implements OnInit {
   depreciationMethod: IDepreciationMethod | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationMethod }) => {
       this.depreciationMethod = depreciationMethod;
     });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
   }
 
   previousState(): void {

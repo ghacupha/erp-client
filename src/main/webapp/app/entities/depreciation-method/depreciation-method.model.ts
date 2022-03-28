@@ -6,6 +6,7 @@ export interface IDepreciationMethod {
   depreciationMethodName?: string;
   description?: string | null;
   depreciationType?: DepreciationTypes;
+  remarks?: string | null;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -15,6 +16,7 @@ export class DepreciationMethod implements IDepreciationMethod {
     public depreciationMethodName?: string,
     public description?: string | null,
     public depreciationType?: DepreciationTypes,
+    public remarks?: string | null,
     public placeholders?: IPlaceholder[] | null
   ) {}
 }

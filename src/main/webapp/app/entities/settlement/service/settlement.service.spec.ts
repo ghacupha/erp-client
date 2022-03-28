@@ -34,6 +34,7 @@ describe('Settlement Service', () => {
       calculationFile: 'AAAAAAA',
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
+      remarks: 'AAAAAAA',
     };
   });
 
@@ -88,6 +89,7 @@ describe('Settlement Service', () => {
           calculationFile: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -116,6 +118,7 @@ describe('Settlement Service', () => {
           calculationFile: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         new Settlement()
       );
@@ -148,6 +151,7 @@ describe('Settlement Service', () => {
           calculationFile: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
+          remarks: 'BBBBBB',
         },
         elemDefault
       );
@@ -204,7 +208,7 @@ describe('Settlement Service', () => {
       });
 
       it('should add only unique Settlement to an array', () => {
-        const settlementArray: ISettlement[] = [{ id: 123 }, { id: 456 }, { id: 94339 }];
+        const settlementArray: ISettlement[] = [{ id: 123 }, { id: 456 }, { id: 86997 }];
         const settlementCollection: ISettlement[] = [{ id: 123 }];
         expectedResult = service.addSettlementToCollectionIfMissing(settlementCollection, ...settlementArray);
         expect(expectedResult).toHaveLength(3);
