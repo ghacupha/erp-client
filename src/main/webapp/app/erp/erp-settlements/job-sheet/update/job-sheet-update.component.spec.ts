@@ -1,3 +1,5 @@
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -32,7 +34,7 @@ describe('JobSheet Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [ErpCommonModule, HttpClientTestingModule],
       declarations: [JobSheetUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

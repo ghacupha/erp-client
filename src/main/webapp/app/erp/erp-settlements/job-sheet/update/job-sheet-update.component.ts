@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IJobSheet, JobSheet } from '../job-sheet.model';
 import { JobSheetService } from '../service/job-sheet.service';
@@ -18,6 +18,14 @@ import { DealerService } from '../../../erp-common/services/dealer.service';
 import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
 import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
+import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { BusinessStampSuggestionService } from '../../../erp-common/suggestion/business-stamp-suggestion.service';
 
 @Component({
   selector: 'jhi-job-sheet-update',
@@ -45,6 +53,32 @@ export class JobSheetUpdateComponent implements OnInit {
     paymentLabels: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  billersLoading = false;
+  billersInput$ = new Subject<string>();
+  billerLookups$: Observable<IDealer[]> = of([]);
+
+  contactPersonsLoading = false;
+  contactPersonInput$ = new Subject<string>();
+  contactPersonLookups$: Observable<IDealer[]> = of([]);
+
+  signatoriesLoading = false;
+  signatoryControlInput$ = new Subject<string>();
+  signatoryLookups$: Observable<IDealer[]> = of([]);
+
+  labelsLoading = false;
+  labelControlInput$ = new Subject<string>();
+  labelLookups$: Observable<IPaymentLabel[]> = of([]);
+
+  businessStampsLoading = false;
+  businessStampsControlInput$ = new Subject<string>();
+  businessStampLookups$: Observable<IBusinessStamp[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -54,7 +88,15 @@ export class JobSheetUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected paymentLabelService: PaymentLabelService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected businessStampSuggestionService: BusinessStampSuggestionService,
+    protected categorySuggestionService: CategorySuggestionService,
+    protected labelSuggestionService: LabelSuggestionService,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +105,143 @@ export class JobSheetUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.loadLabels();
+    this.loadPlaceholders();
+    this.loadBillers();
+    this.loadSignatories();
+    this.loadContactPersons();
+    this.loadBusinessStamps();
+  }
+
+  loadSignatories(): void {
+    this.signatoryLookups$ = concat(
+      of([]), // default items
+      this.signatoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.signatoriesLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.signatoriesLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadBillers(): void {
+    this.billerLookups$ = concat(
+      of([]), // default items
+      this.billersInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.billersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.billersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadContactPersons(): void {
+    this.contactPersonLookups$ = concat(
+      of([]), // default items
+      this.contactPersonInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.contactPersonsLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.contactPersonsLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadLabels(): void {
+    this.labelLookups$ = concat(
+      of([]), // default items
+      this.labelControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.labelsLoading = true),
+        switchMap(term => this.labelSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.labelsLoading = false)
+        ))
+      ),
+      of([...this.paymentLabelsSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadBusinessStamps(): void {
+    this.businessStampLookups$ = concat(
+      of([]), // default items
+      this.businessStampsControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.businessStampsLoading = true),
+        switchMap(term => this.businessStampSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.businessStampsLoading = false)
+        ))
+      ),
+      of([...this.businessStampsSharedCollection])
+    );
+  }
+
+  trackBusinessStampByFn(item: IBusinessStamp): number {
+    return item.id!;
+  }
+
+  trackLabelByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackBillerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {
