@@ -1,0 +1,30 @@
+{
+  "changelogDate": "20220406130104",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "countryCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "countryDescription",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "IsoCountryCode",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "isoCountryCode",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

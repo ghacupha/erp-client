@@ -78,7 +78,12 @@ export class SettlementCurrencyComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['iso4217CurrencyCode', 'currencyName', 'country', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
+    if (
+      query &&
+      ['iso4217CurrencyCode', 'currencyName', 'country', 'numericCode', 'minorUnit', 'fileUploadToken', 'compilationToken'].includes(
+        this.predicate
+      )
+    ) {
       this.predicate = 'id';
       this.ascending = true;
     }

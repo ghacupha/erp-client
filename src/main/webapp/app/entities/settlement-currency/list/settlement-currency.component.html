@@ -56,6 +56,8 @@
           </th>
           <th scope="col" jhiSortBy="currencyName"><span>Currency Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="country"><span>Country</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="numericCode"><span>Numeric Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="minorUnit"><span>Minor Unit</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fileUploadToken">
             <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
@@ -73,6 +75,8 @@
           <td>{{ settlementCurrency.iso4217CurrencyCode }}</td>
           <td>{{ settlementCurrency.currencyName }}</td>
           <td>{{ settlementCurrency.country }}</td>
+          <td>{{ settlementCurrency.numericCode }}</td>
+          <td>{{ settlementCurrency.minorUnit }}</td>
           <td>{{ settlementCurrency.fileUploadToken }}</td>
           <td>{{ settlementCurrency.compilationToken }}</td>
           <td class="text-right">

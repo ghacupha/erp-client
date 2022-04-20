@@ -17,9 +17,9 @@ describe('SettlementCurrency e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const settlementCurrencySample = {
-    iso4217CurrencyCode: 'mar',
+    iso4217CurrencyCode: 'Ele',
     currencyName: 'European Unit of Account 17(E.U.A.-17)',
-    country: 'Australia',
+    country: 'Hungary',
   };
 
   let settlementCurrency: any;
@@ -163,9 +163,13 @@ describe('SettlementCurrency e2e test', () => {
 
       cy.get(`[data-cy="country"]`).type('Liechtenstein').should('have.value', 'Liechtenstein');
 
-      cy.get(`[data-cy="fileUploadToken"]`).type('Dynamic Terrace').should('have.value', 'Dynamic Terrace');
+      cy.get(`[data-cy="numericCode"]`).type('Dynamic Terrace').should('have.value', 'Dynamic Terrace');
 
-      cy.get(`[data-cy="compilationToken"]`).type('Marketing Soap Awesome').should('have.value', 'Marketing Soap Awesome');
+      cy.get(`[data-cy="minorUnit"]`).type('Marketing Soap Awesome').should('have.value', 'Marketing Soap Awesome');
+
+      cy.get(`[data-cy="fileUploadToken"]`).type('maroon Senior').should('have.value', 'maroon Senior');
+
+      cy.get(`[data-cy="compilationToken"]`).type('Pants program optimal').should('have.value', 'Pants program optimal');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

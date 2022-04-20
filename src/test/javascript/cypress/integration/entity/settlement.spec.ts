@@ -41,8 +41,10 @@ describe('Settlement e2e test', () => {
         iso4217CurrencyCode: 'Nor',
         currencyName: 'Cedi',
         country: 'Slovakia (Slovak Republic)',
-        fileUploadToken: 'iterate hack Zambia',
-        compilationToken: 'AI Terrace Architect',
+        numericCode: 'iterate hack Zambia',
+        minorUnit: 'AI Terrace Architect',
+        fileUploadToken: 'COM pink',
+        compilationToken: 'process background',
       },
     }).then(({ body }) => {
       settlementCurrency = body;

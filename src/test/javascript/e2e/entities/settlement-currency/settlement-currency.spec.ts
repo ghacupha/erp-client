@@ -53,6 +53,8 @@ describe('SettlementCurrency e2e test', () => {
       settlementCurrencyUpdatePage.setIso4217CurrencyCodeInput('iso4217CurrencyCode'),
       settlementCurrencyUpdatePage.setCurrencyNameInput('currencyName'),
       settlementCurrencyUpdatePage.setCountryInput('country'),
+      settlementCurrencyUpdatePage.setNumericCodeInput('numericCode'),
+      settlementCurrencyUpdatePage.setMinorUnitInput('minorUnit'),
       settlementCurrencyUpdatePage.setFileUploadTokenInput('fileUploadToken'),
       settlementCurrencyUpdatePage.setCompilationTokenInput('compilationToken'),
       // settlementCurrencyUpdatePage.placeholderSelectLastOption(),

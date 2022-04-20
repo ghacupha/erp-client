@@ -76,7 +76,15 @@
       "BusinessStamp",
       "DeliveryNote",
       "JobSheet",
-      "CreditNote"
+      "CreditNote",
+      "AssetRegistration",
+      "CustomerIDDocumentType",
+      "InstitutionCode",
+      "MfbBranchCode",
+      "IsoCountryCode",
+      "SubCountyCode",
+      "WorkInProgressRegistration",
+      "WorkInProgressTransfer"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

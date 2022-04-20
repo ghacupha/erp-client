@@ -6,13 +6,15 @@ import {RouterModule} from "@angular/router";
 import {PaymentsNavComponent} from "./payment-nav/payments-nav.component";
 import {AssetsNavComponent} from "./assets-nav/assets-nav.component";
 import { TaxesNavComponent } from './taxes-nav/taxes-nav.component';
+import { GranularDataNavComponent } from './granular-data-nav/granular-data-nav.component';
 
 @NgModule({
   declarations: [
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
     AssetsNavComponent,
-    TaxesNavComponent
+    TaxesNavComponent,
+    GranularDataNavComponent
   ],
   imports: [
     SharedModule,
@@ -23,7 +25,8 @@ import { TaxesNavComponent } from './taxes-nav/taxes-nav.component';
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
     AssetsNavComponent,
-    TaxesNavComponent
+    TaxesNavComponent,
+    GranularDataNavComponent
   ]
 })
 export class ErpNavigationModule {}

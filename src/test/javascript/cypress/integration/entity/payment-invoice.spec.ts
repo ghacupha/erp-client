@@ -40,8 +40,10 @@ describe('PaymentInvoice e2e test', () => {
         iso4217CurrencyCode: 'Mar',
         currencyName: 'Codes specifically reserved for testing purposes',
         country: 'Gibraltar',
-        fileUploadToken: 'multi-byte red',
-        compilationToken: 'Account',
+        numericCode: 'multi-byte red',
+        minorUnit: 'Account',
+        fileUploadToken: 'South Intelligent',
+        compilationToken: 'Soft Functionality',
       },
     }).then(({ body }) => {
       settlementCurrency = body;

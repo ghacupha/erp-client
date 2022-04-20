@@ -24,6 +24,8 @@ describe('SettlementCurrency Service', () => {
       iso4217CurrencyCode: 'AAAAAAA',
       currencyName: 'AAAAAAA',
       country: 'AAAAAAA',
+      numericCode: 'AAAAAAA',
+      minorUnit: 'AAAAAAA',
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
     };
@@ -64,6 +66,8 @@ describe('SettlementCurrency Service', () => {
           iso4217CurrencyCode: 'BBBBBB',
           currencyName: 'BBBBBB',
           country: 'BBBBBB',
+          numericCode: 'BBBBBB',
+          minorUnit: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
         },
@@ -82,7 +86,7 @@ describe('SettlementCurrency Service', () => {
     it('should partial update a SettlementCurrency', () => {
       const patchObject = Object.assign(
         {
-          fileUploadToken: 'BBBBBB',
+          numericCode: 'BBBBBB',
         },
         new SettlementCurrency()
       );
@@ -105,6 +109,8 @@ describe('SettlementCurrency Service', () => {
           iso4217CurrencyCode: 'BBBBBB',
           currencyName: 'BBBBBB',
           country: 'BBBBBB',
+          numericCode: 'BBBBBB',
+          minorUnit: 'BBBBBB',
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
         },
@@ -158,7 +164,7 @@ describe('SettlementCurrency Service', () => {
       });
 
       it('should add only unique SettlementCurrency to an array', () => {
-        const settlementCurrencyArray: ISettlementCurrency[] = [{ id: 123 }, { id: 456 }, { id: 18948 }];
+        const settlementCurrencyArray: ISettlementCurrency[] = [{ id: 123 }, { id: 456 }, { id: 37004 }];
         const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 123 }];
         expectedResult = service.addSettlementCurrencyToCollectionIfMissing(settlementCurrencyCollection, ...settlementCurrencyArray);
         expect(expectedResult).toHaveLength(3);

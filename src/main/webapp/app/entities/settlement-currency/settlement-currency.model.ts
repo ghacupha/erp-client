@@ -5,6 +5,8 @@ export interface ISettlementCurrency {
   iso4217CurrencyCode?: string;
   currencyName?: string;
   country?: string;
+  numericCode?: string | null;
+  minorUnit?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   placeholders?: IPlaceholder[] | null;
@@ -16,6 +18,8 @@ export class SettlementCurrency implements ISettlementCurrency {
     public iso4217CurrencyCode?: string,
     public currencyName?: string,
     public country?: string,
+    public numericCode?: string | null,
+    public minorUnit?: string | null,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
     public placeholders?: IPlaceholder[] | null

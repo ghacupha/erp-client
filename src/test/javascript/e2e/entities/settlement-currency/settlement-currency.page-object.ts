@@ -33,6 +33,8 @@ export class SettlementCurrencyUpdatePage {
   iso4217CurrencyCodeInput = element(by.id('field_iso4217CurrencyCode'));
   currencyNameInput = element(by.id('field_currencyName'));
   countryInput = element(by.id('field_country'));
+  numericCodeInput = element(by.id('field_numericCode'));
+  minorUnitInput = element(by.id('field_minorUnit'));
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
 
@@ -72,6 +74,22 @@ export class SettlementCurrencyUpdatePage {
 
   async getCountryInput(): Promise<string> {
     return await this.countryInput.getAttribute('value');
+  }
+
+  async setNumericCodeInput(numericCode: string): Promise<void> {
+    await this.numericCodeInput.sendKeys(numericCode);
+  }
+
+  async getNumericCodeInput(): Promise<string> {
+    return await this.numericCodeInput.getAttribute('value');
+  }
+
+  async setMinorUnitInput(minorUnit: string): Promise<void> {
+    await this.minorUnitInput.sendKeys(minorUnit);
+  }
+
+  async getMinorUnitInput(): Promise<string> {
+    return await this.minorUnitInput.getAttribute('value');
   }
 
   async setFileUploadTokenInput(fileUploadToken: string): Promise<void> {
