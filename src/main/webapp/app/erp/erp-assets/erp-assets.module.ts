@@ -6,6 +6,42 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
   imports: [
     RouterModule.forChild([
       {
+        path: 'asset-registration',
+        data: {
+          pageTitle: 'ERP | FA Registration',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-registration/asset-registration.module').then(
+            m => m.AssetRegistrationModule
+          ),
+      },
+      {
+        path: 'work-in-progress-registration',
+        data: {
+          pageTitle: 'ERP | W.I.P. Registration',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./work-in-progress-registration/work-in-progress-registration.module').then(
+            m => m.WorkInProgressRegistrationModule
+          ),
+      },
+      {
+        path: 'work-in-progress-transfer',
+        data: {
+          pageTitle: 'ERP | W.I.P. Transfer',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./work-in-progress-transfer/work-in-progress-transfer.module').then(
+            m => m.WorkInProgressTransferModule
+          ),
+      },
+      {
         path: 'fixed-asset-net-book-value',
         data: {
           pageTitle: 'ERP | Fixed Asset NetBookValue',

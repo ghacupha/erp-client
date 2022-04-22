@@ -1,4 +1,4 @@
-import { IWorkInProgressRegistration } from 'app/entities/work-in-progress-registration/work-in-progress-registration.model';
+import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress-registration/work-in-progress-registration.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IWorkInProgressTransfer {

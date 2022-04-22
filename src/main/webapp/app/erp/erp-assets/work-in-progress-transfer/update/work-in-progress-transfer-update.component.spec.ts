@@ -9,8 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
 import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
-import { IWorkInProgressRegistration } from 'app/entities/work-in-progress-registration/work-in-progress-registration.model';
-import { WorkInProgressRegistrationService } from 'app/entities/work-in-progress-registration/service/work-in-progress-registration.service';
+import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress-registration/work-in-progress-registration.model';
+import { WorkInProgressRegistrationService } from 'app/erp/erp-assets/work-in-progress-registration/service/work-in-progress-registration.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 

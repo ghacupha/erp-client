@@ -14,6 +14,42 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="asset-registration"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fixed Asset Registration</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-registration"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>W.I.P. Registration</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-transfer"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>W.I.P. Transfer</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
             routerLink="fixed-asset-acquisition"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
