@@ -87,7 +87,7 @@
           <ng-select
             [items]="purchaseOrderLookups$ | async"
             bindLabel="purchaseOrderNumber"
-            [trackByFn]="trackLabelByFn"
+            [trackByFn]="trackPurchaseOrderByFn"
             [minTermLength]="minAccountLengthTerm"
             [loading]="purchaseOrdersLoading"
             typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"

@@ -278,7 +278,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_purchaseOrders">Purchase Order</label>
           <select
             class="form-control"
@@ -295,6 +295,31 @@
               {{ purchaseOrderOption.purchaseOrderNumber }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Purchase Order</label>
+          <ng-select
+            [items]="purchaseOrderLookups$ | async"
+            bindLabel="purchaseOrderNumber"
+            [trackByFn]="trackPurchaseOrderByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="purchaseOrdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="purchaseOrderControlInput$"
+            formControlName="purchaseOrders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of purchaseOrderLookups$ | async" [value]="option">
+              {{ option.purchaseOrderNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{item.purchaseOrderNumber}} DESC: {{ item.description }}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
         </div>
 
         <div class="form-group">

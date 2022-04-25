@@ -211,6 +211,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
+  }
+
   trackCurrencyByFn(item: ISettlementCurrency): number {
     return item.id!;
   }

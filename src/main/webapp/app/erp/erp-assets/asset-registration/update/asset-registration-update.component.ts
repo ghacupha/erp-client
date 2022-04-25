@@ -33,6 +33,7 @@ import { SettlementSuggestionService } from '../../../erp-common/suggestion/sett
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -93,6 +94,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   designatedUsersControlInput$ = new Subject<string>();
   designatedUsersLookups$: Observable<IDealer[]> = of([]);
 
+  purchaseOrdersLoading = false;
+  purchaseOrderControlInput$ = new Subject<string>();
+  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -112,6 +117,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected settlementSuggestionService: SettlementSuggestionService,
     protected dealerSuggestionService: DealerSuggestionService,
     protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
+    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +133,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.loadDealers();
     this.loadPaymentInvoices();
     this.loadDesignatedUsers();
+    this.loadPurchaseOrders();
   }
 
   loadPaymentInvoices(): void {
@@ -222,6 +229,29 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       ),
       of([...this.settlementsSharedCollection])
     );
+  }
+
+  loadPurchaseOrders(): void {
+    this.purchaseOrderLookups$ = concat(
+      of([]), // default items
+      this.purchaseOrderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this. purchaseOrdersLoading = true),
+        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this. purchaseOrdersLoading = false)
+        ))
+      ),
+      of([...this.purchaseOrdersSharedCollection])
+    );
+  }
+
+  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
   }
 
   trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
