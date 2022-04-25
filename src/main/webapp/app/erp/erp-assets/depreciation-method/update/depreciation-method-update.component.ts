@@ -7,15 +7,15 @@ import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, 
 
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { DepreciationTypes } from '../../../erp-common/enumerations/depreciation-types.model';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-depreciation-method-update',
-  templateUrl: './depreciation-method-update.component.html',
+  templateUrl: './depreciation-method-update.component.html'
 })
 export class DepreciationMethodUpdateComponent implements OnInit {
   isSaving = false;
@@ -29,7 +29,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
     description: [],
     depreciationType: [null, [Validators.required]],
     remarks: [],
-    placeholders: [],
+    placeholders: []
   });
 
   minAccountLengthTerm = 3;
@@ -44,7 +44,8 @@ export class DepreciationMethodUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationMethod }) => {
@@ -133,7 +134,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       depreciationMethodName: depreciationMethod.depreciationMethodName,
       description: depreciationMethod.description,
       depreciationType: depreciationMethod.depreciationType,
-      placeholders: depreciationMethod.placeholders,
+      placeholders: depreciationMethod.placeholders
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -161,7 +162,7 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       depreciationMethodName: this.editForm.get(['depreciationMethodName'])!.value,
       description: this.editForm.get(['description'])!.value,
       depreciationType: this.editForm.get(['depreciationType'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value
     };
   }
 }

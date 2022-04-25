@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { DepreciationTypes } from 'app/entities/enumerations/depreciation-types.model';
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
 
 import { DepreciationMethodService } from './depreciation-method.service';
+import { DepreciationTypes } from '../../../erp-common/enumerations/depreciation-types.model';
 
 describe('DepreciationMethod Service', () => {
   let service: DepreciationMethodService;

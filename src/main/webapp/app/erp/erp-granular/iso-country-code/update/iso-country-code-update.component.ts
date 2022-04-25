@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IIsoCountryCode, IsoCountryCode } from '../iso-country-code.model';
 import { IsoCountryCodeService } from '../service/iso-country-code.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-iso-country-code-update',

@@ -11,10 +11,10 @@ import { of, Subject } from 'rxjs';
 
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { DepreciationMethodUpdateComponent } from './depreciation-method-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 describe('DepreciationMethod Management Update Component', () => {
   let comp: DepreciationMethodUpdateComponent;

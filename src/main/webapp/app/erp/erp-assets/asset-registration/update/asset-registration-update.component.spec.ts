@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,26 +11,26 @@ import { of, Subject } from 'rxjs';
 
 import { AssetRegistrationService } from '../service/asset-registration.service';
 import { IAssetRegistration, AssetRegistration } from '../asset-registration.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/entities/payment-invoice/service/payment-invoice.service';
-import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
-import { ISettlement } from 'app/entities/settlement/settlement.model';
-import { SettlementService } from 'app/entities/settlement/service/settlement.service';
-import { IAssetCategory } from 'app/entities/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/asset-category/service/asset-category.service';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
-import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
-import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
-import { DeliveryNoteService } from 'app/entities/delivery-note/service/delivery-note.service';
-import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
-import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 
 import { AssetRegistrationUpdateComponent } from './asset-registration-update.component';
+import { IAssetCategory } from '../../asset-category/asset-category.model';
+import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
+import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
+import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
+import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
+import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
+import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('AssetRegistration Management Update Component', () => {
   let comp: AssetRegistrationUpdateComponent;
@@ -47,7 +49,7 @@ describe('AssetRegistration Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, ErpCommonModule],
       declarations: [AssetRegistrationUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })

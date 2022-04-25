@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { CustomerIDDocumentTypeService } from '../service/customer-id-document-type.service';
 import { ICustomerIDDocumentType, CustomerIDDocumentType } from '../customer-id-document-type.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { CustomerIDDocumentTypeUpdateComponent } from './customer-id-document-type-update.component';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 describe('CustomerIDDocumentType Management Update Component', () => {
   let comp: CustomerIDDocumentTypeUpdateComponent;

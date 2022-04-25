@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ISubCountyCode, SubCountyCode } from '../sub-county-code.model';
 import { SubCountyCodeService } from '../service/sub-county-code.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-sub-county-code-update',

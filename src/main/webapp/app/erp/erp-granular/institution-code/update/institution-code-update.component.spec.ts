@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { InstitutionCodeService } from '../service/institution-code.service';
 import { IInstitutionCode, InstitutionCode } from '../institution-code.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { InstitutionCodeUpdateComponent } from './institution-code-update.component';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 describe('InstitutionCode Management Update Component', () => {
   let comp: InstitutionCodeUpdateComponent;

@@ -9,8 +9,8 @@ import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-prog
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
 import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress-registration/work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from 'app/erp/erp-assets/work-in-progress-registration/service/work-in-progress-registration.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-work-in-progress-transfer-update',

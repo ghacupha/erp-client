@@ -7,10 +7,6 @@ import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, 
 
 import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
 import { DeliveryNoteService } from '../service/delivery-note.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { BusinessStampService } from 'app/entities/business-stamp/service/business-stamp.service';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
@@ -20,6 +16,10 @@ import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
 import { DealerService } from '../../../erp-common/services/dealer.service';
 import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
 import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
+import { IPurchaseOrder } from '../../../erp-common/models/purchase-order.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-delivery-note-update',

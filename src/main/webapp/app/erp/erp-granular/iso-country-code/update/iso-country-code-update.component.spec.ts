@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { IsoCountryCodeService } from '../service/iso-country-code.service';
 import { IIsoCountryCode, IsoCountryCode } from '../iso-country-code.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { IsoCountryCodeUpdateComponent } from './iso-country-code-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('IsoCountryCode Management Update Component', () => {
   let comp: IsoCountryCodeUpdateComponent;

@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 
 export interface IMfbBranchCode {
   id?: number;

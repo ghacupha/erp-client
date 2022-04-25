@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { BranchStatusType } from 'app/entities/enumerations/branch-status-type.model';
 import { IOutletStatus, OutletStatus } from '../outlet-status.model';
 
 import { OutletStatusService } from './outlet-status.service';
+import { BranchStatusType } from '../../../erp-common/enumerations/branch-status-type.model';
 
 describe('OutletStatus Service', () => {
   let service: OutletStatusService;

@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { MfbBranchCodeService } from '../service/mfb-branch-code.service';
 import { IMfbBranchCode, MfbBranchCode } from '../mfb-branch-code.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { MfbBranchCodeUpdateComponent } from './mfb-branch-code-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('MfbBranchCode Management Update Component', () => {
   let comp: MfbBranchCodeUpdateComponent;

@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { OutletStatusService } from '../service/outlet-status.service';
 import { IOutletStatus, OutletStatus } from '../outlet-status.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { OutletStatusUpdateComponent } from './outlet-status-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('OutletStatus Management Update Component', () => {
   let comp: OutletStatusUpdateComponent;

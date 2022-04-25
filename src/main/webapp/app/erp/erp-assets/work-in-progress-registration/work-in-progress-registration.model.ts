@@ -1,11 +1,11 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
-import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
-import { ISettlement } from 'app/entities/settlement/settlement.model';
-import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
-import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
-import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { IJobSheet } from '../../erp-settlements/job-sheet/job-sheet.model';
+import { IDeliveryNote } from '../../erp-settlements/delivery-note/delivery-note.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
+import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
+import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-order.model';
+import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IDealer } from '../../erp-common/models/dealer.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;

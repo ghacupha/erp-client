@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IInstitutionCode, InstitutionCode } from '../institution-code.model';
 import { InstitutionCodeService } from '../service/institution-code.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 @Component({
   selector: 'jhi-institution-code-update',

@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { SubCountyCodeService } from '../service/sub-county-code.service';
 import { ISubCountyCode, SubCountyCode } from '../sub-county-code.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { SubCountyCodeUpdateComponent } from './sub-county-code-update.component';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 
 describe('SubCountyCode Management Update Component', () => {
   let comp: SubCountyCodeUpdateComponent;

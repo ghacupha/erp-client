@@ -7,9 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IOutletStatus, OutletStatus } from '../outlet-status.model';
 import { OutletStatusService } from '../service/outlet-status.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { BranchStatusType } from 'app/entities/enumerations/branch-status-type.model';
+import { BranchStatusType } from '../../../erp-common/enumerations/branch-status-type.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
 
 @Component({
   selector: 'jhi-outlet-status-update',
