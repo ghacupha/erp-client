@@ -199,7 +199,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_settlements">Settlement</label>
           <select
             class="form-control"
@@ -221,6 +221,31 @@
           *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!--// TODO Settlements-->
+        <div class="form-group">
+          <label class="form-control-label">Settlements</label>
+          <ng-select
+            [items]="settlementLookups$ | async"
+            bindLabel="paymentNumber"
+            [trackByFn]="trackSettlementByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="settlementsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementControlInput$"
+            formControlName="settlements"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of settlementLookups$ | async" [value]="option">
+              {{ option.paymentNumber }} DATED: {{ option.paymentDate }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{ item.paymentNumber }} DATED: {{ item.paymentDate }}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
         </div>
 
         <div class="form-group">
