@@ -321,7 +321,6 @@ export class SettlementUpdateComponent implements OnInit {
     return item.id!;
   }
 
-
   trackSettlementByFn(item: ISettlement): number {
     return item.id!;
   }

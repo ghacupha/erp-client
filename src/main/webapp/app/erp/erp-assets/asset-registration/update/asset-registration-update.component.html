@@ -86,7 +86,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -103,9 +103,33 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
         <div class="form-group">
+          <label class="form-control-label">Placeholders</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
+
+        <!--<div class="form-group">
           <label for="field_paymentInvoices">Payment Invoices</label>
           <select
             class="form-control"
@@ -122,6 +146,30 @@
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Invoice</label>
+          <ng-select
+            [items]="paymentInvoiceLookups$ | async"
+            bindLabel="invoiceNumber"
+            [trackByFn]="trackPaymentInvoiceByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="paymentInvoicesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="paymentInvoiceControlInput$"
+            formControlName="paymentInvoices"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of paymentInvoiceLookups$ | async" [value]="option">
+              {{ option.invoiceNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.invoiceNumber}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
 
         <div class="form-group">
@@ -255,7 +303,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_dealer">Dealer</label>
           <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
             <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
@@ -266,6 +314,26 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
+        </div>
+        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Dealer</label>
+          <ng-select
+            [items]="dealerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="dealersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="dealersInput$"
+            formControlName="dealer"
+          >
+            <option [ngValue]="editForm.get('dealer')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['dealer'])!.value|formatDealerId}}</div>
         </div>
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>

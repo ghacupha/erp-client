@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IAssetRegistration, AssetRegistration } from '../asset-registration.model';
 import { AssetRegistrationService } from '../service/asset-registration.service';
@@ -28,6 +28,11 @@ import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/paymen
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
 import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -66,6 +71,28 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     designatedUsers: [],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  paymentInvoicesLoading = false;
+  paymentInvoiceControlInput$ = new Subject<string>();
+  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
+
+  settlementsLoading = false;
+  settlementControlInput$ = new Subject<string>();
+  settlementLookups$: Observable<ISettlement[]> = of([]);
+
+  dealersLoading = false;
+  dealersInput$ = new Subject<string>();
+  dealerLookups$: Observable<IDealer[]> = of([]);
+
+  designatedUsersLoading = false;
+  designatedUsersControlInput$ = new Subject<string>();
+  designatedUsersLookups$: Observable<IDealer[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -80,7 +107,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +120,104 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadPlaceholders();
+    this.loadSettlements();
+    this.loadBillers();
+    this.loadPaymentInvoices();
+  }
+
+  loadPaymentInvoices(): void {
+    this.paymentInvoiceLookups$ = concat(
+      of([]), // default items
+      this.paymentInvoiceControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.paymentInvoicesLoading = true),
+        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.paymentInvoicesLoading = false)
+        ))
+      ),
+      of([...this.paymentInvoicesSharedCollection])
+    );
+  }
+
+  loadBillers(): void {
+    this.dealerLookups$ = concat(
+      of([]), // default items
+      this.dealersInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.dealersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.dealersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadSettlements(): void {
+    this.settlementLookups$ = concat(
+      of([]), // default items
+      this.settlementControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementsLoading = true),
+        switchMap(term => this.settlementSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementsLoading = false)
+        ))
+      ),
+      of([...this.settlementsSharedCollection])
+    );
+  }
+
+  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
+    return item.id!;
+  }
+
+  trackDealerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackSettlementByFn(item: ISettlement): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {
