@@ -124,8 +124,9 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     // fire-up typeahead items
     this.loadPlaceholders();
     this.loadSettlements();
-    this.loadBillers();
+    this.loadDealers();
     this.loadPaymentInvoices();
+    this.loadDesignatedUsers();
   }
 
   loadPaymentInvoices(): void {
@@ -147,7 +148,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
   }
 
-  loadBillers(): void {
+  loadDealers(): void {
     this.dealerLookups$ = concat(
       of([]), // default items
       this.dealersInput$.pipe(
@@ -160,6 +161,25 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         switchMap(term => this.dealerSuggestionService.search(term).pipe(
           catchError(() => of([])),
           tap(() => this.dealersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadDesignatedUsers(): void {
+    this.designatedUsersLookups$ = concat(
+      of([]), // default items
+      this.designatedUsersControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.designatedUsersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.designatedUsersLoading = false)
         ))
       ),
       of([...this.dealersSharedCollection])

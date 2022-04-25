@@ -364,7 +364,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_designatedUsers">Designated Users</label>
           <select
             class="form-control"
@@ -381,7 +381,32 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
+        </div>-->
+
+        <div class="form-group">
+          <label class="form-control-label">Designated Users</label>
+          <ng-select
+            [items]="designatedUsersLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackDealerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="designatedUsersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="designatedUsersControlInput$"
+            formControlName="designatedUsers"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of designatedUsersLookups$ | async" [value]="option">
+              {{ option.dealerName }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('designatedUsers')!.value|json}}</div>
         </div>
+
       </div>
 
       <div>
