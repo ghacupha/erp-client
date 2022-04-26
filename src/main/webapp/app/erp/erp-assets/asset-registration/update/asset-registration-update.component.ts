@@ -161,8 +161,28 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
     this.loadDeliveryNotes()
     this.loadJobSheets()
-    // TODO this.loadServiceOutlets()
+    this.loadServiceOutlets()
     // TODO this.loadAssetCategory()
+  }
+
+  // Load dynamic ServiceOutlet instances from the input-search stream
+  loadServiceOutlets(): void {
+    this.serviceOutletLookups$ = concat(
+      of([]), // default items
+      this.serviceOutletControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.serviceOutletsLoading = true),
+        switchMap(term => this.serviceOutletSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.serviceOutletsLoading = false)
+        ))
+      ),
+      of([...this.serviceOutletsSharedCollection])
+    );
   }
 
   // Load dynamic JobSheets instances from input-search stream
