@@ -86,25 +86,6 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
         <div class="form-group">
           <label class="form-control-label">Placeholder(s)</label>
           <ng-select
@@ -128,25 +109,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label for="field_paymentInvoices">Payment Invoices</label>
-          <select
-            class="form-control"
-            id="field_paymentInvoices"
-            data-cy="paymentInvoices"
-            multiple
-            name="paymentInvoices"
-            formControlName="paymentInvoices"
-          >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
-              {{ paymentInvoiceOption.invoiceNumber }}
-            </option>
-          </select>
-        </div>-->
 
         <div class="form-group">
           <label class="form-control-label">Payment Invoice(s)</label>
@@ -237,36 +199,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
-          <select
-            class="form-control"
-            id="field_assetCategory"
-            data-cy="assetCategory"
-            name="assetCategory"
-            formControlName="assetCategory"
-          >
-            <option *ngIf="!editForm.get('assetCategory')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
-                  ? editForm.get('assetCategory')!.value
-                  : assetCategoryOption
-              "
-              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
-            >
-              {{ assetCategoryOption.assetCategoryName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['assetCategory'])!.invalid && (editForm.get(['assetCategory'])!.dirty || editForm.get(['assetCategory'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <!--// TODO Asset Category-->
         <div class="form-group">
           <label class="form-control-label">Asset Category</label>
@@ -292,25 +224,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_purchaseOrders">Purchase Order</label>
-          <select
-            class="form-control"
-            id="field_purchaseOrders"
-            data-cy="purchaseOrder"
-            multiple
-            name="purchaseOrders"
-            formControlName="purchaseOrders"
-          >
-            <option
-              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
-              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
-            >
-              {{ purchaseOrderOption.purchaseOrderNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <div class="form-group">
           <label class="form-control-label">Purchase Order(s)</label>
           <ng-select
@@ -335,25 +248,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label for="field_deliveryNotes">Delivery Note</label>
-          <select
-            class="form-control"
-            id="field_deliveryNotes"
-            data-cy="deliveryNote"
-            multiple
-            name="deliveryNotes"
-            formControlName="deliveryNotes"
-          >
-            <option
-              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
-              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
-            >
-              {{ deliveryNoteOption.deliveryNoteNumber }}
-            </option>
-          </select>
-        </div>-->
 
         <!--// TODO Delivery Notes-->
         <div class="form-group">
@@ -381,18 +275,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_jobSheets">Job Sheet</label>
-          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
-            <option
-              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
-              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
-            >
-              {{ jobSheetOption.serialNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <!--// TODO Job-Sheet (s)-->
         <div class="form-group">
           <label class="form-control-label">Job Sheet(s)</label>
@@ -419,22 +301,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <div class="form-group">
           <label class="form-control-label">Dealer</label>
           <ng-select
@@ -454,25 +320,6 @@
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
-
-        <!--<div class="form-group">
-          <label for="field_designatedUsers">Designated Users</label>
-          <select
-            class="form-control"
-            id="field_designatedUsers"
-            data-cy="designatedUsers"
-            multiple
-            name="designatedUsers"
-            formControlName="designatedUsers"
-          >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('designatedUsers')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
 
         <div class="form-group">
           <label class="form-control-label">Designated User(s)</label>
