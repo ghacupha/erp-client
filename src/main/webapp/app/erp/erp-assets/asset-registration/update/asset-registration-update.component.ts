@@ -34,6 +34,10 @@ import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-s
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
+import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/delivery-notes-suggestion.service';
+import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
+import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
+import { AssetCategorySuggestionService } from '../../../erp-common/suggestion/asset-category-suggestion.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -98,6 +102,22 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   purchaseOrderControlInput$ = new Subject<string>();
   purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
 
+  serviceOutletsLoading = false;
+  serviceOutletControlInput$ = new Subject<string>();
+  serviceOutletLookups$: Observable<IServiceOutlet[]> = of([]);
+
+  assetCategoriesLoading = false;
+  assetCategoryControlInput$ = new Subject<string>();
+  assetCategoryLookups$: Observable<IAssetCategory[]> = of([]);
+
+  deliveryNotesLoading = false;
+  deliveryNotesControlInput$ = new Subject<string>();
+  deliveryNoteLookups$: Observable<IDeliveryNote[]> = of([]);
+
+  jobSheetsLoading = false;
+  jobSheetsControlInput$ = new Subject<string>();
+  jobSheetLookups$: Observable<IJobSheet[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -118,6 +138,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected dealerSuggestionService: DealerSuggestionService,
     protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
     protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
+    protected deliveryNotesSuggestionService: DeliveryNotesSuggestionService,
+    protected jobSheetsSuggestionService: JobSheetSuggestionService,
+    protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
+    protected assetCategorySuggestionService: AssetCategorySuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +158,51 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.loadPaymentInvoices();
     this.loadDesignatedUsers();
     this.loadPurchaseOrders();
+
+    this.loadDeliveryNotes()
+    this.loadJobSheets()
+    // TODO this.loadServiceOutlets()
+    // TODO this.loadAssetCategory()
+  }
+
+  // Load dynamic JobSheets instances from input-search stream
+  loadJobSheets(): void {
+    this.jobSheetLookups$ = concat(
+      of([]), // default items
+      this.jobSheetsControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.jobSheetsLoading = true),
+        switchMap(term => this.jobSheetsSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.jobSheetsLoading = false)
+        ))
+      ),
+      of([...this.jobSheetsSharedCollection])
+    );
+  }
+
+  // Load dynamic DeliveryNotes from input stream
+  loadDeliveryNotes(): void {
+    this.deliveryNoteLookups$ = concat(
+      of([]), // default items
+      this.deliveryNotesControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.deliveryNotesLoading = true),
+        switchMap(term => this.deliveryNotesSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.deliveryNotesLoading = false)
+        ))
+      ),
+      of([...this.deliveryNotesSharedCollection])
+    );
   }
 
   loadPaymentInvoices(): void {
@@ -251,6 +320,22 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
+  }
+
+  trackServiceOutletByFn(item: IServiceOutlet): number {
+    return item.id!;
+  }
+
+  trackJobSheetByFn(item: IJobSheet): number {
+    return item.id!;
+  }
+
+  trackAssetCategoryByFn(item: IAssetCategory): number {
+    return item.id!;
+  }
+
+  trackDeliveryNoteByFn(item: IDeliveryNote): number {
     return item.id!;
   }
 

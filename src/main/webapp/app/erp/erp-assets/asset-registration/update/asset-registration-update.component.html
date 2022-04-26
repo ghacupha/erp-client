@@ -172,7 +172,7 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_serviceOutlets">Service Outlet</label>
           <select
             class="form-control"
@@ -189,6 +189,40 @@
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['serviceOutlets'])!.invalid &&
+            (editForm.get(['serviceOutlets'])!.dirty || editForm.get(['serviceOutlets'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!--// TODO Service Outlet(s)-->
+        <div class="form-group">
+          <label class="form-control-label">Service Outlet(s)</label>
+          <ng-select
+            [items]="serviceOutletLookups$ | async"
+            bindLabel="outletCode"
+            [trackByFn]="trackServiceOutletByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="serviceOutletsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="serviceOutletControlInput$"
+            formControlName="serviceOutlets"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of serviceOutletLookups$ | async" [value]="option">
+              {{ option.outletCode }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{ item.outletCode }} {{ item.outletName }}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get(['serviceOutlets'])!.value|json }}</div>
         </div>
         <div
           *ngIf="
@@ -248,7 +282,7 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_assetCategory">Asset Category</label>
           <select
             class="form-control"
@@ -269,6 +303,31 @@
               {{ assetCategoryOption.assetCategoryName }}
             </option>
           </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['assetCategory'])!.invalid && (editForm.get(['assetCategory'])!.dirty || editForm.get(['assetCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!--// TODO Asset Category-->
+        <div class="form-group">
+          <label class="form-control-label">Asset Category</label>
+          <ng-select
+            [items]="assetCategoryLookups$ | async"
+            bindLabel="assetCategoryName"
+            [trackByFn]="trackAssetCategoryByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="assetCategoriesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="assetCategoryControlInput$"
+            formControlName="assetCategory"
+          >
+            <option [ngValue]="editForm.get('assetCategory')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['assetCategory'])!.value}}</div>
         </div>
         <div
           *ngIf="
@@ -322,7 +381,7 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_deliveryNotes">Delivery Note</label>
           <select
             class="form-control"
@@ -339,9 +398,34 @@
               {{ deliveryNoteOption.deliveryNoteNumber }}
             </option>
           </select>
+        </div>-->
+
+        <!--// TODO Delivery Notes-->
+        <div class="form-group">
+          <label class="form-control-label">Delivery Note(s)</label>
+          <ng-select
+            [items]="deliveryNoteLookups$ | async"
+            bindLabel="deliveryNoteNumber"
+            [trackByFn]="trackDeliveryNoteByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="deliveryNotesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="deliveryNotesControlInput$"
+            formControlName="deliveryNotes"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of deliveryNoteLookups$ | async" [value]="option">
+              {{ option.deliveryNoteNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.deliveryNoteNumber}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_jobSheets">Job Sheet</label>
           <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
             <option
@@ -351,6 +435,31 @@
               {{ jobSheetOption.serialNumber }}
             </option>
           </select>
+        </div>-->
+
+        <!--// TODO Job-Sheet (s)-->
+        <div class="form-group">
+          <label class="form-control-label">Job Sheet(s)</label>
+          <ng-select
+            [items]="jobSheetLookups$ | async"
+            bindLabel="serialNumber"
+            [trackByFn]="trackJobSheetByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="jobSheetsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="jobSheetsControlInput$"
+            formControlName="jobSheets"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of jobSheetLookups$ | async" [value]="option">
+              {{ option.serialNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{ item.serialNumber }}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
         </div>
 
         <!--<div class="form-group">
