@@ -45,6 +45,37 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label">Settlement Currency</label>
+          <ng-select
+            [items]="settlementCurrencyLookups$ | async"
+            bindLabel="iso4217CurrencyCode"
+            [trackByFn]="trackCurrencyByFn"
+            [minTermLength]="3"
+            [loading]="settlementCurrenciesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="settlementCurrencyControlInput$"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
+            </ng-template>
+          </ng-select>
+          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
@@ -66,6 +97,76 @@
             data-cy="description"
             formControlName="description"
           />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Biller</label>
+          <ng-select
+            [items]="billerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackBillerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="billersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="billersInput$"
+            formControlName="biller"
+          >
+            <option [ngValue]="editForm.get('biller')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Category</label>
+          <ng-select
+            [items]="categoryLookups$ | async"
+            bindLabel="categoryName"
+            [trackByFn]="trackCategoryByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="categoriesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="categoryControlInput$"
+            formControlName="paymentCategory"
+          >
+            <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
+          </ng-select>
+          <div>{{editForm.get(['paymentCategory'])!.value|formatPaymentCategory: [35, '...']}}</div>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['paymentCategory'])!.invalid &&
+            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label">Payment Invoice</label>
+          <ng-select
+            [items]="paymentInvoiceLookups$ | async"
+            bindLabel="invoiceNumber"
+            [trackByFn]="trackPaymentInvoiceByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="paymentInvoicesLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="paymentInvoiceControlInput$"
+            formControlName="paymentInvoices"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of paymentInvoiceLookups$ | async" [value]="option">
+              {{ option.invoiceNumber }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-payment-invoice-option-view [item]='item'></jhi-payment-invoice-option-view>
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
 
         <div class="form-group">
@@ -122,109 +223,6 @@
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
-          <select
-            class="form-control"
-            id="field_settlementCurrency"
-            data-cy="settlementCurrency"
-            name="settlementCurrency"
-            formControlName="settlementCurrency"
-          >
-            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['settlementCurrency'])!.invalid &&
-            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Settlement Currency</label>
-          <ng-select
-            [items]="settlementCurrencyLookups$ | async"
-            bindLabel="iso4217CurrencyCode"
-            [trackByFn]="trackCurrencyByFn"
-            [minTermLength]="3"
-            [loading]="settlementCurrenciesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="settlementCurrencyControlInput$"
-            formControlName="settlementCurrency"
-          >
-            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <!--# {{item.iso4217CurrencyCode}} name: {{ item.currencyName }} country {{ item.country }} code # {{ item.numericCode }}-->
-              <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['settlementCurrency'])!.invalid &&
-            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
-
-        <!--<div class="form-group">
-          <label for="field_paymentLabels">Payment Label</label>
-          <select
-            class="form-control"
-            id="field_paymentLabels"
-            data-cy="paymentLabel"
-            multiple
-            name="paymentLabels"
-            formControlName="paymentLabels"
-          >
-            <option
-              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
-              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
-            >
-              {{ paymentLabelOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
         <div class="form-group">
           <label class="form-control-label">Payment Labels</label>
           <ng-select
@@ -272,186 +270,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
-          <select
-            class="form-control"
-            id="field_paymentCategory"
-            data-cy="paymentCategory"
-            name="paymentCategory"
-            formControlName="paymentCategory"
-          >
-            <option *ngIf="!editForm.get('paymentCategory')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
-                  ? editForm.get('paymentCategory')!.value
-                  : paymentCategoryOption
-              "
-              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
-            >
-              {{ paymentCategoryOption.categoryName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['paymentCategory'])!.invalid &&
-            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Payment Category</label>
-          <ng-select
-            [items]="categoryLookups$ | async"
-            bindLabel="categoryName"
-            [trackByFn]="trackCategoryByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="categoriesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="categoryControlInput$"
-            formControlName="paymentCategory"
-          >
-            <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
-          </ng-select>
-          <div>{{editForm.get(['paymentCategory'])!.value|formatPaymentCategory: [35, '...']}}</div>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['paymentCategory'])!.invalid &&
-            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_groupSettlement">Group Settlement</label>
-          <select
-            class="form-control"
-            id="field_groupSettlement"
-            data-cy="groupSettlement"
-            name="groupSettlement"
-            formControlName="groupSettlement"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementOption.id === editForm.get('groupSettlement')!.value?.id
-                  ? editForm.get('groupSettlement')!.value
-                  : settlementOption
-              "
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
-              {{ settlementOption.id }}
-            </option>
-          </select>
-        </div>-->
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_biller">Biller</label>
-          <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
-            <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('biller')!.value?.id ? editForm.get('biller')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Biller</label>
-          <ng-select
-            [items]="billerLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackBillerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="billersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="billersInput$"
-            formControlName="biller"
-          >
-            <option [ngValue]="editForm.get('biller')!.value"></option>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <!--<div class="form-group">
-          <label for="field_paymentInvoices">Payment Invoice</label>
-          <select
-            class="form-control"
-            id="field_paymentInvoices"
-            data-cy="paymentInvoice"
-            multiple
-            name="paymentInvoices"
-            formControlName="paymentInvoices"
-          >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
-              {{ paymentInvoiceOption.invoiceNumber }}
-            </option>
-          </select>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Payment Invoice</label>
-          <ng-select
-            [items]="paymentInvoiceLookups$ | async"
-            bindLabel="invoiceNumber"
-            [trackByFn]="trackPaymentInvoiceByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="paymentInvoicesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="paymentInvoiceControlInput$"
-            formControlName="paymentInvoices"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of paymentInvoiceLookups$ | async" [value]="option">
-              {{ option.invoiceNumber }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              {{item.invoiceNumber}} dd: {{ item.invoiceDate }}
-              of: {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.invoiceAmount | number }}
-              by: {{ item.biller.dealerName }}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
-        </div>
-
-        <!--<div class="form-group">
-          <label for="field_signatories">Signatories</label>
-          <select
-            class="form-control"
-            id="field_signatories"
-            data-cy="signatories"
-            multiple
-            name="signatories"
-            formControlName="signatories"
-          >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('signatories')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
 
         <div class="form-group">
           <label class="form-control-label">Signatories</label>
