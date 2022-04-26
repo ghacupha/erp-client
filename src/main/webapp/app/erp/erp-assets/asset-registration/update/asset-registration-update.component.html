@@ -58,7 +58,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_comments">Comments</label>
+          <label class="form-control-label" for="field_comments">Comment(s)</label>
           <div>
             <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
               <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
@@ -106,7 +106,7 @@
         </div>-->
 
         <div class="form-group">
-          <label class="form-control-label">Placeholders</label>
+          <label class="form-control-label">Placeholder(s)</label>
           <ng-select
             [items]="placeholderLookups$ | async"
             bindLabel="description"
@@ -149,7 +149,7 @@
         </div>-->
 
         <div class="form-group">
-          <label class="form-control-label">Payment Invoice</label>
+          <label class="form-control-label">Payment Invoice(s)</label>
           <ng-select
             [items]="paymentInvoiceLookups$ | async"
             bindLabel="invoiceNumber"
@@ -166,7 +166,8 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.invoiceNumber}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              # {{ item.invoiceNumber }} Dated: {{ item.invoiceDate }} {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.invoiceAmount | number }} By: {{ item.biller.dealerName }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
@@ -259,7 +260,7 @@
 
         <!--// TODO Settlements-->
         <div class="form-group">
-          <label class="form-control-label">Settlements</label>
+          <label class="form-control-label">Settlement(s)</label>
           <ng-select
             [items]="settlementLookups$ | async"
             bindLabel="paymentNumber"
@@ -276,7 +277,9 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{ item.paymentNumber }} DATED: {{ item.paymentDate }}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{ item.paymentNumber }} dated: {{ item.paymentDate }} With: {{ item.biller.dealerName }}
+              {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.paymentAmount | number }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
@@ -357,7 +360,7 @@
         </div>-->
 
         <div class="form-group">
-          <label class="form-control-label">Purchase Order</label>
+          <label class="form-control-label">Purchase Order(s)</label>
           <ng-select
             [items]="purchaseOrderLookups$ | async"
             bindLabel="purchaseOrderNumber"
@@ -375,7 +378,7 @@
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              {{item.purchaseOrderNumber}} DESC: {{ item.description }}
+              {{item.purchaseOrderNumber}} To: {{ item.vendor.dealerName }} Desc: {{ item.description }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
@@ -419,7 +422,8 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.deliveryNoteNumber}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{item.deliveryNoteNumber}} By: {{ item.supplier.dealerName }} Desc: {{ item.description }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
@@ -456,7 +460,8 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{ item.serialNumber }}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{ item.serialNumber }} By: {{ item.biller.dealerName }} Desc: {{ item.details }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
@@ -518,7 +523,7 @@
         </div>-->
 
         <div class="form-group">
-          <label class="form-control-label">Designated Users</label>
+          <label class="form-control-label">Designated User(s)</label>
           <ng-select
             [items]="designatedUsersLookups$ | async"
             bindLabel="dealerName"
