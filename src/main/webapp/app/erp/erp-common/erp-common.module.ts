@@ -7,6 +7,7 @@ import { FormatSettlementCurrencyPipe } from './pipe/format-settlement-currency.
 import { FormatSettlementPipe } from './pipe/format-settlement.pipe';
 import { FormatDepreciationMethodPipe } from './pipe/format-depreciation-method.pipe';
 import { FormatPurchaseOrderPipe } from './pipe/format-purchase-order.pipe';
+import { OptionViewsModule } from './option-view-components/option-views.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FormatPurchaseOrderPipe } from './pipe/format-purchase-order.pipe';
     FormatSettlementCurrencyPipe,
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
-    FormatPurchaseOrderPipe
+    FormatPurchaseOrderPipe,
+    OptionViewsModule
   ]
 })
 export class ErpCommonModule {}
