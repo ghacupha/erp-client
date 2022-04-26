@@ -100,7 +100,10 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.purchaseOrderNumber}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              # {{  item.purchaseOrderNumber }} dated: {{ item.purchaseOrderDate }}
+              of: {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.purchaseOrderAmount | number }}
+              by: {{ item.vendor.dealerName }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>

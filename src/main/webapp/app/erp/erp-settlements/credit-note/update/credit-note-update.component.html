@@ -117,7 +117,9 @@
               {{ option.purchaseOrderNumber }}
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.purchaseOrderNumber}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              # {{item.purchaseOrderNumber}} dated: {{ item.purchaseOrderDate }} To: {{ item.vendor.dealerName }}
+              of: {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.purchaseOrderAmount | number }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
@@ -151,7 +153,10 @@
               {{ option.invoiceNumber }}
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{ item.invoiceNumber }}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              # {{item.invoiceNumber}} dd: {{ item.invoiceDate }}
+              of: {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.invoiceAmount | number }}
+              by: {{ item.biller.dealerName }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['invoices'])!.value|json}}</div>

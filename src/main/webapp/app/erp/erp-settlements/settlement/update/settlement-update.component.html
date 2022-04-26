@@ -168,6 +168,10 @@
             formControlName="settlementCurrency"
           >
             <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              # {{item.iso4217CurrencyCode}} name: {{ item.currencyName }} country {{ item.country }} code # {{ item.numericCode }}
+            </ng-template>
           </ng-select>
           <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
         </div>
@@ -420,7 +424,10 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.invoiceNumber}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              {{item.invoiceNumber}} dd: {{ item.invoiceDate }}
+              of: {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.invoiceAmount | number }}
+              by: {{ item.biller.dealerName }}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
