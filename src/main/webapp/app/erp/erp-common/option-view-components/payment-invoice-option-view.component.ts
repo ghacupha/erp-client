@@ -4,9 +4,8 @@ import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-i
 @Component({
   selector: 'jhi-payment-invoice-option-view',
   template: `
-    {{item.invoiceNumber}} dd: {{ item.invoiceDate }}
+    by: {{ item.biller!.dealerName }} #: {{item.invoiceNumber}} dd: {{ item.invoiceDate }}
     of: {{ item.settlementCurrency!.iso4217CurrencyCode }} {{ item.invoiceAmount | number }}
-    by: {{ item.biller!.dealerName }}
   `,
 })
 export class PaymentInvoiceOptionViewComponent {
