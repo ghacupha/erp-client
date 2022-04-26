@@ -8,6 +8,7 @@ export interface ISettlementCurrency {
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   placeholders?: IPlaceholder[] | null;
+  numericCode?: string
 }
 
 export class SettlementCurrency implements ISettlementCurrency {
@@ -18,7 +19,8 @@ export class SettlementCurrency implements ISettlementCurrency {
     public country?: string,
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public numericCode?: string
   ) {}
 }
 
