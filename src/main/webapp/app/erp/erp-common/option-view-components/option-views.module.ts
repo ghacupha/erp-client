@@ -6,6 +6,8 @@ import { PaymentInvoiceOptionViewComponent } from './payment-invoice-option-view
 import { BusinessStampOptionViewComponent } from './business-stamp-option-view.component';
 import { PaymentCategoryOptionViewComponent } from './payment-category-option-view.component';
 import { DealerOptionViewComponent } from './dealer-option-view.component';
+import { SettlementOptionViewComponent } from './settlement-option-view.component';
+import { SettlementSelectedOptionViewComponent } from './settlement-selected-option-view.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { DealerOptionViewComponent } from './dealer-option-view.component';
     PaymentInvoiceOptionViewComponent,
     BusinessStampOptionViewComponent,
     PaymentCategoryOptionViewComponent,
-    DealerOptionViewComponent
+    DealerOptionViewComponent,
+    SettlementOptionViewComponent,
+    SettlementSelectedOptionViewComponent
   ],
   imports: [
     CommonModule
@@ -25,7 +29,9 @@ import { DealerOptionViewComponent } from './dealer-option-view.component';
     PaymentInvoiceOptionViewComponent,
     BusinessStampOptionViewComponent,
     PaymentCategoryOptionViewComponent,
-    DealerOptionViewComponent
+    DealerOptionViewComponent,
+    SettlementOptionViewComponent,
+    SettlementSelectedOptionViewComponent
   ]
 })
 export class OptionViewsModule {

@@ -173,33 +173,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_serviceOutlets">Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_serviceOutlets"
-            data-cy="serviceOutlet"
-            multiple
-            name="serviceOutlets"
-            formControlName="serviceOutlets"
-          >
-            <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['serviceOutlets'])!.invalid &&
-            (editForm.get(['serviceOutlets'])!.dirty || editForm.get(['serviceOutlets'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <!--// TODO Service Outlet(s)-->
         <div class="form-group">
           <label class="form-control-label">Service Outlet(s)</label>
@@ -234,30 +207,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_settlements">Settlement</label>
-          <select
-            class="form-control"
-            id="field_settlements"
-            data-cy="settlement"
-            multiple
-            name="settlements"
-            formControlName="settlements"
-          >
-            <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
-              {{ settlementOption.paymentNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <!--// TODO Settlements-->
         <div class="form-group">
           <label class="form-control-label">Settlement(s)</label>
@@ -273,13 +222,16 @@
             [multiple]='true'
           >
             <ng-option *ngFor="let option of settlementLookups$ | async" [value]="option">
-              {{ option.paymentNumber }} DATED: {{ option.paymentDate }}
+              <!--{{ option.paymentNumber }} DATED: {{ option.paymentDate }}-->
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
+                <span class="ng-value-icon right" (click)="clear(item)">×</span>
+              </ng-template>
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              {{ item.paymentNumber }} dated: {{ item.paymentDate }} With: {{ item.biller.dealerName }}
-              {{ item.settlementCurrency.iso4217CurrencyCode }} {{ item.paymentAmount | number }}
+              <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>

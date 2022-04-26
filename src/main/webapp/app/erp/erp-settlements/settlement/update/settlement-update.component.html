@@ -299,7 +299,8 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['signatories'])!.value|json}}</div>
@@ -318,10 +319,15 @@
             formControlName="groupSettlement"
           >
             <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <span class="ng-value-label">{{item.paymentNumber + ' ' + item.paymentDate + ' ' + item.settlementCurrency.iso4217CurrencyCode + ' ' + item.paymentAmount}}</span>
+              <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
               <span class="ng-value-icon right" (click)="clear(item)">×</span>
             </ng-template>
             <option [ngValue]="editForm.get('groupSettlement')!.value"></option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
+            </ng-template>
           </ng-select>
           <div>{{editForm.get(['groupSettlement'])!.value|formatSettlement: [35, '...']}}</div>
         </div>
