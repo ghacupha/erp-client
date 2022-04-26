@@ -3,12 +3,14 @@ import { PurchaseOrderOptionViewComponent } from './purchase-order-option-view.c
 import { CommonModule } from '@angular/common';
 import { SettlementCurrencyOptionViewComponent } from './settlement-currency-option-view.component';
 import { PaymentInvoiceOptionViewComponent } from './payment-invoice-option-view.component';
+import { BusinessStampOptionViewComponent } from './business-stamp-option-view.component';
 
 @NgModule({
   declarations: [
     PurchaseOrderOptionViewComponent,
     SettlementCurrencyOptionViewComponent,
-    PaymentInvoiceOptionViewComponent
+    PaymentInvoiceOptionViewComponent,
+    BusinessStampOptionViewComponent
   ],
   imports: [
     CommonModule
@@ -16,7 +18,8 @@ import { PaymentInvoiceOptionViewComponent } from './payment-invoice-option-view
   exports: [
     PurchaseOrderOptionViewComponent,
     SettlementCurrencyOptionViewComponent,
-    PaymentInvoiceOptionViewComponent
+    PaymentInvoiceOptionViewComponent,
+    BusinessStampOptionViewComponent
   ]
 })
 export class OptionViewsModule {

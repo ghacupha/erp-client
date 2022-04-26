@@ -138,6 +138,32 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['purchaseOrder'])?.errors?.required"> This field is required.</small>
         </div>
 
+        <!-- Delivery Stamps-->
+        <div class="form-group">
+          <label class="form-control-label">Delivery Stamps</label>
+          <ng-select
+            [items]="deliveryStampLookups$ | async"
+            bindLabel="details"
+            [trackByFn]="trackDeliveryStampsByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="deliveryStampsLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="deliveryStampsControlInput$"
+            formControlName="deliveryStamps"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of deliveryStampLookups$ | async" [value]="option">
+              {{ option.details }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-business-stamp-option-view [item]='item'></jhi-business-stamp-option-view>
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['deliveryStamps'])!.value|json}}</div>
+        </div>
+
         <div class="form-group">
           <label class="form-control-label" for="field_serialNumber">Serial Number</label>
           <input
@@ -182,31 +208,6 @@
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
-
-        <!-- Delivery Stamps-->
-        <div class="form-group">
-          <label class="form-control-label">Delivery Stamps</label>
-          <ng-select
-            [items]="deliveryStampLookups$ | async"
-            bindLabel="details"
-            [trackByFn]="trackDeliveryStampsByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="deliveryStampsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="deliveryStampsControlInput$"
-            formControlName="deliveryStamps"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of deliveryStampLookups$ | async" [value]="option">
-              {{ option.details }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.details}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['deliveryStamps'])!.value|json}}</div>
         </div>
 
         <div class="form-group">
