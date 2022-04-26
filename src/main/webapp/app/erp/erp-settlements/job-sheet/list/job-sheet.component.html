@@ -54,7 +54,6 @@
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="jobSheetDate"><span>Job Sheet Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="details"><span>Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="biller.dealerName"><span>Biller</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="contactPerson.dealerName"><span>Contact Person</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -68,7 +67,6 @@
           <td>{{ jobSheet.serialNumber }}</td>
           <td>{{ jobSheet.jobSheetDate | formatMediumDate }}</td>
           <td>{{ jobSheet.details }}</td>
-          <td>{{ jobSheet.remarks }}</td>
           <td>
             <div *ngIf="jobSheet.biller">
               <a [routerLink]="['/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
