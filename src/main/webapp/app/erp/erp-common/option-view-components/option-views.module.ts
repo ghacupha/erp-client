@@ -8,12 +8,14 @@ import { PaymentCategoryOptionViewComponent } from './payment-category-option-vi
 import { DealerOptionViewComponent } from './dealer-option-view.component';
 import { SettlementOptionViewComponent } from './settlement-option-view.component';
 import { SettlementSelectedOptionViewComponent } from './settlement-selected-option-view.component';
+import { PaymentInvoiceSelectedOptionViewComponent } from './payment-invoice-selected-option-view.component';
 
 @NgModule({
   declarations: [
     PurchaseOrderOptionViewComponent,
     SettlementCurrencyOptionViewComponent,
     PaymentInvoiceOptionViewComponent,
+    PaymentInvoiceSelectedOptionViewComponent,
     BusinessStampOptionViewComponent,
     PaymentCategoryOptionViewComponent,
     DealerOptionViewComponent,
@@ -27,6 +29,7 @@ import { SettlementSelectedOptionViewComponent } from './settlement-selected-opt
     PurchaseOrderOptionViewComponent,
     SettlementCurrencyOptionViewComponent,
     PaymentInvoiceOptionViewComponent,
+    PaymentInvoiceSelectedOptionViewComponent,
     BusinessStampOptionViewComponent,
     PaymentCategoryOptionViewComponent,
     DealerOptionViewComponent,

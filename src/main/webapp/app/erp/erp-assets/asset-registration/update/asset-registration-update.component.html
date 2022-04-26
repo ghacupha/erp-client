@@ -124,7 +124,10 @@
             [multiple]='true'
           >
             <ng-option *ngFor="let option of paymentInvoiceLookups$ | async" [value]="option">
-              {{ option.invoiceNumber }}
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <jhi-payment-invoice-selected-option-view [item]='item'></jhi-payment-invoice-selected-option-view>
+                <span class="ng-value-icon right" (click)="clear(item)">×</span>
+              </ng-template>
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
