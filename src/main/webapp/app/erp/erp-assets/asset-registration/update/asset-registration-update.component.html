@@ -298,7 +298,7 @@
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              {{ item.serialNumber }} By: {{ item.biller.dealerName }} Desc: {{ item.details }}
+              <jhi-job-sheet-option-view [item]='item'></jhi-job-sheet-option-view>
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
@@ -317,6 +317,11 @@
             formControlName="dealer"
           >
             <option [ngValue]="editForm.get('dealer')!.value"></option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
+            </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['dealer'])!.value|formatDealerId}}</div>
         </div>
@@ -342,7 +347,8 @@
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+                <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('designatedUsers')!.value|json}}</div>
