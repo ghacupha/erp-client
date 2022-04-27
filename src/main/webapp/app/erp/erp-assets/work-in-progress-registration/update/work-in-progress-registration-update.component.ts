@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { concat, Observable, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
 import { IWorkInProgressRegistration, WorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
@@ -26,6 +26,17 @@ import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
+import { IAssetCategory } from '../../asset-category/asset-category.model';
+import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
+import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
+import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
+import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/delivery-notes-suggestion.service';
+import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
+import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
+import { AssetCategorySuggestionService } from '../../../erp-common/suggestion/asset-category-suggestion.service';
+import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -60,6 +71,48 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     dealer: [null, Validators.required],
   });
 
+  minAccountLengthTerm = 3;
+
+  placeholdersLoading = false;
+  placeholderControlInput$ = new Subject<string>();
+  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
+
+  paymentInvoicesLoading = false;
+  paymentInvoiceControlInput$ = new Subject<string>();
+  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
+
+  settlementsLoading = false;
+  settlementControlInput$ = new Subject<string>();
+  settlementLookups$: Observable<ISettlement[]> = of([]);
+
+  dealersLoading = false;
+  dealersInput$ = new Subject<string>();
+  dealerLookups$: Observable<IDealer[]> = of([]);
+
+  designatedUsersLoading = false;
+  designatedUsersControlInput$ = new Subject<string>();
+  designatedUsersLookups$: Observable<IDealer[]> = of([]);
+
+  purchaseOrdersLoading = false;
+  purchaseOrderControlInput$ = new Subject<string>();
+  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
+
+  serviceOutletsLoading = false;
+  serviceOutletControlInput$ = new Subject<string>();
+  serviceOutletLookups$: Observable<IServiceOutlet[]> = of([]);
+
+  assetCategoriesLoading = false;
+  assetCategoryControlInput$ = new Subject<string>();
+  assetCategoryLookups$: Observable<IAssetCategory[]> = of([]);
+
+  deliveryNotesLoading = false;
+  deliveryNotesControlInput$ = new Subject<string>();
+  deliveryNoteLookups$: Observable<IDeliveryNote[]> = of([]);
+
+  jobSheetsLoading = false;
+  jobSheetsControlInput$ = new Subject<string>();
+  jobSheetLookups$: Observable<IJobSheet[]> = of([]);
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -73,7 +126,16 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected settlementSuggestionService: SettlementSuggestionService,
+    protected dealerSuggestionService: DealerSuggestionService,
+    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
+    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
+    protected deliveryNotesSuggestionService: DeliveryNotesSuggestionService,
+    protected jobSheetsSuggestionService: JobSheetSuggestionService,
+    protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
+    protected assetCategorySuggestionService: AssetCategorySuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +144,249 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    // fire-up typeahead items
+    this.loadPlaceholders();
+    this.loadSettlements();
+    this.loadDealers();
+    this.loadPaymentInvoices();
+    this.loadDesignatedUsers();
+    this.loadPurchaseOrders();
+
+    this.loadDeliveryNotes();
+    this.loadJobSheets();
+    this.loadServiceOutlets();
+    this.loadAssetCategory();
+  }
+
+  // Load dynamic AssetCategory instances from the input-search stream
+  loadAssetCategory(): void {
+    this.assetCategoryLookups$ = concat(
+      of([]), // default items
+      this.assetCategoryControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.assetCategoriesLoading = true),
+        switchMap(term => this.assetCategorySuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.assetCategoriesLoading = false)
+        ))
+      ),
+      of([...this.serviceOutletsSharedCollection])
+    );
+  }
+
+  // Load dynamic ServiceOutlet instances from the input-search stream
+  loadServiceOutlets(): void {
+    this.serviceOutletLookups$ = concat(
+      of([]), // default items
+      this.serviceOutletControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.serviceOutletsLoading = true),
+        switchMap(term => this.serviceOutletSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.serviceOutletsLoading = false)
+        ))
+      ),
+      of([...this.serviceOutletsSharedCollection])
+    );
+  }
+
+  // Load dynamic JobSheets instances from input-search stream
+  loadJobSheets(): void {
+    this.jobSheetLookups$ = concat(
+      of([]), // default items
+      this.jobSheetsControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.jobSheetsLoading = true),
+        switchMap(term => this.jobSheetsSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.jobSheetsLoading = false)
+        ))
+      ),
+      of([...this.jobSheetsSharedCollection])
+    );
+  }
+
+  // Load dynamic DeliveryNotes from input stream
+  loadDeliveryNotes(): void {
+    this.deliveryNoteLookups$ = concat(
+      of([]), // default items
+      this.deliveryNotesControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.deliveryNotesLoading = true),
+        switchMap(term => this.deliveryNotesSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.deliveryNotesLoading = false)
+        ))
+      ),
+      of([...this.deliveryNotesSharedCollection])
+    );
+  }
+
+  loadPaymentInvoices(): void {
+    this.paymentInvoiceLookups$ = concat(
+      of([]), // default items
+      this.paymentInvoiceControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.paymentInvoicesLoading = true),
+        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.paymentInvoicesLoading = false)
+        ))
+      ),
+      of([...this.paymentInvoicesSharedCollection])
+    );
+  }
+
+  loadDealers(): void {
+    this.dealerLookups$ = concat(
+      of([]), // default items
+      this.dealersInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.dealersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.dealersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadDesignatedUsers(): void {
+    this.designatedUsersLookups$ = concat(
+      of([]), // default items
+      this.designatedUsersControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.designatedUsersLoading = true),
+        switchMap(term => this.dealerSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.designatedUsersLoading = false)
+        ))
+      ),
+      of([...this.dealersSharedCollection])
+    );
+  }
+
+  loadPlaceholders(): void {
+    this.placeholderLookups$ = concat(
+      of([]), // default items
+      this.placeholderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.placeholdersLoading = true),
+        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.placeholdersLoading = false)
+        ))
+      ),
+      of([...this.placeholdersSharedCollection])
+    );
+  }
+
+  loadSettlements(): void {
+    this.settlementLookups$ = concat(
+      of([]), // default items
+      this.settlementControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.settlementsLoading = true),
+        switchMap(term => this.settlementSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.settlementsLoading = false)
+        ))
+      ),
+      of([...this.settlementsSharedCollection])
+    );
+  }
+
+  loadPurchaseOrders(): void {
+    this.purchaseOrderLookups$ = concat(
+      of([]), // default items
+      this.purchaseOrderControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this. purchaseOrdersLoading = true),
+        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this. purchaseOrdersLoading = false)
+        ))
+      ),
+      of([...this.purchaseOrdersSharedCollection])
+    );
+  }
+
+  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
+    return item.id!;
+  }
+
+  trackServiceOutletByFn(item: IServiceOutlet): number {
+    return item.id!;
+  }
+
+  trackJobSheetByFn(item: IJobSheet): number {
+    return item.id!;
+  }
+
+  trackAssetCategoryByFn(item: IAssetCategory): number {
+    return item.id!;
+  }
+
+  trackDeliveryNoteByFn(item: IDeliveryNote): number {
+    return item.id!;
+  }
+
+  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
+    return item.id!;
+  }
+
+  trackDealerByFn(item: IDealer): number {
+    return item.id!;
+  }
+
+  trackPlaceholdersByFn(item: IPaymentLabel): number {
+    return item.id!;
+  }
+
+  trackSettlementByFn(item: ISettlement): number {
+    return item.id!;
   }
 
   byteSize(base64String: string): string {

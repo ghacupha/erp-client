@@ -4,7 +4,7 @@ import { IDeliveryNote } from '../../erp-settlements/delivery-note/delivery-note
 @Component({
   selector: 'jhi-delivery-note-option-view',
   template: `
-    {{item.deliveryNoteNumber}} By: {{ item.supplier.dealerName }} Desc: {{ item.description }}
+    {{item.deliveryNoteNumber}} By: {{ item.supplier!.dealerName }} Desc: {{ item.description }}
   `
 })
 export class DeliveryNoteOptionViewComponent {

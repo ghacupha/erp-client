@@ -5,9 +5,10 @@ import { WorkInProgressRegistrationDetailComponent } from './detail/work-in-prog
 import { WorkInProgressRegistrationUpdateComponent } from './update/work-in-progress-registration-update.component';
 import { WorkInProgressRegistrationDeleteDialogComponent } from './delete/work-in-progress-registration-delete-dialog.component';
 import { WorkInProgressRegistrationRoutingModule } from './route/work-in-progress-registration-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, WorkInProgressRegistrationRoutingModule],
+  imports: [SharedModule, WorkInProgressRegistrationRoutingModule, ErpCommonModule],
   declarations: [
     WorkInProgressRegistrationComponent,
     WorkInProgressRegistrationDetailComponent,

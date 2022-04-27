@@ -272,7 +272,7 @@
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              {{item.deliveryNoteNumber}} By: {{ item.supplier.dealerName }} Desc: {{ item.description }}
+              <jhi-delivery-note-option-view [item]='item'></jhi-delivery-note-option-view>
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
