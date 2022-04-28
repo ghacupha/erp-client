@@ -85,7 +85,7 @@
         <dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="workInProgressRegistration.dealer">
-            <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+            <a [routerLink]="['/erp/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
               workInProgressRegistration.dealer?.dealerName
             }}</a>
           </div>

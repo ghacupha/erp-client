@@ -12,6 +12,26 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label">Biller</label>
+          <ng-select
+            [items]="billerLookups$ | async"
+            bindLabel="dealerName"
+            [trackByFn]="trackBillerByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="billersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="billersInput$"
+            formControlName="biller"
+          >
+            <option [ngValue]="editForm.get('biller')!.value"></option>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_serialNumber">Serial Number</label>
           <input
             type="text"
@@ -57,26 +77,6 @@
         <div class="form-group">
           <label class="form-control-label" for="field_remarks">Remarks</label>
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label">Biller</label>
-          <ng-select
-            [items]="billerLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackBillerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="billersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="billersInput$"
-            formControlName="biller"
-          >
-            <option [ngValue]="editForm.get('biller')!.value"></option>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
         </div>
 
         <div class="form-group">

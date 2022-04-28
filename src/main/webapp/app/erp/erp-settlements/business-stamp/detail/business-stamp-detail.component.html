@@ -33,7 +33,7 @@
         <dt><span>Stamp Holder</span></dt>
         <dd>
           <div *ngIf="businessStamp.stampHolder">
-            <a [routerLink]="['/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>

@@ -33,20 +33,20 @@
         <dt><span>Biller</span></dt>
         <dd>
           <div *ngIf="jobSheet.biller">
-            <a [routerLink]="['/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of jobSheet.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contact Person</span></dt>
         <dd>
           <div *ngIf="jobSheet.contactPerson">
-            <a [routerLink]="['/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Business Stamps</span></dt>

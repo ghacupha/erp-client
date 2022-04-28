@@ -78,7 +78,7 @@
           <td>{{ deliveryNote.remarks }}</td>
           <td>
             <div *ngIf="deliveryNote.receivedBy">
-              <a [routerLink]="['/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
             </div>
           </td>
           <td>
@@ -90,7 +90,7 @@
           </td>
           <td>
             <div *ngIf="deliveryNote.supplier">
-              <a [routerLink]="['/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

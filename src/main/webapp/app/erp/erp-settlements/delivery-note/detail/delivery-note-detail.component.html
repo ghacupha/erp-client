@@ -48,7 +48,7 @@
         <dt><span>Received By</span></dt>
         <dd>
           <div *ngIf="deliveryNote.receivedBy">
-            <a [routerLink]="['/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Delivery Stamps</span></dt>
@@ -69,13 +69,13 @@
         <dt><span>Supplier</span></dt>
         <dd>
           <div *ngIf="deliveryNote.supplier">
-            <a [routerLink]="['/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
+            <a [routerLink]="['/erp/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of deliveryNote.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

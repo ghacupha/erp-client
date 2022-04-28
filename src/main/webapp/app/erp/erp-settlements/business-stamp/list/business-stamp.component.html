@@ -70,7 +70,7 @@
           <td>{{ businessStamp.remarks }}</td>
           <td>
             <div *ngIf="businessStamp.stampHolder">
-              <a [routerLink]="['/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">

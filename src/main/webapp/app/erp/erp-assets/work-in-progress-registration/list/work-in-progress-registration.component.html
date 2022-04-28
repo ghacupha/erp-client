@@ -70,7 +70,7 @@
           </td>
           <td>{{ workInProgressRegistration.sequenceNumber }}</td>
           <td>{{ workInProgressRegistration.particulars }}</td>
-          <td>{{ workInProgressRegistration.instalmentAmount }}</td>
+          <td>{{ workInProgressRegistration.instalmentAmount | number }}</td>
           <td>
             <a
               *ngIf="workInProgressRegistration.comments"
@@ -83,7 +83,7 @@
           </td>
           <td>
             <div *ngIf="workInProgressRegistration.dealer">
-              <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+              <a [routerLink]="['/erp/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
                 workInProgressRegistration.dealer?.dealerName
               }}</a>
             </div>

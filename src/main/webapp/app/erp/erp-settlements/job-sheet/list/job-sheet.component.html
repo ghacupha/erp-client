@@ -69,12 +69,12 @@
           <td>{{ jobSheet.details }}</td>
           <td>
             <div *ngIf="jobSheet.biller">
-              <a [routerLink]="['/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="jobSheet.contactPerson">
-              <a [routerLink]="['/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
+              <a [routerLink]="['/erp/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
             </div>
           </td>
           <td class="text-right">
