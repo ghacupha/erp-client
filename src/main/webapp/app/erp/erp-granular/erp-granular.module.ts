@@ -105,7 +105,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'service-outlet',
         data: {
           pageTitle: 'ERP | Service Outlet',
-          authorities: ['ROLE_GRANULAR_REPORTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_GRANULAR_REPORTS_USER',
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
