@@ -14,8 +14,8 @@
     {
       "fieldName": "fileMediumType",
       "fieldType": "FileMediumTypes",
-      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5"
     },
     {
       "fieldName": "description",

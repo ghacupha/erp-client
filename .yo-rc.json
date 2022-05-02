@@ -84,7 +84,9 @@
       "IsoCountryCode",
       "SubCountyCode",
       "WorkInProgressRegistration",
-      "WorkInProgressTransfer"
+      "WorkInProgressTransfer",
+      "TransactionAccount",
+      "PrepaymentAccount"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,
