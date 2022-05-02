@@ -1,0 +1,94 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prepaymentAccount">
+      <h2 data-cy="prepaymentAccountDetailsHeading"><span>Prepayment Account</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.id }}</span>
+        </dd>
+        <dt><span>Catalogue Number</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.catalogueNumber }}</span>
+        </dd>
+        <dt><span>Particulars</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.particulars }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.notes }}</span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{
+              prepaymentAccount.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Prepayment Transaction</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.prepaymentTransaction">
+            <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{
+              prepaymentAccount.prepaymentTransaction?.paymentNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.serviceOutlet">
+            <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{
+              prepaymentAccount.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.dealer">
+            <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.placeholder">
+            <a [routerLink]="['/placeholder', prepaymentAccount.placeholder?.id, 'view']">{{
+              prepaymentAccount.placeholder?.description
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Debit Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.debitAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
+              prepaymentAccount.debitAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Transfer Account</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAccount.transferAccount">
+            <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{
+              prepaymentAccount.transferAccount?.accountName
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prepayment-account', prepaymentAccount.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
