@@ -53,6 +53,7 @@ describe('PrepaymentAccount e2e test', () => {
       prepaymentAccountUpdatePage.setCatalogueNumberInput('catalogueNumber'),
       prepaymentAccountUpdatePage.setParticularsInput('particulars'),
       prepaymentAccountUpdatePage.setNotesInput('notes'),
+      prepaymentAccountUpdatePage.setPrepaymentAmountInput('5'),
       prepaymentAccountUpdatePage.settlementCurrencySelectLastOption(),
       prepaymentAccountUpdatePage.prepaymentTransactionSelectLastOption(),
       prepaymentAccountUpdatePage.serviceOutletSelectLastOption(),

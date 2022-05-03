@@ -10,6 +10,7 @@ export interface IPrepaymentAccount {
   catalogueNumber?: string;
   particulars?: string;
   notes?: string | null;
+  prepaymentAmount?: number | null;
   settlementCurrency?: ISettlementCurrency | null;
   prepaymentTransaction?: ISettlement | null;
   serviceOutlet?: IServiceOutlet | null;
@@ -25,6 +26,7 @@ export class PrepaymentAccount implements IPrepaymentAccount {
     public catalogueNumber?: string,
     public particulars?: string,
     public notes?: string | null,
+    public prepaymentAmount?: number | null,
     public settlementCurrency?: ISettlementCurrency | null,
     public prepaymentTransaction?: ISettlement | null,
     public serviceOutlet?: IServiceOutlet | null,

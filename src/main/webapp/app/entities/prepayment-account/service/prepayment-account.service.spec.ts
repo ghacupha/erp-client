@@ -24,6 +24,7 @@ describe('PrepaymentAccount Service', () => {
       catalogueNumber: 'AAAAAAA',
       particulars: 'AAAAAAA',
       notes: 'AAAAAAA',
+      prepaymentAmount: 0,
     };
   });
 
@@ -62,6 +63,7 @@ describe('PrepaymentAccount Service', () => {
           catalogueNumber: 'BBBBBB',
           particulars: 'BBBBBB',
           notes: 'BBBBBB',
+          prepaymentAmount: 1,
         },
         elemDefault
       );
@@ -101,6 +103,7 @@ describe('PrepaymentAccount Service', () => {
           catalogueNumber: 'BBBBBB',
           particulars: 'BBBBBB',
           notes: 'BBBBBB',
+          prepaymentAmount: 1,
         },
         elemDefault
       );
@@ -152,7 +155,7 @@ describe('PrepaymentAccount Service', () => {
       });
 
       it('should add only unique PrepaymentAccount to an array', () => {
-        const prepaymentAccountArray: IPrepaymentAccount[] = [{ id: 123 }, { id: 456 }, { id: 34889 }];
+        const prepaymentAccountArray: IPrepaymentAccount[] = [{ id: 123 }, { id: 456 }, { id: 37388 }];
         const prepaymentAccountCollection: IPrepaymentAccount[] = [{ id: 123 }];
         expectedResult = service.addPrepaymentAccountToCollectionIfMissing(prepaymentAccountCollection, ...prepaymentAccountArray);
         expect(expectedResult).toHaveLength(3);

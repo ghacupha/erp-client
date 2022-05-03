@@ -16,7 +16,7 @@ describe('PrepaymentAccount e2e test', () => {
   const prepaymentAccountPageUrlPattern = new RegExp('/prepayment-account(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentAccountSample = { catalogueNumber: 'Loan Granite applications', particulars: 'Hryvnia overriding' };
+  const prepaymentAccountSample = { catalogueNumber: 'calculate Berkshire', particulars: 'Hampshire overriding violet' };
 
   let prepaymentAccount: any;
 
@@ -161,6 +161,8 @@ describe('PrepaymentAccount e2e test', () => {
         .type('../fake-data/blob/hipster.txt')
         .invoke('val')
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
+      cy.get(`[data-cy="prepaymentAmount"]`).type('68526').should('have.value', '68526');
 
       cy.get(entityCreateSaveButtonSelector).click();
 
