@@ -52,18 +52,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="prepaymentAmount"
-            id="field_prepaymentAmount"
-            data-cy="prepaymentAmount"
-            formControlName="prepaymentAmount"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
@@ -84,6 +72,18 @@
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="prepaymentAmount"
+            id="field_prepaymentAmount"
+            data-cy="prepaymentAmount"
+            formControlName="prepaymentAmount"
+          />
         </div>
 
         <div class="form-group">

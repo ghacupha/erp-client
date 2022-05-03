@@ -13,6 +13,7 @@ import { ErpTaxesModule } from './erp-taxes/erp-taxes.module';
 import { ErpSettlementsModule } from './erp-settlements/erp-settlements.module';
 import { ErpGranularModule } from './erp-granular/erp-granular.module';
 import { ErpPrepaymentsAccountingModule } from './erp-prepayments/erp-prepayments-accounting.module';
+import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-account.module';
 
 export const routes: Routes = [];
 
@@ -32,6 +33,7 @@ export const routes: Routes = [];
     ErpGranularModule,
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
+    ErpTransactionAccountModule,
   ],
   exports: [
     ErpNavbarModule,
@@ -42,6 +44,7 @@ export const routes: Routes = [];
     ErpGranularModule,
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
+    ErpTransactionAccountModule,
   ]
 })
 export class ErpSystemModule {}

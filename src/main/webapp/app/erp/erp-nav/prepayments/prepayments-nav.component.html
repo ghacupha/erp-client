@@ -80,6 +80,18 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="transaction-account"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Transaction Account</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
             routerLink="settlement"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
