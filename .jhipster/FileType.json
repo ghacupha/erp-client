@@ -14,8 +14,8 @@
     {
       "fieldName": "fileMediumType",
       "fieldType": "FileMediumTypes",
-      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EXCEL,EXCEL_XLS,EXCEL_XLSX,EXCEL_XLSB,EXCEL_CSV,EXCEL_XML,PDF,POWERPOINT,DOC,TEXT,JSON,HTML5"
     },
     {
       "fieldName": "description",
@@ -29,8 +29,8 @@
     {
       "fieldName": "fileType",
       "fieldType": "FileModelType",
-      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV,PAYMENT_LABEL,PAYMENT_CATEGORY,PAYMENT,DEALER,SIGNED_PAYMENT,INVOICE",
-      "fieldValidateRules": ["required", "unique"]
+      "fieldValidateRules": ["required", "unique"],
+      "fieldValues": "CURRENCY_LIST,FIXED_ASSET_ACQUISITION,FIXED_ASSET_DEPRECIATION,FIXED_ASSET_NBV,PAYMENT_LABEL,PAYMENT_CATEGORY,PAYMENT,DEALER,SIGNED_PAYMENT,INVOICE"
     }
   ],
   "fluentMethods": true,
