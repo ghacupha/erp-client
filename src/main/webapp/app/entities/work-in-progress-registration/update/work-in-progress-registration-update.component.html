@@ -1,0 +1,261 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-work-in-progress-registration-heading" data-cy="WorkInProgressRegistrationCreateUpdateHeading">
+        Create or edit a Work In Progress Registration
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="sequenceNumber"
+            id="field_sequenceNumber"
+            data-cy="sequenceNumber"
+            formControlName="sequenceNumber"
+          />
+          <div
+            *ngIf="
+              editForm.get('sequenceNumber')!.invalid && (editForm.get('sequenceNumber')!.dirty || editForm.get('sequenceNumber')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('sequenceNumber')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_particulars">Particulars</label>
+          <input
+            type="text"
+            class="form-control"
+            name="particulars"
+            id="field_particulars"
+            data-cy="particulars"
+            formControlName="particulars"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="instalmentAmount"
+            id="field_instalmentAmount"
+            data-cy="instalmentAmount"
+            formControlName="instalmentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_comments">Comments</label>
+          <div>
+            <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ comments: null }); editForm.patchValue({ commentsContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_comments" data-cy="comments" (change)="setFileData($event, 'comments', false)" />
+          </div>
+          <input type="hidden" class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="commentsContentType"
+            id="field_commentsContentType"
+            formControlName="commentsContentType"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_paymentInvoices">Payment Invoices</label>
+          <select
+            class="form-control"
+            id="field_paymentInvoices"
+            data-cy="paymentInvoices"
+            multiple
+            name="paymentInvoices"
+            formControlName="paymentInvoices"
+          >
+            <option
+              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
+              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
+            >
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_serviceOutlets">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlets"
+            data-cy="serviceOutlet"
+            multiple
+            name="serviceOutlets"
+            formControlName="serviceOutlets"
+          >
+            <option
+              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['serviceOutlets'])!.invalid &&
+            (editForm.get(['serviceOutlets'])!.dirty || editForm.get(['serviceOutlets'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_settlements">Settlement</label>
+          <select
+            class="form-control"
+            id="field_settlements"
+            data-cy="settlement"
+            multiple
+            name="settlements"
+            formControlName="settlements"
+          >
+            <option
+              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_purchaseOrders">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrders"
+            data-cy="purchaseOrder"
+            multiple
+            name="purchaseOrders"
+            formControlName="purchaseOrders"
+          >
+            <option
+              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_deliveryNotes">Delivery Note</label>
+          <select
+            class="form-control"
+            id="field_deliveryNotes"
+            data-cy="deliveryNote"
+            multiple
+            name="deliveryNotes"
+            formControlName="deliveryNotes"
+          >
+            <option
+              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
+              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
+            >
+              {{ deliveryNoteOption.deliveryNoteNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_jobSheets">Job Sheet</label>
+          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
+            <option
+              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
+              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
+            >
+              {{ jobSheetOption.serialNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealer">Dealer</label>
+          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+            <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
