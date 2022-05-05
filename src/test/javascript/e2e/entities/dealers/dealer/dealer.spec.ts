@@ -59,6 +59,7 @@ describe('Dealer e2e test', () => {
       dealerUpdatePage.setFileUploadTokenInput('fileUploadToken'),
       dealerUpdatePage.setCompilationTokenInput('compilationToken'),
       dealerUpdatePage.setRemarksInput('remarks'),
+      dealerUpdatePage.setOtherNamesInput('otherNames'),
       // dealerUpdatePage.paymentLabelSelectLastOption(),
       dealerUpdatePage.dealerGroupSelectLastOption(),
       // dealerUpdatePage.placeholderSelectLastOption(),

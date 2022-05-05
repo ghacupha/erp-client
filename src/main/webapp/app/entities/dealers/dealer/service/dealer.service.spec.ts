@@ -37,6 +37,7 @@ describe('Dealer Service', () => {
       fileUploadToken: 'AAAAAAA',
       compilationToken: 'AAAAAAA',
       remarks: 'AAAAAAA',
+      otherNames: 'AAAAAAA',
     };
   });
 
@@ -88,6 +89,7 @@ describe('Dealer Service', () => {
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
           remarks: 'BBBBBB',
+          otherNames: 'BBBBBB',
         },
         elemDefault
       );
@@ -147,6 +149,7 @@ describe('Dealer Service', () => {
           fileUploadToken: 'BBBBBB',
           compilationToken: 'BBBBBB',
           remarks: 'BBBBBB',
+          otherNames: 'BBBBBB',
         },
         elemDefault
       );
@@ -198,7 +201,7 @@ describe('Dealer Service', () => {
       });
 
       it('should add only unique Dealer to an array', () => {
-        const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 12573 }];
+        const dealerArray: IDealer[] = [{ id: 123 }, { id: 456 }, { id: 98268 }];
         const dealerCollection: IDealer[] = [{ id: 123 }];
         expectedResult = service.addDealerToCollectionIfMissing(dealerCollection, ...dealerArray);
         expect(expectedResult).toHaveLength(3);

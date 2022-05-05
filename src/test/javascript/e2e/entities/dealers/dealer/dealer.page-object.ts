@@ -46,6 +46,7 @@ export class DealerUpdatePage {
   fileUploadTokenInput = element(by.id('field_fileUploadToken'));
   compilationTokenInput = element(by.id('field_compilationToken'));
   remarksInput = element(by.id('field_remarks'));
+  otherNamesInput = element(by.id('field_otherNames'));
 
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   dealerGroupSelect = element(by.id('field_dealerGroup'));
@@ -189,6 +190,14 @@ export class DealerUpdatePage {
 
   async getRemarksInput(): Promise<string> {
     return await this.remarksInput.getAttribute('value');
+  }
+
+  async setOtherNamesInput(otherNames: string): Promise<void> {
+    await this.otherNamesInput.sendKeys(otherNames);
+  }
+
+  async getOtherNamesInput(): Promise<string> {
+    return await this.otherNamesInput.getAttribute('value');
   }
 
   async paymentLabelSelectLastOption(): Promise<void> {

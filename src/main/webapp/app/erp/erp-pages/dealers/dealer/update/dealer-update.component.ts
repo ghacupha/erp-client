@@ -45,6 +45,7 @@ export class DealerUpdateComponent implements OnInit {
     remarks: [],
     dealerGroup: [],
     placeholders: [],
+    otherNames: [],
   });
 
   minAccountLengthTerm = 3;
@@ -240,6 +241,7 @@ export class DealerUpdateComponent implements OnInit {
       paymentLabels: dealer.paymentLabels,
       dealerGroup: dealer.dealerGroup,
       placeholders: dealer.placeholders,
+      otherNames: dealer.otherNames,
     });
 
     this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
@@ -303,6 +305,7 @@ export class DealerUpdateComponent implements OnInit {
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       dealerGroup: this.editForm.get(['dealerGroup'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      otherNames: this.editForm.get(['otherNames'])!.value,
     };
   }
 }

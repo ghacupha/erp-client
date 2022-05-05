@@ -16,7 +16,7 @@ describe('Dealer e2e test', () => {
   const dealerPageUrlPattern = new RegExp('/dealer(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const dealerSample = { dealerName: 'productize reboot' };
+  const dealerSample = { dealerName: 'Tuna Kroon' };
 
   let dealer: any;
 
@@ -187,6 +187,8 @@ describe('Dealer e2e test', () => {
         .type('../fake-data/blob/hipster.txt')
         .invoke('val')
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
+      cy.get(`[data-cy="otherNames"]`).type('productize reboot').should('have.value', 'productize reboot');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

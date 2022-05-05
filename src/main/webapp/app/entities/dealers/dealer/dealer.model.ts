@@ -19,6 +19,7 @@ export interface IDealer {
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   remarks?: string | null;
+  otherNames?: string | null;
   paymentLabels?: IPaymentLabel[] | null;
   dealerGroup?: IDealer | null;
   placeholders?: IPlaceholder[] | null;
@@ -43,6 +44,7 @@ export class Dealer implements IDealer {
     public fileUploadToken?: string | null,
     public compilationToken?: string | null,
     public remarks?: string | null,
+    public otherNames?: string | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public dealerGroup?: IDealer | null,
     public placeholders?: IPlaceholder[] | null
