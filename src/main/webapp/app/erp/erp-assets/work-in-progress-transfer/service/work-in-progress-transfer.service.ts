@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<IWorkInProgressTransfer[]>;
 
 @Injectable({ providedIn: 'root' })
 export class WorkInProgressTransferService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/work-in-progress-transfers');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/work-in-progress-transfers');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/work-in-progress-transfers');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/work-in-progress-transfers');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

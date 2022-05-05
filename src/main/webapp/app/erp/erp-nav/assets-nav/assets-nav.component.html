@@ -26,6 +26,18 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="work-project-register"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Work Project Register</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
             routerLink="work-in-progress-registration"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
