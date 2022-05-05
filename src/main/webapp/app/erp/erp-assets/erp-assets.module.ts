@@ -42,6 +42,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           ),
       },
       {
+        path: 'work-project-register',
+        data: {
+          pageTitle: 'ERP | Work Project',
+          authorities: ['ROLE_FIXED_ASSETS_USER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./work-project-register/work-project-register.module').then(
+            m => m.WorkProjectRegisterModule
+          ),
+      },
+      {
         path: 'fixed-asset-net-book-value',
         data: {
           pageTitle: 'ERP | Fixed Asset NetBookValue',
