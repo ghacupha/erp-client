@@ -87,7 +87,10 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'depreciation-method',
         data: {
           pageTitle: 'ERP | Depreciation Methods',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>

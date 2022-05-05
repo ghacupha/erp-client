@@ -58,6 +58,12 @@ import {RouterModule} from '@angular/router';
       data: { pageTitle: 'ERP | Payment Dealers' },
       loadChildren: () => import('./dealers/dealer/dealer.module').then(m => m.ErpServiceDealerModule),
     },
+    {
+      path: 'placeholder',
+      data: { pageTitle: 'ERP | Placeholders' },
+      loadChildren: () => import('./placeholder/placeholder.module')
+        .then(m => m.ErpServicePlaceholderModule),
+    },
   ])]
 })
 export class ErpPagesModule {}

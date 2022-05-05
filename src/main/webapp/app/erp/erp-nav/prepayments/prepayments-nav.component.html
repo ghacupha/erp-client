@@ -151,6 +151,20 @@
           </span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/placeholder"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Placeholders</span>
+          </span>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>

@@ -27,6 +27,12 @@ import { SettlementSuggestionService } from '../../../erp-common/suggestion/sett
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
+import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/delivery-notes-suggestion.service';
+import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
+import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
+import { IJobSheet } from '../../job-sheet/job-sheet.model';
+import { DeliveryNoteService } from '../../delivery-note/service/delivery-note.service';
+import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -40,6 +46,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   dealersSharedCollection: IDealer[] = [];
+  deliveryNotesSharedCollection: IDeliveryNote[] = [];
+  jobSheetsSharedCollection: IJobSheet[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -54,6 +62,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     paymentLabels: [],
     settlementCurrency: [null, Validators.required],
     biller: [null, Validators.required],
+    deliveryNotes: [],
+    jobSheets: [],
   });
 
   minAccountLengthTerm = 3;
@@ -78,6 +88,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   billersInput$ = new Subject<string>();
   billerLookups$: Observable<IDealer[]> = of([]);
 
+  deliveryNotesLoading = false;
+  deliveryNotesControlInput$ = new Subject<string>();
+  deliveryNoteLookups$: Observable<IDeliveryNote[]> = of([]);
+
+  jobSheetsLoading = false;
+  jobSheetsControlInput$ = new Subject<string>();
+  jobSheetLookups$: Observable<IJobSheet[]> = of([]);
+
   constructor(
     protected paymentInvoiceService: PaymentInvoiceService,
     protected purchaseOrderService: PurchaseOrderService,
@@ -94,6 +112,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected dealerSuggestionService: DealerSuggestionService,
     protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
+    protected deliveryNotesSuggestionService: DeliveryNotesSuggestionService,
+    protected jobSheetsSuggestionService: JobSheetSuggestionService,
+    protected deliveryNoteService: DeliveryNoteService,
+    protected jobSheetService: JobSheetService,
   ) {}
 
   ngOnInit(): void {
@@ -109,6 +131,47 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.loadCurrencies();
     this.loadBillers();
     this.loadPurchaseOrders();
+    this.loadDeliveryNotes();
+    this.loadJobSheets();
+  }
+
+  loadJobSheets(): void {
+    this.jobSheetLookups$ = concat(
+      of([]), // default items
+      this.jobSheetsControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.jobSheetsLoading = true),
+        switchMap(term => this.jobSheetsSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.jobSheetsLoading = false)
+        ))
+      ),
+      of([...this.jobSheetsSharedCollection])
+    );
+  }
+
+  // Load dynamic DeliveryNotes from input stream
+  loadDeliveryNotes(): void {
+    this.deliveryNoteLookups$ = concat(
+      of([]), // default items
+      this.deliveryNotesControlInput$.pipe(
+        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        filter(res => res !== null),
+        distinctUntilChanged(),
+        debounceTime(800),
+        tap(() => this.deliveryNotesLoading = true),
+        switchMap(term => this.deliveryNotesSuggestionService.search(term).pipe(
+          catchError(() => of([])),
+          tap(() => this.deliveryNotesLoading = false)
+        ))
+      ),
+      of([...this.deliveryNotesSharedCollection])
+    );
   }
 
   loadPurchaseOrders(): void {
@@ -235,8 +298,15 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     return item.id!;
   }
 
-
   trackSettlementByFn(item: ISettlement): number {
+    return item.id!;
+  }
+
+  trackDeliveryNotesByFn(item: IDeliveryNote): number {
+    return item.id!;
+  }
+
+  trackJobSheetByFn(item: IJobSheet): number {
     return item.id!;
   }
 
@@ -274,6 +344,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
+    return item.id!;
+  }
+
+  trackJobSheetById(index: number, item: IJobSheet): number {
+    return item.id!;
+  }
+
   getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -297,6 +375,28 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -339,6 +439,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: paymentInvoice.paymentLabels,
       settlementCurrency: paymentInvoice.settlementCurrency,
       biller: paymentInvoice.biller,
+      deliveryNotes: paymentInvoice.deliveryNotes,
+      jobSheets: paymentInvoice.jobSheets,
     });
 
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
@@ -358,6 +460,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentInvoice.settlementCurrency
     );
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(paymentInvoice.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(paymentInvoice.jobSheets ?? [])
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -412,6 +522,26 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('biller')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.deliveryNoteService
+      .query()
+      .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
+      .pipe(
+        map((deliveryNotes: IDeliveryNote[]) =>
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+        )
+      )
+      .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
+
+    this.jobSheetService
+      .query()
+      .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
+      .pipe(
+        map((jobSheets: IJobSheet[]) =>
+          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+        )
+      )
+      .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
   }
 
   protected createFromForm(): IPaymentInvoice {
@@ -428,6 +558,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       biller: this.editForm.get(['biller'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
     };
   }
 }

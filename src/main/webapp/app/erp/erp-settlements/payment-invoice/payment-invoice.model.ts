@@ -4,6 +4,8 @@ import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency
 import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
 import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDeliveryNote } from '../delivery-note/delivery-note.model';
+import { IJobSheet } from '../job-sheet/job-sheet.model';
 
 export interface IPaymentInvoice {
   id?: number;
@@ -18,6 +20,8 @@ export interface IPaymentInvoice {
   paymentLabels?: IPaymentLabel[] | null;
   settlementCurrency?: ISettlementCurrency;
   biller?: IDealer;
+  deliveryNotes?: IDeliveryNote[] | null;
+  jobSheets?: IJobSheet[] | null;
 }
 
 export class PaymentInvoice implements IPaymentInvoice {
@@ -33,7 +37,9 @@ export class PaymentInvoice implements IPaymentInvoice {
     public placeholders?: IPlaceholder[] | null,
     public paymentLabels?: IPaymentLabel[] | null,
     public settlementCurrency?: ISettlementCurrency,
-    public biller?: IDealer
+    public biller?: IDealer,
+    public deliveryNotes?: IDeliveryNote[] | null,
+    public jobSheets?: IJobSheet[] | null
   ) {}
 }
 

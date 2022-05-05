@@ -73,6 +73,20 @@
             <a [routerLink]="['/erp/dealer', paymentInvoice.biller?.id, 'view']">{{ paymentInvoice.biller?.dealerName }}</a>
           </div>
         </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <span *ngFor="let deliveryNote of paymentInvoice.deliveryNotes; let last = last">
+            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <span *ngFor="let jobSheet of paymentInvoice.jobSheets; let last = last">
+            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

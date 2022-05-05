@@ -9,7 +9,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'settlement',
         data: {
           pageTitle: 'ERP-Payments | Settlements',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./settlement/settlement.module').then(m => m.SettlementModule),
@@ -27,7 +31,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'settlement-currency',
         data: {
           pageTitle: 'ERP-Payments | SettlementCurrencies',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_TAX_MODULE_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_TAX_MODULE_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./settlement-currency/settlement-currency.module').then(m => m.SettlementCurrencyModule),
@@ -36,7 +44,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'purchase-order',
         data: {
           pageTitle: 'ERP-Payments | PurchaseOrders',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule),
@@ -45,7 +57,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'payment-invoice',
         data: {
           pageTitle: 'ERP-Payments | PaymentInvoices',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./payment-invoice/payment-invoice.module').then(m => m.PaymentInvoiceModule),
@@ -54,7 +70,10 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'delivery-note',
         data: {
           pageTitle: 'ERP-Payments | Delivery Notes',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./delivery-note/delivery-note.module').then(m => m.DeliveryNoteModule),
@@ -63,7 +82,10 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'business-stamp',
         data: {
           pageTitle: 'ERP-Payments | Business Stamps',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./business-stamp/business-stamp.module').then(m => m.BusinessStampModule),
@@ -72,7 +94,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'credit-note',
         data: {
           pageTitle: 'ERP-Payments | Credit Notes',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./credit-note/credit-note.module').then(m => m.CreditNoteModule),
@@ -81,7 +107,11 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'job-sheet',
         data: {
           pageTitle: 'ERP-Payments | Job Sheet',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./job-sheet/job-sheet.module').then(m => m.JobSheetModule),
