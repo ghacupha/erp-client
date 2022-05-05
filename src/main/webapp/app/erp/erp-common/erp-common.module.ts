@@ -8,6 +8,7 @@ import { FormatSettlementPipe } from './pipe/format-settlement.pipe';
 import { FormatDepreciationMethodPipe } from './pipe/format-depreciation-method.pipe';
 import { FormatPurchaseOrderPipe } from './pipe/format-purchase-order.pipe';
 import { OptionViewsModule } from './option-view-components/option-views.module';
+import { FormatTransactionAccountPipe } from './pipe/format-transaction-account.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { OptionViewsModule } from './option-view-components/option-views.module'
     FormatSettlementCurrencyPipe,
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
-    FormatPurchaseOrderPipe
+    FormatPurchaseOrderPipe,
+    FormatTransactionAccountPipe
   ],
   exports: [
     FormatDealerIdPipe,
@@ -29,6 +31,7 @@ import { OptionViewsModule } from './option-view-components/option-views.module'
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
+    FormatTransactionAccountPipe,
     OptionViewsModule
   ]
 })

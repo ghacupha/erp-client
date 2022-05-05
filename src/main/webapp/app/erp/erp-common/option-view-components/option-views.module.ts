@@ -11,6 +11,7 @@ import { SettlementSelectedOptionViewComponent } from './settlement-selected-opt
 import { PaymentInvoiceSelectedOptionViewComponent } from './payment-invoice-selected-option-view.component';
 import { JobSheetOptionViewComponent } from './job-sheet-option-view.component';
 import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.component';
+import { TransactionAccountOptionViewComponent } from './transaction-account-option-view.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.com
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
+    TransactionAccountOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -41,6 +43,7 @@ import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.com
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
+    TransactionAccountOptionViewComponent,
   ]
 })
 export class OptionViewsModule {
