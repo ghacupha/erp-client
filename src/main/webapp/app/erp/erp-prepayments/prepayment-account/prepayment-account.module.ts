@@ -5,9 +5,10 @@ import { PrepaymentAccountDetailComponent } from './detail/prepayment-account-de
 import { PrepaymentAccountUpdateComponent } from './update/prepayment-account-update.component';
 import { PrepaymentAccountDeleteDialogComponent } from './delete/prepayment-account-delete-dialog.component';
 import { PrepaymentAccountRoutingModule } from './route/prepayment-account-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentAccountRoutingModule],
+  imports: [SharedModule, PrepaymentAccountRoutingModule, ErpCommonModule],
   declarations: [
     PrepaymentAccountComponent,
     PrepaymentAccountDetailComponent,
