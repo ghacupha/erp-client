@@ -206,6 +206,25 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label for="field_otherPurchaseOrders">Other Purchase Orders</label>
+          <select
+            class="form-control"
+            id="field_otherPurchaseOrders"
+            data-cy="otherPurchaseOrders"
+            multiple
+            name="otherPurchaseOrders"
+            formControlName="otherPurchaseOrders"
+          >
+            <option
+              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('otherPurchaseOrders')!.value)"
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

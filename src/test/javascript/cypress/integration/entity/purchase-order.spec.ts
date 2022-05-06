@@ -52,6 +52,7 @@ describe('PurchaseOrder e2e test', () => {
         fileUploadToken: 'National navigating flexibility',
         compilationToken: 'cross-platform',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'SDD haptic',
       },
     }).then(({ body }) => {
       dealer = body;

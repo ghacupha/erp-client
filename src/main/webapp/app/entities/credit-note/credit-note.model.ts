@@ -3,6 +3,7 @@ import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model
 import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 
 export interface ICreditNote {
   id?: number;
@@ -14,6 +15,7 @@ export interface ICreditNote {
   invoices?: IPaymentInvoice[] | null;
   paymentLabels?: IPaymentLabel[] | null;
   placeholders?: IPlaceholder[] | null;
+  settlementCurrency?: ISettlementCurrency | null;
 }
 
 export class CreditNote implements ICreditNote {
@@ -26,7 +28,8 @@ export class CreditNote implements ICreditNote {
     public purchaseOrders?: IPurchaseOrder[] | null,
     public invoices?: IPaymentInvoice[] | null,
     public paymentLabels?: IPaymentLabel[] | null,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public settlementCurrency?: ISettlementCurrency | null
   ) {}
 }
 

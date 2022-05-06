@@ -6,20 +6,21 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        <div class='form-group' [hidden]="editForm.get('id')!.value == null">
+          <label class='form-control-label' for='field_id'>ID</label>
+          <input type='number' class='form-control' name='id' id='field_id' data-cy='id' formControlName='id'
+                 [readonly]='true' />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_catalogueNumber'>Catalogue Number</label>
           <input
-            type="text"
-            class="form-control"
-            name="catalogueNumber"
-            id="field_catalogueNumber"
-            data-cy="catalogueNumber"
-            formControlName="catalogueNumber"
+            type='text'
+            class='form-control'
+            name='catalogueNumber'
+            id='field_catalogueNumber'
+            data-cy='catalogueNumber'
+            formControlName='catalogueNumber'
           />
           <div
             *ngIf="
@@ -27,28 +28,32 @@
               (editForm.get('catalogueNumber')!.dirty || editForm.get('catalogueNumber')!.touched)
             "
           >
-            <small class="form-text text-danger" *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field is required. </small>
+            <small class='form-text text-danger' *ngIf="editForm.get('catalogueNumber')?.errors?.required"> This field
+              is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_particulars">Particulars</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_particulars'>Particulars</label>
           <input
-            type="text"
-            class="form-control"
-            name="particulars"
-            id="field_particulars"
-            data-cy="particulars"
-            formControlName="particulars"
+            type='text'
+            class='form-control'
+            name='particulars'
+            id='field_particulars'
+            data-cy='particulars'
+            formControlName='particulars'
           />
-          <div *ngIf="editForm.get('particulars')!.invalid && (editForm.get('particulars')!.dirty || editForm.get('particulars')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('particulars')?.errors?.required"> This field is required. </small>
+          <div
+            *ngIf="editForm.get('particulars')!.invalid && (editForm.get('particulars')!.dirty || editForm.get('particulars')!.touched)">
+            <small class='form-text text-danger' *ngIf="editForm.get('particulars')?.errors?.required"> This field is
+              required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
-          <textarea class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes"></textarea>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_notes'>Notes</label>
+          <textarea class='form-control' name='notes' id='field_notes' data-cy='notes'
+                    formControlName='notes'></textarea>
         </div>
 
         <!--<div class="form-group">
@@ -74,21 +79,21 @@
           </select>
         </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Settlement Currency</label>
+        <div class='form-group'>
+          <label class='form-control-label'>Settlement Currency</label>
           <ng-select
-            [items]="settlementCurrencyLookups$ | async"
-            bindLabel="iso4217CurrencyCode"
-            [trackByFn]="trackCurrencyByFn"
-            [minTermLength]="3"
-            [loading]="settlementCurrenciesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="settlementCurrencyControlInput$"
-            formControlName="settlementCurrency"
+            [items]='settlementCurrencyLookups$ | async'
+            bindLabel='iso4217CurrencyCode'
+            [trackByFn]='trackCurrencyByFn'
+            [minTermLength]='3'
+            [loading]='settlementCurrenciesLoading'
+            typeToSearchText='Please enter {{minAccountLengthTerm}} or more characters'
+            [typeahead]='settlementCurrencyControlInput$'
+            formControlName='settlementCurrency'
           >
             <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+            <ng-template ng-option-tmp let-item='item' let-item$='item$' let-index='index'>
+              <input id='item-{{index}}' type='checkbox' [checked]='item$.selected' />
               <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
             </ng-template>
           </ng-select>
@@ -100,20 +105,20 @@
             (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
           "
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+          <small class='form-text text-danger' *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
             This field is required.
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_prepaymentAmount'>Prepayment Amount</label>
           <input
-            type="number"
-            class="form-control"
-            name="prepaymentAmount"
-            id="field_prepaymentAmount"
-            data-cy="prepaymentAmount"
-            formControlName="prepaymentAmount"
+            type='number'
+            class='form-control'
+            name='prepaymentAmount'
+            id='field_prepaymentAmount'
+            data-cy='prepaymentAmount'
+            formControlName='prepaymentAmount'
           />
         </div>
 
@@ -140,29 +145,29 @@
           </select>
         </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Prepayment Transaction</label>
+        <div class='form-group'>
+          <label class='form-control-label'>Prepayment Transaction</label>
           <ng-select
-            [items]="prepaymentTransactionLookups$ | async"
-            bindLabel="accountNumber"
-            [trackByFn]="trackSettlementsByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="prepaymentTransactionsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="prepaymentTransactionsControlInput$"
-            formControlName="prepaymentTransaction"
+            [items]='prepaymentTransactionLookups$ | async'
+            bindLabel='accountNumber'
+            [trackByFn]='trackSettlementsByFn'
+            [minTermLength]='minAccountLengthTerm'
+            [loading]='prepaymentTransactionsLoading'
+            typeToSearchText='Please enter {{minAccountLengthTerm}} or more characters'
+            [typeahead]='prepaymentTransactionsControlInput$'
+            formControlName='prepaymentTransaction'
             [multiple]='true'
           >
-            <ng-option *ngFor="let option of prepaymentTransactionLookups$ | async" [value]="option">
+            <ng-option *ngFor='let option of prepaymentTransactionLookups$ | async' [value]='option'>
               <!--{{ option.paymentNumber }} DATED: {{ option.paymentDate }}-->
-              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <ng-template ng-label-tmp let-item='item' let-clear='clear'>
                 <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
-                <span class="ng-value-icon right" (click)="clear(item)">×</span>
+                <span class='ng-value-icon right' (click)='clear(item)'>×</span>
               </ng-template>
             </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <ng-template ng-option-tmp let-item='item' let-item$='item$' let-index='index'>
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+              <input id='item-{{index}}' type='checkbox' [checked]='item$.selected' />
               <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
             </ng-template>
           </ng-select>
@@ -192,21 +197,21 @@
           </select>
         </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Service Outlet</label>
+        <div class='form-group'>
+          <label class='form-control-label'>Service Outlet</label>
           <ng-select
-            [items]="serviceOutletLookups$ | async"
-            bindLabel="outletCode"
-            [trackByFn]="trackServiceOutletByFn"
-            [minTermLength]="3"
-            [loading]="serviceOutletsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="serviceOutletControlInput$"
-            formControlName="serviceOutlet"
+            [items]='serviceOutletLookups$ | async'
+            bindLabel='outletCode'
+            [trackByFn]='trackServiceOutletByFn'
+            [minTermLength]='3'
+            [loading]='serviceOutletsLoading'
+            typeToSearchText='Please enter {{minAccountLengthTerm}} or more characters'
+            [typeahead]='serviceOutletControlInput$'
+            formControlName='serviceOutlet'
           >
             <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+            <ng-template ng-option-tmp let-item='item' let-item$='item$' let-index='index'>
+              <input id='item-{{index}}' type='checkbox' [checked]='item$.selected' />
               <jhi-service-outlet-option-view [item]='item'></jhi-service-outlet-option-view>
             </ng-template>
           </ng-select>
@@ -218,7 +223,7 @@
             editForm.get('serviceOutlet')!.dirty || editForm.get('serviceOutlet')!.touched
           "
         >
-          <small class="form-text text-danger" *ngIf="editForm.get('serviceOutlet')?.errors?.required">
+          <small class='form-text text-danger' *ngIf="editForm.get('serviceOutlet')?.errors?.required">
             This field is required.
           </small>
         </div>
@@ -236,7 +241,7 @@
           </select>
         </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label">Dealer</label>
           <ng-select
             [items]="dealerLookups$ | async"
@@ -250,7 +255,7 @@
           >
             <option [ngValue]="editForm.get('dealer')!.value"></option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              &lt;!&ndash; // TODO Check if we need to track selection on the many to many entities with selected: boolean&ndash;&gt;
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
               <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
             </ng-template>
@@ -259,7 +264,13 @@
         </div>
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+
+        <jhi-many-to-one-dealer-form-control
+          formControlName='dealer'
+          [inputDealer]="editForm.get('dealer')!.value">
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
+        </jhi-many-to-one-dealer-form-control>
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_placeholder">Placeholder</label>
@@ -276,86 +287,87 @@
           </select>
         </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Placeholder(s)</label>
+        <div class='form-group'>
+          <label class='form-control-label'>Placeholder(s)</label>
           <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
-            formControlName="placeholders"
+            [items]='placeholderLookups$ | async'
+            bindLabel='description'
+            [trackByFn]='trackPlaceholdersByFn'
+            [minTermLength]='minAccountLengthTerm'
+            [loading]='placeholdersLoading'
+            typeToSearchText='Please enter {{minAccountLengthTerm}} or more characters'
+            [typeahead]='placeholderControlInput$'
+            formControlName='placeholders'
             [multiple]='true'
           >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+            <ng-option *ngFor='let option of placeholderLookups$ | async' [value]='option'>
               {{ option.description }}
             </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <ng-template ng-option-tmp let-item='item' let-item$='item$' let-index='index'>
               <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+              <input id='item-{{index}}' type='checkbox' [checked]='item$.selected' /> {{item.description}}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_debitAccount">Debit Account</label>
-          <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
-            <option [ngValue]="null"></option>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_debitAccount'>Debit Account</label>
+          <select class='form-control' id='field_debitAccount' data-cy='debitAccount' name='debitAccount'
+                  formControlName='debitAccount'>
+            <option [ngValue]='null'></option>
             <option
               [ngValue]="
                 transactionAccountOption.id === editForm.get('debitAccount')!.value?.id
                   ? editForm.get('debitAccount')!.value
                   : transactionAccountOption
               "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+              *ngFor='let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById'
             >
               {{ transactionAccountOption.accountName }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_transferAccount">Transfer Account</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_transferAccount'>Transfer Account</label>
           <select
-            class="form-control"
-            id="field_transferAccount"
-            data-cy="transferAccount"
-            name="transferAccount"
-            formControlName="transferAccount"
+            class='form-control'
+            id='field_transferAccount'
+            data-cy='transferAccount'
+            name='transferAccount'
+            formControlName='transferAccount'
           >
-            <option [ngValue]="null"></option>
+            <option [ngValue]='null'></option>
             <option
               [ngValue]="
                 transactionAccountOption.id === editForm.get('transferAccount')!.value?.id
                   ? editForm.get('transferAccount')!.value
                   : transactionAccountOption
               "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+              *ngFor='let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById'
             >
               {{ transactionAccountOption.accountName }}
             </option>
           </select>
         </div>
-      </div>
 
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        <button type='button' id='cancel-save' data-cy='entityCreateCancelButton' class='btn btn-secondary'
+                (click)='previousState()'>
+          <fa-icon icon='ban'></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
         <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          type='submit'
+          id='save-entity'
+          data-cy='entityCreateSaveButton'
+          [disabled]='editForm.invalid || isSaving'
+          class='btn btn-primary'
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          <fa-icon icon='save'></fa-icon>&nbsp;<span>Save</span>
         </button>
       </div>
+
     </form>
   </div>
 </div>

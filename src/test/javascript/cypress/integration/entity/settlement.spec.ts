@@ -84,6 +84,7 @@ describe('Settlement e2e test', () => {
         fileUploadToken: 'Future',
         compilationToken: 'Nevada Account',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'project Industrial Agent',
       },
     }).then(({ body }) => {
       dealer = body;

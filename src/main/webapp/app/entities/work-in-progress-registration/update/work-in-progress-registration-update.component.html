@@ -239,6 +239,78 @@
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workInProgressGroup">Work In Progress Group</label>
+          <select
+            class="form-control"
+            id="field_workInProgressGroup"
+            data-cy="workInProgressGroup"
+            name="workInProgressGroup"
+            formControlName="workInProgressGroup"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workInProgressRegistrationOption.id === editForm.get('workInProgressGroup')!.value?.id
+                  ? editForm.get('workInProgressGroup')!.value
+                  : workInProgressRegistrationOption
+              "
+              *ngFor="
+                let workInProgressRegistrationOption of workInProgressRegistrationsSharedCollection;
+                trackBy: trackWorkInProgressRegistrationById
+              "
+            >
+              {{ workInProgressRegistrationOption.sequenceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workProjectRegister">Work Project Register</label>
+          <select
+            class="form-control"
+            id="field_workProjectRegister"
+            data-cy="workProjectRegister"
+            name="workProjectRegister"
+            formControlName="workProjectRegister"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workProjectRegisterOption.id === editForm.get('workProjectRegister')!.value?.id
+                  ? editForm.get('workProjectRegister')!.value
+                  : workProjectRegisterOption
+              "
+              *ngFor="let workProjectRegisterOption of workProjectRegistersSharedCollection; trackBy: trackWorkProjectRegisterById"
+            >
+              {{ workProjectRegisterOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

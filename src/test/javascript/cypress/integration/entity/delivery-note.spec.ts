@@ -52,6 +52,7 @@ describe('DeliveryNote e2e test', () => {
         fileUploadToken: 'and Gabon',
         compilationToken: '4th Lakes Litas',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'Card',
       },
     }).then(({ body }) => {
       dealer = body;

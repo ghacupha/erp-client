@@ -18,6 +18,7 @@ export interface IDeliveryNote {
   purchaseOrder?: IPurchaseOrder | null;
   supplier?: IDealer;
   signatories?: IDealer[] | null;
+  otherPurchaseOrders?: IPurchaseOrder[] | null;
 }
 
 export class DeliveryNote implements IDeliveryNote {
@@ -34,7 +35,8 @@ export class DeliveryNote implements IDeliveryNote {
     public deliveryStamps?: IBusinessStamp[] | null,
     public purchaseOrder?: IPurchaseOrder | null,
     public supplier?: IDealer,
-    public signatories?: IDealer[] | null
+    public signatories?: IDealer[] | null,
+    public otherPurchaseOrders?: IPurchaseOrder[] | null
   ) {}
 }
 

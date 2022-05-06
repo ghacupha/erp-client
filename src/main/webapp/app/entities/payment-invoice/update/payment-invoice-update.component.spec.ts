@@ -19,6 +19,10 @@ import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
+import { DeliveryNoteService } from 'app/entities/delivery-note/service/delivery-note.service';
+import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
+import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 
 import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
 
@@ -32,6 +36,8 @@ describe('PaymentInvoice Management Update Component', () => {
   let paymentLabelService: PaymentLabelService;
   let settlementCurrencyService: SettlementCurrencyService;
   let dealerService: DealerService;
+  let deliveryNoteService: DeliveryNoteService;
+  let jobSheetService: JobSheetService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -50,6 +56,8 @@ describe('PaymentInvoice Management Update Component', () => {
     paymentLabelService = TestBed.inject(PaymentLabelService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     dealerService = TestBed.inject(DealerService);
+    deliveryNoteService = TestBed.inject(DeliveryNoteService);
+    jobSheetService = TestBed.inject(JobSheetService);
 
     comp = fixture.componentInstance;
   });
@@ -159,6 +167,47 @@ describe('PaymentInvoice Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call DeliveryNote query and add missing value', () => {
+      const paymentInvoice: IPaymentInvoice = { id: 456 };
+      const deliveryNotes: IDeliveryNote[] = [{ id: 29346 }];
+      paymentInvoice.deliveryNotes = deliveryNotes;
+
+      const deliveryNoteCollection: IDeliveryNote[] = [{ id: 12280 }];
+      jest.spyOn(deliveryNoteService, 'query').mockReturnValue(of(new HttpResponse({ body: deliveryNoteCollection })));
+      const additionalDeliveryNotes = [...deliveryNotes];
+      const expectedCollection: IDeliveryNote[] = [...additionalDeliveryNotes, ...deliveryNoteCollection];
+      jest.spyOn(deliveryNoteService, 'addDeliveryNoteToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ paymentInvoice });
+      comp.ngOnInit();
+
+      expect(deliveryNoteService.query).toHaveBeenCalled();
+      expect(deliveryNoteService.addDeliveryNoteToCollectionIfMissing).toHaveBeenCalledWith(
+        deliveryNoteCollection,
+        ...additionalDeliveryNotes
+      );
+      expect(comp.deliveryNotesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call JobSheet query and add missing value', () => {
+      const paymentInvoice: IPaymentInvoice = { id: 456 };
+      const jobSheets: IJobSheet[] = [{ id: 83209 }];
+      paymentInvoice.jobSheets = jobSheets;
+
+      const jobSheetCollection: IJobSheet[] = [{ id: 3205 }];
+      jest.spyOn(jobSheetService, 'query').mockReturnValue(of(new HttpResponse({ body: jobSheetCollection })));
+      const additionalJobSheets = [...jobSheets];
+      const expectedCollection: IJobSheet[] = [...additionalJobSheets, ...jobSheetCollection];
+      jest.spyOn(jobSheetService, 'addJobSheetToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ paymentInvoice });
+      comp.ngOnInit();
+
+      expect(jobSheetService.query).toHaveBeenCalled();
+      expect(jobSheetService.addJobSheetToCollectionIfMissing).toHaveBeenCalledWith(jobSheetCollection, ...additionalJobSheets);
+      expect(comp.jobSheetsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const paymentInvoice: IPaymentInvoice = { id: 456 };
       const purchaseOrders: IPurchaseOrder = { id: 92226 };
@@ -171,6 +220,10 @@ describe('PaymentInvoice Management Update Component', () => {
       paymentInvoice.settlementCurrency = settlementCurrency;
       const biller: IDealer = { id: 64409 };
       paymentInvoice.biller = biller;
+      const deliveryNotes: IDeliveryNote = { id: 28117 };
+      paymentInvoice.deliveryNotes = [deliveryNotes];
+      const jobSheets: IJobSheet = { id: 34466 };
+      paymentInvoice.jobSheets = [jobSheets];
 
       activatedRoute.data = of({ paymentInvoice });
       comp.ngOnInit();
@@ -181,6 +234,8 @@ describe('PaymentInvoice Management Update Component', () => {
       expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.dealersSharedCollection).toContain(biller);
+      expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);
+      expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
     });
   });
 
@@ -288,6 +343,22 @@ describe('PaymentInvoice Management Update Component', () => {
         expect(trackResult).toEqual(entity.id);
       });
     });
+
+    describe('trackDeliveryNoteById', () => {
+      it('Should return tracked DeliveryNote primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDeliveryNoteById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackJobSheetById', () => {
+      it('Should return tracked JobSheet primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackJobSheetById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
   });
 
   describe('Getting selected relationships', () => {
@@ -364,6 +435,58 @@ describe('PaymentInvoice Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPaymentLabel(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedDeliveryNote', () => {
+      it('Should return option if no DeliveryNote is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedDeliveryNote(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected DeliveryNote for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedDeliveryNote(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this DeliveryNote is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedDeliveryNote(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedJobSheet', () => {
+      it('Should return option if no JobSheet is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedJobSheet(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected JobSheet for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedJobSheet(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this JobSheet is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedJobSheet(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

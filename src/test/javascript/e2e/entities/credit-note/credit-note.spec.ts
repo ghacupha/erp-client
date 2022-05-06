@@ -51,6 +51,7 @@ describe('CreditNote e2e test', () => {
       // creditNoteUpdatePage.invoicesSelectLastOption(),
       // creditNoteUpdatePage.paymentLabelSelectLastOption(),
       // creditNoteUpdatePage.placeholderSelectLastOption(),
+      creditNoteUpdatePage.settlementCurrencySelectLastOption(),
     ]);
 
     await creditNoteUpdatePage.save();

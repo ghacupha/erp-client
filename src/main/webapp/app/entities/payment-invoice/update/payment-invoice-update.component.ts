@@ -20,6 +20,10 @@ import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
+import { DeliveryNoteService } from 'app/entities/delivery-note/service/delivery-note.service';
+import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
+import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -33,6 +37,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   dealersSharedCollection: IDealer[] = [];
+  deliveryNotesSharedCollection: IDeliveryNote[] = [];
+  jobSheetsSharedCollection: IJobSheet[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -47,6 +53,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     paymentLabels: [],
     settlementCurrency: [null, Validators.required],
     biller: [null, Validators.required],
+    deliveryNotes: [],
+    jobSheets: [],
   });
 
   constructor(
@@ -58,6 +66,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected paymentLabelService: PaymentLabelService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected dealerService: DealerService,
+    protected deliveryNoteService: DeliveryNoteService,
+    protected jobSheetService: JobSheetService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -119,6 +129,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
+    return item.id!;
+  }
+
+  trackJobSheetById(index: number, item: IJobSheet): number {
+    return item.id!;
+  }
+
   getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -142,6 +160,28 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -185,6 +225,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: paymentInvoice.paymentLabels,
       settlementCurrency: paymentInvoice.settlementCurrency,
       biller: paymentInvoice.biller,
+      deliveryNotes: paymentInvoice.deliveryNotes,
+      jobSheets: paymentInvoice.jobSheets,
     });
 
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
@@ -204,6 +246,14 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentInvoice.settlementCurrency
     );
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(paymentInvoice.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(paymentInvoice.jobSheets ?? [])
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -258,6 +308,26 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('biller')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.deliveryNoteService
+      .query()
+      .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
+      .pipe(
+        map((deliveryNotes: IDeliveryNote[]) =>
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+        )
+      )
+      .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
+
+    this.jobSheetService
+      .query()
+      .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
+      .pipe(
+        map((jobSheets: IJobSheet[]) =>
+          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+        )
+      )
+      .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
   }
 
   protected createFromForm(): IPaymentInvoice {
@@ -275,6 +345,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       biller: this.editForm.get(['biller'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
     };
   }
 }

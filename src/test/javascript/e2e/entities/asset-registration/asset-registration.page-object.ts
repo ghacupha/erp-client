@@ -46,6 +46,7 @@ export class AssetRegistrationUpdatePage {
   jobSheetSelect = element(by.id('field_jobSheet'));
   dealerSelect = element(by.id('field_dealer'));
   designatedUsersSelect = element(by.id('field_designatedUsers'));
+  settlementCurrencySelect = element(by.id('field_settlementCurrency'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -257,6 +258,22 @@ export class AssetRegistrationUpdatePage {
 
   async getDesignatedUsersSelectedOption(): Promise<string> {
     return await this.designatedUsersSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementCurrencySelectLastOption(): Promise<void> {
+    await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementCurrencySelectOption(option: string): Promise<void> {
+    await this.settlementCurrencySelect.sendKeys(option);
+  }
+
+  getSettlementCurrencySelect(): ElementFinder {
+    return this.settlementCurrencySelect;
+  }
+
+  async getSettlementCurrencySelectedOption(): Promise<string> {
+    return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

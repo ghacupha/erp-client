@@ -17,6 +17,8 @@ import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 
 import { CreditNoteUpdateComponent } from './credit-note-update.component';
 
@@ -29,6 +31,7 @@ describe('CreditNote Management Update Component', () => {
   let paymentInvoiceService: PaymentInvoiceService;
   let paymentLabelService: PaymentLabelService;
   let placeholderService: PlaceholderService;
+  let settlementCurrencyService: SettlementCurrencyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -46,6 +49,7 @@ describe('CreditNote Management Update Component', () => {
     paymentInvoiceService = TestBed.inject(PaymentInvoiceService);
     paymentLabelService = TestBed.inject(PaymentLabelService);
     placeholderService = TestBed.inject(PlaceholderService);
+    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
 
     comp = fixture.componentInstance;
   });
@@ -136,6 +140,28 @@ describe('CreditNote Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call SettlementCurrency query and add missing value', () => {
+      const creditNote: ICreditNote = { id: 456 };
+      const settlementCurrency: ISettlementCurrency = { id: 72300 };
+      creditNote.settlementCurrency = settlementCurrency;
+
+      const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 60923 }];
+      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCurrencyCollection })));
+      const additionalSettlementCurrencies = [settlementCurrency];
+      const expectedCollection: ISettlementCurrency[] = [...additionalSettlementCurrencies, ...settlementCurrencyCollection];
+      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ creditNote });
+      comp.ngOnInit();
+
+      expect(settlementCurrencyService.query).toHaveBeenCalled();
+      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCurrencyCollection,
+        ...additionalSettlementCurrencies
+      );
+      expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const creditNote: ICreditNote = { id: 456 };
       const purchaseOrders: IPurchaseOrder = { id: 37739 };
@@ -146,6 +172,8 @@ describe('CreditNote Management Update Component', () => {
       creditNote.paymentLabels = [paymentLabels];
       const placeholders: IPlaceholder = { id: 15251 };
       creditNote.placeholders = [placeholders];
+      const settlementCurrency: ISettlementCurrency = { id: 27178 };
+      creditNote.settlementCurrency = settlementCurrency;
 
       activatedRoute.data = of({ creditNote });
       comp.ngOnInit();
@@ -155,6 +183,7 @@ describe('CreditNote Management Update Component', () => {
       expect(comp.paymentInvoicesSharedCollection).toContain(invoices);
       expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
     });
   });
 
@@ -251,6 +280,14 @@ describe('CreditNote Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSettlementCurrencyById', () => {
+      it('Should return tracked SettlementCurrency primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementCurrencyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

@@ -69,6 +69,9 @@ describe('WorkInProgressRegistration e2e test', () => {
             // workInProgressRegistrationUpdatePage.deliveryNoteSelectLastOption(),
             // workInProgressRegistrationUpdatePage.jobSheetSelectLastOption(),
             workInProgressRegistrationUpdatePage.dealerSelectLastOption(),
+            workInProgressRegistrationUpdatePage.workInProgressGroupSelectLastOption(),
+            workInProgressRegistrationUpdatePage.settlementCurrencySelectLastOption(),
+            workInProgressRegistrationUpdatePage.workProjectRegisterSelectLastOption(),
         ]);
 
         await workInProgressRegistrationUpdatePage.save();

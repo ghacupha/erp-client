@@ -79,6 +79,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Other Purchase Orders</span></dt>
+        <dd>
+          <span *ngFor="let otherPurchaseOrders of deliveryNote.otherPurchaseOrders; let last = last">
+            <a [routerLink]="['/purchase-order', otherPurchaseOrders?.id, 'view']">{{ otherPurchaseOrders.purchaseOrderNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

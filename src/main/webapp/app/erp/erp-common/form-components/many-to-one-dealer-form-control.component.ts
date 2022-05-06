@@ -53,6 +53,14 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 })
 export class ManyToOneDealerFormControlComponent implements OnInit, ControlValueAccessor {
 
+  // TODO Split class from template
+  // TODO Use abstract terms for the labels and other elements of the component
+  // TODO Add logs and developer views to the component to aid in telemetry
+  // TODO Create similar components for other entities
+  // TODO Implement entity for many-to-many relationships
+  // TODO Add self validation code via NG_VALIDATOR provider
+
+
   resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
 
   @HostBinding('attr.id')

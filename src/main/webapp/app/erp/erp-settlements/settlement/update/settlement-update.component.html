@@ -99,7 +99,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label">Biller</label>
           <ng-select
             [items]="billerLookups$ | async"
@@ -113,7 +113,7 @@
           >
             <option [ngValue]="editForm.get('biller')!.value"></option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              &lt;!&ndash; // TODO Check if we need to track selection on the many to many entities with selected: boolean&ndash;&gt;
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
               <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
             </ng-template>
@@ -122,7 +122,17 @@
         </div>
         <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+
+        <jhi-many-to-one-dealer-form-control
+          ngDefaultControl
+          formControlName='biller'
+          [inputDealer]="editForm.get('biller')!.value"
+          [id]='billersInput$'
+          (dealerSelected)='updateDealer($event)'
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-many-to-one-dealer-form-control>
 
         <div class="form-group">
           <label class="form-control-label">Payment Category</label>

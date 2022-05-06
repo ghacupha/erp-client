@@ -18,6 +18,8 @@ import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-credit-note-update',
@@ -30,6 +32,7 @@ export class CreditNoteUpdateComponent implements OnInit {
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -41,6 +44,7 @@ export class CreditNoteUpdateComponent implements OnInit {
     invoices: [],
     paymentLabels: [],
     placeholders: [],
+    settlementCurrency: [],
   });
 
   constructor(
@@ -51,6 +55,7 @@ export class CreditNoteUpdateComponent implements OnInit {
     protected paymentInvoiceService: PaymentInvoiceService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
+    protected settlementCurrencyService: SettlementCurrencyService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -105,6 +110,10 @@ export class CreditNoteUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
     return item.id!;
   }
 
@@ -182,6 +191,7 @@ export class CreditNoteUpdateComponent implements OnInit {
       invoices: creditNote.invoices,
       paymentLabels: creditNote.paymentLabels,
       placeholders: creditNote.placeholders,
+      settlementCurrency: creditNote.settlementCurrency,
     });
 
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
@@ -199,6 +209,10 @@ export class CreditNoteUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(creditNote.placeholders ?? [])
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      creditNote.settlementCurrency
     );
   }
 
@@ -248,6 +262,19 @@ export class CreditNoteUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
   }
 
   protected createFromForm(): ICreditNote {
@@ -262,6 +289,7 @@ export class CreditNoteUpdateComponent implements OnInit {
       invoices: this.editForm.get(['invoices'])!.value,
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
     };
   }
 }

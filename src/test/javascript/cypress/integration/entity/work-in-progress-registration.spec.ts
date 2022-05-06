@@ -54,7 +54,7 @@ describe('WorkInProgressRegistration e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/dealers',
-      body: {"dealerName":"cross-platform","taxNumber":"Greens Pants","identificationDocumentNumber":"Movies parallelism","organizationName":"deposit Avon","department":"utilize generating","position":"Wooden","postalAddress":"Isle","physicalAddress":"Mobility Forge Tasty","accountName":"Savings Account","accountNumber":"leverage initiatives back-end","bankersName":"streamline ADP","bankersBranch":"indigo 5th","bankersSwiftCode":"Account","fileUploadToken":"Gloves","compilationToken":"overriding throughput Cotton","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
+      body: {"dealerName":"cross-platform","taxNumber":"Greens Pants","identificationDocumentNumber":"Movies parallelism","organizationName":"deposit Avon","department":"utilize generating","position":"Wooden","postalAddress":"Isle","physicalAddress":"Mobility Forge Tasty","accountName":"Savings Account","accountNumber":"leverage initiatives back-end","bankersName":"streamline ADP","bankersBranch":"indigo 5th","bankersSwiftCode":"Account","fileUploadToken":"Gloves","compilationToken":"overriding throughput Cotton","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","otherNames":"Walks"},
     }).then(({ body }) => {
       dealer = body;
     });
@@ -108,6 +108,21 @@ describe('WorkInProgressRegistration e2e test', () => {
     cy.intercept('GET', '/api/dealers', {
       statusCode: 200,
       body: [dealer],
+    });
+
+    cy.intercept('GET', '/api/work-in-progress-registrations', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/settlement-currencies', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/work-project-registers', {
+      statusCode: 200,
+      body: [],
     });
 
   });

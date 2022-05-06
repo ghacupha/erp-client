@@ -6,6 +6,8 @@ import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model
 import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
 import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;
@@ -22,6 +24,9 @@ export interface IWorkInProgressRegistration {
   deliveryNotes?: IDeliveryNote[] | null;
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
+  workInProgressGroup?: IWorkInProgressRegistration | null;
+  settlementCurrency?: ISettlementCurrency | null;
+  workProjectRegister?: IWorkProjectRegister | null;
 }
 
 export class WorkInProgressRegistration implements IWorkInProgressRegistration {
@@ -39,7 +44,10 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public purchaseOrders?: IPurchaseOrder[] | null,
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
-    public dealer?: IDealer
+    public dealer?: IDealer,
+    public workInProgressGroup?: IWorkInProgressRegistration | null,
+    public settlementCurrency?: ISettlementCurrency | null,
+    public workProjectRegister?: IWorkProjectRegister | null
   ) {}
 }
 

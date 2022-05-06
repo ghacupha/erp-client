@@ -119,10 +119,12 @@ describe('DeliveryNote Management Update Component', () => {
       const deliveryNote: IDeliveryNote = { id: 456 };
       const purchaseOrder: IPurchaseOrder = { id: 90254 };
       deliveryNote.purchaseOrder = purchaseOrder;
+      const otherPurchaseOrders: IPurchaseOrder[] = [{ id: 5273 }];
+      deliveryNote.otherPurchaseOrders = otherPurchaseOrders;
 
-      const purchaseOrderCollection: IPurchaseOrder[] = [{ id: 5273 }];
+      const purchaseOrderCollection: IPurchaseOrder[] = [{ id: 36372 }];
       jest.spyOn(purchaseOrderService, 'query').mockReturnValue(of(new HttpResponse({ body: purchaseOrderCollection })));
-      const additionalPurchaseOrders = [purchaseOrder];
+      const additionalPurchaseOrders = [purchaseOrder, ...otherPurchaseOrders];
       const expectedCollection: IPurchaseOrder[] = [...additionalPurchaseOrders, ...purchaseOrderCollection];
       jest.spyOn(purchaseOrderService, 'addPurchaseOrderToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -149,8 +151,10 @@ describe('DeliveryNote Management Update Component', () => {
       deliveryNote.signatories = [signatories];
       const deliveryStamps: IBusinessStamp = { id: 81629 };
       deliveryNote.deliveryStamps = [deliveryStamps];
-      const purchaseOrder: IPurchaseOrder = { id: 36372 };
+      const purchaseOrder: IPurchaseOrder = { id: 84059 };
       deliveryNote.purchaseOrder = purchaseOrder;
+      const otherPurchaseOrders: IPurchaseOrder = { id: 64784 };
+      deliveryNote.otherPurchaseOrders = [otherPurchaseOrders];
 
       activatedRoute.data = of({ deliveryNote });
       comp.ngOnInit();
@@ -162,6 +166,7 @@ describe('DeliveryNote Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(signatories);
       expect(comp.businessStampsSharedCollection).toContain(deliveryStamps);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrder);
+      expect(comp.purchaseOrdersSharedCollection).toContain(otherPurchaseOrders);
     });
   });
 
@@ -337,6 +342,32 @@ describe('DeliveryNote Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedBusinessStamp(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedPurchaseOrder', () => {
+      it('Should return option if no PurchaseOrder is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedPurchaseOrder(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected PurchaseOrder for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedPurchaseOrder(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this PurchaseOrder is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedPurchaseOrder(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

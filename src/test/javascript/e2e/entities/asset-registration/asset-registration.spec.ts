@@ -69,6 +69,7 @@ describe('AssetRegistration e2e test', () => {
             // assetRegistrationUpdatePage.jobSheetSelectLastOption(),
             assetRegistrationUpdatePage.dealerSelectLastOption(),
             // assetRegistrationUpdatePage.designatedUsersSelectLastOption(),
+            assetRegistrationUpdatePage.settlementCurrencySelectLastOption(),
         ]);
 
         await assetRegistrationUpdatePage.save();

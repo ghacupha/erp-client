@@ -43,6 +43,9 @@ export class WorkInProgressRegistrationUpdatePage {
   deliveryNoteSelect = element(by.id('field_deliveryNote'));
   jobSheetSelect = element(by.id('field_jobSheet'));
   dealerSelect = element(by.id('field_dealer'));
+  workInProgressGroupSelect = element(by.id('field_workInProgressGroup'));
+  settlementCurrencySelect = element(by.id('field_settlementCurrency'));
+  workProjectRegisterSelect = element(by.id('field_workProjectRegister'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -214,6 +217,54 @@ export class WorkInProgressRegistrationUpdatePage {
 
   async getDealerSelectedOption(): Promise<string> {
     return await this.dealerSelect.element(by.css('option:checked')).getText();
+  }
+
+  async workInProgressGroupSelectLastOption(): Promise<void> {
+    await this.workInProgressGroupSelect.all(by.tagName('option')).last().click();
+  }
+
+  async workInProgressGroupSelectOption(option: string): Promise<void> {
+    await this.workInProgressGroupSelect.sendKeys(option);
+  }
+
+  getWorkInProgressGroupSelect(): ElementFinder {
+    return this.workInProgressGroupSelect;
+  }
+
+  async getWorkInProgressGroupSelectedOption(): Promise<string> {
+    return await this.workInProgressGroupSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementCurrencySelectLastOption(): Promise<void> {
+    await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementCurrencySelectOption(option: string): Promise<void> {
+    await this.settlementCurrencySelect.sendKeys(option);
+  }
+
+  getSettlementCurrencySelect(): ElementFinder {
+    return this.settlementCurrencySelect;
+  }
+
+  async getSettlementCurrencySelectedOption(): Promise<string> {
+    return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
+  }
+
+  async workProjectRegisterSelectLastOption(): Promise<void> {
+    await this.workProjectRegisterSelect.all(by.tagName('option')).last().click();
+  }
+
+  async workProjectRegisterSelectOption(option: string): Promise<void> {
+    await this.workProjectRegisterSelect.sendKeys(option);
+  }
+
+  getWorkProjectRegisterSelect(): ElementFinder {
+    return this.workProjectRegisterSelect;
+  }
+
+  async getWorkProjectRegisterSelectedOption(): Promise<string> {
+    return await this.workProjectRegisterSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -99,6 +99,7 @@ export class DealerComponent implements OnInit {
         'fileUploadToken',
         'compilationToken',
         'remarks',
+        'otherNames',
       ].includes(this.predicate)
     ) {
       this.predicate = 'id';

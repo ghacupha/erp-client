@@ -25,6 +25,10 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
+import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
 
 import { WorkInProgressRegistrationUpdateComponent } from './work-in-progress-registration-update.component';
 
@@ -41,6 +45,8 @@ describe('WorkInProgressRegistration Management Update Component', () => {
   let deliveryNoteService: DeliveryNoteService;
   let jobSheetService: JobSheetService;
   let dealerService: DealerService;
+  let settlementCurrencyService: SettlementCurrencyService;
+  let workProjectRegisterService: WorkProjectRegisterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,6 +68,8 @@ describe('WorkInProgressRegistration Management Update Component', () => {
     deliveryNoteService = TestBed.inject(DeliveryNoteService);
     jobSheetService = TestBed.inject(JobSheetService);
     dealerService = TestBed.inject(DealerService);
+    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
+    workProjectRegisterService = TestBed.inject(WorkProjectRegisterService);
 
     comp = fixture.componentInstance;
   });
@@ -231,6 +239,79 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call WorkInProgressRegistration query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const workInProgressGroup: IWorkInProgressRegistration = { id: 71550 };
+      workInProgressRegistration.workInProgressGroup = workInProgressGroup;
+
+      const workInProgressRegistrationCollection: IWorkInProgressRegistration[] = [{ id: 19737 }];
+      jest
+        .spyOn(workInProgressRegistrationService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: workInProgressRegistrationCollection })));
+      const additionalWorkInProgressRegistrations = [workInProgressGroup];
+      const expectedCollection: IWorkInProgressRegistration[] = [
+        ...additionalWorkInProgressRegistrations,
+        ...workInProgressRegistrationCollection,
+      ];
+      jest
+        .spyOn(workInProgressRegistrationService, 'addWorkInProgressRegistrationToCollectionIfMissing')
+        .mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(workInProgressRegistrationService.query).toHaveBeenCalled();
+      expect(workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing).toHaveBeenCalledWith(
+        workInProgressRegistrationCollection,
+        ...additionalWorkInProgressRegistrations
+      );
+      expect(comp.workInProgressRegistrationsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call SettlementCurrency query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const settlementCurrency: ISettlementCurrency = { id: 88925 };
+      workInProgressRegistration.settlementCurrency = settlementCurrency;
+
+      const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 48153 }];
+      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCurrencyCollection })));
+      const additionalSettlementCurrencies = [settlementCurrency];
+      const expectedCollection: ISettlementCurrency[] = [...additionalSettlementCurrencies, ...settlementCurrencyCollection];
+      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(settlementCurrencyService.query).toHaveBeenCalled();
+      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCurrencyCollection,
+        ...additionalSettlementCurrencies
+      );
+      expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call WorkProjectRegister query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const workProjectRegister: IWorkProjectRegister = { id: 55547 };
+      workInProgressRegistration.workProjectRegister = workProjectRegister;
+
+      const workProjectRegisterCollection: IWorkProjectRegister[] = [{ id: 5036 }];
+      jest.spyOn(workProjectRegisterService, 'query').mockReturnValue(of(new HttpResponse({ body: workProjectRegisterCollection })));
+      const additionalWorkProjectRegisters = [workProjectRegister];
+      const expectedCollection: IWorkProjectRegister[] = [...additionalWorkProjectRegisters, ...workProjectRegisterCollection];
+      jest.spyOn(workProjectRegisterService, 'addWorkProjectRegisterToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(workProjectRegisterService.query).toHaveBeenCalled();
+      expect(workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing).toHaveBeenCalledWith(
+        workProjectRegisterCollection,
+        ...additionalWorkProjectRegisters
+      );
+      expect(comp.workProjectRegistersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 54597 };
@@ -249,6 +330,12 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       workInProgressRegistration.jobSheets = [jobSheets];
       const dealer: IDealer = { id: 30945 };
       workInProgressRegistration.dealer = dealer;
+      const workInProgressGroup: IWorkInProgressRegistration = { id: 39161 };
+      workInProgressRegistration.workInProgressGroup = workInProgressGroup;
+      const settlementCurrency: ISettlementCurrency = { id: 47782 };
+      workInProgressRegistration.settlementCurrency = settlementCurrency;
+      const workProjectRegister: IWorkProjectRegister = { id: 74342 };
+      workInProgressRegistration.workProjectRegister = workProjectRegister;
 
       activatedRoute.data = of({ workInProgressRegistration });
       comp.ngOnInit();
@@ -262,6 +349,9 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);
       expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
       expect(comp.dealersSharedCollection).toContain(dealer);
+      expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressGroup);
+      expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
+      expect(comp.workProjectRegistersSharedCollection).toContain(workProjectRegister);
     });
   });
 
@@ -390,6 +480,30 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       it('Should return tracked Dealer primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackDealerById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackWorkInProgressRegistrationById', () => {
+      it('Should return tracked WorkInProgressRegistration primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackWorkInProgressRegistrationById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSettlementCurrencyById', () => {
+      it('Should return tracked SettlementCurrency primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementCurrencyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackWorkProjectRegisterById', () => {
+      it('Should return tracked WorkProjectRegister primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackWorkProjectRegisterById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

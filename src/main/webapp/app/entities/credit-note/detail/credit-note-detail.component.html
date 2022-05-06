@@ -58,6 +58,14 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="creditNote.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', creditNote.settlementCurrency?.id, 'view']">{{
+              creditNote.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

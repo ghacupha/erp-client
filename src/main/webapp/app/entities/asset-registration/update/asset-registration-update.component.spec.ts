@@ -27,6 +27,8 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 
 import { AssetRegistrationUpdateComponent } from './asset-registration-update.component';
 
@@ -44,6 +46,7 @@ describe('AssetRegistration Management Update Component', () => {
   let deliveryNoteService: DeliveryNoteService;
   let jobSheetService: JobSheetService;
   let dealerService: DealerService;
+  let settlementCurrencyService: SettlementCurrencyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -66,6 +69,7 @@ describe('AssetRegistration Management Update Component', () => {
     deliveryNoteService = TestBed.inject(DeliveryNoteService);
     jobSheetService = TestBed.inject(JobSheetService);
     dealerService = TestBed.inject(DealerService);
+    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
 
     comp = fixture.componentInstance;
   });
@@ -259,6 +263,28 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call SettlementCurrency query and add missing value', () => {
+      const assetRegistration: IAssetRegistration = { id: 456 };
+      const settlementCurrency: ISettlementCurrency = { id: 59048 };
+      assetRegistration.settlementCurrency = settlementCurrency;
+
+      const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 70043 }];
+      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCurrencyCollection })));
+      const additionalSettlementCurrencies = [settlementCurrency];
+      const expectedCollection: ISettlementCurrency[] = [...additionalSettlementCurrencies, ...settlementCurrencyCollection];
+      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ assetRegistration });
+      comp.ngOnInit();
+
+      expect(settlementCurrencyService.query).toHaveBeenCalled();
+      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCurrencyCollection,
+        ...additionalSettlementCurrencies
+      );
+      expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 78776 };
@@ -281,6 +307,8 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.dealer = dealer;
       const designatedUsers: IDealer = { id: 28507 };
       assetRegistration.designatedUsers = [designatedUsers];
+      const settlementCurrency: ISettlementCurrency = { id: 34313 };
+      assetRegistration.settlementCurrency = settlementCurrency;
 
       activatedRoute.data = of({ assetRegistration });
       comp.ngOnInit();
@@ -296,6 +324,7 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
       expect(comp.dealersSharedCollection).toContain(dealer);
       expect(comp.dealersSharedCollection).toContain(designatedUsers);
+      expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
     });
   });
 
@@ -432,6 +461,14 @@ describe('AssetRegistration Management Update Component', () => {
       it('Should return tracked Dealer primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackDealerById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSettlementCurrencyById', () => {
+      it('Should return tracked SettlementCurrency primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementCurrencyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

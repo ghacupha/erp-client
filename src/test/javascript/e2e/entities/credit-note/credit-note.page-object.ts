@@ -39,6 +39,7 @@ export class CreditNoteUpdatePage {
   invoicesSelect = element(by.id('field_invoices'));
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   placeholderSelect = element(by.id('field_placeholder'));
+  settlementCurrencySelect = element(by.id('field_settlementCurrency'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -146,6 +147,22 @@ export class CreditNoteUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementCurrencySelectLastOption(): Promise<void> {
+    await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementCurrencySelectOption(option: string): Promise<void> {
+    await this.settlementCurrencySelect.sendKeys(option);
+  }
+
+  getSettlementCurrencySelect(): ElementFinder {
+    return this.settlementCurrencySelect;
+  }
+
+  async getSettlementCurrencySelectedOption(): Promise<string> {
+    return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

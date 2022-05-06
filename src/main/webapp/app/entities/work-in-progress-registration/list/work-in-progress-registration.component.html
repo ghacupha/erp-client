@@ -58,6 +58,15 @@
           <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="workInProgressGroup.sequenceNumber">
+            <span>Work In Progress Group</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="workProjectRegister.catalogueNumber">
+            <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -85,6 +94,27 @@
             <div *ngIf="workInProgressRegistration.dealer">
               <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
                 workInProgressRegistration.dealer?.dealerName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.workInProgressGroup">
+              <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
+                workInProgressRegistration.workInProgressGroup?.sequenceNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
+                workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.workProjectRegister">
+              <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
+                workInProgressRegistration.workProjectRegister?.catalogueNumber
               }}</a>
             </div>
           </td>

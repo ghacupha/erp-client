@@ -58,6 +58,9 @@
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -88,6 +91,13 @@
           <td>
             <div *ngIf="assetRegistration.dealer">
               <a [routerLink]="['/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetRegistration.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
+                assetRegistration.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
             </div>
           </td>
           <td class="text-right">

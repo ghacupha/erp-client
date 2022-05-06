@@ -26,6 +26,10 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
+import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -42,6 +46,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
+  workInProgressRegistrationsSharedCollection: IWorkInProgressRegistration[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  workProjectRegistersSharedCollection: IWorkProjectRegister[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -58,6 +65,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     deliveryNotes: [],
     jobSheets: [],
     dealer: [null, Validators.required],
+    workInProgressGroup: [],
+    settlementCurrency: [],
+    workProjectRegister: [],
   });
 
   constructor(
@@ -72,6 +82,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
+    protected settlementCurrencyService: SettlementCurrencyService,
+    protected workProjectRegisterService: WorkProjectRegisterService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -142,6 +154,18 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   }
 
   trackDealerById(index: number, item: IDealer): number {
+    return item.id!;
+  }
+
+  trackWorkInProgressRegistrationById(index: number, item: IWorkInProgressRegistration): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackWorkProjectRegisterById(index: number, item: IWorkProjectRegister): number {
     return item.id!;
   }
 
@@ -257,6 +281,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: workInProgressRegistration.deliveryNotes,
       jobSheets: workInProgressRegistration.jobSheets,
       dealer: workInProgressRegistration.dealer,
+      workInProgressGroup: workInProgressRegistration.workInProgressGroup,
+      settlementCurrency: workInProgressRegistration.settlementCurrency,
+      workProjectRegister: workInProgressRegistration.workProjectRegister,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -290,6 +317,19 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
       this.dealersSharedCollection,
       workInProgressRegistration.dealer
+    );
+    this.workInProgressRegistrationsSharedCollection =
+      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+        this.workInProgressRegistrationsSharedCollection,
+        workInProgressRegistration.workInProgressGroup
+      );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      workInProgressRegistration.settlementCurrency
+    );
+    this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+      this.workProjectRegistersSharedCollection,
+      workInProgressRegistration.workProjectRegister
     );
   }
 
@@ -378,6 +418,48 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.workInProgressRegistrationService
+      .query()
+      .pipe(map((res: HttpResponse<IWorkInProgressRegistration[]>) => res.body ?? []))
+      .pipe(
+        map((workInProgressRegistrations: IWorkInProgressRegistration[]) =>
+          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+            workInProgressRegistrations,
+            this.editForm.get('workInProgressGroup')!.value
+          )
+        )
+      )
+      .subscribe(
+        (workInProgressRegistrations: IWorkInProgressRegistration[]) =>
+          (this.workInProgressRegistrationsSharedCollection = workInProgressRegistrations)
+      );
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.workProjectRegisterService
+      .query()
+      .pipe(map((res: HttpResponse<IWorkProjectRegister[]>) => res.body ?? []))
+      .pipe(
+        map((workProjectRegisters: IWorkProjectRegister[]) =>
+          this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+            workProjectRegisters,
+            this.editForm.get('workProjectRegister')!.value
+          )
+        )
+      )
+      .subscribe((workProjectRegisters: IWorkProjectRegister[]) => (this.workProjectRegistersSharedCollection = workProjectRegisters));
   }
 
   protected createFromForm(): IWorkInProgressRegistration {
@@ -397,6 +479,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
+      workInProgressGroup: this.editForm.get(['workInProgressGroup'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
     };
   }
 }

@@ -52,6 +52,7 @@ describe('BusinessStamp e2e test', () => {
         fileUploadToken: 'quantifying',
         compilationToken: 'Oregon quantifying',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'card Handcrafted implement',
       },
     }).then(({ body }) => {
       dealer = body;

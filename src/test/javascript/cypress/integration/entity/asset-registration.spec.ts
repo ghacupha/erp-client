@@ -63,7 +63,7 @@ describe('AssetRegistration e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/dealers',
-      body: {"dealerName":"pink Parkway definition","taxNumber":"Forges alarm Illinois","identificationDocumentNumber":"CSS Architect program","organizationName":"Visionary Dollar Buckinghamshire","department":"Tuna","position":"Village","postalAddress":"Cambridgeshire","physicalAddress":"Paradigm Bike","accountName":"Investment Account","accountNumber":"Account programming Shoes","bankersName":"Avon","bankersBranch":"invoice","bankersSwiftCode":"Metal Shoes","fileUploadToken":"Fresh backing","compilationToken":"Credit Handmade Outdoors","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
+      body: {"dealerName":"pink Parkway definition","taxNumber":"Forges alarm Illinois","identificationDocumentNumber":"CSS Architect program","organizationName":"Visionary Dollar Buckinghamshire","department":"Tuna","position":"Village","postalAddress":"Cambridgeshire","physicalAddress":"Paradigm Bike","accountName":"Investment Account","accountNumber":"Account programming Shoes","bankersName":"Avon","bankersBranch":"invoice","bankersSwiftCode":"Metal Shoes","fileUploadToken":"Fresh backing","compilationToken":"Credit Handmade Outdoors","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","otherNames":"input quantify"},
     }).then(({ body }) => {
       dealer = body;
     });
@@ -122,6 +122,11 @@ describe('AssetRegistration e2e test', () => {
     cy.intercept('GET', '/api/dealers', {
       statusCode: 200,
       body: [dealer],
+    });
+
+    cy.intercept('GET', '/api/settlement-currencies', {
+      statusCode: 200,
+      body: [],
     });
 
   });

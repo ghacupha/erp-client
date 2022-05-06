@@ -7,6 +7,7 @@ import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model
 import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
 import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 
 export interface IAssetRegistration {
   id?: number;
@@ -26,6 +27,7 @@ export interface IAssetRegistration {
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
   designatedUsers?: IDealer[] | null;
+  settlementCurrency?: ISettlementCurrency | null;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -46,7 +48,8 @@ export class AssetRegistration implements IAssetRegistration {
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
     public dealer?: IDealer,
-    public designatedUsers?: IDealer[] | null
+    public designatedUsers?: IDealer[] | null,
+    public settlementCurrency?: ISettlementCurrency | null
   ) {}
 }
 

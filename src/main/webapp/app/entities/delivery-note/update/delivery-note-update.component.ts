@@ -45,6 +45,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     purchaseOrder: [],
     supplier: [null, Validators.required],
     signatories: [],
+    otherPurchaseOrders: [],
   });
 
   constructor(
@@ -145,6 +146,17 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     return option;
   }
 
+  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDeliveryNote>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -179,6 +191,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       purchaseOrder: deliveryNote.purchaseOrder,
       supplier: deliveryNote.supplier,
       signatories: deliveryNote.signatories,
+      otherPurchaseOrders: deliveryNote.otherPurchaseOrders,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -197,7 +210,8 @@ export class DeliveryNoteUpdateComponent implements OnInit {
     );
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
       this.purchaseOrdersSharedCollection,
-      deliveryNote.purchaseOrder
+      deliveryNote.purchaseOrder,
+      ...(deliveryNote.otherPurchaseOrders ?? [])
     );
   }
 
@@ -245,7 +259,11 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(purchaseOrders, this.editForm.get('purchaseOrder')!.value)
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+            purchaseOrders,
+            this.editForm.get('purchaseOrder')!.value,
+            ...(this.editForm.get('otherPurchaseOrders')!.value ?? [])
+          )
         )
       )
       .subscribe((purchaseOrders: IPurchaseOrder[]) => (this.purchaseOrdersSharedCollection = purchaseOrders));
@@ -267,6 +285,7 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       purchaseOrder: this.editForm.get(['purchaseOrder'])!.value,
       supplier: this.editForm.get(['supplier'])!.value,
       signatories: this.editForm.get(['signatories'])!.value,
+      otherPurchaseOrders: this.editForm.get(['otherPurchaseOrders'])!.value,
     };
   }
 }

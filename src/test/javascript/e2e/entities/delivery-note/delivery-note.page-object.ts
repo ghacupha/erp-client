@@ -43,6 +43,7 @@ export class DeliveryNoteUpdatePage {
   purchaseOrderSelect = element(by.id('field_purchaseOrder'));
   supplierSelect = element(by.id('field_supplier'));
   signatoriesSelect = element(by.id('field_signatories'));
+  otherPurchaseOrdersSelect = element(by.id('field_otherPurchaseOrders'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -198,6 +199,22 @@ export class DeliveryNoteUpdatePage {
 
   async getSignatoriesSelectedOption(): Promise<string> {
     return await this.signatoriesSelect.element(by.css('option:checked')).getText();
+  }
+
+  async otherPurchaseOrdersSelectLastOption(): Promise<void> {
+    await this.otherPurchaseOrdersSelect.all(by.tagName('option')).last().click();
+  }
+
+  async otherPurchaseOrdersSelectOption(option: string): Promise<void> {
+    await this.otherPurchaseOrdersSelect.sendKeys(option);
+  }
+
+  getOtherPurchaseOrdersSelect(): ElementFinder {
+    return this.otherPurchaseOrdersSelect;
+  }
+
+  async getOtherPurchaseOrdersSelectedOption(): Promise<string> {
+    return await this.otherPurchaseOrdersSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

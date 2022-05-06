@@ -86,7 +86,10 @@
       "WorkInProgressRegistration",
       "WorkInProgressTransfer",
       "TransactionAccount",
-      "PrepaymentAccount"
+      "PrepaymentAccount",
+      "WorkProjectRegister",
+      "PrepaymentMarshalling",
+      "PrepaymentAmortization"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

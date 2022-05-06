@@ -62,6 +62,7 @@ describe('DeliveryNote e2e test', () => {
             deliveryNoteUpdatePage.purchaseOrderSelectLastOption(),
             deliveryNoteUpdatePage.supplierSelectLastOption(),
             // deliveryNoteUpdatePage.signatoriesSelectLastOption(),
+            // deliveryNoteUpdatePage.otherPurchaseOrdersSelectLastOption(),
         ]);
 
         await deliveryNoteUpdatePage.save();

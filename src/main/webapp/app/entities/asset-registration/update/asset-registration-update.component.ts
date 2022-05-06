@@ -28,6 +28,8 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -45,6 +47,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -64,6 +67,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     jobSheets: [],
     dealer: [null, Validators.required],
     designatedUsers: [],
+    settlementCurrency: [],
   });
 
   constructor(
@@ -79,6 +83,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
+    protected settlementCurrencyService: SettlementCurrencyService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -153,6 +158,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   trackDealerById(index: number, item: IDealer): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
     return item.id!;
   }
 
@@ -282,6 +291,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       jobSheets: assetRegistration.jobSheets,
       dealer: assetRegistration.dealer,
       designatedUsers: assetRegistration.designatedUsers,
+      settlementCurrency: assetRegistration.settlementCurrency,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -320,6 +330,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       this.dealersSharedCollection,
       assetRegistration.dealer,
       ...(assetRegistration.designatedUsers ?? [])
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      assetRegistration.settlementCurrency
     );
   }
 
@@ -426,6 +440,19 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         )
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
   }
 
   protected createFromForm(): IAssetRegistration {
@@ -448,6 +475,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
       designatedUsers: this.editForm.get(['designatedUsers'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
     };
   }
 }

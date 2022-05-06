@@ -69,6 +69,7 @@ describe('PaymentInvoice e2e test', () => {
         fileUploadToken: 'Village Mouse',
         compilationToken: 'Hat',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'digital Expanded Beauty',
       },
     }).then(({ body }) => {
       dealer = body;
@@ -106,6 +107,16 @@ describe('PaymentInvoice e2e test', () => {
     cy.intercept('GET', '/api/dealers', {
       statusCode: 200,
       body: [dealer],
+    });
+
+    cy.intercept('GET', '/api/delivery-notes', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/job-sheets', {
+      statusCode: 200,
+      body: [],
     });
   });
 

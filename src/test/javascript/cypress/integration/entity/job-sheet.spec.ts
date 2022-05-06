@@ -52,6 +52,7 @@ describe('JobSheet e2e test', () => {
         fileUploadToken: 'Flats wireless Palestinian',
         compilationToken: 'silver',
         remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        otherNames: 'innovative',
       },
     }).then(({ body }) => {
       dealer = body;

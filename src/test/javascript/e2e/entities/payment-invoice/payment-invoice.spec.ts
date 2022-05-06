@@ -61,6 +61,8 @@ describe('PaymentInvoice e2e test', () => {
             // paymentInvoiceUpdatePage.paymentLabelSelectLastOption(),
             paymentInvoiceUpdatePage.settlementCurrencySelectLastOption(),
             paymentInvoiceUpdatePage.billerSelectLastOption(),
+            // paymentInvoiceUpdatePage.deliveryNoteSelectLastOption(),
+            // paymentInvoiceUpdatePage.jobSheetSelectLastOption(),
         ]);
 
         await paymentInvoiceUpdatePage.save();

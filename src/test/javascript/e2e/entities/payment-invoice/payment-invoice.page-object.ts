@@ -42,6 +42,8 @@ export class PaymentInvoiceUpdatePage {
   paymentLabelSelect = element(by.id('field_paymentLabel'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   billerSelect = element(by.id('field_biller'));
+  deliveryNoteSelect = element(by.id('field_deliveryNote'));
+  jobSheetSelect = element(by.id('field_jobSheet'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -181,6 +183,38 @@ export class PaymentInvoiceUpdatePage {
 
   async getBillerSelectedOption(): Promise<string> {
     return await this.billerSelect.element(by.css('option:checked')).getText();
+  }
+
+  async deliveryNoteSelectLastOption(): Promise<void> {
+    await this.deliveryNoteSelect.all(by.tagName('option')).last().click();
+  }
+
+  async deliveryNoteSelectOption(option: string): Promise<void> {
+    await this.deliveryNoteSelect.sendKeys(option);
+  }
+
+  getDeliveryNoteSelect(): ElementFinder {
+    return this.deliveryNoteSelect;
+  }
+
+  async getDeliveryNoteSelectedOption(): Promise<string> {
+    return await this.deliveryNoteSelect.element(by.css('option:checked')).getText();
+  }
+
+  async jobSheetSelectLastOption(): Promise<void> {
+    await this.jobSheetSelect.all(by.tagName('option')).last().click();
+  }
+
+  async jobSheetSelectOption(option: string): Promise<void> {
+    await this.jobSheetSelect.sendKeys(option);
+  }
+
+  getJobSheetSelect(): ElementFinder {
+    return this.jobSheetSelect;
+  }
+
+  async getJobSheetSelectedOption(): Promise<string> {
+    return await this.jobSheetSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
