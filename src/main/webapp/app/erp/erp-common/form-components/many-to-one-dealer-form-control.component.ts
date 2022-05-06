@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, EventEmitter, forwardRef, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { IDealer } from '../../../entities/dealers/dealer/dealer.model';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { DataUtils } from '../../../core/util/data-util.service';
@@ -29,35 +29,42 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
         [loading]="dealersLoading"
         typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
         [typeahead]="dealersInput$"
-        formControlName="dealer"
+        [(ngModel)]='inputDealer'
+        (change)="getValues()"
       >
-        <option [ngValue]="editForm.get('dealer')!.value"></option>
+        <option [ngValue]="inputDealer"></option>
         <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
           <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
           <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
           <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
         </ng-template>
       </ng-select>
-      <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['dealer'])!.value|formatDealerId}}</div>
+      <div>{{inputDealer|formatDealerId}}</div>
+      <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputDealer|json }}</div>
     </div>
-    <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-      <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-    </div>
-  `
+  `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ManyToOneDealerFormControlComponent),
+      multi: true
+    }
+  ]
 })
-export class ManyToOneDealerFormControlComponent implements OnInit {
+export class ManyToOneDealerFormControlComponent implements OnInit, ControlValueAccessor {
 
   resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
 
+  @HostBinding('attr.id')
+  externalId = '';
+
   @Input() inputDealer: IDealer = {};
+
+  @Output() dealerSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
 
   isSaving = false;
 
   dealersSharedCollection: IDealer[] = [];
-
-  editForm = this.fb.group({
-    dealer: [null, [Validators.required]],
-  });
 
   minAccountLengthTerm = 3;
 
@@ -70,10 +77,16 @@ export class ManyToOneDealerFormControlComponent implements OnInit {
     protected eventManager: EventManager,
     protected dealerService: DealerService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
     protected http: HttpClient,
     protected applicationConfigService: ApplicationConfigService
   ) {}
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onChange: any = () => {
+    this.getValues();
+  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouched: any = () => {};
 
   ngOnInit(): void {
 
@@ -136,23 +149,25 @@ export class ManyToOneDealerFormControlComponent implements OnInit {
     return item.id!;
   }
 
+  writeValue(value: IDealer): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (value) {
+      this.inputDealer = value;
+    }
+  }
+
+  getValues(): void {
+    // eslint-disable-next-line no-console
+    console.log("Picking changed values");
+
+    this.dealerSelected.emit(this.inputDealer);
+  }
+
   previousState(): void {
     window.history.back();
   }
 
-  save(): void {
-    this.isSaving = true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const prepaymentAccount = this.createFromForm();
-
-    //  TODO something with this
-  }
-
   protected updateForm(): void {
-    this.editForm.patchValue({
-      dealer: this.inputDealer
-    });
-
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
       this.dealersSharedCollection,
       this.inputDealer
@@ -164,16 +179,17 @@ export class ManyToOneDealerFormControlComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.inputDealer)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
   }
 
-  protected createFromForm(): IDealer {
-    this.inputDealer = this.editForm.get(['dealer'])!.value;
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.editForm.get(['dealer'])!.value;
+  // eslint-disable-next-line @typescript-eslint/member-ordering,@typescript-eslint/no-empty-function
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-
+  // eslint-disable-next-line @typescript-eslint/member-ordering,@typescript-eslint/no-empty-function
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
 }
