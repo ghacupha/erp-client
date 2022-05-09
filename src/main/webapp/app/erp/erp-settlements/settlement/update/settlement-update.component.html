@@ -130,6 +130,7 @@
           [inputDealer]="editForm.get('biller')!.value"
           [id]='billersInput$'
           (dealerSelected)='updateDealer($event)'
+          inputControlLabel=Biller
         >
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-many-to-one-dealer-form-control>

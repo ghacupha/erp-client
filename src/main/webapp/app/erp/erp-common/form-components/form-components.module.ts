@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
-import { ManyToOneDealerFormControlComponent } from './many-to-one-dealer-form-control.component';
+import { ManyToOneDealerFormControlComponent } from './dealer-form-controls/many-to-one-dealer-form-control.component';
 import { ErpFormattingModule } from '../pipe/erp-formatting.module';
 import { OptionViewsModule } from '../option-view-components/option-views.module';
 
