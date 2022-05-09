@@ -91,7 +91,7 @@ export class SettlementUpdateComponent implements OnInit {
   settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
 
   billersLoading = false;
-  billersInput$ = new Subject<string>();
+  // billersInput$ = new Subject<string>();
   billerLookups$: Observable<IDealer[]> = of([]);
 
   signatoriesLoading = false;
@@ -136,7 +136,7 @@ export class SettlementUpdateComponent implements OnInit {
     this.loadCategories();
     this.loadSettlements();
     this.loadCurrencies();
-    this.loadBillers();
+    // this.loadBillers();
     this.loadSignatories();
     this.loadPaymentInvoices();
   }
@@ -186,11 +186,11 @@ export class SettlementUpdateComponent implements OnInit {
     );
   }
 
-  loadBillers(): void {
+  /* loadBillers(): void {
     this.billerLookups$ = concat(
       of([]), // default items
       this.billersInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
+        /!* filter(res => res.length >= this.minAccountLengthTerm), *!/
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filter(res => res !== null),
         distinctUntilChanged(),
@@ -203,7 +203,7 @@ export class SettlementUpdateComponent implements OnInit {
       ),
       of([...this.dealersSharedCollection])
     );
-  }
+  } */
 
   loadCurrencies(): void {
     this.settlementCurrencyLookups$ = concat(

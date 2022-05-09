@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
-import { ManyToOneDealerFormControlComponent } from './dealer-form-controls/many-to-one-dealer-form-control.component';
+import { M21DealerFormControlComponent } from './dealer-form-controls/m21-dealer-form-control.component';
 import { ErpFormattingModule } from '../pipe/erp-formatting.module';
 import { OptionViewsModule } from '../option-view-components/option-views.module';
 
 @NgModule({
   declarations: [
-    ManyToOneDealerFormControlComponent
+    M21DealerFormControlComponent
   ],
   imports: [
     CommonModule,
@@ -16,7 +16,7 @@ import { OptionViewsModule } from '../option-view-components/option-views.module
     OptionViewsModule
   ],
   exports: [
-    ManyToOneDealerFormControlComponent
+    M21DealerFormControlComponent
   ]
 })
 export class FormComponentsModule {

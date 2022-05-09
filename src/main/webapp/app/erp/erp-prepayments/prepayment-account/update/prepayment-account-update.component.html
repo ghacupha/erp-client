@@ -266,11 +266,15 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>-->
 
-        <jhi-many-to-one-dealer-form-control
-          formControlName='dealer'
-          [inputDealer]="editForm.get('dealer')!.value">
-          <option [ngValue]="editForm.get('dealer')!.value"></option>
-        </jhi-many-to-one-dealer-form-control>
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='biller'
+          [inputDealer]="editForm.get('biller')!.value"
+          (dealerSelected)='updateDealer($event)'
+          inputControlLabel=Beneficiary
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-m21-dealer-form-control>
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_placeholder">Placeholder</label>

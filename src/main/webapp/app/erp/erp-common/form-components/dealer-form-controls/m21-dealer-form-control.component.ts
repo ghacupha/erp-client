@@ -1,5 +1,5 @@
 import { Component, EventEmitter, forwardRef, HostBinding, Input, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, FormBuilder, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { IDealer } from '../../../../entities/dealers/dealer/dealer.model';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { DataUtils } from '../../../../core/util/data-util.service';
@@ -7,33 +7,28 @@ import { EventManager } from '../../../../core/util/event-manager.service';
 import { DealerService } from '../../../../entities/dealers/dealer/service/dealer.service';
 import { ActivatedRoute } from '@angular/router';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { createRequestOption } from '../../../../core/request/request-util';
-import { ASC, DESC } from '../../../../config/pagination.constants';
-import { ApplicationConfigService } from '../../../../core/config/application-config.service';
+import { HttpResponse } from '@angular/common/http';
 import { DealerInputControlService } from './dealer-input-control.service';
 
 @Component({
-  selector: 'jhi-many-to-one-dealer-form-control',
-  templateUrl: './many-to-one-dealer-form-control.component.html',
+  selector: 'jhi-m21-dealer-form-control',
+  templateUrl: './m21-dealer-form-control.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ManyToOneDealerFormControlComponent),
+      useExisting: forwardRef(() => M21DealerFormControlComponent),
       multi: true
     }
   ]
 })
-export class ManyToOneDealerFormControlComponent implements OnInit, ControlValueAccessor {
+export class M21DealerFormControlComponent implements OnInit, ControlValueAccessor {
 
-  // TODO Use abstract terms for the labels and other elements of the component
   // TODO Add logs and developer views to the component to aid in telemetry
   // TODO Create similar components for other entities
   // TODO Implement entity for many-to-many relationships
   // TODO Add self validation code via NG_VALIDATOR provider
 
-  @HostBinding('attr.id')
-  externalId = '';
+  @HostBinding('attr.id') externalId = '';
 
   @Input() inputDealer: IDealer = {}
 
