@@ -1,6 +1,7 @@
 <div class="form-group">
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
+    [multiple]='true'
     [items]="dealerLookups$ | async"
     bindLabel="dealerName"
     [trackByFn]="trackDealerByFn"
@@ -8,15 +9,16 @@
     [loading]="dealersLoading"
     typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
     [typeahead]="dealersInput$"
-    [(ngModel)]='inputDealer'
+    [(ngModel)]='inputDealers'
     (change)="getValues()"
   >
-    <option [ngValue]="inputDealer"></option>
+    <ng-option *ngFor="let option of dealerLookups$ | async" [value]="option">
+      {{ option.dealerName }}
+    </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
       <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
     </ng-template>
   </ng-select>
-  <div>{{inputDealer|formatDealerId}}</div>
-  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputDealer|json }}</div>
+  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputDealers|json }}</div>
 </div>

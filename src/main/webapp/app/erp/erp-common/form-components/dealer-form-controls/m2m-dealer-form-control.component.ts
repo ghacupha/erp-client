@@ -2,10 +2,7 @@ import { Component, EventEmitter, forwardRef, HostBinding, Input, OnInit, Output
 import { ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { IDealer } from '../../../../entities/dealers/dealer/dealer.model';
 import { concat, Observable, of, Subject } from 'rxjs';
-import { DataUtils } from '../../../../core/util/data-util.service';
-import { EventManager } from '../../../../core/util/event-manager.service';
 import { DealerService } from '../../../../entities/dealers/dealer/service/dealer.service';
-import { ActivatedRoute } from '@angular/router';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
 import { DealerInputControlService } from './dealer-input-control.service';
@@ -30,11 +27,13 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
 
   @HostBinding('attr.id') externalId = '';
 
-  @Input() inputDealer: IDealer = {}
+  @Input() inputDealers: IDealer[] = [];
 
   @Input() inputControlLabel = '';
 
   @Output() dealerSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
+
+  selectedDealer: IDealer = {};
 
   isSaving = false;
 
@@ -47,10 +46,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
   dealerLookups$: Observable<IDealer[]> = of([]);
 
   constructor(
-    protected dataUtils: DataUtils,
-    protected eventManager: EventManager,
     protected dealerService: DealerService,
-    protected activatedRoute: ActivatedRoute,
     protected dealerInputControlService: DealerInputControlService
   ) {}
 
@@ -96,14 +92,14 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
   writeValue(value: IDealer): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
-      this.inputDealer = value;
+      this.selectedDealer = value;
     }
   }
 
   getValues(): void {
     // eslint-disable-next-line no-console
-    console.log("Picking changed values");
-    this.dealerSelected.emit(this.inputDealer);
+    console.log(`Picking changed values: ${this.selectedDealer}`);
+    this.dealerSelected.emit(this.selectedDealer);
   }
 
   previousState(): void {
@@ -111,9 +107,10 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
   }
 
   protected updateForm(): void {
+    this.dealersSharedCollection = [...this.dealersSharedCollection,
+      ...this.inputDealers];
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      this.inputDealer
+      this.dealersSharedCollection
     );
   }
 
@@ -121,7 +118,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.inputDealer)))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing([...dealers, ...this.inputDealers])))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
   }
 

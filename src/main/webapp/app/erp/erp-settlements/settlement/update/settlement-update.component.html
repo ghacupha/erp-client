@@ -316,6 +316,15 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['signatories'])!.value|json}}</div>
         </div>
 
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='signatories'
+          [inputDealers]="editForm.get(['signatories'])!.value"
+          (dealerSelected)='updateSignatories($event)'
+          inputControlLabel=Signatories
+        >
+        </jhi-m2m-dealer-form-control>
+
         <div class="form-group">
           <label class="form-control-label">Settlement Group</label>
           <ng-select

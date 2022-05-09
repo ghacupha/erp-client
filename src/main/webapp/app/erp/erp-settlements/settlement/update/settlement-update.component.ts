@@ -148,6 +148,12 @@ export class SettlementUpdateComponent implements OnInit {
     });
   }
 
+  updateSignatories(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      signatories: [...this.editForm.get(['signatories'])!.value, dealerUpdate]
+    });
+  }
+
   loadPaymentInvoices(): void {
     this.paymentInvoiceLookups$ = concat(
       of([]), // default items
