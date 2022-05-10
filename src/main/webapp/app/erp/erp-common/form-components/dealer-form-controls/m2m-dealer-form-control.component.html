@@ -1,7 +1,6 @@
 <div class="form-group">
-  <label class="form-control-label">{{ inputControlLabel }}</label>
+  <label class="form-control-label">Signatories</label>
   <ng-select
-    [multiple]='true'
     [items]="dealerLookups$ | async"
     bindLabel="dealerName"
     [trackByFn]="trackDealerByFn"
@@ -11,14 +10,16 @@
     [typeahead]="dealersInput$"
     [(ngModel)]='inputDealers'
     (change)="getValues()"
+    [multiple]='true'
   >
     <ng-option *ngFor="let option of dealerLookups$ | async" [value]="option">
       {{ option.dealerName }}
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
       <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
     </ng-template>
   </ng-select>
-  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputDealers|json }}</div>
+  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputDealers|json}}</div>
 </div>

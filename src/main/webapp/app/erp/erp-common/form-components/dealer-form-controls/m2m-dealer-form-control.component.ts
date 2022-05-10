@@ -31,7 +31,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
 
   @Input() inputControlLabel = '';
 
-  @Output() dealerSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
+  @Output() dealerSelected: EventEmitter<IDealer[]> = new EventEmitter<IDealer[]>();
 
   selectedDealer: IDealer = {};
 
@@ -81,7 +81,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
           tap(() => this.dealersLoading = false)
         ))
       ),
-      of([...this.dealersSharedCollection])
+      of([])
     );
   }
 
@@ -93,13 +93,15 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
       this.selectedDealer = value;
+      // this.inputDealers.push(value);
     }
   }
 
   getValues(): void {
     // eslint-disable-next-line no-console
     console.log(`Picking changed values: ${this.selectedDealer}`);
-    this.dealerSelected.emit(this.selectedDealer);
+    // this.dealerSelected.emit(this.selectedDealer);
+    this.dealerSelected.emit(this.inputDealers);
   }
 
   previousState(): void {
@@ -107,10 +109,8 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
   }
 
   protected updateForm(): void {
-    this.dealersSharedCollection = [...this.dealersSharedCollection,
-      ...this.inputDealers];
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection
+      this.inputDealers
     );
   }
 
@@ -118,7 +118,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing([...dealers, ...this.inputDealers])))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
   }
 
