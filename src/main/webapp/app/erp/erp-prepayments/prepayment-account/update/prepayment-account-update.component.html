@@ -228,92 +228,25 @@
           </small>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
-
-        <!--<div class="form-group">
-          <label class="form-control-label">Dealer</label>
-          <ng-select
-            [items]="dealerLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackDealerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="dealersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="dealersInput$"
-            formControlName="dealer"
-          >
-            <option [ngValue]="editForm.get('dealer')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              &lt;!&ndash; // TODO Check if we need to track selection on the many to many entities with selected: boolean&ndash;&gt;
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['dealer'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='biller'
-          [inputDealer]="editForm.get('biller')!.value"
-          (dealerSelected)='updateDealer($event)'
-          inputControlLabel=Beneficiary
+          [inputValue]="editForm.get('dealer')!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel=Dealer
         >
-          <option [ngValue]="editForm.get('biller')!.value"></option>
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_placeholder">Placeholder</label>
-          <select class="form-control" id="field_placeholder" data-cy="placeholder" name="placeholder" formControlName="placeholder">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                placeholderOption.id === editForm.get('placeholder')!.value?.id ? editForm.get('placeholder')!.value : placeholderOption
-              "
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholder'
+          [inputValues]="editForm.get(['placeholder'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
-        <div class='form-group'>
-          <label class='form-control-label'>Placeholder(s)</label>
-          <ng-select
-            [items]='placeholderLookups$ | async'
-            bindLabel='description'
-            [trackByFn]='trackPlaceholdersByFn'
-            [minTermLength]='minAccountLengthTerm'
-            [loading]='placeholdersLoading'
-            typeToSearchText='Please enter {{minAccountLengthTerm}} or more characters'
-            [typeahead]='placeholderControlInput$'
-            formControlName='placeholders'
-            [multiple]='true'
-          >
-            <ng-option *ngFor='let option of placeholderLookups$ | async' [value]='option'>
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item='item' let-item$='item$' let-index='index'>
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id='item-{{index}}' type='checkbox' [checked]='item$.selected' /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
 
         <div class='form-group'>
           <label class='form-control-label' for='field_debitAccount'>Debit Account</label>

@@ -102,8 +102,8 @@
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='biller'
-          [inputDealer]="editForm.get('biller')!.value"
-          (dealerSelected)='updateDealer($event)'
+          [inputValue]="editForm.get('biller')!.value"
+          (valueSelected)='updateDealer($event)'
           inputControlLabel=Biller
         >
           <option [ngValue]="editForm.get('biller')!.value"></option>

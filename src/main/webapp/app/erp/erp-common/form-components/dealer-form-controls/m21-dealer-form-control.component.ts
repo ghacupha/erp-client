@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -17,22 +17,22 @@ import { DealerService } from '../../services/dealer.service';
     }
   ]
 })
-export class M21DealerFormControlComponent implements OnInit, ControlValueAccessor {
+export class M21DealerFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
-  @Input() inputDealer: IDealer = {}
+  @Input() inputValue: IDealer = {}
 
   @Input() inputControlLabel = '';
 
-  @Output() dealerSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
+  @Output() valueSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
 
   minAccountLengthTerm = 3;
-  dealersLoading = false;
-  dealersInput$ = new Subject<string>();
-  dealerLookups$: Observable<IDealer[]> = of([]);
+  valuesLoading = false;
+  valueControlInput$ = new Subject<string>();
+  valueLookUps$: Observable<IDealer[]> = of([]);
 
   constructor(
-    protected dealerService: DealerService,
-    protected dealerInputControlService: DealerInputControlService
+    protected valueService: DealerService,
+    protected valueSuggestionService: DealerInputControlService
   ) {}
 
   onChange: any = () => {
@@ -44,40 +44,47 @@ export class M21DealerFormControlComponent implements OnInit, ControlValueAccess
 
   ngOnInit(): void {
 
-    this.loadDealers();
+    this.loadValues();
   }
 
-   loadDealers(): void {
-    this.dealerLookups$ = concat(
+  ngOnDestroy(): void {
+
+    this.valueLookUps$ = of([]);
+    this.inputValue = {}
+  }
+
+  loadValues(): void {
+    this.valueLookUps$ = concat(
       of([]), // default items
-      this.dealersInput$.pipe(
+      this.valueControlInput$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filter(res => res !== null),
         distinctUntilChanged(),
         debounceTime(800),
-        tap(() => this.dealersLoading = true),
-        switchMap(term => this.dealerInputControlService.search(term).pipe(
+        tap(() => this.valuesLoading = true),
+        switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
-          tap(() => this.dealersLoading = false)
+          tap(() => this.valuesLoading = false)
         ))
       ),
     );
   }
 
-  trackDealerByFn(item: IDealer): number {
+  trackValueByFn(item: any): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return item.id!;
   }
 
   writeValue(value: IDealer): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
-      this.inputDealer = value;
+      this.inputValue = value;
     }
   }
 
   getValues(): void {
-    this.dealerSelected.emit(this.inputDealer);
+    this.valueSelected.emit(this.inputValue);
   }
 
   registerOnChange(fn: any): void {

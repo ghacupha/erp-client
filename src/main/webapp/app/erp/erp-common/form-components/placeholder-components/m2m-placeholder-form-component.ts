@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { PlaceholderSuggestionService } from '../../suggestion/placeholder-sugge
     }
   ]
 })
-export class M2MPlaceholderFormComponent implements OnInit, ControlValueAccessor {
+export class M2MPlaceholderFormComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() inputValues: IPlaceholder[] = [];
 
@@ -43,10 +43,16 @@ export class M2MPlaceholderFormComponent implements OnInit, ControlValueAccessor
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    this.loadDealers();
+    this.loadValues();
   }
 
-  loadDealers(): void {
+  ngOnDestroy(): void {
+
+    this.valueLookUps$ = of([]);
+    this.inputValues = [];
+  }
+
+  loadValues(): void {
     this.valueLookUps$ = concat(
       of([]), // default items
       this.valueInputControl$.pipe(

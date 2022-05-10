@@ -119,6 +119,13 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholder: [...update],
+    });
+  }
+
   loadPlaceholders(): void {
     this.placeholderLookups$ = concat(
       of([]), // default items
