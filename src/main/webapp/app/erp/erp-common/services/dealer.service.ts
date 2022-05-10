@@ -6,7 +6,6 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ErpCommonModule } from '../erp-common.module';
 import { getDealerIdentifier, IDealer } from '../models/dealer.model';
 
 export type EntityResponseType = HttpResponse<IDealer>;
