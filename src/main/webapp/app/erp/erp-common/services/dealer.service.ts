@@ -12,7 +12,7 @@ import { getDealerIdentifier, IDealer } from '../models/dealer.model';
 export type EntityResponseType = HttpResponse<IDealer>;
 export type EntityArrayResponseType = HttpResponse<IDealer[]>;
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class DealerService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dealers');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
