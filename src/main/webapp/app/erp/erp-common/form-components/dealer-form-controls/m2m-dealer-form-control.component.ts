@@ -22,7 +22,6 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
 
   // TODO Add logs and developer views to the component to aid in telemetry
   // TODO Create similar components for other entities
-  // TODO Implement entity for many-to-many relationships
   // TODO Add self validation code via NG_VALIDATOR provider
 
   @HostBinding('attr.id') externalId = '';
@@ -89,18 +88,16 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
     return item.id!;
   }
 
-  writeValue(value: IDealer): void {
+  writeValue(value: IDealer[]): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
-      this.selectedDealer = value;
-      // this.inputDealers.push(value);
+      this.inputDealers = value
     }
   }
 
   getValues(): void {
     // eslint-disable-next-line no-console
     console.log(`Picking changed values: ${this.selectedDealer}`);
-    // this.dealerSelected.emit(this.selectedDealer);
     this.dealerSelected.emit(this.inputDealers);
   }
 
