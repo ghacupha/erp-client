@@ -7,7 +7,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { IPlaceholder } from '../models/placeholder.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class PlaceholderSuggestionService {
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/placeholders');
 

@@ -154,6 +154,12 @@ export class SettlementUpdateComponent implements OnInit {
     });
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
   loadPaymentInvoices(): void {
     this.paymentInvoiceLookups$ = concat(
       of([]), // default items
