@@ -99,37 +99,12 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label">Biller</label>
-          <ng-select
-            [items]="billerLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackBillerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="billersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="billersInput$"
-            formControlName="biller"
-          >
-            <option [ngValue]="editForm.get('biller')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              &lt;!&ndash; // TODO Check if we need to track selection on the many to many entities with selected: boolean&ndash;&gt;
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['biller'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='biller'
           [inputDealer]="editForm.get('biller')!.value"
           (dealerSelected)='updateDealer($event)'
-          inputControlLabel=Beneficiary
+          inputControlLabel=Biller
         >
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
@@ -289,31 +264,6 @@
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label">Signatories</label>
-          <ng-select
-            [items]="signatoryLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackBillerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="signatoriesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="signatoryControlInput$"
-            formControlName="signatories"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of signatoryLookups$ | async" [value]="option">
-              {{ option.dealerName }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['signatories'])!.value|json}}</div>
         </div>
 
         <jhi-m2m-dealer-form-control
