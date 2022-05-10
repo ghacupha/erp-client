@@ -1,10 +1,10 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import { IDealer } from '../../../../entities/dealers/dealer/dealer.model';
 import { concat, Observable, of, Subject } from 'rxjs';
-import { DealerService } from '../../../../entities/dealers/dealer/service/dealer.service';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { DealerInputControlService } from './dealer-input-control.service';
+import { IDealer } from '../../models/dealer.model';
+import { DealerService } from '../../services/dealer.service';
 
 @Component({
   selector: 'jhi-m2m-dealer-form-control',
