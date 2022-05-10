@@ -16,7 +16,6 @@
       {{ option.dealerName }}
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-      <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
       <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
     </ng-template>
