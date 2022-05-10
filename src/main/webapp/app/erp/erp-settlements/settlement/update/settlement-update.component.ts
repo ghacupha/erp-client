@@ -70,10 +70,6 @@ export class SettlementUpdateComponent implements OnInit {
 
   minAccountLengthTerm = 3;
 
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
   categoriesLoading = false;
   categoryControlInput$ = new Subject<string>();
   categoryLookups$: Observable<IPaymentCategory[]> = of([]);
@@ -89,14 +85,6 @@ export class SettlementUpdateComponent implements OnInit {
   settlementCurrenciesLoading = false;
   settlementCurrencyControlInput$ = new Subject<string>();
   settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
-
-  billersLoading = false;
-  // billersInput$ = new Subject<string>();
-  billerLookups$: Observable<IDealer[]> = of([]);
-
-  signatoriesLoading = false;
-  signatoryControlInput$ = new Subject<string>();
-  signatoryLookups$: Observable<IDealer[]> = of([]);
 
   paymentInvoicesLoading = false;
   paymentInvoiceControlInput$ = new Subject<string>();
@@ -115,10 +103,8 @@ export class SettlementUpdateComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected categorySuggestionService: CategorySuggestionService,
     protected labelSuggestionService: LabelSuggestionService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
     protected settlementSuggestionService: SettlementSuggestionService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
-    protected dealerSuggestionService: DealerSuggestionService,
     protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
     protected fb: FormBuilder
   ) {}
@@ -132,12 +118,9 @@ export class SettlementUpdateComponent implements OnInit {
 
     // fire-up typeahead items
     this.loadLabels();
-    this.loadPlaceholders();
     this.loadCategories();
     this.loadSettlements();
     this.loadCurrencies();
-    // this.loadBillers();
-    this.loadSignatories();
     this.loadPaymentInvoices();
   }
 
@@ -178,44 +161,6 @@ export class SettlementUpdateComponent implements OnInit {
       of([...this.paymentInvoicesSharedCollection])
     );
   }
-
-  loadSignatories(): void {
-    this.signatoryLookups$ = concat(
-      of([]), // default items
-      this.signatoryControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.signatoriesLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.signatoriesLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
-  }
-
-  /* loadBillers(): void {
-    this.billerLookups$ = concat(
-      of([]), // default items
-      this.billersInput$.pipe(
-        /!* filter(res => res.length >= this.minAccountLengthTerm), *!/
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.billersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.billersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
-  } */
 
   loadCurrencies(): void {
     this.settlementCurrencyLookups$ = concat(
@@ -274,25 +219,6 @@ export class SettlementUpdateComponent implements OnInit {
     );
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
   loadSettlements(): void {
     this.settlementLookups$ = concat(
       of([]), // default items
@@ -316,19 +242,11 @@ export class SettlementUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackBillerByFn(item: IDealer): number {
-    return item.id!;
-  }
-
   trackCurrencyByFn(item: ISettlementCurrency): number {
     return item.id!;
   }
 
   trackPaymentByFn(item: IPayment): number {
-    return item.id!;
-  }
-
-  trackPlaceholdersByFn(item: IPaymentLabel): number {
     return item.id!;
   }
 
