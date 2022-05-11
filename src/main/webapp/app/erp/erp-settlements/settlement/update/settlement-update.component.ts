@@ -78,10 +78,6 @@ export class SettlementUpdateComponent implements OnInit {
   labelControlInput$ = new Subject<string>();
   labelLookups$: Observable<IPaymentLabel[]> = of([]);
 
-  settlementsLoading = false;
-  settlementControlInput$ = new Subject<string>();
-  settlementLookups$: Observable<ISettlement[]> = of([]);
-
   settlementCurrenciesLoading = false;
   settlementCurrencyControlInput$ = new Subject<string>();
   settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
@@ -119,7 +115,6 @@ export class SettlementUpdateComponent implements OnInit {
     // fire-up typeahead items
     this.loadLabels();
     this.loadCategories();
-    this.loadSettlements();
     this.loadCurrencies();
     this.loadPaymentInvoices();
   }
@@ -225,25 +220,6 @@ export class SettlementUpdateComponent implements OnInit {
     );
   }
 
-  loadSettlements(): void {
-    this.settlementLookups$ = concat(
-      of([]), // default items
-      this.settlementControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementsLoading = true),
-        switchMap(term => this.settlementSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementsLoading = false)
-        ))
-      ),
-      of([...this.settlementsSharedCollection])
-    );
-  }
-
   trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
     return item.id!;
   }
@@ -261,10 +237,6 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   trackLabelByFn(item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackSettlementByFn(item: ISettlement): number {
     return item.id!;
   }
 
