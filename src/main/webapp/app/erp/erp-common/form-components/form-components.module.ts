@@ -15,6 +15,9 @@ import { M2MPaymentInvoiceFormControlComponent } from './payment-invoice-control
 import { M21PaymentInvoiceFormControlComponent } from './payment-invoice-control-form-components/m21-payment-invoice-form-control.component';
 import { M21PurchaseOrderFormControlComponent } from './purchase-order-form-control-components/m21-purchase-order-form-control.component';
 import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m-job-sheet-form-control.component';
+import { M2MDeliveryNoteFormControlComponent } from './delivery-note-form-components/m2m-delivery-note-form-control.component';
+import { M21ServiceOutletFormControlComponent } from './service-outlet-form-components/m21-service-outlet-form-control.component';
+import { M21TransactionAccountFormControlComponent } from './transaction-account-form-components/m21-transaction-account-form-control.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,9 @@ import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m
     M21PaymentInvoiceFormControlComponent,
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
+    M2MDeliveryNoteFormControlComponent,
+    M21ServiceOutletFormControlComponent,
+    M21TransactionAccountFormControlComponent
   ],
   imports: [
     CommonModule,
@@ -50,6 +56,9 @@ import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m
     M21PaymentInvoiceFormControlComponent,
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
+    M2MDeliveryNoteFormControlComponent,
+    M21ServiceOutletFormControlComponent,
+    M21TransactionAccountFormControlComponent,
   ]
 })
 export class FormComponentsModule {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { SettlementCurrencySuggestionService } from '../../suggestion/settlement
     }
   ]
 })
-export class M2MSettlementCurrencyFormControlComponent implements OnInit, ControlValueAccessor {
+export class M2MSettlementCurrencyFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() inputValues: ISettlementCurrency[] = [];
 
@@ -42,6 +42,11 @@ export class M2MSettlementCurrencyFormControlComponent implements OnInit, Contro
 
   ngOnInit(): void {
     this.loadDealers();
+  }
+
+  ngOnDestroy(): void {
+    this.valueLookups$ = of([]);
+    this.inputValues = [];
   }
 
   loadDealers(): void {

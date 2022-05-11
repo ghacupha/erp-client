@@ -1,9 +1,9 @@
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { ISettlement } from 'app/entities/settlement/settlement.model';
-import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IDealer } from '../../erp-common/models/dealer.model';
+import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
 
 export interface IPrepaymentAccount {
   id?: number;

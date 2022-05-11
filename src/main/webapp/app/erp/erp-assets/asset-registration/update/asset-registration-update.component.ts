@@ -32,7 +32,6 @@ import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/pla
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
 import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/delivery-notes-suggestion.service';
 import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';

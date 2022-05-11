@@ -25,10 +25,8 @@ import { IDealer } from '../../../erp-common/models/dealer.model';
 import { IPayment } from '../../../erp-common/models/payment.model';
 import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
 import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
-import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 
 @Component({

@@ -2,31 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { ISettlement } from 'app/entities/settlement/settlement.model';
-import { SettlementService } from 'app/entities/settlement/service/settlement.service';
-import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
-import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
-import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
-import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
-import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -57,28 +52,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     transferAccount: [],
   });
 
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  settlementCurrenciesLoading = false;
-  settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
-
-  prepaymentTransactionsLoading = false;
-  prepaymentTransactionsControlInput$ = new Subject<string>();
-  prepaymentTransactionLookups$: Observable<ISettlement[]> = of([]);
-
-  serviceOutletsLoading = false;
-  serviceOutletControlInput$ = new Subject<string>();
-  serviceOutletLookups$: Observable<IServiceOutlet[]> = of([]);
-
-  dealersLoading = false;
-  dealersInput$ = new Subject<string>();
-  dealerLookups$: Observable<IDealer[]> = of([]);
-
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -89,11 +62,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
     protected transactionAccountService: TransactionAccountService,
-    protected settlementSuggestionService: SettlementSuggestionService,
-    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
-    protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
-    protected dealerSuggestionService: DealerSuggestionService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -105,11 +73,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
-    this.loadSettlements();
-    this.loadCurrencies();
-    this.loadServiceOutlets();
-    this.loadDealers();
-    this.loadPlaceholders();
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -126,120 +89,39 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     });
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updatePrepaymentTransaction(update: ISettlement): void {
+    this.editForm.patchValue({
+      prepaymentTransaction: update,
+    });
   }
 
-  loadDealers(): void {
-    this.dealerLookups$ = concat(
-      of([]), // default items
-      this.dealersInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.dealersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.dealersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateCurrencies(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      settlementCurrency: update,
+    });
   }
 
-  loadCurrencies(): void {
-    this.settlementCurrencyLookups$ = concat(
-      of([]), // default items
-      this.settlementCurrencyControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementCurrenciesLoading = true),
-        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementCurrenciesLoading = false)
-        ))
-      ),
-      of([...this.settlementCurrenciesSharedCollection])
-    );
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateServiceOutlet(update: IServiceOutlet): void {
+    this.editForm.patchValue({
+      serviceOutlet: update,
+    });
   }
 
-  // Load dynamic ServiceOutlet instances from the input-search stream
-  loadServiceOutlets(): void {
-    this.serviceOutletLookups$ = concat(
-      of([]), // default items
-      this.serviceOutletControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.serviceOutletsLoading = true),
-        switchMap(term => this.serviceOutletSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.serviceOutletsLoading = false)
-        ))
-      ),
-      of([...this.serviceOutletsSharedCollection])
-    );
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDebitAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debitAccount: update,
+    });
   }
 
-  loadSettlements(): void {
-    this.prepaymentTransactionLookups$ = concat(
-      of([]), // default items
-      this.prepaymentTransactionsControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.prepaymentTransactionsLoading = true),
-        switchMap(term => this.settlementSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.prepaymentTransactionsLoading = false)
-        ))
-      ),
-      of([...this.settlementsSharedCollection])
-    );
-  }
-
-  trackDealerByFn(item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPlaceholdersByFn(item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackCurrencyByFn(item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackServiceOutletByFn(item: IServiceOutlet): number {
-    return item.id!;
-  }
-
-  trackSettlementsByFn(item: ISettlement): number {
-    return item.id!;
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateTransferAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      transferAccount: update,
+    });
   }
 
   byteSize(base64String: string): string {

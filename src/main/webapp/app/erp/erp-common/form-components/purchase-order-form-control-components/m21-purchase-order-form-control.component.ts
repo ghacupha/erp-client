@@ -6,7 +6,7 @@ import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase
 import { PurchaseOrderSuggestionService } from '../../suggestion/purchase-order-suggestion.service';
 
 @Component({
-  selector: 'jhi-m21-dealer-form-control',
+  selector: 'jhi-m21-purchase-order-form-control',
   templateUrl: './m21-purchase-order-form-control.component.html',
   providers: [
     {

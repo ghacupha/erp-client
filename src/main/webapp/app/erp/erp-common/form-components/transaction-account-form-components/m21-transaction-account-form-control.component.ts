@@ -2,60 +2,59 @@ import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
-
+import { TransactionAccountSuggestionService } from '../../suggestion/transaction-account-suggestion.service';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 
 @Component({
-  selector: 'jhi-m2m-settlement-form-control',
-  templateUrl: './m2m-settlement-form-control.component.html',
+  selector: 'jhi-m21-transaction-account-form-control',
+  templateUrl: './m21-transaction-account-form-control.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => M2MSettlementFormControlComponent),
+      useExisting: forwardRef(() => M21TransactionAccountFormControlComponent),
       multi: true
     }
   ]
 })
-export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class M21TransactionAccountFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
-  @Input() inputValues: ISettlement[] = [];
+  @Input() inputValue: ITransactionAccount = {}
 
   @Input() inputControlLabel = '';
 
-  @Output() valueSelected: EventEmitter<ISettlement[]> = new EventEmitter<ISettlement[]>();
+  @Output() valueSelected: EventEmitter<ITransactionAccount> = new EventEmitter<ITransactionAccount>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
-  valueInputControl$ = new Subject<string>();
-  valueLookups$: Observable<ISettlement[]> = of([]);
+  valueControlInput$ = new Subject<string>();
+  valueLookUps$: Observable<ITransactionAccount[]> = of([]);
 
   constructor(
-    protected valueService: SettlementService,
-    protected valueSuggestionService: SettlementSuggestionService
+    protected valueSuggestionService: TransactionAccountSuggestionService
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onChange: any = () => {
     this.getValues();
   };
+
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    this.loadDealers();
+
+    this.loadValues();
   }
 
   ngOnDestroy(): void {
-    this.valueLookups$ = of([]);
-    this.inputValues = [];
+
+    this.valueLookUps$ = of([]);
+    this.inputValue = {}
   }
 
-  loadDealers(): void {
-    this.valueLookups$ = concat(
+  loadValues(): void {
+    this.valueLookUps$ = concat(
       of([]), // default items
-      this.valueInputControl$.pipe(
+      this.valueControlInput$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filter(res => res !== null),
@@ -66,7 +65,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
           catchError(() => of([])),
           tap(() => this.valuesLoading = false)
         ))
-      )
+      ),
     );
   }
 
@@ -75,22 +74,15 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
     return item.id!;
   }
 
-  /**
-   * Replaces the array received from the parent with the one currently in view
-   *
-   * @param value
-   */
-  writeValue(value: ISettlement[]): void {
-    if (value.length !== 0) {
-      this.inputValues = value
+  writeValue(value: ITransactionAccount): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (value) {
+      this.inputValue = value;
     }
   }
 
-  /**
-   * Emits updated array to parent
-   */
   getValues(): void {
-    this.valueSelected.emit(this.inputValues);
+    this.valueSelected.emit(this.inputValue);
   }
 
   registerOnChange(fn: any): void {

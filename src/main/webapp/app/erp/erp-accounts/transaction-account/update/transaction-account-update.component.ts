@@ -14,7 +14,6 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { TransactionAccountSuggestionService } from '../../../erp-common/suggestion/transaction-account-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-transaction-account-update',

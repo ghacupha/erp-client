@@ -2,38 +2,35 @@ import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
-
+import { DeliveryNotesSuggestionService } from '../../suggestion/delivery-notes-suggestion.service';
+import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
 
 @Component({
-  selector: 'jhi-m2m-settlement-form-control',
-  templateUrl: './m2m-settlement-form-control.component.html',
+  selector: 'jhi-m2m-delivery-note-form-control',
+  templateUrl: './m2m-delivery-note-form-control.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => M2MSettlementFormControlComponent),
+      useExisting: forwardRef(() => M2MDeliveryNoteFormControlComponent),
       multi: true
     }
   ]
 })
-export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
+export class M2MDeliveryNoteFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  @Input() inputValues: ISettlement[] = [];
+  @Input() inputValues: IDeliveryNote[] = [];
 
   @Input() inputControlLabel = '';
 
-  @Output() valueSelected: EventEmitter<ISettlement[]> = new EventEmitter<ISettlement[]>();
+  @Output() selectedValues: EventEmitter<IDeliveryNote[]> = new EventEmitter<IDeliveryNote[]>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueInputControl$ = new Subject<string>();
-  valueLookups$: Observable<ISettlement[]> = of([]);
+  valueLookUps$: Observable<IDeliveryNote[]> = of([]);
 
   constructor(
-    protected valueService: SettlementService,
-    protected valueSuggestionService: SettlementSuggestionService
+    protected valueSuggestionService: DeliveryNotesSuggestionService
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -44,16 +41,17 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    this.loadDealers();
+    this.loadValues();
   }
 
   ngOnDestroy(): void {
-    this.valueLookups$ = of([]);
+
+    this.valueLookUps$ = of([]);
     this.inputValues = [];
   }
 
-  loadDealers(): void {
-    this.valueLookups$ = concat(
+  loadValues(): void {
+    this.valueLookUps$ = concat(
       of([]), // default items
       this.valueInputControl$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
@@ -70,7 +68,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
     );
   }
 
-  trackValueByFn(item: any): number {
+  trackValuesByFn(item: any): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return item.id!;
   }
@@ -80,7 +78,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
    *
    * @param value
    */
-  writeValue(value: ISettlement[]): void {
+  writeValue(value: IDeliveryNote[]): void {
     if (value.length !== 0) {
       this.inputValues = value
     }
@@ -90,7 +88,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
    * Emits updated array to parent
    */
   getValues(): void {
-    this.valueSelected.emit(this.inputValues);
+    this.selectedValues.emit(this.inputValues);
   }
 
   registerOnChange(fn: any): void {

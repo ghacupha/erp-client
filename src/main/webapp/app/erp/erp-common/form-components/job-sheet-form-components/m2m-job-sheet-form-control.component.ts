@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
     }
   ]
 })
-export class M2MJobSheetFormControlComponent implements OnInit, ControlValueAccessor {
+export class M2MJobSheetFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() inputValues: IJobSheet[] = [];
 
@@ -42,6 +42,11 @@ export class M2MJobSheetFormControlComponent implements OnInit, ControlValueAcce
 
   ngOnInit(): void {
     this.loadDealers();
+  }
+
+  ngOnDestroy(): void {
+    this.valueLookups$ = of([]);
+    this.inputValues = [];
   }
 
   loadDealers(): void {
