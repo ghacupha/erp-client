@@ -1,36 +1,36 @@
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { DealerInputControlService } from './dealer-input-control.service';
-import { IDealer } from '../../models/dealer.model';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencySuggestionService } from '../../suggestion/settlement-currency-suggestion.service';
 
 @Component({
-  selector: 'jhi-m21-dealer-form-control',
-  templateUrl: './m21-dealer-form-control.component.html',
+  selector: 'jhi-m21-settlement-currency-form-control',
+  templateUrl: './m21-settlement-currency-form-control.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => M21DealerFormControlComponent),
+      useExisting: forwardRef(() => M21SettlementCurrencyFormControlComponent),
       multi: true
     }
   ]
 })
-export class M21DealerFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
+export class M21SettlementCurrencyFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
-  @Input() inputValue: IDealer = {}
+  @Input() inputValue: ISettlementCurrency = {}
 
   @Input() inputControlLabel = '';
 
-  @Output() valueSelected: EventEmitter<IDealer> = new EventEmitter<IDealer>();
+  @Output() valueSelected: EventEmitter<ISettlementCurrency> = new EventEmitter<ISettlementCurrency>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueControlInput$ = new Subject<string>();
-  valueLookUps$: Observable<IDealer[]> = of([]);
+  valueLookUps$: Observable<ISettlementCurrency[]> = of([]);
 
   constructor(
-    protected valueSuggestionService: DealerInputControlService
+    protected valueSuggestionService: SettlementCurrencySuggestionService
   ) {}
 
   onChange: any = () => {
@@ -74,7 +74,7 @@ export class M21DealerFormControlComponent implements OnInit, ControlValueAccess
     return item.id!;
   }
 
-  writeValue(value: IDealer): void {
+  writeValue(value: ISettlementCurrency): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
       this.inputValue = value;

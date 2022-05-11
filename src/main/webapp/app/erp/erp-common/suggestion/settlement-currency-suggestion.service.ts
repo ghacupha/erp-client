@@ -7,7 +7,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class SettlementCurrencySuggestionService {
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/settlement-currencies');
 

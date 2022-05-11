@@ -8,6 +8,7 @@ import { M2MDealerFormControlComponent } from './dealer-form-controls/m2m-dealer
 import { M2MPlaceholderFormComponent } from './placeholder-components/m2m-placeholder-form-component';
 import { M2MSettlementFormControlComponent } from './settlement-form-components/m2m-settlement-form-control.component';
 import { M21SettlementFormControlComponent } from './settlement-form-components/m21-settlement-form-control.component';
+import { M21SettlementCurrencyFormControlComponent } from './settlement-currency-form-components/m21-settlement-currency-form-control.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { M21SettlementFormControlComponent } from './settlement-form-components/
     M2MPlaceholderFormComponent,
     M2MSettlementFormControlComponent,
     M21SettlementFormControlComponent,
+    M21SettlementCurrencyFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +31,7 @@ import { M21SettlementFormControlComponent } from './settlement-form-components/
     M2MPlaceholderFormComponent,
     M2MSettlementFormControlComponent,
     M21SettlementFormControlComponent,
+    M21SettlementCurrencyFormControlComponent,
   ]
 })
 export class FormComponentsModule {
