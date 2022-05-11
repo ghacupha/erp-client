@@ -19,20 +19,20 @@ import { DealerService } from '../../services/dealer.service';
 })
 export class M2MDealerFormControlComponent implements OnInit, ControlValueAccessor {
 
-  @Input() inputDealers: IDealer[] = [];
+  @Input() inputValues: IDealer[] = [];
 
   @Input() inputControlLabel = '';
 
-  @Output() dealerSelected: EventEmitter<IDealer[]> = new EventEmitter<IDealer[]>();
+  @Output() valueSelected: EventEmitter<IDealer[]> = new EventEmitter<IDealer[]>();
 
   minAccountLengthTerm = 3;
-  dealersLoading = false;
-  dealersInput$ = new Subject<string>();
-  dealerLookups$: Observable<IDealer[]> = of([]);
+  valuesLoading = false;
+  valueInputControl$ = new Subject<string>();
+  valueLookups$: Observable<IDealer[]> = of([]);
 
   constructor(
-    protected dealerService: DealerService,
-    protected dealerInputControlService: DealerInputControlService
+    protected valueService: DealerService,
+    protected valueSuggestionService: DealerInputControlService
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -47,18 +47,18 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
   }
 
   loadDealers(): void {
-    this.dealerLookups$ = concat(
+    this.valueLookups$ = concat(
       of([]), // default items
-      this.dealersInput$.pipe(
+      this.valueInputControl$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         filter(res => res !== null),
         distinctUntilChanged(),
         debounceTime(800),
-        tap(() => this.dealersLoading = true),
-        switchMap(term => this.dealerInputControlService.search(term).pipe(
+        tap(() => this.valuesLoading = true),
+        switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
-          tap(() => this.dealersLoading = false)
+          tap(() => this.valuesLoading = false)
         ))
       )
     );
@@ -75,7 +75,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
    */
   writeValue(value: IDealer[]): void {
     if (value.length !== 0) {
-      this.inputDealers = value
+      this.inputValues = value
     }
   }
 
@@ -83,7 +83,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
    * Emits updated array to parent
    */
   getValues(): void {
-    this.dealerSelected.emit(this.inputDealers);
+    this.valueSelected.emit(this.inputValues);
   }
 
   registerOnChange(fn: any): void {
