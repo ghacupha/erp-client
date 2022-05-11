@@ -2,7 +2,7 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookUps$ | async"
-    bindLabel="dealerName"
+    bindLabel="purchaseOrderNumber"
     [trackByFn]="trackValueByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"
@@ -14,10 +14,9 @@
     <option [ngValue]="inputValue"></option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
+      <jhi-purchase-order-option-view [item]='item'></jhi-purchase-order-option-view>
     </ng-template>
   </ng-select>
-  <!--// TODO Add entity-specific views-->
-  <div>{{inputValue|formatDealerId}}</div>
+  <div>{{inputValue|formatPurchaseOrder}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>

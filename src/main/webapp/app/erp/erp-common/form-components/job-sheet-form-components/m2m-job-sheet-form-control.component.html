@@ -1,0 +1,26 @@
+<div class="form-group">
+  <label class="form-control-label">{{ inputControlLabel }}</label>
+  <ng-select
+    [items]="valueLookups$ | async"
+    bindLabel="serialNumber"
+    [trackByFn]="trackValueByFn"
+    [minTermLength]="minAccountLengthTerm"
+    [loading]="valuesLoading"
+    typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+    [typeahead]="valueInputControl$"
+    [(ngModel)]='inputValues'
+    (change)="getValues()"
+    [multiple]='true'
+  >
+    <ng-option *ngFor="let option of valueLookups$ | async" [value]="option">
+      <!--// TODO Display additional details about the value-->
+      <jhi-job-sheet-option-view [item]='option'></jhi-job-sheet-option-view>
+    </ng-option>
+    <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+      <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
+      <!--// TODO Display additional details about the value-->
+      <jhi-job-sheet-option-view [item]='item'></jhi-job-sheet-option-view>
+    </ng-template>
+  </ng-select>
+  <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValues|json}}</div>
+</div>

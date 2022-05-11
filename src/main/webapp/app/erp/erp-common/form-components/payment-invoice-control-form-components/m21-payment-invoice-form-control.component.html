@@ -17,6 +17,6 @@
       <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
     </ng-template>
   </ng-select>
-  <div>{{inputValue|formatDealerId}}</div>
+  <div>{{inputValue|formatPaymentInvoice}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>
