@@ -11,6 +11,7 @@ import { M21SettlementFormControlComponent } from './settlement-form-components/
 import { M21SettlementCurrencyFormControlComponent } from './settlement-currency-form-components/m21-settlement-currency-form-control.component';
 import { M2MSettlementCurrencyFormControlComponent } from './settlement-currency-form-components/m2m-settlement-currency-form-control.component';
 import { M21PaymentCategoryControlComponent } from './payment-category-form-components/m21-payment-category-control.component';
+import { M2MPaymentInvoiceFormControlComponent } from './payment-invoice-control-form-components/m2m-payment-invoice-form-control.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { M21PaymentCategoryControlComponent } from './payment-category-form-comp
     M21SettlementCurrencyFormControlComponent,
     M2MSettlementCurrencyFormControlComponent,
     M21PaymentCategoryControlComponent,
+    M2MPaymentInvoiceFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -38,6 +40,7 @@ import { M21PaymentCategoryControlComponent } from './payment-category-form-comp
     M21SettlementCurrencyFormControlComponent,
     M2MSettlementCurrencyFormControlComponent,
     M21PaymentCategoryControlComponent,
+    M2MPaymentInvoiceFormControlComponent,
   ]
 })
 export class FormComponentsModule {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
@@ -7,7 +6,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class PaymentInvoiceSuggestionService {
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-invoices');
 
