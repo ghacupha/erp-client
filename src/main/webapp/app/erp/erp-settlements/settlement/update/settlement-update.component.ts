@@ -150,6 +150,12 @@ export class SettlementUpdateComponent implements OnInit {
     });
   }
 
+  updatePaymentCategory(update: IPaymentCategory): void {
+    this.editForm.patchValue({
+      paymentCategory: update
+    });
+  }
+
   loadPaymentInvoices(): void {
     this.paymentInvoiceLookups$ = concat(
       of([]), // default items

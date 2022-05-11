@@ -44,36 +44,15 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label">Settlement Currency</label>
-          <ng-select
-            [items]="settlementCurrencyLookups$ | async"
-            bindLabel="iso4217CurrencyCode"
-            [trackByFn]="trackCurrencyByFn"
-            [minTermLength]="3"
-            [loading]="settlementCurrenciesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="settlementCurrencyControlInput$"
-            formControlName="settlementCurrency"
-          >
-            <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{editForm.get(['settlementCurrency'])!.value|formatSettlementCurrency: [2, '...']}}</div>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['settlementCurrency'])!.invalid &&
-            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
-          "
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrencies($event)'
+          inputControlLabel='Currency Code (Required)'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
@@ -109,35 +88,15 @@
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label">Payment Category</label>
-          <ng-select
-            [items]="categoryLookups$ | async"
-            bindLabel="categoryName"
-            [trackByFn]="trackCategoryByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="categoriesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="categoryControlInput$"
-            formControlName="paymentCategory"
-          >
-            <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-payment-category-option-view [item]='item'></jhi-payment-category-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{editForm.get(['paymentCategory'])!.value|formatPaymentCategory: [35, '...']}}</div>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['paymentCategory'])!.invalid &&
-            (editForm.get(['paymentCategory'])!.dirty || editForm.get(['paymentCategory'])!.touched)
-          "
+        <jhi-m21-payment-category-form-control
+          ngDefaultControl
+          formControlName='paymentCategory'
+          [inputValue]="editForm.get('paymentCategory')!.value"
+          (valueSelected)='updatePaymentCategory($event)'
+          inputControlLabel='Payment Category (Required)'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
+        </jhi-m21-payment-category-form-control>
 
         <div class="form-group">
           <label class="form-control-label">Payment Invoice</label>
