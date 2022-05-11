@@ -260,31 +260,14 @@
         >
         </jhi-m2m-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label">Settlement Group</label>
-          <ng-select
-            [items]="settlementLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPaymentByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="settlementsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="settlementControlInput$"
-            formControlName="groupSettlement"
-          >
-            <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
-              <span class="ng-value-icon right" (click)="clear(item)">×</span>
-            </ng-template>
-            <option [ngValue]="editForm.get('groupSettlement')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{editForm.get(['groupSettlement'])!.value|formatSettlement: [35, '...']}}</div>
-        </div>
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='groupSettlement'
+          [inputValue]="editForm.get('groupSettlement')!.value"
+          (valueSelected)='updateSettlementGroup($event)'
+          inputControlLabel='Settlement Group'
+        >
+        </jhi-m21-settlement-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>

@@ -143,6 +143,12 @@ export class SettlementUpdateComponent implements OnInit {
     });
   }
 
+  updateSettlementGroup(update: ISettlement): void {
+    this.editForm.patchValue({
+      groupSettlement: update
+    });
+  }
+
   loadPaymentInvoices(): void {
     this.paymentInvoiceLookups$ = concat(
       of([]), // default items

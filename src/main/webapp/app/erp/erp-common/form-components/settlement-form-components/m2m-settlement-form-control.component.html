@@ -2,7 +2,7 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookups$ | async"
-    bindLabel="dealerName"
+    bindLabel="paymentNumber"
     [trackByFn]="trackValueByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"
@@ -14,12 +14,12 @@
   >
     <ng-option *ngFor="let option of valueLookups$ | async" [value]="option">
       <!--// TODO Display additional details about the value-->
-      <jhi-dealer-option-view [item]='option'></jhi-dealer-option-view>
+      <jhi-settlement-selected-option-view [item]='option'></jhi-settlement-selected-option-view>
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
       <!--// TODO Display additional details about the value-->
-      <jhi-dealer-option-view [item]='item'></jhi-dealer-option-view>
+      <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
     </ng-template>
   </ng-select>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValues|json}}</div>
