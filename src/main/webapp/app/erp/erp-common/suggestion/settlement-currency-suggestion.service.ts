@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';

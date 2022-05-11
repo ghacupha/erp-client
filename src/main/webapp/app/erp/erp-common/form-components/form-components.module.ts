@@ -9,6 +9,7 @@ import { M2MPlaceholderFormComponent } from './placeholder-components/m2m-placeh
 import { M2MSettlementFormControlComponent } from './settlement-form-components/m2m-settlement-form-control.component';
 import { M21SettlementFormControlComponent } from './settlement-form-components/m21-settlement-form-control.component';
 import { M21SettlementCurrencyFormControlComponent } from './settlement-currency-form-components/m21-settlement-currency-form-control.component';
+import { M2MSettlementCurrencyFormControlComponent } from './settlement-currency-form-components/m2m-settlement-currency-form-control.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { M21SettlementCurrencyFormControlComponent } from './settlement-currency
     M2MSettlementFormControlComponent,
     M21SettlementFormControlComponent,
     M21SettlementCurrencyFormControlComponent,
+    M2MSettlementCurrencyFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import { M21SettlementCurrencyFormControlComponent } from './settlement-currency
     M2MSettlementFormControlComponent,
     M21SettlementFormControlComponent,
     M21SettlementCurrencyFormControlComponent,
+    M2MSettlementCurrencyFormControlComponent,
   ]
 })
 export class FormComponentsModule {

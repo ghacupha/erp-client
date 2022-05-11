@@ -1,36 +1,36 @@
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { DealerInputControlService } from './dealer-input-control.service';
-import { IDealer } from '../../models/dealer.model';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencySuggestionService } from '../../suggestion/settlement-currency-suggestion.service';
 
 @Component({
-  selector: 'jhi-m2m-dealer-form-control',
-  templateUrl: './m2m-dealer-form-control.component.html',
+  selector: 'jhi-m2m-settlement-currency-form-control',
+  templateUrl: './m2m-settlement-currency-form-control.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => M2MDealerFormControlComponent),
+      useExisting: forwardRef(() => M2MSettlementCurrencyFormControlComponent),
       multi: true
     }
   ]
 })
-export class M2MDealerFormControlComponent implements OnInit, ControlValueAccessor {
+export class M2MSettlementCurrencyFormControlComponent implements OnInit, ControlValueAccessor {
 
-  @Input() inputValues: IDealer[] = [];
+  @Input() inputValues: ISettlementCurrency[] = [];
 
   @Input() inputControlLabel = '';
 
-  @Output() valueSelected: EventEmitter<IDealer[]> = new EventEmitter<IDealer[]>();
+  @Output() valueSelected: EventEmitter<ISettlementCurrency[]> = new EventEmitter<ISettlementCurrency[]>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueInputControl$ = new Subject<string>();
-  valueLookups$: Observable<IDealer[]> = of([]);
+  valueLookups$: Observable<ISettlementCurrency[]> = of([]);
 
   constructor(
-    protected valueSuggestionService: DealerInputControlService
+    protected valueSuggestionService: SettlementCurrencySuggestionService
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -72,7 +72,7 @@ export class M2MDealerFormControlComponent implements OnInit, ControlValueAccess
    *
    * @param value
    */
-  writeValue(value: IDealer[]): void {
+  writeValue(value: ISettlementCurrency[]): void {
     if (value.length !== 0) {
       this.inputValues = value
     }
