@@ -12,7 +12,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 import { IDealer } from '../../../erp-common/models/dealer.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';

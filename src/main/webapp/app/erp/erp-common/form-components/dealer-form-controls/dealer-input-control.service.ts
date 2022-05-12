@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
-import { IDealer } from '../../../../entities/dealers/dealer/dealer.model';
 import { createRequestOption } from '../../../../core/request/request-util';
 import { ASC, DESC } from '../../../../config/pagination.constants';
+import { IDealer } from '../../models/dealer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerInputControlService {

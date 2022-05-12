@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface ITransactionAccount {
   id?: number;
