@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { finalize, map, } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
@@ -23,7 +23,6 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -54,11 +53,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     transferAccount: [],
   });
 
-  minAccountLengthTerm = 3;
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -81,31 +75,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
-    // fire-up typeahead items
-    this.loadPlaceholders();
-
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
-  trackPlaceholdersByFn(item: IPaymentLabel): number {
+  trackPlaceholdersByFn(item: IPlaceholder): number {
     return item.id!;
   }
 
@@ -119,7 +91,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
-      placeholder: [...update],
+      placeholder: update
     });
   }
 

@@ -106,38 +106,14 @@
           <option [ngValue]="editForm.get('dealer')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <!--<jhi-m2m-placeholder-form-control
+        <jhi-m2m-placeholder-form-control
           ngDefaultControl
           formControlName='placeholder'
           [inputValues]="editForm.get(['placeholder'])!.value"
           (selectedValues)='updatePlaceholders($event)'
           inputControlLabel='Placeholder Items'
         >
-        </jhi-m2m-placeholder-form-control>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Placeholders</label>
-          <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
-            formControlName="placeholders"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
+        </jhi-m2m-placeholder-form-control>
 
         <jhi-m21-transaction-account-form-control
           ngDefaultControl

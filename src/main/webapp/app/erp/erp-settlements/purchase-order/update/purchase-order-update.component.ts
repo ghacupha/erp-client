@@ -185,7 +185,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackPlaceholdersByFn(item: IPaymentLabel): number {
+  trackPlaceholdersByFn(item: IPlaceholder): number {
     return item.id!;
   }
 
