@@ -44,6 +44,23 @@ export class DealerComponent implements OnInit {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 
+  loadReport(): void {
+    this.isLoading = true;
+
+    this.dealerService
+      .report()
+      .subscribe(
+        (res: HttpResponse<IDealer[]>) => {
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
+    return;
+  }
+
   loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
     const pageToLoad: number = page ?? this.page ?? 1;

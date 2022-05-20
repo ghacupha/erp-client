@@ -89,7 +89,9 @@
       "PrepaymentAccount",
       "WorkProjectRegister",
       "PrepaymentMarshalling",
-      "PrepaymentAmortization"
+      "PrepaymentAmortization",
+      "ReportTemplate",
+      "PdfReportRequisition"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

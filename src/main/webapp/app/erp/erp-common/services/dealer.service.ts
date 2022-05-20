@@ -13,6 +13,7 @@ export type EntityArrayResponseType = HttpResponse<IDealer[]>;
 
 @Injectable({ providedIn: 'root' })
 export class DealerService {
+  protected reportUrl = this.applicationConfigService.getEndpointFor('api/reports/dealers-listing');
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dealers');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
 
@@ -32,6 +33,10 @@ export class DealerService {
 
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IDealer>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  report(): Observable<any> {
+    return this.http.post(this.reportUrl, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
