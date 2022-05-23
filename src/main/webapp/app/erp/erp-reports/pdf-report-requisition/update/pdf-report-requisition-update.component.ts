@@ -11,6 +11,7 @@ import { IReportTemplate } from '../../report-template/report-template.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ReportTemplateService } from '../../report-template/service/report-template.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
 
 @Component({
   selector: 'jhi-pdf-report-requisition-update',

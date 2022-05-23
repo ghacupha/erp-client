@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
 
 import { PdfReportRequisitionService } from './pdf-report-requisition.service';
+import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
 
 describe('PdfReportRequisition Service', () => {
   let service: PdfReportRequisitionService;

@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import { IReportTemplate } from '../report-template/report-template.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
 
 export interface IPdfReportRequisition {
   id?: number;
