@@ -8,6 +8,7 @@ import {AssetsNavComponent} from "./assets-nav/assets-nav.component";
 import { TaxesNavComponent } from './taxes-nav/taxes-nav.component';
 import { GranularDataNavComponent } from './granular-data-nav/granular-data-nav.component';
 import { PrepaymentsNavComponent } from './prepayments/prepayments-nav.component';
+import { ReportsNavComponent } from './reports-nav/reports-nav.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { PrepaymentsNavComponent } from './prepayments/prepayments-nav.component
     AssetsNavComponent,
     TaxesNavComponent,
     GranularDataNavComponent,
-    PrepaymentsNavComponent
+    PrepaymentsNavComponent,
+    ReportsNavComponent,
   ],
   imports: [
     SharedModule,
@@ -29,7 +31,8 @@ import { PrepaymentsNavComponent } from './prepayments/prepayments-nav.component
     AssetsNavComponent,
     TaxesNavComponent,
     GranularDataNavComponent,
-    PrepaymentsNavComponent
+    PrepaymentsNavComponent,
+    ReportsNavComponent,
   ]
 })
 export class ErpNavigationModule {}
