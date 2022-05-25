@@ -85,7 +85,7 @@ export class SettlementComponent implements OnInit {
       ['paymentNumber', 'description', 'notes', 'calculationFile', 'fileUploadToken', 'compilationToken'].includes(this.predicate)
     ) {
       this.predicate = 'id';
-      this.ascending = true;
+      this.ascending = false;
     }
     this.currentSearch = query;
     this.loadPage(1);
@@ -119,7 +119,7 @@ export class SettlementComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+    const result = [this.predicate + ',' + (this.ascending ? DESC : ASC)];
     if (this.predicate !== 'id') {
       result.push('id');
     }

@@ -80,7 +80,7 @@ export class PaymentInvoiceComponent implements OnInit {
   search(query: string): void {
     if (query && ['invoiceNumber', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
-      this.ascending = true;
+      this.ascending = false;
     }
     this.currentSearch = query;
     this.loadPage(1);
@@ -106,7 +106,7 @@ export class PaymentInvoiceComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+    const result = [this.predicate + ',' + (this.ascending ? DESC : ASC)];
     if (this.predicate !== 'id') {
       result.push('id');
     }
