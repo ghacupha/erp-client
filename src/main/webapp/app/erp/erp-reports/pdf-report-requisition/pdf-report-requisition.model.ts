@@ -13,6 +13,7 @@ export interface IPdfReportRequisition {
   reportId?: string;
   reportTemplate?: IReportTemplate;
   placeholders?: IPlaceholder[] | null;
+  reportAttachment?: string | null;
 }
 
 export class PdfReportRequisition implements IPdfReportRequisition {
@@ -25,7 +26,8 @@ export class PdfReportRequisition implements IPdfReportRequisition {
     public reportStatus?: ReportStatusTypes | null,
     public reportId?: string,
     public reportTemplate?: IReportTemplate,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public reportAttachment?: string | null,
   ) {}
 }
 

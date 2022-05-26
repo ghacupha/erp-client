@@ -9,6 +9,7 @@ import { IPdfReportRequisition } from '../pdf-report-requisition.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PdfReportRequisitionService } from '../service/pdf-report-requisition.service';
 import { PdfReportRequisitionDeleteDialogComponent } from '../delete/pdf-report-requisition-delete-dialog.component';
+import { DataUtils } from '../../../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-pdf-report-requisition',
@@ -25,10 +26,13 @@ export class PdfReportRequisitionComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  contentType = "application/pdf";
+
   constructor(
     protected pdfReportRequisitionService: PdfReportRequisitionService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
+    protected dataUtils: DataUtils,
     protected modalService: NgbModal
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
@@ -92,6 +96,14 @@ export class PdfReportRequisitionComponent implements OnInit {
 
   trackId(index: number, item: IPdfReportRequisition): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string): void {
+    return this.dataUtils.openFile(base64String, this.contentType);
   }
 
   delete(pdfReportRequisition: IPdfReportRequisition): void {

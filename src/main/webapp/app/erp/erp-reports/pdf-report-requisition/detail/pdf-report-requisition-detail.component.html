@@ -38,6 +38,13 @@
         <dd>
           <span>{{ pdfReportRequisition.reportId }}</span>
         </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="pdfReportRequisition.reportAttachment">
+            <a (click)="openFile(pdfReportRequisition.reportAttachment, contentType)">open</a>
+            {{ contentType }}, {{ byteSize(pdfReportRequisition.reportAttachment) }}
+          </div>
+        </dd>
         <dt><span>Report Template</span></dt>
         <dd>
           <div *ngIf="pdfReportRequisition.reportTemplate">

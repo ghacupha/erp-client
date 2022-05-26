@@ -57,6 +57,7 @@
           <th scope="col" jhiSortBy="ownerPassword"><span>Owner Password</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportStatus"><span>Report Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportId"><span>Report Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportId"><span>Attachment</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportTemplate.catalogueNumber"><span>Report Template</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -72,6 +73,18 @@
           <td>{{ pdfReportRequisition.ownerPassword }}</td>
           <td>{{ pdfReportRequisition.reportStatus }}</td>
           <td>{{ pdfReportRequisition.reportId }}</td>
+          <td>
+            <a
+              *ngIf="pdfReportRequisition.reportAttachment"
+              (click)="openFile(pdfReportRequisition.reportAttachment)"
+            >open</a
+            >
+            <span *ngIf="pdfReportRequisition.reportAttachment"
+            >{{ contentType }}, {{ byteSize(pdfReportRequisition.reportAttachment) }}</span
+            >
+          </td>
+
+
           <td>
             <div *ngIf="pdfReportRequisition.reportTemplate">
               <a [routerLink]="['/report-template', pdfReportRequisition.reportTemplate?.id, 'view']">{{
