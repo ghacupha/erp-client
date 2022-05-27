@@ -87,7 +87,9 @@
           <label class="form-control-label" for="field_reportStatus">Report Status</label>
           <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
             <option [ngValue]="null"></option>
-            <option *ngFor="let reportStatusTypes of reportStatusTypesValues" [value]="reportStatusTypes">reportStatusTypes</option>
+            <option value="GENERATING">GENERATING</option>
+            <option value="SUCCESSFUL">SUCCESSFUL</option>
+            <option value="FAILED">FAILED</option>
           </select>
         </div>
 
