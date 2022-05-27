@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
+import { v4 as uuidv4 } from 'uuid';
 import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
 import { PdfReportRequisitionService } from '../service/pdf-report-requisition.service';
 import { IReportTemplate } from '../../report-template/report-template.model';
@@ -49,6 +50,11 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
       this.updateForm(pdfReportRequisition);
 
       this.loadRelationshipsOptions();
+    });
+
+    this.editForm.patchValue({
+      reportStatus: ReportStatusTypes.GENERATING,
+      reportId: uuidv4(),
     });
   }
 
@@ -112,7 +118,7 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
       userPassword: pdfReportRequisition.userPassword,
       ownerPassword: pdfReportRequisition.ownerPassword,
       reportStatus: pdfReportRequisition.reportStatus,
-      reportId: pdfReportRequisition.reportId,
+      reportId: pdfReportRequisition.reportId == null ? uuidv4() : pdfReportRequisition.reportId,
       reportTemplate: pdfReportRequisition.reportTemplate,
       placeholders: pdfReportRequisition.placeholders,
     });

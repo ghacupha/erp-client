@@ -78,6 +78,7 @@
     "sonar-scanner": "3.1.0",
     "swagger-ui-dist": "3.52.5",
     "tslib": "2.3.1",
+    "uuid": "^8.3.2",
     "webstomp-client": "1.2.6",
     "zone.js": "0.11.4"
   },
@@ -97,6 +98,7 @@
     "@types/node": "16.11.1",
     "@types/selenium-webdriver": "4.0.11",
     "@types/sockjs-client": "1.5.0",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
     "browser-sync": "2.27.5",
