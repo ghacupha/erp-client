@@ -12,6 +12,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { sha512 } from 'hash-wasm';
 
 @Component({
   selector: 'jhi-report-template-update',
@@ -148,6 +149,24 @@ export class ReportTemplateUpdateComponent implements OnInit {
   }
 
   protected createFromForm(): IReportTemplate {
+
+    let checkSumPlaceholder: IPlaceholder | null = {};
+
+    sha512(this.editForm.get(['reportFile'])!.value).then(tk => {
+      this.placeholderService.create({
+        description: this.editForm.get(['catalogueNumber'])!.value,
+        token: tk,
+      }).subscribe(pl => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (pl) {
+          checkSumPlaceholder = pl.body;
+        }
+        this.editForm.patchValue({
+          placeholders: [ checkSumPlaceholder],
+        });
+      });
+    });
+
     return {
       ...new ReportTemplate(),
       id: this.editForm.get(['id'])!.value,
@@ -159,7 +178,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
       reportFile: this.editForm.get(['reportFile'])!.value,
       compileReportFileContentType: this.editForm.get(['compileReportFileContentType'])!.value,
       compileReportFile: this.editForm.get(['compileReportFile'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
+      placeholders: [this.editForm.get(['placeholders'])!.value, checkSumPlaceholder],
     };
   }
 }
