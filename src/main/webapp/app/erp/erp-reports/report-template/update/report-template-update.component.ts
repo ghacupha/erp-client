@@ -12,7 +12,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { sha512 } from 'hash-wasm';
+import { sha512, md5 } from 'hash-wasm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-report-template-update',
@@ -22,6 +23,10 @@ export class ReportTemplateUpdateComponent implements OnInit {
   isSaving = false;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
+
+  checkSumPlaceholder: IPlaceholder | null = {};
+
+  catalogueToken = '';
 
   editForm = this.fb.group({
     id: [],
@@ -50,6 +55,13 @@ export class ReportTemplateUpdateComponent implements OnInit {
       this.updateForm(reportTemplate);
 
       this.loadRelationshipsOptions();
+    });
+
+    md5(uuidv4()).then(token => {
+      this.catalogueToken = token.substring(0, 6);
+      this.editForm.patchValue({
+        catalogueNumber: token.substring(0, 6)
+      });
     });
   }
 
@@ -99,12 +111,23 @@ export class ReportTemplateUpdateComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IReportTemplate>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
+      (res) => this.onSaveSuccess(res),
       () => this.onSaveError()
     );
   }
 
-  protected onSaveSuccess(): void {
+  protected onSaveSuccess(res: HttpResponse<IReportTemplate>): void {
+
+    if (res.body) {
+      const rpt: IReportTemplate = res.body;
+      if (this.checkSumPlaceholder) {
+        rpt.placeholders?.push(this.checkSumPlaceholder);
+      }
+      this.reportTemplateService.update(rpt).subscribe(() => {
+        this.isSaving = false;
+      })
+    }
+
     this.previousState();
   }
 
@@ -113,7 +136,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
   }
 
   protected onSaveFinalize(): void {
-    this.isSaving = false;
+    // this.isSaving = false;
   }
 
   protected updateForm(reportTemplate: IReportTemplate): void {
@@ -150,26 +173,25 @@ export class ReportTemplateUpdateComponent implements OnInit {
 
   protected createFromForm(): IReportTemplate {
 
-    let checkSumPlaceholder: IPlaceholder | null = {};
-
-    sha512(this.editForm.get(['reportFile'])!.value).then(tk => {
+    sha512(this.editForm.get(['reportFile'])!.value).then(token => {
       this.placeholderService.create({
-        description: this.editForm.get(['catalogueNumber'])!.value,
-        token: tk,
+        description: this.catalogueToken,
+        token,
       }).subscribe(pl => {
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (pl) {
-          checkSumPlaceholder = pl.body;
+          this.checkSumPlaceholder = pl.body;
         }
-        this.editForm.patchValue({
-          placeholders: [ checkSumPlaceholder],
-        });
+        // this.editForm.patchValue({
+        //   placeholders: [ checkSumPlaceholder],
+        // });
       });
     });
 
     return {
       ...new ReportTemplate(),
       id: this.editForm.get(['id'])!.value,
+      // catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
       description: this.editForm.get(['description'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,
@@ -178,7 +200,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
       reportFile: this.editForm.get(['reportFile'])!.value,
       compileReportFileContentType: this.editForm.get(['compileReportFileContentType'])!.value,
       compileReportFile: this.editForm.get(['compileReportFile'])!.value,
-      placeholders: [this.editForm.get(['placeholders'])!.value, checkSumPlaceholder],
+      placeholders: [this.editForm.get(['placeholders'])!.value],
     };
   }
 }
