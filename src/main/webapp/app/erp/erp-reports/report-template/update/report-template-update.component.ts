@@ -10,14 +10,14 @@ import { ReportTemplateService } from '../service/report-template.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPlaceholder, Placeholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { sha512, md5 } from 'hash-wasm';
 import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-report-template-update',
-  templateUrl: './report-template-update.component.html',
+  templateUrl: './report-template-update.component.html'
 })
 export class ReportTemplateUpdateComponent implements OnInit {
   isSaving = false;
@@ -27,6 +27,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
   checkSumPlaceholder: IPlaceholder | null = {};
 
   catalogueToken = '';
+  fileToken = '';
 
   editForm = this.fb.group({
     id: [],
@@ -38,7 +39,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
     reportFileContentType: [],
     compileReportFile: [],
     compileReportFileContentType: [],
-    placeholders: [],
+    placeholders: []
   });
 
   constructor(
@@ -48,7 +49,8 @@ export class ReportTemplateUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportTemplate }) => {
@@ -76,7 +78,10 @@ export class ReportTemplateUpdateComponent implements OnInit {
   setFileData(event: Event, field: string, isImage: boolean): void {
     this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
       error: (err: FileLoadError) =>
-        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message }))
+    });
+    sha512(this.editForm.get(['reportFile'])!.value).then(ftk => {
+      this.fileToken = ftk;
     });
   }
 
@@ -118,14 +123,23 @@ export class ReportTemplateUpdateComponent implements OnInit {
 
   protected onSaveSuccess(res: HttpResponse<IReportTemplate>): void {
 
-    if (res.body) {
+    if (res.body?.reportFile) {
       const rpt: IReportTemplate = res.body;
-      if (this.checkSumPlaceholder) {
-        rpt.placeholders?.push(this.checkSumPlaceholder);
-      }
-      this.reportTemplateService.update(rpt).subscribe(() => {
-        this.isSaving = false;
-      })
+
+      sha512(res.body.reportFile).then(tkn => {
+        this.placeholderService.create({
+          ...new Placeholder(),
+          description: res.body?.catalogueNumber,
+          token: tkn
+        }).subscribe(plc => {
+          if (plc.body) {
+            rpt.placeholders?.push(plc.body);
+          }
+          this.reportTemplateService.update(rpt).subscribe(() => {
+            this.isSaving = false;
+          });
+        });
+      });
     }
 
     this.previousState();
@@ -150,7 +164,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
       reportFileContentType: reportTemplate.reportFileContentType,
       compileReportFile: reportTemplate.compileReportFile,
       compileReportFileContentType: reportTemplate.compileReportFileContentType,
-      placeholders: reportTemplate.placeholders,
+      placeholders: reportTemplate.placeholders
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -173,17 +187,17 @@ export class ReportTemplateUpdateComponent implements OnInit {
 
   protected createFromForm(): IReportTemplate {
 
-    sha512(this.editForm.get(['reportFile'])!.value).then(token => {
-      this.placeholderService.create({
-        description: this.catalogueToken,
-        token,
-      }).subscribe(pl => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (pl) {
-          this.checkSumPlaceholder = pl.body;
-        }
-      });
-    });
+    // sha512(this.editForm.get(['reportFile'])!.value).then(token => {
+    //   this.placeholderService.create({
+    //     description: this.catalogueToken,
+    //     token,
+    //   }).subscribe(pl => {
+    //     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    //     if (pl) {
+    //       this.checkSumPlaceholder = pl.body;
+    //     }
+    //   });
+    // });
 
     return {
       ...new ReportTemplate(),
@@ -196,7 +210,7 @@ export class ReportTemplateUpdateComponent implements OnInit {
       reportFile: this.editForm.get(['reportFile'])!.value,
       compileReportFileContentType: this.editForm.get(['compileReportFileContentType'])!.value,
       compileReportFile: this.editForm.get(['compileReportFile'])!.value,
-      placeholders: [this.editForm.get(['placeholders'])!.value],
+      placeholders: [this.editForm.get(['placeholders'])!.value]
     };
   }
 }
