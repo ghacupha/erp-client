@@ -182,16 +182,12 @@ export class ReportTemplateUpdateComponent implements OnInit {
         if (pl) {
           this.checkSumPlaceholder = pl.body;
         }
-        // this.editForm.patchValue({
-        //   placeholders: [ checkSumPlaceholder],
-        // });
       });
     });
 
     return {
       ...new ReportTemplate(),
       id: this.editForm.get(['id'])!.value,
-      // catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
       description: this.editForm.get(['description'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,
