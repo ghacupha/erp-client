@@ -80,7 +80,7 @@ export class PlaceholderComponent implements OnInit {
   search(query: string): void {
     if (query && ['description', 'token', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
-      this.ascending = true;
+      this.ascending = false;
     }
     this.currentSearch = query;
     this.loadPage(1);
@@ -106,7 +106,7 @@ export class PlaceholderComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+    const result = [this.predicate + ',' + DESC];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -119,7 +119,7 @@ export class PlaceholderComponent implements OnInit {
       const pageNumber = +(page ?? 1);
       const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
       const predicate = sort[0];
-      const ascending = sort[1] === ASC;
+      const ascending = sort[1] === DESC;
       if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
         this.predicate = predicate;
         this.ascending = ascending;
@@ -138,7 +138,7 @@ export class PlaceholderComponent implements OnInit {
           page: this.page,
           size: this.itemsPerPage,
           search: this.currentSearch,
-          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+          sort: this.predicate + ',' + (this.ascending ? DESC : ASC),
         },
       });
     }
