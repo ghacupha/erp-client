@@ -15,6 +15,12 @@ import { RouterModule } from '@angular/router';
       loadChildren: () => import('./pdf-report-requisition/pdf-report-requisition.module')
         .then(m => m.PdfReportRequisitionModule),
     },
+    {
+      path: 'xlsx-report-requisition',
+      data: { pageTitle: 'ERP | EXCEL Report Requisition' },
+      loadChildren: () => import('./xlsx-report-requisition/xlsx-report-requisition.module')
+        .then(m => m.XlsxReportRequisitionModule),
+    },
   ])
   ]
 })

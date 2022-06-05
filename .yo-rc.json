@@ -91,7 +91,8 @@
       "PrepaymentMarshalling",
       "PrepaymentAmortization",
       "ReportTemplate",
-      "PdfReportRequisition"
+      "PdfReportRequisition",
+      "XlsxReportRequisition"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,
