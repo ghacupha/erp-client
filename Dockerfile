@@ -17,34 +17,24 @@
 #
 
 # Stage 1
-FROM node:14.18-alpine3.12 as compile-image
+FROM node:10-alpine AS compile-image
 
 WORKDIR /opt/app
-# Enable the line below for local dev behind proxy
-#COPY .npmrc /opt/app
-#COPY package.json /opt/app
-#COPY package-lock.json /opt/app
-#COPY server.js /opt/app
+# Enable the line below for in-container npm configurations
+COPY .npmrc /opt/app
+COPY package.json /opt/app
+COPY package-lock.json /opt/app
 
 COPY . /opt/app
-RUN cd /opt/app && npm install @angular/cli && npm install && npm run build
-
-#ENV PATH="./node_modules/.bin:$PATH"
-#
-#RUN #npm run build --prod
-
-FROM node:14.18-alpine3.12 as serve-image
-WORKDIR /root/
-COPY --from=compile-image /opt/app/target/classes/static ./dist
-COPY package*.json ./
 RUN npm install
-COPY server.js .
 
-EXPOSE 8981
+ENV PATH="./node_modules/.bin:$PATH"
 
-## Stage 2
-#FROM nginx
-#COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
-#COPY --from=compile-image /opt/app/target/classes/static /opt/app/html
+RUN npm run webapp:prod
 
-CMD ["node", "server.js"]
+# Stage 2
+FROM nginx
+COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
