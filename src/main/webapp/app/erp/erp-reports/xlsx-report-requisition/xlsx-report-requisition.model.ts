@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
+import { IReportTemplate } from '../report-template/report-template.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
 
 export interface IXlsxReportRequisition {
   id?: number;
