@@ -8,12 +8,12 @@ import { finalize, map } from 'rxjs/operators';
 import { v4 as uuidv4 } from 'uuid';
 import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
+import { ReportTemplateService } from '../../report-template/service/report-template.service';
+import { IReportTemplate } from '../../report-template/report-template.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-xlsx-report-requisition-update',
@@ -42,7 +42,7 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
     protected reportTemplateService: ReportTemplateService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected dataUtils: DataUtils, 
+    protected dataUtils: DataUtils,
     protected fb: FormBuilder
   ) {}
 

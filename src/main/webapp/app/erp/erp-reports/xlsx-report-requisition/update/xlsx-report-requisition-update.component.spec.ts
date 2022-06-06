@@ -1,3 +1,5 @@
+import { ReportTemplateService } from '../../report-template/service/report-template.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,12 +11,11 @@ import { of, Subject } from 'rxjs';
 
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
 import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { XlsxReportRequisitionUpdateComponent } from './xlsx-report-requisition-update.component';
+import { IReportTemplate } from '../../report-template/report-template.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('XlsxReportRequisition Management Update Component', () => {
   let comp: XlsxReportRequisitionUpdateComponent;
