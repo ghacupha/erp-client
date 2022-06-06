@@ -30,7 +30,7 @@ RUN npm install
 
 ENV PATH="./node_modules/.bin:$PATH"
 
-RUN npm run webapp:prod
+RUN npm run webapp:build:prod
 
 # Stage 2
 FROM nginx
