@@ -29,7 +29,6 @@ describe('XlsxReportRequisition Service', () => {
       reportName: 'AAAAAAA',
       reportDate: currentDate,
       userPassword: 'AAAAAAA',
-      reportFileChecksum: 'AAAAAAA',
       reportStatus: ReportStatusTypes.GENERATING,
       reportId: 'AAAAAAA',
     };
@@ -81,7 +80,6 @@ describe('XlsxReportRequisition Service', () => {
           reportName: 'BBBBBB',
           reportDate: currentDate.format(DATE_FORMAT),
           userPassword: 'BBBBBB',
-          reportFileChecksum: 'BBBBBB',
           reportStatus: 'BBBBBB',
           reportId: 'BBBBBB',
         },
@@ -106,7 +104,6 @@ describe('XlsxReportRequisition Service', () => {
       const patchObject = Object.assign(
         {
           reportDate: currentDate.format(DATE_FORMAT),
-          reportId: 'BBBBBB',
         },
         new XlsxReportRequisition()
       );
@@ -134,7 +131,6 @@ describe('XlsxReportRequisition Service', () => {
           reportName: 'BBBBBB',
           reportDate: currentDate.format(DATE_FORMAT),
           userPassword: 'BBBBBB',
-          reportFileChecksum: 'BBBBBB',
           reportStatus: 'BBBBBB',
           reportId: 'BBBBBB',
         },
@@ -193,7 +189,7 @@ describe('XlsxReportRequisition Service', () => {
       });
 
       it('should add only unique XlsxReportRequisition to an array', () => {
-        const xlsxReportRequisitionArray: IXlsxReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 66603 }];
+        const xlsxReportRequisitionArray: IXlsxReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 58045 }];
         const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [{ id: 123 }];
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing(
           xlsxReportRequisitionCollection,

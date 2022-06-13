@@ -5,15 +5,17 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
+import { v4 as uuidv4 } from 'uuid';
 import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
+import { DataUtils } from 'app/core/util/data-util.service';
+import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
+import { ReportTemplateService } from '../../report-template/service/report-template.service';
+import { IReportTemplate } from '../../report-template/report-template.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-xlsx-report-requisition-update',
@@ -31,12 +33,12 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
     id: [],
     reportName: [null, [Validators.required]],
     reportDate: [],
-    userPassword: [null, [Validators.required]],
-    reportFileChecksum: [],
+    userPassword: [null, []],
     reportStatus: [],
     reportId: [null, [Validators.required]],
     reportTemplate: [null, Validators.required],
     placeholders: [],
+    reportFileChecksum: [],
     parameters: [],
   });
 
@@ -46,12 +48,27 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ xlsxReportRequisition }) => {
+      if (!xlsxReportRequisition.id) {
+        this.editForm.patchValue({
+          reportStatus: ReportStatusTypes.GENERATING,
+          reportId: uuidv4(),
+        });
+      }
+
       this.updateForm(xlsxReportRequisition);
+
+      if (!xlsxReportRequisition.id) {
+        this.editForm.patchValue({
+          reportStatus: ReportStatusTypes.GENERATING,
+          reportId: uuidv4(),
+        });
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -79,10 +96,6 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -92,6 +105,10 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
       }
     }
     return option;
+  }
+
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
   }
 
   getSelectedUniversallyUniqueMapping(
@@ -133,11 +150,11 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
       reportName: xlsxReportRequisition.reportName,
       reportDate: xlsxReportRequisition.reportDate,
       userPassword: xlsxReportRequisition.userPassword,
-      reportFileChecksum: xlsxReportRequisition.reportFileChecksum,
       reportStatus: xlsxReportRequisition.reportStatus,
       reportId: xlsxReportRequisition.reportId,
       reportTemplate: xlsxReportRequisition.reportTemplate,
       placeholders: xlsxReportRequisition.placeholders,
+      reportFileChecksum: xlsxReportRequisition.reportFileChecksum,
       parameters: xlsxReportRequisition.parameters,
     });
 
@@ -148,10 +165,6 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(xlsxReportRequisition.placeholders ?? [])
-    );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(xlsxReportRequisition.parameters ?? [])
     );
   }
 
@@ -200,11 +213,11 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
       reportName: this.editForm.get(['reportName'])!.value,
       reportDate: this.editForm.get(['reportDate'])!.value,
       userPassword: this.editForm.get(['userPassword'])!.value,
-      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       reportStatus: this.editForm.get(['reportStatus'])!.value,
       reportId: this.editForm.get(['reportId'])!.value,
       reportTemplate: this.editForm.get(['reportTemplate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       parameters: this.editForm.get(['parameters'])!.value,
     };
   }

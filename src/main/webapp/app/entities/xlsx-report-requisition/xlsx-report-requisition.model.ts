@@ -1,19 +1,20 @@
 import * as dayjs from 'dayjs';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
+import { IReportTemplate } from '../report-template/report-template.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IXlsxReportRequisition {
   id?: number;
   reportName?: string;
   reportDate?: dayjs.Dayjs | null;
-  userPassword?: string;
-  reportFileChecksum?: string | null;
+  userPassword?: string | null;
   reportStatus?: ReportStatusTypes | null;
   reportId?: string;
   reportTemplate?: IReportTemplate;
   placeholders?: IPlaceholder[] | null;
+  reportAttachment?: string | null;
+  reportFileChecksum?: string | null;
   parameters?: IUniversallyUniqueMapping[] | null;
 }
 
@@ -22,13 +23,14 @@ export class XlsxReportRequisition implements IXlsxReportRequisition {
     public id?: number,
     public reportName?: string,
     public reportDate?: dayjs.Dayjs | null,
-    public userPassword?: string,
-    public reportFileChecksum?: string | null,
+    public userPassword?: string | null,
     public reportStatus?: ReportStatusTypes | null,
     public reportId?: string,
     public reportTemplate?: IReportTemplate,
     public placeholders?: IPlaceholder[] | null,
-    public parameters?: IUniversallyUniqueMapping[] | null
+    public reportAttachment?: string | null,
+    public reportFileChecksum?: string | null,
+    public parameters?: IUniversallyUniqueMapping[] | null,
   ) {}
 }
 

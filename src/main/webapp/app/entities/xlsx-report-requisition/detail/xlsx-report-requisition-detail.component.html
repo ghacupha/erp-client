@@ -26,10 +26,6 @@
         <dd>
           <span>{{ xlsxReportRequisition.userPassword }}</span>
         </dd>
-        <dt><span>Report File Checksum</span></dt>
-        <dd>
-          <span>{{ xlsxReportRequisition.reportFileChecksum }}</span>
-        </dd>
         <dt><span>Report Status</span></dt>
         <dd>
           <span>{{ xlsxReportRequisition.reportStatus }}</span>
@@ -37,6 +33,24 @@
         <dt><span>Report Id</span></dt>
         <dd>
           <span>{{ xlsxReportRequisition.reportId }}</span>
+        </dd>
+        <dt><span>Report File</span></dt>
+        <dd>
+          <div *ngIf="xlsxReportRequisition.reportAttachment">
+            <a (click)="openFile(xlsxReportRequisition.reportAttachment, contentType)">open</a>
+            {{ contentType }}, {{ byteSize(xlsxReportRequisition.reportAttachment) }}
+          </div>
+        </dd>
+        <dt><span>Report File Checksum</span></dt>
+        <dd>
+          <span>{{ xlsxReportRequisition.reportFileChecksum }}</span>
+        </dd>
+        <dt><span>Parameters</span></dt>
+        <dd>
+          <span *ngFor="let parameters of xlsxReportRequisition.parameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
         </dd>
         <dt><span>Report Template</span></dt>
         <dd>
@@ -50,13 +64,6 @@
         <dd>
           <span *ngFor="let placeholder of xlsxReportRequisition.placeholders; let last = last">
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Parameters</span></dt>
-        <dd>
-          <span *ngFor="let parameters of xlsxReportRequisition.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

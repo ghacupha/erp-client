@@ -52,7 +52,7 @@
         <div class="form-group">
           <label class="form-control-label" for="field_userPassword">User Password</label>
           <input
-            type="text"
+            type="password"
             class="form-control"
             name="userPassword"
             id="field_userPassword"
@@ -61,34 +61,22 @@
           />
           <div
             *ngIf="editForm.get('userPassword')!.invalid && (editForm.get('userPassword')!.dirty || editForm.get('userPassword')!.touched)"
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('userPassword')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportFileChecksum">Report File Checksum</label>
-          <input
-            type="text"
-            class="form-control"
-            name="reportFileChecksum"
-            id="field_reportFileChecksum"
-            data-cy="reportFileChecksum"
-            formControlName="reportFileChecksum"
-          />
+          ></div>
         </div>
 
         <div class="form-group">
           <label class="form-control-label" for="field_reportStatus">Report Status</label>
           <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
             <option [ngValue]="null"></option>
-            <option *ngFor="let reportStatusTypes of reportStatusTypesValues" [value]="reportStatusTypes">reportStatusTypes</option>
+            <option value="GENERATING">GENERATING</option>
+            <option value="SUCCESSFUL">SUCCESSFUL</option>
+            <option value="FAILED">FAILED</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_reportId">Report Id</label>
-          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
+          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" [readonly]="true" />
           <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
           </div>
@@ -116,6 +104,20 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group"  [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_reportFileChecksum">Report File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="reportFileChecksum"
+            id="field_reportFileChecksum"
+            data-cy="reportFileChecksum"
+            formControlName="reportFileChecksum"
+            [readonly]="true"
+          />
+        </div>
+
         <div
           *ngIf="
             editForm.get(['reportTemplate'])!.invalid &&
@@ -123,6 +125,21 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['reportTemplate'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_parameters">Parameters</label>
+          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -140,21 +157,6 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_parameters">Parameters</label>
-          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
         </div>
