@@ -53,10 +53,12 @@ describe('XlsxReportRequisition e2e test', () => {
             xlsxReportRequisitionUpdatePage.setReportNameInput('reportName'),
             xlsxReportRequisitionUpdatePage.setReportDateInput('2000-12-31'),
             xlsxReportRequisitionUpdatePage.setUserPasswordInput('userPassword'),
+            xlsxReportRequisitionUpdatePage.setReportFileChecksumInput('reportFileChecksum'),
             xlsxReportRequisitionUpdatePage.reportStatusSelectLastOption(),
             xlsxReportRequisitionUpdatePage.setReportIdInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             xlsxReportRequisitionUpdatePage.reportTemplateSelectLastOption(),
             // xlsxReportRequisitionUpdatePage.placeholderSelectLastOption(),
+            // xlsxReportRequisitionUpdatePage.parametersSelectLastOption(),
         ]);
 
         await xlsxReportRequisitionUpdatePage.save();

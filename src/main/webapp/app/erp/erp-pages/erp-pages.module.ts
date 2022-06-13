@@ -64,6 +64,12 @@ import {RouterModule} from '@angular/router';
       loadChildren: () => import('./placeholder/placeholder.module')
         .then(m => m.ErpServicePlaceholderModule),
     },
+    {
+      path: 'universally-unique-mapping',
+      data: { pageTitle: 'ERP | Universal Mapping' },
+      loadChildren: () => import('./universally-unique-mapping/universally-unique-mapping.module')
+        .then(m => m.UniversallyUniqueMappingModule),
+    },
   ])]
 })
 export class ErpPagesModule {}

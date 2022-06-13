@@ -17,9 +17,10 @@ describe('PdfReportRequisition e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const pdfReportRequisitionSample = {
-    reportName: 'Baby Programmable Cambridgeshire',
-    ownerPassword: 'synthesize',
-    reportId: '375b4f53-375a-456a-ae3f-e414ed38500b',
+    reportName: 'Krone',
+    userPassword: 'eyeballs Iraqi Hill',
+    ownerPassword: 'Director',
+    reportId: '375a56ae-e3fe-4414-ad38-500bc10d6264',
   };
 
   let pdfReportRequisition: any;
@@ -68,6 +69,11 @@ describe('PdfReportRequisition e2e test', () => {
     });
 
     cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/universally-unique-mappings', {
       statusCode: 200,
       body: [],
     });
@@ -214,12 +220,14 @@ describe('PdfReportRequisition e2e test', () => {
 
       cy.get(`[data-cy="ownerPassword"]`).type('violet Consultant Movies').should('have.value', 'violet Consultant Movies');
 
-      cy.get(`[data-cy="reportStatus"]`).select('GENERATING');
+      cy.get(`[data-cy="reportFileChecksum"]`).type('drive').should('have.value', 'drive');
+
+      cy.get(`[data-cy="reportStatus"]`).select('FAILED');
 
       cy.get(`[data-cy="reportId"]`)
-        .type('6c5bb644-5b91-4906-a59d-c1c5ad69b3d1')
+        .type('b6445b91-906e-459d-81c5-ad69b3d1d0a1')
         .invoke('val')
-        .should('match', new RegExp('6c5bb644-5b91-4906-a59d-c1c5ad69b3d1'));
+        .should('match', new RegExp('b6445b91-906e-459d-81c5-ad69b3d1d0a1'));
 
       cy.get(`[data-cy="reportTemplate"]`).select(1);
 

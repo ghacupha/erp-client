@@ -15,6 +15,7 @@ import { ErpGranularModule } from './erp-granular/erp-granular.module';
 import { ErpPrepaymentsAccountingModule } from './erp-prepayments/erp-prepayments-accounting.module';
 import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-account.module';
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
+import { EntitiesModule } from '../entities/entities.module';
 
 export const routes: Routes = [];
 
@@ -48,6 +49,7 @@ export const routes: Routes = [];
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
+    EntitiesModule
   ]
 })
 export class ErpSystemModule {}

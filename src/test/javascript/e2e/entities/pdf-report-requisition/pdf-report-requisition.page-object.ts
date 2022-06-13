@@ -34,11 +34,13 @@ export class PdfReportRequisitionUpdatePage {
   reportDateInput = element(by.id('field_reportDate'));
   userPasswordInput = element(by.id('field_userPassword'));
   ownerPasswordInput = element(by.id('field_ownerPassword'));
+  reportFileChecksumInput = element(by.id('field_reportFileChecksum'));
   reportStatusSelect = element(by.id('field_reportStatus'));
   reportIdInput = element(by.id('field_reportId'));
 
   reportTemplateSelect = element(by.id('field_reportTemplate'));
   placeholderSelect = element(by.id('field_placeholder'));
+  parametersSelect = element(by.id('field_parameters'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -82,6 +84,14 @@ export class PdfReportRequisitionUpdatePage {
 
   async getOwnerPasswordInput(): Promise<string> {
     return await this.ownerPasswordInput.getAttribute('value');
+  }
+
+  async setReportFileChecksumInput(reportFileChecksum: string): Promise<void> {
+    await this.reportFileChecksumInput.sendKeys(reportFileChecksum);
+  }
+
+  async getReportFileChecksumInput(): Promise<string> {
+    return await this.reportFileChecksumInput.getAttribute('value');
   }
 
   async setReportStatusSelect(reportStatus: string): Promise<void> {
@@ -134,6 +144,22 @@ export class PdfReportRequisitionUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async parametersSelectLastOption(): Promise<void> {
+    await this.parametersSelect.all(by.tagName('option')).last().click();
+  }
+
+  async parametersSelectOption(option: string): Promise<void> {
+    await this.parametersSelect.sendKeys(option);
+  }
+
+  getParametersSelect(): ElementFinder {
+    return this.parametersSelect;
+  }
+
+  async getParametersSelectedOption(): Promise<string> {
+    return await this.parametersSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

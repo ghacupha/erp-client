@@ -92,7 +92,8 @@
       "PrepaymentAmortization",
       "ReportTemplate",
       "PdfReportRequisition",
-      "XlsxReportRequisition"
+      "XlsxReportRequisition",
+      "UniversallyUniqueMapping"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

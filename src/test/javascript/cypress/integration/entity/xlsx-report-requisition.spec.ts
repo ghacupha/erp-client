@@ -16,7 +16,11 @@ describe('XlsxReportRequisition e2e test', () => {
   const xlsxReportRequisitionPageUrlPattern = new RegExp('/xlsx-report-requisition(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const xlsxReportRequisitionSample = { reportName: 'transition Legacy', reportId: 'a297d3b8-8367-4883-aa88-4c54a5a979bd' };
+  const xlsxReportRequisitionSample = {
+    reportName: 'synthesize Towels overriding',
+    userPassword: 'Comoros Mills',
+    reportId: '36a884c5-4a5a-4979-bd2d-43273e6f40bc',
+  };
 
   let xlsxReportRequisition: any;
   let reportTemplate: any;
@@ -64,6 +68,11 @@ describe('XlsxReportRequisition e2e test', () => {
     });
 
     cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/universally-unique-mappings', {
       statusCode: 200,
       body: [],
     });
@@ -208,12 +217,14 @@ describe('XlsxReportRequisition e2e test', () => {
 
       cy.get(`[data-cy="userPassword"]`).type('open-source Ergonomic').should('have.value', 'open-source Ergonomic');
 
+      cy.get(`[data-cy="reportFileChecksum"]`).type('invoice').should('have.value', 'invoice');
+
       cy.get(`[data-cy="reportStatus"]`).select('GENERATING');
 
       cy.get(`[data-cy="reportId"]`)
-        .type('afe4504e-e24d-4329-ba95-2089d2274be5')
+        .type('504ee24d-3293-4a95-a089-d2274be586d2')
         .invoke('val')
-        .should('match', new RegExp('afe4504e-e24d-4329-ba95-2089d2274be5'));
+        .should('match', new RegExp('504ee24d-3293-4a95-a089-d2274be586d2'));
 
       cy.get(`[data-cy="reportTemplate"]`).select(1);
 

@@ -54,10 +54,12 @@ describe('PdfReportRequisition e2e test', () => {
             pdfReportRequisitionUpdatePage.setReportDateInput('2000-12-31'),
             pdfReportRequisitionUpdatePage.setUserPasswordInput('userPassword'),
             pdfReportRequisitionUpdatePage.setOwnerPasswordInput('ownerPassword'),
+            pdfReportRequisitionUpdatePage.setReportFileChecksumInput('reportFileChecksum'),
             pdfReportRequisitionUpdatePage.reportStatusSelectLastOption(),
             pdfReportRequisitionUpdatePage.setReportIdInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             pdfReportRequisitionUpdatePage.reportTemplateSelectLastOption(),
             // pdfReportRequisitionUpdatePage.placeholderSelectLastOption(),
+            // pdfReportRequisitionUpdatePage.parametersSelectLastOption(),
         ]);
 
         await pdfReportRequisitionUpdatePage.save();
