@@ -5,16 +5,15 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { v4 as uuidv4 } from 'uuid';
 import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
 import { PdfReportRequisitionService } from '../service/pdf-report-requisition.service';
-import { IReportTemplate } from '../../report-template/report-template.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ReportTemplateService } from '../../report-template/service/report-template.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
-import { IUniversallyUniqueMapping } from '../../../../entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from '../../../../entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IReportTemplate } from 'app/entities/report-template/report-template.model';
+import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 
 @Component({
   selector: 'jhi-pdf-report-requisition-update',
@@ -32,12 +31,14 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
     id: [],
     reportName: [null, [Validators.required]],
     reportDate: [],
-    userPassword: [null, []],
+    userPassword: [null, [Validators.required]],
     ownerPassword: [null, [Validators.required]],
+    reportFileChecksum: [],
     reportStatus: [],
     reportId: [null, [Validators.required]],
     reportTemplate: [null, Validators.required],
     placeholders: [],
+    parameters: [],
   });
 
   constructor(
@@ -51,13 +52,6 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ pdfReportRequisition }) => {
-      if (!pdfReportRequisition.id) {
-        this.editForm.patchValue({
-          reportStatus: ReportStatusTypes.GENERATING,
-          reportId: uuidv4(),
-        });
-      }
-
       this.updateForm(pdfReportRequisition);
 
       this.loadRelationshipsOptions();
@@ -141,11 +135,11 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
       reportDate: pdfReportRequisition.reportDate,
       userPassword: pdfReportRequisition.userPassword,
       ownerPassword: pdfReportRequisition.ownerPassword,
+      reportFileChecksum: pdfReportRequisition.reportFileChecksum,
       reportStatus: pdfReportRequisition.reportStatus,
-      reportId: pdfReportRequisition.reportId == null ? uuidv4() : pdfReportRequisition.reportId,
+      reportId: pdfReportRequisition.reportId,
       reportTemplate: pdfReportRequisition.reportTemplate,
       placeholders: pdfReportRequisition.placeholders,
-      reportFileChecksum: pdfReportRequisition.reportFileChecksum,
       parameters: pdfReportRequisition.parameters,
     });
 
@@ -209,10 +203,12 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
       reportDate: this.editForm.get(['reportDate'])!.value,
       userPassword: this.editForm.get(['userPassword'])!.value,
       ownerPassword: this.editForm.get(['ownerPassword'])!.value,
+      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       reportStatus: this.editForm.get(['reportStatus'])!.value,
       reportId: this.editForm.get(['reportId'])!.value,
       reportTemplate: this.editForm.get(['reportTemplate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      parameters: this.editForm.get(['parameters'])!.value,
     };
   }
 }

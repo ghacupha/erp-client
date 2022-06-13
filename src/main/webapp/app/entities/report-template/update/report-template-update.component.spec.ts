@@ -9,10 +9,10 @@ import { of, Subject } from 'rxjs';
 
 import { ReportTemplateService } from '../service/report-template.service';
 import { IReportTemplate, ReportTemplate } from '../report-template.model';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { ReportTemplateUpdateComponent } from './report-template-update.component';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('ReportTemplate Management Update Component', () => {
   let comp: ReportTemplateUpdateComponent;

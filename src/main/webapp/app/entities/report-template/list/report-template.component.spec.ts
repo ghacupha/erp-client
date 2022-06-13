@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { ReportTemplateService } from '../service/report-template.service';
+
 import { ReportTemplateComponent } from './report-template.component';
 
 describe('ReportTemplate Management Component', () => {

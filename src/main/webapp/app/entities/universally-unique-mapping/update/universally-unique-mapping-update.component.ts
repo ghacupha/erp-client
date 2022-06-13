@@ -7,7 +7,6 @@ import { finalize } from 'rxjs/operators';
 
 import { IUniversallyUniqueMapping, UniversallyUniqueMapping } from '../universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from '../service/universally-unique-mapping.service';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-universally-unique-mapping-update',
@@ -30,11 +29,6 @@ export class UniversallyUniqueMappingUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ universallyUniqueMapping }) => {
-      if (!universallyUniqueMapping.id) {
-        this.editForm.patchValue({
-          universalKey: uuidv4(),
-        });
-      }
       this.updateForm(universallyUniqueMapping);
     });
   }

@@ -10,7 +10,6 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IXlsxReportRequisition, getXlsxReportRequisitionIdentifier } from '../xlsx-report-requisition.model';
-import { sha512 } from 'hash-wasm';
 
 export type EntityResponseType = HttpResponse<IXlsxReportRequisition>;
 export type EntityArrayResponseType = HttpResponse<IXlsxReportRequisition[]>;
@@ -26,8 +25,7 @@ export class XlsxReportRequisitionService {
     const copy = this.convertDateFromClient(xlsxReportRequisition);
     return this.http
       .post<IXlsxReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(xlsxReportRequisition: IXlsxReportRequisition): Observable<EntityResponseType> {
@@ -36,8 +34,7 @@ export class XlsxReportRequisitionService {
       .put<IXlsxReportRequisition>(`${this.resourceUrl}/${getXlsxReportRequisitionIdentifier(xlsxReportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(xlsxReportRequisition: IXlsxReportRequisition): Observable<EntityResponseType> {
@@ -46,23 +43,20 @@ export class XlsxReportRequisitionService {
       .patch<IXlsxReportRequisition>(`${this.resourceUrl}/${getXlsxReportRequisitionIdentifier(xlsxReportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IXlsxReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IXlsxReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -73,8 +67,7 @@ export class XlsxReportRequisitionService {
     const options = createRequestOption(req);
     return this.http
       .get<IXlsxReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addXlsxReportRequisitionToCollectionIfMissing(
@@ -119,30 +112,6 @@ export class XlsxReportRequisitionService {
     if (res.body) {
       res.body.forEach((xlsxReportRequisition: IXlsxReportRequisition) => {
         xlsxReportRequisition.reportDate = xlsxReportRequisition.reportDate ? dayjs(xlsxReportRequisition.reportDate) : undefined;
-      });
-    }
-    return res;
-  }
-
-  protected convertPasswordFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      if (res.body.userPassword) {
-        sha512(res.body.userPassword).then(token => {
-          res.body!.userPassword = token.substring(0,15)
-        })
-      }
-    }
-    return res;
-  }
-
-  protected convertPasswordArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((xlsxReportRequisition: IXlsxReportRequisition) => {
-        if (xlsxReportRequisition.userPassword) {
-          sha512(xlsxReportRequisition.userPassword).then(token => {
-            xlsxReportRequisition.userPassword = token.substring(0,15)
-          })
-        }
       });
     }
     return res;

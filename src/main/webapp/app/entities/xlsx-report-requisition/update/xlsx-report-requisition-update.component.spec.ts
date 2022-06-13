@@ -1,5 +1,3 @@
-import { ReportTemplateService } from '../../report-template/service/report-template.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -11,11 +9,14 @@ import { of, Subject } from 'rxjs';
 
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
 import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
+import { IReportTemplate } from 'app/entities/report-template/report-template.model';
+import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { XlsxReportRequisitionUpdateComponent } from './xlsx-report-requisition-update.component';
-import { IReportTemplate } from '../../report-template/report-template.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('XlsxReportRequisition Management Update Component', () => {
   let comp: XlsxReportRequisitionUpdateComponent;
@@ -24,6 +25,7 @@ describe('XlsxReportRequisition Management Update Component', () => {
   let xlsxReportRequisitionService: XlsxReportRequisitionService;
   let reportTemplateService: ReportTemplateService;
   let placeholderService: PlaceholderService;
+  let universallyUniqueMappingService: UniversallyUniqueMappingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,6 +41,7 @@ describe('XlsxReportRequisition Management Update Component', () => {
     xlsxReportRequisitionService = TestBed.inject(XlsxReportRequisitionService);
     reportTemplateService = TestBed.inject(ReportTemplateService);
     placeholderService = TestBed.inject(PlaceholderService);
+    universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
 
     comp = fixture.componentInstance;
   });
@@ -85,12 +88,41 @@ describe('XlsxReportRequisition Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call UniversallyUniqueMapping query and add missing value', () => {
+      const xlsxReportRequisition: IXlsxReportRequisition = { id: 456 };
+      const parameters: IUniversallyUniqueMapping[] = [{ id: 85715 }];
+      xlsxReportRequisition.parameters = parameters;
+
+      const universallyUniqueMappingCollection: IUniversallyUniqueMapping[] = [{ id: 21534 }];
+      jest
+        .spyOn(universallyUniqueMappingService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: universallyUniqueMappingCollection })));
+      const additionalUniversallyUniqueMappings = [...parameters];
+      const expectedCollection: IUniversallyUniqueMapping[] = [
+        ...additionalUniversallyUniqueMappings,
+        ...universallyUniqueMappingCollection,
+      ];
+      jest.spyOn(universallyUniqueMappingService, 'addUniversallyUniqueMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ xlsxReportRequisition });
+      comp.ngOnInit();
+
+      expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+      expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+        universallyUniqueMappingCollection,
+        ...additionalUniversallyUniqueMappings
+      );
+      expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const xlsxReportRequisition: IXlsxReportRequisition = { id: 456 };
       const reportTemplate: IReportTemplate = { id: 21979 };
       xlsxReportRequisition.reportTemplate = reportTemplate;
       const placeholders: IPlaceholder = { id: 75395 };
       xlsxReportRequisition.placeholders = [placeholders];
+      const parameters: IUniversallyUniqueMapping = { id: 23116 };
+      xlsxReportRequisition.parameters = [parameters];
 
       activatedRoute.data = of({ xlsxReportRequisition });
       comp.ngOnInit();
@@ -98,6 +130,7 @@ describe('XlsxReportRequisition Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(xlsxReportRequisition));
       expect(comp.reportTemplatesSharedCollection).toContain(reportTemplate);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(parameters);
     });
   });
 
@@ -181,6 +214,14 @@ describe('XlsxReportRequisition Management Update Component', () => {
         expect(trackResult).toEqual(entity.id);
       });
     });
+
+    describe('trackUniversallyUniqueMappingById', () => {
+      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
   });
 
   describe('Getting selected relationships', () => {
@@ -205,6 +246,32 @@ describe('XlsxReportRequisition Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedUniversallyUniqueMapping', () => {
+      it('Should return option if no UniversallyUniqueMapping is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected UniversallyUniqueMapping for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

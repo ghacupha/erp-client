@@ -10,7 +10,6 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IPdfReportRequisition, getPdfReportRequisitionIdentifier } from '../pdf-report-requisition.model';
-import { sha512 } from 'hash-wasm';
 
 export type EntityResponseType = HttpResponse<IPdfReportRequisition>;
 export type EntityArrayResponseType = HttpResponse<IPdfReportRequisition[]>;
@@ -26,8 +25,7 @@ export class PdfReportRequisitionService {
     const copy = this.convertDateFromClient(pdfReportRequisition);
     return this.http
       .post<IPdfReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(pdfReportRequisition: IPdfReportRequisition): Observable<EntityResponseType> {
@@ -36,8 +34,7 @@ export class PdfReportRequisitionService {
       .put<IPdfReportRequisition>(`${this.resourceUrl}/${getPdfReportRequisitionIdentifier(pdfReportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(pdfReportRequisition: IPdfReportRequisition): Observable<EntityResponseType> {
@@ -46,23 +43,20 @@ export class PdfReportRequisitionService {
       .patch<IPdfReportRequisition>(`${this.resourceUrl}/${getPdfReportRequisitionIdentifier(pdfReportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IPdfReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IPdfReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -73,8 +67,7 @@ export class PdfReportRequisitionService {
     const options = createRequestOption(req);
     return this.http
       .get<IPdfReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addPdfReportRequisitionToCollectionIfMissing(
@@ -116,40 +109,6 @@ export class PdfReportRequisitionService {
     if (res.body) {
       res.body.forEach((pdfReportRequisition: IPdfReportRequisition) => {
         pdfReportRequisition.reportDate = pdfReportRequisition.reportDate ? dayjs(pdfReportRequisition.reportDate) : undefined;
-      });
-    }
-    return res;
-  }
-
-  protected convertPasswordFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      if (res.body.userPassword) {
-        sha512(res.body.userPassword).then(token => {
-          res.body!.userPassword = token.substring(0,15)
-        })
-      }
-      if (res.body.ownerPassword) {
-        sha512(res.body.ownerPassword).then(token => {
-          res.body!.ownerPassword = token.substring(0,15)
-        })
-      }
-    }
-    return res;
-  }
-
-  protected convertPasswordArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((pdfReportRequisition: IPdfReportRequisition) => {
-        if (pdfReportRequisition.userPassword) {
-          sha512(pdfReportRequisition.userPassword).then(token => {
-            pdfReportRequisition.userPassword = token.substring(0,15)
-          })
-        }
-        if (pdfReportRequisition.ownerPassword) {
-          sha512(pdfReportRequisition.ownerPassword).then(token => {
-            pdfReportRequisition.ownerPassword = token.substring(0,15)
-          })
-        }
       });
     }
     return res;

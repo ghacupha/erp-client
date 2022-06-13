@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
+import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
 
 import { PdfReportRequisitionService } from './pdf-report-requisition.service';
-import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
 
 describe('PdfReportRequisition Service', () => {
   let service: PdfReportRequisitionService;
@@ -30,6 +30,7 @@ describe('PdfReportRequisition Service', () => {
       reportDate: currentDate,
       userPassword: 'AAAAAAA',
       ownerPassword: 'AAAAAAA',
+      reportFileChecksum: 'AAAAAAA',
       reportStatus: ReportStatusTypes.GENERATING,
       reportId: 'AAAAAAA',
     };
@@ -82,6 +83,7 @@ describe('PdfReportRequisition Service', () => {
           reportDate: currentDate.format(DATE_FORMAT),
           userPassword: 'BBBBBB',
           ownerPassword: 'BBBBBB',
+          reportFileChecksum: 'BBBBBB',
           reportStatus: 'BBBBBB',
           reportId: 'BBBBBB',
         },
@@ -108,7 +110,7 @@ describe('PdfReportRequisition Service', () => {
           reportName: 'BBBBBB',
           reportDate: currentDate.format(DATE_FORMAT),
           userPassword: 'BBBBBB',
-          reportId: 'BBBBBB',
+          reportStatus: 'BBBBBB',
         },
         new PdfReportRequisition()
       );
@@ -137,6 +139,7 @@ describe('PdfReportRequisition Service', () => {
           reportDate: currentDate.format(DATE_FORMAT),
           userPassword: 'BBBBBB',
           ownerPassword: 'BBBBBB',
+          reportFileChecksum: 'BBBBBB',
           reportStatus: 'BBBBBB',
           reportId: 'BBBBBB',
         },
@@ -195,7 +198,7 @@ describe('PdfReportRequisition Service', () => {
       });
 
       it('should add only unique PdfReportRequisition to an array', () => {
-        const pdfReportRequisitionArray: IPdfReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 714 }];
+        const pdfReportRequisitionArray: IPdfReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 19038 }];
         const pdfReportRequisitionCollection: IPdfReportRequisition[] = [{ id: 123 }];
         expectedResult = service.addPdfReportRequisitionToCollectionIfMissing(pdfReportRequisitionCollection, ...pdfReportRequisitionArray);
         expect(expectedResult).toHaveLength(3);

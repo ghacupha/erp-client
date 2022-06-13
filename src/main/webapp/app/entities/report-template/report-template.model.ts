@@ -1,4 +1,4 @@
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IReportTemplate {
   id?: number;

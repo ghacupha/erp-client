@@ -9,12 +9,14 @@ import { of, Subject } from 'rxjs';
 
 import { PdfReportRequisitionService } from '../service/pdf-report-requisition.service';
 import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
+import { IReportTemplate } from 'app/entities/report-template/report-template.model';
+import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { PdfReportRequisitionUpdateComponent } from './pdf-report-requisition-update.component';
-import { ReportTemplateService } from '../../report-template/service/report-template.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { IReportTemplate } from '../../report-template/report-template.model';
 
 describe('PdfReportRequisition Management Update Component', () => {
   let comp: PdfReportRequisitionUpdateComponent;
@@ -23,6 +25,7 @@ describe('PdfReportRequisition Management Update Component', () => {
   let pdfReportRequisitionService: PdfReportRequisitionService;
   let reportTemplateService: ReportTemplateService;
   let placeholderService: PlaceholderService;
+  let universallyUniqueMappingService: UniversallyUniqueMappingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,6 +41,7 @@ describe('PdfReportRequisition Management Update Component', () => {
     pdfReportRequisitionService = TestBed.inject(PdfReportRequisitionService);
     reportTemplateService = TestBed.inject(ReportTemplateService);
     placeholderService = TestBed.inject(PlaceholderService);
+    universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
 
     comp = fixture.componentInstance;
   });
@@ -84,12 +88,41 @@ describe('PdfReportRequisition Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call UniversallyUniqueMapping query and add missing value', () => {
+      const pdfReportRequisition: IPdfReportRequisition = { id: 456 };
+      const parameters: IUniversallyUniqueMapping[] = [{ id: 17789 }];
+      pdfReportRequisition.parameters = parameters;
+
+      const universallyUniqueMappingCollection: IUniversallyUniqueMapping[] = [{ id: 64015 }];
+      jest
+        .spyOn(universallyUniqueMappingService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: universallyUniqueMappingCollection })));
+      const additionalUniversallyUniqueMappings = [...parameters];
+      const expectedCollection: IUniversallyUniqueMapping[] = [
+        ...additionalUniversallyUniqueMappings,
+        ...universallyUniqueMappingCollection,
+      ];
+      jest.spyOn(universallyUniqueMappingService, 'addUniversallyUniqueMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ pdfReportRequisition });
+      comp.ngOnInit();
+
+      expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+      expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+        universallyUniqueMappingCollection,
+        ...additionalUniversallyUniqueMappings
+      );
+      expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const pdfReportRequisition: IPdfReportRequisition = { id: 456 };
       const reportTemplate: IReportTemplate = { id: 96290 };
       pdfReportRequisition.reportTemplate = reportTemplate;
       const placeholders: IPlaceholder = { id: 41212 };
       pdfReportRequisition.placeholders = [placeholders];
+      const parameters: IUniversallyUniqueMapping = { id: 85009 };
+      pdfReportRequisition.parameters = [parameters];
 
       activatedRoute.data = of({ pdfReportRequisition });
       comp.ngOnInit();
@@ -97,6 +130,7 @@ describe('PdfReportRequisition Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(pdfReportRequisition));
       expect(comp.reportTemplatesSharedCollection).toContain(reportTemplate);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(parameters);
     });
   });
 
@@ -180,6 +214,14 @@ describe('PdfReportRequisition Management Update Component', () => {
         expect(trackResult).toEqual(entity.id);
       });
     });
+
+    describe('trackUniversallyUniqueMappingById', () => {
+      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
   });
 
   describe('Getting selected relationships', () => {
@@ -204,6 +246,32 @@ describe('PdfReportRequisition Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedUniversallyUniqueMapping', () => {
+      it('Should return option if no UniversallyUniqueMapping is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected UniversallyUniqueMapping for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

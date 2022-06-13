@@ -1,21 +1,20 @@
 import * as dayjs from 'dayjs';
-import { IReportTemplate } from '../report-template/report-template.model';
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
-import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IReportTemplate } from 'app/entities/report-template/report-template.model';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 
 export interface IPdfReportRequisition {
   id?: number;
   reportName?: string;
   reportDate?: dayjs.Dayjs | null;
-  userPassword?: string | null;
+  userPassword?: string;
   ownerPassword?: string;
+  reportFileChecksum?: string | null;
   reportStatus?: ReportStatusTypes | null;
   reportId?: string;
   reportTemplate?: IReportTemplate;
   placeholders?: IPlaceholder[] | null;
-  reportAttachment?: string | null;
-  reportFileChecksum?: string | null;
   parameters?: IUniversallyUniqueMapping[] | null;
 }
 
@@ -24,15 +23,14 @@ export class PdfReportRequisition implements IPdfReportRequisition {
     public id?: number,
     public reportName?: string,
     public reportDate?: dayjs.Dayjs | null,
-    public userPassword?: string | null,
+    public userPassword?: string,
     public ownerPassword?: string,
+    public reportFileChecksum?: string | null,
     public reportStatus?: ReportStatusTypes | null,
     public reportId?: string,
     public reportTemplate?: IReportTemplate,
     public placeholders?: IPlaceholder[] | null,
-    public reportAttachment?: string | null,
-    public reportFileChecksum?: string | null,
-    public parameters?: IUniversallyUniqueMapping[] | null,
+    public parameters?: IUniversallyUniqueMapping[] | null
   ) {}
 }
 
