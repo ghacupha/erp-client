@@ -9,7 +9,6 @@ import { IXlsxReportRequisition } from '../xlsx-report-requisition.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
 import { XlsxReportRequisitionDeleteDialogComponent } from '../delete/xlsx-report-requisition-delete-dialog.component';
-import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-xlsx-report-requisition',
@@ -26,13 +25,10 @@ export class XlsxReportRequisitionComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
-  contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
   constructor(
     protected xlsxReportRequisitionService: XlsxReportRequisitionService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected dataUtils: DataUtils,
     protected modalService: NgbModal
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
@@ -82,20 +78,12 @@ export class XlsxReportRequisitionComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['reportName', 'userPassword', 'reportStatus', 'reportId'].includes(this.predicate)) {
+    if (query && ['reportName', 'userPassword', 'reportFileChecksum', 'reportStatus', 'reportId'].includes(this.predicate)) {
       this.predicate = 'id';
-      this.ascending = false;
+      this.ascending = true;
     }
     this.currentSearch = query;
     this.loadPage(1);
-  }
-
-  byteSize(base64String: string): string {
-    return this.dataUtils.byteSize(base64String);
-  }
-
-  openFile(base64String: string): void {
-    return this.dataUtils.openFile(base64String, this.contentType);
   }
 
   ngOnInit(): void {
@@ -118,7 +106,7 @@ export class XlsxReportRequisitionComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? DESC : ASC)];
+    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -131,7 +119,7 @@ export class XlsxReportRequisitionComponent implements OnInit {
       const pageNumber = +(page ?? 1);
       const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
       const predicate = sort[0];
-      const ascending = sort[1] === DESC;
+      const ascending = sort[1] === ASC;
       if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
         this.predicate = predicate;
         this.ascending = ascending;
@@ -150,7 +138,7 @@ export class XlsxReportRequisitionComponent implements OnInit {
           page: this.page,
           size: this.itemsPerPage,
           search: this.currentSearch,
-          sort: this.predicate + ',' + (this.ascending ? DESC : ASC),
+          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
         },
       });
     }

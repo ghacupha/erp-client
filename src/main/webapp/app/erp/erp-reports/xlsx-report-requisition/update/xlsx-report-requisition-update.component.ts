@@ -166,6 +166,10 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
       this.placeholdersSharedCollection,
       ...(xlsxReportRequisition.placeholders ?? [])
     );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(xlsxReportRequisition.parameters ?? [])
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -213,11 +217,11 @@ export class XlsxReportRequisitionUpdateComponent implements OnInit {
       reportName: this.editForm.get(['reportName'])!.value,
       reportDate: this.editForm.get(['reportDate'])!.value,
       userPassword: this.editForm.get(['userPassword'])!.value,
+      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       reportStatus: this.editForm.get(['reportStatus'])!.value,
       reportId: this.editForm.get(['reportId'])!.value,
       reportTemplate: this.editForm.get(['reportTemplate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
-      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       parameters: this.editForm.get(['parameters'])!.value,
     };
   }

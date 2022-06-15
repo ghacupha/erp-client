@@ -56,7 +56,7 @@
           <th scope="col" jhiSortBy="userPassword"><span>User Password</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportStatus"><span>Report Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportId"><span>Report Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="reportId"><span>Attachment</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <!--<th scope="col" jhiSortBy="reportId"><span>Attachment</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>-->
           <th scope="col" jhiSortBy="reportTemplate.catalogueNumber"><span>Report Template</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -71,7 +71,7 @@
           <td>{{ xlsxReportRequisition.userPassword }}</td>
           <td>{{ xlsxReportRequisition.reportStatus }}</td>
           <td>{{ xlsxReportRequisition.reportId }}</td>
-          <td>
+          <!--<td>
             <a
               *ngIf="xlsxReportRequisition.reportAttachment"
               (click)="openFile(xlsxReportRequisition.reportAttachment)"
@@ -80,7 +80,7 @@
             <span *ngIf="xlsxReportRequisition.reportAttachment"
             >{{ contentType }}, {{ byteSize(xlsxReportRequisition.reportAttachment) }}</span
             >
-          </td>
+          </td>-->
           <td>
             <div *ngIf="xlsxReportRequisition.reportTemplate">
               <a [routerLink]="['/report-template', xlsxReportRequisition.reportTemplate?.id, 'view']">{{

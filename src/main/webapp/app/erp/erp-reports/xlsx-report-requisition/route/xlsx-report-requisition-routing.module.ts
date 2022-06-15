@@ -12,7 +12,7 @@ const xlsxReportRequisitionRoute: Routes = [
     path: '',
     component: XlsxReportRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

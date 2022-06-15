@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
 import { IReportTemplate } from '../report-template/report-template.model';
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
-import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ReportStatusTypes } from '../../erp/erp-common/enumerations/report-status-types.model';
+import { IPlaceholder } from '../../erp/erp-pages/placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IXlsxReportRequisition {
   id?: number;
