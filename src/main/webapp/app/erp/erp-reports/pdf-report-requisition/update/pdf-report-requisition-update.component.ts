@@ -14,7 +14,7 @@ import { ReportTemplateService } from '../../report-template/service/report-temp
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
 import { IUniversallyUniqueMapping } from '../../../../entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from '../../../../entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-pdf-report-requisition-update',

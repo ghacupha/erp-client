@@ -2,7 +2,7 @@ import * as dayjs from 'dayjs';
 import { IReportTemplate } from '../report-template/report-template.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
-import { IUniversallyUniqueMapping } from '../../../entities/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IXlsxReportRequisition {
   id?: number;
@@ -16,6 +16,7 @@ export interface IXlsxReportRequisition {
   reportAttachment?: string | null;
   reportFileChecksum?: string | null;
   parameters?: IUniversallyUniqueMapping[] | null;
+  toString(): string;
 }
 
 export class XlsxReportRequisition implements IXlsxReportRequisition {
@@ -32,7 +33,15 @@ export class XlsxReportRequisition implements IXlsxReportRequisition {
     public reportFileChecksum?: string | null,
     public parameters?: IUniversallyUniqueMapping[] | null,
   ) {}
+
+  toString(): string {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return `id: ${this.id} name: ${this.reportName} Report: ${this.reportId} Params: ${this.parameters[0].toString()}`;
+  }
+
 }
+
 
 export function getXlsxReportRequisitionIdentifier(xlsxReportRequisition: IXlsxReportRequisition): number | undefined {
   return xlsxReportRequisition.id;
