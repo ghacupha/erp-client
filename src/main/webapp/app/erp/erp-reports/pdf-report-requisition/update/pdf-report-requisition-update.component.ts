@@ -38,6 +38,8 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
     reportId: [null, [Validators.required]],
     reportTemplate: [null, Validators.required],
     placeholders: [],
+    parameters: [],
+    reportFileChecksum: [],
   });
 
   constructor(
@@ -213,6 +215,8 @@ export class PdfReportRequisitionUpdateComponent implements OnInit {
       reportId: this.editForm.get(['reportId'])!.value,
       reportTemplate: this.editForm.get(['reportTemplate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
+      parameters: this.editForm.get(['parameters'])!.value
     };
   }
 }
