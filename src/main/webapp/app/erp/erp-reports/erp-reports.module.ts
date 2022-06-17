@@ -21,6 +21,24 @@ import { RouterModule } from '@angular/router';
       loadChildren: () => import('./xlsx-report-requisition/xlsx-report-requisition.module')
         .then(m => m.XlsxReportRequisitionModule),
     },
+    {
+      path: 'report-requisition',
+      data: { pageTitle: 'ERP | Report Requisition' },
+      loadChildren: () => import('./report-requisition/report-requisition.module')
+        .then(m => m.ReportRequisitionModule),
+    },
+    {
+      path: 'report-content-type',
+      data: { pageTitle: 'ERP | Report Content Type' },
+      loadChildren: () => import('./report-content-type/report-content-type.module')
+        .then(m => m.ReportContentTypeModule),
+    },
+    {
+      path: 'system-content-type',
+      data: { pageTitle: 'ERP | System Content Type' },
+      loadChildren: () => import('./system-content-type/system-content-type.module')
+        .then(m => m.SystemContentTypeModule),
+    },
   ])
   ]
 })

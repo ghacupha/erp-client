@@ -146,21 +146,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_placeholder">Placeholder</label>
-          <select class="form-control" id="field_placeholder" data-cy="placeholder" name="placeholder" formControlName="placeholder">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                placeholderOption.id === editForm.get('placeholder')!.value?.id ? editForm.get('placeholder')!.value : placeholderOption
-              "
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_debitAccount">Debit Account</label>
           <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
             <option [ngValue]="null"></option>
@@ -196,6 +181,25 @@
               *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
             >
               {{ transactionAccountOption.accountName }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
             </option>
           </select>
         </div>

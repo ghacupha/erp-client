@@ -93,7 +93,10 @@
       "ReportTemplate",
       "PdfReportRequisition",
       "XlsxReportRequisition",
-      "UniversallyUniqueMapping"
+      "UniversallyUniqueMapping",
+      "SystemContentType",
+      "ReportRequisition",
+      "ReportContentType"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

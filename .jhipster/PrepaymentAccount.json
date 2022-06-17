@@ -46,12 +46,6 @@
       "otherEntityField": "dealerName"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "description"
-    },
-    {
       "relationshipName": "debitAccount",
       "otherEntityName": "transactionAccount",
       "relationshipType": "many-to-one",
@@ -62,6 +56,14 @@
       "otherEntityName": "transactionAccount",
       "relationshipType": "many-to-one",
       "otherEntityField": "accountName"
+    },
+    {
+      "relationshipName": "placeholder",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAccount"
     }
   ],
   "service": "serviceImpl",

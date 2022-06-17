@@ -35,6 +35,30 @@
             <span>Report Parameters</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="system-content-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>System Content Type</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="report-content-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Content Type</span>
+          </a>
+        </li>
       </ul>
     </li>
 
@@ -50,6 +74,18 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Requisition</span>
+          </a>
+        </li>
         <li>
           <a
             class="dropdown-item"

@@ -39,9 +39,9 @@ export class PrepaymentAccountUpdatePage {
   prepaymentTransactionSelect = element(by.id('field_prepaymentTransaction'));
   serviceOutletSelect = element(by.id('field_serviceOutlet'));
   dealerSelect = element(by.id('field_dealer'));
-  placeholderSelect = element(by.id('field_placeholder'));
   debitAccountSelect = element(by.id('field_debitAccount'));
   transferAccountSelect = element(by.id('field_transferAccount'));
+  placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -151,22 +151,6 @@ export class PrepaymentAccountUpdatePage {
     return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
-  async placeholderSelectLastOption(): Promise<void> {
-    await this.placeholderSelect.all(by.tagName('option')).last().click();
-  }
-
-  async placeholderSelectOption(option: string): Promise<void> {
-    await this.placeholderSelect.sendKeys(option);
-  }
-
-  getPlaceholderSelect(): ElementFinder {
-    return this.placeholderSelect;
-  }
-
-  async getPlaceholderSelectedOption(): Promise<string> {
-    return await this.placeholderSelect.element(by.css('option:checked')).getText();
-  }
-
   async debitAccountSelectLastOption(): Promise<void> {
     await this.debitAccountSelect.all(by.tagName('option')).last().click();
   }
@@ -197,6 +181,22 @@ export class PrepaymentAccountUpdatePage {
 
   async getTransferAccountSelectedOption(): Promise<string> {
     return await this.transferAccountSelect.element(by.css('option:checked')).getText();
+  }
+
+  async placeholderSelectLastOption(): Promise<void> {
+    await this.placeholderSelect.all(by.tagName('option')).last().click();
+  }
+
+  async placeholderSelectOption(option: string): Promise<void> {
+    await this.placeholderSelect.sendKeys(option);
+  }
+
+  getPlaceholderSelect(): ElementFinder {
+    return this.placeholderSelect;
+  }
+
+  async getPlaceholderSelectedOption(): Promise<string> {
+    return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

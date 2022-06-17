@@ -60,14 +60,6 @@
             <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
           </div>
         </dd>
-        <dt><span>Placeholder</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.placeholder">
-            <a [routerLink]="['/placeholder', prepaymentAccount.placeholder?.id, 'view']">{{
-              prepaymentAccount.placeholder?.description
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Debit Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.debitAccount">
@@ -83,6 +75,13 @@
               prepaymentAccount.transferAccount?.accountName
             }}</a>
           </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
         </dd>
       </dl>
 

@@ -17,10 +17,10 @@ import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model
 import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PrepaymentAccountUpdateComponent } from './prepayment-account-update.component';
 
@@ -33,8 +33,8 @@ describe('PrepaymentAccount Management Update Component', () => {
   let settlementService: SettlementService;
   let serviceOutletService: ServiceOutletService;
   let dealerService: DealerService;
-  let placeholderService: PlaceholderService;
   let transactionAccountService: TransactionAccountService;
+  let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,8 +52,8 @@ describe('PrepaymentAccount Management Update Component', () => {
     settlementService = TestBed.inject(SettlementService);
     serviceOutletService = TestBed.inject(ServiceOutletService);
     dealerService = TestBed.inject(DealerService);
-    placeholderService = TestBed.inject(PlaceholderService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
+    placeholderService = TestBed.inject(PlaceholderService);
 
     comp = fixture.componentInstance;
   });
@@ -141,25 +141,6 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call Placeholder query and add missing value', () => {
-      const prepaymentAccount: IPrepaymentAccount = { id: 456 };
-      const placeholder: IPlaceholder = { id: 20901 };
-      prepaymentAccount.placeholder = placeholder;
-
-      const placeholderCollection: IPlaceholder[] = [{ id: 81553 }];
-      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: placeholderCollection })));
-      const additionalPlaceholders = [placeholder];
-      const expectedCollection: IPlaceholder[] = [...additionalPlaceholders, ...placeholderCollection];
-      jest.spyOn(placeholderService, 'addPlaceholderToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ prepaymentAccount });
-      comp.ngOnInit();
-
-      expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
-      expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should call TransactionAccount query and add missing value', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
       const debitAccount: ITransactionAccount = { id: 95760 };
@@ -184,6 +165,25 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Placeholder query and add missing value', () => {
+      const prepaymentAccount: IPrepaymentAccount = { id: 456 };
+      const placeholders: IPlaceholder[] = [{ id: 20901 }];
+      prepaymentAccount.placeholders = placeholders;
+
+      const placeholderCollection: IPlaceholder[] = [{ id: 81553 }];
+      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: placeholderCollection })));
+      const additionalPlaceholders = [...placeholders];
+      const expectedCollection: IPlaceholder[] = [...additionalPlaceholders, ...placeholderCollection];
+      jest.spyOn(placeholderService, 'addPlaceholderToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentAccount });
+      comp.ngOnInit();
+
+      expect(placeholderService.query).toHaveBeenCalled();
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
       const settlementCurrency: ISettlementCurrency = { id: 83958 };
@@ -194,12 +194,12 @@ describe('PrepaymentAccount Management Update Component', () => {
       prepaymentAccount.serviceOutlet = serviceOutlet;
       const dealer: IDealer = { id: 51117 };
       prepaymentAccount.dealer = dealer;
-      const placeholder: IPlaceholder = { id: 55956 };
-      prepaymentAccount.placeholder = placeholder;
       const debitAccount: ITransactionAccount = { id: 2986 };
       prepaymentAccount.debitAccount = debitAccount;
       const transferAccount: ITransactionAccount = { id: 8579 };
       prepaymentAccount.transferAccount = transferAccount;
+      const placeholders: IPlaceholder = { id: 55956 };
+      prepaymentAccount.placeholders = [placeholders];
 
       activatedRoute.data = of({ prepaymentAccount });
       comp.ngOnInit();
@@ -209,9 +209,9 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.settlementsSharedCollection).toContain(prepaymentTransaction);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
       expect(comp.dealersSharedCollection).toContain(dealer);
-      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(transferAccount);
+      expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
   });
 
@@ -312,6 +312,14 @@ describe('PrepaymentAccount Management Update Component', () => {
       });
     });
 
+    describe('trackTransactionAccountById', () => {
+      it('Should return tracked TransactionAccount primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackTransactionAccountById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
     describe('trackPlaceholderById', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
@@ -319,12 +327,32 @@ describe('PrepaymentAccount Management Update Component', () => {
         expect(trackResult).toEqual(entity.id);
       });
     });
+  });
 
-    describe('trackTransactionAccountById', () => {
-      it('Should return tracked TransactionAccount primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackTransactionAccountById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+  describe('Getting selected relationships', () => {
+    describe('getSelectedPlaceholder', () => {
+      it('Should return option if no Placeholder is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedPlaceholder(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected Placeholder for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this Placeholder is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
       });
     });
   });

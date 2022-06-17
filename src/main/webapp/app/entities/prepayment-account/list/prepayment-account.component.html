@@ -65,7 +65,6 @@
           </th>
           <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="placeholder.description"><span>Placeholder</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="debitAccount.accountName"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferAccount.accountName"><span>Transfer Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -104,13 +103,6 @@
           <td>
             <div *ngIf="prepaymentAccount.dealer">
               <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="prepaymentAccount.placeholder">
-              <a [routerLink]="['/placeholder', prepaymentAccount.placeholder?.id, 'view']">{{
-                prepaymentAccount.placeholder?.description
-              }}</a>
             </div>
           </td>
           <td>

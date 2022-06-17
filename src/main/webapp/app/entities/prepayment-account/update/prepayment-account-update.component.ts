@@ -18,10 +18,10 @@ import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model
 import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -34,8 +34,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   settlementsSharedCollection: ISettlement[] = [];
   serviceOutletsSharedCollection: IServiceOutlet[] = [];
   dealersSharedCollection: IDealer[] = [];
-  placeholdersSharedCollection: IPlaceholder[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
+  placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -47,9 +47,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     prepaymentTransaction: [],
     serviceOutlet: [],
     dealer: [],
-    placeholder: [],
     debitAccount: [],
     transferAccount: [],
+    placeholders: [],
   });
 
   constructor(
@@ -60,8 +60,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected settlementService: SettlementService,
     protected serviceOutletService: ServiceOutletService,
     protected dealerService: DealerService,
-    protected placeholderService: PlaceholderService,
     protected transactionAccountService: TransactionAccountService,
+    protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -119,12 +119,23 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
+    return item.id!;
+  }
+
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
   }
 
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
-    return item.id!;
+  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentAccount>>): void {
@@ -157,9 +168,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       prepaymentTransaction: prepaymentAccount.prepaymentTransaction,
       serviceOutlet: prepaymentAccount.serviceOutlet,
       dealer: prepaymentAccount.dealer,
-      placeholder: prepaymentAccount.placeholder,
       debitAccount: prepaymentAccount.debitAccount,
       transferAccount: prepaymentAccount.transferAccount,
+      placeholders: prepaymentAccount.placeholders,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -178,14 +189,14 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       this.dealersSharedCollection,
       prepaymentAccount.dealer
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
-      this.placeholdersSharedCollection,
-      prepaymentAccount.placeholder
-    );
     this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
       this.transactionAccountsSharedCollection,
       prepaymentAccount.debitAccount,
       prepaymentAccount.transferAccount
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(prepaymentAccount.placeholders ?? [])
     );
   }
 
@@ -229,16 +240,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
-    this.placeholderService
-      .query()
-      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
-      .pipe(
-        map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, this.editForm.get('placeholder')!.value)
-        )
-      )
-      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-
     this.transactionAccountService
       .query()
       .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
@@ -252,6 +253,16 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((transactionAccounts: ITransactionAccount[]) => (this.transactionAccountsSharedCollection = transactionAccounts));
+
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+        )
+      )
+      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
   }
 
   protected createFromForm(): IPrepaymentAccount {
@@ -266,9 +277,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       prepaymentTransaction: this.editForm.get(['prepaymentTransaction'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
-      placeholder: this.editForm.get(['placeholder'])!.value,
       debitAccount: this.editForm.get(['debitAccount'])!.value,
       transferAccount: this.editForm.get(['transferAccount'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

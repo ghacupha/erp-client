@@ -58,9 +58,9 @@ describe('PrepaymentAccount e2e test', () => {
       prepaymentAccountUpdatePage.prepaymentTransactionSelectLastOption(),
       prepaymentAccountUpdatePage.serviceOutletSelectLastOption(),
       prepaymentAccountUpdatePage.dealerSelectLastOption(),
-      prepaymentAccountUpdatePage.placeholderSelectLastOption(),
       prepaymentAccountUpdatePage.debitAccountSelectLastOption(),
       prepaymentAccountUpdatePage.transferAccountSelectLastOption(),
+      // prepaymentAccountUpdatePage.placeholderSelectLastOption(),
     ]);
 
     await prepaymentAccountUpdatePage.save();

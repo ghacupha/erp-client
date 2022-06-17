@@ -265,6 +265,21 @@ import { RouterModule } from '@angular/router';
         loadChildren: () =>
           import('./universally-unique-mapping/universally-unique-mapping.module').then(m => m.UniversallyUniqueMappingModule),
       },
+      {
+        path: 'dev/system-content-type',
+        data: { pageTitle: 'SystemContentTypes' },
+        loadChildren: () => import('./system-content-type/system-content-type.module').then(m => m.SystemContentTypeModule),
+      },
+      {
+        path: 'dev/report-requisition',
+        data: { pageTitle: 'ReportRequisitions' },
+        loadChildren: () => import('./report-requisition/report-requisition.module').then(m => m.ReportRequisitionModule),
+      },
+      {
+        path: 'dev/report-content-type',
+        data: { pageTitle: 'ReportContentTypes' },
+        loadChildren: () => import('./report-content-type/report-content-type.module').then(m => m.ReportContentTypeModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],
