@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value != null">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_reportRequestTime">Report Request Time</label>
           <div class="d-flex">
             <input
@@ -37,6 +37,7 @@
               name="reportRequestTime"
               formControlName="reportRequestTime"
               placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
             />
           </div>
           <div
@@ -86,7 +87,7 @@
 
         <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_reportId">Report Id</label>
-          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
+          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" [readonly]="true" />
           <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
           </div>
