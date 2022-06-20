@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [hidden]="editForm.get('id')!.value != null">
           <label class="form-control-label" for="field_reportRequestTime">Report Request Time</label>
           <div class="d-flex">
             <input
@@ -57,7 +57,7 @@
         <div class="form-group">
           <label class="form-control-label" for="field_reportPassword">Report Password</label>
           <input
-            type="text"
+            type="password"
             class="form-control"
             name="reportPassword"
             id="field_reportPassword"
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_reportStatus">Report Status</label>
           <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
             <option [ngValue]="null"></option>
@@ -84,7 +84,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_reportId">Report Id</label>
           <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
           <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
@@ -92,7 +92,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_reportFileAttachment">Report File Attachment</label>
           <div>
             <div *ngIf="editForm.get('reportFileAttachment')!.value" class="form-text text-danger clearfix">
@@ -137,9 +137,9 @@
             id="field_reportFileAttachmentContentType"
             formControlName="reportFileAttachmentContentType"
           />
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_reportFileCheckSum">Report File Check Sum</label>
           <textarea
             class="form-control"
@@ -148,7 +148,7 @@
             data-cy="reportFileCheckSum"
             formControlName="reportFileCheckSum"
           ></textarea>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label class="form-control-label" for="field_reportNotes">Report Notes</label>

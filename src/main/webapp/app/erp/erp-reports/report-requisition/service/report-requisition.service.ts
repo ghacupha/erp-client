@@ -9,6 +9,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IReportRequisition, getReportRequisitionIdentifier } from '../report-requisition.model';
+import { sha512 } from 'hash-wasm';
 
 export type EntityResponseType = HttpResponse<IReportRequisition>;
 export type EntityArrayResponseType = HttpResponse<IReportRequisition[]>;
@@ -24,7 +25,8 @@ export class ReportRequisitionService {
     const copy = this.convertDateFromClient(reportRequisition);
     return this.http
       .post<IReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
   }
 
   update(reportRequisition: IReportRequisition): Observable<EntityResponseType> {
@@ -33,7 +35,8 @@ export class ReportRequisitionService {
       .put<IReportRequisition>(`${this.resourceUrl}/${getReportRequisitionIdentifier(reportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
   }
 
   partialUpdate(reportRequisition: IReportRequisition): Observable<EntityResponseType> {
@@ -42,20 +45,23 @@ export class ReportRequisitionService {
       .patch<IReportRequisition>(`${this.resourceUrl}/${getReportRequisitionIdentifier(reportRequisition) as number}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
+      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -66,7 +72,8 @@ export class ReportRequisitionService {
     const options = createRequestOption(req);
     return this.http
       .get<IReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
+      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
   }
 
   addReportRequisitionToCollectionIfMissing(
@@ -108,6 +115,35 @@ export class ReportRequisitionService {
     if (res.body) {
       res.body.forEach((reportRequisition: IReportRequisition) => {
         reportRequisition.reportRequestTime = reportRequisition.reportRequestTime ? dayjs(reportRequisition.reportRequestTime) : undefined;
+      });
+    }
+    return res;
+  }
+
+  protected convertPasswordFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      if (res.body.reportPassword) {
+        sha512(res.body.reportPassword).then(token => {
+          res.body!.reportPassword = token.substring(0,15)
+        })
+      }
+      if (res.body.reportPassword) {
+        sha512(res.body.reportPassword).then(token => {
+          res.body!.reportPassword = token.substring(0,15)
+        })
+      }
+    }
+    return res;
+  }
+
+  protected convertPasswordArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((reportRequisition: IReportRequisition) => {
+        if (reportRequisition.reportPassword) {
+          sha512(reportRequisition.reportPassword).then(token => {
+            reportRequisition.reportPassword = token.substring(0,15)
+          })
+        }
       });
     }
     return res;

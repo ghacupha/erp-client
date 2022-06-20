@@ -22,6 +22,7 @@ import { ReportTemplateService } from 'app/entities/report-template/service/repo
 import { IReportContentType } from 'app/entities/report-content-type/report-content-type.model';
 import { ReportContentTypeService } from 'app/entities/report-content-type/service/report-content-type.service';
 import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-report-requisition-update',
@@ -69,8 +70,9 @@ export class ReportRequisitionUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportRequisition }) => {
       if (reportRequisition.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         reportRequisition.reportRequestTime = today;
+        reportRequisition.reportId  = uuidv4();
       }
 
       this.updateForm(reportRequisition);
