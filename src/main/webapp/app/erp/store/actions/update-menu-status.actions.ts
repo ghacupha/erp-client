@@ -1,5 +1,5 @@
 ///
-/// Payment Records - Payment records is part of the ERP System
+/// Erp System - Mark II No 11 (Artaxerxes Series)
 /// Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
