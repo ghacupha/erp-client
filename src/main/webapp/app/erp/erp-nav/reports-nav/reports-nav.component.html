@@ -1,6 +1,6 @@
 <div  [ngSwitch]="isAuthenticated()">
   <ul  class="navbar-nav ml-auto">
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+     <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="report-definition-menu">
           <span>
@@ -11,7 +11,7 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="report-definition-menu">
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
           <a
             class="dropdown-item"
             routerLink="report-template"
@@ -23,7 +23,7 @@
             <span>Report Template</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
           <a
             class="dropdown-item"
             routerLink="universally-unique-mapping"
@@ -35,7 +35,7 @@
             <span>Report Parameters</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="system-content-type"
@@ -47,7 +47,7 @@
             <span>System Content Type</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"
             routerLink="report-content-type"
@@ -74,7 +74,7 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
           <a
             class="dropdown-item"
             routerLink="report-requisition"
@@ -86,7 +86,7 @@
             <span>Requisition</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
           <a
             class="dropdown-item"
             routerLink="xlsx-report-requisition"
@@ -98,7 +98,7 @@
             <span>Excel Report</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
           <a
             class="dropdown-item"
             routerLink="pdf-report-requisition"

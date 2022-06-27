@@ -27,7 +27,7 @@
         </a>
       </li>
 
-      <jhi-reports-nav></jhi-reports-nav>
+      <jhi-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']"></jhi-reports-nav>
 
       <jhi-payments-nav *jhiHasAnyAuthority="'ROLE_PAYMENTS_USER'"></jhi-payments-nav>
 

@@ -13,8 +13,8 @@ export type EntityArrayResponseType = HttpResponse<ISystemContentType[]>;
 
 @Injectable({ providedIn: 'root' })
 export class SystemContentTypeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/system-content-types');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/system-content-types');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dev/system-content-types');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/dev/_search/system-content-types');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

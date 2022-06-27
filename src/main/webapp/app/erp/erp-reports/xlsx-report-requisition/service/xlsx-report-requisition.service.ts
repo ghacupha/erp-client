@@ -17,8 +17,8 @@ export type EntityArrayResponseType = HttpResponse<IXlsxReportRequisition[]>;
 
 @Injectable({ providedIn: 'root' })
 export class XlsxReportRequisitionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/xlsx-report-requisitions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/xlsx-report-requisitions');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dev/xlsx-report-requisitions');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/dev/_search/xlsx-report-requisitions');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
