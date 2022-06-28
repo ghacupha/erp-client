@@ -25,7 +25,7 @@ import { RouterModule } from '@angular/router';
       path: 'report-template',
       data: {
         pageTitle: 'ERP | Report Template',
-        authorities: ['ROLE_REPORT_DESIGNER'],
+        authorities: ['ROLE_DEV','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./report-template/report-template.module')
         .then(m => m.ReportTemplateModule),
@@ -34,7 +34,7 @@ import { RouterModule } from '@angular/router';
       path: 'pdf-report-requisition',
       data: {
         pageTitle: 'ERP | Report Requisition - PDF',
-        authorities: ['ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
+        authorities: ['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./pdf-report-requisition/pdf-report-requisition.module')
         .then(m => m.PdfReportRequisitionModule),
@@ -43,7 +43,7 @@ import { RouterModule } from '@angular/router';
       path: 'xlsx-report-requisition',
       data: {
         pageTitle: 'ERP | EXCEL Report Requisition',
-        authorities: ['ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
+        authorities: ['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./xlsx-report-requisition/xlsx-report-requisition.module')
         .then(m => m.XlsxReportRequisitionModule),
@@ -52,7 +52,7 @@ import { RouterModule } from '@angular/router';
       path: 'report-requisition',
       data: {
         pageTitle: 'ERP | Report Requisition',
-        authorities: ['ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
+        authorities: ['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./report-requisition/report-requisition.module')
         .then(m => m.ReportRequisitionModule),
