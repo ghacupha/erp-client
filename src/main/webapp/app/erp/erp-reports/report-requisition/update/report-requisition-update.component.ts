@@ -31,16 +31,16 @@ import { ReportRequisitionService } from '../service/report-requisition.service'
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
-import { IReportContentType } from 'app/entities/report-content-type/report-content-type.model';
-import { ReportContentTypeService } from 'app/entities/report-content-type/service/report-content-type.service';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 import { v4 as uuidv4 } from 'uuid';
+import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IReportTemplate } from '../../report-template/report-template.model';
+import { IReportContentType } from '../../report-content-type/report-content-type.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ReportTemplateService } from '../../report-template/service/report-template.service';
+import { ReportContentTypeService } from '../../report-content-type/service/report-content-type.service';
 
 @Component({
   selector: 'jhi-report-requisition-update',

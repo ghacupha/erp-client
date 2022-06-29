@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<IReportContentType[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ReportContentTypeService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/report-content-types');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/report-content-types');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dev/report-content-types');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/dev/_search/report-content-types');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
