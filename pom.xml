@@ -1,7 +1,3 @@
-<!-- 
-    This configuration file is used only to ease the work of license management through the 
-    mycila plugin and nothing else
- -->
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 11 (Artaxerxes Series)</description>
+    <description>Mark II No 17 (Baruch Series)</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
@@ -37,7 +33,7 @@
         <docker.image.prefix>ghacupha</docker.image.prefix>
         <founder.website>https://github.com/ghacupha</founder.website>
         <owner.email>mailnjeru@gmail.com</owner.email>
-        <project.inceptionYear>2021</project.inceptionYear>
+        <project.inceptionYear>2021 - 2022</project.inceptionYear>
         <project.owner>Edwin Njeru</project.owner>
 
     </properties>

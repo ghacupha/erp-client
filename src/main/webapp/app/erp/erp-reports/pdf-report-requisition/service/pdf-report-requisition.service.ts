@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark II No 11 (Artaxerxes Series)
-/// Copyright © 2021 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark II No 17 (Baruch Series)
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -35,8 +35,8 @@ export type EntityArrayResponseType = HttpResponse<IPdfReportRequisition[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PdfReportRequisitionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/read-report/pdf-report-requisitions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/read-report/_search/pdf-report-requisitions');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pdf-report-requisitions');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/pdf-report-requisitions');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
