@@ -96,7 +96,15 @@
       "UniversallyUniqueMapping",
       "SystemContentType",
       "ReportRequisition",
-      "ReportContentType"
+      "ReportContentType",
+      "SystemModule",
+      "ExcelReportExport",
+      "ProcessStatus",
+      "ReportStatus",
+      "Algorithm",
+      "SecurityClearance",
+      "ApplicationUser",
+      "ReportDesign"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

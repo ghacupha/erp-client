@@ -31,6 +31,24 @@ import { RouterModule } from '@angular/router';
         .then(m => m.ReportTemplateModule),
     },
     {
+      path: 'report-design',
+      data: {
+        pageTitle: 'ERP | Report Design',
+        authorities: [],
+      },
+      loadChildren: () => import('./report-design/report-design.module')
+        .then(m => m.ReportDesignModule),
+    },
+    {
+      path: 'report-status',
+      data: {
+        pageTitle: 'ERP | Report Status',
+        authorities: [],
+      },
+      loadChildren: () => import('./report-status/report-status.module')
+        .then(m => m.ReportStatusModule),
+    },
+    {
       path: 'pdf-report-requisition',
       data: {
         pageTitle: 'ERP | Report Requisition - PDF',
@@ -47,6 +65,14 @@ import { RouterModule } from '@angular/router';
       },
       loadChildren: () => import('./xlsx-report-requisition/xlsx-report-requisition.module')
         .then(m => m.XlsxReportRequisitionModule),
+    },{
+      path: 'excel-report-export',
+      data: {
+        pageTitle: 'ERP | Excel Export',
+        authorities: ['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER'],
+      },
+      loadChildren: () => import('./excel-report-export/excel-report-export.module')
+        .then(m => m.ExcelReportExportModule),
     },
     {
       path: 'report-requisition',
