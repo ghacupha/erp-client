@@ -9,6 +9,8 @@ import { IProcessStatus, ProcessStatus } from '../process-status.model';
 import { ProcessStatusService } from '../service/process-status.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-process-status-update',
@@ -34,7 +36,9 @@ export class ProcessStatusUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ processStatus }) => {
