@@ -10,18 +10,20 @@ import { ReportDesignService } from '../service/report-design.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
-import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
-import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
+import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
+import { IApplicationUser } from 'app/entities/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISystemModule } from 'app/entities/system-module/system-module.model';
+import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
+import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
+import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
 
 @Component({
   selector: 'jhi-report-design-update',
@@ -36,6 +38,7 @@ export class ReportDesignUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   systemModulesSharedCollection: ISystemModule[] = [];
+  algorithmsSharedCollection: IAlgorithm[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -44,8 +47,9 @@ export class ReportDesignUpdateComponent implements OnInit {
     description: [],
     notes: [],
     notesContentType: [],
-    reportFile: [null, [Validators.required]],
+    reportFile: [],
     reportFileContentType: [],
+    reportFileChecksum: [null, []],
     parameters: [],
     securityClearance: [null, Validators.required],
     reportDesigner: [null, Validators.required],
@@ -53,6 +57,7 @@ export class ReportDesignUpdateComponent implements OnInit {
     department: [null, Validators.required],
     placeholders: [],
     systemModule: [null, Validators.required],
+    fileCheckSumAlgorithm: [null, Validators.required],
   });
 
   constructor(
@@ -65,6 +70,7 @@ export class ReportDesignUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
     protected systemModuleService: SystemModuleService,
+    protected algorithmService: AlgorithmService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -130,6 +136,10 @@ export class ReportDesignUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAlgorithmById(index: number, item: IAlgorithm): number {
+    return item.id!;
+  }
+
   getSelectedUniversallyUniqueMapping(
     option: IUniversallyUniqueMapping,
     selectedVals?: IUniversallyUniqueMapping[]
@@ -184,6 +194,7 @@ export class ReportDesignUpdateComponent implements OnInit {
       notesContentType: reportDesign.notesContentType,
       reportFile: reportDesign.reportFile,
       reportFileContentType: reportDesign.reportFileContentType,
+      reportFileChecksum: reportDesign.reportFileChecksum,
       parameters: reportDesign.parameters,
       securityClearance: reportDesign.securityClearance,
       reportDesigner: reportDesign.reportDesigner,
@@ -191,6 +202,7 @@ export class ReportDesignUpdateComponent implements OnInit {
       department: reportDesign.department,
       placeholders: reportDesign.placeholders,
       systemModule: reportDesign.systemModule,
+      fileCheckSumAlgorithm: reportDesign.fileCheckSumAlgorithm,
     });
 
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
@@ -217,6 +229,10 @@ export class ReportDesignUpdateComponent implements OnInit {
     this.systemModulesSharedCollection = this.systemModuleService.addSystemModuleToCollectionIfMissing(
       this.systemModulesSharedCollection,
       reportDesign.systemModule
+    );
+    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
+      this.algorithmsSharedCollection,
+      reportDesign.fileCheckSumAlgorithm
     );
   }
 
@@ -293,6 +309,16 @@ export class ReportDesignUpdateComponent implements OnInit {
         )
       )
       .subscribe((systemModules: ISystemModule[]) => (this.systemModulesSharedCollection = systemModules));
+
+    this.algorithmService
+      .query()
+      .pipe(map((res: HttpResponse<IAlgorithm[]>) => res.body ?? []))
+      .pipe(
+        map((algorithms: IAlgorithm[]) =>
+          this.algorithmService.addAlgorithmToCollectionIfMissing(algorithms, this.editForm.get('fileCheckSumAlgorithm')!.value)
+        )
+      )
+      .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
   }
 
   protected createFromForm(): IReportDesign {
@@ -306,6 +332,7 @@ export class ReportDesignUpdateComponent implements OnInit {
       notes: this.editForm.get(['notes'])!.value,
       reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
       reportFile: this.editForm.get(['reportFile'])!.value,
+      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
       parameters: this.editForm.get(['parameters'])!.value,
       securityClearance: this.editForm.get(['securityClearance'])!.value,
       reportDesigner: this.editForm.get(['reportDesigner'])!.value,
@@ -313,6 +340,7 @@ export class ReportDesignUpdateComponent implements OnInit {
       department: this.editForm.get(['department'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       systemModule: this.editForm.get(['systemModule'])!.value,
+      fileCheckSumAlgorithm: this.editForm.get(['fileCheckSumAlgorithm'])!.value,
     };
   }
 }

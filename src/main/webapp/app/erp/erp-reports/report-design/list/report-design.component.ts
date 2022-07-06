@@ -80,7 +80,7 @@ export class ReportDesignComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['catalogueNumber', 'designation', 'description', 'notes', 'reportFile'].includes(this.predicate)) {
+    if (query && ['catalogueNumber', 'designation', 'description', 'notes', 'reportFile', 'reportFileChecksum'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

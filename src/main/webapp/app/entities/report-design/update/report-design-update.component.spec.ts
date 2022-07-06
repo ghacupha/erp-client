@@ -21,6 +21,8 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { ISystemModule } from 'app/entities/system-module/system-module.model';
 import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
+import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
+import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
 
 import { ReportDesignUpdateComponent } from './report-design-update.component';
 
@@ -35,6 +37,7 @@ describe('ReportDesign Management Update Component', () => {
   let dealerService: DealerService;
   let placeholderService: PlaceholderService;
   let systemModuleService: SystemModuleService;
+  let algorithmService: AlgorithmService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -54,6 +57,7 @@ describe('ReportDesign Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     placeholderService = TestBed.inject(PlaceholderService);
     systemModuleService = TestBed.inject(SystemModuleService);
+    algorithmService = TestBed.inject(AlgorithmService);
 
     comp = fixture.componentInstance;
   });
@@ -192,6 +196,25 @@ describe('ReportDesign Management Update Component', () => {
       expect(comp.systemModulesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Algorithm query and add missing value', () => {
+      const reportDesign: IReportDesign = { id: 456 };
+      const fileCheckSumAlgorithm: IAlgorithm = { id: 73099 };
+      reportDesign.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
+
+      const algorithmCollection: IAlgorithm[] = [{ id: 75364 }];
+      jest.spyOn(algorithmService, 'query').mockReturnValue(of(new HttpResponse({ body: algorithmCollection })));
+      const additionalAlgorithms = [fileCheckSumAlgorithm];
+      const expectedCollection: IAlgorithm[] = [...additionalAlgorithms, ...algorithmCollection];
+      jest.spyOn(algorithmService, 'addAlgorithmToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ reportDesign });
+      comp.ngOnInit();
+
+      expect(algorithmService.query).toHaveBeenCalled();
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const reportDesign: IReportDesign = { id: 456 };
       const parameters: IUniversallyUniqueMapping = { id: 35505 };
@@ -208,6 +231,8 @@ describe('ReportDesign Management Update Component', () => {
       reportDesign.placeholders = [placeholders];
       const systemModule: ISystemModule = { id: 97044 };
       reportDesign.systemModule = systemModule;
+      const fileCheckSumAlgorithm: IAlgorithm = { id: 96305 };
+      reportDesign.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
 
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
@@ -220,6 +245,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(department);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.systemModulesSharedCollection).toContain(systemModule);
+      expect(comp.algorithmsSharedCollection).toContain(fileCheckSumAlgorithm);
     });
   });
 
@@ -332,6 +358,14 @@ describe('ReportDesign Management Update Component', () => {
       it('Should return tracked SystemModule primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackSystemModuleById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAlgorithmById', () => {
+      it('Should return tracked Algorithm primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAlgorithmById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

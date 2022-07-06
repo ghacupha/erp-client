@@ -58,11 +58,15 @@
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportFileChecksum">
+            <span>Report File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportDesigner.applicationIdentity"><span>Report Designer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="organization.dealerName"><span>Organization</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="department.dealerName"><span>Department</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="systemModule.moduleName"><span>System Module</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileCheckSumAlgorithm.name"><span>File Check Sum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -82,6 +86,7 @@
             <a *ngIf="reportDesign.reportFile" (click)="openFile(reportDesign.reportFile, reportDesign.reportFileContentType)">open</a>
             <span *ngIf="reportDesign.reportFile">{{ reportDesign.reportFileContentType }}, {{ byteSize(reportDesign.reportFile) }}</span>
           </td>
+          <td>{{ reportDesign.reportFileChecksum }}</td>
           <td>
             <div *ngIf="reportDesign.securityClearance">
               <a [routerLink]="['/security-clearance', reportDesign.securityClearance?.id, 'view']">{{
@@ -109,6 +114,13 @@
           <td>
             <div *ngIf="reportDesign.systemModule">
               <a [routerLink]="['/system-module', reportDesign.systemModule?.id, 'view']">{{ reportDesign.systemModule?.moduleName }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="reportDesign.fileCheckSumAlgorithm">
+              <a [routerLink]="['/algorithm', reportDesign.fileCheckSumAlgorithm?.id, 'view']">{{
+                reportDesign.fileCheckSumAlgorithm?.name
+              }}</a>
             </div>
           </td>
           <td class="text-right">

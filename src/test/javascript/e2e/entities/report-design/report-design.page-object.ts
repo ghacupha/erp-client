@@ -35,6 +35,7 @@ export class ReportDesignUpdatePage {
   descriptionInput = element(by.id('field_description'));
   notesInput = element(by.id('file_notes'));
   reportFileInput = element(by.id('file_reportFile'));
+  reportFileChecksumInput = element(by.id('field_reportFileChecksum'));
 
   parametersSelect = element(by.id('field_parameters'));
   securityClearanceSelect = element(by.id('field_securityClearance'));
@@ -43,6 +44,7 @@ export class ReportDesignUpdatePage {
   departmentSelect = element(by.id('field_department'));
   placeholderSelect = element(by.id('field_placeholder'));
   systemModuleSelect = element(by.id('field_systemModule'));
+  fileCheckSumAlgorithmSelect = element(by.id('field_fileCheckSumAlgorithm'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -94,6 +96,14 @@ export class ReportDesignUpdatePage {
 
   async getReportFileInput(): Promise<string> {
     return await this.reportFileInput.getAttribute('value');
+  }
+
+  async setReportFileChecksumInput(reportFileChecksum: string): Promise<void> {
+    await this.reportFileChecksumInput.sendKeys(reportFileChecksum);
+  }
+
+  async getReportFileChecksumInput(): Promise<string> {
+    return await this.reportFileChecksumInput.getAttribute('value');
   }
 
   async parametersSelectLastOption(): Promise<void> {
@@ -206,6 +216,22 @@ export class ReportDesignUpdatePage {
 
   async getSystemModuleSelectedOption(): Promise<string> {
     return await this.systemModuleSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fileCheckSumAlgorithmSelectLastOption(): Promise<void> {
+    await this.fileCheckSumAlgorithmSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fileCheckSumAlgorithmSelectOption(option: string): Promise<void> {
+    await this.fileCheckSumAlgorithmSelect.sendKeys(option);
+  }
+
+  getFileCheckSumAlgorithmSelect(): ElementFinder {
+    return this.fileCheckSumAlgorithmSelect;
+  }
+
+  async getFileCheckSumAlgorithmSelectedOption(): Promise<string> {
+    return await this.fileCheckSumAlgorithmSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

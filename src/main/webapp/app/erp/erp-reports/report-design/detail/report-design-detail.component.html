@@ -40,6 +40,10 @@
             {{ reportDesign.reportFileContentType }}, {{ byteSize(reportDesign.reportFile) }}
           </div>
         </dd>
+        <dt><span>Report File Checksum</span></dt>
+        <dd>
+          <span>{{ reportDesign.reportFileChecksum }}</span>
+        </dd>
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of reportDesign.parameters; let last = last">
@@ -86,6 +90,14 @@
         <dd>
           <div *ngIf="reportDesign.systemModule">
             <a [routerLink]="['/system-module', reportDesign.systemModule?.id, 'view']">{{ reportDesign.systemModule?.moduleName }}</a>
+          </div>
+        </dd>
+        <dt><span>File Check Sum Algorithm</span></dt>
+        <dd>
+          <div *ngIf="reportDesign.fileCheckSumAlgorithm">
+            <a [routerLink]="['/algorithm', reportDesign.fileCheckSumAlgorithm?.id, 'view']">{{
+              reportDesign.fileCheckSumAlgorithm?.name
+            }}</a>
           </div>
         </dd>
       </dl>

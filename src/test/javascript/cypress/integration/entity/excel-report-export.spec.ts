@@ -78,7 +78,7 @@ describe('ExcelReportExport e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/report-designs',
-      body: {"catalogueNumber":"bdca0b3d-2821-408e-8bbc-52a9b7ce5986","designation":"invoice","description":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","reportFile":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","reportFileContentType":"unknown"},
+      body: {"catalogueNumber":"bdca0b3d-2821-408e-8bbc-52a9b7ce5986","designation":"invoice","description":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","reportFile":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","reportFileContentType":"unknown","reportFileChecksum":"Mississippi"},
     }).then(({ body }) => {
       reportDesign = body;
     });

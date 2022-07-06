@@ -28,6 +28,7 @@ describe('ReportDesign Service', () => {
       notes: 'AAAAAAA',
       reportFileContentType: 'image/png',
       reportFile: 'AAAAAAA',
+      reportFileChecksum: 'AAAAAAA',
     };
   });
 
@@ -68,6 +69,7 @@ describe('ReportDesign Service', () => {
           description: 'BBBBBB',
           notes: 'BBBBBB',
           reportFile: 'BBBBBB',
+          reportFileChecksum: 'BBBBBB',
         },
         elemDefault
       );
@@ -87,6 +89,7 @@ describe('ReportDesign Service', () => {
           designation: 'BBBBBB',
           description: 'BBBBBB',
           reportFile: 'BBBBBB',
+          reportFileChecksum: 'BBBBBB',
         },
         new ReportDesign()
       );
@@ -111,6 +114,7 @@ describe('ReportDesign Service', () => {
           description: 'BBBBBB',
           notes: 'BBBBBB',
           reportFile: 'BBBBBB',
+          reportFileChecksum: 'BBBBBB',
         },
         elemDefault
       );
@@ -162,7 +166,7 @@ describe('ReportDesign Service', () => {
       });
 
       it('should add only unique ReportDesign to an array', () => {
-        const reportDesignArray: IReportDesign[] = [{ id: 123 }, { id: 456 }, { id: 74557 }];
+        const reportDesignArray: IReportDesign[] = [{ id: 123 }, { id: 456 }, { id: 10823 }];
         const reportDesignCollection: IReportDesign[] = [{ id: 123 }];
         expectedResult = service.addReportDesignToCollectionIfMissing(reportDesignCollection, ...reportDesignArray);
         expect(expectedResult).toHaveLength(3);

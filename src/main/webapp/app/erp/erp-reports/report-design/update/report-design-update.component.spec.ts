@@ -1,5 +1,3 @@
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -11,19 +9,22 @@ import { of, Subject } from 'rxjs';
 
 import { ReportDesignService } from '../service/report-design.service';
 import { IReportDesign, ReportDesign } from '../report-design.model';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
+import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
+import { IApplicationUser } from 'app/entities/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISystemModule } from 'app/entities/system-module/system-module.model';
+import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
+import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
+import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
 
 import { ReportDesignUpdateComponent } from './report-design-update.component';
-import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
-import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
-import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
-import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
 
 describe('ReportDesign Management Update Component', () => {
   let comp: ReportDesignUpdateComponent;
@@ -36,6 +37,7 @@ describe('ReportDesign Management Update Component', () => {
   let dealerService: DealerService;
   let placeholderService: PlaceholderService;
   let systemModuleService: SystemModuleService;
+  let algorithmService: AlgorithmService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -55,6 +57,7 @@ describe('ReportDesign Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     placeholderService = TestBed.inject(PlaceholderService);
     systemModuleService = TestBed.inject(SystemModuleService);
+    algorithmService = TestBed.inject(AlgorithmService);
 
     comp = fixture.componentInstance;
   });
@@ -193,6 +196,25 @@ describe('ReportDesign Management Update Component', () => {
       expect(comp.systemModulesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Algorithm query and add missing value', () => {
+      const reportDesign: IReportDesign = { id: 456 };
+      const fileCheckSumAlgorithm: IAlgorithm = { id: 73099 };
+      reportDesign.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
+
+      const algorithmCollection: IAlgorithm[] = [{ id: 75364 }];
+      jest.spyOn(algorithmService, 'query').mockReturnValue(of(new HttpResponse({ body: algorithmCollection })));
+      const additionalAlgorithms = [fileCheckSumAlgorithm];
+      const expectedCollection: IAlgorithm[] = [...additionalAlgorithms, ...algorithmCollection];
+      jest.spyOn(algorithmService, 'addAlgorithmToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ reportDesign });
+      comp.ngOnInit();
+
+      expect(algorithmService.query).toHaveBeenCalled();
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const reportDesign: IReportDesign = { id: 456 };
       const parameters: IUniversallyUniqueMapping = { id: 35505 };
@@ -209,6 +231,8 @@ describe('ReportDesign Management Update Component', () => {
       reportDesign.placeholders = [placeholders];
       const systemModule: ISystemModule = { id: 97044 };
       reportDesign.systemModule = systemModule;
+      const fileCheckSumAlgorithm: IAlgorithm = { id: 96305 };
+      reportDesign.fileCheckSumAlgorithm = fileCheckSumAlgorithm;
 
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
@@ -221,6 +245,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(department);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.systemModulesSharedCollection).toContain(systemModule);
+      expect(comp.algorithmsSharedCollection).toContain(fileCheckSumAlgorithm);
     });
   });
 
@@ -333,6 +358,14 @@ describe('ReportDesign Management Update Component', () => {
       it('Should return tracked SystemModule primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackSystemModuleById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAlgorithmById', () => {
+      it('Should return tracked Algorithm primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAlgorithmById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

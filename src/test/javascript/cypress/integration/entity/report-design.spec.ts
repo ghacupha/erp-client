@@ -16,17 +16,14 @@ describe('ReportDesign e2e test', () => {
   const reportDesignPageUrlPattern = new RegExp('/report-design(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const reportDesignSample = {
-    catalogueNumber: '96b54180-79df-41b9-9cd2-fc0cf505e21c',
-    designation: 'Shirt out-of-the-box',
-    reportFileContentType: 'unknown',
-  };
+  const reportDesignSample = { catalogueNumber: '079df1b9-5cd2-4fc0-8f50-5e21c52645b4', designation: 'installation' };
 
   let reportDesign: any;
   //let securityClearance: any;
   //let applicationUser: any;
   //let dealer: any;
   //let systemModule: any;
+  //let algorithm: any;
 
   before(() => {
     cy.window().then(win => {
@@ -71,6 +68,14 @@ describe('ReportDesign e2e test', () => {
     }).then(({ body }) => {
       systemModule = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/algorithms',
+      body: {"name":"Centralized Litas"},
+    }).then(({ body }) => {
+      algorithm = body;
+    });
   });
    */
 
@@ -111,6 +116,11 @@ describe('ReportDesign e2e test', () => {
     cy.intercept('GET', '/api/system-modules', {
       statusCode: 200,
       body: [systemModule],
+    });
+
+    cy.intercept('GET', '/api/algorithms', {
+      statusCode: 200,
+      body: [algorithm],
     });
 
   });
@@ -159,6 +169,14 @@ describe('ReportDesign e2e test', () => {
         url: `/api/system-modules/${systemModule.id}`,
       }).then(() => {
         systemModule = undefined;
+      });
+    }
+    if (algorithm) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/algorithms/${algorithm.id}`,
+      }).then(() => {
+        algorithm = undefined;
       });
     }
   });
@@ -212,6 +230,7 @@ describe('ReportDesign e2e test', () => {
             organization: dealer,
             department: dealer,
             systemModule: systemModule,
+            fileCheckSumAlgorithm: algorithm,
           },
         }).then(({ body }) => {
           reportDesign = body;
@@ -307,11 +326,14 @@ describe('ReportDesign e2e test', () => {
 
       cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
 
+      cy.get(`[data-cy="reportFileChecksum"]`).type('repurpose actuating').should('have.value', 'repurpose actuating');
+
       cy.get(`[data-cy="securityClearance"]`).select(1);
       cy.get(`[data-cy="reportDesigner"]`).select(1);
       cy.get(`[data-cy="organization"]`).select(1);
       cy.get(`[data-cy="department"]`).select(1);
       cy.get(`[data-cy="systemModule"]`).select(1);
+      cy.get(`[data-cy="fileCheckSumAlgorithm"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

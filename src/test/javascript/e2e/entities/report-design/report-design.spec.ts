@@ -59,6 +59,7 @@ describe('ReportDesign e2e test', () => {
             reportDesignUpdatePage.setDescriptionInput('description'),
             reportDesignUpdatePage.setNotesInput(absolutePath),
             reportDesignUpdatePage.setReportFileInput(absolutePath),
+            reportDesignUpdatePage.setReportFileChecksumInput('reportFileChecksum'),
             // reportDesignUpdatePage.parametersSelectLastOption(),
             reportDesignUpdatePage.securityClearanceSelectLastOption(),
             reportDesignUpdatePage.reportDesignerSelectLastOption(),
@@ -66,6 +67,7 @@ describe('ReportDesign e2e test', () => {
             reportDesignUpdatePage.departmentSelectLastOption(),
             // reportDesignUpdatePage.placeholderSelectLastOption(),
             reportDesignUpdatePage.systemModuleSelectLastOption(),
+            reportDesignUpdatePage.fileCheckSumAlgorithmSelectLastOption(),
         ]);
 
         await reportDesignUpdatePage.save();
