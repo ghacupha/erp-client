@@ -28,7 +28,7 @@ import { RouterModule } from '@angular/router';
       path: 'algorithm',
       data: {
         pageTitle: 'ERP | Algorithm',
-        authorities: ['ROLE_DEV','ROLE_REPORT_DESIGNER', 'ROLE_REPORT_ACCESSOR'],
+        authorities: ['ROLE_ADMIN'],
       },
       loadChildren: () => import('./algorithm/algorithm.module')
         .then(m => m.AlgorithmModule),
@@ -64,10 +64,10 @@ import { RouterModule } from '@angular/router';
       path: 'system-module',
       data: {
         pageTitle: 'ERP | System Module',
-        authorities: [],
+        authorities: ['ROLE_ADMIN'],
       },
-      loadChildren: () => import('./security-clearance/security-clearance.module')
-        .then(m => m.SecurityClearanceModule),
+      loadChildren: () => import('./system-module/system-module.module')
+        .then(m => m.SystemModuleModule),
     },
     ])
   ],

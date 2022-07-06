@@ -30,7 +30,7 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="report-definition-menu">
-        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
             routerLink="report-template"
@@ -40,6 +40,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Report Template</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="report-design"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Design</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
@@ -106,6 +118,30 @@
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="excel-report-export"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Excel Report Export</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="report-status"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Status</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
             routerLink="xlsx-report-requisition"
