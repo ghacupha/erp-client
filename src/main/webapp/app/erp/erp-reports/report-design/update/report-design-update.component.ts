@@ -24,6 +24,8 @@ import { ISystemModule } from 'app/entities/system-module/system-module.model';
 import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
 import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
 import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
+import { md5, sha512 } from 'hash-wasm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-report-design-update',
@@ -31,6 +33,8 @@ import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.servi
 })
 export class ReportDesignUpdateComponent implements OnInit {
   isSaving = false;
+
+  catalogueToken = '';
 
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   securityClearancesSharedCollection: ISecurityClearance[] = [];
@@ -81,6 +85,28 @@ export class ReportDesignUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    md5(uuidv4()).then(token => {
+      this.catalogueToken = token.substring(0, 6);
+      this.editForm.patchValue({
+        catalogueNumber: token.substring(0, 6)
+      });
+    });
+
+    this.editForm.get(['reportFile'])?.valueChanges.subscribe((fileAttachment) => {
+      sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
+        this.editForm.get(['reportFileChecksum'])?.setValue(sha512Token)
+      });
+    });
+  }
+
+  fileDataArray(b64String: string): Uint8Array {
+    const byteCharacters = atob(b64String);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    return new Uint8Array(byteNumbers);
   }
 
   byteSize(base64String: string): string {
