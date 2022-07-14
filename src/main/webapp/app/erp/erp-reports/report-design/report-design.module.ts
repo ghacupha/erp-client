@@ -23,9 +23,10 @@ import { ReportDesignDetailComponent } from './detail/report-design-detail.compo
 import { ReportDesignUpdateComponent } from './update/report-design-update.component';
 import { ReportDesignDeleteDialogComponent } from './delete/report-design-delete-dialog.component';
 import { ReportDesignRoutingModule } from './route/report-design-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ReportDesignRoutingModule],
+  imports: [SharedModule, ReportDesignRoutingModule, ErpCommonModule],
   declarations: [ReportDesignComponent, ReportDesignDetailComponent, ReportDesignUpdateComponent, ReportDesignDeleteDialogComponent],
   entryComponents: [ReportDesignDeleteDialogComponent],
 })

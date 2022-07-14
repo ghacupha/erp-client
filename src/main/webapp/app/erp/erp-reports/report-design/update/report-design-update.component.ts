@@ -28,22 +28,23 @@ import { ReportDesignService } from '../service/report-design.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
-import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
-import { IApplicationUser } from 'app/entities/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ISystemModule } from 'app/entities/system-module/system-module.model';
-import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
-import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
-import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
 import { md5, sha512 } from 'hash-wasm';
 import { v4 as uuidv4 } from 'uuid';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
+import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
+import { IAlgorithm } from '../../../erp-common/algorithm/algorithm.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
+import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
+import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
+import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({
   selector: 'jhi-report-design-update',
@@ -104,17 +105,83 @@ export class ReportDesignUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    this.updateCatalogueNumber();
+
+    this.updateFileUploadChecksum();
+
+    this.updatePreferredDepartment();
+
+    this.updatePreferredOrganization();
+  }
+
+  updatePreferredDepartment(): void {
+    // TODO Replace with entity filters
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignDepartmentDealer"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: dealers }) => {
+                if (dealers) {
+                  this.editForm.get(['department'])?.setValue(dealers[0]);
+                }
+              });
+          }
+        }
+      });
+  }
+
+  updatePreferredOrganization(): void {
+      // TODO Replace with entity filters
+      this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignOrganizationDealer"})
+        .subscribe(({ body }) => {
+          if (body!.length > 0) {
+            if (body) {
+              this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+                .subscribe(({ body: dealers }) => {
+                  if (dealers) {
+                    this.editForm.get(['organization'])?.setValue(dealers[0]);
+                  }
+                });
+            }
+          }
+        });
+    }
+
+  updateFileUploadChecksum(): void {
+    this.editForm.get(['reportFile'])?.valueChanges.subscribe((fileAttachment) => {
+      sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
+        this.editForm.get(['reportFileChecksum'])?.setValue(sha512Token)
+      });
+    });
+  }
+
+  updateCatalogueNumber(): void {
     md5(uuidv4()).then(token => {
       this.catalogueToken = token.substring(0, 6);
       this.editForm.patchValue({
         catalogueNumber: token.substring(0, 6)
       });
     });
+  }
 
-    this.editForm.get(['reportFile'])?.valueChanges.subscribe((fileAttachment) => {
-      sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
-        this.editForm.get(['reportFileChecksum'])?.setValue(sha512Token)
-      });
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateOrganization(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      organization: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      department: dealerUpdate,
     });
   }
 

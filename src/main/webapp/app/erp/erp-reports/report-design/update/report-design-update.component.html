@@ -236,18 +236,15 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['reportDesigner'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_organization">Organization</label>
-          <select class="form-control" id="field_organization" data-cy="organization" name="organization" formControlName="organization">
-            <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='organization'
+          [inputValue]="editForm.get('organization')!.value"
+          (valueSelected)='updateOrganization($event)'
+          inputControlLabel="organization (Required)"
+        >
+          <option [ngValue]="editForm.get('organization')!.value"></option>
+        </jhi-m21-dealer-form-control>
         <div
           *ngIf="
             editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
@@ -256,42 +253,29 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
-          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
-            <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='department'
+          [inputValue]="editForm.get('department')!.value"
+          (valueSelected)='updateDepartment($event)'
+          inputControlLabel="Department (Required)"
+        >
+          <option [ngValue]="editForm.get('department')!.value"></option>
+        </jhi-m21-dealer-form-control>
         <div
           *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_systemModule">System Module</label>
