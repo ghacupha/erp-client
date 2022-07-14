@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class PaymentCalculatorService {
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   calculatePayableAmount(settlementAmount: number, category: IPaymentCategory): Observable<number> {
 
     return of(settlementAmount);

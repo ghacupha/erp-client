@@ -49,7 +49,7 @@ import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
-import { sha512 } from 'hash-wasm';
+// import { sha512 } from 'hash-wasm';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
 
 @Component({

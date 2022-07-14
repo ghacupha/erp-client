@@ -51,6 +51,8 @@ import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
 import { IJobSheet } from '../../job-sheet/job-sheet.model';
 import { DeliveryNoteService } from '../../delivery-note/service/delivery-note.service';
 import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
+import { SearchWithPagination } from '../../../../core/request/request.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -134,6 +136,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService
   ) {}
 
   ngOnInit(): void {
@@ -151,6 +154,42 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.loadPurchaseOrders();
     this.loadDeliveryNotes();
     this.loadJobSheets();
+    this.updatePreferredCurrency();
+    this.updatePreferredPaymentLabels();
+  }
+
+  updatePreferredCurrency(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementIso4217CurrencyCode"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: currencies }) => {
+                if (currencies) {
+                  this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
+                }
+              });
+          }
+        }
+      });
+  }
+
+  updatePreferredPaymentLabels(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdatePaymentLabel"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: vals }) => {
+                if (vals) {
+                  this.editForm.patchValue({
+                    paymentLabels: [...vals]
+                  });
+                }
+              });
+          }
+        }
+      });
   }
 
   loadJobSheets(): void {
