@@ -46,6 +46,11 @@ import { LabelSuggestionService } from '../../../erp-common/suggestion/label-sug
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
+import { SearchWithPagination } from '../../../../core/request/request.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import * as dayjs from 'dayjs';
+import { sha512 } from 'hash-wasm';
+import { PaymentCalculatorService } from '../service/payment-calculator.service';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -118,6 +123,8 @@ export class SettlementUpdateComponent implements OnInit {
     protected settlementSuggestionService: SettlementSuggestionService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected paymentCalculatorService: PaymentCalculatorService,
     protected fb: FormBuilder
   ) {}
 
@@ -128,11 +135,140 @@ export class SettlementUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    this.editForm.patchValue({
+      paymentDate: dayjs().startOf('day')
+    });
+
     // fire-up typeahead items
     this.loadLabels();
     this.loadCategories();
     this.loadCurrencies();
     this.loadPaymentInvoices();
+    this.updatePreferredCurrency();
+    this.updatePreferredCategory();
+    this.updatePreferredSignatories();
+    this.updatePreferredPaymentLabels();
+    this.updatePreferredBillerGivenInvoice();
+    this.updatePreferredPaymentAmountGivenInvoice();
+    this.updatePreferredCurrencyGivenInvoice();
+    this.updatePreferredPaymentLabelsGivenInvoice();
+  }
+
+  updatePreferredCurrency(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementIso4217CurrencyCode"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: currencies }) => {
+                if (currencies) {
+                  this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
+                }
+              });
+          }
+        }
+      });
+  }
+
+  updatePreferredCategory(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdatePaymentCategoryName"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: categories }) => {
+                if (categories) {
+                  this.editForm.get(['paymentCategory'])?.setValue(categories[0]);
+                }
+              });
+          }
+        }
+      });
+  }
+
+  updatePreferredSignatories(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdateSignatoryName"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: vals }) => {
+                if (vals) {
+                  this.editForm.patchValue({
+                    signatories: [...vals]
+                  });
+                }
+              });
+          }
+        }
+      });
+  }
+
+  updatePreferredBillerGivenInvoice(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      const p_dealers: IDealer[] = [];
+      invoices.forEach((inv: { biller: IDealer; }) => {
+        p_dealers.push(inv.biller);
+      })
+      this.editForm.get(['biller'])?.setValue(p_dealers[0])
+    });
+  }
+
+  updatePreferredCurrencyGivenInvoice(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      const p_crn: ISettlementCurrency[] = [];
+      invoices.forEach((inv: { settlementCurrency: ISettlementCurrency; }) => {
+        p_crn.push(inv.settlementCurrency);
+      })
+      this.editForm.get(['settlementCurrency'])?.setValue(p_crn[0])
+    });
+  }
+
+  updatePreferredPaymentLabelsGivenInvoice(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      const p_labels: IPaymentLabel[] = [];
+      invoices.forEach((inv: { paymentLabels: IPaymentLabel[]; }) => {
+        p_labels.push(...inv.paymentLabels);
+      });
+      const labels = [...this.editForm.get(['paymentLabels'])?.value, ...p_labels];
+      this.editForm.get(['paymentLabels'])?.setValue(labels)
+    });
+  }
+
+  updatePreferredPaymentAmountGivenInvoice(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      let settlementAmount = 0;
+      invoices.forEach(({ invoiceAmount }: IPaymentInvoice) => {
+        settlementAmount += invoiceAmount ?? 0;
+      })
+
+      this.editForm.patchValue({ paymentAmount: settlementAmount})
+
+      /* TODO this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
+          this.paymentCalculatorService.calculatePayableAmount(settlementAmount, cat.body)
+            .subscribe(val => {
+              this.editForm.patchValue({ paymentAmount: val})
+            })
+      }); */
+    });
+  }
+
+  updatePreferredPaymentLabels(): void {
+    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdatePaymentLabel"})
+      .subscribe(({ body }) => {
+        if (body!.length > 0) {
+          if (body) {
+            this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+              .subscribe(({ body: vals }) => {
+                if (vals) {
+                  this.editForm.patchValue({
+                    paymentLabels: [...vals]
+                  });
+                }
+              });
+          }
+        }
+      });
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering

@@ -63,6 +63,15 @@
           </div>
         </div>
 
+        <jhi-m2m-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='invoiceNumber'
+          [inputValues]="editForm.get(['paymentInvoices'])!.value"
+          (valueSelected)='updatePaymentInvoices($event)'
+          inputControlLabel='Invoices'
+        >
+        </jhi-m2m-payment-invoice-form-control>
+
         <jhi-m21-settlement-currency-form-control
           ngDefaultControl
           formControlName='settlementCurrency'
@@ -116,15 +125,6 @@
         >
           <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
         </jhi-m21-payment-category-form-control>
-
-        <jhi-m2m-payment-invoice-form-control
-          ngDefaultControl
-          formControlName='invoiceNumber'
-          [inputValues]="editForm.get(['paymentInvoices'])!.value"
-          (valueSelected)='updatePaymentInvoices($event)'
-          inputControlLabel='Invoices'
-        >
-        </jhi-m2m-payment-invoice-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_notes">Notes</label>
