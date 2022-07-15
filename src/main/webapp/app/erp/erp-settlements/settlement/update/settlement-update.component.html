@@ -30,6 +30,16 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
+        <jhi-m21-payment-category-form-control
+          ngDefaultControl
+          formControlName='paymentCategory'
+          [inputValue]="editForm.get('paymentCategory')!.value"
+          (valueSelected)='updatePaymentCategory($event)'
+          inputControlLabel='Payment Category (Required)'
+        >
+          <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
+        </jhi-m21-payment-category-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
           <input
@@ -115,16 +125,6 @@
         >
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
-
-        <jhi-m21-payment-category-form-control
-          ngDefaultControl
-          formControlName='paymentCategory'
-          [inputValue]="editForm.get('paymentCategory')!.value"
-          (valueSelected)='updatePaymentCategory($event)'
-          inputControlLabel='Payment Category (Required)'
-        >
-          <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
-        </jhi-m21-payment-category-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_notes">Notes</label>

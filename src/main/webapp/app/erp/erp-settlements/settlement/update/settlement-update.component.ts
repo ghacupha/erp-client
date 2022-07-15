@@ -21,7 +21,16 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  map,
+  switchMap,
+  tap
+} from 'rxjs/operators';
 
 import { ISettlement, Settlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
@@ -152,6 +161,7 @@ export class SettlementUpdateComponent implements OnInit {
     this.updatePreferredPaymentAmountGivenInvoice();
     this.updatePreferredCurrencyGivenInvoice();
     this.updatePreferredPaymentLabelsGivenInvoice();
+    this.updatePaymentAmountGivenPaymentCategory();
   }
 
   updatePreferredCurrency(): void {
@@ -242,14 +252,25 @@ export class SettlementUpdateComponent implements OnInit {
         settlementAmount += invoiceAmount ?? 0;
       })
 
-      this.editForm.patchValue({ paymentAmount: settlementAmount})
+      this.paymentCalculatorService.calculatePayableAmount(settlementAmount, this.editForm.get(['paymentCategory'])?.value)
+      .subscribe(calculatedAmount => {
+        this.editForm.patchValue({ paymentAmount: calculatedAmount})
+      });
+    });
+  }
 
-      /* TODO this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
-          this.paymentCalculatorService.calculatePayableAmount(settlementAmount, cat.body)
-            .subscribe(val => {
-              this.editForm.patchValue({ paymentAmount: val})
-            })
-      }); */
+  updatePaymentAmountGivenPaymentCategory(): void {
+    this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
+
+      let settlementAmount = 0;
+      this.editForm.get(['paymentInvoices'])?.value.forEach(({ invoiceAmount }: IPaymentInvoice) => {
+        settlementAmount += invoiceAmount ?? 0;
+      })
+
+      this.paymentCalculatorService.calculatePayableAmount(settlementAmount,  cat)
+        .subscribe(calculatedAmount => {
+          this.editForm.patchValue({ paymentAmount: calculatedAmount })
+        });
     });
   }
 
