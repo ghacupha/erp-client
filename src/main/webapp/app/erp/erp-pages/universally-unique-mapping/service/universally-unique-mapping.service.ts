@@ -74,6 +74,10 @@ export class UniversallyUniqueMappingService {
     return this.http.get<IUniversallyUniqueMapping[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
+  findMap(universalKey: string): Observable<HttpResponse<string>> {
+    return this.http.get<string>(`${this.resourceUrl}/${universalKey}`, { observe: 'response' });
+  }
+
   addUniversallyUniqueMappingToCollectionIfMissing(
     universallyUniqueMappingCollection: IUniversallyUniqueMapping[],
     ...universallyUniqueMappingsToCheck: (IUniversallyUniqueMapping | null | undefined)[]
