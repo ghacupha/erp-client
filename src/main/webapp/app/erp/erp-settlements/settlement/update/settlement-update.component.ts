@@ -58,7 +58,6 @@ import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
-// import { sha512 } from 'hash-wasm';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
 
 @Component({
@@ -165,52 +164,41 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredCurrency(): void {
-    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementIso4217CurrencyCode"})
-      .subscribe(({ body }) => {
-        if (body!.length > 0) {
-          if (body) {
-            this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
-              .subscribe(({ body: currencies }) => {
-                if (currencies) {
-                  this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
-                }
-              });
-          }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementIso4217CurrencyCode")
+      .subscribe(mapped => {
+          this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+            .subscribe(({ body: currencies }) => {
+              if (currencies) {
+                this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
+              }
+            });
         }
-      });
+      );
   }
 
   updatePreferredCategory(): void {
-    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdatePaymentCategoryName"})
-      .subscribe(({ body }) => {
-        if (body!.length > 0) {
-          if (body) {
-            this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
-              .subscribe(({ body: categories }) => {
-                if (categories) {
-                  this.editForm.get(['paymentCategory'])?.setValue(categories[0]);
-                }
-              });
-          }
-        }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentCategoryName")
+      .subscribe((mapped) => {
+          this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+            .subscribe(({ body: categories }) => {
+              if (categories) {
+                this.editForm.get(['paymentCategory'])?.setValue(categories[0]);
+              }
+            });
       });
   }
 
   updatePreferredSignatories(): void {
-    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdateSignatoryName"})
-      .subscribe(({ body }) => {
-        if (body!.length > 0) {
-          if (body) {
-            this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
-              .subscribe(({ body: vals }) => {
-                if (vals) {
-                  this.editForm.patchValue({
-                    signatories: [...vals]
-                  });
-                }
-              });
-          }
-        }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
+      .subscribe((mapped) => {
+          this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+            .subscribe(({ body: vals }) => {
+              if (vals) {
+                this.editForm.patchValue({
+                  signatories: [...vals]
+                });
+              }
+            });
       });
   }
 
@@ -275,20 +263,16 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredPaymentLabels(): void {
-    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementUpdatePaymentLabel"})
-      .subscribe(({ body }) => {
-        if (body!.length > 0) {
-          if (body) {
-            this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
-              .subscribe(({ body: vals }) => {
-                if (vals) {
-                  this.editForm.patchValue({
-                    paymentLabels: [...vals]
-                  });
-                }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentLabel")
+      .subscribe((mapped) => {
+        this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                paymentLabels: [...vals]
               });
-          }
-        }
+            }
+          });
       });
   }
 

@@ -117,17 +117,13 @@ export class ReportDesignUpdateComponent implements OnInit {
   updatePreferredDepartment(): void {
     // TODO Replace with entity filters
     this.universallyUniqueMappingService.findMap("globallyPreferredReportDesignDepartmentDealer")
-      .subscribe(({ body }) => {
-        // if (body!.length > 0) {
-          if (body) {
-            this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body })
-              .subscribe(({ body: dealers }) => {
-                if (dealers) {
-                  this.editForm.get(['department'])?.setValue(dealers[0]);
-                }
-              });
-          }
-        // }
+      .subscribe((mapped) => {
+        this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: dealers }) => {
+            if (dealers) {
+              this.editForm.get(['department'])?.setValue(dealers[0]);
+            }
+          });
       });
   }
 

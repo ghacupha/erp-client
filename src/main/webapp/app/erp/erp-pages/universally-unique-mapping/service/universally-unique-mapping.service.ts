@@ -18,7 +18,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -32,6 +32,7 @@ export type EntityArrayResponseType = HttpResponse<IUniversallyUniqueMapping[]>;
 @Injectable({ providedIn: 'root' })
 export class UniversallyUniqueMappingService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/universally-unique-mappings');
+  protected resourceConfigsUrl = this.applicationConfigService.getEndpointFor('api/configuration/universally-unique-mappings');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/universally-unique-mappings');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -74,8 +75,8 @@ export class UniversallyUniqueMappingService {
     return this.http.get<IUniversallyUniqueMapping[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  findMap(universalKey: string): Observable<HttpResponse<string>> {
-    return this.http.get<string>(`${this.resourceUrl}/${universalKey}`, { observe: 'response' });
+  findMap(universalKey: string): Observable<EntityResponseType> {
+    return this.http.get<IUniversallyUniqueMapping>(`${this.resourceConfigsUrl}/${universalKey}`, { observe: 'response' });
   }
 
   addUniversallyUniqueMappingToCollectionIfMissing(
