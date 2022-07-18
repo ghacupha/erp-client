@@ -59,6 +59,8 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
+import { IcuPlaceholder } from '@angular/compiler/src/i18n/i18n_ast';
+import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -161,6 +163,7 @@ export class SettlementUpdateComponent implements OnInit {
     this.updatePreferredCurrencyGivenInvoice();
     this.updatePreferredPaymentLabelsGivenInvoice();
     this.updatePaymentAmountGivenPaymentCategory();
+    this.updateDescriptionGivenInvoicePurchaseOrder();
   }
 
   updatePreferredCurrency(): void {
@@ -219,6 +222,18 @@ export class SettlementUpdateComponent implements OnInit {
         p_crn.push(inv.settlementCurrency);
       })
       this.editForm.get(['settlementCurrency'])?.setValue(p_crn[0])
+    });
+  }
+
+  updateDescriptionGivenInvoicePurchaseOrder(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      const description = invoices[0].purchaseOrder.description;
+
+      this.editForm.patchValue({
+        description,
+        remarks: description,
+      })
+
     });
   }
 

@@ -156,6 +156,27 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.loadJobSheets();
     this.updatePreferredCurrency();
     this.updatePreferredPaymentLabels();
+    this.updateInputsGivenPurchaseOrder();
+  }
+
+  updateInputsGivenPurchaseOrder(): void {
+    this.editForm.get(['purchaseOrders'])?.valueChanges.subscribe((orders) => {
+      const p_labels: IPaymentLabel[] = [];
+      let p_amount: number | null | undefined = 0;
+      orders.forEach((ordered: IPurchaseOrder) => {
+          ({ purchaseOrderAmount: p_amount } = ordered);
+      });
+
+      this.editForm.patchValue({
+        invoiceAmount: p_amount,
+        biller: orders[0].vendor,
+        remarks: orders[0].remarks,
+        settlementCurrency: orders[0].settlementCurrency
+      })
+
+      const labels = [...this.editForm.get(['paymentLabels'])?.value, ...p_labels];
+      this.editForm.get(['paymentLabels'])?.setValue(labels)
+    });
   }
 
   updatePreferredCurrency(): void {
