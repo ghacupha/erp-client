@@ -1,6 +1,6 @@
 {
   "name": "erp-system",
-  "version": "0.0.1",
+  "version": "0.0.3-SNAPSHOT",
   "private": true,
   "description": "Description for erpSystem",
   "license": "GPLv3",
