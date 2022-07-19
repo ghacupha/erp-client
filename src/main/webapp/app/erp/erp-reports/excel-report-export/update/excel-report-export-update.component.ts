@@ -125,6 +125,12 @@ export class ExcelReportExportUpdateComponent implements OnInit {
     })
   }
 
+  updateParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      parameters: [...update]
+    })
+  }
+
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
       placeholders: [...update]

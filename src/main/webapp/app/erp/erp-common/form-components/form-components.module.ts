@@ -36,6 +36,7 @@ import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m
 import { M2MDeliveryNoteFormControlComponent } from './delivery-note-form-components/m2m-delivery-note-form-control.component';
 import { M21ServiceOutletFormControlComponent } from './service-outlet-form-components/m21-service-outlet-form-control.component';
 import { M21TransactionAccountFormControlComponent } from './transaction-account-form-components/m21-transaction-account-form-control.component';
+import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mapping-components/m2m-universally-unique-mapping-form-control.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { M21TransactionAccountFormControlComponent } from './transaction-account
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
     M21ServiceOutletFormControlComponent,
-    M21TransactionAccountFormControlComponent
+    M21TransactionAccountFormControlComponent,
+    M2mUniversallyUniqueMappingFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -77,6 +79,7 @@ import { M21TransactionAccountFormControlComponent } from './transaction-account
     M2MDeliveryNoteFormControlComponent,
     M21ServiceOutletFormControlComponent,
     M21TransactionAccountFormControlComponent,
+    M2mUniversallyUniqueMappingFormControlComponent,
   ]
 })
 export class FormComponentsModule {
