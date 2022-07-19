@@ -49,6 +49,7 @@ import { DealerService } from '../../../erp-common/services/dealer.service';
 import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
 import { ReportDesignService } from '../../report-design/service/report-design.service';
 import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-excel-report-export-update',
@@ -110,7 +111,7 @@ export class ExcelReportExportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ excelReportExport }) => {
       if (excelReportExport.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         excelReportExport.reportTimeStamp = today;
       }
 
@@ -118,6 +119,10 @@ export class ExcelReportExportUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.editForm.patchValue({
+      reportId: uuidv4(),
+    })
   }
 
   byteSize(base64String: string): string {

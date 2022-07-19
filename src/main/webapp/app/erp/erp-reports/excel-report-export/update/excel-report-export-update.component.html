@@ -48,7 +48,7 @@
         <div class="form-group">
           <label class="form-control-label" for="field_reportPassword">Report Password</label>
           <input
-            type="text"
+            type="password"
             class="form-control"
             name="reportPassword"
             id="field_reportPassword"
@@ -101,7 +101,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" readonly='true'>
           <label class="form-control-label" for="field_fileCheckSum">File Check Sum</label>
           <textarea
             class="form-control"
@@ -109,6 +109,7 @@
             id="field_fileCheckSum"
             data-cy="fileCheckSum"
             formControlName="fileCheckSum"
+            [readonly]="true"
           ></textarea>
         </div>
 
@@ -149,7 +150,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" readonly='true'>
           <label class="form-control-label" for="field_reportTimeStamp">Report Time Stamp</label>
           <div class="d-flex">
             <input
@@ -160,6 +161,7 @@
               name="reportTimeStamp"
               formControlName="reportTimeStamp"
               placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
             />
           </div>
           <div
@@ -175,9 +177,9 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" readonly='true'>
           <label class="form-control-label" for="field_reportId">Report Id</label>
-          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
+          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" [readonly]="true" />
           <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
           </div>
@@ -217,7 +219,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group" readonly=true>
           <label class="form-control-label" for="field_reportStatus">Report Status</label>
           <select class="form-control" id="field_reportStatus" data-cy="reportStatus" name="reportStatus" formControlName="reportStatus">
             <option [ngValue]="null"></option>
@@ -230,7 +232,7 @@
               {{ reportStatusOption.id }}
             </option>
           </select>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>

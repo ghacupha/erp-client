@@ -28,7 +28,7 @@ import { ReportDesignService } from '../service/report-design.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { md5, sha512 } from 'hash-wasm';
+import { sha512 } from 'hash-wasm';
 import { v4 as uuidv4 } from 'uuid';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
@@ -153,11 +153,8 @@ export class ReportDesignUpdateComponent implements OnInit {
   }
 
   updateCatalogueNumber(): void {
-    md5(uuidv4()).then(token => {
-      this.catalogueToken = token.substring(0, 6);
-      this.editForm.patchValue({
-        catalogueNumber: token.substring(0, 6)
-      });
+    this.editForm.patchValue({
+      catalogueNumber: uuidv4()
     });
   }
 
