@@ -26,7 +26,7 @@ export class FormatSecurityClearancePipe implements PipeTransform {
 
   transform(value: ISecurityClearance): string {
 
-    const accountDetail = `Id: ${value.id} | Name: ${value.clearanceLevel}`;
+    const accountDetail = `Id: ${value.id} | Clearance: ${value.clearanceLevel}`;
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return value ? accountDetail :'';
