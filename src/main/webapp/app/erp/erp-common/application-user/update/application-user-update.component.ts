@@ -33,6 +33,7 @@ import { DealerService } from '../../services/dealer.service';
 import { UserService } from '../../../../core/user/user.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-application-user-update',
@@ -74,6 +75,41 @@ export class ApplicationUserUpdateComponent implements OnInit {
       this.updateForm(applicationUser);
 
       this.loadRelationshipsOptions();
+    });
+    this.editForm.patchValue({
+      designation: uuidv4(),
+    })
+  }
+
+  updateDealerIdentity(update: IDealer): void {
+    this.editForm.patchValue({
+      dealerIdentity: update
+    });
+  }
+
+  updateSecurityClearance(update: ISecurityClearance): void {
+    this.editForm.patchValue({
+      securityClearance: update
+    })
+  }
+
+  updateParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      parameters: [...update]
+    })
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateOrganization(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      organization: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      department: dealerUpdate,
     });
   }
 

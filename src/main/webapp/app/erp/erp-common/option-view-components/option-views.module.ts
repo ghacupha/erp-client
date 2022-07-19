@@ -31,6 +31,7 @@ import { JobSheetOptionViewComponent } from './job-sheet-option-view.component';
 import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.component';
 import { TransactionAccountOptionViewComponent } from './transaction-account-option-view.component';
 import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.component';
+import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.c
     DeliveryNoteOptionViewComponent,
     TransactionAccountOptionViewComponent,
     ServiceOutletOptionViewComponent,
+    ApplicationUserOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -65,6 +67,7 @@ import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.c
     DeliveryNoteOptionViewComponent,
     TransactionAccountOptionViewComponent,
     ServiceOutletOptionViewComponent,
+    ApplicationUserOptionViewComponent,
   ]
 })
 export class OptionViewsModule {

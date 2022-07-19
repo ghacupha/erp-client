@@ -67,76 +67,35 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_organization">Organization</label>
-          <select class="form-control" id="field_organization" data-cy="organization" name="organization" formControlName="organization">
-            <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
-          "
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='organization'
+          [inputValue]="editForm.get('organization')!.value"
+          (valueSelected)='updateOrganization($event)'
+          inputControlLabel="organization (Required)"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('organization')!.value"></option>
+        </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
-          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
-            <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='department'
+          [inputValue]="editForm.get('department')!.value"
+          (valueSelected)='updateDepartment($event)'
+          inputControlLabel="Department (Required)"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('department')!.value"></option>
+        </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
-          <select
-            class="form-control"
-            id="field_securityClearance"
-            data-cy="securityClearance"
-            name="securityClearance"
-            formControlName="securityClearance"
-          >
-            <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
-              {{ securityClearanceOption.clearanceLevel }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['securityClearance'])!.invalid &&
-            (editForm.get(['securityClearance'])!.dirty || editForm.get(['securityClearance'])!.touched)
-          "
+        <jhi-m21-security-clearance-form-control
+          ngDefaultControl
+          formControlName='securityClearance'
+          [inputValue]="editForm.get('securityClearance')!.value"
+          (valueSelected)='updateSecurityClearance($event)'
+          inputControlLabel="Security Clearance"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get('securityClearance')!.value"></option>
+        </jhi-m21-security-clearance-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_systemIdentity">System Identity</label>
@@ -165,56 +124,25 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['systemIdentity'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_userProperties">User Properties</label>
-          <select
-            class="form-control"
-            id="field_userProperties"
-            data-cy="userProperties"
-            multiple
-            name="userProperties"
-            formControlName="userProperties"
-          >
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('userProperties')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.mappedValue }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealerIdentity">Dealer Identity</label>
-          <select
-            class="form-control"
-            id="field_dealerIdentity"
-            data-cy="dealerIdentity"
-            name="dealerIdentity"
-            formControlName="dealerIdentity"
-          >
-            <option *ngIf="editForm.get(['dealerIdentity'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('dealerIdentity')!.value?.id ? editForm.get('dealerIdentity')!.value : dealerOption
-              "
-              *ngFor="let dealerOption of dealerIdentitiesCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['dealerIdentity'])!.invalid &&
-            (editForm.get(['dealerIdentity'])!.dirty || editForm.get(['dealerIdentity'])!.touched)
-          "
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='userProperties'
+          [inputValues]="editForm.get(['userProperties'])!.value"
+          (selectedValues)='updateParameters($event)'
+          inputControlLabel='User Properties'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealerIdentity'])?.errors?.required"> This field is required. </small>
-        </div>
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealerIdentity'
+          [inputValue]="editForm.get('dealerIdentity')!.value"
+          (valueSelected)='updateDealerIdentity($event)'
+          inputControlLabel="Dealer Id (Required)"
+        >
+          <option [ngValue]="editForm.get('dealerIdentity')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
       </div>
 
       <div>

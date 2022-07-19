@@ -165,35 +165,15 @@
           <option [ngValue]="editForm.get('securityClearance')!.value"></option>
         </jhi-m21-security-clearance-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportCreator">Report Creator</label>
-          <select
-            class="form-control"
-            id="field_reportCreator"
-            data-cy="reportCreator"
-            name="reportCreator"
-            formControlName="reportCreator"
-          >
-            <option *ngIf="!editForm.get('reportCreator')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('reportCreator')!.value?.id
-                  ? editForm.get('reportCreator')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['reportCreator'])!.invalid && (editForm.get(['reportCreator'])!.dirty || editForm.get(['reportCreator'])!.touched)
-          "
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='designation'
+          [inputValue]="editForm.get('reportCreator')!.value"
+          (valueSelected)='updateApplicationUser($event)'
+          inputControlLabel="Report Creator"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['reportCreator'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('reportCreator')!.value"></option>
+        </jhi-m21-application-user-form-control>
 
         <jhi-m21-dealer-form-control
           ngDefaultControl
