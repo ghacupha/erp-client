@@ -247,13 +247,6 @@
         >
           <option [ngValue]="editForm.get('organization')!.value"></option>
         </jhi-m21-dealer-form-control>
-        <div
-          *ngIf="
-            editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m21-dealer-form-control
           ngDefaultControl
@@ -264,11 +257,6 @@
         >
           <option [ngValue]="editForm.get('department')!.value"></option>
         </jhi-m21-dealer-form-control>
-        <div
-          *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl

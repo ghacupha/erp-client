@@ -125,6 +125,26 @@ export class ExcelReportExportUpdateComponent implements OnInit {
     })
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateOrganization(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      organization: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      department: dealerUpdate,
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
