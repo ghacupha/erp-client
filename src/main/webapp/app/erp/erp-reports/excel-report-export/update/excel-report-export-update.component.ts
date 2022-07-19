@@ -131,6 +131,12 @@ export class ExcelReportExportUpdateComponent implements OnInit {
     })
   }
 
+  updateSecurityClearance(update: ISecurityClearance): void {
+    this.editForm.patchValue({
+      securityClearance: update
+    })
+  }
+
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
       placeholders: [...update]

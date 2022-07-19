@@ -59,8 +59,6 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
-import { IcuPlaceholder } from '@angular/compiler/src/i18n/i18n_ast';
-import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
 
 @Component({
   selector: 'jhi-settlement-update',
