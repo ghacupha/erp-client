@@ -1,6 +1,6 @@
 {
   "name": "erp-system",
-  "version": "0.0.5-SNAPSHOT",
+  "version": "0.0.6-SNAPSHOT",
   "private": true,
   "description": "Description for erpSystem",
   "license": "GPLv3",
@@ -33,7 +33,7 @@
     "start": "ng serve --hmr",
     "start-tls": "npm run webapp:dev-ssl",
     "pretest": "npm run lint",
-    "test": "ng test --coverage --log-heap-usage -w=2 --detect-open-handles",
+    "test": "ng test --coverage --log-heap-usage -w=2",
     "test:watch": "npm run test -- --watch",
     "watch": "concurrently npm:start",
     "webapp:build": "npm run clean-www && npm run webapp:build:dev",
