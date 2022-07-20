@@ -16,6 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const esModules = ['ngx-bootstrap', '@ng-select/ng-select', 'zone.js', 'jsdom'].join('|');
 
 const {
   compilerOptions: { paths = {}, baseUrl = './' },
@@ -36,4 +37,10 @@ module.exports = {
   testResultsProcessor: 'jest-sonar-reporter',
   testMatch: ['<rootDir>/src/main/webapp/app/**/@(*.)@(spec.ts)'],
   testURL: 'http://localhost/',
+  transform: {
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+    "^.+\\.(js|jsx)$": "babel-jest",
+    "^.+\\.scss$": "jest-transform-scss",
+  },
+  transformIgnorePatterns: [`/node_modules/(?!${esModules})`],
 };

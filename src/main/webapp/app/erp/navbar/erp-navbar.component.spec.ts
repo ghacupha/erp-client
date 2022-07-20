@@ -59,6 +59,7 @@ describe('Component Tests', () => {
           providers: [Router, LoginService],
         })
           .overrideTemplate(ERPNavbarComponent, '')
+          .overrideComponent(ERPNavbarComponent, { set: { styleUrls: []}})
           .compileComponents();
       })
     );

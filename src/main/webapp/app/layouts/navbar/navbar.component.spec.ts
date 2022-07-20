@@ -57,6 +57,7 @@ describe('Navbar Component', () => {
         providers: [Router, LoginService],
       })
         .overrideTemplate(NavbarComponent, '')
+        .overrideComponent(NavbarComponent, { set: { styleUrls: []}})
         .compileComponents();
     })
   );

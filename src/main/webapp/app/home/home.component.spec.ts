@@ -18,7 +18,7 @@
 
 jest.mock('app/core/auth/account.service');
 jest.mock('@angular/router');
-
+// TODO Undefined error failing to load scss files
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
@@ -51,6 +51,7 @@ describe('Home Component', () => {
         providers: [AccountService, Router],
       })
         .overrideTemplate(HomeComponent, '')
+        .overrideComponent(HomeComponent, { set: { styleUrls: []}})
         .compileComponents();
     })
   );
