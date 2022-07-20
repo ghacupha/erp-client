@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark II No 20 (Baruch Series)
+/// Erp System - Mark II No 20 (Baruch Series) Client v 0.0.9-SNAPSHOT
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
