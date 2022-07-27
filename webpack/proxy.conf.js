@@ -29,13 +29,15 @@ function setupProxy({ tls }) {
         '/auth',
         '/health',
       ],
-      target: `http${tls ? 's' : ''}://localhost:8980`,
+      // target: `http${tls ? 's' : ''}://localhost:8980`,
+      target: process.env.SERVER_API_URL_URL,
       secure: false,
       changeOrigin: tls,
     },
     {
       context: ['/websocket'],
-      target: 'ws://127.0.0.1:8980',
+      // target: 'ws://127.0.0.1:8980',
+      target: process.env.SERVER_API_WS_URL,
       ws: true,
     },
   ];

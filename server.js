@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+// We sometimes use this server on a different port; for testing purposes
 const express = require('express');
 const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -22,13 +25,15 @@ const path = require('path');
 
 const app = express();
 // Configuration
-const PORT = 8981;
+const SERVER_PORT=8982
+const PORT = 8984;
 const HOST = "localhost";
-const API_SERVICE_URL = "http://localhost:8980";
+const API_SERVICE_URL = "http://localhost:" + SERVER_PORT;
 
 // Logging
 app.use(morgan('dev'));
 
+// You build the app on the dist folder with "ng build --prod --output-path ./dist"
 app.use(express.static(__dirname + '/dist'));
 
 // Proxy endpoints
