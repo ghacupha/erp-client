@@ -49,6 +49,7 @@ environment keys are configured:
 - SERVER_API_URL_URL: The address of the backend server without the quotes or the stroke
 - SERVER_API_WS_URL: The address of the backend server's web-socker end-point e.g. set SERVER_API_WS_URL=ws://127.0.0.1:8982
 - ERP_SYSTEM_DEV_PORT: This is picked from the environment as it should be already configured to enable the server to run severally  from a different port
+- ERP_CLIENT_DEV_PORT: The port on which the client is to be accessed on a browser. e.g. set ERP_CLIENT_DEV_PORT=8984
 
 Note: If you intend to use a production instance from a container to run tests, the port of that instance is what you use to configure the ERP_SYSTEM_DEV_PORT
 
