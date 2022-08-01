@@ -38,6 +38,22 @@ To run the most recent setup from the deployment repo run the following:
 
 ```
 
+### Test Deployment
+Sometimes a test environment needs to be configured alongside a running prod server.
+The above build can be used to run a several server-client instance when the following
+environment keys are configured:
+
+- ERP_SYSTEM_DEV_PORT: The port of the backend server
+- ERP_SYSTEM_DEV_PORT: The port of the backend server
+- SERVER_API_URL: Address of the backend server written in quotes e.g. set SERVER_API_URL="http://localhost:8982/"
+- SERVER_API_URL_URL: The address of the backend server without the quotes or the stroke
+- SERVER_API_WS_URL: The address of the backend server's web-socker end-point e.g. set SERVER_API_WS_URL=ws://127.0.0.1:8982
+- ERP_SYSTEM_DEV_PORT: This is picked from the environment as it should be already configured to enable the server to run severally  from a different port
+
+Note: If you intend to use a production instance from a container to run tests, the port of that instance is what you use to configure the ERP_SYSTEM_DEV_PORT
+
+All these keys are created to enable a dev instance of this client to access a dev or prod instance of the server depending on the configuration of the later's port
+
 
 ## Development
 

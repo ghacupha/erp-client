@@ -23,8 +23,8 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
 
 const app = express();
-// Configuration
-const SERVER_PORT=8982
+// Configure the port of the backend server e.g. on unix export ERP_SYSTEM_DEV_PORT=8982
+const SERVER_PORT=process.env.ERP_SYSTEM_DEV_PORT
 const PORT = 8984;
 const HOST = "localhost";
 const API_SERVICE_URL = "http://localhost:" + SERVER_PORT;
