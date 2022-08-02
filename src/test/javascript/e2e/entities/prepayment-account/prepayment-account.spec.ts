@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
@@ -72,6 +54,7 @@ describe('PrepaymentAccount e2e test', () => {
       prepaymentAccountUpdatePage.setParticularsInput('particulars'),
       prepaymentAccountUpdatePage.setNotesInput('notes'),
       prepaymentAccountUpdatePage.setPrepaymentAmountInput('5'),
+      prepaymentAccountUpdatePage.setPrepaymentGuidInput('64c99148-3908-465d-8c4a-e510e3ade974'),
       prepaymentAccountUpdatePage.settlementCurrencySelectLastOption(),
       prepaymentAccountUpdatePage.prepaymentTransactionSelectLastOption(),
       prepaymentAccountUpdatePage.serviceOutletSelectLastOption(),
@@ -79,6 +62,8 @@ describe('PrepaymentAccount e2e test', () => {
       prepaymentAccountUpdatePage.debitAccountSelectLastOption(),
       prepaymentAccountUpdatePage.transferAccountSelectLastOption(),
       // prepaymentAccountUpdatePage.placeholderSelectLastOption(),
+      // prepaymentAccountUpdatePage.generalParametersSelectLastOption(),
+      // prepaymentAccountUpdatePage.prepaymentParametersSelectLastOption(),
     ]);
 
     await prepaymentAccountUpdatePage.save();

@@ -338,6 +338,21 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'ReportDesigns' },
         loadChildren: () => import('./report-design/report-design.module').then(m => m.ReportDesignModule),
       },
+      {
+        path: 'dev/amortization-recurrence',
+        data: { pageTitle: 'AmortizationRecurrences' },
+        loadChildren: () => import('./amortization-recurrence/amortization-recurrence.module').then(m => m.AmortizationRecurrenceModule),
+      },
+      {
+        path: 'dev/prepayment-mapping',
+        data: { pageTitle: 'PrepaymentMappings' },
+        loadChildren: () => import('./prepayment-mapping/prepayment-mapping.module').then(m => m.PrepaymentMappingModule),
+      },
+      {
+        path: 'dev/amortization-sequence',
+        data: { pageTitle: 'AmortizationSequences' },
+        loadChildren: () => import('./amortization-sequence/amortization-sequence.module').then(m => m.AmortizationSequenceModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

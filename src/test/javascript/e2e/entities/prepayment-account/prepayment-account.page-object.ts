@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { element, by, ElementFinder } from 'protractor';
 
 export class PrepaymentAccountComponentsPage {
@@ -52,6 +34,7 @@ export class PrepaymentAccountUpdatePage {
   particularsInput = element(by.id('field_particulars'));
   notesInput = element(by.id('field_notes'));
   prepaymentAmountInput = element(by.id('field_prepaymentAmount'));
+  prepaymentGuidInput = element(by.id('field_prepaymentGuid'));
 
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   prepaymentTransactionSelect = element(by.id('field_prepaymentTransaction'));
@@ -60,6 +43,8 @@ export class PrepaymentAccountUpdatePage {
   debitAccountSelect = element(by.id('field_debitAccount'));
   transferAccountSelect = element(by.id('field_transferAccount'));
   placeholderSelect = element(by.id('field_placeholder'));
+  generalParametersSelect = element(by.id('field_generalParameters'));
+  prepaymentParametersSelect = element(by.id('field_prepaymentParameters'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -103,6 +88,14 @@ export class PrepaymentAccountUpdatePage {
 
   async getPrepaymentAmountInput(): Promise<string> {
     return await this.prepaymentAmountInput.getAttribute('value');
+  }
+
+  async setPrepaymentGuidInput(prepaymentGuid: string): Promise<void> {
+    await this.prepaymentGuidInput.sendKeys(prepaymentGuid);
+  }
+
+  async getPrepaymentGuidInput(): Promise<string> {
+    return await this.prepaymentGuidInput.getAttribute('value');
   }
 
   async settlementCurrencySelectLastOption(): Promise<void> {
@@ -215,6 +208,38 @@ export class PrepaymentAccountUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async generalParametersSelectLastOption(): Promise<void> {
+    await this.generalParametersSelect.all(by.tagName('option')).last().click();
+  }
+
+  async generalParametersSelectOption(option: string): Promise<void> {
+    await this.generalParametersSelect.sendKeys(option);
+  }
+
+  getGeneralParametersSelect(): ElementFinder {
+    return this.generalParametersSelect;
+  }
+
+  async getGeneralParametersSelectedOption(): Promise<string> {
+    return await this.generalParametersSelect.element(by.css('option:checked')).getText();
+  }
+
+  async prepaymentParametersSelectLastOption(): Promise<void> {
+    await this.prepaymentParametersSelect.all(by.tagName('option')).last().click();
+  }
+
+  async prepaymentParametersSelectOption(option: string): Promise<void> {
+    await this.prepaymentParametersSelect.sendKeys(option);
+  }
+
+  getPrepaymentParametersSelect(): ElementFinder {
+    return this.prepaymentParametersSelect;
+  }
+
+  async getPrepaymentParametersSelectedOption(): Promise<string> {
+    return await this.prepaymentParametersSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

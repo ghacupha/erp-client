@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -34,7 +16,7 @@ describe('PrepaymentAccount e2e test', () => {
   const prepaymentAccountPageUrlPattern = new RegExp('/prepayment-account(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentAccountSample = { catalogueNumber: 'calculate Berkshire', particulars: 'Hampshire overriding violet' };
+  const prepaymentAccountSample = { catalogueNumber: 'IB', particulars: 'eco-centric Shoes Squares' };
 
   let prepaymentAccount: any;
 
@@ -181,6 +163,11 @@ describe('PrepaymentAccount e2e test', () => {
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="prepaymentAmount"]`).type('68526').should('have.value', '68526');
+
+      cy.get(`[data-cy="prepaymentGuid"]`)
+        .type('9ca1876d-89bd-43d3-ad47-544aa5d6d9e1')
+        .invoke('val')
+        .should('match', new RegExp('9ca1876d-89bd-43d3-ad47-544aa5d6d9e1'));
 
       cy.get(entityCreateSaveButtonSelector).click();
 

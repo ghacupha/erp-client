@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,20 +29,23 @@ import { of, Subject } from 'rxjs';
 
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { ISettlement } from 'app/entities/settlement/settlement.model';
-import { SettlementService } from 'app/entities/settlement/service/settlement.service';
-import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
 
 import { PrepaymentAccountUpdateComponent } from './prepayment-account-update.component';
+import { DealerService } from '../../../erp-common/services/dealer.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
 
 describe('PrepaymentAccount Management Update Component', () => {
   let comp: PrepaymentAccountUpdateComponent;
@@ -53,6 +58,8 @@ describe('PrepaymentAccount Management Update Component', () => {
   let dealerService: DealerService;
   let placeholderService: PlaceholderService;
   let transactionAccountService: TransactionAccountService;
+  let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let prepaymentMappingService: PrepaymentMappingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -72,6 +79,8 @@ describe('PrepaymentAccount Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     placeholderService = TestBed.inject(PlaceholderService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
+    universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    prepaymentMappingService = TestBed.inject(PrepaymentMappingService);
 
     comp = fixture.componentInstance;
   });
@@ -159,7 +168,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call Placeholder query and add missing value', () => {
+   /* it('Should call Placeholder query and add missing value', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
       const placeholder: IPlaceholder = { id: 20901 };
       prepaymentAccount.placeholder = placeholder;
@@ -176,7 +185,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(placeholderService.query).toHaveBeenCalled();
       expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
-    });
+    }); */
 
     it('Should call TransactionAccount query and add missing value', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
@@ -212,12 +221,16 @@ describe('PrepaymentAccount Management Update Component', () => {
       prepaymentAccount.serviceOutlet = serviceOutlet;
       const dealer: IDealer = { id: 51117 };
       prepaymentAccount.dealer = dealer;
-      const placeholder: IPlaceholder = { id: 55956 };
-      prepaymentAccount.placeholder = placeholder;
       const debitAccount: ITransactionAccount = { id: 2986 };
       prepaymentAccount.debitAccount = debitAccount;
       const transferAccount: ITransactionAccount = { id: 8579 };
       prepaymentAccount.transferAccount = transferAccount;
+      const placeholders: IPlaceholder = { id: 55956 };
+      prepaymentAccount.placeholders = [placeholders];
+      const generalParameters: IUniversallyUniqueMapping = { id: 53339 };
+      prepaymentAccount.generalParameters = [generalParameters];
+      const prepaymentParameters: IPrepaymentMapping = { id: 91756 };
+      prepaymentAccount.prepaymentParameters = [prepaymentParameters];
 
       activatedRoute.data = of({ prepaymentAccount });
       comp.ngOnInit();
@@ -227,10 +240,61 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.settlementsSharedCollection).toContain(prepaymentTransaction);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
       expect(comp.dealersSharedCollection).toContain(dealer);
-      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(transferAccount);
+      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(generalParameters);
+      expect(comp.prepaymentMappingsSharedCollection).toContain(prepaymentParameters);
     });
+  });
+
+  it('Should call UniversallyUniqueMapping query and add missing value', () => {
+    const prepaymentAccount: IPrepaymentAccount = { id: 456 };
+    const generalParameters: IUniversallyUniqueMapping[] = [{ id: 44009 }];
+    prepaymentAccount.generalParameters = generalParameters;
+
+    const universallyUniqueMappingCollection: IUniversallyUniqueMapping[] = [{ id: 28246 }];
+    jest
+      .spyOn(universallyUniqueMappingService, 'query')
+      .mockReturnValue(of(new HttpResponse({ body: universallyUniqueMappingCollection })));
+    const additionalUniversallyUniqueMappings = [...generalParameters];
+    const expectedCollection: IUniversallyUniqueMapping[] = [
+      ...additionalUniversallyUniqueMappings,
+      ...universallyUniqueMappingCollection,
+    ];
+    jest.spyOn(universallyUniqueMappingService, 'addUniversallyUniqueMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+    activatedRoute.data = of({ prepaymentAccount });
+    comp.ngOnInit();
+
+    expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+    expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+      universallyUniqueMappingCollection,
+      ...additionalUniversallyUniqueMappings
+    );
+    expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+  });
+
+  it('Should call PrepaymentMapping query and add missing value', () => {
+    const prepaymentAccount: IPrepaymentAccount = { id: 456 };
+    const prepaymentParameters: IPrepaymentMapping[] = [{ id: 25518 }];
+    prepaymentAccount.prepaymentParameters = prepaymentParameters;
+
+    const prepaymentMappingCollection: IPrepaymentMapping[] = [{ id: 67453 }];
+    jest.spyOn(prepaymentMappingService, 'query').mockReturnValue(of(new HttpResponse({ body: prepaymentMappingCollection })));
+    const additionalPrepaymentMappings = [...prepaymentParameters];
+    const expectedCollection: IPrepaymentMapping[] = [...additionalPrepaymentMappings, ...prepaymentMappingCollection];
+    jest.spyOn(prepaymentMappingService, 'addPrepaymentMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+    activatedRoute.data = of({ prepaymentAccount });
+    comp.ngOnInit();
+
+    expect(prepaymentMappingService.query).toHaveBeenCalled();
+    expect(prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing).toHaveBeenCalledWith(
+      prepaymentMappingCollection,
+      ...additionalPrepaymentMappings
+    );
+    expect(comp.prepaymentMappingsSharedCollection).toEqual(expectedCollection);
   });
 
   describe('save', () => {
@@ -338,11 +402,80 @@ describe('PrepaymentAccount Management Update Component', () => {
       });
     });
 
+
+    describe('trackUniversallyUniqueMappingById', () => {
+      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackPrepaymentMappingById', () => {
+      it('Should return tracked PrepaymentMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackPrepaymentMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
     describe('trackTransactionAccountById', () => {
       it('Should return tracked TransactionAccount primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackTransactionAccountById(0, entity);
         expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('getSelectedUniversallyUniqueMapping', () => {
+      it('Should return option if no UniversallyUniqueMapping is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected UniversallyUniqueMapping for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedPrepaymentMapping', () => {
+      it('Should return option if no PrepaymentMapping is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedPrepaymentMapping(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected PrepaymentMapping for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedPrepaymentMapping(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this PrepaymentMapping is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedPrepaymentMapping(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
       });
     });
   });

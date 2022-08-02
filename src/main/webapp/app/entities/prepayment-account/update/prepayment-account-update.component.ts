@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -40,6 +22,10 @@ import { ITransactionAccount } from 'app/entities/transaction-account/transactio
 import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
+import { PrepaymentMappingService } from 'app/entities/prepayment-mapping/service/prepayment-mapping.service';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -54,6 +40,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+  prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -61,6 +49,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     particulars: [null, [Validators.required]],
     notes: [],
     prepaymentAmount: [],
+    prepaymentGuid: [],
     settlementCurrency: [],
     prepaymentTransaction: [],
     serviceOutlet: [],
@@ -68,6 +57,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     debitAccount: [],
     transferAccount: [],
     placeholders: [],
+    generalParameters: [],
+    prepaymentParameters: [],
   });
 
   constructor(
@@ -80,6 +71,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected prepaymentMappingService: PrepaymentMappingService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -145,7 +138,41 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
+  }
+
+  trackPrepaymentMappingById(index: number, item: IPrepaymentMapping): number {
+    return item.id!;
+  }
+
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+
+  getSelectedUniversallyUniqueMapping(
+    option: IUniversallyUniqueMapping,
+    selectedVals?: IUniversallyUniqueMapping[]
+  ): IUniversallyUniqueMapping {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedPrepaymentMapping(option: IPrepaymentMapping, selectedVals?: IPrepaymentMapping[]): IPrepaymentMapping {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -182,6 +209,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       particulars: prepaymentAccount.particulars,
       notes: prepaymentAccount.notes,
       prepaymentAmount: prepaymentAccount.prepaymentAmount,
+      prepaymentGuid: prepaymentAccount.prepaymentGuid,
       settlementCurrency: prepaymentAccount.settlementCurrency,
       prepaymentTransaction: prepaymentAccount.prepaymentTransaction,
       serviceOutlet: prepaymentAccount.serviceOutlet,
@@ -189,6 +217,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       debitAccount: prepaymentAccount.debitAccount,
       transferAccount: prepaymentAccount.transferAccount,
       placeholders: prepaymentAccount.placeholders,
+      generalParameters: prepaymentAccount.generalParameters,
+      prepaymentParameters: prepaymentAccount.prepaymentParameters,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -215,6 +245,14 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(prepaymentAccount.placeholders ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(prepaymentAccount.generalParameters ?? [])
+    );
+    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+      this.prepaymentMappingsSharedCollection,
+      ...(prepaymentAccount.prepaymentParameters ?? [])
     );
   }
 
@@ -281,6 +319,35 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.universallyUniqueMappingService
+      .query()
+      .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
+      .pipe(
+        map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+            universallyUniqueMappings,
+            ...(this.editForm.get('generalParameters')!.value ?? [])
+          )
+        )
+      )
+      .subscribe(
+        (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
+      );
+
+    this.prepaymentMappingService
+      .query()
+      .pipe(map((res: HttpResponse<IPrepaymentMapping[]>) => res.body ?? []))
+      .pipe(
+        map((prepaymentMappings: IPrepaymentMapping[]) =>
+          this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+            prepaymentMappings,
+            ...(this.editForm.get('prepaymentParameters')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((prepaymentMappings: IPrepaymentMapping[]) => (this.prepaymentMappingsSharedCollection = prepaymentMappings));
   }
 
   protected createFromForm(): IPrepaymentAccount {
@@ -291,6 +358,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       particulars: this.editForm.get(['particulars'])!.value,
       notes: this.editForm.get(['notes'])!.value,
       prepaymentAmount: this.editForm.get(['prepaymentAmount'])!.value,
+      prepaymentGuid: this.editForm.get(['prepaymentGuid'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       prepaymentTransaction: this.editForm.get(['prepaymentTransaction'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
@@ -298,6 +366,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       debitAccount: this.editForm.get(['debitAccount'])!.value,
       transferAccount: this.editForm.get(['transferAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      generalParameters: this.editForm.get(['generalParameters'])!.value,
+      prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
     };
   }
 }

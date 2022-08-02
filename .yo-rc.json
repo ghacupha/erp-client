@@ -104,7 +104,10 @@
       "Algorithm",
       "SecurityClearance",
       "ApplicationUser",
-      "ReportDesign"
+      "ReportDesign",
+      "AmortizationRecurrence",
+      "PrepaymentMapping",
+      "AmortizationSequence"
     ],
     "lastLiquibaseTimestamp": 1632149732000,
     "monorepository": true,

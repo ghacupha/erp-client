@@ -31,6 +31,18 @@
                  [readonly]='true' />
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentGuid">Prepayment Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prepaymentGuid"
+            id="field_prepaymentGuid"
+            data-cy="prepaymentGuid"
+            formControlName="prepaymentGuid"
+          />
+        </div>
+
         <div class='form-group'>
           <label class='form-control-label' for='field_catalogueNumber'>Catalogue Number</label>
           <input
@@ -151,6 +163,48 @@
           inputControlLabel='Transfer Account (Required)'
         >
         </jhi-m21-transaction-account-form-control>
+
+
+        <div class="form-group">
+          <label for="field_generalParameters">General Parameters</label>
+          <select
+            class="form-control"
+            id="field_generalParameters"
+            data-cy="generalParameters"
+            multiple
+            name="generalParameters"
+            formControlName="generalParameters"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('generalParameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_prepaymentParameters">Prepayment Parameters</label>
+          <select
+            class="form-control"
+            id="field_prepaymentParameters"
+            data-cy="prepaymentParameters"
+            multiple
+            name="prepaymentParameters"
+            formControlName="prepaymentParameters"
+          >
+            <option
+              [ngValue]="getSelectedPrepaymentMapping(prepaymentMappingOption, editForm.get('prepaymentParameters')!.value)"
+              *ngFor="let prepaymentMappingOption of prepaymentMappingsSharedCollection; trackBy: trackPrepaymentMappingById"
+            >
+              {{ prepaymentMappingOption.parameterKey }}
+            </option>
+          </select>
+        </div>
 
         <button type='button' id='cancel-save' data-cy='entityCreateCancelButton' class='btn btn-secondary'
                 (click)='previousState()'>

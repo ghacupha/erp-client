@@ -33,6 +33,10 @@
         <dd>
           <span>{{ prepaymentAccount.id }}</span>
         </dd>
+        <dt><span>Prepayment Guid</span></dt>
+        <dd>
+          <span>{{ prepaymentAccount.prepaymentGuid }}</span>
+        </dd>
         <dt><span>Catalogue Number</span></dt>
         <dd>
           <span>{{ prepaymentAccount.catalogueNumber }}</span>
@@ -79,14 +83,6 @@
             <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
           </div>
         </dd>
-        <dt><span>Placeholder</span></dt>
-        <dd>
-          <div *ngIf="prepaymentAccount.placeholder">
-            <a [routerLink]="['/placeholder', prepaymentAccount.placeholder?.id, 'view']">{{
-              prepaymentAccount.placeholder?.description
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Debit Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.debitAccount">
@@ -102,6 +98,28 @@
               prepaymentAccount.transferAccount?.accountName
             }}</a>
           </div>
+        </dd>
+
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>General Parameters</span></dt>
+        <dd>
+          <span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{ generalParameters.mappedValue }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Prepayment Parameters</span></dt>
+        <dd>
+          <span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last">
+            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
         </dd>
       </dl>
 

@@ -19,6 +19,17 @@
 version: '3'
 services:
   erp-client:
-    image: ghacupha/erp-client:0.1.0-SNAPSHOT
+    image: ghacupha/erp-client:0.0.7-SNAPSHOT
+    environment:
+      # - SERVER_API_URL="http://localhost:8980/"
+      # - SERVER_API_URL_URL=http://localhost:8980
+      # - SERVER_API_WS_URL=ws://127.0.0.1:8980
+      # - ERP_SYSTEM_DEV_PORT=8980
+      - SERVER_API_URL=${SERVER_API_URL}
+      - SERVER_API_URL_URL=${SERVER_API_URL_URL}
+      - SERVER_API_WS_URL=${SERVER_API_WS_URL}
+      - ERP_SYSTEM_DEV_PORT=${ERP_SYSTEM_DEV_PORT}
+      - ERP_CLIENT_DEV_PORT=${ERP_CLIENT_DEV_PORT}
     ports:
-      - "8981:80"
+      #- "8981:80"
+      - ${ERP_CLIENT_DEPLOYMENT_PROD_PORT}

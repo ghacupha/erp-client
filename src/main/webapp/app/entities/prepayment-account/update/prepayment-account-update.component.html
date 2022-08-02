@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT
-    Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
@@ -79,6 +60,18 @@
             id="field_prepaymentAmount"
             data-cy="prepaymentAmount"
             formControlName="prepaymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentGuid">Prepayment Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prepaymentGuid"
+            id="field_prepaymentGuid"
+            data-cy="prepaymentGuid"
+            formControlName="prepaymentGuid"
           />
         </div>
 
@@ -219,6 +212,47 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_generalParameters">General Parameters</label>
+          <select
+            class="form-control"
+            id="field_generalParameters"
+            data-cy="generalParameters"
+            multiple
+            name="generalParameters"
+            formControlName="generalParameters"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('generalParameters')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.mappedValue }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_prepaymentParameters">Prepayment Parameters</label>
+          <select
+            class="form-control"
+            id="field_prepaymentParameters"
+            data-cy="prepaymentParameters"
+            multiple
+            name="prepaymentParameters"
+            formControlName="prepaymentParameters"
+          >
+            <option
+              [ngValue]="getSelectedPrepaymentMapping(prepaymentMappingOption, editForm.get('prepaymentParameters')!.value)"
+              *ngFor="let prepaymentMappingOption of prepaymentMappingsSharedCollection; trackBy: trackPrepaymentMappingById"
+            >
+              {{ prepaymentMappingOption.parameterKey }}
             </option>
           </select>
         </div>
