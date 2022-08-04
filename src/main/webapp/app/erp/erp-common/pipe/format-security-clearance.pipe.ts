@@ -17,7 +17,7 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ISecurityClearance } from '../security-clearance/security-clearance.model';
+import { ISecurityClearance } from '../../erp-pages/security-clearance/security-clearance.model';
 
 @Pipe({
   name: 'formatSecurityClearance',

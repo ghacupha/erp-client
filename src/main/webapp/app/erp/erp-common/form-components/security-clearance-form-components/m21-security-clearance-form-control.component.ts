@@ -20,7 +20,7 @@ import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
+import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
 import { SecurityClearanceSuggestionService } from '../../suggestion/security-clearance-suggestion.service';
 
 /**

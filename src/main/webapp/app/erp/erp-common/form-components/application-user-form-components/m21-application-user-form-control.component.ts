@@ -21,7 +21,7 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ApplicationUserSuggestionService } from '../../suggestion/application-user-suggestion.service';
-import { IApplicationUser } from '../../application-user/application-user.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 
 @Component({
   selector: 'jhi-m21-application-user-form-control',

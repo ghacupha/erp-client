@@ -23,18 +23,18 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAlgorithm, Algorithm } from '../algorithm.model';
-import { AlgorithmService } from '../service/algorithm.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IProcessStatus, ProcessStatus } from '../process-status.model';
+import { ProcessStatusService } from '../service/process-status.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
-  selector: 'jhi-algorithm-update',
-  templateUrl: './algorithm-update.component.html',
+  selector: 'jhi-process-status-update',
+  templateUrl: './process-status-update.component.html',
 })
-export class AlgorithmUpdateComponent implements OnInit {
+export class ProcessStatusUpdateComponent implements OnInit {
   isSaving = false;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -42,22 +42,25 @@ export class AlgorithmUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    name: [null, [Validators.required]],
+    statusCode: [null, [Validators.required]],
+    description: [null, [Validators.required]],
     placeholders: [],
     parameters: [],
   });
 
   constructor(
-    protected algorithmService: AlgorithmService,
+    protected processStatusService: ProcessStatusService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ algorithm }) => {
-      this.updateForm(algorithm);
+    this.activatedRoute.data.subscribe(({ processStatus }) => {
+      this.updateForm(processStatus);
 
       this.loadRelationshipsOptions();
     });
@@ -69,11 +72,11 @@ export class AlgorithmUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const algorithm = this.createFromForm();
-    if (algorithm.id !== undefined) {
-      this.subscribeToSaveResponse(this.algorithmService.update(algorithm));
+    const processStatus = this.createFromForm();
+    if (processStatus.id !== undefined) {
+      this.subscribeToSaveResponse(this.processStatusService.update(processStatus));
     } else {
-      this.subscribeToSaveResponse(this.algorithmService.create(algorithm));
+      this.subscribeToSaveResponse(this.processStatusService.create(processStatus));
     }
   }
 
@@ -110,7 +113,7 @@ export class AlgorithmUpdateComponent implements OnInit {
     return option;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IAlgorithm>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IProcessStatus>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -129,21 +132,22 @@ export class AlgorithmUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(algorithm: IAlgorithm): void {
+  protected updateForm(processStatus: IProcessStatus): void {
     this.editForm.patchValue({
-      id: algorithm.id,
-      name: algorithm.name,
-      placeholders: algorithm.placeholders,
-      parameters: algorithm.parameters,
+      id: processStatus.id,
+      statusCode: processStatus.statusCode,
+      description: processStatus.description,
+      placeholders: processStatus.placeholders,
+      parameters: processStatus.parameters,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
-      ...(algorithm.placeholders ?? [])
+      ...(processStatus.placeholders ?? [])
     );
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
-      ...(algorithm.parameters ?? [])
+      ...(processStatus.parameters ?? [])
     );
   }
 
@@ -175,11 +179,12 @@ export class AlgorithmUpdateComponent implements OnInit {
       );
   }
 
-  protected createFromForm(): IAlgorithm {
+  protected createFromForm(): IProcessStatus {
     return {
-      ...new Algorithm(),
+      ...new ProcessStatus(),
       id: this.editForm.get(['id'])!.value,
-      name: this.editForm.get(['name'])!.value,
+      statusCode: this.editForm.get(['statusCode'])!.value,
+      description: this.editForm.get(['description'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       parameters: this.editForm.get(['parameters'])!.value,
     };

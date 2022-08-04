@@ -28,9 +28,9 @@ import { of, Subject } from 'rxjs';
 import { ReportStatusService } from '../service/report-status.service';
 import { IReportStatus, ReportStatus } from '../report-status.model';
 import { ReportStatusUpdateComponent } from './report-status-update.component';
-import { ProcessStatusService } from '../../../erp-common/process-status/service/process-status.service';
+import { ProcessStatusService } from '../../../erp-pages/process-status/service/process-status.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IProcessStatus } from '../../../erp-common/process-status/process-status.model';
+import { IProcessStatus } from '../../../erp-pages/process-status/process-status.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('ReportStatus Management Update Component', () => {

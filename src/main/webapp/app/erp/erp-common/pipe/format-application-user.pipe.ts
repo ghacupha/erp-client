@@ -17,7 +17,7 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { IApplicationUser } from '../application-user/application-user.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 @Pipe({
   name: 'formatApplicationUser',

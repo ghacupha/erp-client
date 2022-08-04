@@ -22,7 +22,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
-import { ISecurityClearance } from '../security-clearance/security-clearance.model';
+import { ISecurityClearance } from '../../erp-pages/security-clearance/security-clearance.model';
 
 @Injectable({ providedIn: 'root' })
 export class SecurityClearanceSuggestionService {

@@ -25,13 +25,13 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IApplicationUser, ApplicationUser } from '../application-user.model';
 import { ApplicationUserService } from '../service/application-user.service';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IDealer } from '../../dealers/dealer/dealer.model';
 import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { IUser } from '../../../../admin/user-management/user-management.model';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { DealerService } from '../../dealers/dealer/service/dealer.service';
 import { UserService } from '../../../../core/user/user.service';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
 import { v4 as uuidv4 } from 'uuid';
 

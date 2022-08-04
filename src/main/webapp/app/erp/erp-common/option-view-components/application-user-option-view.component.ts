@@ -17,7 +17,7 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { IApplicationUser } from '../application-user/application-user.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 @Component({
   selector: 'jhi-application-user-option-view',

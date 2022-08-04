@@ -18,10 +18,10 @@
 
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { IAlgorithm } from '../../erp-common/algorithm/algorithm.model';
-import { ISecurityClearance } from '../../erp-common/security-clearance/security-clearance.model';
-import { IApplicationUser } from '../../erp-common/application-user/application-user.model';
-import { ISystemModule } from '../../erp-common/system-module/system-module.model';
+import { IAlgorithm } from '../../erp-pages/algorithm/algorithm.model';
+import { ISecurityClearance } from '../../erp-pages/security-clearance/security-clearance.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import { ISystemModule } from '../../erp-pages/system-module/system-module.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 export interface IReportDesign {

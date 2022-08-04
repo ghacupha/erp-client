@@ -25,8 +25,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ISecurityClearance, SecurityClearance } from '../security-clearance.model';
 import { SecurityClearanceService } from '../service/security-clearance.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-security-clearance-update',

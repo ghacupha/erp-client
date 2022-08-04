@@ -22,7 +22,7 @@ import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { Injectable } from '@angular/core';
-import { IApplicationUser } from '../application-user/application-user.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 @Injectable({ providedIn: 'root' })
 export class ApplicationUserSuggestionService {

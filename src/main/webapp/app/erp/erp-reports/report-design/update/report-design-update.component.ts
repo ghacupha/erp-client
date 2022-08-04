@@ -31,19 +31,19 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { sha512 } from 'hash-wasm';
 import { v4 as uuidv4 } from 'uuid';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
-import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
-import { IAlgorithm } from '../../../erp-common/algorithm/algorithm.model';
+import { ISystemModule } from '../../../erp-pages/system-module/system-module.model';
+import { IAlgorithm } from '../../../erp-pages/algorithm/algorithm.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
-import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { SecurityClearanceService } from '../../../erp-pages/security-clearance/service/security-clearance.service';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
-import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
+import { SystemModuleService } from '../../../erp-pages/system-module/service/system-module.service';
+import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({

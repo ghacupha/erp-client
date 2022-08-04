@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -31,9 +31,9 @@ import { AlgorithmService } from '../service/algorithm.service';
 import { IAlgorithm, Algorithm } from '../algorithm.model';
 
 import { AlgorithmUpdateComponent } from './algorithm-update.component';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 
 describe('Algorithm Management Update Component', () => {
   let comp: AlgorithmUpdateComponent;

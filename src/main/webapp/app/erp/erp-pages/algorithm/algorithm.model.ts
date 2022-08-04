@@ -16,24 +16,25 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IPlaceholder } from '../placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 
-export interface ISecurityClearance {
+export interface IAlgorithm {
   id?: number;
-  clearanceLevel?: string;
-  grantedClearances?: ISecurityClearance[] | null;
+  name?: string;
   placeholders?: IPlaceholder[] | null;
+  parameters?: IUniversallyUniqueMapping[] | null;
 }
 
-export class SecurityClearance implements ISecurityClearance {
+export class Algorithm implements IAlgorithm {
   constructor(
     public id?: number,
-    public clearanceLevel?: string,
-    public grantedClearances?: ISecurityClearance[] | null,
-    public placeholders?: IPlaceholder[] | null
+    public name?: string,
+    public placeholders?: IPlaceholder[] | null,
+    public parameters?: IUniversallyUniqueMapping[] | null
   ) {}
 }
 
-export function getSecurityClearanceIdentifier(securityClearance: ISecurityClearance): number | undefined {
-  return securityClearance.id;
+export function getAlgorithmIdentifier(algorithm: IAlgorithm): number | undefined {
+  return algorithm.id;
 }

@@ -20,12 +20,12 @@ import * as dayjs from 'dayjs';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IReportStatus } from '../report-status/report-status.model';
-import { ISecurityClearance } from '../../erp-common/security-clearance/security-clearance.model';
-import { IApplicationUser } from '../../erp-common/application-user/application-user.model';
+import { ISecurityClearance } from '../../erp-pages/security-clearance/security-clearance.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
-import { ISystemModule } from '../../erp-common/system-module/system-module.model';
+import { ISystemModule } from '../../erp-pages/system-module/system-module.model';
 import { IReportDesign } from '../report-design/report-design.model';
-import { IAlgorithm } from '../../erp-common/algorithm/algorithm.model';
+import { IAlgorithm } from '../../erp-pages/algorithm/algorithm.model';
 
 export interface IExcelReportExport {
   id?: number;

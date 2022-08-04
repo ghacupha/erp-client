@@ -17,7 +17,7 @@
 ///
 
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { IProcessStatus } from '../../erp-common/process-status/process-status.model';
+import { IProcessStatus } from '../../erp-pages/process-status/process-status.model';
 
 export interface IReportStatus {
   id?: number;

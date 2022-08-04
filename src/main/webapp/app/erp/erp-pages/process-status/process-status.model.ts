@@ -16,25 +16,27 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IPlaceholder } from '../placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 
-export interface IAlgorithm {
+export interface IProcessStatus {
   id?: number;
-  name?: string;
+  statusCode?: string;
+  description?: string;
   placeholders?: IPlaceholder[] | null;
   parameters?: IUniversallyUniqueMapping[] | null;
 }
 
-export class Algorithm implements IAlgorithm {
+export class ProcessStatus implements IProcessStatus {
   constructor(
     public id?: number,
-    public name?: string,
+    public statusCode?: string,
+    public description?: string,
     public placeholders?: IPlaceholder[] | null,
     public parameters?: IUniversallyUniqueMapping[] | null
   ) {}
 }
 
-export function getAlgorithmIdentifier(algorithm: IAlgorithm): number | undefined {
-  return algorithm.id;
+export function getProcessStatusIdentifier(processStatus: IProcessStatus): number | undefined {
+  return processStatus.id;
 }

@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -31,7 +31,7 @@ import { SecurityClearanceService } from '../service/security-clearance.service'
 import { ISecurityClearance, SecurityClearance } from '../security-clearance.model';
 
 import { SecurityClearanceUpdateComponent } from './security-clearance-update.component';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
 
 describe('SecurityClearance Management Update Component', () => {
   let comp: SecurityClearanceUpdateComponent;

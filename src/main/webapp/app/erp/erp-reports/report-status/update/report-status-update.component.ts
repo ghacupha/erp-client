@@ -26,9 +26,9 @@ import { finalize, map } from 'rxjs/operators';
 import { IReportStatus, ReportStatus } from '../report-status.model';
 import { ReportStatusService } from '../service/report-status.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IProcessStatus } from '../../../erp-common/process-status/process-status.model';
+import { IProcessStatus } from '../../../erp-pages/process-status/process-status.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { ProcessStatusService } from '../../../erp-common/process-status/service/process-status.service';
+import { ProcessStatusService } from '../../../erp-pages/process-status/service/process-status.service';
 
 @Component({
   selector: 'jhi-report-status-update',

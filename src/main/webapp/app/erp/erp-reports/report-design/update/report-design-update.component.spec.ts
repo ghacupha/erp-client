@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
+import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
 
 jest.mock('@angular/router');
 
@@ -31,18 +31,18 @@ import { ReportDesignService } from '../service/report-design.service';
 import { IReportDesign, ReportDesign } from '../report-design.model';
 
 import { ReportDesignUpdateComponent } from './report-design-update.component';
-import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
-import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
+import { SecurityClearanceService } from '../../../erp-pages/security-clearance/service/security-clearance.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IAlgorithm } from '../../../erp-common/algorithm/algorithm.model';
+import { IAlgorithm } from '../../../erp-pages/algorithm/algorithm.model';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
-import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
-import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
+import { ISystemModule } from '../../../erp-pages/system-module/system-module.model';
+import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
+import { SystemModuleService } from '../../../erp-pages/system-module/service/system-module.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('ReportDesign Management Update Component', () => {

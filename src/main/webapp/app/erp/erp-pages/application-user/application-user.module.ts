@@ -23,7 +23,7 @@ import { ApplicationUserDetailComponent } from './detail/application-user-detail
 import { ApplicationUserUpdateComponent } from './update/application-user-update.component';
 import { ApplicationUserDeleteDialogComponent } from './delete/application-user-delete-dialog.component';
 import { ApplicationUserRoutingModule } from './route/application-user-routing.module';
-import { ErpCommonModule } from '../erp-common.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
   imports: [SharedModule, ApplicationUserRoutingModule, ErpCommonModule],
