@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IAmortizationSequence[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AmortizationSequenceService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/amortization-sequences');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/amortization-sequences');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayments/amortization-sequences');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/prepayments/_search/amortization-sequences');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

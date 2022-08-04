@@ -5,12 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
-import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
-import {IPaymentCalculation} from '../../../../erp-common/models/payment-calculation.model';
-import {ITaxRule} from '../../../../erp-common/models/tax-rule.model';
-import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
-import {TaxRuleService} from '../../../../erp-common/services/tax-rule.service';
-import {PaymentCalculationService} from '../../../../erp-common/services/payment-calculation.service';
+import {ITaxRule} from '../../tax-rule/tax-rule.model';
 import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {
@@ -46,27 +41,32 @@ import {
 import {
   dealerInvoiceStateReset,
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
-import {InvoiceService} from "../../../../erp-common/services/invoice.service";
+import {InvoiceService} from "../../invoice/service/invoice.service";
 import {NGXLogger} from "ngx-logger";
-import { ISignedPayment, SignedPayment } from '../../../../erp-common/models/signed-payment.model';
 import * as dayjs from 'dayjs';
-import { SignedPaymentService } from '../../../../erp-common/services/signed-payment.service';
 import { DataUtils, FileLoadError } from '../../../../../core/util/data-util.service';
 import { EventManager, EventWithContent } from '../../../../../core/util/event-manager.service';
 import { AlertError } from '../../../../../shared/alert/alert-error.model';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
-import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { DealerService } from '../../../../erp-common/services/dealer.service';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { Dealer, IDealer } from '../../../dealers/dealer/dealer.model';
+import { IPayment, Payment } from '../payment.model';
+import { IInvoice, Invoice } from '../../invoice/invoice.model';
+import { PaymentService } from '../service/payment.service';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { DealerService } from '../../../dealers/dealer/service/dealer.service';
 import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
 import { CategorySuggestionService } from '../../../../erp-common/suggestion/category-suggestion.service';
 import { PaymentSuggestionService } from '../../../../erp-common/suggestion/payment-suggestion.service';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
+import { IPaymentCalculation } from '../../payment-calculation/payment-calculation.model';
+import { TaxRuleService } from '../../tax-rule/service/tax-rule.service';
+import { SignedPaymentService } from '../../../signed-payment/service/signed-payment.service';
+import { PaymentCalculationService } from '../../payment-calculation/service/payment-calculation.service';
+import { ISignedPayment, SignedPayment } from '../../../signed-payment/signed-payment.model';
 
 @Component({
   selector: 'jhi-payment-update',

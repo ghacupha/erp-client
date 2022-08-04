@@ -1,4 +1,4 @@
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
 
 jest.mock('@angular/router');
 
@@ -10,17 +10,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { PaymentUpdateComponent } from './payment-update.component';
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
-import { IPaymentCategory } from '../../../../erp-common/models/payment-category.model';
 import { initialState } from '../../../../store/global-store.definition';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { PaymentService } from '../service/payment.service';
+import { IPayment, Payment } from '../payment.model';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 describe('Component Tests', () => {
   describe('Payment Management Update Component', () => {

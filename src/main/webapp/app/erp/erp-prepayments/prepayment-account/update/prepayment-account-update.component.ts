@@ -12,21 +12,21 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IUniversallyUniqueMapping } from '../../../../entities/universally-unique-mapping/universally-unique-mapping.model';
-import { IPrepaymentMapping } from '../../../../entities/prepayment-mapping/prepayment-mapping.model';
-import { UniversallyUniqueMappingService } from '../../../../entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { PrepaymentMappingService } from '../../../../entities/prepayment-mapping/service/prepayment-mapping.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 
 @Component({
   selector: 'jhi-prepayment-account-update',

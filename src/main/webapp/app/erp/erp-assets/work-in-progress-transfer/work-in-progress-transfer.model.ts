@@ -1,5 +1,5 @@
 import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress-registration/work-in-progress-registration.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IWorkInProgressTransfer {
   id?: number;

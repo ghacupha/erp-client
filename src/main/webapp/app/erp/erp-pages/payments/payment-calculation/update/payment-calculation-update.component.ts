@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
-import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
-import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
-import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
+import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-payment-calculation-update',

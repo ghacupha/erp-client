@@ -4,7 +4,7 @@ import { ApplicationConfigService } from '../../../../core/config/application-co
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../../core/request/request-util';
 import { ASC, DESC } from '../../../../config/pagination.constants';
-import { IDealer } from '../../models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerInputControlService {

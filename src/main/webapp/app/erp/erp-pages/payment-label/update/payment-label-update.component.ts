@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-common/models/payment-label.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-pages/payment-label/payment-label.model';
+import { PaymentLabelService } from 'app/erp/erp-pages/payment-label/service/payment-label.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 
 @Component({

@@ -1,5 +1,5 @@
-import { ISystemContentType } from 'app/entities/system-content-type/system-content-type.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { ISystemContentType } from '../system-content-type/system-content-type.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IReportContentType {
   id?: number;

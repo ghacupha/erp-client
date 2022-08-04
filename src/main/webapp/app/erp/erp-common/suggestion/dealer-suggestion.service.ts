@@ -5,7 +5,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { Observable, of } from 'rxjs';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { HttpClient } from '@angular/common/http';
-import { IDealer } from '../models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 @Injectable({ providedIn: ErpCommonModule })
 export class DealerSuggestionService {

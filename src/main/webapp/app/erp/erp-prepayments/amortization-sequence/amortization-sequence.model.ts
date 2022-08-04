@@ -1,9 +1,9 @@
 import * as dayjs from 'dayjs';
-import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
-import { IAmortizationRecurrence } from 'app/entities/amortization-recurrence/amortization-recurrence.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IAmortizationRecurrence } from '../amortization-recurrence/amortization-recurrence.model';
+import { IPrepaymentMapping } from '../prepayment-mapping/prepayment-mapping.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAmortizationSequence {
   id?: number;

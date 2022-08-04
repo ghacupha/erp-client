@@ -15,13 +15,13 @@ import { SettlementService } from '../../../erp-settlements/settlement/service/s
 import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
 import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
@@ -36,7 +36,7 @@ import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/d
 import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
 import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
 import { AssetCategorySuggestionService } from '../../../erp-common/suggestion/asset-category-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',

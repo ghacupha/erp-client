@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ISignedPayment } from '../../../erp-common/models/signed-payment.model';
+import { ISignedPayment } from '../signed-payment.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
+import { SignedPaymentService } from '../service/signed-payment.service';
 import { SignedPaymentDeleteDialogComponent } from '../delete/signed-payment-delete-dialog.component';
 
 @Component({

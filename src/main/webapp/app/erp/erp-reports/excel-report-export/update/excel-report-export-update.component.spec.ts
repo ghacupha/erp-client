@@ -17,7 +17,7 @@ import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-
 import { ReportStatusService } from '../../report-status/service/report-status.service';
 import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
 import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
 import { ReportDesignService } from '../../report-design/service/report-design.service';
 import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
@@ -26,7 +26,7 @@ import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique
 import { IReportStatus } from '../../report-status/report-status.model';
 import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
 import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IReportDesign } from '../../report-design/report-design.model';
 import { IAlgorithm } from '../../../erp-common/algorithm/algorithm.model';
 import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';

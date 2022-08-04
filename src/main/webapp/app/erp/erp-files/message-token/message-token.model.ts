@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IMessageToken {
   id?: number;

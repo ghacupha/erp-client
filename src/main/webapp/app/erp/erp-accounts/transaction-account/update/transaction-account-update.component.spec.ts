@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { TransactionAccountUpdateComponent } from './transaction-account-update.component';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('TransactionAccount Management Update Component', () => {
   let comp: TransactionAccountUpdateComponent;

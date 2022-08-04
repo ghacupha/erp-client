@@ -5,20 +5,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
 
-import { InvoiceService } from '../../../../erp-common/services/invoice.service';
+import { InvoiceService } from '../service/invoice.service';
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {
   dealerInvoicePaymentWorkflowCancelled,
   recordInvoicePaymentButtonClicked
 } from "../../../../store/actions/dealer-invoice-workflows-status.actions";
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { IInvoice, Invoice } from '../invoice.model';
 import { LabelSuggestionService } from '../../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../../erp-common/suggestion/placeholder-suggestion.service';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-invoice-update',

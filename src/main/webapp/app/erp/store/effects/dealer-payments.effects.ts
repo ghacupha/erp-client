@@ -7,7 +7,7 @@ import {
   paymentCategoryAcquiredForPayment,
   requisitionForDealerCategoryInitiated
 } from "../actions/dealer-workflows-status.actions";
-import {DealerCategoryService} from "../../erp-common/services/dealer-category.service";
+import {DealerCategoryService} from "../../erp-pages/dealers/dealer/service/dealer-category.service";
 
 @Injectable()
 export class DealerPaymentsEffects {

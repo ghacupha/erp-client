@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { InvoiceService } from '../../../../erp-common/services/invoice.service';
+import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceComponent } from './invoice.component';
 import {initialState} from "../../../../store/global-store.definition";

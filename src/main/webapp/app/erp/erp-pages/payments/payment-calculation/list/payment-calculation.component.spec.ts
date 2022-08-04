@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
+import { PaymentCalculationService } from '../service/payment-calculation.service';
 
 import { PaymentCalculationComponent } from './payment-calculation.component';
 

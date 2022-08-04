@@ -12,7 +12,7 @@ import {
   DEFAULT_TRANSACTION_AMOUNT,
 } from "../default-values.constants";
 import {Injectable} from "@angular/core";
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { IPayment, Payment } from '../payment.model';
 
 /**
  * Provides the New Payment form with default values

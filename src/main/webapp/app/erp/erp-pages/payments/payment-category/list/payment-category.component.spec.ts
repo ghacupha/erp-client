@@ -8,9 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
-
 import { PaymentCategoryComponent } from './payment-category.component';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
 
 describe('Component Tests', () => {
   describe('PaymentCategory Management Component', () => {

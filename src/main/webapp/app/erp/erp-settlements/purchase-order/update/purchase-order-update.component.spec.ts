@@ -1,4 +1,4 @@
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 
 jest.mock('@angular/router');
 
@@ -13,11 +13,11 @@ import { PurchaseOrderService } from '../service/purchase-order.service';
 import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 import { PurchaseOrderUpdateComponent } from './purchase-order-update.component';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('PurchaseOrder Management Update Component', () => {

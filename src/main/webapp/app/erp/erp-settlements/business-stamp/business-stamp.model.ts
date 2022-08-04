@@ -1,6 +1,6 @@
 import * as dayjs from 'dayjs';
-import { IDealer } from '../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IBusinessStamp {
   id?: number;

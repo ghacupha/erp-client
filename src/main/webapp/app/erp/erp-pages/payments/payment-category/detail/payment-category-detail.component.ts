@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { IPaymentCategory } from '../../../../erp-common/models/payment-category.model';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
 
 @Component({
   selector: 'jhi-payment-category-detail',

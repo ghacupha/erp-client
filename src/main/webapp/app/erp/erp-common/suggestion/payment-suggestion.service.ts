@@ -5,7 +5,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
-import { IPayment } from '../models/payment.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
 
 @Injectable({ providedIn: ErpCommonModule })
 export class PaymentSuggestionService {

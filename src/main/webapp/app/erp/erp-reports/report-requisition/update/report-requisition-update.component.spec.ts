@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,26 +11,25 @@ import { of, Subject } from 'rxjs';
 
 import { ReportRequisitionService } from '../service/report-requisition.service';
 import { IReportRequisition, ReportRequisition } from '../report-requisition.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-// import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-// import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-// import { ReportTemplateService } from 'app/entities/report-template/service/report-template.service';
-import { IReportContentType } from 'app/entities/report-content-type/report-content-type.model';
-// import { ReportContentTypeService } from 'app/entities/report-content-type/service/report-content-type.service';
 
 import { ReportRequisitionUpdateComponent } from './report-requisition-update.component';
+import { IReportContentType } from '../../report-content-type/report-content-type.model';
+import { IReportTemplate } from '../../report-template/report-template.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ReportTemplateService } from '../../report-template/service/report-template.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ReportContentTypeService } from '../../report-content-type/service/report-content-type.service';
 
 describe('ReportRequisition Management Update Component', () => {
   let comp: ReportRequisitionUpdateComponent;
   let fixture: ComponentFixture<ReportRequisitionUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let reportRequisitionService: ReportRequisitionService;
-  // let placeholderService: PlaceholderService;
-  // let universallyUniqueMappingService: UniversallyUniqueMappingService;
-  // let reportTemplateService: ReportTemplateService;
-  // let reportContentTypeService: ReportContentTypeService;
+  let placeholderService: PlaceholderService;
+  let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let reportTemplateService: ReportTemplateService;
+  let reportContentTypeService: ReportContentTypeService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -42,16 +43,16 @@ describe('ReportRequisition Management Update Component', () => {
     fixture = TestBed.createComponent(ReportRequisitionUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     reportRequisitionService = TestBed.inject(ReportRequisitionService);
-    // placeholderService = TestBed.inject(PlaceholderService);
-    // universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
-    // reportTemplateService = TestBed.inject(ReportTemplateService);
-    // reportContentTypeService = TestBed.inject(ReportContentTypeService);
+    placeholderService = TestBed.inject(PlaceholderService);
+    universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    reportTemplateService = TestBed.inject(ReportTemplateService);
+    reportContentTypeService = TestBed.inject(ReportContentTypeService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    /* TODO it('Should call Placeholder query and add missing value', () => {
+     it('Should call Placeholder query and add missing value', () => {
       const reportRequisition: IReportRequisition = { id: 456 };
       const placeholders: IPlaceholder[] = [{ id: 52719 }];
       reportRequisition.placeholders = placeholders;
@@ -139,7 +140,7 @@ describe('ReportRequisition Management Update Component', () => {
         ...additionalReportContentTypes
       );
       expect(comp.reportContentTypesSharedCollection).toEqual(expectedCollection);
-    }); */
+    });
 
     it('Should update editForm', () => {
       const reportRequisition: IReportRequisition = { id: 456 };

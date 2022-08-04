@@ -9,8 +9,8 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { PaymentLabelRoutingResolveService } from './payment-label-routing-resolve.service';
-import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
-import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-common/models/payment-label.model';
+import { PaymentLabelService } from 'app/erp/erp-pages/payment-label/service/payment-label.service';
+import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-pages/payment-label/payment-label.model';
 
 describe('Service Tests', () => {
   describe('PaymentLabel routing resolve service', () => {

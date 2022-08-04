@@ -13,17 +13,17 @@ import { AmortizationRecurrenceService } from '../service/amortization-recurrenc
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
-import { PrepaymentMappingService } from 'app/entities/prepayment-mapping/service/prepayment-mapping.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IDepreciationMethod } from 'app/entities/depreciation-method/depreciation-method.model';
-import { DepreciationMethodService } from 'app/entities/depreciation-method/service/depreciation-method.service';
-import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
-import { recurrenceFrequency } from 'app/entities/enumerations/recurrence-frequency.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+import { IDepreciationMethod } from '../../../erp-assets/depreciation-method/depreciation-method.model';
+import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
+import { DepreciationMethodService } from '../../../erp-assets/depreciation-method/service/depreciation-method.service';
+import { recurrenceFrequency } from '../../../../entities/enumerations/recurrence-frequency.model';
 
 @Component({
   selector: 'jhi-amortization-recurrence-update',

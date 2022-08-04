@@ -9,8 +9,8 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { DealerRoutingResolveService } from './dealer-routing-resolve.service';
-import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
-import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { Dealer, IDealer } from '../dealer.model';
+import { DealerService } from '../service/dealer.service';
 
 describe('Service Tests', () => {
   describe('Dealer routing resolve service', () => {

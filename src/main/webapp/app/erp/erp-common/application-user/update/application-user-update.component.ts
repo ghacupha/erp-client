@@ -7,11 +7,11 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IApplicationUser, ApplicationUser } from '../application-user.model';
 import { ApplicationUserService } from '../service/application-user.service';
-import { IDealer } from '../../models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { IUser } from '../../../../admin/user-management/user-management.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { DealerService } from '../../services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { UserService } from '../../../../core/user/user.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';

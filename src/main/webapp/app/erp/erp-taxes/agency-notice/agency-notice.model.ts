@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
 import { AgencyStatusType } from '../../erp-common/enumerations/agency-status-type.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 export interface IAgencyNotice {
   id?: number;

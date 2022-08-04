@@ -13,9 +13,9 @@ import { AssetCategoryService } from '../service/asset-category.service';
 import { IAssetCategory, AssetCategory } from '../asset-category.model';
 
 import { AssetCategoryUpdateComponent } from './asset-category-update.component';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDepreciationMethod } from '../../depreciation-method/depreciation-method.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('AssetCategory Management Update Component', () => {

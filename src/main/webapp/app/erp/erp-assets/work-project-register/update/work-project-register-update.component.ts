@@ -10,8 +10,8 @@ import { WorkProjectRegisterService } from '../service/work-project-register.ser
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';

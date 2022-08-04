@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
 import { SettlementCurrencyService } from '../service/settlement-currency.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-settlement-currency-update',

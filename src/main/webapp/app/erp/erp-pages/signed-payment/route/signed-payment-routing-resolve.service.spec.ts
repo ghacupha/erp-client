@@ -8,8 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
-import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
+import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { SignedPaymentService } from '../service/signed-payment.service';
 
 import { SignedPaymentRoutingResolveService } from './signed-payment-routing-resolve.service';
 

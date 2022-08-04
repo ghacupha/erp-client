@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPaymentCategory } from '../../../../erp-common/models/payment-category.model';
-
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
 import { PaymentCategoryDeleteDialogComponent } from '../delete/payment-category-delete-dialog.component';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
 
 @Component({
   selector: 'jhi-payment-category',

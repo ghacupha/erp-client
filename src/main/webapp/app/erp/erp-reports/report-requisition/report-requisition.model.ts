@@ -1,9 +1,9 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { IReportTemplate } from 'app/entities/report-template/report-template.model';
-import { IReportContentType } from 'app/entities/report-content-type/report-content-type.model';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
+import { ReportStatusTypes } from '../../erp-common/enumerations/report-status-types.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IReportContentType } from '../report-content-type/report-content-type.model';
+import { IReportTemplate } from '../report-template/report-template.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IReportRequisition {
   id?: number;

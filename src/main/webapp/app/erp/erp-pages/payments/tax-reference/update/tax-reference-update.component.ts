@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ITaxReference, TaxReference } from '../../../../erp-common/models/tax-reference.model';
-import { TaxReferenceService } from '../../../../erp-common/services/tax-reference.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
+import { TaxReferenceService } from '../service/tax-reference.service';
+import { ITaxReference, TaxReference } from '../tax-reference.model';
 
 @Component({
   selector: 'jhi-tax-reference-update',

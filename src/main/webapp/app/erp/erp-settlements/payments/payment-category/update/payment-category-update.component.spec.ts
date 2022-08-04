@@ -11,12 +11,12 @@ import { of, Subject } from 'rxjs';
 
 import { PaymentCategoryService } from '../service/payment-category.service';
 import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../../erp-pages/payment-label/payment-label.model';
+import { PaymentLabelService } from '../../../../erp-pages/payment-label/service/payment-label.service';
 
 import { PaymentCategoryUpdateComponent } from './payment-category-update.component';
+import { PlaceholderService } from '../../../../erp-pages/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../../erp-pages/placeholder/placeholder.model';
 
 describe('PaymentCategory Management Update Component', () => {
   let comp: PaymentCategoryUpdateComponent;

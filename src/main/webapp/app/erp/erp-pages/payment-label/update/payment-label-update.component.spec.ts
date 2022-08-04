@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -8,11 +10,10 @@ import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { PaymentLabelUpdateComponent } from './payment-label-update.component';
-import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
-import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-common/models/payment-label.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
+import { PaymentLabelService } from 'app/erp/erp-pages/payment-label/service/payment-label.service';
+import { IPaymentLabel, PaymentLabel } from 'app/erp/erp-pages/payment-label/payment-label.model';
 import { ErpCommonModule } from 'app/erp/erp-common/erp-common.module';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
 
 describe('Component Tests', () => {
   describe('PaymentLabel Management Update Component', () => {

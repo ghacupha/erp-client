@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IMfbBranchCode, MfbBranchCode } from '../mfb-branch-code.model';
 import { MfbBranchCodeService } from '../service/mfb-branch-code.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-mfb-branch-code-update',

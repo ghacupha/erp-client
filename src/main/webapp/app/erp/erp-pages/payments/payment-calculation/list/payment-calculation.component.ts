@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
+import { IPaymentCalculation } from '../payment-calculation.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
+import { PaymentCalculationService } from '../service/payment-calculation.service';
 import { PaymentCalculationDeleteDialogComponent } from '../delete/payment-calculation-delete-dialog.component';
 
 @Component({

@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,12 +11,11 @@ import { of, Subject } from 'rxjs';
 
 import { SystemContentTypeService } from '../service/system-content-type.service';
 import { ISystemContentType, SystemContentType } from '../system-content-type.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { SystemContentTypeUpdateComponent } from './system-content-type-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('SystemContentType Management Update Component', () => {
   let comp: SystemContentTypeUpdateComponent;

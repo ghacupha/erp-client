@@ -19,12 +19,12 @@ import { DataUtils, FileLoadError } from '../../../../core/util/data-util.servic
 import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
 import { AlertError } from '../../../../shared/alert/alert-error.model';
 import { AgencyStatusType } from 'app/erp/erp-common/enumerations/agency-status-type.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { IDealer } from 'app/erp/erp-common/models/dealer.model';
-import { ISettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IDealer } from 'app/erp/erp-pages/dealers/dealer/dealer.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-agency-notice-update',

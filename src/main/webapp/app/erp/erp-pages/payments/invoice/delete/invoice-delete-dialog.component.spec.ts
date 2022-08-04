@@ -8,12 +8,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { InvoiceService } from '../../../../erp-common/services/invoice.service';
+import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceDeleteDialogComponent } from './invoice-delete-dialog.component';
 import {initialState} from "../../../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
-import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('Invoice Management Delete Component', () => {
@@ -25,7 +24,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [ErpCommonModule, HttpClientTestingModule, LoggerTestingModule],
+        imports: [HttpClientTestingModule, LoggerTestingModule],
         declarations: [InvoiceDeleteDialogComponent],
         providers: [NgbActiveModal, provideMockStore({initialState})],
       })

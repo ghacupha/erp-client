@@ -3,12 +3,15 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-
-import { IPaymentCategory, PaymentCategory } from '../../../../erp-common/models/payment-category.model';
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
+import {
+  IPaymentCategory,
+  PaymentCategory
+} from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentCategoryRoutingResolveService implements Resolve<IPaymentCategory> {
+
   constructor(protected service: PaymentCategoryService, protected router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IPaymentCategory> | Observable<never> {

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IPaymentCategory } from '../models/payment-category.model';
+import { IPaymentCategory } from '../../erp-settlements/payments/payment-category/payment-category.model';
 
 @Pipe({
   name: 'formatPaymentCategory',

@@ -11,14 +11,14 @@ import { of, Subject } from 'rxjs';
 
 import { DeliveryNoteService } from '../service/delivery-note.service';
 import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { DeliveryNoteUpdateComponent } from './delivery-note-update.component';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
 import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
 import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
 
 describe('DeliveryNote Management Update Component', () => {

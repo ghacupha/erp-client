@@ -1,9 +1,9 @@
 import * as dayjs from 'dayjs';
 import { IPurchaseOrder } from 'app/erp/erp-settlements/purchase-order/purchase-order.model';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
-import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IDeliveryNote } from '../delivery-note/delivery-note.model';
 import { IJobSheet } from '../job-sheet/job-sheet.model';
 

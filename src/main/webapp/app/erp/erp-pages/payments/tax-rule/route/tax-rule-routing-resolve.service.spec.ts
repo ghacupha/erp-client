@@ -8,8 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { ITaxRule, TaxRule } from '../../../../erp-common/models/tax-rule.model';
-import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
+import { ITaxRule, TaxRule } from '../tax-rule.model';
+import { TaxRuleService } from '../service/tax-rule.service';
 
 import { TaxRuleRoutingResolveService } from './tax-rule-routing-resolve.service';
 

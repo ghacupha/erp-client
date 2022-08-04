@@ -11,7 +11,7 @@ import { of } from 'rxjs';
 import { DealerComponent } from './dealer.component';
 import {initialState} from '../../../../store/global-store.definition';
 import {LoggerTestingModule} from "ngx-logger/testing";
-import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { DealerService } from '../service/dealer.service';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {

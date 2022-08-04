@@ -1,4 +1,4 @@
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 
 jest.mock('@angular/router');
 
@@ -13,9 +13,9 @@ import { BusinessStampService } from '../service/business-stamp.service';
 import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
 
 import { BusinessStampUpdateComponent } from './business-stamp-update.component';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('BusinessStamp Management Update Component', () => {

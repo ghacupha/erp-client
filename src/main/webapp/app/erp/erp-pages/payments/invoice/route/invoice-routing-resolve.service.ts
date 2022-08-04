@@ -4,8 +4,8 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { InvoiceService } from '../../../../erp-common/services/invoice.service';
-import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
+import { InvoiceService } from '../service/invoice.service';
+import { IInvoice, Invoice } from '../invoice.model';
 
 @Injectable({ providedIn: 'root' })
 export class InvoiceRoutingResolveService implements Resolve<IInvoice> {

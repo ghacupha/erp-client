@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IFixedAssetAcquisition {
   id?: number;

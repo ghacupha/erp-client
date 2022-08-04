@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ITaxRule } from '../../../../erp-common/models/tax-rule.model';
-import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
+import { ITaxRule } from '../tax-rule.model';
+import { TaxRuleService } from '../service/tax-rule.service';
 
 @Component({
   templateUrl: './tax-rule-delete-dialog.component.html',

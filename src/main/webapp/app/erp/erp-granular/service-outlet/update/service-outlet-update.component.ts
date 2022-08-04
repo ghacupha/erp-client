@@ -7,14 +7,14 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IServiceOutlet, ServiceOutlet } from '../service-outlet.model';
 import { ServiceOutletService } from '../service/service-outlet.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { OutletStatusService } from '../../outlet-status/service/outlet-status.service';
 import { CountyCodeService } from '../../county-code/service/county-code.service';
 import { BankBranchCodeService } from '../../bank-branch-code/service/bank-branch-code.service';
 import { IOutletType } from '../../outlet-type/outlet-type.model';
 import { IBankBranchCode } from '../../bank-branch-code/bank-branch-code.model';
 import { OutletTypeService } from '../../outlet-type/service/outlet-type.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IOutletStatus } from '../../outlet-status/outlet-status.model';
 import { ICountyCode } from '../../county-code/county-code.model';
 

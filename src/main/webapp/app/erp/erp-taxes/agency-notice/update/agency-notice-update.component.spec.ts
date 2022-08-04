@@ -13,12 +13,12 @@ import { AgencyNoticeService } from '../service/agency-notice.service';
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 
 import { AgencyNoticeUpdateComponent } from './agency-notice-update.component';
-import { DealerService } from '../../../erp-common/services/dealer.service';
-import { SettlementCurrencyService } from '../../../erp-common/services/settlement-currency.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { ISettlementCurrency } from '../../../erp-common/models/settlement-currency.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 describe('AgencyNotice Management Update Component', () => {
   let comp: AgencyNoticeUpdateComponent;

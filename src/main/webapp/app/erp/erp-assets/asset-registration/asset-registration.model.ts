@@ -1,9 +1,9 @@
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IAssetCategory } from '../asset-category/asset-category.model';
 import { IJobSheet } from '../../erp-settlements/job-sheet/job-sheet.model';
 import { IDeliveryNote } from '../../erp-settlements/delivery-note/delivery-note.model';
 import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-order.model';

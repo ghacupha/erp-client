@@ -7,8 +7,8 @@ import {State} from "../../../../store/global-store.definition";
 import {EMPTY, Observable, of} from "rxjs";
 import {flatMap} from "rxjs/operators";
 import {HttpResponse} from "@angular/common/http";
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { IPayment, Payment } from '../payment.model';
+import { PaymentService } from '../service/payment.service';
 
 /**
  * Provides the edit form containing the entity to be edited pre-filled

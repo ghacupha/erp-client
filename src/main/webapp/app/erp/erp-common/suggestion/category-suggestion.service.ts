@@ -4,7 +4,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
-import { IPaymentCategory } from '../models/payment-category.model';
+import { IPaymentCategory } from '../../erp-settlements/payments/payment-category/payment-category.model';
 
 @Injectable({ providedIn: 'root' })
 export class CategorySuggestionService {

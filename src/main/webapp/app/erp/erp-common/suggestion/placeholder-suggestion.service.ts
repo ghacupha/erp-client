@@ -4,7 +4,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
-import { IPlaceholder } from '../models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 @Injectable({ providedIn: 'root' })
 export class PlaceholderSuggestionService {

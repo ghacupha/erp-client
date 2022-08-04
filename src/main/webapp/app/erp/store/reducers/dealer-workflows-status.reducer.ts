@@ -5,9 +5,9 @@ import {
   payDealerButtonClicked, paymentCategoryAcquiredForPayment,
   paymentToDealerCompleted, paymentToDealerReset,
 } from '../actions/dealer-workflows-status.actions';
-import {IPaymentCategory} from '../../erp-common/models/payment-category.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
-import { IPayment } from '../../erp-common/models/payment.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
+import { IPaymentCategory } from '../../erp-settlements/payments/payment-category/payment-category.model';
 
 export const paymentToDealerWorkflowStateSelector = 'paymentToDealerWorkflows'
 

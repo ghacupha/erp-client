@@ -18,6 +18,7 @@ describe('WorkInProgressRegistration e2e test', () => {
   /* let workInProgressRegistrationDeleteDialog: WorkInProgressRegistrationDeleteDialog; */
   const fileNameToUpload = 'logo-jhipster.png';
   const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const absolutePath = path.resolve(__dirname, fileToUpload);
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';

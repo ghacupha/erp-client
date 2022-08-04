@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -13,7 +13,7 @@ import { BankBranchCodeService } from '../service/bank-branch-code.service';
 import { IBankBranchCode, BankBranchCode } from '../bank-branch-code.model';
 
 import { BankBranchCodeUpdateComponent } from './bank-branch-code-update.component';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('BankBranchCode Management Update Component', () => {
   let comp: BankBranchCodeUpdateComponent;

@@ -1,4 +1,4 @@
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
 
 jest.mock('@angular/router');
 
@@ -9,17 +9,17 @@ import { FormBuilder } from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { InvoiceService } from '../../../../erp-common/services/invoice.service';
+import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceUpdateComponent } from './invoice-update.component';
 import {MockStore, provideMockStore} from "@ngrx/store/testing";
 import {initialState} from "../../../../store/global-store.definition";
 import {LoggerTestingModule} from "ngx-logger/testing";
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
-import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { IInvoice, Invoice } from '../invoice.model';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
 
 describe('Component Tests', () => {
   describe('Invoice Management Update Component', () => {

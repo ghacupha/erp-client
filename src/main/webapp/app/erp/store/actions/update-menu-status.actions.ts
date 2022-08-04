@@ -1,5 +1,5 @@
 import {createAction, props} from "@ngrx/store";
-import { IPayment } from '../../erp-common/models/payment.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
 
 export const paymentCopyInitiated = createAction(
   '[Payments Page] payment copy initiated',

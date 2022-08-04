@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IBankBranchCode, BankBranchCode } from '../bank-branch-code.model';
 import { BankBranchCodeService } from '../service/bank-branch-code.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-bank-branch-code-update',

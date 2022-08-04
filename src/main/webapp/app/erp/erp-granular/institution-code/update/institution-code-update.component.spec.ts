@@ -1,4 +1,4 @@
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 jest.mock('@angular/router');
 
@@ -13,7 +13,7 @@ import { InstitutionCodeService } from '../service/institution-code.service';
 import { IInstitutionCode, InstitutionCode } from '../institution-code.model';
 
 import { InstitutionCodeUpdateComponent } from './institution-code-update.component';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('InstitutionCode Management Update Component', () => {
   let comp: InstitutionCodeUpdateComponent;

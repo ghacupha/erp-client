@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { ISignedPayment } from '../../../erp-common/models/signed-payment.model';
-import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
+import { ISignedPayment } from '../signed-payment.model';
+import { SignedPaymentService } from '../service/signed-payment.service';
 
 @Component({
   templateUrl: './signed-payment-delete-dialog.component.html',

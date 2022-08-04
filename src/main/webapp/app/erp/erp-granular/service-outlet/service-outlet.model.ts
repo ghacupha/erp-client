@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IBankBranchCode } from '../bank-branch-code/bank-branch-code.model';
 import { IOutletType } from '../outlet-type/outlet-type.model';
 import { ICountyCode } from '../county-code/county-code.model';

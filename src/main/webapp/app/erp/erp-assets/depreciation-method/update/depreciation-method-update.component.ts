@@ -9,9 +9,9 @@ import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { DepreciationTypes } from '../../../erp-common/enumerations/depreciation-types.model';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-depreciation-method-update',

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { IPaymentCategory } from '../../../../erp-common/models/payment-category.model';
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
 
 @Component({
   templateUrl: './payment-category-delete-dialog.component.html',

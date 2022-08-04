@@ -13,8 +13,8 @@ import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ReportTemplateService } from '../../report-template/service/report-template.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ReportStatusTypes } from '../../../erp-common/enumerations/report-status-types.model';
-import { IUniversallyUniqueMapping } from '../../../../entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 @Component({
   selector: 'jhi-pdf-report-requisition-update',

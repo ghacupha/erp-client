@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IBusinessStamp } from '../business-stamp/business-stamp.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IPurchaseOrder } from '../purchase-order/purchase-order.model';
 
 export interface IDeliveryNote {

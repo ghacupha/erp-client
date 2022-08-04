@@ -7,10 +7,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IReportContentType, ReportContentType } from '../report-content-type.model';
 import { ReportContentTypeService } from '../service/report-content-type.service';
-import { ISystemContentType } from 'app/entities/system-content-type/system-content-type.model';
-import { SystemContentTypeService } from 'app/entities/system-content-type/service/system-content-type.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISystemContentType } from '../../system-content-type/system-content-type.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { SystemContentTypeService } from '../../system-content-type/service/system-content-type.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-report-content-type-update',

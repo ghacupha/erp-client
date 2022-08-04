@@ -13,7 +13,7 @@ import { PrepaymentAccountService } from '../service/prepayment-account.service'
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 
 import { PrepaymentAccountUpdateComponent } from './prepayment-account-update.component';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
@@ -23,7 +23,7 @@ import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepa
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
@@ -150,10 +150,10 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
-   /* it('Should call Placeholder query and add missing value', () => {
+    it('Should call Placeholder query and add missing value', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };
       const placeholder: IPlaceholder = { id: 20901 };
-      prepaymentAccount.placeholder = placeholder;
+      prepaymentAccount.placeholders = [placeholder];
 
       const placeholderCollection: IPlaceholder[] = [{ id: 81553 }];
       jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: placeholderCollection })));
@@ -165,9 +165,9 @@ describe('PrepaymentAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      // TODO expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
-    }); */
+    });
 
     it('Should call TransactionAccount query and add missing value', () => {
       const prepaymentAccount: IPrepaymentAccount = { id: 456 };

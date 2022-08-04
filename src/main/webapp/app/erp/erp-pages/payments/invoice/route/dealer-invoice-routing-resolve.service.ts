@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
-import {InvoiceService} from "../../../../erp-common/services/invoice.service";
+import {InvoiceService} from "../service/invoice.service";
 import {Resolve, Router} from "@angular/router";
 import {Observable, of} from "rxjs";
 import {select, Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {DEFAULT_CONVERSION_RATE, DEFAULT_CURRENCY} from "../../payment/default-values.constants";
 import {dealerInvoiceSelectedDealer} from "../../../../store/selectors/dealer-invoice-worklows-status.selectors";
-import { IInvoice, Invoice } from '../../../../erp-common/models/invoice.model';
-import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { IInvoice, Invoice } from '../invoice.model';
+import { IDealer } from '../../../dealers/dealer/dealer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerInvoiceRoutingResolveService implements Resolve<IInvoice>  {

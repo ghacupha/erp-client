@@ -8,10 +8,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IPaymentCategory, PaymentCategory } from '../../../../erp-common/models/payment-category.model';
-import { PaymentCategoryService } from '../../../../erp-common/services/payment-category.service';
-
 import { PaymentCategoryRoutingResolveService } from './payment-category-routing-resolve.service';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import {
+  IPaymentCategory,
+  PaymentCategory
+} from '../../../../erp-settlements/payments/payment-category/payment-category.model';
 
 describe('Service Tests', () => {
   describe('PaymentCategory routing resolve service', () => {

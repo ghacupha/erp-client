@@ -1,8 +1,8 @@
 import * as dayjs from 'dayjs';
 import { IPurchaseOrder } from '../purchase-order/purchase-order.model';
 import { IPaymentInvoice } from '../payment-invoice/payment-invoice.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
-import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
 
 export interface ICreditNote {
   id?: number;

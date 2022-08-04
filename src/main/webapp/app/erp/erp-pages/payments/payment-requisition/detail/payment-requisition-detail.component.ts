@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IPaymentRequisition } from '../../../../erp-common/models/payment-requisition.model';
+import { IPaymentRequisition } from '../payment-requisition.model';
 
 @Component({
   selector: 'jhi-payment-requisition-detail',

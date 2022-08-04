@@ -1,4 +1,4 @@
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { PaymentLabelService } from '../service/payment-label.service';
 
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
@@ -9,7 +9,6 @@ import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PaymentLabelDeleteDialogComponent } from './payment-label-delete-dialog.component';
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {
   describe('PaymentLabel Management Delete Component', () => {
@@ -20,7 +19,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [ErpCommonModule, HttpClientTestingModule],
+        imports: [HttpClientTestingModule],
         declarations: [PaymentLabelDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

@@ -1,4 +1,4 @@
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 

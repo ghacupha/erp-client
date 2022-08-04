@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import {Store} from "@ngrx/store";
 import {State} from "../../../../store/global-store.definition";
 import {paymentToInvoiceDealerConcluded} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
-import { IInvoice } from '../../../../erp-common/models/invoice.model';
+import { IInvoice } from '../invoice.model';
 
 @Component({
   selector: 'jhi-invoice-detail',

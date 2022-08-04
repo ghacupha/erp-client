@@ -1,4 +1,4 @@
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface ISubCountyCode {
   id?: number;

@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { recurrenceFrequency } from 'app/entities/enumerations/recurrence-frequency.model';
 import { IAmortizationRecurrence, AmortizationRecurrence } from '../amortization-recurrence.model';
 
 import { AmortizationRecurrenceService } from './amortization-recurrence.service';
+import { recurrenceFrequency } from '../../../../entities/enumerations/recurrence-frequency.model';
 
 describe('AmortizationRecurrence Service', () => {
   let service: AmortizationRecurrenceService;

@@ -1,3 +1,5 @@
+import { ISystemContentType } from '../../system-content-type/system-content-type.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,12 +11,11 @@ import { of, Subject } from 'rxjs';
 
 import { ReportContentTypeService } from '../service/report-content-type.service';
 import { IReportContentType, ReportContentType } from '../report-content-type.model';
-import { ISystemContentType } from 'app/entities/system-content-type/system-content-type.model';
-import { SystemContentTypeService } from 'app/entities/system-content-type/service/system-content-type.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { ReportContentTypeUpdateComponent } from './report-content-type-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { SystemContentTypeService } from '../../system-content-type/service/system-content-type.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('ReportContentType Management Update Component', () => {
   let comp: ReportContentTypeUpdateComponent;

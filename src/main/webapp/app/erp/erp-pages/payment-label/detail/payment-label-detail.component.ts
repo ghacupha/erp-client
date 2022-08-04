@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPaymentLabel } from '../payment-label.model';
 
 @Component({
   selector: 'jhi-payment-label-detail',

@@ -1,5 +1,3 @@
-import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
-
 jest.mock('@ng-bootstrap/ng-bootstrap');
 
 import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
@@ -8,7 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
+import { TaxRuleService } from '../service/tax-rule.service';
 
 import { TaxRuleDeleteDialogComponent } from './tax-rule-delete-dialog.component';
 
@@ -21,7 +19,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, ErpCommonModule],
+        imports: [HttpClientTestingModule],
         declarations: [TaxRuleDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

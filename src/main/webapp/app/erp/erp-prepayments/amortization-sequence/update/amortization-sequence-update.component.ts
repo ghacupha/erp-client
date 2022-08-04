@@ -7,16 +7,16 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAmortizationSequence, AmortizationSequence } from '../amortization-sequence.model';
 import { AmortizationSequenceService } from '../service/amortization-sequence.service';
-import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
-import { IAmortizationRecurrence } from 'app/entities/amortization-recurrence/amortization-recurrence.model';
-import { AmortizationRecurrenceService } from 'app/entities/amortization-recurrence/service/amortization-recurrence.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
-import { PrepaymentMappingService } from 'app/entities/prepayment-mapping/service/prepayment-mapping.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { IAmortizationRecurrence } from '../../amortization-recurrence/amortization-recurrence.model';
+import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { AmortizationRecurrenceService } from '../../amortization-recurrence/service/amortization-recurrence.service';
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-amortization-sequence-update',

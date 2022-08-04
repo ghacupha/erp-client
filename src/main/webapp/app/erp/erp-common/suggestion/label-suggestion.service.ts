@@ -5,7 +5,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
-import { IPaymentLabel } from '../models/payment-label.model';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
 
 @Injectable({ providedIn: ErpCommonModule })
 export class LabelSuggestionService {

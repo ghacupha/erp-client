@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IDealer } from '../models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 @Pipe({
   name: 'formatDealerId',

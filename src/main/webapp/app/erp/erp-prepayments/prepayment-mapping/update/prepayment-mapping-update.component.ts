@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentMapping, PrepaymentMapping } from '../prepayment-mapping.model';
 import { PrepaymentMappingService } from '../service/prepayment-mapping.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-prepayment-mapping-update',

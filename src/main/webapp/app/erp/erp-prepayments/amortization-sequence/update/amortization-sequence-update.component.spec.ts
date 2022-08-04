@@ -1,3 +1,5 @@
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,18 +11,17 @@ import { of, Subject } from 'rxjs';
 
 import { AmortizationSequenceService } from '../service/amortization-sequence.service';
 import { IAmortizationSequence, AmortizationSequence } from '../amortization-sequence.model';
-import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
-import { IAmortizationRecurrence } from 'app/entities/amortization-recurrence/amortization-recurrence.model';
-import { AmortizationRecurrenceService } from 'app/entities/amortization-recurrence/service/amortization-recurrence.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
-import { PrepaymentMappingService } from 'app/entities/prepayment-mapping/service/prepayment-mapping.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { AmortizationSequenceUpdateComponent } from './amortization-sequence-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IAmortizationRecurrence } from '../../amortization-recurrence/amortization-recurrence.model';
+import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { AmortizationRecurrenceService } from '../../amortization-recurrence/service/amortization-recurrence.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
 
 describe('AmortizationSequence Management Update Component', () => {
   let comp: AmortizationSequenceUpdateComponent;

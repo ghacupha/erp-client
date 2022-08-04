@@ -4,8 +4,8 @@ import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet
 import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-order.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;

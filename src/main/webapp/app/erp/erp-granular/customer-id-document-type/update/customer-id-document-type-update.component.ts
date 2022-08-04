@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICustomerIDDocumentType, CustomerIDDocumentType } from '../customer-id-document-type.model';
 import { CustomerIDDocumentTypeService } from '../service/customer-id-document-type.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-customer-id-document-type-update',

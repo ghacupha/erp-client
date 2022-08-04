@@ -1,3 +1,5 @@
+import { ISecurityClearance } from '../../../erp-common/security-clearance/security-clearance.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,22 +11,21 @@ import { of, Subject } from 'rxjs';
 
 import { ReportDesignService } from '../service/report-design.service';
 import { IReportDesign, ReportDesign } from '../report-design.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
-import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
-import { IApplicationUser } from 'app/entities/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { ISystemModule } from 'app/entities/system-module/system-module.model';
-import { SystemModuleService } from 'app/entities/system-module/service/system-module.service';
-import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
-import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.service';
 
 import { ReportDesignUpdateComponent } from './report-design-update.component';
+import { IApplicationUser } from '../../../erp-common/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-common/application-user/service/application-user.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { SecurityClearanceService } from '../../../erp-common/security-clearance/service/security-clearance.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IAlgorithm } from '../../../erp-common/algorithm/algorithm.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ISystemModule } from '../../../erp-common/system-module/system-module.model';
+import { AlgorithmService } from '../../../erp-common/algorithm/service/algorithm.service';
+import { SystemModuleService } from '../../../erp-common/system-module/service/system-module.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('ReportDesign Management Update Component', () => {
   let comp: ReportDesignUpdateComponent;
@@ -82,12 +83,12 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(universallyUniqueMappingService.query).toHaveBeenCalled();
-      // expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
-      //   universallyUniqueMappingCollection,
-      //   ...additionalUniversallyUniqueMappings
-      // );
-      // TODO expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+      expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+      expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+        universallyUniqueMappingCollection,
+        ...additionalUniversallyUniqueMappings
+      );
+      expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call SecurityClearance query and add missing value', () => {
@@ -104,12 +105,12 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(securityClearanceService.query).toHaveBeenCalled();
-      // expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
-      //   securityClearanceCollection,
-      //   ...additionalSecurityClearances
-      // );
-      // TODO expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
+      expect(securityClearanceService.query).toHaveBeenCalled();
+      expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
+        securityClearanceCollection,
+        ...additionalSecurityClearances
+      );
+      expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call ApplicationUser query and add missing value', () => {
@@ -126,12 +127,12 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(applicationUserService.query).toHaveBeenCalled();
-      // expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
-      //   applicationUserCollection,
-      //   ...additionalApplicationUsers
-      // );
-      // TODO expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
+      expect(applicationUserService.query).toHaveBeenCalled();
+      expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
+        applicationUserCollection,
+        ...additionalApplicationUsers
+      );
+      expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Dealer query and add missing value', () => {
@@ -150,9 +151,9 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(dealerService.query).toHaveBeenCalled();
-      // TODO expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
-      // TODO expect(comp.dealersSharedCollection).toEqual(expectedCollection);
+      expect(dealerService.query).toHaveBeenCalled();
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Placeholder query and add missing value', () => {
@@ -169,9 +170,9 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(placeholderService.query).toHaveBeenCalled();
-      // TODO expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
-      // TODO expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
+      expect(placeholderService.query).toHaveBeenCalled();
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call SystemModule query and add missing value', () => {
@@ -188,12 +189,12 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(systemModuleService.query).toHaveBeenCalled();
+      expect(systemModuleService.query).toHaveBeenCalled();
       // expect(systemModuleService.addSystemModuleToCollectionIfMissing).toHaveBeenCalledWith(
       //   systemModuleCollection,
       //   ...additionalSystemModules
       // );
-      // TODO expect(comp.systemModulesSharedCollection).toEqual(expectedCollection);
+      expect(comp.systemModulesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Algorithm query and add missing value', () => {
@@ -210,9 +211,9 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      // TODO expect(algorithmService.query).toHaveBeenCalled();
-      // TODO expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
-      // TODO expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
+      expect(algorithmService.query).toHaveBeenCalled();
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
@@ -266,9 +267,9 @@ describe('ReportDesign Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      // TODO expect(comp.previousState).toHaveBeenCalled();
+      expect(comp.previousState).toHaveBeenCalled();
       // TODO expect(reportDesignService.update).toHaveBeenCalledWith(reportDesign);
-      // TODO expect(comp.isSaving).toEqual(false);
+      expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
@@ -288,8 +289,8 @@ describe('ReportDesign Management Update Component', () => {
 
       // THEN
       // TODO expect(reportDesignService.create).toHaveBeenCalledWith(reportDesign);
-      // TODO expect(comp.isSaving).toEqual(false);
-      // TODO expect(comp.previousState).toHaveBeenCalled();
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
@@ -308,8 +309,8 @@ describe('ReportDesign Management Update Component', () => {
 
       // THEN
       // TODO expect(reportDesignService.update).toHaveBeenCalledWith(reportDesign);
-      // TODO expect(comp.isSaving).toEqual(false);
-      // TODO expect(comp.previousState).not.toHaveBeenCalled();
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 

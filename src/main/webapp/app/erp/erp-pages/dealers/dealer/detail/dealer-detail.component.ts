@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { IDealer } from '../dealer.model';
 
 @Component({
   selector: 'jhi-dealer-detail',

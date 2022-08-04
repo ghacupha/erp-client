@@ -1,6 +1,6 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { SystemContentTypeAvailability } from 'app/entities/enumerations/system-content-type-availability.model';
+import { SystemContentTypeAvailability } from '../../erp-common/enumerations/system-content-type-availability.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface ISystemContentType {
   id?: number;

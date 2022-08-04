@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { PrepaymentMappingService } from '../service/prepayment-mapping.service';
 import { IPrepaymentMapping, PrepaymentMapping } from '../prepayment-mapping.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { PrepaymentMappingUpdateComponent } from './prepayment-mapping-update.component';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('PrepaymentMapping Management Update Component', () => {
   let comp: PrepaymentMappingUpdateComponent;

@@ -8,8 +8,8 @@ import { finalize, map } from 'rxjs/operators';
 import { IFixedAssetDepreciation, FixedAssetDepreciation } from '../fixed-asset-depreciation.model';
 import { FixedAssetDepreciationService } from '../service/fixed-asset-depreciation.service';
 import { DepreciationRegime } from '../../../erp-common/enumerations/depreciation-regime.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-fixed-asset-depreciation-update',

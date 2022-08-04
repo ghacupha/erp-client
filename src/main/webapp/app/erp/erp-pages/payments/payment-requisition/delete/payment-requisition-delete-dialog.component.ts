@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { IPaymentRequisition } from '../../../../erp-common/models/payment-requisition.model';
-import { PaymentRequisitionService } from '../../../../erp-common/services/payment-requisition.service';
+import { PaymentRequisitionService } from '../service/payment-requisition.service';
+import { IPaymentRequisition } from '../payment-requisition.model';
 
 @Component({
   templateUrl: './payment-requisition-delete-dialog.component.html',

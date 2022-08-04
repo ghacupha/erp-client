@@ -5,14 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
-import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
-import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
-import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { SignedPaymentService } from '../service/signed-payment.service';
+import { IPaymentLabel } from '../../payment-label/payment-label.model';
+import { PaymentLabelService } from '../../payment-label/service/payment-label.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IPaymentCategory } from '../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-signed-payment-update',

@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { DealerService } from '../service/dealer.service';
 import { DealerDeleteDialogComponent } from './dealer-delete-dialog.component';
 
 describe('Component Tests', () => {
@@ -20,7 +20,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [ErpCommonModule, HttpClientTestingModule],
+        imports: [HttpClientTestingModule],
         declarations: [DealerDeleteDialogComponent],
         providers: [NgbActiveModal],
       })

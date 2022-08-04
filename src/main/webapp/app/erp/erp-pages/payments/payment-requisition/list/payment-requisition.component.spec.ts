@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { PaymentRequisitionService } from '../../../../erp-common/services/payment-requisition.service';
+import { PaymentRequisitionService } from '../service/payment-requisition.service';
 
 import { PaymentRequisitionComponent } from './payment-requisition.component';
 

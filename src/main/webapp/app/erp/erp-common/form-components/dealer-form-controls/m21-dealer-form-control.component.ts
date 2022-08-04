@@ -3,7 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { DealerInputControlService } from './dealer-input-control.service';
-import { IDealer } from '../../models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 @Component({
   selector: 'jhi-m21-dealer-form-control',

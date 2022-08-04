@@ -6,8 +6,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PaymentLabelDeleteDialogComponent } from '../delete/payment-label-delete-dialog.component';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { IPaymentLabel } from '../payment-label.model';
+import { PaymentLabelService } from '../service/payment-label.service';
 
 @Component({
   selector: 'jhi-payment-label',

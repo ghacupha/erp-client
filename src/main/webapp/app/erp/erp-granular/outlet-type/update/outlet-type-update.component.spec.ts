@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -13,7 +13,7 @@ import { OutletTypeService } from '../service/outlet-type.service';
 import { IOutletType, OutletType } from '../outlet-type.model';
 
 import { OutletTypeUpdateComponent } from './outlet-type-update.component';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('OutletType Management Update Component', () => {
   let comp: OutletTypeUpdateComponent;

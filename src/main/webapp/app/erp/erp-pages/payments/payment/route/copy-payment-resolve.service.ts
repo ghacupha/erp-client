@@ -7,8 +7,8 @@ import {EMPTY, Observable, of} from "rxjs";
 import {flatMap} from "rxjs/operators";
 import {HttpResponse} from "@angular/common/http";
 import {paymentCopyInitiated} from "../../../../store/actions/update-menu-status.actions";
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
+import { IPayment, Payment } from '../payment.model';
+import { PaymentService } from '../service/payment.service';
 
 /**
  * Provides the update form containing the entity to be copied

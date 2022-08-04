@@ -8,9 +8,8 @@
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
     <name>Erp System</name>
-    <description>Mark II No 21 (Baruch Series) Client v 0.1.0-SNAPSHOT</description>
+    <description>Mark II No 23 (Baruch Series) Client v 0.1.1-SNAPSHOT</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

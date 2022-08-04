@@ -14,11 +14,11 @@ import {
   selectedInvoiceUpdatedWithPaymentSuccessfully,
   selectedInvoiceUpdateWithPaymentErrored
 } from "../actions/dealer-invoice-workflows-status.actions";
-import { IDealer } from '../../erp-common/models/dealer.model';
-import { IInvoice } from '../../erp-common/models/invoice.model';
-import { IPayment } from '../../erp-common/models/payment.model';
-import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IInvoice } from '../../erp-pages/payments/invoice/invoice.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export const dealerInvoiceWorkflowStateSelector = 'recordDealerInvoiceWorkflows'
 

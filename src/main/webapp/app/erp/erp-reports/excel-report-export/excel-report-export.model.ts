@@ -4,7 +4,7 @@ import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-ma
 import { IReportStatus } from '../report-status/report-status.model';
 import { ISecurityClearance } from '../../erp-common/security-clearance/security-clearance.model';
 import { IApplicationUser } from '../../erp-common/application-user/application-user.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { ISystemModule } from '../../erp-common/system-module/system-module.model';
 import { IReportDesign } from '../report-design/report-design.model';
 import { IAlgorithm } from '../../erp-common/algorithm/algorithm.model';

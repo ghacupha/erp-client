@@ -10,7 +10,7 @@ import {
   DEFAULT_INVOICE_AMOUNT,
   DEFAULT_TRANSACTION_AMOUNT,
 } from '../default-values.constants';
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { IPayment, Payment } from '../payment.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerPaymentResolveService implements Resolve<IPayment> {

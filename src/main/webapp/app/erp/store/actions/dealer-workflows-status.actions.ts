@@ -1,6 +1,6 @@
 import {createAction, props} from '@ngrx/store';
-import { IDealer } from '../../erp-common/models/dealer.model';
-import { IPaymentCategory } from '../../erp-common/models/payment-category.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IPaymentCategory } from '../../erp-settlements/payments/payment-category/payment-category.model';
 
 export const payDealerButtonClicked = createAction(
   '[Dealer-category-service] pay dealers button clicked',

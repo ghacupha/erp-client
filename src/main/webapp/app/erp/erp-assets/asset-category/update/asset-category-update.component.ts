@@ -8,12 +8,12 @@ import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, 
 import { IAssetCategory, AssetCategory } from '../asset-category.model';
 import { AssetCategoryService } from '../service/asset-category.service';
 import { IDepreciationMethod } from '../../depreciation-method/depreciation-method.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
 import { DepreciationMethodService } from '../../depreciation-method/service/depreciation-method.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { DepreciationMethodSuggestionService } from '../../../erp-common/suggestion/depreciation-method-suggestion.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 
 @Component({
   selector: 'jhi-asset-category-update',

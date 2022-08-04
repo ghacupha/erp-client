@@ -9,8 +9,8 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { PaymentRoutingResolveService } from './payment-routing-resolve.service';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
+import { PaymentService } from '../service/payment.service';
+import { IPayment, Payment } from '../payment.model';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 
 describe('Service Tests', () => {

@@ -12,9 +12,9 @@ import {
   DEFAULT_DESCRIPTION,
 } from "../default-values.constants";
 import {dealerAcquiredForInvoicedPayment} from "../../../../store/actions/dealer-invoice-workflows-status.actions";
-import { IPayment, Payment } from '../../../../erp-common/models/payment.model';
-import { IInvoice } from '../../../../erp-common/models/invoice.model';
-import { IDealer } from '../../../../erp-common/models/dealer.model';
+import { IPayment, Payment } from '../payment.model';
+import { IInvoice } from '../../invoice/invoice.model';
+import { IDealer } from '../../../dealers/dealer/dealer.model';
 
 @Injectable({ providedIn: 'root' })
 export class DealerInvoicePaymentResolveService implements Resolve<IPayment>  {

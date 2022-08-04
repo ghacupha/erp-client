@@ -1,4 +1,4 @@
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 jest.mock('@angular/router');
 
@@ -15,7 +15,7 @@ import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress
 import { WorkInProgressRegistrationService } from 'app/erp/erp-assets/work-in-progress-registration/service/work-in-progress-registration.service';
 
 import { WorkInProgressTransferUpdateComponent } from './work-in-progress-transfer-update.component';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('WorkInProgressTransfer Management Update Component', () => {
   let comp: WorkInProgressTransferUpdateComponent;

@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { PaymentLabelComponent } from './payment-label.component';
-import { PaymentLabelService } from 'app/erp/erp-common/services/payment-label.service';
+import { PaymentLabelService } from 'app/erp/erp-pages/payment-label/service/payment-label.service';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('Component Tests', () => {

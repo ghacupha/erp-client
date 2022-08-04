@@ -14,6 +14,8 @@ import { IProcessStatus, ProcessStatus } from '../process-status.model';
 
 import { ProcessStatusUpdateComponent } from './process-status-update.component';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('ProcessStatus Management Update Component', () => {
   let comp: ProcessStatusUpdateComponent;

@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,10 +11,9 @@ import { of, Subject } from 'rxjs';
 
 import { FileUploadService } from '../service/file-upload.service';
 import { IFileUpload, FileUpload } from '../file-upload.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
 
 import { FileUploadUpdateComponent } from './file-upload-update.component';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('Component Tests', () => {
   describe('FileUpload Management Update Component', () => {

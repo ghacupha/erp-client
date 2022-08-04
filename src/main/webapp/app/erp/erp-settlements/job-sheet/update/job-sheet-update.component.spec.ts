@@ -14,13 +14,13 @@ import { IJobSheet, JobSheet } from '../job-sheet.model';
 
 import { JobSheetUpdateComponent } from './job-sheet-update.component';
 import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 
 describe('JobSheet Management Update Component', () => {
   let comp: JobSheetUpdateComponent;

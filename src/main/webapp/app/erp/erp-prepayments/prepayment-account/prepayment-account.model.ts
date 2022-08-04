@@ -3,7 +3,7 @@ import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IPrepaymentMapping } from '../prepayment-mapping/prepayment-mapping.model';
 

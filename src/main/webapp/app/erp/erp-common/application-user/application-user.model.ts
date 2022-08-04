@@ -1,4 +1,4 @@
-import { IDealer } from '../models/dealer.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { ISecurityClearance } from '../security-clearance/security-clearance.model';
 import { IUser } from '../../../admin/user-management/user-management.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';

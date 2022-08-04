@@ -9,18 +9,18 @@ import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
 import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
 import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
-import { IPayment } from '../../../erp-common/models/payment.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPayment } from '../../../erp-pages/payments/payment/payment.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
 
 @Component({

@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -13,7 +13,7 @@ import { FixedAssetDepreciationService } from '../service/fixed-asset-depreciati
 import { IFixedAssetDepreciation, FixedAssetDepreciation } from '../fixed-asset-depreciation.model';
 
 import { FixedAssetDepreciationUpdateComponent } from './fixed-asset-depreciation-update.component';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('FixedAssetDepreciation Management Update Component', () => {
   let comp: FixedAssetDepreciationUpdateComponent;

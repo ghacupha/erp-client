@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -20,12 +20,12 @@ import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-n
 import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
 import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
-import { DealerService } from '../../../erp-common/services/dealer.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';

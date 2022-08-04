@@ -1,3 +1,5 @@
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -8,13 +10,12 @@ import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
 import { DealerUpdateComponent } from './dealer-update.component';
-import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { DealerService } from '../service/dealer.service';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
-import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { Dealer, IDealer } from '../dealer.model';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 describe('Dealer Management Update Component', () => {
   let comp: DealerUpdateComponent;

@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -13,7 +13,7 @@ import { CountyCodeService } from '../service/county-code.service';
 import { ICountyCode, CountyCode } from '../county-code.model';
 
 import { CountyCodeUpdateComponent } from './county-code-update.component';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('CountyCode Management Update Component', () => {
   let comp: CountyCodeUpdateComponent;

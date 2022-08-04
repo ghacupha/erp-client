@@ -10,7 +10,7 @@ import { CreditNoteService } from '../service/credit-note.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
 import { BusinessStampSuggestionService } from '../../../erp-common/suggestion/business-stamp-suggestion.service';
 import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
@@ -23,12 +23,12 @@ import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/
 import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
 import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
 import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
 import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-credit-note-update',

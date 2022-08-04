@@ -13,17 +13,17 @@ import { PaymentInvoiceService } from '../service/payment-invoice.service';
 import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
 import { IPurchaseOrder } from 'app/erp/erp-settlements/purchase-order/purchase-order.model';
 import { PurchaseOrderService } from 'app/erp/erp-settlements/purchase-order/service/purchase-order.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
 
 import { PaymentInvoiceUpdateComponent } from './payment-invoice-update.component';
-import { DealerService } from '../../../erp-common/services/dealer.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 describe('PaymentInvoice Management Update Component', () => {
   let comp: PaymentInvoiceUpdateComponent;

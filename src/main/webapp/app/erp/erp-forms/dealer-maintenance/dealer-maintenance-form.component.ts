@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
-import { DealerService } from '../../erp-common/services/dealer.service';
-import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
-import { Dealer, IDealer } from '../../erp-common/models/dealer.model';
-import { PaymentLabelService } from '../../erp-common/services/payment-label.service';
-import { PlaceholderService } from '../../erp-common/services/placeholder.service';
+import { DealerService } from '../../erp-pages/dealers/dealer/service/dealer.service';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
+import { Dealer, IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { DealerSuggestionService } from '../../erp-common/suggestion/dealer-suggestion.service';
 import { LabelSuggestionService } from '../../erp-common/suggestion/label-suggestion.service';
 import { PlaceholderSuggestionService } from '../../erp-common/suggestion/placeholder-suggestion.service';
+import { PlaceholderService } from '../../erp-pages/placeholder/service/placeholder.service';
+import { PaymentLabelService } from '../../erp-pages/payment-label/service/payment-label.service';
 
 @Component({
   selector: "jhi-dealer-maintenance",

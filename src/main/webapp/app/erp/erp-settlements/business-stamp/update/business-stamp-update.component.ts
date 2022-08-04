@@ -7,13 +7,13 @@ import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, 
 
 import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
-import { IDealer } from '../../../erp-common/models/dealer.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { DealerService } from '../../../erp-common/services/dealer.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 
 @Component({
   selector: 'jhi-business-stamp-update',

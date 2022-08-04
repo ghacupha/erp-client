@@ -11,7 +11,7 @@ import {
   paymentUpdateConcluded,
   paymentUpdateErrorHasOccurred
 } from "../actions/update-menu-status.actions";
-import { IPayment } from '../../erp-common/models/payment.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
 
 export const paymentUpdateFormStateSelector = 'paymentUpdateForm';
 

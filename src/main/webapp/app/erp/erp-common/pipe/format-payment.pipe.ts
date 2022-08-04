@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { IPayment } from '../models/payment.model';
+import { IPayment } from '../../erp-pages/payments/payment/payment.model';
 
 @Pipe({
   name: 'formatPayment',

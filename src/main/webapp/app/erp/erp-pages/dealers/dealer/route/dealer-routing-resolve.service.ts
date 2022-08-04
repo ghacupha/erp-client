@@ -3,8 +3,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { Dealer, IDealer } from '../../../../erp-common/models/dealer.model';
-import { DealerService } from '../../../../erp-common/services/dealer.service';
+import { Dealer, IDealer } from '../dealer.model';
+import { DealerService } from '../service/dealer.service';
 
 @Injectable({ providedIn: 'root' })
 export class DealerRoutingResolveService implements Resolve<IDealer> {

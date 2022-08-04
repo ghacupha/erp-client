@@ -13,8 +13,8 @@ import { DepreciationMethodService } from '../service/depreciation-method.servic
 import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
 
 import { DepreciationMethodUpdateComponent } from './depreciation-method-update.component';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('DepreciationMethod Management Update Component', () => {
   let comp: DepreciationMethodUpdateComponent;

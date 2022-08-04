@@ -1,3 +1,4 @@
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
 
 jest.mock('@angular/router');
 
@@ -8,17 +9,16 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
-import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
 
 import { PaymentCalculationUpdateComponent } from './payment-calculation-update.component';
-import {PaymentCategoryService} from '../../../../erp-common/services/payment-category.service';
-import {IPaymentCategory} from '../../../../erp-common/models/payment-category.model';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { IPaymentCategory } from '../../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 describe('Component Tests', () => {
   describe('PaymentCalculation Management Update Component', () => {

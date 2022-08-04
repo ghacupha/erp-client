@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { SystemContentTypeAvailability } from 'app/entities/enumerations/system-content-type-availability.model';
 import { ISystemContentType, SystemContentType } from '../system-content-type.model';
 
 import { SystemContentTypeService } from './system-content-type.service';
+import { SystemContentTypeAvailability } from '../../../erp-common/enumerations/system-content-type-availability.model';
 
 describe('SystemContentType Service', () => {
   let service: SystemContentTypeService;

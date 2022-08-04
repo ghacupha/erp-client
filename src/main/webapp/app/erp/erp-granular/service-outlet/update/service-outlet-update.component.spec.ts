@@ -1,4 +1,4 @@
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 jest.mock('@angular/router');
 
@@ -14,7 +14,7 @@ import { IServiceOutlet, ServiceOutlet } from '../service-outlet.model';
 
 import { ServiceOutletUpdateComponent } from './service-outlet-update.component';
 import { OutletStatusService } from '../../outlet-status/service/outlet-status.service';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { CountyCodeService } from '../../county-code/service/county-code.service';
 import { BankBranchCodeService } from '../../bank-branch-code/service/bank-branch-code.service';
 import { IOutletType } from '../../outlet-type/outlet-type.model';

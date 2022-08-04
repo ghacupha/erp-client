@@ -1,3 +1,5 @@
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,14 +11,13 @@ import { of, Subject } from 'rxjs';
 
 import { WorkProjectRegisterService } from '../service/work-project-register.service';
 import { IWorkProjectRegister, WorkProjectRegister } from '../work-project-register.model';
-import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 import { WorkProjectRegisterUpdateComponent } from './work-project-register-update.component';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 describe('WorkProjectRegister Management Update Component', () => {
   let comp: WorkProjectRegisterUpdateComponent;

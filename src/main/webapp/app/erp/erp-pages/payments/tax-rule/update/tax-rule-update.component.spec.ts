@@ -9,12 +9,12 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { TaxRuleService } from '../../../../erp-common/services/tax-rule.service';
-import { ITaxRule, TaxRule } from '../../../../erp-common/models/tax-rule.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
+import { TaxRuleService } from '../service/tax-rule.service';
+import { ITaxRule, TaxRule } from '../tax-rule.model';
 
 import { TaxRuleUpdateComponent } from './tax-rule-update.component';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
 
 describe('Component Tests', () => {
   describe('TaxRule Management Update Component', () => {

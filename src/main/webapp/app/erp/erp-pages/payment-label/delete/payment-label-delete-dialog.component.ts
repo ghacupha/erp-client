@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { IPaymentLabel } from '../payment-label.model';
+import { PaymentLabelService } from '../service/payment-label.service';
 
 @Component({
   templateUrl: './payment-label-delete-dialog.component.html',

@@ -9,14 +9,14 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { PaymentRequisitionService } from '../../../../erp-common/services/payment-requisition.service';
-import { IPaymentRequisition, PaymentRequisition } from '../../../../erp-common/models/payment-requisition.model';
+import { PaymentRequisitionService } from '../service/payment-requisition.service';
+import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
 
 import { PaymentRequisitionUpdateComponent } from './payment-requisition-update.component';
-import { PaymentLabelService } from '../../../../erp-common/services/payment-label.service';
-import { PlaceholderService } from '../../../../erp-common/services/placeholder.service';
-import { IPaymentLabel } from '../../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../../erp-common/models/placeholder.model';
+import { PaymentLabelService } from '../../../payment-label/service/payment-label.service';
+import { IPaymentLabel } from '../../../payment-label/payment-label.model';
+import { PlaceholderService } from '../../../placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../placeholder/placeholder.model';
 
 describe('PaymentRequisition Management Update Component', () => {
   let comp: PaymentRequisitionUpdateComponent;

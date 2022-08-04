@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { DataUtils } from '../../../../../core/util/data-util.service';
-import { IPayment } from '../../../../erp-common/models/payment.model';
+import { IPayment } from '../payment.model';
 
 @Component({
   selector: 'jhi-payment-detail',

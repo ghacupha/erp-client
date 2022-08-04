@@ -1,10 +1,10 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../../erp-common/models/placeholder.model';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
-import { IPaymentLabel } from '../../erp-common/models/payment-label.model';
-import { IPaymentCategory } from 'app/erp/erp-settlements/payments/payment-category/payment-category.model';
-import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment-invoice.model';
-import { IDealer } from '../../erp-common/models/dealer.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
+import { IPaymentCategory } from '../../erp-pages/payments/payment-category/payment-category.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IPaymentInvoice } from '../payment-invoice/payment-invoice.model';
 
 export interface ISettlement {
   id?: number;

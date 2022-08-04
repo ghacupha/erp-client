@@ -9,8 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { PaymentComponent } from './payment.component';
-import { PaymentService } from '../../../../erp-common/services/payment.service';
 import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
+import { PaymentService } from '../service/payment.service';
 
 describe('Component Tests', () => {
   describe('Payment Management Component', () => {

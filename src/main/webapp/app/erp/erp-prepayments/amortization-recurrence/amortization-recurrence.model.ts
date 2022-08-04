@@ -1,10 +1,10 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-mapping.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { IDepreciationMethod } from 'app/entities/depreciation-method/depreciation-method.model';
-import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
-import { recurrenceFrequency } from 'app/entities/enumerations/recurrence-frequency.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IDepreciationMethod } from '../../erp-assets/depreciation-method/depreciation-method.model';
+import { IPrepaymentMapping } from '../prepayment-mapping/prepayment-mapping.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
+import { recurrenceFrequency } from '../../../entities/enumerations/recurrence-frequency.model';
 
 export interface IAmortizationRecurrence {
   id?: number;

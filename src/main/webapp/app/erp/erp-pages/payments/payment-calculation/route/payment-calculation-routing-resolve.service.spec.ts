@@ -8,8 +8,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { IPaymentCalculation, PaymentCalculation } from '../../../../erp-common/models/payment-calculation.model';
-import { PaymentCalculationService } from '../../../../erp-common/services/payment-calculation.service';
+import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
+import { PaymentCalculationService } from '../service/payment-calculation.service';
 
 import { PaymentCalculationRoutingResolveService } from './payment-calculation-routing-resolve.service';
 

@@ -1,5 +1,3 @@
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,15 +7,15 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { of, Subject } from 'rxjs';
 
-import { SignedPaymentService } from '../../../erp-common/services/signed-payment.service';
-import { ISignedPayment, SignedPayment } from '../../../erp-common/models/signed-payment.model';
-import { IPlaceholder } from 'app/erp/erp-common/models/placeholder.model';
-import { PlaceholderService } from 'app/erp/erp-common/services/placeholder.service';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
+import { SignedPaymentService } from '../service/signed-payment.service';
+import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { PaymentLabelService } from '../../payment-label/service/payment-label.service';
 import { SignedPaymentUpdateComponent } from './signed-payment-update.component';
-import { PaymentCategoryService } from '../../../erp-common/services/payment-category.service';
-import { IPaymentCategory } from '../../../erp-common/models/payment-category.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
+import { IPaymentLabel } from '../../payment-label/payment-label.model';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IPaymentCategory } from '../../../erp-settlements/payments/payment-category/payment-category.model';
+import { PaymentCategoryService } from '../../../erp-settlements/payments/payment-category/service/payment-category.service';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 describe('Component Tests', () => {
   describe('SignedPayment Management Update Component', () => {
@@ -31,7 +29,7 @@ describe('Component Tests', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [ErpCommonModule, HttpClientTestingModule],
+        imports: [HttpClientTestingModule],
         declarations: [SignedPaymentUpdateComponent],
         providers: [FormBuilder, ActivatedRoute],
       })

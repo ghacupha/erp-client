@@ -14,13 +14,13 @@ import { ICreditNote, CreditNote } from '../credit-note.model';
 
 import { CreditNoteUpdateComponent } from './credit-note-update.component';
 import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
-import { PaymentLabelService } from '../../../erp-common/services/payment-label.service';
-import { PlaceholderService } from '../../../erp-common/services/placeholder.service';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
 import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
-import { IPaymentLabel } from '../../../erp-common/models/payment-label.model';
-import { IPlaceholder } from '../../../erp-common/models/placeholder.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 describe('CreditNote Management Update Component', () => {
   let comp: CreditNoteUpdateComponent;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ISignedPayment } from '../../../erp-common/models/signed-payment.model';
+import { ISignedPayment } from '../signed-payment.model';
 
 @Component({
   selector: 'jhi-signed-payment-detail',
