@@ -20,7 +20,6 @@ import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {State} from '../../../../store/global-store.definition';
 import {EMPTY, Observable, of} from "rxjs";
-import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
 import { IPaymentCategory, PaymentCategory } from '../../../payments/payment-category/payment-category.model';
 import { IDealer } from '../dealer.model';
 import { EntityArrayResponseType, PaymentService } from '../../../payments/payment/service/payment.service';
