@@ -79,7 +79,7 @@
       "otherEntityName": "depreciationMethod",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "description"
+      "otherEntityField": "depreciationMethodName"
     },
     {
       "relationshipName": "prepaymentAccount",

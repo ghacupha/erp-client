@@ -101,7 +101,7 @@
         <dd>
           <div *ngIf="amortizationRecurrence.depreciationMethod">
             <a [routerLink]="['/depreciation-method', amortizationRecurrence.depreciationMethod?.id, 'view']">{{
-              amortizationRecurrence.depreciationMethod?.description
+              amortizationRecurrence.depreciationMethod?.depreciationMethodName
             }}</a>
           </div>
         </dd>
