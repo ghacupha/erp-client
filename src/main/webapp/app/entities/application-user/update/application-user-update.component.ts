@@ -11,10 +11,10 @@ import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
 import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { UserService } from '../../../core/user/user.service';
+import { IUser } from '../../../admin/user-management/user-management.model';
 
 @Component({
   selector: 'jhi-application-user-update',
