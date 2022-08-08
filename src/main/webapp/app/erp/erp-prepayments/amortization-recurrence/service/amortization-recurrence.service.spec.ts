@@ -24,7 +24,7 @@ import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IAmortizationRecurrence, AmortizationRecurrence } from '../amortization-recurrence.model';
 
 import { AmortizationRecurrenceService } from './amortization-recurrence.service';
-import { recurrenceFrequency } from '../../../../entities/enumerations/recurrence-frequency.model';
+import { recurrenceFrequency } from '../../../erp-common/enumerations/recurrence-frequency.model';
 
 describe('AmortizationRecurrence Service', () => {
   let service: AmortizationRecurrenceService;

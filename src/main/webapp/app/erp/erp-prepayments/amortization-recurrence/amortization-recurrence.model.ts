@@ -22,7 +22,7 @@ import { IDepreciationMethod } from '../../erp-assets/depreciation-method/deprec
 import { IPrepaymentMapping } from '../prepayment-mapping/prepayment-mapping.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
-import { recurrenceFrequency } from '../../../entities/enumerations/recurrence-frequency.model';
+import { recurrenceFrequency } from '../../erp-common/enumerations/recurrence-frequency.model';
 
 export interface IAmortizationRecurrence {
   id?: number;

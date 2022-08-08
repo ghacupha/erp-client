@@ -41,7 +41,7 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
 import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 import { DepreciationMethodService } from '../../../erp-assets/depreciation-method/service/depreciation-method.service';
-import { recurrenceFrequency } from '../../../../entities/enumerations/recurrence-frequency.model';
+import { recurrenceFrequency } from '../../../erp-common/enumerations/recurrence-frequency.model';
 
 @Component({
   selector: 'jhi-amortization-recurrence-update',
