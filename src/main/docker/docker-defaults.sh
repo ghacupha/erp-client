@@ -10,7 +10,10 @@ set -eu
 export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://localhost:8980}
 
 # Due to `set -u` this would fail if not defined and no default was set above
-echo "Will proxy requests for /* to ${SERVER_API_DOCKER_DEPLOY_URL}*"
+echo "Will proxy requests for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/*"
+
+# Running envsubst
+envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
