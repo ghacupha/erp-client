@@ -37,5 +37,15 @@ FROM nginx
 COPY src/main/docker/nginx/nginx-default.conf /etc/nginx/conf.d/default.temp.conf
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
+COPY src/main/docker/docker-defaults.sh /
+# Just in case the file mode was not properly set in Git
+RUN chmod +x /docker-defaults.sh
+
+# This will delegate to the original Nginx `docker-entrypoint.sh`
+ENTRYPOINT ["/docker-defaults.sh"]
+
+# The default parameters to ENTRYPOINT (unless overruled on the command line)
+CMD ["nginx", "-g", "daemon off;"]
+
 # CMD ["/bin/sh", "-c", "envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
-CMD ["/bin/sh", "-c", "envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+#CMD ["/bin/sh", "-c", "envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
