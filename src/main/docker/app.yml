@@ -19,7 +19,7 @@
 version: '3'
 services:
   erp-client:
-    image: ghacupha/erp-client:0.0.7-SNAPSHOT
+    image: ghacupha/erp-client:0.1.1-SNAPSHOT
     environment:
       # - SERVER_API_URL="http://localhost:8980/"
       # - SERVER_API_URL_URL=http://localhost:8980
