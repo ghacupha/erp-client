@@ -26,7 +26,7 @@ echo "\\n\\n Configuration script complete! Initializing environment-variable su
 
 
 # Running envsubst
-# envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
+envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
 echo "\\n\\n Systems check, reviewing compiled nginx configuration script....\\n\\n"
 
