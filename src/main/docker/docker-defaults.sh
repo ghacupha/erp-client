@@ -38,10 +38,11 @@ echo "Line No. $n : $line"
 n=$((n+1))
 done < $filename
 
-echo "\\n\\n If the API variable you may ignore the message. Interupt the process if the SERVER_API is misconfigured..."
+echo "\\n\\n If the API variable you may ignore the message. Interrupt the process if the SERVER_API is misconfigured..."
 
 
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
 # (like Ctrl+C) that Docker may send it:
+#exec /docker-entrypoint.sh "$@"
 exec /docker-entrypoint.sh "$@"
