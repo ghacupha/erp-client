@@ -13,7 +13,7 @@ export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://local
 echo "Will proxy requests for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/*"
 
 # Running envsubst
-envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
+# envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
 echo "Systems check, reviewing nginx configuration script....\\n\\n"
 
