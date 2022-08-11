@@ -26,9 +26,9 @@ echo "\\n\\n Configuration script complete! Initializing environment-variable su
 
 
 # Running envsubst
-envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
+# envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
-echo "Systems check, reviewing nginx configuration script....\\n\\n"
+echo "\\n\\n Systems check, reviewing compiled nginx configuration script....\\n\\n"
 
 filename='/etc/nginx/conf.d/default.conf'
 n=1
@@ -44,5 +44,4 @@ echo "\\n\\n If the API variable you may ignore the message. Interrupt the proce
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
 # (like Ctrl+C) that Docker may send it:
-#exec /docker-entrypoint.sh "$@"
 exec /docker-entrypoint.sh "$@"
