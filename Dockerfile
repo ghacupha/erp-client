@@ -46,5 +46,4 @@ RUN chmod +x /docker-defaults.sh
 ENTRYPOINT ["/docker-defaults.sh"]
 
 # The default parameters to ENTRYPOINT (unless overruled on the command line)
-#CMD ["nginx", "-g", "daemon off;"]
 CMD ["nginx", "-g", "daemon off;"]

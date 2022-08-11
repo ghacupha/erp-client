@@ -13,7 +13,6 @@ export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://local
 
 # cat /etc/nginx/conf.d/default.conf
 
-
 # Due to `set -u` this would fail if not defined and no default was set above
 echo "Requests proxy configured for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/*"
 
