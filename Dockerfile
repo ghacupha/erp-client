@@ -48,4 +48,4 @@ ENTRYPOINT ["/docker-defaults.sh"]
 CMD ["nginx", "-g", "daemon off;"]
 
 # CMD ["/bin/sh", "-c", "envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
-#CMD ["/bin/sh", "-c", "envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+# CMD ["/bin/sh", "-c", "envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
