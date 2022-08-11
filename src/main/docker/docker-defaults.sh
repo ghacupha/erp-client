@@ -9,7 +9,7 @@ set -eu
 # to set the defaults:
 export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://localhost:8980}
 
-envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
 cat /etc/nginx/conf.d/default.conf
 
