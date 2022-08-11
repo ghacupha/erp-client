@@ -34,8 +34,8 @@ RUN npm run webapp:build:prod
 
 # Stage 2
 FROM nginx
-#COPY src/main/docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
-COPY src/main/docker/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
+COPY src/main/docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+# COPY src/main/docker/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
 COPY src/main/docker/docker-defaults.sh /
@@ -46,4 +46,5 @@ RUN chmod +x /docker-defaults.sh
 ENTRYPOINT ["/docker-defaults.sh"]
 
 # The default parameters to ENTRYPOINT (unless overruled on the command line)
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
+CMD ["cat /etc/nginx/conf.d/default.conf && nginx", "-g", "daemon off;"]
