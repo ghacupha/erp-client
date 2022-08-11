@@ -6,29 +6,29 @@ server {
 
     root /usr/share/nginx/html;
 
-    location /api {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/api;
+    location /api/ {
+        proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/api/;
     }
-    location /services {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/services;
+    location /services/ {
+        proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/services/;
     }
-    location /management {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/management;
+    location /management/ {
+        proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/management/;
     }
-    location /swagger-resources {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/swagger-resources;
+    location /swagger-resources/ {
+        proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/swagger-resources/;
     }
-    location /v2 {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/v2;
+    location /v2/ {
+       proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/v2/;
     }
-    location /v3 {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/v3;
+    location /v3/ {
+       proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/v3/;
     }
-    location /auth {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/auth;
+    location /auth/ {
+       proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/auth/;
     }
-    location /health {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/health;
+    location /health/ {
+       proxy_pass /${SERVER_API_DOCKER_DEPLOY_URL}/health/;
     }
 
     location / {
