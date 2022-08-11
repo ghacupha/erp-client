@@ -47,4 +47,4 @@ ENTRYPOINT ["/docker-defaults.sh"]
 
 # The default parameters to ENTRYPOINT (unless overruled on the command line)
 #CMD ["nginx", "-g", "daemon off;"]
-CMD ["cat /etc/nginx/conf.d/default.conf && nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
