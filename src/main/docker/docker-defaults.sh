@@ -15,6 +15,15 @@ echo "Will proxy requests for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/*"
 # Running envsubst
 envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
+filename='/etc/nginx/conf.d/default.conf'
+n=1
+while read line; do
+# reading each line
+echo "Line No. $n : $line"
+n=$((n+1))
+done < $filename
+
+
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
 # (like Ctrl+C) that Docker may send it:
