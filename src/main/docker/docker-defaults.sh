@@ -12,33 +12,33 @@ export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://local
 # Due to `set -u` this would fail if not defined and no default was set above
 echo "Will proxy requests for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/* \\n\\n"
 
-echo "Systems check, reviewing initial nginx configuration script....\\n\\n"
-
-initialFile='/etc/nginx/conf.d/default.temp.conf'
-n=1
-while read line; do
-# reading each line
-echo "Line No. $n : $line"
-n=$((n+1))
-done < $initialFile
+#    echo "Systems check, reviewing initial nginx configuration script....\\n\\n"
+#
+#    initialFile='/etc/nginx/conf.d/default.temp.conf'
+#    n=1
+#    while read line; do
+#    # reading each line
+#    echo "Line No. $n : $line"
+#    n=$((n+1))
+#    done < $initialFile
 
 echo "\\n\\n Configuration script complete! Initializing environment-variable substitution... \\n\\n"
 
 
 # Running envsubst
-envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
+# envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf
 
-echo "\\n\\n Systems check, reviewing compiled nginx configuration script....\\n\\n"
+# echo "\\n\\n Variable-substitution completed, reviewing compiled nginx configuration script....\\n\\n"
 
-filename='/etc/nginx/conf.d/default.conf'
-n=1
-while read line; do
-# reading each line
-echo "Line No. $n : $line"
-n=$((n+1))
-done < $filename
-
-echo "\\n\\n If the API variable you may ignore the message. Interrupt the process if the SERVER_API is misconfigured..."
+#    filename='/etc/nginx/conf.d/default.conf'
+#    n=1
+#    while read line; do
+#    # reading each line
+#    echo "Line No. $n : $line"
+#    n=$((n+1))
+#    done < $filename
+#
+#    echo "\\n\\n If the API variable you may ignore the message. Interrupt the process if the SERVER_API is misconfigured..."
 
 
 # Finally, let the original Nginx entry point do its work, passing whatever is
