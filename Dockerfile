@@ -44,10 +44,5 @@ RUN chmod +x /docker-defaults.sh
 # This will delegate to the original Nginx `docker-entrypoint.sh`
 ENTRYPOINT ["/docker-defaults.sh"]
 
-# COPY /docker-defaults.sh  /docker-entrypoint.d/docker-defaults.sh
-
 # The default parameters to ENTRYPOINT (unless overruled on the command line)
 CMD ["nginx", "-g", "daemon off;"]
-
-# CMD ["/bin/sh", "-c", "envsubst '$${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
-# CMD ["/bin/sh", "-c", "envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.temp.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
