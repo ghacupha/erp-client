@@ -25,8 +25,8 @@ set -eu
 # variable substitution. But that uses `envsubst`, which does not allow for
 # defaults for missing variables. Here, first use the regular command shell
 # to set the defaults:
-# export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://localhost:8980}
-export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL}
+export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://localhost:8980}
+export ERP_CLIENT_DEPLOYMENT_PROD_PORT=${ERP_CLIENT_DEPLOYMENT_PROD_PORT}
 
 # envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
