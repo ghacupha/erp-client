@@ -18,14 +18,21 @@
 
 import { Injectable } from '@angular/core';
 
+/**
+ * Just noting that the class method #setEndpointPrefix is being used to set the API_URL
+ * at compile time. So there being no other evidence, am going to take a gamble and disable
+ * the #endpointPrefix field in order to prevent the values being generated such as
+ * http://localhost:8980/underfinedapi/account running on the client calls.
+ * Someone else is adding the API URL before ${this.endpointPrefix}.
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class ApplicationConfigService {
-  private endpointPrefix = '';
+  private endpointPrefix: string | undefined = '';
   private microfrontend = false;
 
-  setEndpointPrefix(endpointPrefix: string): void {
+  setEndpointPrefix(endpointPrefix: string|undefined): void {
     this.endpointPrefix = endpointPrefix;
   }
 
@@ -39,7 +46,13 @@ export class ApplicationConfigService {
 
   getEndpointFor(api: string, microservice?: string): string {
     if (microservice) {
+      if (this.endpointPrefix === undefined) {
+        return `services/${microservice}/${api}`;
+      }
       return `${this.endpointPrefix}services/${microservice}/${api}`;
+    }
+    if (this.endpointPrefix === undefined) {
+      return `${api}`;
     }
     return `${this.endpointPrefix}${api}`;
   }
