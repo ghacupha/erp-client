@@ -15,7 +15,9 @@ export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL}
 # cat /etc/nginx/conf.d/default.conf
 
 # Due to `set -u` this would fail if not defined and no default was set above
-echo "Requests proxy configured for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/*"
+echo "Requests proxy configured for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/* \\n\\n"
+
+echo "Client running on the port configuration: ${ERP_CLIENT_DEPLOYMENT_PROD_PORT} \\n\\n"
 
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
