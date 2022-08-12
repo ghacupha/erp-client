@@ -26,7 +26,6 @@ set -eu
 # defaults for missing variables. Here, first use the regular command shell
 # to set the defaults:
 export SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL:-http://localhost:8980}
-export ERP_CLIENT_DEPLOYMENT_PROD_PORT=${ERP_CLIENT_DEPLOYMENT_PROD_PORT}
 
 # envsubst '${SERVER_API_DOCKER_DEPLOY_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
@@ -34,8 +33,6 @@ export ERP_CLIENT_DEPLOYMENT_PROD_PORT=${ERP_CLIENT_DEPLOYMENT_PROD_PORT}
 
 # Due to `set -u` this would fail if not defined and no default was set above
 echo "Requests proxy configured for /* to ${SERVER_API_DOCKER_DEPLOY_URL}/* \\n\\n"
-
-echo "Client running on the port configuration: ${ERP_CLIENT_DEPLOYMENT_PROD_PORT} \\n\\n"
 
 # Finally, let the original Nginx entry point do its work, passing whatever is
 # set for CMD. Use `exec` to replace the current process, to trap any signals
