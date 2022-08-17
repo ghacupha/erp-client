@@ -1,5 +1,5 @@
 #
-# Erp System - Mark II No 26 (Baruch Series) Client v 0.1.2-SNAPSHOT
+# Erp System - Mark II No 26 (Baruch Series) Client v 0.1.1-SNAPSHOT
 # Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-# This is a simple build. Our aspirations had been to come up with a container
-# that had environment variables that could be varied at runtime to change the
-# reference to the backend server, but all those efforts were met with failure.
-# We intend to get back to that but at the moment what we have is a hard-coded
-# reference to the backend API on the default.conf file copied directly to the
-# conf.d.
-# We retain the custom enrty-point for future development
 # Stage 1
 FROM node:14.19-alpine AS compile-image
 
@@ -40,8 +33,9 @@ ENV PATH="./node_modules/.bin:$PATH"
 RUN npm run webapp:build:prod
 
 # Stage 2
-FROM nginx
-COPY src/main/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+FROM nginx:1.23.1-alpine
+COPY src/main/docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
+# COPY src/main/docker/nginx/default.conf.template /etc/nginx/conf.d/default.conf.template
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
 COPY src/main/docker/docker-defaults.sh /
