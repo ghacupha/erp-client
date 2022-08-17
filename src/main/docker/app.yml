@@ -19,7 +19,7 @@
 version: '3'
 services:
   erp-client:
-    image: ghacupha/erp-client:0.1.1-SNAPSHOT
+    image: ghacupha/erp-client:0.1.4-SNAPSHOT
     volumes:
     - ./templates:/etc/nginx/templates
     environment:
@@ -33,7 +33,8 @@ services:
       - ERP_SYSTEM_DEV_PORT=${ERP_SYSTEM_DEV_PORT}
       - ERP_CLIENT_DEV_PORT=${ERP_CLIENT_DEV_PORT}
       - SERVER_API_DOCKER_DEPLOY_INTERNAL_PORT=${SERVER_API_DOCKER_DEPLOY_INTERNAL_PORT};
-      - SERVER_API_DOCKER_DEPLOY_URL=${SERVER_API_DOCKER_DEPLOY_URL}
+      - SERVER_API_DOCKER_DEPLOY_HOST=${SERVER_API_DOCKER_DEPLOY_HOST}
+      - SERVER_API_DOCKER_DEPLOY_PORT=${SERVER_API_DOCKER_DEPLOY_PORT}
     ports:
       # - "8985:80"
       - ${ERP_CLIENT_DEPLOYMENT_PROD_PORT}

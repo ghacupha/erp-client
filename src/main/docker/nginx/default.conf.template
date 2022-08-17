@@ -1,34 +1,34 @@
 server {
     listen 80;
     index index.html;
-    server_name localhost;
+    server_name ${SERVER_API_DOCKER_DEPLOY_HOST};
     error_log  /var/log/nginx/error.log;
 
     root /usr/share/nginx/html;
 
     location /api {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/api;
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/api;
     }
     location /services {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/services;
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/services;
     }
     location /management {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/management;
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/management;
     }
     location /swagger-resources {
-        proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/swagger-resources;
+        proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/swagger-resources;
     }
     location /v2 {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/v2;
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/v2;
     }
     location /v3 {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/v3;
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/v3;
     }
     location /auth {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/auth;
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/auth;
     }
     location /health {
-       proxy_pass ${SERVER_API_DOCKER_DEPLOY_URL}/health;
+       proxy_pass ${SERVER_API_DOCKER_DEPLOY_HOST}:${SERVER_API_DOCKER_DEPLOY_PORT}/health;
     }
 
     location / {
