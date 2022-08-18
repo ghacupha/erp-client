@@ -109,27 +109,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
-    this.loadCurrencies();
     this.updatePreferredCurrency();
-  }
-
-  loadCurrencies(): void {
-    this.settlementCurrencyLookups$ = concat(
-      of([]), // default items
-      this.settlementCurrencyControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementCurrenciesLoading = true),
-        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementCurrenciesLoading = false)
-        ))
-      ),
-      of([...this.settlementCurrenciesSharedCollection])
-    );
   }
 
   updateCurrencies(update: ISettlementCurrency): void {
@@ -149,6 +129,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
             });
         }
       );
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
   }
 
   byteSize(base64String: string): string {
