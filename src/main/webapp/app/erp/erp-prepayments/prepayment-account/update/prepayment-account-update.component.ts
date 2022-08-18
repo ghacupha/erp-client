@@ -138,6 +138,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     });
   }
 
+  updateSettlement(update: ISettlement): void {
+    this.editForm.patchValue({
+      prepaymentTransaction: update
+    });
+  }
+
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
       placeholders: [...update]
