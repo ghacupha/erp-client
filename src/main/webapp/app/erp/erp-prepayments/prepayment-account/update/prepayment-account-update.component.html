@@ -117,28 +117,15 @@
         >
         </jhi-m21-settlement-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_serviceOutlet"
-            data-cy="serviceOutlet"
-            name="serviceOutlet"
-            formControlName="serviceOutlet"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
-                  ? editForm.get('serviceOutlet')!.value
-                  : serviceOutletOption
-              "
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel="Department"
+        >
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
 
         <jhi-m21-dealer-form-control
           ngDefaultControl
@@ -150,45 +137,28 @@
           <option [ngValue]="editForm.get('dealer')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_debitAccount">Debit Account</label>
-          <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('debitAccount')!.value?.id
-                  ? editForm.get('debitAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>
+        <!--jhi-m21-transaction-account-form-control-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='debitAccount'
+          [inputValue]="editForm.get('debitAccount')!.value"
+          (valueSelected)='updateTransactionAccount($event)'
+          inputControlLabel="Account debited (by prepayment transaction)"
+        >
+          <option [ngValue]="editForm.get('debitAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_transferAccount">Transfer Account</label>
-          <select
-            class="form-control"
-            id="field_transferAccount"
-            data-cy="transferAccount"
-            name="transferAccount"
-            formControlName="transferAccount"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('transferAccount')!.value?.id
-                  ? editForm.get('transferAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>
+
+        <!--jhi-m21-transaction-account-form-control-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='transferAccount'
+          [inputValue]="editForm.get('transferAccount')!.value"
+          (valueSelected)='updateTransferAccount($event)'
+          inputControlLabel="Transfer Account (debited by amortization routines)"
+        >
+          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl

@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
@@ -134,13 +134,33 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   updateDealer(dealerUpdate: IDealer): void {
     this.editForm.patchValue({
-      biller: dealerUpdate,
+      dealer: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateTransactionAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debitAccount: update,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateTransferAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      transferAccount: update,
     });
   }
 
   updateSettlement(update: ISettlement): void {
     this.editForm.patchValue({
       prepaymentTransaction: update
+    });
+  }
+
+  updateServiceOutlet(update: IServiceOutlet): void {
+    this.editForm.patchValue({
+      serviceOutlet: update
     });
   }
 
