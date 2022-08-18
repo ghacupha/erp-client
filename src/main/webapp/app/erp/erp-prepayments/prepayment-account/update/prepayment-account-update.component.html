@@ -154,7 +154,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_dealer">Dealer</label>
           <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
             <option [ngValue]="null"></option>
@@ -165,7 +165,17 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get('dealer')!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel="Dealer's Name"
+        >
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
+        </jhi-m21-dealer-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_debitAccount">Debit Account</label>
