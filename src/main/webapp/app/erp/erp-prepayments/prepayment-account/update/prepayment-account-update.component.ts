@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable} from 'rxjs';
-import { finalize, map, } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
@@ -29,21 +29,20 @@ import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
-import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
-import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
-import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IPrepaymentMapping } from '../../prepayment-mapping/prepayment-mapping.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 
 @Component({
@@ -57,8 +56,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   settlementsSharedCollection: ISettlement[] = [];
   serviceOutletsSharedCollection: IServiceOutlet[] = [];
   dealersSharedCollection: IDealer[] = [];
-  placeholdersSharedCollection: IPlaceholder[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
+  placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
 
@@ -88,9 +87,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected settlementService: SettlementService,
     protected serviceOutletService: ServiceOutletService,
     protected dealerService: DealerService,
-    protected placeholderService: PlaceholderService,
     protected transactionAccountService: TransactionAccountService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected prepaymentMappingService: PrepaymentMappingService,
     protected activatedRoute: ActivatedRoute,
@@ -102,60 +100,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       this.updateForm(prepaymentAccount);
 
       this.loadRelationshipsOptions();
-    });
-
-  }
-
-  trackPlaceholdersByFn(item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateDealer(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      dealer: dealerUpdate,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updatePlaceholders(update: IPlaceholder[]): void {
-    this.editForm.patchValue({
-      placeholder: update
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updatePrepaymentTransaction(update: ISettlement): void {
-    this.editForm.patchValue({
-      prepaymentTransaction: update,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateCurrencies(update: ISettlementCurrency): void {
-    this.editForm.patchValue({
-      settlementCurrency: update,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateServiceOutlet(update: IServiceOutlet): void {
-    this.editForm.patchValue({
-      serviceOutlet: update,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateDebitAccount(update: ITransactionAccount): void {
-    this.editForm.patchValue({
-      debitAccount: update,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateTransferAccount(update: ITransactionAccount): void {
-    this.editForm.patchValue({
-      transferAccount: update,
     });
   }
 
@@ -188,15 +132,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     }
   }
 
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackPrepaymentMappingById(index: number, item: IPrepaymentMapping): number {
-    return item.id!;
-  }
-
   trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
     return item.id!;
   }
@@ -213,12 +148,31 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
+    return item.id!;
+  }
+
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
   }
 
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
     return item.id!;
+  }
+
+  trackPrepaymentMappingById(index: number, item: IPrepaymentMapping): number {
+    return item.id!;
+  }
+
+  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedUniversallyUniqueMapping(
@@ -359,16 +313,6 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
-    this.placeholderService
-      .query()
-      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
-      .pipe(
-        map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, this.editForm.get('placeholder')!.value)
-        )
-      )
-      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-
     this.transactionAccountService
       .query()
       .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
@@ -382,6 +326,16 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((transactionAccounts: ITransactionAccount[]) => (this.transactionAccountsSharedCollection = transactionAccounts));
+
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+        )
+      )
+      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
 
     this.universallyUniqueMappingService
       .query()
