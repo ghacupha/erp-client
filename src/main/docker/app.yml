@@ -1,5 +1,5 @@
 #
-# Erp System - Mark II No 26 (Baruch Series) Client 0.1.4-SNAPSHOT
+# Erp System - Mark II No 26 (Baruch Series) Client 0.1.5-SNAPSHOT
 # Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 version: '3'
 services:
   erp-client:
-    image: ghacupha/erp-client:0.1.4-SNAPSHOT
+    image: ghacupha/erp-client:0.1.5-SNAPSHOT
     volumes:
     - ./templates:/etc/nginx/templates
     environment:
