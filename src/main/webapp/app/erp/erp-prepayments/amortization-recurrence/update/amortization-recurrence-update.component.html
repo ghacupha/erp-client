@@ -65,6 +65,30 @@
           </small>
         </div>
 
+        <div class='input-group' >
+          <span>
+            <div class="form-group">
+              <span class='input-group-prepend'>
+                <input  type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+              </span>
+              <span>
+                <label class="form-control-label" for="field_isActive">Is Active</label>
+              </span>
+            </div>
+          </span>
+
+          <span>
+            <div class="form-group">
+              <span>
+                <input type="checkbox" class="form-check" name="isOverWritten" id="field_isOverWritten" data-cy="isOverWritten" formControlName="isOverWritten" />
+              </span>
+              <span>
+                <label class="form-control-label" for="field_isOverWritten">Is Over Written</label>
+              </span>
+            </div>
+          </span>
+        </div>
+
         <div class="form-group">
           <label class="form-control-label" for="field_recurrenceGuid">Recurrence Guid</label>
           <input
@@ -227,23 +251,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_isActive">Is Active</label>
-          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_isOverWritten">Is Over Written</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="isOverWritten"
-            id="field_isOverWritten"
-            data-cy="isOverWritten"
-            formControlName="isOverWritten"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_timeOfInstallation">Time Of Installation</label>
           <div class="d-flex">
             <input
@@ -272,25 +279,6 @@
         </div>
 
         <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="field_parameters">Parameters</label>
           <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
             <option
@@ -302,27 +290,16 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="field_applicationParameters">Application Parameters</label>
-          <select
-            class="form-control"
-            id="field_applicationParameters"
-            data-cy="applicationParameters"
-            multiple
-            name="applicationParameters"
-            formControlName="applicationParameters"
-          >
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationParameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.mappedValue }}
-            </option>
-          </select>
-        </div>
+
+        <!--jhi-m2m-universally-unique-mapping-form-control-->
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='applicationParameters'
+          [inputValues]="editForm.get(['applicationParameters'])!.value"
+          (selectedValues)='updateApplicationParameters($event)'
+          inputControlLabel='Application Parameters'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_depreciationMethod">Depreciation Method</label>
@@ -356,6 +333,16 @@
             This field is required.
           </small>
         </div>
+
+        <!--jhi-m2m-placeholder-form-control-->
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
       </div>
 

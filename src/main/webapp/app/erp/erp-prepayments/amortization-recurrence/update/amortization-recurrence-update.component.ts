@@ -123,6 +123,18 @@ export class AmortizationRecurrenceUpdateComponent implements OnInit {
     });
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateApplicationParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      applicationParameters: [...update]
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

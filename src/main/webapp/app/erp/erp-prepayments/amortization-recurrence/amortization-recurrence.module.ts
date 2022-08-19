@@ -23,9 +23,10 @@ import { AmortizationRecurrenceDetailComponent } from './detail/amortization-rec
 import { AmortizationRecurrenceUpdateComponent } from './update/amortization-recurrence-update.component';
 import { AmortizationRecurrenceDeleteDialogComponent } from './delete/amortization-recurrence-delete-dialog.component';
 import { AmortizationRecurrenceRoutingModule } from './route/amortization-recurrence-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AmortizationRecurrenceRoutingModule],
+  imports: [SharedModule, AmortizationRecurrenceRoutingModule, ErpCommonModule],
   declarations: [
     AmortizationRecurrenceComponent,
     AmortizationRecurrenceDetailComponent,
