@@ -58,7 +58,7 @@
     </li>
 
     <!-- Navigation for Accounts Maintenance-->
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+    <!--<li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="accounts-maintenance-menu">
           <span>
@@ -82,7 +82,7 @@
           </a>
         </li>
       </ul>
-    </li>
+    </li>-->
 
     <!-- Navigation for maintenance modules-->
     <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
@@ -171,6 +171,18 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="service-outlet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Service Outlet</span>
+          </a>
+        </li>
+        <!--<li>
+          <a
+            class="dropdown-item"
             routerLink="purchase-order"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
@@ -191,7 +203,7 @@
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Job Sheets</span>
           </a>
-        </li>
+        </li>-->
         <li>
           <a
             class="dropdown-item"
