@@ -33,6 +33,80 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
+          <select
+            class="form-control"
+            id="field_prepaymentAccount"
+            data-cy="prepaymentAccount"
+            name="prepaymentAccount"
+            formControlName="prepaymentAccount"
+          >
+            <option *ngIf="!editForm.get('prepaymentAccount')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
+                  ? editForm.get('prepaymentAccount')!.value
+                  : prepaymentAccountOption
+              "
+              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
+            >
+              {{ prepaymentAccountOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['prepaymentAccount'])!.invalid &&
+            (editForm.get(['prepaymentAccount'])!.dirty || editForm.get(['prepaymentAccount'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['prepaymentAccount'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_recurrenceGuid">Recurrence Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="recurrenceGuid"
+            id="field_recurrenceGuid"
+            data-cy="recurrenceGuid"
+            formControlName="recurrenceGuid"
+          />
+          <div
+            *ngIf="
+              editForm.get('recurrenceGuid')!.invalid && (editForm.get('recurrenceGuid')!.dirty || editForm.get('recurrenceGuid')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('recurrenceGuid')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_prepaymentAccountGuid">Prepayment Account Guid</label>
+          <input
+            type="text"
+            class="form-control"
+            name="prepaymentAccountGuid"
+            id="field_prepaymentAccountGuid"
+            data-cy="prepaymentAccountGuid"
+            formControlName="prepaymentAccountGuid"
+          />
+          <div
+            *ngIf="
+              editForm.get('prepaymentAccountGuid')!.invalid &&
+              (editForm.get('prepaymentAccountGuid')!.dirty || editForm.get('prepaymentAccountGuid')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('prepaymentAccountGuid')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_firstAmortizationDate">First Amortization Date</label>
           <div class="input-group">
             <input
@@ -73,7 +147,9 @@
             data-cy="amortizationFrequency"
           >
             <option [ngValue]="null"></option>
-            <option *ngFor="let recurrenceFrequency of recurrenceFrequencyValues" [value]="recurrenceFrequency">recurrenceFrequency</option>
+            <option *ngFor="let recurrenceFrequency of recurrenceFrequencyValues" [value]="recurrenceFrequency">
+                {{ recurrenceFrequency }}
+            </option>
           </select>
           <div
             *ngIf="
@@ -196,47 +272,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_recurrenceGuid">Recurrence Guid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="recurrenceGuid"
-            id="field_recurrenceGuid"
-            data-cy="recurrenceGuid"
-            formControlName="recurrenceGuid"
-          />
-          <div
-            *ngIf="
-              editForm.get('recurrenceGuid')!.invalid && (editForm.get('recurrenceGuid')!.dirty || editForm.get('recurrenceGuid')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('recurrenceGuid')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccountGuid">Prepayment Account Guid</label>
-          <input
-            type="text"
-            class="form-control"
-            name="prepaymentAccountGuid"
-            id="field_prepaymentAccountGuid"
-            data-cy="prepaymentAccountGuid"
-            formControlName="prepaymentAccountGuid"
-          />
-          <div
-            *ngIf="
-              editForm.get('prepaymentAccountGuid')!.invalid &&
-              (editForm.get('prepaymentAccountGuid')!.dirty || editForm.get('prepaymentAccountGuid')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('prepaymentAccountGuid')?.errors?.required">
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -322,38 +357,6 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
-          <select
-            class="form-control"
-            id="field_prepaymentAccount"
-            data-cy="prepaymentAccount"
-            name="prepaymentAccount"
-            formControlName="prepaymentAccount"
-          >
-            <option *ngIf="!editForm.get('prepaymentAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
-                  ? editForm.get('prepaymentAccount')!.value
-                  : prepaymentAccountOption
-              "
-              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
-            >
-              {{ prepaymentAccountOption.catalogueNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['prepaymentAccount'])!.invalid &&
-            (editForm.get(['prepaymentAccount'])!.dirty || editForm.get(['prepaymentAccount'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['prepaymentAccount'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
       </div>
 
       <div>

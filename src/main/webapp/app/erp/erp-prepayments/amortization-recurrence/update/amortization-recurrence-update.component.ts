@@ -42,6 +42,7 @@ import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.
 import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 import { DepreciationMethodService } from '../../../erp-assets/depreciation-method/service/depreciation-method.service';
 import { recurrenceFrequency } from '../../../erp-common/enumerations/recurrence-frequency.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-amortization-recurrence-update',
@@ -93,13 +94,32 @@ export class AmortizationRecurrenceUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ amortizationRecurrence }) => {
       if (amortizationRecurrence.id === undefined) {
-        const today = dayjs().startOf('day');
+        // default value
+        const today = dayjs();
         amortizationRecurrence.timeOfInstallation = today;
+        amortizationRecurrence.isActive = true;
+        amortizationRecurrence.recurrenceGuid = uuidv4();
       }
 
       this.updateForm(amortizationRecurrence);
 
       this.loadRelationshipsOptions();
+
+      this. updateDetailsGivenPrepaymentAccount();
+    });
+  }
+
+  updateDetailsGivenPrepaymentAccount(): void {
+    this.editForm.get(['prepaymentAccount'])?.valueChanges.subscribe((transaction) => {
+
+      this.editForm.patchValue({
+        // prevent GUID overwrite
+        prepaymentAccountGuid: transaction.prepaymentGuid,
+        particulars: transaction.particulars,
+        isActive: true,
+        timeOfInstallation: this.editForm.get(['timeOfInstallation'])?.value,
+        recurrenceGuid: this.editForm.get(['recurrenceGuid'])?.value,
+      })
     });
   }
 
