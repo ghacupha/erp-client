@@ -110,14 +110,14 @@
         <dt><span>General Parameters</span></dt>
         <dd>
           <span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{ generalParameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{generalParameters.universalKey}}: {{ generalParameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Prepayment Parameters</span></dt>
         <dd>
           <span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last">
-            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}</a
+            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}:{{prepaymentParameters.parameter}}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

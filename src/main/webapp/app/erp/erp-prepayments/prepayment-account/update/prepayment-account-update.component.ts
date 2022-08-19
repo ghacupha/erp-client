@@ -46,6 +46,7 @@ import { TransactionAccountService } from '../../../erp-accounts/transaction-acc
 import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -108,6 +109,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.editForm.patchValue({
+      prepaymentGuid: uuidv4(),
+    })
 
     this.updatePreferredCurrency();
   }
@@ -173,6 +178,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   updateGeneralParameters(update: IUniversallyUniqueMapping[]): void {
     this.editForm.patchValue({
       generalParameters: [...update]
+    });
+  }
+
+  updatePrepaymentParameters(update: IPrepaymentMapping[]): void {
+    this.editForm.patchValue({
+      prepaymentParameters: [...update]
     });
   }
 
