@@ -129,6 +129,12 @@ export class AmortizationRecurrenceUpdateComponent implements OnInit {
     });
   }
 
+  updatePrepaymentParameters(update: IPrepaymentMapping[]): void {
+    this.editForm.patchValue({
+      prepaymentParameters: [...update]
+    });
+  }
+
   updateApplicationParameters(update: IUniversallyUniqueMapping[]): void {
     this.editForm.patchValue({
       applicationParameters: [...update]

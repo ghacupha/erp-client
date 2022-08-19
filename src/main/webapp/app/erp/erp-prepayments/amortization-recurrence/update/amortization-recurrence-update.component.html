@@ -278,7 +278,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_parameters">Parameters</label>
           <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
             <option
@@ -288,7 +288,17 @@
               {{ prepaymentMappingOption.parameter }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <!--jhi-m2m-prepayment-mapping-form-control-->
+        <jhi-m2m-prepayment-mapping-form-control
+          ngDefaultControl
+          formControlName='parameters'
+          [inputValues]="editForm.get(['parameters'])!.value"
+          (selectedValues)='updatePrepaymentParameters($event)'
+          inputControlLabel='Prepayment Parameters'
+        >
+        </jhi-m2m-prepayment-mapping-form-control>
 
 
         <!--jhi-m2m-universally-unique-mapping-form-control-->

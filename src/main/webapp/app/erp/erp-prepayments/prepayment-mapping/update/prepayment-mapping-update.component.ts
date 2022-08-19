@@ -27,6 +27,7 @@ import { IPrepaymentMapping, PrepaymentMapping } from '../prepayment-mapping.mod
 import { PrepaymentMappingService } from '../service/prepayment-mapping.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-prepayment-mapping-update',
@@ -57,6 +58,10 @@ export class PrepaymentMappingUpdateComponent implements OnInit {
       this.updateForm(prepaymentMapping);
 
       this.loadRelationshipsOptions();
+    });
+
+    this.editForm.patchValue({
+      parameterGuid: uuidv4(),
     });
   }
 
