@@ -170,6 +170,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     });
   }
 
+  updateGeneralParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      generalParameters: [...update]
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
