@@ -115,6 +115,22 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     })
 
     this.updatePreferredCurrency();
+
+    this.updateDetailsGivenTransaction();
+  }
+
+  updateDetailsGivenTransaction(): void {
+    this.editForm.get(['prepaymentTransaction'])?.valueChanges.subscribe((transaction) => {
+      this.editForm.patchValue({
+        // prevent GUID overwrite
+        prepaymentGuid: this.editForm.get(['prepaymentGuid'])?.value,
+        dealer: transaction.biller,
+        settlementCurrency: transaction.settlementCurrency,
+        particulars: transaction.description,
+        prepaymentAmount: transaction.paymentAmount,
+        placeholders: transaction.placeholders,
+      })
+    });
   }
 
   updateCurrencies(update: ISettlementCurrency): void {
