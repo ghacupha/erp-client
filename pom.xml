@@ -9,7 +9,7 @@
     <artifactId>erp-client</artifactId>
     <version>0.1.5-SNAPSHOT</version>
     <name>Erp System</name>
-    <description>Mark II No 26 (Baruch Series) Client 0.1.5-SNAPSHOT</description>
+    <description>Mark II No 27 (Baruch Series) Client 0.1.5-SNAPSHOT</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

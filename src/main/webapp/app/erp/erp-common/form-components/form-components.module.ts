@@ -40,6 +40,7 @@ import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mappin
 import { M21SecurityClearanceFormControlComponent } from './security-clearance-form-components/m21-security-clearance-form-control.component';
 import { M21ApplicationUserFormControlComponent } from './application-user-form-components/m21-application-user-form-control.component';
 import { M2mPrepaymentMappingFormControlComponent } from './prepayment-mapping-components/m2m-prepayment-mapping-form-control.component';
+import { M21PrepaymentAccountFormControlComponent } from './prepayment-account-form-components/m21-prepayment-account-form-control.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { M2mPrepaymentMappingFormControlComponent } from './prepayment-mapping-c
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
+    M21PrepaymentAccountFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -89,6 +91,7 @@ import { M2mPrepaymentMappingFormControlComponent } from './prepayment-mapping-c
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
+    M21PrepaymentAccountFormControlComponent,
   ]
 })
 export class FormComponentsModule {
