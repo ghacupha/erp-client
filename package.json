@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "0.1.5-SNAPSHOT",
+  "version": "0.1.7-SNAPSHOT",
   "private": true,
-  "description": "Mark II No 26 (Baruch Series) Client 0.1.5-SNAPSHOT",
+  "description": "Mark II No 27 (Baruch Series) Client 0.1.7-SNAPSHOT",
   "license": "GPLv3",
   "scripts": {
     "build": "npm run webapp:prod --",
