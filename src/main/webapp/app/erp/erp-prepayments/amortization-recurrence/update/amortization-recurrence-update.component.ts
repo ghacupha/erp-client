@@ -43,6 +43,7 @@ import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepa
 import { DepreciationMethodService } from '../../../erp-assets/depreciation-method/service/depreciation-method.service';
 import { recurrenceFrequency } from '../../../erp-common/enumerations/recurrence-frequency.model';
 import { v4 as uuidv4 } from 'uuid';
+import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({
   selector: 'jhi-amortization-recurrence-update',
@@ -99,6 +100,7 @@ export class AmortizationRecurrenceUpdateComponent implements OnInit {
         amortizationRecurrence.timeOfInstallation = today;
         amortizationRecurrence.isActive = true;
         amortizationRecurrence.recurrenceGuid = uuidv4();
+        amortizationRecurrence.amortizationFrequency = recurrenceFrequency.MONTHLY
       }
 
       this.updateForm(amortizationRecurrence);
@@ -106,7 +108,23 @@ export class AmortizationRecurrenceUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
 
       this. updateDetailsGivenPrepaymentAccount();
+
+      this.preferenceUpdates();
     });
+  }
+
+  preferenceUpdates(): void {
+    this.prepaymentMappingService.findMap("preferredDepreciationMethodForAmortization")
+      .subscribe(parameter => {
+        // Search for parameter in the entity's service
+          this.depreciationMethodService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: parameter.body?.parameter })
+            .subscribe(({ body: depreciationMethods }) => {
+              if (depreciationMethods) {
+                this.editForm.get(['depreciationMethod'])?.setValue(depreciationMethods[0]);
+              }
+            });
+        }
+      );
   }
 
   updateDetailsGivenPrepaymentAccount(): void {

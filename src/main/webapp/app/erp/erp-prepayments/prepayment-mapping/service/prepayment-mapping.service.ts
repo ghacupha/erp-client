@@ -29,10 +29,15 @@ import { IPrepaymentMapping, getPrepaymentMappingIdentifier } from '../prepaymen
 export type EntityResponseType = HttpResponse<IPrepaymentMapping>;
 export type EntityArrayResponseType = HttpResponse<IPrepaymentMapping[]>;
 
+/**
+ * Service for prepayment-mapping. In it we also access configuration resources applied in the prepayment modules
+ * through the api GET: API/CONFIGURATION/PREPAYMENT_MAPPINGS
+ */
 @Injectable({ providedIn: 'root' })
 export class PrepaymentMappingService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayment-mappings');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/prepayment-mappings');
+  protected resourceConfigsUrl = this.applicationConfigService.getEndpointFor('api/configuration/prepayment-mappings');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -94,5 +99,9 @@ export class PrepaymentMappingService {
       return [...prepaymentMappingsToAdd, ...prepaymentMappingCollection];
     }
     return prepaymentMappingCollection;
+  }
+
+  findMap(parameterKey: string): Observable<EntityResponseType> {
+    return this.http.get<IPrepaymentMapping>(`${this.resourceConfigsUrl}/${parameterKey}`, { observe: 'response' });
   }
 }
