@@ -33,7 +33,7 @@ ENV PATH="./node_modules/.bin:$PATH"
 RUN npm run webapp:build:prod
 
 # Stage 2
-FROM nginx
+FROM nginx:1.23.1-alpine
 COPY src/main/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=compile-image /opt/app/target/classes/static /usr/share/nginx/html
 
