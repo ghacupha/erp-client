@@ -33,6 +33,7 @@ import { TransactionAccountOptionViewComponent } from './transaction-account-opt
 import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.component';
 import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
 import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
+import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { PrepaymentAccountOptionViewComponent } from './prepayment-account-optio
     ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
+    ReportDesignOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -71,6 +73,7 @@ import { PrepaymentAccountOptionViewComponent } from './prepayment-account-optio
     ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
+    ReportDesignOptionViewComponent,
   ]
 })
 export class OptionViewsModule {

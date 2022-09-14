@@ -32,6 +32,7 @@ import { FormatPaymentInvoicePipe } from './format-payment-invoice.pipe';
 import { FormatSecurityClearancePipe } from './format-security-clearance.pipe';
 import { FormatApplicationUserPipe } from './format-application-user.pipe';
 import { FormatPrepaymentAccountPipe } from './format-prepayment-account.pipe';
+import { FormatReportDesignPipe } from './format-report-design.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { FormatPrepaymentAccountPipe } from './format-prepayment-account.pipe';
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
     FormatPrepaymentAccountPipe,
+    FormatReportDesignPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -66,6 +68,7 @@ import { FormatPrepaymentAccountPipe } from './format-prepayment-account.pipe';
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
     FormatPrepaymentAccountPipe,
+    FormatReportDesignPipe,
   ]
 })
 export class ErpFormattingModule{}

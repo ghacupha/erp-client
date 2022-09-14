@@ -157,6 +157,13 @@ export class ExcelReportExportUpdateComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateReportDesign(reportDesign: IReportDesign): void {
+    this.editForm.patchValue({
+      reportDesign,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   updateDepartment(dealerUpdate: IDealer): void {
     this.editForm.patchValue({
       department: dealerUpdate,
