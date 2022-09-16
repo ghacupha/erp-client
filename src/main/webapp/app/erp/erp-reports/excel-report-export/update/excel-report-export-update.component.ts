@@ -51,6 +51,7 @@ import { ReportDesignService } from '../../report-design/service/report-design.s
 import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
 import { v4 as uuidv4 } from 'uuid';
 import { SystemModuleSuggestionService } from '../../../erp-common/suggestion/system-module-suggestion.service';
+import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({
   selector: 'jhi-excel-report-export-update',
@@ -119,11 +120,97 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       this.updateForm(excelReportExport);
 
       this.loadRelationshipsOptions();
+      this.updatePreferredOrganization();
+      this.updatePreferredReportCreator();
+      this.updatePreferredSystemModule();
+
     });
 
     this.editForm.patchValue({
       reportId: uuidv4(),
     })
+
+    this.updatePreferredDepartment();
+  }
+
+  updatePreferredDepartment(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateDepartment")
+      .subscribe((mapped) => {
+        this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                department: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  updatePreferredOrganization(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateOrganization")
+      .subscribe((mapped) => {
+        this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                organization: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  updatePreferredReportCreator(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateCreator")
+      .subscribe((mapped) => {
+        this.applicationUserService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                reportCreator: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  updatePreferredBillerGivenInvoice(): void {
+    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+      const p_dealers: IDealer[] = [];
+      invoices.forEach((inv: { biller: IDealer; }) => {
+        p_dealers.push(inv.biller);
+      })
+      this.editForm.get(['biller'])?.setValue(p_dealers[0])
+    });
+  }
+
+  updatePreferredSystemModule(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateErpModule")
+      .subscribe((mapped) => {
+        this.systemModuleService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                systemModule: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  updatePreferredFileChecksumAlgorithm(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateFileChecksumAlgorithm")
+      .subscribe((mapped) => {
+        this.algorithmService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                fileCheckSumAlgorithm: vals[0]
+              });
+            }
+          });
+      });
   }
 
   updateApplicationUser(update: IApplicationUser): void {

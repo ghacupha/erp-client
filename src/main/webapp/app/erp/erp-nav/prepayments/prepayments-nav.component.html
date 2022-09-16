@@ -232,6 +232,20 @@
           </span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="/universally-unique-mapping"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Application Mapping</span>
+          </span>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>
