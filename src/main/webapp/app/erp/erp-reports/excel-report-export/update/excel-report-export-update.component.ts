@@ -170,6 +170,13 @@ export class ExcelReportExportUpdateComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateFileChecksumAlgorithm(algorithmSelection: IAlgorithm): void {
+    this.editForm.patchValue({
+      fileCheckSum: algorithmSelection,
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

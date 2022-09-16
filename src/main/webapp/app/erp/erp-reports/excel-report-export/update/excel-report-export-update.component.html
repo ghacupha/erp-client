@@ -250,7 +250,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['reportDesign'])?.errors?.required"> This field is required. </small>
         </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fileCheckSumAlgorithm">File Check Sum Algorithm</label>
           <select
             class="form-control"
@@ -271,8 +271,8 @@
               {{ algorithmOption.name }}
             </option>
           </select>
-        </div>
-        <div
+        </div>-->
+        <!--<div
           *ngIf="
             editForm.get(['fileCheckSumAlgorithm'])!.invalid &&
             (editForm.get(['fileCheckSumAlgorithm'])!.dirty || editForm.get(['fileCheckSumAlgorithm'])!.touched)
@@ -281,7 +281,19 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['fileCheckSumAlgorithm'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
+
+        <!-- // jhi-algorithm-form-control -->
+        <jhi-algorithm-form-control
+          ngDefaultControl
+          formControlName='fileCheckSumAlgorithm'
+          [inputValue]="editForm.get('fileCheckSumAlgorithm')!.value"
+          (valueSelected)='updateFileChecksumAlgorithm($event)'
+          inputControlLabel="File CheckSum Algorithm"
+        >
+          <option [ngValue]="editForm.get('fileCheckSumAlgorithm')!.value"></option>
+        </jhi-algorithm-form-control>
+
       </div>
 
       <div>
