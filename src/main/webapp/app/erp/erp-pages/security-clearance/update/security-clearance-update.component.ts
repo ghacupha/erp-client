@@ -60,6 +60,12 @@ export class SecurityClearanceUpdateComponent implements OnInit {
     });
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

@@ -23,9 +23,10 @@ import { SecurityClearanceDetailComponent } from './detail/security-clearance-de
 import { SecurityClearanceUpdateComponent } from './update/security-clearance-update.component';
 import { SecurityClearanceDeleteDialogComponent } from './delete/security-clearance-delete-dialog.component';
 import { SecurityClearanceRoutingModule } from './route/security-clearance-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SecurityClearanceRoutingModule],
+  imports: [SharedModule, SecurityClearanceRoutingModule, ErpCommonModule],
   declarations: [
     SecurityClearanceComponent,
     SecurityClearanceDetailComponent,
