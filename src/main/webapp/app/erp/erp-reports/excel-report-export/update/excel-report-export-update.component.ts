@@ -50,6 +50,7 @@ import { SystemModuleService } from '../../../erp-pages/system-module/service/sy
 import { ReportDesignService } from '../../report-design/service/report-design.service';
 import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
 import { v4 as uuidv4 } from 'uuid';
+import { SystemModuleSuggestionService } from '../../../erp-common/suggestion/system-module-suggestion.service';
 
 @Component({
   selector: 'jhi-excel-report-export-update',
@@ -174,6 +175,13 @@ export class ExcelReportExportUpdateComponent implements OnInit {
   updateFileChecksumAlgorithm(algorithmSelection: IAlgorithm): void {
     this.editForm.patchValue({
       fileCheckSum: algorithmSelection,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateSystemModule(systemModule: ISystemModule): void {
+    this.editForm.patchValue({
+      systemModule,
     });
   }
 

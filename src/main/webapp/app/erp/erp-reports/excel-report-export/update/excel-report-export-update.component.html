@@ -206,7 +206,7 @@
           <option [ngValue]="editForm.get('department')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_systemModule">System Module</label>
           <select class="form-control" id="field_systemModule" data-cy="systemModule" name="systemModule" formControlName="systemModule">
             <option *ngIf="!editForm.get('systemModule')!.value" [ngValue]="null" selected></option>
@@ -226,7 +226,18 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['systemModule'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+
+        <jhi-m21-system-module-form-control
+          ngDefaultControl
+          formControlName='systemModule'
+          [inputValue]="editForm.get('systemModule')!.value"
+          (valueSelected)='updateSystemModule($event)'
+          inputControlLabel="ERP System Module Context for the report"
+        >
+          <option [ngValue]="editForm.get('systemModule')!.value"></option>
+        </jhi-m21-system-module-form-control>
+
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_reportDesign">Report Design</label>
