@@ -123,6 +123,7 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       this.updatePreferredOrganization();
       this.updatePreferredReportCreator();
       this.updatePreferredSystemModule();
+      this.updatePreferredFileChecksumAlgorithm();
 
     });
 

@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -55,9 +55,18 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--<div class="form-group">
           <label for="field_parameters">Parameters</label>
           <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
             <option
@@ -70,7 +79,17 @@
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='parameters'
+          [inputValues]="editForm.get(['parameters'])!.value"
+          (selectedValues)='updateParameters($event)'
+          inputControlLabel='Parameters Items'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
       </div>
 
       <div>

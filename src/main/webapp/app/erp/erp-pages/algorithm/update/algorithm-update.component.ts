@@ -63,6 +63,18 @@ export class AlgorithmUpdateComponent implements OnInit {
     });
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      parameters: [...update]
+    })
+  }
+
   previousState(): void {
     window.history.back();
   }
