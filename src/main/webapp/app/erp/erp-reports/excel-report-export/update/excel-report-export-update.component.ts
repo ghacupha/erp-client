@@ -125,6 +125,9 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       this.updatePreferredSystemModule();
       this.updatePreferredFileChecksumAlgorithm();
 
+      // TODO Check how this will conflict with the user security-clearance
+      this.updatePreferredSecurityClearance();
+
     });
 
     this.editForm.patchValue({
@@ -194,6 +197,20 @@ export class ExcelReportExportUpdateComponent implements OnInit {
             if (vals) {
               this.editForm.patchValue({
                 systemModule: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  updatePreferredSecurityClearance(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredExcelExportUpdateSecurityClearance")
+      .subscribe((mapped) => {
+        this.securityClearanceService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                securityClearance: vals[0]
               });
             }
           });

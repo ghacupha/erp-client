@@ -20,7 +20,7 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-excel-report-export-heading" data-cy="ExcelReportExportCreateUpdateHeading">Create or edit a Excel Report Export</h2>
+      <h2 id="jhi-excel-report-export-heading" data-cy="ExcelReportExportCreateUpdateHeading">Create or edit an Excel Report Export</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -147,24 +147,6 @@
           </div>
         </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='parameters'
-          [inputValues]="editForm.get(['parameters'])!.value"
-          (selectedValues)='updateParameters($event)'
-          inputControlLabel='Parameters Items'
-        >
-        </jhi-m2m-universally-unique-mapping-form-control>
-
         <!-- // TODO jhi-m21-security-clearance-form-control-->
         <jhi-m21-security-clearance-form-control
           ngDefaultControl
@@ -206,28 +188,6 @@
           <option [ngValue]="editForm.get('department')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_systemModule">System Module</label>
-          <select class="form-control" id="field_systemModule" data-cy="systemModule" name="systemModule" formControlName="systemModule">
-            <option *ngIf="!editForm.get('systemModule')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                systemModuleOption.id === editForm.get('systemModule')!.value?.id ? editForm.get('systemModule')!.value : systemModuleOption
-              "
-              *ngFor="let systemModuleOption of systemModulesSharedCollection; trackBy: trackSystemModuleById"
-            >
-              {{ systemModuleOption.moduleName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['systemModule'])!.invalid && (editForm.get(['systemModule'])!.dirty || editForm.get(['systemModule'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['systemModule'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <jhi-m21-system-module-form-control
           ngDefaultControl
           formControlName='systemModule'
@@ -237,62 +197,6 @@
         >
           <option [ngValue]="editForm.get('systemModule')!.value"></option>
         </jhi-m21-system-module-form-control>
-
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_reportDesign">Report Design</label>
-          <select class="form-control" id="field_reportDesign" data-cy="reportDesign" name="reportDesign" formControlName="reportDesign">
-            <option *ngIf="!editForm.get('reportDesign')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                reportDesignOption.id === editForm.get('reportDesign')!.value?.id ? editForm.get('reportDesign')!.value : reportDesignOption
-              "
-              *ngFor="let reportDesignOption of reportDesignsSharedCollection; trackBy: trackReportDesignById"
-            >
-              {{ reportDesignOption.designation }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['reportDesign'])!.invalid && (editForm.get(['reportDesign'])!.dirty || editForm.get(['reportDesign'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['reportDesign'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_fileCheckSumAlgorithm">File Check Sum Algorithm</label>
-          <select
-            class="form-control"
-            id="field_fileCheckSumAlgorithm"
-            data-cy="fileCheckSumAlgorithm"
-            name="fileCheckSumAlgorithm"
-            formControlName="fileCheckSumAlgorithm"
-          >
-            <option *ngIf="!editForm.get('fileCheckSumAlgorithm')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                algorithmOption.id === editForm.get('fileCheckSumAlgorithm')!.value?.id
-                  ? editForm.get('fileCheckSumAlgorithm')!.value
-                  : algorithmOption
-              "
-              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
-            >
-              {{ algorithmOption.name }}
-            </option>
-          </select>
-        </div>-->
-        <!--<div
-          *ngIf="
-            editForm.get(['fileCheckSumAlgorithm'])!.invalid &&
-            (editForm.get(['fileCheckSumAlgorithm'])!.dirty || editForm.get(['fileCheckSumAlgorithm'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fileCheckSumAlgorithm'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
 
         <!-- // jhi-algorithm-form-control -->
         <jhi-algorithm-form-control
@@ -304,6 +208,24 @@
         >
           <option [ngValue]="editForm.get('fileCheckSumAlgorithm')!.value"></option>
         </jhi-algorithm-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='parameters'
+          [inputValues]="editForm.get(['parameters'])!.value"
+          (selectedValues)='updateParameters($event)'
+          inputControlLabel='Parameters Items'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
       </div>
 
