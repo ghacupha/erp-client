@@ -44,6 +44,15 @@
             <small class="form-text text-danger" *ngIf="editForm.get('moduleName')?.errors?.required"> This field is required. </small>
           </div>
         </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
       </div>
 
       <div>

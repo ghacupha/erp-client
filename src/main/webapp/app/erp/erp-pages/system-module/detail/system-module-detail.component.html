@@ -37,6 +37,13 @@
         <dd>
           <span>{{ systemModule.moduleName }}</span>
         </dd>
+        <dt><span>Placeholders</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of systemModule.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

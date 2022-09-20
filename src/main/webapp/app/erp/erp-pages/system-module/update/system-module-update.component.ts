@@ -21,10 +21,16 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { ISystemModule, SystemModule } from '../system-module.model';
 import { SystemModuleService } from '../service/system-module.service';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IDealer } from '../../dealers/dealer/dealer.model';
+import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
+import { IUser } from '../../../../admin/user-management/user-management.model';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 
 @Component({
   selector: 'jhi-system-module-update',
@@ -33,16 +39,30 @@ import { SystemModuleService } from '../service/system-module.service';
 export class SystemModuleUpdateComponent implements OnInit {
   isSaving = false;
 
+  placeholdersSharedCollection: IPlaceholder[] = [];
+
   editForm = this.fb.group({
     id: [],
     moduleName: [null, [Validators.required]],
+    placeholders: [],
   });
 
-  constructor(protected systemModuleService: SystemModuleService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected systemModuleService: SystemModuleService,
+    protected placeholderService: PlaceholderService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ systemModule }) => {
       this.updateForm(systemModule);
+      this.loadRelationshipsOptions();
+    });
+  }
+
+  updatePlaceholders(updates: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...updates]
     });
   }
 
@@ -79,11 +99,34 @@ export class SystemModuleUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
+  protected loadRelationshipsOptions(): void {
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(
+            placeholders,
+            ...(this.editForm.get('placeholders')!.value ?? [])
+          )
+        )
+      )
+      .subscribe(
+        (placeholders: IPlaceholder[]) =>
+          (this.placeholdersSharedCollection = placeholders)
+      );
+  }
+
   protected updateForm(systemModule: ISystemModule): void {
     this.editForm.patchValue({
       id: systemModule.id,
       moduleName: systemModule.moduleName,
+      placeholders: systemModule.placeholders,
     });
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(systemModule.placeholders ?? [])
+    );
   }
 
   protected createFromForm(): ISystemModule {
@@ -91,6 +134,7 @@ export class SystemModuleUpdateComponent implements OnInit {
       ...new SystemModule(),
       id: this.editForm.get(['id'])!.value,
       moduleName: this.editForm.get(['moduleName'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

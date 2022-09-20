@@ -16,13 +16,20 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IPlaceholder } from '../placeholder/placeholder.model';
+
 export interface ISystemModule {
   id?: number;
   moduleName?: string;
+  placeholders?: IPlaceholder[] | null;
 }
 
 export class SystemModule implements ISystemModule {
-  constructor(public id?: number, public moduleName?: string) {}
+  constructor(
+    public id?: number,
+    public moduleName?: string,
+    public placeholders?: IPlaceholder[] | null,
+    ) {}
 }
 
 export function getSystemModuleIdentifier(systemModule: ISystemModule): number | undefined {

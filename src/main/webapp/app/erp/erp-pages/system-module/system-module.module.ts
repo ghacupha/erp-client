@@ -23,9 +23,10 @@ import { SystemModuleDetailComponent } from './detail/system-module-detail.compo
 import { SystemModuleUpdateComponent } from './update/system-module-update.component';
 import { SystemModuleDeleteDialogComponent } from './delete/system-module-delete-dialog.component';
 import { SystemModuleRoutingModule } from './route/system-module-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SystemModuleRoutingModule],
+  imports: [SharedModule, SystemModuleRoutingModule, ErpCommonModule],
   declarations: [SystemModuleComponent, SystemModuleDetailComponent, SystemModuleUpdateComponent, SystemModuleDeleteDialogComponent],
   entryComponents: [SystemModuleDeleteDialogComponent],
 })
