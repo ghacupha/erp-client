@@ -20,6 +20,7 @@ import { IDealer } from '../dealers/dealer/dealer.model';
 import { ISecurityClearance } from '../security-clearance/security-clearance.model';
 import { IUser } from '../../../admin/user-management/user-management.model';
 import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
+import { IPlaceholder } from '../placeholder/placeholder.model';
 
 export interface IApplicationUser {
   id?: number;
@@ -31,6 +32,7 @@ export interface IApplicationUser {
   systemIdentity?: IUser;
   userProperties?: IUniversallyUniqueMapping[] | null;
   dealerIdentity?: IDealer;
+  placeholders?: IPlaceholder[] | null;
 }
 
 export class ApplicationUser implements IApplicationUser {
@@ -43,7 +45,8 @@ export class ApplicationUser implements IApplicationUser {
     public securityClearance?: ISecurityClearance,
     public systemIdentity?: IUser,
     public userProperties?: IUniversallyUniqueMapping[] | null,
-    public dealerIdentity?: IDealer
+    public dealerIdentity?: IDealer,
+    public placeholders?: IPlaceholder[] | null,
   ) {}
 }
 

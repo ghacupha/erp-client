@@ -34,6 +34,8 @@ import { UserService } from '../../../../core/user/user.service';
 import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
 import { v4 as uuidv4 } from 'uuid';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-application-user-update',
@@ -47,6 +49,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
   securityClearancesSharedCollection: ISecurityClearance[] = [];
   usersSharedCollection: IUser[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+  placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -58,6 +61,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
     systemIdentity: [null, Validators.required],
     userProperties: [],
     dealerIdentity: [null, Validators.required],
+    placeholders: []
   });
 
   constructor(
@@ -66,6 +70,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
     protected securityClearanceService: SecurityClearanceService,
     protected userService: UserService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -84,6 +89,12 @@ export class ApplicationUserUpdateComponent implements OnInit {
   updateDealerIdentity(update: IDealer): void {
     this.editForm.patchValue({
       dealerIdentity: update
+    });
+  }
+
+  updatePlaceholders(updates: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...updates]
     });
   }
 
@@ -187,6 +198,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
       systemIdentity: applicationUser.systemIdentity,
       userProperties: applicationUser.userProperties,
       dealerIdentity: applicationUser.dealerIdentity,
+      placeholders: applicationUser.placeholders,
     });
 
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
@@ -206,6 +218,10 @@ export class ApplicationUserUpdateComponent implements OnInit {
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
       ...(applicationUser.userProperties ?? [])
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(applicationUser.placeholders ?? [])
     );
   }
 
@@ -266,6 +282,22 @@ export class ApplicationUserUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
+
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(
+            placeholders,
+            ...(this.editForm.get('placeholders')!.value ?? [])
+          )
+        )
+      )
+      .subscribe(
+        (placeholders: IPlaceholder[]) =>
+          (this.placeholdersSharedCollection = placeholders)
+      );
   }
 
   protected createFromForm(): IApplicationUser {
@@ -280,6 +312,7 @@ export class ApplicationUserUpdateComponent implements OnInit {
       systemIdentity: this.editForm.get(['systemIdentity'])!.value,
       userProperties: this.editForm.get(['userProperties'])!.value,
       dealerIdentity: this.editForm.get(['dealerIdentity'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

@@ -143,6 +143,15 @@
           <option [ngValue]="editForm.get('dealerIdentity')!.value"></option>
         </jhi-m21-dealer-form-control>
 
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
       </div>
 
       <div>
