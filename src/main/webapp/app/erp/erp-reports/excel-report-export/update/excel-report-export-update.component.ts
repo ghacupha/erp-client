@@ -50,7 +50,6 @@ import { SystemModuleService } from '../../../erp-pages/system-module/service/sy
 import { ReportDesignService } from '../../report-design/service/report-design.service';
 import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
 import { v4 as uuidv4 } from 'uuid';
-import { SystemModuleSuggestionService } from '../../../erp-common/suggestion/system-module-suggestion.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({

@@ -27,10 +27,6 @@ import { ISystemModule, SystemModule } from '../system-module.model';
 import { SystemModuleService } from '../service/system-module.service';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IPlaceholder } from '../../placeholder/placeholder.model';
-import { IDealer } from '../../dealers/dealer/dealer.model';
-import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
-import { IUser } from '../../../../admin/user-management/user-management.model';
-import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 
 @Component({
   selector: 'jhi-system-module-update',
