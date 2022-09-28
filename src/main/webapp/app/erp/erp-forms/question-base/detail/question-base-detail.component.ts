@@ -8,7 +8,7 @@ import { IQuestionBase } from '../question-base.model';
   templateUrl: './question-base-detail.component.html',
 })
 export class QuestionBaseDetailComponent implements OnInit {
-  questionBase: IQuestionBase | null = null;
+  questionBase: IQuestionBase<any> | null = null;
 
   constructor(protected activatedRoute: ActivatedRoute) {}
 

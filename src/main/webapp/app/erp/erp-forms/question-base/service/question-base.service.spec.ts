@@ -8,8 +8,8 @@ import { QuestionBaseService } from './question-base.service';
 describe('QuestionBase Service', () => {
   let service: QuestionBaseService;
   let httpMock: HttpTestingController;
-  let elemDefault: IQuestionBase;
-  let expectedResult: IQuestionBase | IQuestionBase[] | boolean | null;
+  let elemDefault: IQuestionBase<string>;
+  let expectedResult: IQuestionBase<string> | IQuestionBase<string>[] | boolean | null;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -143,15 +143,15 @@ describe('QuestionBase Service', () => {
 
     describe('addQuestionBaseToCollectionIfMissing', () => {
       it('should add a QuestionBase to an empty array', () => {
-        const questionBase: IQuestionBase = { id: 123 };
+        const questionBase: IQuestionBase<string> = { id: 123 };
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], questionBase);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should not add a QuestionBase to an array that contains it', () => {
-        const questionBase: IQuestionBase = { id: 123 };
-        const questionBaseCollection: IQuestionBase[] = [
+        const questionBase: IQuestionBase<string> = { id: 123 };
+        const questionBaseCollection: IQuestionBase<string>[] = [
           {
             ...questionBase,
           },
@@ -162,23 +162,23 @@ describe('QuestionBase Service', () => {
       });
 
       it("should add a QuestionBase to an array that doesn't contain it", () => {
-        const questionBase: IQuestionBase = { id: 123 };
-        const questionBaseCollection: IQuestionBase[] = [{ id: 456 }];
+        const questionBase: IQuestionBase<string> = { id: 123 };
+        const questionBaseCollection: IQuestionBase<string>[] = [{ id: 456 }];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, questionBase);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should add only unique QuestionBase to an array', () => {
-        const questionBaseArray: IQuestionBase[] = [{ id: 123 }, { id: 456 }, { id: 20839 }];
-        const questionBaseCollection: IQuestionBase[] = [{ id: 123 }];
+        const questionBaseArray: IQuestionBase<string>[] = [{ id: 123 }, { id: 456 }, { id: 20839 }];
+        const questionBaseCollection: IQuestionBase<string>[] = [{ id: 123 }];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, ...questionBaseArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const questionBase: IQuestionBase = { id: 123 };
-        const questionBase2: IQuestionBase = { id: 456 };
+        const questionBase: IQuestionBase<string> = { id: 123 };
+        const questionBase2: IQuestionBase<string> = { id: 456 };
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], questionBase, questionBase2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(questionBase);
@@ -186,14 +186,14 @@ describe('QuestionBase Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const questionBase: IQuestionBase = { id: 123 };
+        const questionBase: IQuestionBase<string> = { id: 123 };
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], null, questionBase, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should return initial array if no QuestionBase is added', () => {
-        const questionBaseCollection: IQuestionBase[] = [{ id: 123 }];
+        const questionBaseCollection: IQuestionBase<string>[] = [{ id: 123 }];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, undefined, null);
         expect(expectedResult).toEqual(questionBaseCollection);
       });

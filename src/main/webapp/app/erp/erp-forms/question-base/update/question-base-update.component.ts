@@ -99,7 +99,7 @@ export class QuestionBaseUpdateComponent implements OnInit {
     return option;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionBase>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionBase<any>>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -118,7 +118,7 @@ export class QuestionBaseUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(questionBase: IQuestionBase): void {
+  protected updateForm(questionBase: IQuestionBase<any>): void {
     this.editForm.patchValue({
       id: questionBase.id,
       value: questionBase.value,
@@ -171,7 +171,7 @@ export class QuestionBaseUpdateComponent implements OnInit {
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
   }
 
-  protected createFromForm(): IQuestionBase {
+  protected createFromForm(): IQuestionBase<any> {
     return {
       ...new QuestionBase(),
       id: this.editForm.get(['id'])!.value,

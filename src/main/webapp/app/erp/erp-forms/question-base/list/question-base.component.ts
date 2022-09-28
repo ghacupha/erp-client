@@ -15,7 +15,7 @@ import { QuestionBaseDeleteDialogComponent } from '../delete/question-base-delet
   templateUrl: './question-base.component.html',
 })
 export class QuestionBaseComponent implements OnInit {
-  questionBases?: IQuestionBase[];
+  questionBases?: IQuestionBase<any>[];
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
@@ -47,7 +47,7 @@ export class QuestionBaseComponent implements OnInit {
           sort: this.sort(),
         })
         .subscribe(
-          (res: HttpResponse<IQuestionBase[]>) => {
+          (res: HttpResponse<IQuestionBase<any>[]>) => {
             this.isLoading = false;
             this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
           },
@@ -66,7 +66,7 @@ export class QuestionBaseComponent implements OnInit {
         sort: this.sort(),
       })
       .subscribe(
-        (res: HttpResponse<IQuestionBase[]>) => {
+        (res: HttpResponse<IQuestionBase<any>[]>) => {
           this.isLoading = false;
           this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
         },
@@ -90,11 +90,11 @@ export class QuestionBaseComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(index: number, item: IQuestionBase): number {
+  trackId(index: number, item: IQuestionBase<any>): number {
     return item.id!;
   }
 
-  delete(questionBase: IQuestionBase): void {
+  delete(questionBase: IQuestionBase<any>): void {
     const modalRef = this.modalService.open(QuestionBaseDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.questionBase = questionBase;
     // unsubscribe not needed because closed completes on modal close
@@ -128,7 +128,7 @@ export class QuestionBaseComponent implements OnInit {
     });
   }
 
-  protected onSuccess(data: IQuestionBase[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+  protected onSuccess(data: IQuestionBase<any>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     this.ngbPaginationPage = this.page;

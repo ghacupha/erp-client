@@ -45,7 +45,7 @@ describe('QuestionBase Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call UniversallyUniqueMapping query and add missing value', () => {
-      const questionBase: IQuestionBase = { id: 456 };
+      const questionBase: IQuestionBase<string> = { id: 456 };
       const parameters: IUniversallyUniqueMapping[] = [{ id: 56557 }];
       questionBase.parameters = parameters;
 
@@ -72,7 +72,7 @@ describe('QuestionBase Management Update Component', () => {
     });
 
     it('Should call Placeholder query and add missing value', () => {
-      const questionBase: IQuestionBase = { id: 456 };
+      const questionBase: IQuestionBase<string> = { id: 456 };
       const placeholderItems: IPlaceholder[] = [{ id: 52896 }];
       questionBase.placeholderItems = placeholderItems;
 
@@ -91,7 +91,7 @@ describe('QuestionBase Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const questionBase: IQuestionBase = { id: 456 };
+      const questionBase: IQuestionBase<string> = { id: 456 };
       const parameters: IUniversallyUniqueMapping = { id: 66315 };
       questionBase.parameters = [parameters];
       const placeholderItems: IPlaceholder = { id: 16847 };

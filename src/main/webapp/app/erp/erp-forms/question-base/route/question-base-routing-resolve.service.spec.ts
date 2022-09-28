@@ -16,7 +16,7 @@ describe('QuestionBase routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: QuestionBaseRoutingResolveService;
   let service: QuestionBaseService;
-  let resultQuestionBase: IQuestionBase | undefined;
+  let resultQuestionBase: IQuestionBase<any> | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,7 +31,7 @@ describe('QuestionBase routing resolve service', () => {
   });
 
   describe('resolve', () => {
-    it('should return IQuestionBase returned by find', () => {
+    it('should return IQuestionBase<any> returned by find', () => {
       // GIVEN
       service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
       mockActivatedRouteSnapshot.params = { id: 123 };
@@ -46,7 +46,7 @@ describe('QuestionBase routing resolve service', () => {
       expect(resultQuestionBase).toEqual({ id: 123 });
     });
 
-    it('should return new IQuestionBase if id is not provided', () => {
+    it('should return new IQuestionBase<any> if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};

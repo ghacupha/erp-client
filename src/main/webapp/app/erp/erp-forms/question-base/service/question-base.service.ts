@@ -8,8 +8,8 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IQuestionBase, getQuestionBaseIdentifier } from '../question-base.model';
 
-export type EntityResponseType = HttpResponse<IQuestionBase>;
-export type EntityArrayResponseType = HttpResponse<IQuestionBase[]>;
+export type EntityResponseType = HttpResponse<IQuestionBase<any>>;
+export type EntityArrayResponseType = HttpResponse<IQuestionBase<any>[]>;
 
 @Injectable({ providedIn: 'root' })
 export class QuestionBaseService {
@@ -18,29 +18,29 @@ export class QuestionBaseService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(questionBase: IQuestionBase): Observable<EntityResponseType> {
-    return this.http.post<IQuestionBase>(this.resourceUrl, questionBase, { observe: 'response' });
+  create(questionBase: IQuestionBase<any>): Observable<EntityResponseType> {
+    return this.http.post<IQuestionBase<any>>(this.resourceUrl, questionBase, { observe: 'response' });
   }
 
-  update(questionBase: IQuestionBase): Observable<EntityResponseType> {
-    return this.http.put<IQuestionBase>(`${this.resourceUrl}/${getQuestionBaseIdentifier(questionBase) as number}`, questionBase, {
+  update(questionBase: IQuestionBase<any>): Observable<EntityResponseType> {
+    return this.http.put<IQuestionBase<any>>(`${this.resourceUrl}/${getQuestionBaseIdentifier(questionBase) as number}`, questionBase, {
       observe: 'response',
     });
   }
 
-  partialUpdate(questionBase: IQuestionBase): Observable<EntityResponseType> {
-    return this.http.patch<IQuestionBase>(`${this.resourceUrl}/${getQuestionBaseIdentifier(questionBase) as number}`, questionBase, {
+  partialUpdate(questionBase: IQuestionBase<any>): Observable<EntityResponseType> {
+    return this.http.patch<IQuestionBase<any>>(`${this.resourceUrl}/${getQuestionBaseIdentifier(questionBase) as number}`, questionBase, {
       observe: 'response',
     });
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IQuestionBase>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http.get<IQuestionBase<any>>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IQuestionBase[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IQuestionBase<any>[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -49,14 +49,14 @@ export class QuestionBaseService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IQuestionBase[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http.get<IQuestionBase<any>[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
   addQuestionBaseToCollectionIfMissing(
-    questionBaseCollection: IQuestionBase[],
-    ...questionBasesToCheck: (IQuestionBase | null | undefined)[]
-  ): IQuestionBase[] {
-    const questionBases: IQuestionBase[] = questionBasesToCheck.filter(isPresent);
+    questionBaseCollection: IQuestionBase<any>[],
+    ...questionBasesToCheck: (IQuestionBase<any> | null | undefined)[]
+  ): IQuestionBase<any>[] {
+    const questionBases: IQuestionBase<any>[] = questionBasesToCheck.filter(isPresent);
     if (questionBases.length > 0) {
       const questionBaseCollectionIdentifiers = questionBaseCollection.map(
         questionBaseItem => getQuestionBaseIdentifier(questionBaseItem)!

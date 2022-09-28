@@ -8,7 +8,7 @@ import { QuestionBaseService } from '../service/question-base.service';
   templateUrl: './question-base-delete-dialog.component.html',
 })
 export class QuestionBaseDeleteDialogComponent {
-  questionBase?: IQuestionBase;
+  questionBase?: IQuestionBase<any>;
 
   constructor(protected questionBaseService: QuestionBaseService, protected activeModal: NgbActiveModal) {}
 
