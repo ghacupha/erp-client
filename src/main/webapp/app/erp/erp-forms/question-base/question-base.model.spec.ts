@@ -8,47 +8,48 @@ describe('QuestionBase models', () => {
 
   beforeEach(() => {
     txtBoxQuestion = new TextboxQuestion(
-      {
-        id: 1001,
-        value: '',
-        key: '',
-        label: '',
-        required: false,
-        order: 2,
-        controlType: 'textbox',
-      },
-      'text',
-      0,
-      0,
+        1001,
+        'valT',
+        'key3',
+        'label1',
+        false,
+        2,
+        'text box question',
+        false,
+      [],
+      [],
+      'textbox',
       '',
     );
 
     txtAreaQuestion = new TextareaQuestion(
-      {
-        id: 1001,
-        value: '',
-        key: '',
-        label: '',
-        required: false,
-        order: 2,
-        controlType: 'textbox', // proving that this assignment will be relevant
-      },
+        1001,
+        'value',
+        'key1',
+        'TextLabel',
+        false,
+        2,
+        'textbox', // proving that this assignment will be relevant
+      true,
+      [],
+      [],
       0,
       0,
       0,
-      0
+      0,
     );
 
     dropDownQuestion = new DropdownQuestion(
-      {
-        id: 1001,
-        value: '',
-        key: '',
-        label: '',
-        required: false,
-        order: 2,
-        controlType: 'textbox', // proving that this assignment will be relevant
-      }
+        1001,
+        'value2',
+        'key4',
+        'label5',
+        false,
+        2,
+        'textbox', // proving that this assignment will be relevant
+      false,
+      [],
+      [],
     );
   });
 

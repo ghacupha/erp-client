@@ -3,7 +3,8 @@ import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 /**
  * Base representation of information about a form-control that we are trying to construct
- * dynamically at runtime
+ * dynamically at runtime. Each instance of this object consists information enough to form
+ * a form-control. A collection of form-controls consist a form-group.
  */
 export interface IQuestionBase<T> {
   id?: number;
@@ -43,66 +44,105 @@ export function getQuestionBaseIdentifier(questionBase: IQuestionBase<any>): num
   return questionBase.id;
 }
 
-/**
- * Question-base instance designed to fulfill the parameters through options object
- */
-export class OptionalQuestionBase<T> extends QuestionBase<T> implements IQuestionBase<T> {
-  options: QuestionBase<any> | undefined;
+export class DropdownQuestion<T> extends QuestionBase<T> {
 
-  constructor(options: QuestionBase<T> = {}) {
-    super(
-      options.id,
-      options.value,
-      options.key,
-      options.label,
-      options.required,
-      options.order,
-      options.controlType,
-      options.placeholder,
-      options.iterable,
-      options.parameters,
-      options.placeholderItems
-    );
-    this.options = options;
-  }
-}
-
-export class DropdownQuestion extends OptionalQuestionBase<string> {
   controlType = 'dropdown';
-  options: QuestionBase<string> = {
-    controlType : 'dropdown',
-  };
 
-  constructor(options: QuestionBase<string> = {controlType : 'dropdown'}) {
-    super(options);
-    this.options = options;
+  constructor(
+    public id?: number,
+    public value?: T | null | undefined,
+    public key?: string,
+    public label?: string,
+    public options?: { key: string, value: string }[],
+    public required?: boolean | null,
+    public order?: number,
+    public placeholder?: string | null,
+    public iterable?: boolean | null,
+    public parameters?: IUniversallyUniqueMapping[] | null,
+    public placeholderItems?: IPlaceholder[] | null,
+  ) {
+    super(
+      id,
+      value,
+      key,
+      label,
+      required,
+      order,
+      'dropdown',
+      placeholder,
+      iterable,
+      parameters,
+      placeholderItems
+    );
   }
 }
 
-export class TextareaQuestion extends OptionalQuestionBase<string> {
+export class TextareaQuestion<T> extends QuestionBase<T> {
   controlType = 'textarea';
 
   constructor(
-    options: QuestionBase<string> = {controlType : 'textarea'},
+    public id?: number,
+    public value?: T | null | undefined,
+    public key?: string,
+    public label?: string,
+    public required?: boolean | null,
+    public order?: number,
+    public placeholder?: string | null,
+    public iterable?: boolean | null,
+    public parameters?: IUniversallyUniqueMapping[] | null,
+    public placeholderItems?: IPlaceholder[] | null,
     public cols: number = 0,
     public rows: number = 0,
     public maxlength: number = 0,
     public minlength: number = 0
   ) {
-    super(options);
+    super(
+      id,
+      value,
+      key,
+      label,
+      required,
+      order,
+      'textarea',
+      placeholder,
+      iterable,
+      parameters,
+      placeholderItems
+    );
   }
 }
 
-export class TextboxQuestion extends OptionalQuestionBase<string> {
+export class TextboxQuestion<T> extends QuestionBase<T> {
   controlType = 'textbox';
 
   constructor(
-    options: QuestionBase<string> = {controlType : 'textbox'},
-    public type: string = 'text',
+    public id?: number,
+    public value?: T | null | undefined,
+    public key?: string,
+    public label?: string,
+    public required?: boolean | null,
+    public order?: number,
+    public placeholder?: string | null,
+    public iterable?: boolean | null,
+    public parameters?: IUniversallyUniqueMapping[] | null,
+    public placeholderItems?: IPlaceholder[] | null,
+    public type: string = 'textbox',
     public min: number | string = 0,
     public max: number | string = 0,
-    public pattern: string,
+    public pattern?: string,
   ) {
-    super(options);
+    super(
+      id,
+      value,
+      key,
+      label,
+      required,
+      order,
+      'textbox',
+      placeholder,
+      iterable,
+      parameters,
+      placeholderItems
+    );
   }
 }
