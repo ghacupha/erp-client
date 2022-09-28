@@ -107,9 +107,10 @@
       "ReportDesign",
       "AmortizationRecurrence",
       "PrepaymentMapping",
-      "AmortizationSequence"
+      "AmortizationSequence",
+      "QuestionBase"
     ],
-    "lastLiquibaseTimestamp": 1632149732000,
+    "lastLiquibaseTimestamp": 1664359007000,
     "monorepository": true,
     "skipCommitHook": true
   }

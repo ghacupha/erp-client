@@ -36,6 +36,11 @@ import { SharedModule } from '../../shared/shared.module';
          data: { pageTitle: 'ERP | Dealer Maintenance' },
          loadChildren: () => import('./dealer-maintenance/dealer-maintenance.module').then(m => m.DealerMaintenanceModule),
        },
+       {
+         path: 'question-base',
+         data: { pageTitle: 'Question form control definitions' },
+         loadChildren: () => import('./question-base/question-base.module').then(m => m.QuestionBaseModule),
+       },
      ]),
   ],
   exports: [
