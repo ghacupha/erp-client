@@ -44,9 +44,10 @@ describe('QuestionBase models', () => {
         'value2',
         'key4',
         'label5',
+        [],
         false,
         2,
-        'textbox', // proving that this assignment will be relevant
+      '',
       false,
       [],
       [],
