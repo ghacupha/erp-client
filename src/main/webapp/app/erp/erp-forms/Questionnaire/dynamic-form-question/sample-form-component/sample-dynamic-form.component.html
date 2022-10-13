@@ -1,0 +1,36 @@
+<!-- How it's implemented... -->
+<div class="container">
+
+  <div class="row">
+    <div class="column">
+      <h1>Test Dynamic Form</h1>
+      <p>Here is an example of how you can build on-the-fly forms with Angular. <code>The form</code> is the form as defined in <code>The data object</code>. You also can see the changes while you're modifying the form's values in <code>The result</code> section.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <h2>The form</h2>
+      <jhi-app-dynamic-form #dynamicForm
+                        [questions]="questions"></jhi-app-dynamic-form>
+    </div>
+    <div class="column">
+
+      <div class="row">
+        <div class="column">
+          <h2>The result</h2>
+          <pre><code>{{ dynamicForm.form.value | json }}</code></pre>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="column">
+          <h2>The data object</h2>
+          <pre><code>{{ questions | json }}</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

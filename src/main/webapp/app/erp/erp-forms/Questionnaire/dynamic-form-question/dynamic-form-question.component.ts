@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { QuestionBase } from '../../question-base/question-base.model';
 
 @Component({
@@ -10,12 +10,12 @@ import { QuestionBase } from '../../question-base/question-base.model';
 export class DynamicFormQuestionComponent implements OnInit{
 
   @Input() question: QuestionBase<any> = {key: 'Key'};
-  @Input() form: FormGroup | undefined;
+  @Input() form!: FormGroup;
 
   get isValid(): boolean {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/ban-ts-comment
     // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unnecessary-condition
     return !!this.form && this.form.controls[this.question.key].valid;
   }
 
@@ -25,16 +25,19 @@ export class DynamicFormQuestionComponent implements OnInit{
   ngOnInit(): void { }
 
   public addQuestion(): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     !!this.questionArray && this.questionArray.push(this.fb.control(''));
   }
 
   public removeQuestion(index: number): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     !!this.questionArray && this.questionArray.removeAt(index);
   }
 
-  public get questionArray(): false | FormArray {
+  public get questionArray(): FormArray {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return !!this.form && this.form.get(this.question.key) as FormArray;
   }
 
@@ -43,7 +46,7 @@ export class DynamicFormQuestionComponent implements OnInit{
     return !!this.question && this.question.iterable;
   }
 
-  public questionControl(index?: number): AbstractControl {
+  public questionControl(index?: number): FormControl {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

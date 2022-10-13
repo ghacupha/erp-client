@@ -6,16 +6,18 @@
 
     <div [ngSwitch]="question.controlType">
 
-      <input *ngSwitchCase="'textbox'"
+      <!--// TODO Create several API with type field-->
+      <!--<input *ngSwitchCase="'textbox'"
              [formControl]="questionControl(index)"
              [placeholder]="question.placeholder"
              [attr.min]="question['min']"
              [attr.max]="question['max']"
              [attr.pattern]="question['pattern']"
              [id]="questionId(index)"
-             [type]="question['type']">
+             [type]="question['type']">-->
 
-      <select [id]="question.key"
+      <!--// TODO Implement options component-->
+      <!--<select [id]="question.key"
               *ngSwitchCase="'dropdown'"
               [formControl]="questionControl(index)">
         <option value=""
@@ -24,16 +26,17 @@
                 selected>{{ question.placeholder }}</option>
         <option *ngFor="let opt of question['options']"
                 [value]="opt.key">{{ opt.value }}</option>
-      </select>
+      </select>-->
 
-      <textarea *ngSwitchCase="'textarea'"
+      <!--//TODO Implement text-area component-->
+      <!--<textarea *ngSwitchCase="'textarea'"
                 [formControl]="questionControl(index)"
                 [id]="question.key"
                 [cols]="question['cols']"
                 [rows]="question['rows']"
                 [maxlength]="question['maxlength']"
                 [minlength]="question['minlength']"
-                [placeholder]="question.placeholder"></textarea>
+                [placeholder]="question.placeholder"></textarea>-->
     </div>
 
     <div class="errorMessage"
