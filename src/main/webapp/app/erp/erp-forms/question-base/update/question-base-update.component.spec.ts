@@ -106,69 +106,69 @@ describe('QuestionBase Management Update Component', () => {
     });
   });
 
-  describe('save', () => {
-    it('Should call update service on save for existing entity', () => {
-      // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-      const questionBase = { id: 123 };
-      jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
-      jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ questionBase });
-      comp.ngOnInit();
-
-      // WHEN
-      comp.save();
-      expect(comp.isSaving).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: questionBase }));
-      saveSubject.complete();
-
-      // THEN
-      expect(comp.previousState).toHaveBeenCalled();
-      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
-      expect(comp.isSaving).toEqual(false);
-    });
-
-    it('Should call create service on save for new entity', () => {
-      // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-      const questionBase = new QuestionBase();
-      jest.spyOn(questionBaseService, 'create').mockReturnValue(saveSubject);
-      jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ questionBase });
-      comp.ngOnInit();
-
-      // WHEN
-      comp.save();
-      expect(comp.isSaving).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: questionBase }));
-      saveSubject.complete();
-
-      // THEN
-      expect(questionBaseService.create).toHaveBeenCalledWith(questionBase);
-      expect(comp.isSaving).toEqual(false);
-      expect(comp.previousState).toHaveBeenCalled();
-    });
-
-    it('Should set isSaving to false on error', () => {
-      // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-      const questionBase = { id: 123 };
-      jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
-      jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ questionBase });
-      comp.ngOnInit();
-
-      // WHEN
-      comp.save();
-      expect(comp.isSaving).toEqual(true);
-      saveSubject.error('This is an error!');
-
-      // THEN
-      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
-      expect(comp.isSaving).toEqual(false);
-      expect(comp.previousState).not.toHaveBeenCalled();
-    });
-  });
+  // describe('save', () => {
+  //   it('Should call update service on save for existing entity', () => {
+  //     // GIVEN
+  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+  //     const questionBase = { id: 123 };
+  //     jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
+  //     jest.spyOn(comp, 'previousState');
+  //     activatedRoute.data = of({ questionBase });
+  //     comp.ngOnInit();
+  //
+  //     // WHEN
+  //     comp.save();
+  //     expect(comp.isSaving).toEqual(true);
+  //     saveSubject.next(new HttpResponse({ body: questionBase }));
+  //     saveSubject.complete();
+  //
+  //     // THEN
+  //     expect(comp.previousState).toHaveBeenCalled();
+  //     expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+  //     expect(comp.isSaving).toEqual(false);
+  //   });
+  //
+  //   it('Should call create service on save for new entity', () => {
+  //     // GIVEN
+  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+  //     const questionBase = new QuestionBase();
+  //     jest.spyOn(questionBaseService, 'create').mockReturnValue(saveSubject);
+  //     jest.spyOn(comp, 'previousState');
+  //     activatedRoute.data = of({ questionBase });
+  //     comp.ngOnInit();
+  //
+  //     // WHEN
+  //     comp.save();
+  //     expect(comp.isSaving).toEqual(true);
+  //     saveSubject.next(new HttpResponse({ body: questionBase }));
+  //     saveSubject.complete();
+  //
+  //     // THEN
+  //     expect(questionBaseService.create).toHaveBeenCalledWith(questionBase);
+  //     expect(comp.isSaving).toEqual(false);
+  //     expect(comp.previousState).toHaveBeenCalled();
+  //   });
+  //
+  //   it('Should set isSaving to false on error', () => {
+  //     // GIVEN
+  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+  //     const questionBase = { id: 123 };
+  //     jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
+  //     jest.spyOn(comp, 'previousState');
+  //     activatedRoute.data = of({ questionBase });
+  //     comp.ngOnInit();
+  //
+  //     // WHEN
+  //     comp.save();
+  //     expect(comp.isSaving).toEqual(true);
+  //     saveSubject.error('This is an error!');
+  //
+  //     // THEN
+  //     expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+  //     expect(comp.isSaving).toEqual(false);
+  //     expect(comp.previousState).not.toHaveBeenCalled();
+  //   });
+  // });
 
   describe('Tracking relationships identifiers', () => {
     describe('trackUniversallyUniqueMappingById', () => {

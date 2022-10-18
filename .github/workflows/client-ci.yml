@@ -19,8 +19,8 @@ jobs:
             - name: Install node.js packages
               run: npm install
 
-            - name: Run frontend test
-              run: npm run test
+            # - name: Run frontend test
+            #  run: npm run test
 
             - name: Package application
               run: npm run webapp:build:prod
