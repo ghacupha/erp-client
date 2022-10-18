@@ -63,7 +63,7 @@
       <jhi-system-admin-nav *jhiHasAnyAuthority="'ROLE_ADMIN'"></jhi-system-admin-nav>
 
       <li
-        *ngSwitchCase="true"
+        *jhiHasAnyAuthority="'ROLE_DEV'"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
