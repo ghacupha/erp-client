@@ -50,10 +50,10 @@
             "production": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": true,
-              "namedChunks": true,
+              "sourceMap": false,
+              "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": true,
+              "vendorChunk": false,
               "buildOptimizer": true,
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json",
@@ -74,7 +74,7 @@
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
-              "extractLicenses": true,
+              "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
             }
