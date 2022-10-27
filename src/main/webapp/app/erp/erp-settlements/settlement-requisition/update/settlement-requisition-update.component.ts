@@ -151,6 +151,12 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     });
   }
 
+  updateDeliveryNotesItems(update: IDeliveryNote[]): void {
+    this.editForm.patchValue({
+      deliveryNotes: [...update]
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }
