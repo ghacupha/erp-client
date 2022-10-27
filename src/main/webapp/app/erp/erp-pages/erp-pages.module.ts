@@ -133,6 +133,15 @@ import {RouterModule} from '@angular/router';
         loadChildren: () => import('./system-module/system-module.module')
           .then(m => m.SystemModuleModule),
       },
+      {
+        path: 'business-document',
+        data: {
+          pageTitle: 'ERP | Business Document',
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+        },
+        loadChildren: () => import('./business-document/business-document.module')
+          .then(m => m.BusinessDocumentModule),
+      },
   ])]
 })
 export class ErpPagesModule {}

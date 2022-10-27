@@ -1,0 +1,234 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-business-document-heading" data-cy="BusinessDocumentCreateUpdateHeading">Create or edit a Business Document</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentTitle">Document Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentTitle"
+            id="field_documentTitle"
+            data-cy="documentTitle"
+            formControlName="documentTitle"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentTitle')!.invalid && (editForm.get('documentTitle')!.dirty || editForm.get('documentTitle')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentSerial">Document Serial</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentSerial"
+            id="field_documentSerial"
+            data-cy="documentSerial"
+            formControlName="documentSerial"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentSerial')!.invalid && (editForm.get('documentSerial')!.dirty || editForm.get('documentSerial')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentSerial')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastModified">Last Modified</label>
+          <div class="d-flex">
+            <input
+              id="field_lastModified"
+              data-cy="lastModified"
+              type="datetime-local"
+              class="form-control"
+              name="lastModified"
+              formControlName="lastModified"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_attachmentFilePath">Attachment File Path</label>
+          <input
+            type="text"
+            class="form-control"
+            name="attachmentFilePath"
+            id="field_attachmentFilePath"
+            data-cy="attachmentFilePath"
+            formControlName="attachmentFilePath"
+          />
+          <div
+            *ngIf="
+              editForm.get('attachmentFilePath')!.invalid &&
+              (editForm.get('attachmentFilePath')!.dirty || editForm.get('attachmentFilePath')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('attachmentFilePath')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_createdBy">Created By</label>
+          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
+            <option *ngIf="!editForm.get('createdBy')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['createdBy'])!.invalid && (editForm.get(['createdBy'])!.dirty || editForm.get(['createdBy'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['createdBy'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastModifiedBy">Last Modified By</label>
+          <select
+            class="form-control"
+            id="field_lastModifiedBy"
+            data-cy="lastModifiedBy"
+            name="lastModifiedBy"
+            formControlName="lastModifiedBy"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('lastModifiedBy')!.value?.id
+                  ? editForm.get('lastModifiedBy')!.value
+                  : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_originatingDepartment">Originating Department</label>
+          <select
+            class="form-control"
+            id="field_originatingDepartment"
+            data-cy="originatingDepartment"
+            name="originatingDepartment"
+            formControlName="originatingDepartment"
+          >
+            <option *ngIf="!editForm.get('originatingDepartment')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                dealerOption.id === editForm.get('originatingDepartment')!.value?.id
+                  ? editForm.get('originatingDepartment')!.value
+                  : dealerOption
+              "
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['originatingDepartment'])!.invalid &&
+            (editForm.get(['originatingDepartment'])!.dirty || editForm.get(['originatingDepartment'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['originatingDepartment'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="field_applicationMappings">Application Mappings</label>
+          <select
+            class="form-control"
+            id="field_applicationMappings"
+            data-cy="applicationMappings"
+            multiple
+            name="applicationMappings"
+            formControlName="applicationMappings"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationMappings')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

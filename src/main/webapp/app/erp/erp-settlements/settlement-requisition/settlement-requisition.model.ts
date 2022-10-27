@@ -1,0 +1,61 @@
+import * as dayjs from 'dayjs';
+import { ISettlementCurrency } from '../settlement-currency/settlement-currency.model';
+import { IJobSheet } from '../job-sheet/job-sheet.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IDeliveryNote } from '../delivery-note/delivery-note.model';
+import { IPaymentInvoice } from '../payment-invoice/payment-invoice.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { PaymentStatus } from '../../erp-common/enumerations/payment-status.model';
+
+export interface ISettlementRequisition {
+  id?: number;
+  description?: string | null;
+  serialNumber?: string;
+  timeOfRequisition?: dayjs.Dayjs;
+  requisitionNumber?: string;
+  paymentAmount?: number;
+  paymentStatus?: PaymentStatus;
+  settlementCurrency?: ISettlementCurrency;
+  currentOwner?: IApplicationUser;
+  nativeOwner?: IApplicationUser;
+  nativeDepartment?: IDealer;
+  biller?: IDealer;
+  paymentInvoices?: IPaymentInvoice[] | null;
+  deliveryNotes?: IDeliveryNote[] | null;
+  jobSheets?: IJobSheet[] | null;
+  signatures?: IDealer[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
+  applicationMappings?: IUniversallyUniqueMapping[] | null;
+  placeholders?: IPlaceholder[] | null;
+}
+
+export class SettlementRequisition implements ISettlementRequisition {
+  constructor(
+    public id?: number,
+    public description?: string | null,
+    public serialNumber?: string,
+    public timeOfRequisition?: dayjs.Dayjs,
+    public requisitionNumber?: string,
+    public paymentAmount?: number,
+    public paymentStatus?: PaymentStatus,
+    public settlementCurrency?: ISettlementCurrency,
+    public currentOwner?: IApplicationUser,
+    public nativeOwner?: IApplicationUser,
+    public nativeDepartment?: IDealer,
+    public biller?: IDealer,
+    public paymentInvoices?: IPaymentInvoice[] | null,
+    public deliveryNotes?: IDeliveryNote[] | null,
+    public jobSheets?: IJobSheet[] | null,
+    public signatures?: IDealer[] | null,
+    public businessDocuments?: IBusinessDocument[] | null,
+    public applicationMappings?: IUniversallyUniqueMapping[] | null,
+    public placeholders?: IPlaceholder[] | null
+  ) {}
+}
+
+export function getSettlementRequisitionIdentifier(settlementRequisition: ISettlementRequisition): number | undefined {
+  return settlementRequisition.id;
+}

@@ -134,6 +134,20 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         canActivate: [UserRouteAccessService],
         loadChildren: () => import('./job-sheet/job-sheet.module').then(m => m.JobSheetModule),
       },
+      {
+        path: 'settlement-requisition',
+        data: {
+          pageTitle: 'ERP-Payments | Requisition',
+          authorities: [
+            'ROLE_PAYMENTS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_FIXED_ASSETS_USER'
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () => import('./settlement-requisition/settlement-requisition.module')
+          .then(m => m.SettlementRequisitionModule),
+      },
     ]),
   ],
 })

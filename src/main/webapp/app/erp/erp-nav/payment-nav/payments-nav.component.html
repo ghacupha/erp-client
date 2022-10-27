@@ -30,6 +30,20 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="business-document"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Business Document File</span>
+          </span>
+          </a>
+        </li>
         <li>
           <a
             class="dropdown-item"
@@ -148,6 +162,20 @@
           <span>
               <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
               <span>Settlements</span>
+          </span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="settlement-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+          <span>
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Requisition</span>
           </span>
           </a>
         </li>

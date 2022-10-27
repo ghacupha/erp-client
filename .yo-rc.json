@@ -108,7 +108,9 @@
       "AmortizationRecurrence",
       "PrepaymentMapping",
       "AmortizationSequence",
-      "QuestionBase"
+      "QuestionBase",
+      "BusinessDocument",
+      "SettlementRequisition"
     ],
     "lastLiquibaseTimestamp": 1664359007000,
     "monorepository": true,
