@@ -222,25 +222,6 @@
         >
         </jhi-m2m-payment-invoice-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_deliveryNotes">Delivery Note</label>
-          <select
-            class="form-control"
-            id="field_deliveryNotes"
-            data-cy="deliveryNote"
-            multiple
-            name="deliveryNotes"
-            formControlName="deliveryNotes"
-          >
-            <option
-              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
-              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
-            >
-              {{ deliveryNoteOption.deliveryNoteNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-delivery-note-form-control
           ngDefaultControl
           formControlName='deliveryNotes'

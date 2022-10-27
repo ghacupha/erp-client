@@ -139,9 +139,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         data: {
           pageTitle: 'ERP-Payments | Requisition',
           authorities: [
-            'ROLE_PAYMENTS_USER',
-            'ROLE_PREPAYMENTS_MODULE_USER',
-            'ROLE_FIXED_ASSETS_USER'
+            'ROLE_REQUISITION_MANAGER',
           ],
         },
         canActivate: [UserRouteAccessService],
