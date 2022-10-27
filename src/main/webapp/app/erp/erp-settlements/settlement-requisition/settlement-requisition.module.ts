@@ -5,9 +5,10 @@ import { SettlementRequisitionDetailComponent } from './detail/settlement-requis
 import { SettlementRequisitionUpdateComponent } from './update/settlement-requisition-update.component';
 import { SettlementRequisitionDeleteDialogComponent } from './delete/settlement-requisition-delete-dialog.component';
 import { SettlementRequisitionRoutingModule } from './route/settlement-requisition-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SettlementRequisitionRoutingModule],
+  imports: [SharedModule, SettlementRequisitionRoutingModule, ErpCommonModule],
   declarations: [
     SettlementRequisitionComponent,
     SettlementRequisitionDetailComponent,

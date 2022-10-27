@@ -135,7 +135,8 @@
           </div>
         </div>
 
-        <div class="form-group">
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
@@ -166,7 +167,17 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrencies($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_currentOwner">Current Owner</label>
@@ -214,7 +225,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['nativeOwner'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_nativeDepartment">Native Department</label>
           <select
             class="form-control"
@@ -243,9 +254,19 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['nativeDepartment'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='nativeDepartment'
+          [inputValue]="editForm.get('nativeDepartment')!.value"
+          (valueSelected)='updateNativeDepartment($event)'
+          inputControlLabel='Originating Department (Where requisition came from)'
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_biller">Biller</label>
           <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
             <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
@@ -259,9 +280,19 @@
         </div>
         <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='biller'
+          [inputValue]="editForm.get('biller')!.value"
+          (valueSelected)='updateBiller($event)'
+          inputControlLabel=Biller
+        >
+          <option [ngValue]="editForm.get('biller')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="form-group">
           <label for="field_paymentInvoices">Payment Invoice</label>
           <select
             class="form-control"
@@ -278,7 +309,16 @@
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='invoiceNumber'
+          [inputValues]="editForm.get(['paymentInvoices'])!.value"
+          (valueSelected)='updatePaymentInvoices($event)'
+          inputControlLabel='Invoices (Could be multiple)'
+        >
+        </jhi-m2m-payment-invoice-form-control>
 
         <div class="form-group">
           <label for="field_deliveryNotes">Delivery Note</label>
@@ -311,7 +351,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_signatures">Signatures</label>
           <select class="form-control" id="field_signatures" data-cy="signatures" multiple name="signatures" formControlName="signatures">
             <option
@@ -321,7 +361,16 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='signatures'
+          [inputValues]="editForm.get(['signatures'])!.value"
+          (valueSelected)='updateSignatories($event)'
+          inputControlLabel='Signatories (Multiple)'
+        >
+        </jhi-m2m-dealer-form-control>
 
         <div class="form-group">
           <label for="field_businessDocuments">Business Document</label>
@@ -342,7 +391,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_applicationMappings">Application Mapping</label>
           <select
             class="form-control"
@@ -362,9 +411,19 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <!--jhi-m2m-universally-unique-mapping-form-control-->
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='applicationMappings'
+          [inputValues]="editForm.get(['applicationMappings'])!.value"
+          (selectedValues)='updateApplicationMapping($event)'
+          inputControlLabel='Application Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -381,7 +440,17 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
       </div>
 
       <div>

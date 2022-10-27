@@ -103,6 +103,48 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     })
   }
 
+  updateCurrencies(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      settlementCurrency: update
+    });
+  }
+
+  updateBiller(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      biller: dealerUpdate,
+    });
+  }
+
+  updateNativeDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      nativeDepartment: dealerUpdate,
+    });
+  }
+
+  updatePaymentInvoices(update: IPaymentInvoice[]): void {
+    this.editForm.patchValue({
+      paymentInvoices: update
+    });
+  }
+
+  updateSignatories(dealerUpdate: IDealer[]): void {
+    this.editForm.patchValue({
+      signatures: [...dealerUpdate]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateApplicationMapping(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      applicationMapping: [...update]
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }
