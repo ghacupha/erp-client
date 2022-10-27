@@ -241,18 +241,6 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="field_jobSheets">Job Sheet</label>
-          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
-            <option
-              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
-              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
-            >
-              {{ jobSheetOption.serialNumber }}
-            </option>
-          </select>
-        </div>
-
         <jhi-m2m-job-sheet-form-control
           ngDefaultControl
           formControlName='jobSheets'
