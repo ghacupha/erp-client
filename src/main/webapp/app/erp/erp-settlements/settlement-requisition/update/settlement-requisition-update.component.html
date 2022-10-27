@@ -34,6 +34,7 @@
             id="field_serialNumber"
             data-cy="serialNumber"
             formControlName="serialNumber"
+            [readonly]="true"
           />
           <div
             *ngIf="editForm.get('serialNumber')!.invalid && (editForm.get('serialNumber')!.dirty || editForm.get('serialNumber')!.touched)"
@@ -53,6 +54,7 @@
               name="timeOfRequisition"
               formControlName="timeOfRequisition"
               placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
             />
           </div>
           <div
@@ -135,40 +137,6 @@
           </div>
         </div>
 
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
-          <select
-            class="form-control"
-            id="field_settlementCurrency"
-            data-cy="settlementCurrency"
-            name="settlementCurrency"
-            formControlName="settlementCurrency"
-          >
-            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['settlementCurrency'])!.invalid &&
-            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
-
         <jhi-m21-settlement-currency-form-control
           ngDefaultControl
           formControlName='settlementCurrency'
@@ -225,37 +193,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['nativeOwner'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_nativeDepartment">Native Department</label>
-          <select
-            class="form-control"
-            id="field_nativeDepartment"
-            data-cy="nativeDepartment"
-            name="nativeDepartment"
-            formControlName="nativeDepartment"
-          >
-            <option *ngIf="!editForm.get('nativeDepartment')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('nativeDepartment')!.value?.id ? editForm.get('nativeDepartment')!.value : dealerOption
-              "
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['nativeDepartment'])!.invalid &&
-            (editForm.get(['nativeDepartment'])!.dirty || editForm.get(['nativeDepartment'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['nativeDepartment'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
-
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='nativeDepartment'
@@ -266,22 +203,6 @@
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_biller">Biller</label>
-          <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
-            <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('biller')!.value?.id ? editForm.get('biller')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='biller'
@@ -291,25 +212,6 @@
         >
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
-
-        <!--<div class="form-group">
-          <label for="field_paymentInvoices">Payment Invoice</label>
-          <select
-            class="form-control"
-            id="field_paymentInvoices"
-            data-cy="paymentInvoice"
-            multiple
-            name="paymentInvoices"
-            formControlName="paymentInvoices"
-          >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
-              {{ paymentInvoiceOption.invoiceNumber }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m2m-payment-invoice-form-control
           ngDefaultControl
@@ -351,18 +253,6 @@
           </select>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_signatures">Signatures</label>
-          <select class="form-control" id="field_signatures" data-cy="signatures" multiple name="signatures" formControlName="signatures">
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('signatures')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-dealer-form-control
           ngDefaultControl
           formControlName='signatures'
@@ -391,28 +281,6 @@
           </select>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_applicationMappings">Application Mapping</label>
-          <select
-            class="form-control"
-            id="field_applicationMappings"
-            data-cy="applicationMapping"
-            multiple
-            name="applicationMappings"
-            formControlName="applicationMappings"
-          >
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationMappings')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.universalKey }}
-            </option>
-          </select>
-        </div>-->
-
         <!--jhi-m2m-universally-unique-mapping-form-control-->
         <jhi-m2m-universally-unique-mapping-form-control
           ngDefaultControl
@@ -422,25 +290,6 @@
           inputControlLabel='Application Mapping(s)'
         >
         </jhi-m2m-universally-unique-mapping-form-control>
-
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
