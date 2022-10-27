@@ -20,9 +20,9 @@
 <div class="form-group">
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
-    [items]="valueLookups$ | async"
+    [items]="valueLookUps$ | async"
     bindLabel="serialNumber"
-    [trackByFn]="trackValueByFn"
+    [trackByFn]="trackValuesByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"
     typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
@@ -31,7 +31,7 @@
     (change)="getValues()"
     [multiple]='true'
   >
-    <ng-option *ngFor="let option of valueLookups$ | async" [value]="option">
+    <ng-option *ngFor="let option of valueLookUps$ | async" [value]="option">
       <!--// TODO Display additional details about the value-->
       <jhi-job-sheet-option-view [item]='option'></jhi-job-sheet-option-view>
     </ng-option>

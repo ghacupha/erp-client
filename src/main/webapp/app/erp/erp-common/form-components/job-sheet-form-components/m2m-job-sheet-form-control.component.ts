@@ -36,16 +36,17 @@ import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
 })
 export class M2MJobSheetFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
+
   @Input() inputValues: IJobSheet[] = [];
 
   @Input() inputControlLabel = '';
 
-  @Output() valueSelected: EventEmitter<IJobSheet[]> = new EventEmitter<IJobSheet[]>();
+  @Output() selectedValues: EventEmitter<IJobSheet[]> = new EventEmitter<IJobSheet[]>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueInputControl$ = new Subject<string>();
-  valueLookups$: Observable<IJobSheet[]> = of([]);
+  valueLookUps$: Observable<IJobSheet[]> = of([]);
 
   constructor(
     protected valueSuggestionService: JobSheetSuggestionService
@@ -59,16 +60,17 @@ export class M2MJobSheetFormControlComponent implements OnInit, OnDestroy, Contr
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    this.loadDealers();
+    this.loadValues();
   }
 
   ngOnDestroy(): void {
-    this.valueLookups$ = of([]);
+
+    this.valueLookUps$ = of([]);
     this.inputValues = [];
   }
 
-  loadDealers(): void {
-    this.valueLookups$ = concat(
+  loadValues(): void {
+    this.valueLookUps$ = concat(
       of([]), // default items
       this.valueInputControl$.pipe(
         /* filter(res => res.length >= this.minAccountLengthTerm), */
@@ -85,7 +87,7 @@ export class M2MJobSheetFormControlComponent implements OnInit, OnDestroy, Contr
     );
   }
 
-  trackValueByFn(item: any): number {
+  trackValuesByFn(item: any): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return item.id!;
   }
@@ -105,7 +107,7 @@ export class M2MJobSheetFormControlComponent implements OnInit, OnDestroy, Contr
    * Emits updated array to parent
    */
   getValues(): void {
-    this.valueSelected.emit(this.inputValues);
+    this.selectedValues.emit(this.inputValues);
   }
 
   registerOnChange(fn: any): void {
