@@ -29,6 +29,7 @@ import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PaymentStatus } from '../../../erp-common/enumerations/payment-status.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-settlement-requisition-update',
@@ -96,6 +97,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.editForm.patchValue({
+      serialNumber: uuidv4(),
+    })
   }
 
   previousState(): void {
