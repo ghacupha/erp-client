@@ -253,6 +253,15 @@
           </select>
         </div>
 
+        <jhi-m2m-job-sheet-form-control
+          ngDefaultControl
+          formControlName='jobSheets'
+          [inputValues]="editForm.get(['jobSheets'])!.value"
+          (selectedValues)='updateJobSheetItems($event)'
+          inputControlLabel='Job sheet details (If any)'
+        >
+        </jhi-m2m-job-sheet-form-control>
+
         <jhi-m2m-dealer-form-control
           ngDefaultControl
           formControlName='signatures'

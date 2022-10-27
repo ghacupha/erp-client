@@ -145,6 +145,12 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     });
   }
 
+  updateJobSheetItems(update: IJobSheet[]): void {
+    this.editForm.patchValue({
+      jobSheets: [...update]
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }
