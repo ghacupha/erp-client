@@ -88,7 +88,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlementRequisition }) => {
       if (settlementRequisition.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         settlementRequisition.timeOfRequisition = today;
       }
 
