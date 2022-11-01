@@ -18,11 +18,14 @@
 
 import { Injectable } from '@angular/core';
 import {
-  DropdownQuestion, IQuestionBase,
+  DropdownQuestion,
+  IQuestionBase,
   QuestionBase,
   TextareaQuestion,
   TextboxQuestion
 } from '../question-base/question-base.model';
+import { IStringQuestionBase, StringQuestionBase } from '../string-question-base/string-question-base.model';
+import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 
 /**
  * @deprecated This is strictly a testing service and is here for demo purposes only.
@@ -119,6 +122,55 @@ export class QuestionService {
         30,
         10
       )
+    ];
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return questions.sort((a , b) => a.order ?? 0 - b.order ?? 1);
+  }
+
+
+  getStringQuestions(): IStringQuestionBase[] {
+
+    const questions: IStringQuestionBase[] = [
+
+      new StringQuestionBase(
+        1001,
+        'Edwin',
+        'firstName',
+        'First name',
+        true,
+        1,
+        ControlTypes.TEXTBOX,
+        'First Name',
+        false,
+      ),
+
+      new StringQuestionBase(
+        1002,
+        'secondName',
+        '',
+        'Second name',
+        false,
+        2,
+        ControlTypes.TEXTBOX,
+        'First Name',
+        false,
+      ),
+
+      new StringQuestionBase(
+        1003,
+        'emailAddress',
+        'emailAddress',
+        'Email',
+        false,
+        3,
+        ControlTypes.TEXTBOX,
+        'someone@erp-mail.com',
+        false,
+      ),
+
     ];
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment

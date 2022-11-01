@@ -1,0 +1,55 @@
+<!--
+
+    Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+    Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!-- How it's implemented... -->
+<div class="container">
+
+  <div class="row">
+    <div class="column">
+      <h1>Test Dynamic Form</h1>
+      <p>Here is an example of how you can build on-the-fly forms with Angular. <code>The form</code> is the form as defined in <code>The data object</code>. You also can see the changes while you're modifying the form's values in <code>The result</code> section.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="column">
+      <h2>The Text Box form</h2>
+      <jhi-app-string-dynamic-form #dynamicForm
+                                   [questions]="questions"></jhi-app-string-dynamic-form>
+    </div>
+    <div class="column">
+
+      <div class="row">
+        <div class="column">
+          <h2>The result</h2>
+          <pre><code>{{ dynamicForm.form.value | json }}</code></pre>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="column">
+          <h2>The data object</h2>
+          <pre><code>{{ questions | json }}</code></pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

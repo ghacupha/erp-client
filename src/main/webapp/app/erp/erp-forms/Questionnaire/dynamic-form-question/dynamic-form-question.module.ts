@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
+import { StringDynamicFormQuestionComponent } from './string-dynamic-form-question/string-dynamic-form-question.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,13 @@ import { DynamicFormQuestionComponent } from './dynamic-form-question.component'
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [DynamicFormQuestionComponent],
-  exports: [DynamicFormQuestionComponent]
+  declarations: [
+    DynamicFormQuestionComponent,
+    StringDynamicFormQuestionComponent,
+  ],
+  exports: [
+    DynamicFormQuestionComponent,
+    StringDynamicFormQuestionComponent
+  ]
 })
 export class DynamicFormQuestionModule {}

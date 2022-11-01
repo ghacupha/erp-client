@@ -110,9 +110,10 @@
       "AmortizationSequence",
       "QuestionBase",
       "BusinessDocument",
-      "SettlementRequisition"
+      "SettlementRequisition",
+      "StringQuestionBase"
     ],
-    "lastLiquibaseTimestamp": 1664359007000,
+    "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,
     "skipCommitHook": true
   }

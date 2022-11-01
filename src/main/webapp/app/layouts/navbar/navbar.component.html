@@ -865,6 +865,18 @@
               <span>Settlement Requisition</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="string-question-base"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>String Question Base</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

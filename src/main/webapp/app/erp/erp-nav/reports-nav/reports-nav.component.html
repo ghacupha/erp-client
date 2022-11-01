@@ -66,7 +66,7 @@
             <span>Report Parameters</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="['ROLE_REPORT_DESIGNER']">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
             routerLink="question-base"
@@ -76,6 +76,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Question Base</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_REPORT_DESIGNER', 'ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="string-question-base"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>String Question Base</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
@@ -88,6 +100,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Dynamic Form</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="test/textbox/dynamic-form"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Dynamic Textbox Form</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="'ROLE_DEV'">

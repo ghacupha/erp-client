@@ -35,6 +35,7 @@ import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-acco
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
 import { EntityRoutingModule } from '../entities/entity-routing.module';
 import { SampleDynamicFormModule } from './erp-forms/Questionnaire/dynamic-form-question/sample-form-component/sample-dynamic-form.module';
+import { SampleTextBoxModule } from './erp-forms/Questionnaire/dynamic-form-question/sample-text-box-component/sample-text-box.module';
 
 export const routes: Routes = [];
 
@@ -57,6 +58,7 @@ export const routes: Routes = [];
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
     SampleDynamicFormModule,
+    SampleTextBoxModule,
   ],
   exports: [
     ErpNavbarModule,

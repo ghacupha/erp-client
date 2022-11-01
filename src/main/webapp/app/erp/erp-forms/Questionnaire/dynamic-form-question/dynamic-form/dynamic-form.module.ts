@@ -22,6 +22,7 @@ import { QuestionControlService } from '../../question-control.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DynamicFormQuestionModule } from '../dynamic-form-question.module';
 import { DynamicFormComponent } from './dynamic-form.component';
+import { StringDynamicFormComponent } from './string-dynamic-form/string-dynamic-form.component';
 
 /**
  * This is a sample implementation of the dynamic-form using the dynamic-form-question module
@@ -36,7 +37,13 @@ import { DynamicFormComponent } from './dynamic-form.component';
     DynamicFormQuestionModule
   ],
   providers: [QuestionControlService],
-  declarations: [DynamicFormComponent],
-  exports: [DynamicFormComponent]
+  declarations: [
+    DynamicFormComponent,
+    StringDynamicFormComponent
+  ],
+  exports: [
+    DynamicFormComponent,
+    StringDynamicFormComponent
+  ]
 })
 export class DynamicFormModule {}

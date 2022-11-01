@@ -41,6 +41,11 @@ import { SharedModule } from '../../shared/shared.module';
          data: { pageTitle: 'Question form control definitions' },
          loadChildren: () => import('./question-base/question-base.module').then(m => m.QuestionBaseModule),
        },
+       {
+         path: 'string-question-base',
+         data: { pageTitle: 'StringQuestionBases' },
+         loadChildren: () => import('./string-question-base/string-question-base.module').then(m => m.StringQuestionBaseModule),
+       },
      ]),
   ],
   exports: [

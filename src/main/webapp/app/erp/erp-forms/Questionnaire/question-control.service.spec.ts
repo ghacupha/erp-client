@@ -28,4 +28,6 @@ describe('QuestionControlService', () => {
     const service: QuestionControlService = TestBed.inject(QuestionControlService);
     expect(service).toBeTruthy();
   });
+
+  // TODO test  for the string method
 });
