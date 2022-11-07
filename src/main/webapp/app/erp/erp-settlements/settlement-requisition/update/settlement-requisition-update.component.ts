@@ -109,6 +109,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       if (settlementRequisition.id === undefined) {
         const today = dayjs();
         settlementRequisition.timeOfRequisition = today;
+        settlementRequisition.paymentStatus = PaymentStatus.IN_PROCESS;
       }
 
       this.updateForm(settlementRequisition);
@@ -116,14 +117,29 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    const reqSerial = uuidv4();
+
     this.editForm.patchValue({
-      serialNumber: uuidv4(),
+      serialNumber: reqSerial,
+      requisitionNumber: reqSerial.substring(0,8)
     })
   }
 
   updateCurrencies(update: ISettlementCurrency): void {
     this.editForm.patchValue({
       settlementCurrency: update
+    });
+  }
+
+  updateCurrentOwner(update: IApplicationUser): void {
+    this.editForm.patchValue({
+      currentOwner: update
+    });
+  }
+
+  updateNativeOwner(update: IApplicationUser): void {
+    this.editForm.patchValue({
+      nativeOwner: update
     });
   }
 
