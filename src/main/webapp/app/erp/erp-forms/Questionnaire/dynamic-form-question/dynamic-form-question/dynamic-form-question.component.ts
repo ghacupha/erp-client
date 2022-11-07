@@ -31,14 +31,19 @@ import { QuestionBase } from '../../../question-base/question-base.model';
 })
 export class DynamicFormQuestionComponent implements OnInit{
 
-  @Input() question: QuestionBase = {key: 'Key'};
+  @Input() question: QuestionBase | undefined;
   @Input() form!: FormGroup;
 
   get isValid(): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/no-unnecessary-condition
-    return !!this.form && this.form.controls[this.question.key].valid;
+    if (this.question) {
+      if (this.question.key) {
+        return this.form.controls[this.question.key].valid;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   constructor(private fb: FormBuilder) { }
@@ -68,6 +73,18 @@ export class DynamicFormQuestionComponent implements OnInit{
     return !!this.question && this.question.iterable;
   }
 
+  public questionControlName(): string | number {
+    if (this.question) {
+      if( this.question.key) {
+        return this.question.key;
+      } else {
+        return this.question.order ?? 1;
+      }
+    } else {
+      return 'undefined control'
+    }
+  }
+
   public questionControl(index?: number): FormControl {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return,@typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -76,7 +93,11 @@ export class DynamicFormQuestionComponent implements OnInit{
   }
 
   public questionId(index?: number): string | undefined {
-    return this.questionIsIterable ? `${this.question.key}-${index}` : this.question.key;
+    if (this.question) {
+      return this.questionIsIterable ? `${this.question.key}-${index}` : this.question.key;
+    } else {
+      return '';
+    }
   }
 
   public questionLabel(index?: number): string | undefined {

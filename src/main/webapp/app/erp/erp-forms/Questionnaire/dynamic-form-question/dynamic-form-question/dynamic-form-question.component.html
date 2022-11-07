@@ -17,11 +17,8 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div [formGroup]="form">
-
-  <ng-template #formTmpl
-               let-index="index">
-    <label [attr.for]="questionId(index)">{{ questionLabel(index) }}</label>
+<div *ngIf='question' [formGroup]="form">
+    <label [attr.for]="question.key">{{ question.label }}</label>
 
     <div [ngSwitch]="question.controlType">
 
@@ -36,9 +33,9 @@
              [type]="question['type']">-->
 
       <input *ngSwitchCase="'TEXTBOX'"
-             [formControl]="questionControl(index)"
+             [formControlName]="questionControlName()"
              [placeholder]="question.placeholder"
-             [id]="questionId(index)"
+             [id]="question.key"
              [type]="'textbox'">
 
       <!--// TODO Implement options component-->
@@ -65,7 +62,5 @@
     </div>
 
     <div class="errorMessage"
-         *ngIf="!isValid">{{ question.label }} is required</div>
-
-  </ng-template>
+         *ngIf="!isValid">{{ question!.label }} is required</div>
 </div>

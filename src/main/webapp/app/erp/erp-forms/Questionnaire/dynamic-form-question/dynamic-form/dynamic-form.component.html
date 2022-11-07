@@ -18,8 +18,7 @@
 
 -->
 <div>
-  <form (ngSubmit)="onSubmit()"
-        [formGroup]="form">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
 
     <div *ngFor="let question of questions" class="form-row">
       <jhi-app-question
@@ -34,8 +33,7 @@
     </div>
   </form>
 
-  <div *ngIf="payLoad"
-       class="form-row">
+  <div *ngIf="payLoad" class="form-row">
     <strong>Saved the following values</strong><br>
     <pre><code>{{ payLoad | json }}</code></pre>
   </div>
