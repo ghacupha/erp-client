@@ -18,15 +18,28 @@
 
 import { TestBed } from '@angular/core/testing';
 import { QuestionControlService } from './question-control.service';
+// import { FormControl, FormGroup } from '@angular/forms';
 
 describe('QuestionControlService', () => {
+  let service: QuestionControlService;
+
   beforeEach(() => TestBed.configureTestingModule({
     providers: [QuestionControlService]
   }));
+  beforeEach(() => {
+    service = TestBed.inject(QuestionControlService);
+  });
 
   it('should be created', () => {
-    const service: QuestionControlService = TestBed.inject(QuestionControlService);
     expect(service).toBeTruthy();
+  });
+
+  it('should create the appropriate form object', () => {
+    // const dyForm: FormGroup = new FormGroup();
+    //
+    // dyForm.addControl("firstName", )
+
+    // expect(dyForm).toBeTruthy();
   });
 
   // TODO test  for the string method

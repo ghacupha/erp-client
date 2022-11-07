@@ -33,8 +33,8 @@
     </div>
   </form>
 
-  <div *ngIf="payLoad" class="form-row">
+  <div *ngIf="payLoad" class="row">
     <strong>Saved the following values</strong><br>
-    <pre><code>{{ payLoad | json }}</code></pre>
+    <pre><code>{{ form.value | json }}</code></pre>
   </div>
 </div>

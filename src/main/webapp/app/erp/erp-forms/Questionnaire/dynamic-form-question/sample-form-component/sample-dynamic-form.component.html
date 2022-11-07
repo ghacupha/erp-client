@@ -21,12 +21,6 @@
 <div class="container">
 
   <div class="row">
-    <div>
-      <h1>Test Dynamic Form</h1>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="form-row">
       <h2>The form</h2>
       <jhi-app-dynamic-form
@@ -38,6 +32,7 @@
     <div class="form-row">
         <div>
           <h2>The result</h2>
+          <!--// TODO Check if we need a dynamic value accessor to return values from the child-->
           <pre><code>{{ dynamicForm.form.value | json }}</code></pre>
         </div>
 

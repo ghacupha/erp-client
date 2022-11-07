@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { QuestionBase } from '../../../question-base/question-base.model';
 import { FormGroup } from '@angular/forms';
 import { QuestionControlService } from '../../question-control.service';
@@ -29,16 +29,15 @@ import { QuestionControlService } from '../../question-control.service';
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss']
 })
-export class DynamicFormComponent implements OnInit{
+export class DynamicFormComponent {
 
   @Input() questions: QuestionBase[] = [];
-  form!: FormGroup;
+  form: FormGroup;
   payLoad = '';
 
-  constructor(private qcs: QuestionControlService) { }
-
-  ngOnInit(): void {
-    this.form = this.qcs.toFormGroup(this.questions);
+  constructor(private qcs: QuestionControlService) {
+    // this.form = this.qcs.toFormGroup(this.questions);
+    this.form = this.qcs.sampleFormGroup(this.questions);
   }
 
   onSubmit(): void {

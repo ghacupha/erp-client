@@ -40,18 +40,6 @@ describe('QuestionService', () => {
   it('should create test objects', () => {
     const questions: QuestionBase[] = [
       new QuestionBase(
-        1002,
-        'Heroes',
-        'firstName',
-        'Marcus',
-        'First name',
-        'First name',
-        true,
-        1,
-        ControlTypes.TEXTBOX,
-        'First Name'
-      ),
-      new QuestionBase(
         1001,
         'Heroes',
         'secondName',
@@ -59,11 +47,33 @@ describe('QuestionService', () => {
         'secondName',
         'Second name',
         true,
-        2,
+        1,
         ControlTypes.TEXTBOX,
         'Second name'
       ),
+      new QuestionBase(
+        1002,
+        'Heroes',
+        'firstName',
+        'Marcus',
+        'firstName',
+        'First name',
+        true,
+        2,
+        ControlTypes.TEXTBOX,
+        'First Name'
+      )
     ];
     expect(service.getQuestions()).toMatchObject(questions)
+  });
+
+  it('should create two test objects', () => {
+
+    expect(service.getQuestions().length).toEqual(2);
+  });
+
+  it('should sort the two test objects', () => {
+    expect(service.getQuestions()[1].key).toEqual("firstName");
+    expect(service.getQuestions()[0].key).toEqual("secondName");
   });
 });

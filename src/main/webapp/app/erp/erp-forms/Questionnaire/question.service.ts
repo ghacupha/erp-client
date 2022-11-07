@@ -18,7 +18,7 @@
 
 import { Injectable } from '@angular/core';
 import { IQuestionBase, QuestionBase } from '../question-base/question-base.model';
-import { IStringQuestionBase, StringQuestionBase } from '../string-question-base/string-question-base.model';
+// import { IStringQuestionBase, StringQuestionBase } from '../string-question-base/string-question-base.model';
 import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 
 /**
@@ -31,7 +31,6 @@ export class QuestionService {
   getQuestions(): IQuestionBase[] {
 
     const questions: QuestionBase[] = [
-
       new QuestionBase(
         1002,
         'Heroes',
@@ -40,7 +39,7 @@ export class QuestionService {
         'firstName',
         'First name',
         true,
-        1,
+        2,
         ControlTypes.TEXTBOX,
         'First Name'
       ),
@@ -52,66 +51,74 @@ export class QuestionService {
         'secondName',
         'Second name',
         true,
-        2,
+        1,
         ControlTypes.TEXTBOX,
         'Second name'
       ),
-
-
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return questions.sort((a , b) => a.order ?? 0 - b.order ?? 1);
+    // if (questions.length !== 0) {
+      return questions.sort((a, b) => {
+        if (a.order !== undefined && b.order !== undefined) {
+          if (a.order > b.order) {
+            return 1;
+          }
+          if (a.order < b.order) {
+            return -1;
+          }
+        }
+        return 0;
+      });
+    // }
+    // return questions;
   }
 
 
-  getStringQuestions(): IStringQuestionBase[] {
-
-    const questions: IStringQuestionBase[] = [
-
-      new StringQuestionBase(
-        1001,
-        'Edwin',
-        'firstName',
-        'First name',
-        true,
-        1,
-        ControlTypes.TEXTBOX,
-        'First Name',
-        false,
-      ),
-
-      new StringQuestionBase(
-        1002,
-        'secondName',
-        '',
-        'Second name',
-        false,
-        2,
-        ControlTypes.TEXTBOX,
-        'First Name',
-        false,
-      ),
-
-      new StringQuestionBase(
-        1003,
-        'emailAddress',
-        'emailAddress',
-        'Email',
-        false,
-        3,
-        ControlTypes.TEXTBOX,
-        'someone@erp-mail.com',
-        false,
-      ),
-
-    ];
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return questions.sort((a , b) => a.order ?? 0 - b.order ?? 1);
-  }
+ // getStringQuestions(): IStringQuestionBase[] {
+ //
+ //    const questions: IStringQuestionBase[] = [
+ //
+ //      new StringQuestionBase(
+ //        1001,
+ //        'Edwin',
+ //        'firstName',
+ //        'First name',
+ //        true,
+ //        1,
+ //        ControlTypes.TEXTBOX,
+ //        'First Name',
+ //        false,
+ //      ),
+ //
+ //      new StringQuestionBase(
+ //        1002,
+ //        'secondName',
+ //        '',
+ //        'Second name',
+ //        false,
+ //        2,
+ //        ControlTypes.TEXTBOX,
+ //        'First Name',
+ //        false,
+ //      ),
+ //
+ //      new StringQuestionBase(
+ //        1003,
+ //        'emailAddress',
+ //        'emailAddress',
+ //        'Email',
+ //        false,
+ //        3,
+ //        ControlTypes.TEXTBOX,
+ //        'someone@erp-mail.com',
+ //        false,
+ //      ),
+ //
+ //    ];
+ //
+ //    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment
+ //    // @ts-ignore
+ //    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+ //    return questions.sort((a , b) => a.order ?? 0 - b.order ?? 1);
+ //  }
 }

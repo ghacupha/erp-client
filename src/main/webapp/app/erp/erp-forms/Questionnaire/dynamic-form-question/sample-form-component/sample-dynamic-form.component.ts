@@ -18,6 +18,7 @@
 
 import { Component, VERSION } from '@angular/core';
 import { QuestionService } from '../../question.service';
+import { QuestionBase } from '../../../question-base/question-base.model';
 
 /**
  * This component used the question-service to provide configuration for the
@@ -30,7 +31,7 @@ import { QuestionService } from '../../question.service';
 })
 export class SampleDynamicFormComponent {
 
-  questions: any[];
+  questions: QuestionBase[];
   version = VERSION.full;
 
   constructor(service: QuestionService) {

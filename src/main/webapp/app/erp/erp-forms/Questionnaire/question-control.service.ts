@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { IQuestionBase } from '../question-base/question-base.model';
+import { IQuestionBase, QuestionBase } from '../question-base/question-base.model';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IStringQuestionBase } from '../string-question-base/string-question-base.model';
 
@@ -53,6 +53,18 @@ export class QuestionControlService {
 
       }
 
+    });
+    return new FormGroup(group);
+  }
+
+  sampleFormGroup(questions: QuestionBase[]): FormGroup {
+    const group: any = { };
+
+    questions.forEach(question => {
+      if (question.key) {
+        group[question.key] = question.required ? new FormControl(question.value ?? '', Validators.required)
+          : new FormControl(question.value ?? '');
+      }
     });
     return new FormGroup(group);
   }

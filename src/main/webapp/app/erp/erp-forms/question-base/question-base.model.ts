@@ -36,6 +36,7 @@ export class QuestionBase implements IQuestionBase {
   ) {
     this.required = this.required ?? false;
     this.iterable = this.iterable ?? false;
+    this.order = this.order ?? 0;
   }
 }
 
