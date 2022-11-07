@@ -46,12 +46,14 @@ describe('QuestionBase e2e test', () => {
     await questionBaseComponentsPage.clickOnCreateButton();
 
     await promise.all([
+      questionBaseUpdatePage.setContextInput('context'),
+      questionBaseUpdatePage.setSerialInput('64c99148-3908-465d-8c4a-e510e3ade974'),
       questionBaseUpdatePage.setValueInput('value'),
       questionBaseUpdatePage.setKeyInput('key'),
       questionBaseUpdatePage.setLabelInput('label'),
       questionBaseUpdatePage.getRequiredInput().click(),
       questionBaseUpdatePage.setOrderInput('5'),
-      questionBaseUpdatePage.setControlTypeInput('controlType'),
+      questionBaseUpdatePage.controlTypeSelectLastOption(),
       questionBaseUpdatePage.setPlaceholderInput('placeholder'),
       questionBaseUpdatePage.getIterableInput().click(),
       // questionBaseUpdatePage.parametersSelectLastOption(),

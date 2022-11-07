@@ -16,7 +16,7 @@ describe('StringQuestionBase e2e test', () => {
   const stringQuestionBasePageUrlPattern = new RegExp('/string-question-base(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const stringQuestionBaseSample = { key: 'Home', label: 'Rupee', order: 26653, controlType: 'TEXTBOX' };
+  const stringQuestionBaseSample = { key: 'Home', label: 'Rupee', order: 26653, controlType: 'TEXTAREA' };
 
   let stringQuestionBase: any;
 
@@ -164,7 +164,7 @@ describe('StringQuestionBase e2e test', () => {
 
       cy.get(`[data-cy="order"]`).type('29928').should('have.value', '29928');
 
-      cy.get(`[data-cy="controlType"]`).select('STRING');
+      cy.get(`[data-cy="controlType"]`).select('TEXTBOX');
 
       cy.get(`[data-cy="placeholder"]`).type('Handcrafted Concrete Jewelery').should('have.value', 'Handcrafted Concrete Jewelery');
 

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,7 +15,7 @@ import { QuestionBaseDeleteDialogComponent } from '../delete/question-base-delet
   templateUrl: './question-base.component.html',
 })
 export class QuestionBaseComponent implements OnInit {
-  questionBases?: IQuestionBase<any>[];
+  questionBases?: IQuestionBase[];
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
@@ -65,7 +47,7 @@ export class QuestionBaseComponent implements OnInit {
           sort: this.sort(),
         })
         .subscribe(
-          (res: HttpResponse<IQuestionBase<any>[]>) => {
+          (res: HttpResponse<IQuestionBase[]>) => {
             this.isLoading = false;
             this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
           },
@@ -84,7 +66,7 @@ export class QuestionBaseComponent implements OnInit {
         sort: this.sort(),
       })
       .subscribe(
-        (res: HttpResponse<IQuestionBase<any>[]>) => {
+        (res: HttpResponse<IQuestionBase[]>) => {
           this.isLoading = false;
           this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
         },
@@ -96,7 +78,7 @@ export class QuestionBaseComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['value', 'key', 'label', 'controlType', 'placeholder'].includes(this.predicate)) {
+    if (query && ['context', 'serial', 'value', 'key', 'label', 'controlType', 'placeholder'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -108,11 +90,11 @@ export class QuestionBaseComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackId(index: number, item: IQuestionBase<any>): number {
+  trackId(index: number, item: IQuestionBase): number {
     return item.id!;
   }
 
-  delete(questionBase: IQuestionBase<any>): void {
+  delete(questionBase: IQuestionBase): void {
     const modalRef = this.modalService.open(QuestionBaseDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.questionBase = questionBase;
     // unsubscribe not needed because closed completes on modal close
@@ -146,7 +128,7 @@ export class QuestionBaseComponent implements OnInit {
     });
   }
 
-  protected onSuccess(data: IQuestionBase<any>[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+  protected onSuccess(data: IQuestionBase[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
     this.ngbPaginationPage = this.page;

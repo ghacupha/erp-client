@@ -32,33 +32,24 @@ export class QuestionControlService {
    *
    * @param questions Array of QuestionBase objects defining the form-group
    */
-  toFormGroup(questions: IQuestionBase<any>[]): FormGroup {
+  toFormGroup(questions: IQuestionBase[]): FormGroup {
     const group: any = {};
 
     questions.forEach(question => {
 
       if (question.iterable) {
 
-        if (!Array.isArray(question.value)) {
-          question.value = question.value ? [question.value] : [''];
-        }
-
         const tmpArray: FormArray = question.required ? new FormArray([]) : new FormArray([], Validators.required);
 
         if (!question.value || !question.value.length) {
           tmpArray.push(new FormControl(''));
-        } else {
-          question.value.forEach((val: any) => {
-            tmpArray.push(new FormControl(val));
-          });
         }
 
         group.key = tmpArray;
 
       } else {
 
-        group.key = question.required ? new FormControl(question.value || '', Validators.required)
-          : new FormControl(question.value || '');
+        group.key = question.required ? new FormControl(question.value ?? '', Validators.required) : new FormControl(question.value ?? '');
 
       }
 

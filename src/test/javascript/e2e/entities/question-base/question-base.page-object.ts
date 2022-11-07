@@ -30,12 +30,14 @@ export class QuestionBaseUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
+  contextInput = element(by.id('field_context'));
+  serialInput = element(by.id('field_serial'));
   valueInput = element(by.id('field_value'));
   keyInput = element(by.id('field_key'));
   labelInput = element(by.id('field_label'));
   requiredInput = element(by.id('field_required'));
   orderInput = element(by.id('field_order'));
-  controlTypeInput = element(by.id('field_controlType'));
+  controlTypeSelect = element(by.id('field_controlType'));
   placeholderInput = element(by.id('field_placeholder'));
   iterableInput = element(by.id('field_iterable'));
 
@@ -52,6 +54,22 @@ export class QuestionBaseUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
+  }
+
+  async setContextInput(context: string): Promise<void> {
+    await this.contextInput.sendKeys(context);
+  }
+
+  async getContextInput(): Promise<string> {
+    return await this.contextInput.getAttribute('value');
+  }
+
+  async setSerialInput(serial: string): Promise<void> {
+    await this.serialInput.sendKeys(serial);
+  }
+
+  async getSerialInput(): Promise<string> {
+    return await this.serialInput.getAttribute('value');
   }
 
   async setValueInput(value: string): Promise<void> {
@@ -90,12 +108,16 @@ export class QuestionBaseUpdatePage {
     return await this.orderInput.getAttribute('value');
   }
 
-  async setControlTypeInput(controlType: string): Promise<void> {
-    await this.controlTypeInput.sendKeys(controlType);
+  async setControlTypeSelect(controlType: string): Promise<void> {
+    await this.controlTypeSelect.sendKeys(controlType);
   }
 
-  async getControlTypeInput(): Promise<string> {
-    return await this.controlTypeInput.getAttribute('value');
+  async getControlTypeSelect(): Promise<string> {
+    return await this.controlTypeSelect.element(by.css('option:checked')).getText();
+  }
+
+  async controlTypeSelectLastOption(): Promise<void> {
+    await this.controlTypeSelect.all(by.tagName('option')).last().click();
   }
 
   async setPlaceholderInput(placeholder: string): Promise<void> {

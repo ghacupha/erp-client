@@ -16,7 +16,14 @@ describe('QuestionBase e2e test', () => {
   const questionBasePageUrlPattern = new RegExp('/question-base(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const questionBaseSample = { key: 'user-centric', label: 'ubiquitous SAS', order: 50972, controlType: 'RAM Field auxiliary' };
+  const questionBaseSample = {
+    context: 'Automotive',
+    serial: 'b500c903-c95a-46ad-a038-7313d1547ceb',
+    key: 'Rubber',
+    label: 'blue framework',
+    order: 30865,
+    controlType: 'TEL',
+  };
 
   let questionBase: any;
 
@@ -153,20 +160,27 @@ describe('QuestionBase e2e test', () => {
     });
 
     it('should create an instance of QuestionBase', () => {
-      cy.get(`[data-cy="value"]`).type('Associate').should('have.value', 'Associate');
+      cy.get(`[data-cy="context"]`).type('Associate').should('have.value', 'Associate');
 
-      cy.get(`[data-cy="key"]`).type('Open-architected').should('have.value', 'Open-architected');
+      cy.get(`[data-cy="serial"]`)
+        .type('138ac7b4-8e07-4aed-ab32-20c1892776f9')
+        .invoke('val')
+        .should('match', new RegExp('138ac7b4-8e07-4aed-ab32-20c1892776f9'));
 
-      cy.get(`[data-cy="label"]`).type('Ridges Cambridgeshire Borders').should('have.value', 'Ridges Cambridgeshire Borders');
+      cy.get(`[data-cy="value"]`).type('Distributed').should('have.value', 'Distributed');
+
+      cy.get(`[data-cy="key"]`).type('USB ubiquitous').should('have.value', 'USB ubiquitous');
+
+      cy.get(`[data-cy="label"]`).type('online bus Applications').should('have.value', 'online bus Applications');
 
       cy.get(`[data-cy="required"]`).should('not.be.checked');
       cy.get(`[data-cy="required"]`).click().should('be.checked');
 
-      cy.get(`[data-cy="order"]`).type('89506').should('have.value', '89506');
+      cy.get(`[data-cy="order"]`).type('78232').should('have.value', '78232');
 
-      cy.get(`[data-cy="controlType"]`).type('mint Jewelery Borders').should('have.value', 'mint Jewelery Borders');
+      cy.get(`[data-cy="controlType"]`).select('TEXTBOX');
 
-      cy.get(`[data-cy="placeholder"]`).type('Lake Money').should('have.value', 'Lake Money');
+      cy.get(`[data-cy="placeholder"]`).type('Granite enhance').should('have.value', 'Granite enhance');
 
       cy.get(`[data-cy="iterable"]`).should('not.be.checked');
       cy.get(`[data-cy="iterable"]`).click().should('be.checked');

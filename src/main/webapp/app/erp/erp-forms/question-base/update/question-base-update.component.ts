@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -27,6 +9,7 @@ import { IQuestionBase, QuestionBase } from '../question-base.model';
 import { QuestionBaseService } from '../service/question-base.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ControlTypes } from '../../../erp-common/enumerations/control-types.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
@@ -36,12 +19,15 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 })
 export class QuestionBaseUpdateComponent implements OnInit {
   isSaving = false;
+  controlTypesValues = Object.keys(ControlTypes);
 
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
     id: [],
+    context: [null, [Validators.required]],
+    serial: [null, [Validators.required]],
     value: [],
     key: [null, [Validators.required]],
     label: [null, [Validators.required]],
@@ -117,7 +103,7 @@ export class QuestionBaseUpdateComponent implements OnInit {
     return option;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionBase<any>>>): void {
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionBase>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
       () => this.onSaveError()
@@ -136,9 +122,11 @@ export class QuestionBaseUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  protected updateForm(questionBase: IQuestionBase<any>): void {
+  protected updateForm(questionBase: IQuestionBase): void {
     this.editForm.patchValue({
       id: questionBase.id,
+      context: questionBase.context,
+      serial: questionBase.serial,
       value: questionBase.value,
       key: questionBase.key,
       label: questionBase.label,
@@ -189,10 +177,12 @@ export class QuestionBaseUpdateComponent implements OnInit {
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
   }
 
-  protected createFromForm(): IQuestionBase<any> {
+  protected createFromForm(): IQuestionBase {
     return {
       ...new QuestionBase(),
       id: this.editForm.get(['id'])!.value,
+      context: this.editForm.get(['context'])!.value,
+      serial: this.editForm.get(['serial'])!.value,
       value: this.editForm.get(['value'])!.value,
       key: this.editForm.get(['key'])!.value,
       label: this.editForm.get(['label'])!.value,

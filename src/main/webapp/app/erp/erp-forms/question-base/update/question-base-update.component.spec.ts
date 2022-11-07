@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
-/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 jest.mock('@angular/router');
@@ -63,7 +45,7 @@ describe('QuestionBase Management Update Component', () => {
 
   describe('ngOnInit', () => {
     it('Should call UniversallyUniqueMapping query and add missing value', () => {
-      const questionBase: IQuestionBase<string> = { id: 456 };
+      const questionBase: IQuestionBase = { id: 456 };
       const parameters: IUniversallyUniqueMapping[] = [{ id: 56557 }];
       questionBase.parameters = parameters;
 
@@ -90,7 +72,7 @@ describe('QuestionBase Management Update Component', () => {
     });
 
     it('Should call Placeholder query and add missing value', () => {
-      const questionBase: IQuestionBase<string> = { id: 456 };
+      const questionBase: IQuestionBase = { id: 456 };
       const placeholderItems: IPlaceholder[] = [{ id: 52896 }];
       questionBase.placeholderItems = placeholderItems;
 
@@ -109,7 +91,7 @@ describe('QuestionBase Management Update Component', () => {
     });
 
     it('Should update editForm', () => {
-      const questionBase: IQuestionBase<string> = { id: 456 };
+      const questionBase: IQuestionBase = { id: 456 };
       const parameters: IUniversallyUniqueMapping = { id: 66315 };
       questionBase.parameters = [parameters];
       const placeholderItems: IPlaceholder = { id: 16847 };
@@ -124,69 +106,69 @@ describe('QuestionBase Management Update Component', () => {
     });
   });
 
-  // describe('save', () => {
-  //   it('Should call update service on save for existing entity', () => {
-  //     // GIVEN
-  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-  //     const questionBase = { id: 123 };
-  //     jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
-  //     jest.spyOn(comp, 'previousState');
-  //     activatedRoute.data = of({ questionBase });
-  //     comp.ngOnInit();
-  //
-  //     // WHEN
-  //     comp.save();
-  //     expect(comp.isSaving).toEqual(true);
-  //     saveSubject.next(new HttpResponse({ body: questionBase }));
-  //     saveSubject.complete();
-  //
-  //     // THEN
-  //     expect(comp.previousState).toHaveBeenCalled();
-  //     expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
-  //     expect(comp.isSaving).toEqual(false);
-  //   });
-  //
-  //   it('Should call create service on save for new entity', () => {
-  //     // GIVEN
-  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-  //     const questionBase = new QuestionBase();
-  //     jest.spyOn(questionBaseService, 'create').mockReturnValue(saveSubject);
-  //     jest.spyOn(comp, 'previousState');
-  //     activatedRoute.data = of({ questionBase });
-  //     comp.ngOnInit();
-  //
-  //     // WHEN
-  //     comp.save();
-  //     expect(comp.isSaving).toEqual(true);
-  //     saveSubject.next(new HttpResponse({ body: questionBase }));
-  //     saveSubject.complete();
-  //
-  //     // THEN
-  //     expect(questionBaseService.create).toHaveBeenCalledWith(questionBase);
-  //     expect(comp.isSaving).toEqual(false);
-  //     expect(comp.previousState).toHaveBeenCalled();
-  //   });
-  //
-  //   it('Should set isSaving to false on error', () => {
-  //     // GIVEN
-  //     const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-  //     const questionBase = { id: 123 };
-  //     jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
-  //     jest.spyOn(comp, 'previousState');
-  //     activatedRoute.data = of({ questionBase });
-  //     comp.ngOnInit();
-  //
-  //     // WHEN
-  //     comp.save();
-  //     expect(comp.isSaving).toEqual(true);
-  //     saveSubject.error('This is an error!');
-  //
-  //     // THEN
-  //     expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
-  //     expect(comp.isSaving).toEqual(false);
-  //     expect(comp.previousState).not.toHaveBeenCalled();
-  //   });
-  // });
+  describe('save', () => {
+    it('Should call update service on save for existing entity', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+      const questionBase = { id: 123 };
+      jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ questionBase });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: questionBase }));
+      saveSubject.complete();
+
+      // THEN
+      expect(comp.previousState).toHaveBeenCalled();
+      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+      expect(comp.isSaving).toEqual(false);
+    });
+
+    it('Should call create service on save for new entity', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+      const questionBase = new QuestionBase();
+      jest.spyOn(questionBaseService, 'create').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ questionBase });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: questionBase }));
+      saveSubject.complete();
+
+      // THEN
+      expect(questionBaseService.create).toHaveBeenCalledWith(questionBase);
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).toHaveBeenCalled();
+    });
+
+    it('Should set isSaving to false on error', () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+      const questionBase = { id: 123 };
+      jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
+      jest.spyOn(comp, 'previousState');
+      activatedRoute.data = of({ questionBase });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving).toEqual(true);
+      saveSubject.error('This is an error!');
+
+      // THEN
+      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+      expect(comp.isSaving).toEqual(false);
+      expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
 
   describe('Tracking relationships identifiers', () => {
     describe('trackUniversallyUniqueMappingById', () => {

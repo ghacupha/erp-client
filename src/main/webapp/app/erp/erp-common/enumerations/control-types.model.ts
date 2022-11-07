@@ -1,9 +1,23 @@
 export enum ControlTypes {
-  STRING = 'textbox',
+  TEXTBOX = 'TEXTBOX',
 
-  DROPDOWN = 'dropdown',
+  DATETIME_LOCAL = 'DATETIME_LOCAL',
 
-  TEXTAREA = 'textarea',
+  DATE = 'DATE',
 
-  TEXTBOX = 'textbox',
+  PASSWORD = 'PASSWORD',
+
+  NUMBER = 'NUMBER',
+
+  SEARCH = 'SEARCH',
+
+  EMAIL = 'EMAIL',
+
+  MONTH = 'MONTH',
+
+  WEEK = 'WEEK',
+
+  TEL = 'TEL',
+
+  TEXTAREA = 'TEXTAREA',
 }

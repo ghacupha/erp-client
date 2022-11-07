@@ -1,6 +1,16 @@
 {
   "fields": [
     {
+      "fieldName": "context",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "serial",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
       "fieldName": "value",
       "fieldType": "String"
     },
@@ -25,7 +35,8 @@
     },
     {
       "fieldName": "controlType",
-      "fieldType": "String",
+      "fieldType": "ControlTypes",
+      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA",
       "fieldValidateRules": ["required"]
     },
     {

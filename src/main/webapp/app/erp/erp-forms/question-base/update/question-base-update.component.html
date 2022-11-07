@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
-    Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
@@ -28,6 +9,22 @@
         <div class="form-group" [hidden]="editForm.get('id')!.value == null">
           <label class="form-control-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_context">Context</label>
+          <input type="text" class="form-control" name="context" id="field_context" data-cy="context" formControlName="context" />
+          <div *ngIf="editForm.get('context')!.invalid && (editForm.get('context')!.dirty || editForm.get('context')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('context')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serial">Serial</label>
+          <input type="text" class="form-control" name="serial" id="field_serial" data-cy="serial" formControlName="serial" />
+          <div *ngIf="editForm.get('serial')!.invalid && (editForm.get('serial')!.dirty || editForm.get('serial')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('serial')?.errors?.required"> This field is required. </small>
+          </div>
         </div>
 
         <div class="form-group">
@@ -67,14 +64,10 @@
 
         <div class="form-group">
           <label class="form-control-label" for="field_controlType">Control Type</label>
-          <input
-            type="text"
-            class="form-control"
-            name="controlType"
-            id="field_controlType"
-            data-cy="controlType"
-            formControlName="controlType"
-          />
+          <select class="form-control" name="controlType" formControlName="controlType" id="field_controlType" data-cy="controlType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let controlTypes of controlTypesValues" [value]="controlTypes">controlTypes</option>
+          </select>
           <div *ngIf="editForm.get('controlType')!.invalid && (editForm.get('controlType')!.dirty || editForm.get('controlType')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('controlType')?.errors?.required"> This field is required. </small>
           </div>

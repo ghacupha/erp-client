@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
-    Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div>
   <h2 id="page-heading" data-cy="QuestionBaseHeading">
     <span>Question Bases</span>
@@ -70,6 +51,8 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="context"><span>Context</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serial"><span>Serial</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="value"><span>Value</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="key"><span>Key</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="label"><span>Label</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
@@ -86,6 +69,8 @@
           <td>
             <a [routerLink]="['/question-base', questionBase.id, 'view']">{{ questionBase.id }}</a>
           </td>
+          <td>{{ questionBase.context }}</td>
+          <td>{{ questionBase.serial }}</td>
           <td>{{ questionBase.value }}</td>
           <td>{{ questionBase.key }}</td>
           <td>{{ questionBase.label }}</td>
