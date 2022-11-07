@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { QuestionControlService } from '../../../question-control.service';
 import { StringQuestionBase } from '../../../../string-question-base/string-question-base.model';
