@@ -18,15 +18,52 @@
 
 import { TestBed } from '@angular/core/testing';
 import { QuestionService } from './question.service';
+import { QuestionBase } from '../question-base/question-base.model';
+import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 
 describe('QuestionService', () => {
+
+  let service: QuestionService;
+
   beforeEach(() => TestBed.configureTestingModule({
     providers: [QuestionService]
   }));
 
-  it('should be created', () => {
+  beforeEach(() => {
+    service = TestBed.get(QuestionService);
+  });
 
-    const service: QuestionService = TestBed.get(QuestionService);
+  it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('should create test objects', () => {
+    const questions: QuestionBase[] = [
+      new QuestionBase(
+        1002,
+        'Heroes',
+        'firstName',
+        'Marcus',
+        'First name',
+        'First name',
+        true,
+        1,
+        ControlTypes.TEXTBOX,
+        'First Name'
+      ),
+      new QuestionBase(
+        1001,
+        'Heroes',
+        'secondName',
+        'Aurelius',
+        'secondName',
+        'Second name',
+        true,
+        2,
+        ControlTypes.TEXTBOX,
+        'Second name'
+      ),
+    ];
+    expect(service.getQuestions()).toMatchObject(questions)
   });
 });

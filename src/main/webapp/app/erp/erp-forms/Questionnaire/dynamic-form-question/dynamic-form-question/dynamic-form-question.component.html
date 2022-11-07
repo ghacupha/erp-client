@@ -35,6 +35,12 @@
              [id]="questionId(index)"
              [type]="question['type']">-->
 
+      <input *ngSwitchCase="'TEXTBOX'"
+             [formControl]="questionControl(index)"
+             [placeholder]="question.placeholder"
+             [id]="questionId(index)"
+             [type]="'textbox'">
+
       <!--// TODO Implement options component-->
       <!--<select [id]="question.key"
               *ngSwitchCase="'dropdown'"
@@ -62,21 +68,4 @@
          *ngIf="!isValid">{{ question.label }} is required</div>
 
   </ng-template>
-
-  <div *ngIf="question.iterable; else formTmpl">
-    <div *ngFor="let field of questionArray.controls; let i=index; first as isFirst last as isLast">
-      <ng-container [ngTemplateOutlet]="formTmpl"
-                    [ngTemplateOutletContext]="{index: i}"></ng-container>
-
-      <button *ngIf="question.iterable && questionArray.controls.length > 1"
-              (click)="removeQuestion(i)"
-              type="button">-</button>
-
-      <button *ngIf="question.iterable && isLast"
-              (click)="addQuestion()"
-              type="button">+</button>
-
-    </div>
-  </div>
-
 </div>

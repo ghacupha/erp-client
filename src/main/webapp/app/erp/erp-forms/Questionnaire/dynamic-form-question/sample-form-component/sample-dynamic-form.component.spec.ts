@@ -19,6 +19,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SampleDynamicFormComponent } from './sample-dynamic-form.component';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
+import { QuestionService } from '../../question.service';
 
 
 describe('SampleDynamicFormComponent', () => {
@@ -27,8 +28,10 @@ describe('SampleDynamicFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ DynamicFormModule ]
+      imports: [ DynamicFormModule ],
+      providers: [QuestionService]
     })
+      .overrideTemplate(SampleDynamicFormComponent, '')
       .compileComponents();
   }));
 
