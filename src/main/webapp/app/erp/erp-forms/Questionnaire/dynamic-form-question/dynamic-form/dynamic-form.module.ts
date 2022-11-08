@@ -20,7 +20,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuestionControlService } from '../../question-control.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DynamicFormQuestionModule } from '../dynamic-form-question.module';
+import { DynamicFormQuestionModule } from '../dynamic-form-question/dynamic-form-question.module';
 import { DynamicFormComponent } from './dynamic-form.component';
 
 /**

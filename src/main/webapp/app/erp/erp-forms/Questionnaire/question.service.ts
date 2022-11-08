@@ -17,9 +17,9 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { IQuestionBase, QuestionBase } from '../question-base/question-base.model';
-// import { IStringQuestionBase, StringQuestionBase } from '../string-question-base/string-question-base.model';
-import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
+// import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
+import { Observable, of } from 'rxjs';
+import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from './dynamic-question.model';
 
 /**
  * @deprecated This is strictly a testing service and is here for demo purposes only.
@@ -28,97 +28,39 @@ import { ControlTypes } from '../../erp-common/enumerations/control-types.model'
 @Injectable({providedIn: 'root'})
 export class QuestionService {
 
-  getQuestions(): IQuestionBase[] {
+  // TODO: get from a remote source of question metadata
+  getQuestions(): Observable<DynamicQuestion<string>[]> {
 
-    const questions: QuestionBase[] = [
-      new QuestionBase(
-        1002,
-        'Heroes',
-        'firstName',
-        'Marcus',
-        'firstName',
-        'First name',
-        true,
-        2,
-        ControlTypes.TEXTBOX,
-        'First Name'
-      ),
-      new QuestionBase(
-        1001,
-        'Heroes',
-        'secondName',
-        'Aurelius',
-        'secondName',
-        'Second name',
-        true,
-        1,
-        ControlTypes.TEXTBOX,
-        'Second name'
-      ),
+    const questions: DynamicQuestion<string>[] = [
+
+      new DropdownQuestion({
+        key: 'brave',
+        label: 'Bravery Rating',
+        options: [
+          {key: 'solid',  value: 'Solid'},
+          {key: 'great',  value: 'Great'},
+          {key: 'good',   value: 'Good'},
+          {key: 'unproven', value: 'Unproven'}
+        ],
+        order: 3
+      }),
+
+      new TextboxQuestion({
+        key: 'firstName',
+        label: 'First name',
+        value: 'Bombasto',
+        required: true,
+        order: 1
+      }),
+
+      new TextboxQuestion({
+        key: 'emailAddress',
+        label: 'Email',
+        type: 'email',
+        order: 2
+      })
     ];
 
-    // if (questions.length !== 0) {
-      return questions.sort((a, b) => {
-        if (a.order !== undefined && b.order !== undefined) {
-          if (a.order > b.order) {
-            return 1;
-          }
-          if (a.order < b.order) {
-            return -1;
-          }
-        }
-        return 0;
-      });
-    // }
-    // return questions;
+    return of(questions.sort((a, b) => a.order - b.order));
   }
-
-
- // getStringQuestions(): IStringQuestionBase[] {
- //
- //    const questions: IStringQuestionBase[] = [
- //
- //      new StringQuestionBase(
- //        1001,
- //        'Edwin',
- //        'firstName',
- //        'First name',
- //        true,
- //        1,
- //        ControlTypes.TEXTBOX,
- //        'First Name',
- //        false,
- //      ),
- //
- //      new StringQuestionBase(
- //        1002,
- //        'secondName',
- //        '',
- //        'Second name',
- //        false,
- //        2,
- //        ControlTypes.TEXTBOX,
- //        'First Name',
- //        false,
- //      ),
- //
- //      new StringQuestionBase(
- //        1003,
- //        'emailAddress',
- //        'emailAddress',
- //        'Email',
- //        false,
- //        3,
- //        ControlTypes.TEXTBOX,
- //        'someone@erp-mail.com',
- //        false,
- //      ),
- //
- //    ];
- //
- //    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,@typescript-eslint/ban-ts-comment
- //    // @ts-ignore
- //    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
- //    return questions.sort((a , b) => a.order ?? 0 - b.order ?? 1);
- //  }
 }

@@ -18,7 +18,7 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DynamicFormQuestionModule } from '../dynamic-form-question.module';
+import { DynamicFormQuestionModule } from './dynamic-form-question.module';
 import { DynamicFormQuestionComponent } from './dynamic-form-question.component';
 import { ControlTypes } from '../../../../erp-common/enumerations/control-types.model';
 

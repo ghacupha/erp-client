@@ -22,7 +22,7 @@ import { ErpMaterialModule } from '../../erp-material.module';
 import { DealerMaintenanceModule } from './dealer-maintenance/dealer-maintenance.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { SampleDynamicFormModule } from './Questionnaire/dynamic-form-question/sample-form-component/sample-dynamic-form.module';
+import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
 
 @NgModule({
  imports: [
@@ -51,7 +51,7 @@ import { SampleDynamicFormModule } from './Questionnaire/dynamic-form-question/s
   ],
   exports: [
     DealerMaintenanceModule,
-    SampleDynamicFormModule,
+    QuestionnaireModule
   ]
 })
 export class ErpFormsModule {}

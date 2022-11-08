@@ -26,6 +26,7 @@ describe('QuestionControlService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [QuestionControlService]
   }));
+
   beforeEach(() => {
     service = TestBed.inject(QuestionControlService);
   });
