@@ -20,6 +20,9 @@ import { Injectable } from '@angular/core';
 // import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 import { Observable, of } from 'rxjs';
 import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from './dynamic-question.model';
+import { QuestionBaseService } from '../question-base/service/question-base.service';
+import { IQuestionBase } from '../question-base/question-base.model';
+import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 
 /**
  * @deprecated This is strictly a testing service and is here for demo purposes only.
@@ -27,6 +30,24 @@ import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from './dynamic-qu
  */
 @Injectable({providedIn: 'root'})
 export class QuestionService {
+
+  keyCounter = 0;
+
+  constructor(private questionBaseService: QuestionBaseService) {
+  }
+
+  getQBQuestionS(req?: any): Observable<DynamicQuestion<string>[]> {
+    const qns: DynamicQuestion<string>[] = [];
+
+    this.questionBaseService.query(req).subscribe(questions => {
+      ++this.keyCounter;
+      questions.body?.forEach(question => {
+        qns.push(this.mapQuestionToForm(question));
+      });
+    });
+
+    return of(qns);
+  }
 
   // TODO: get from a remote source of question metadata
   getQuestions(): Observable<DynamicQuestion<string>[]> {
@@ -62,5 +83,59 @@ export class QuestionService {
     ];
 
     return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+  private mapQuestionToForm(question: IQuestionBase): DynamicQuestion<string> {
+    return {
+      value: question.value ?? '',
+      controlType: this.controlTypeToStringMapping(question.controlType ?? ControlTypes.TEXTBOX),
+      key: question.key ?? `key # ${this.keyCounter}`,
+      label: question.label ?? `label # ${this.keyCounter}`,
+      options: [],
+      order: this.keyCounter,
+      required: question.required ?? false,
+      type: this.controlTypeToStringMapping(question.controlType ?? ControlTypes.TEXTBOX),
+    };
+  }
+
+  private controlTypeToStringMapping(controlType: ControlTypes): string {
+     switch (controlType) {
+       case ControlTypes.TEXTBOX: {
+         return 'textbox';
+       }
+       case ControlTypes.DATETIME_LOCAL: {
+         return 'datetime-local';
+       }
+       case ControlTypes.DATE: {
+         return 'date';
+       }
+       case ControlTypes.PASSWORD: {
+         return 'password';
+       }
+       case ControlTypes.NUMBER: {
+         return 'number';
+       }
+       case ControlTypes.SEARCH: {
+         return 'search';
+       }
+       case ControlTypes.EMAIL: {
+         return 'email';
+       }
+       case ControlTypes.MONTH: {
+         return 'month';
+       }
+       case ControlTypes.WEEK: {
+         return 'week';
+       }
+       case ControlTypes.TEL: {
+         return 'tel';
+       }
+       case ControlTypes.TEXTAREA: {
+         return 'textarea';
+       }
+       default: {
+         return 'textbox';
+       }
+     }
   }
 }
