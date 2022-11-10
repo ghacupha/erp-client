@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { element, by, ElementFinder } from 'protractor';
 
 export class QuestionBaseComponentsPage {
@@ -32,9 +50,9 @@ export class QuestionBaseUpdatePage {
   idInput = element(by.id('field_id'));
   contextInput = element(by.id('field_context'));
   serialInput = element(by.id('field_serial'));
-  valueInput = element(by.id('field_value'));
-  keyInput = element(by.id('field_key'));
-  labelInput = element(by.id('field_label'));
+  questionBaseValueInput = element(by.id('field_questionBaseValue'));
+  questionBaseKeyInput = element(by.id('field_questionBaseKey'));
+  questionBaseLabelInput = element(by.id('field_questionBaseLabel'));
   requiredInput = element(by.id('field_required'));
   orderInput = element(by.id('field_order'));
   controlTypeSelect = element(by.id('field_controlType'));
@@ -72,28 +90,28 @@ export class QuestionBaseUpdatePage {
     return await this.serialInput.getAttribute('value');
   }
 
-  async setValueInput(value: string): Promise<void> {
-    await this.valueInput.sendKeys(value);
+  async setQuestionBaseValueInput(questionBaseValue: string): Promise<void> {
+    await this.questionBaseValueInput.sendKeys(questionBaseValue);
   }
 
-  async getValueInput(): Promise<string> {
-    return await this.valueInput.getAttribute('value');
+  async getQuestionBaseValueInput(): Promise<string> {
+    return await this.questionBaseValueInput.getAttribute('value');
   }
 
-  async setKeyInput(key: string): Promise<void> {
-    await this.keyInput.sendKeys(key);
+  async setQuestionBaseKeyInput(questionBaseKey: string): Promise<void> {
+    await this.questionBaseKeyInput.sendKeys(questionBaseKey);
   }
 
-  async getKeyInput(): Promise<string> {
-    return await this.keyInput.getAttribute('value');
+  async getQuestionBaseKeyInput(): Promise<string> {
+    return await this.questionBaseKeyInput.getAttribute('value');
   }
 
-  async setLabelInput(label: string): Promise<void> {
-    await this.labelInput.sendKeys(label);
+  async setQuestionBaseLabelInput(questionBaseLabel: string): Promise<void> {
+    await this.questionBaseLabelInput.sendKeys(questionBaseLabel);
   }
 
-  async getLabelInput(): Promise<string> {
-    return await this.labelInput.getAttribute('value');
+  async getQuestionBaseLabelInput(): Promise<string> {
+    return await this.questionBaseLabelInput.getAttribute('value');
   }
 
   getRequiredInput(): ElementFinder {

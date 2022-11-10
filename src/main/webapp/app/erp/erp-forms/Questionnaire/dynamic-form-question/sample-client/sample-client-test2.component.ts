@@ -16,27 +16,21 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import { IStringQuestionBase } from '../string-question-base.model';
+import { Observable } from 'rxjs';
+import { DynamicQuestion } from '../../dynamic-question.model';
+import { QuestionService } from '../../question.service';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'jhi-string-question-base-detail',
-  templateUrl: './string-question-base-detail.component.html',
+  selector: 'jhi-sample-client',
+  templateUrl: './sample-client-test2.component.html',
+  providers:  [QuestionService]
 })
-export class StringQuestionBaseDetailComponent implements OnInit {
-  stringQuestionBase: IStringQuestionBase | null = null;
+export class SampleClientTest2Component {
+  questions$: Observable<DynamicQuestion<any>[]>;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ stringQuestionBase }) => {
-      this.stringQuestionBase = stringQuestionBase;
-    });
-  }
-
-  previousState(): void {
-    window.history.back();
+  constructor(service: QuestionService) {
+    // Apply mapping using the QuestionBase entity
+    this.questions$ = service.getQBQuestionS();
   }
 }

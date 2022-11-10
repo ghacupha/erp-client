@@ -18,18 +18,6 @@
 
 -->
 <div>
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
-
-    <div *ngFor="let question of questions" class="form-row">
-      <jhi-app-question [question]="question" [form]="form"></jhi-app-question>
-    </div>
-
-    <div class="form-row">
-      <button type="submit" [disabled]="!form.valid">Save</button>
-    </div>
-  </form>
-
-  <div *ngIf="payLoad" class="form-row">
-    <strong>Saved the following values</strong><br>{{payLoad}}
-  </div>
+  <h2>Dynamic Forms Test #2</h2>
+  <jhi-dynamic-form [questions]="questions$ | async"></jhi-dynamic-form>
 </div>

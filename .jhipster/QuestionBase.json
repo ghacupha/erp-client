@@ -11,16 +11,16 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "value",
+      "fieldName": "questionBaseValue",
       "fieldType": "String"
     },
     {
-      "fieldName": "key",
+      "fieldName": "questionBaseKey",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "label",
+      "fieldName": "questionBaseLabel",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },
@@ -69,5 +69,9 @@
   "readOnly": false,
   "pagination": "pagination",
   "name": "QuestionBase",
-  "changelogDate": "20220928095647"
+  "changelogDate": "20220928095647",
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "dto": "mapstruct",
+  "service": "serviceImpl"
 }

@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -19,8 +37,8 @@ describe('QuestionBase e2e test', () => {
   const questionBaseSample = {
     context: 'Automotive',
     serial: 'b500c903-c95a-46ad-a038-7313d1547ceb',
-    key: 'Rubber',
-    label: 'blue framework',
+    questionBaseKey: 'Rubber',
+    questionBaseLabel: 'blue framework',
     order: 30865,
     controlType: 'TEL',
   };
@@ -167,11 +185,11 @@ describe('QuestionBase e2e test', () => {
         .invoke('val')
         .should('match', new RegExp('138ac7b4-8e07-4aed-ab32-20c1892776f9'));
 
-      cy.get(`[data-cy="value"]`).type('Distributed').should('have.value', 'Distributed');
+      cy.get(`[data-cy="questionBaseValue"]`).type('Distributed').should('have.value', 'Distributed');
 
-      cy.get(`[data-cy="key"]`).type('USB ubiquitous').should('have.value', 'USB ubiquitous');
+      cy.get(`[data-cy="questionBaseKey"]`).type('USB ubiquitous').should('have.value', 'USB ubiquitous');
 
-      cy.get(`[data-cy="label"]`).type('online bus Applications').should('have.value', 'online bus Applications');
+      cy.get(`[data-cy="questionBaseLabel"]`).type('online bus Applications').should('have.value', 'online bus Applications');
 
       cy.get(`[data-cy="required"]`).should('not.be.checked');
       cy.get(`[data-cy="required"]`).click().should('be.checked');

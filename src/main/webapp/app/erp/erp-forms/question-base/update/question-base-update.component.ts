@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -28,9 +46,9 @@ export class QuestionBaseUpdateComponent implements OnInit {
     id: [],
     context: [null, [Validators.required]],
     serial: [null, [Validators.required]],
-    value: [],
-    key: [null, [Validators.required]],
-    label: [null, [Validators.required]],
+    questionBaseValue: [],
+    questionBaseKey: [null, [Validators.required]],
+    questionBaseLabel: [null, [Validators.required]],
     required: [],
     order: [null, [Validators.required]],
     controlType: [null, [Validators.required]],
@@ -127,9 +145,9 @@ export class QuestionBaseUpdateComponent implements OnInit {
       id: questionBase.id,
       context: questionBase.context,
       serial: questionBase.serial,
-      value: questionBase.value,
-      key: questionBase.key,
-      label: questionBase.label,
+      questionBaseValue: questionBase.questionBaseValue,
+      questionBaseKey: questionBase.questionBaseKey,
+      questionBaseLabel: questionBase.questionBaseLabel,
       required: questionBase.required,
       order: questionBase.order,
       controlType: questionBase.controlType,
@@ -183,9 +201,9 @@ export class QuestionBaseUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       context: this.editForm.get(['context'])!.value,
       serial: this.editForm.get(['serial'])!.value,
-      value: this.editForm.get(['value'])!.value,
-      key: this.editForm.get(['key'])!.value,
-      label: this.editForm.get(['label'])!.value,
+      questionBaseValue: this.editForm.get(['questionBaseValue'])!.value,
+      questionBaseKey: this.editForm.get(['questionBaseKey'])!.value,
+      questionBaseLabel: this.editForm.get(['questionBaseLabel'])!.value,
       required: this.editForm.get(['required'])!.value,
       order: this.editForm.get(['order'])!.value,
       controlType: this.editForm.get(['controlType'])!.value,

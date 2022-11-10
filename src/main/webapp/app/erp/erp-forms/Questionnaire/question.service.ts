@@ -17,7 +17,6 @@
 ///
 
 import { Injectable } from '@angular/core';
-// import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 import { Observable, of } from 'rxjs';
 import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from './dynamic-question.model';
 import { QuestionBaseService } from '../question-base/service/question-base.service';
@@ -87,10 +86,10 @@ export class QuestionService {
 
   private mapQuestionToForm(question: IQuestionBase): DynamicQuestion<string> {
     return {
-      value: question.value ?? '',
+      value: question.questionBaseValue ?? '',
       controlType: this.controlTypeToStringMapping(question.controlType ?? ControlTypes.TEXTBOX),
-      key: question.key ?? `key # ${this.keyCounter}`,
-      label: question.label ?? `label # ${this.keyCounter}`,
+      key: question.questionBaseKey ?? `key # ${this.keyCounter}`,
+      label: question.questionBaseLabel ?? `label # ${this.keyCounter}`,
       options: [],
       order: this.keyCounter,
       required: question.required ?? false,

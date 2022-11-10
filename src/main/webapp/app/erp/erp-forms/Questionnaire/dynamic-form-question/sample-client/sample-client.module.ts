@@ -1,26 +1,50 @@
+///
+/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { NgModule } from '@angular/core';
 import { SampleClientComponent } from './sample-client.component';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../../../../shared/shared.module';
+import { SampleClientTest2Component } from './sample-client-test2.component';
 
 /**
  * This test uses the base angular tutorial model for creating dynamic form
  */
 @NgModule({
-  declarations: [SampleClientComponent],
+  declarations: [SampleClientComponent, SampleClientTest2Component],
   imports: [
     DynamicFormModule,
     RouterModule.forRoot([
       {
-        path: 'test/dynamic-form/test#1',
+        path: 'test/dynamic-form/test-1',
         data: { pageTitle: 'ERP | Dynamic Form Test' },
         component: SampleClientComponent
+      },
+      {
+        path: 'test/dynamic-form/test-2',
+        data: { pageTitle: 'ERP | Dynamic Form Test 2' },
+        component: SampleClientTest2Component
       }
     ]),
     SharedModule
   ],
-  exports: [DynamicFormModule, SampleClientComponent]
+  exports: [DynamicFormModule, SampleClientComponent, SampleClientTest2Component]
 })
 export class SampleClientModule {
 }

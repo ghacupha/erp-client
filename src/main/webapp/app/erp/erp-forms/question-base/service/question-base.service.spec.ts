@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT
+/// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
@@ -24,9 +42,9 @@ describe('QuestionBase Service', () => {
       id: 0,
       context: 'AAAAAAA',
       serial: 'AAAAAAA',
-      value: 'AAAAAAA',
-      key: 'AAAAAAA',
-      label: 'AAAAAAA',
+      questionBaseValue: 'AAAAAAA',
+      questionBaseKey: 'AAAAAAA',
+      questionBaseLabel: 'AAAAAAA',
       required: false,
       order: 0,
       controlType: ControlTypes.TEXTBOX,
@@ -69,9 +87,9 @@ describe('QuestionBase Service', () => {
           id: 1,
           context: 'BBBBBB',
           serial: 'BBBBBB',
-          value: 'BBBBBB',
-          key: 'BBBBBB',
-          label: 'BBBBBB',
+          questionBaseValue: 'BBBBBB',
+          questionBaseKey: 'BBBBBB',
+          questionBaseLabel: 'BBBBBB',
           required: true,
           order: 1,
           controlType: 'BBBBBB',
@@ -94,9 +112,9 @@ describe('QuestionBase Service', () => {
       const patchObject = Object.assign(
         {
           context: 'BBBBBB',
-          value: 'BBBBBB',
-          key: 'BBBBBB',
-          label: 'BBBBBB',
+          questionBaseValue: 'BBBBBB',
+          questionBaseKey: 'BBBBBB',
+          questionBaseLabel: 'BBBBBB',
         },
         new QuestionBase()
       );
@@ -118,9 +136,9 @@ describe('QuestionBase Service', () => {
           id: 1,
           context: 'BBBBBB',
           serial: 'BBBBBB',
-          value: 'BBBBBB',
-          key: 'BBBBBB',
-          label: 'BBBBBB',
+          questionBaseValue: 'BBBBBB',
+          questionBaseKey: 'BBBBBB',
+          questionBaseLabel: 'BBBBBB',
           required: true,
           order: 1,
           controlType: 'BBBBBB',
