@@ -22,6 +22,8 @@ import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from './dynamic-qu
 import { QuestionBaseService } from '../question-base/service/question-base.service';
 import { IQuestionBase } from '../question-base/question-base.model';
 import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
+import { NGXLogger } from 'ngx-logger';
+import { count, map } from 'rxjs/operators';
 
 /**
  * @deprecated This is strictly a testing service and is here for demo purposes only.
@@ -32,20 +34,21 @@ export class QuestionService {
 
   keyCounter = 0;
 
-  constructor(private questionBaseService: QuestionBaseService) {
+  constructor(
+    private questionBaseService: QuestionBaseService,
+    private log: NGXLogger
+    ) {
   }
 
   getQBQuestionS(req?: any): Observable<DynamicQuestion<string>[]> {
-    const qns: DynamicQuestion<string>[] = [];
+    const qns: Observable<DynamicQuestion<string>[]> | undefined = this.questionBaseService.getQuestions(req);
 
-    this.questionBaseService.query(req).subscribe(questions => {
-      ++this.keyCounter;
-      questions.body?.forEach(question => {
-        qns.push(this.mapQuestionToForm(question));
-      });
-    });
-
-    return of(qns);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (qns !== undefined) {
+      return qns;
+    } else {
+      return of([]);
+    }
   }
 
   // TODO: get from a remote source of question metadata
@@ -62,7 +65,7 @@ export class QuestionService {
           {key: 'good',   value: 'Good'},
           {key: 'unproven', value: 'Unproven'}
         ],
-        order: 3
+        order: 1
       }),
 
       new TextboxQuestion({
@@ -70,16 +73,18 @@ export class QuestionService {
         label: 'First name',
         value: 'Bombasto',
         required: true,
-        order: 1
+        order: 2
       }),
 
       new TextboxQuestion({
         key: 'emailAddress',
         label: 'Email',
         type: 'email',
-        order: 2
+        order: 3
       })
     ];
+
+    this.log.debug(`We are now pushing ${questions.length} elements to the question-service`)
 
     return of(questions.sort((a, b) => a.order - b.order));
   }

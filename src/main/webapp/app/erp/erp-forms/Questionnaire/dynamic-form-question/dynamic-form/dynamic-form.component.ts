@@ -20,6 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { QuestionControlService } from '../../question-control.service';
 import { DynamicQuestion } from '../../dynamic-question.model';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'jhi-dynamic-form',
@@ -32,9 +33,11 @@ export class DynamicFormComponent implements OnInit {
   form!: FormGroup;
   payLoad = '';
 
-  constructor(private qcs: QuestionControlService) {}
+  constructor(private qcs: QuestionControlService, private log: NGXLogger) {}
 
   ngOnInit(): void {
+    this.log.debug(`Rendering form with ${this.questions?.length} questions`);
+
     this.form = this.qcs.toFormGroup(this.questions as DynamicQuestion<string>[]);
   }
 

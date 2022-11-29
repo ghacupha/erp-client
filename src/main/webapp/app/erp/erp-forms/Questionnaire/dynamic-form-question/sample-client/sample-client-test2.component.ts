@@ -16,21 +16,26 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Observable } from 'rxjs';
 import { DynamicQuestion } from '../../dynamic-question.model';
 import { QuestionService } from '../../question.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { QuestionBaseService } from '../../../question-base/service/question-base.service';
 
 @Component({
   selector: 'jhi-sample-client',
   templateUrl: './sample-client-test2.component.html',
   providers:  [QuestionService]
 })
-export class SampleClientTest2Component {
-  questions$: Observable<DynamicQuestion<any>[]>;
+export class SampleClientTest2Component implements OnInit {
+  questions: DynamicQuestion<any>[] = [];
 
-  constructor(service: QuestionService) {
-    // Apply mapping using the QuestionBase entity
-    this.questions$ = service.getQBQuestionS();
+  constructor(private service: QuestionService, private questionBaseService: QuestionBaseService) {
   }
+
+  ngOnInit(): void {
+    this. service.getQBQuestionS().subscribe(qn => {
+      this.questions = [...this.questions, ...qn]
+    });
+  }
+
 }

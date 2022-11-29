@@ -25,9 +25,14 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IQuestionBase, getQuestionBaseIdentifier } from '../question-base.model';
+import { DynamicQuestion } from '../../Questionnaire/dynamic-question.model';
+import { ControlTypes } from '../../../erp-common/enumerations/control-types.model';
+import { map } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 export type EntityResponseType = HttpResponse<IQuestionBase>;
 export type EntityArrayResponseType = HttpResponse<IQuestionBase[]>;
+export type EntityArrayQuestionResponseType = DynamicQuestion<string>[];
 
 @Injectable({ providedIn: 'root' })
 export class QuestionBaseService {
@@ -61,6 +66,13 @@ export class QuestionBaseService {
     return this.http.get<IQuestionBase[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  getQuestions(req?: any): Observable<DynamicQuestion<string>[]> | undefined {
+    const options = createRequestOption(req);
+    return this.http.get<IQuestionBase[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertQuestionsFromServer(res)))
+      .pipe(map(questions => this.sortQuestionsFromServer(questions)));
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
@@ -90,5 +102,76 @@ export class QuestionBaseService {
       return [...questionBasesToAdd, ...questionBaseCollection];
     }
     return questionBaseCollection;
+  }
+
+  private sortQuestionsFromServer(questions: DynamicQuestion<string>[]): DynamicQuestion<string>[] {
+     return questions.sort((a, b) => a.order - b.order)
+  }
+
+  private convertQuestionsFromServer(res: EntityArrayResponseType): DynamicQuestion<string>[] {
+    let keyCounter = 0;
+    const questions: DynamicQuestion<string>[] = [];
+    if (res.body) {
+      res.body.forEach(question => {
+        ++keyCounter;
+        questions.push(this.mapQuestionToForm(question, keyCounter));
+      })
+    }
+    return questions;
+  }
+
+
+  private mapQuestionToForm(question: IQuestionBase, keyCounter: number): DynamicQuestion<string> {
+    return {
+      value: question.questionBaseValue ?? '',
+      controlType: this.controlTypeToStringMapping(question.controlType ?? ControlTypes.TEXTBOX),
+      key: question.questionBaseKey ?? `key # ${keyCounter}`,
+      label: question.questionBaseLabel ?? `label # ${keyCounter}`,
+      options: [],
+      order: question.order ?? keyCounter,
+      required: question.required ?? false,
+      type: this.controlTypeToStringMapping(question.controlType ?? ControlTypes.TEXTBOX),
+    };
+  }
+
+  private controlTypeToStringMapping(controlType: ControlTypes): string {
+    switch (controlType) {
+      case ControlTypes.TEXTBOX: {
+        return 'textbox';
+      }
+      case ControlTypes.DATETIME_LOCAL: {
+        return 'datetime-local';
+      }
+      case ControlTypes.DATE: {
+        return 'date';
+      }
+      case ControlTypes.PASSWORD: {
+        return 'password';
+      }
+      case ControlTypes.NUMBER: {
+        return 'number';
+      }
+      case ControlTypes.SEARCH: {
+        return 'search';
+      }
+      case ControlTypes.EMAIL: {
+        return 'email';
+      }
+      case ControlTypes.MONTH: {
+        return 'month';
+      }
+      case ControlTypes.WEEK: {
+        return 'week';
+      }
+      case ControlTypes.TEL: {
+        return 'tel';
+      }
+      case ControlTypes.TEXTAREA: {
+        return 'textarea';
+      }
+      default: {
+        return 'textbox';
+      }
+    }
   }
 }
