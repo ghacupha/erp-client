@@ -20,6 +20,7 @@ import { DynamicQuestion } from '../../dynamic-question.model';
 import { QuestionService } from '../../question.service';
 import { Component, OnInit } from '@angular/core';
 import { QuestionBaseService } from '../../../question-base/service/question-base.service';
+import { MockQuestionBaseService } from './mock-question-base.service';
 
 @Component({
   selector: 'jhi-sample-client',
@@ -29,13 +30,16 @@ import { QuestionBaseService } from '../../../question-base/service/question-bas
 export class SampleClientTest2Component implements OnInit {
   questions: DynamicQuestion<any>[] = [];
 
-  constructor(private service: QuestionService, private questionBaseService: QuestionBaseService) {
+  constructor(
+    private service: QuestionService,
+    private questionBaseService: QuestionBaseService,
+    private mockQuestionBaseService: MockQuestionBaseService
+  ) {
   }
 
   ngOnInit(): void {
-    this. service.getQBQuestionS().subscribe(qn => {
+    this.mockQuestionBaseService.getQuestions().subscribe(qn => {
       this.questions = [...this.questions, ...qn]
     });
   }
-
 }

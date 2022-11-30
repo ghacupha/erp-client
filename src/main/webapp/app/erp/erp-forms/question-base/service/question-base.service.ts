@@ -67,8 +67,7 @@ export class QuestionBaseService {
   }
 
   getQuestions(req?: any): Observable<DynamicQuestion<string>[]> | undefined {
-    const options = createRequestOption(req);
-    return this.http.get<IQuestionBase[]>(this.resourceUrl, { params: options, observe: 'response' })
+    return this.query(req)
       .pipe(map((res: EntityArrayResponseType) => this.convertQuestionsFromServer(res)))
       .pipe(map(questions => this.sortQuestionsFromServer(questions)));
   }
