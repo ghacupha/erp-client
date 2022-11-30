@@ -19,10 +19,11 @@
 import { NgModule } from '@angular/core';
 import { SampleClientComponent } from './sample-client.component';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
-import { Route, RouterModule } from '@angular/router';
+import {  Route, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { SampleClientTest2Component } from './sample-client-test2.component';
 import { SampleClientTest3Component } from './sample-client-test3.component';
+import { SampleClientTest3ResolverService } from './sample-client-test3-resolver.service';
 
 const routes: Route[] = [
   {
@@ -38,7 +39,8 @@ const routes: Route[] = [
   {
     path: 'test/dynamic-form/test-3',
     data: { pageTitle: 'ERP | Dynamic Form Test 3' },
-    component: SampleClientTest3Component
+    component: SampleClientTest3Component,
+    resolve: { serverQuestions: SampleClientTest3ResolverService }
   }
 ]
 
@@ -61,7 +63,8 @@ const routes: Route[] = [
     SampleClientComponent,
     SampleClientTest2Component,
     SampleClientTest3Component
-  ]
+  ],
+  providers: [SampleClientTest3ResolverService]
 })
 export class SampleClientModule {
 }

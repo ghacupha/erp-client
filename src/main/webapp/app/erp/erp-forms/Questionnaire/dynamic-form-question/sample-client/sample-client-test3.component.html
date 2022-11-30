@@ -19,5 +19,7 @@
 -->
 <div>
   <h2>Dynamic Forms Test #3</h2>
-  <jhi-dynamic-form [questions]="questions$ | async"></jhi-dynamic-form>
+  <div *ngIf='pageReady'>
+    <jhi-dynamic-form [questions]="questions$ | async"></jhi-dynamic-form>
+  </div>
 </div>

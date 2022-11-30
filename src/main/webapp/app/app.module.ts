@@ -48,6 +48,7 @@ import { ErpSystemModule } from './erp/erp-system.module';
 import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SampleClientTest3ResolverService } from './erp/erp-forms/Questionnaire/dynamic-form-question/sample-client/sample-client-test3-resolver.service';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
+    SampleClientTest3ResolverService,
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
   bootstrap: [MainComponent],

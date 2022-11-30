@@ -1,18 +1,23 @@
 import { Injectable } from '@angular/core';
-import { QuestionBaseService } from '../../../question-base/service/question-base.service';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from '../../dynamic-question.model';
+import { HttpClient } from '@angular/common/http';
+import { createRequestOption } from '../../../../../core/request/request-util';
+import { map } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class SampleClientTest3Service {
 
-  keyCounter = 0;
+  protected resourceUrl = 'content/json/sample3-dynamic-question.json';
 
-  constructor(
-    private questionBaseService: QuestionBaseService,
-    private log: NGXLogger
-  ) {
+  constructor(protected http: HttpClient, private log: NGXLogger) {}
+
+  getQuestionsV3(req?: any): Observable<DynamicQuestion<string>[]> {
+    const options = createRequestOption(req);
+    return this.http.get<DynamicQuestion<string>[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(questions => questions.body ?? []))
+      .pipe(map(questions => this.sortQuestionsFromServer(questions)));
   }
 
   // TODO: get from a remote source of question metadata
@@ -51,5 +56,10 @@ export class SampleClientTest3Service {
     this.log.debug(`We are now pushing ${questions.length} elements to the question-service`)
 
     return of(questions.sort((a, b) => a.order - b.order));
+  }
+
+
+  private sortQuestionsFromServer(questions: DynamicQuestion<string>[]): DynamicQuestion<string>[] {
+    return questions.sort((a, b) => a.order - b.order)
   }
 }

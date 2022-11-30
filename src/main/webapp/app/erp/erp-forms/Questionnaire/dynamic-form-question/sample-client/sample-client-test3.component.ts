@@ -16,10 +16,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DynamicQuestion } from '../../dynamic-question.model';
 import { SampleClientTest3Service } from './sample-client-test3.service';
+import { ActivatedRoute } from '@angular/router';
 
 /**
  * This is the famous dynamic forms tutorial from the site https://angular.io/guide/dynamic-form
@@ -31,14 +32,23 @@ import { SampleClientTest3Service } from './sample-client-test3.service';
 @Component({
   selector: 'jhi-sample-client',
   templateUrl: './sample-client-test3.component.html',
-  providers:  [SampleClientTest3Service]
 })
-export class SampleClientTest3Component {
+export class SampleClientTest3Component implements OnInit{
 
-  questions$: Observable<DynamicQuestion<any>[]>;
+  questionsLoaded!: Promise<boolean>;
 
-  constructor(service: SampleClientTest3Service) {
-    // Apply mapping using the QuestionBase entity
-    this.questions$ = service.getQuestions();
+  questions$!: Observable<DynamicQuestion<any>[]>;
+
+  pageReady = false;
+
+  constructor(service: SampleClientTest3Service, private route: ActivatedRoute) {
+  }
+
+  ngOnInit(): void {
+    this.questions$ = this.route.snapshot.data.serverQuestions;
+
+    this.questionsLoaded = Promise.resolve(true);
+
+    this.questionsLoaded.finally(() => this.pageReady = true)
   }
 }
