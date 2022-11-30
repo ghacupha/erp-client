@@ -23,7 +23,6 @@ import { QuestionBaseService } from '../question-base/service/question-base.serv
 import { IQuestionBase } from '../question-base/question-base.model';
 import { ControlTypes } from '../../erp-common/enumerations/control-types.model';
 import { NGXLogger } from 'ngx-logger';
-import { count, map } from 'rxjs/operators';
 
 /**
  * @deprecated This is strictly a testing service and is here for demo purposes only.

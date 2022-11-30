@@ -28,11 +28,9 @@ import { IQuestionBase, getQuestionBaseIdentifier } from '../question-base.model
 import { DynamicQuestion } from '../../Questionnaire/dynamic-question.model';
 import { ControlTypes } from '../../../erp-common/enumerations/control-types.model';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
 
 export type EntityResponseType = HttpResponse<IQuestionBase>;
 export type EntityArrayResponseType = HttpResponse<IQuestionBase[]>;
-export type EntityArrayQuestionResponseType = DynamicQuestion<string>[];
 
 @Injectable({ providedIn: 'root' })
 export class QuestionBaseService {

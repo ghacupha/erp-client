@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { IQuestionBase, QuestionBase } from '../../../question-base/question-base.model';
+import { Observable } from 'rxjs';
+import { IQuestionBase} from '../../../question-base/question-base.model';
 import { ControlTypes } from '../../../../erp-common/enumerations/control-types.model';
 import { DynamicQuestion } from '../../dynamic-question.model';
 import { map } from 'rxjs/operators';
 import { EntityArrayResponseType } from '../../../question-base/service/question-base.service';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { createRequestOption } from '../../../../../core/request/request-util';
 
+/**
+ * Among other things we set out to create a service that would really fetch data from an external
+ * resource, in this case a random file containing configurations for a form. This framework of configuration
+ * of forms does not look so bad either, if only we could find out why only one item is picked from the entire
+ * list of questions
+ */
 @Injectable({providedIn: 'root'})
 export class MockQuestionBaseService {
 
-  protected resourceUrl = 'src/test/javascript/assets/question-base.json';
+  protected resourceUrl = 'content/json/question-base.json';
 
   constructor(protected http: HttpClient) {}
 
@@ -52,73 +58,6 @@ export class MockQuestionBaseService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private mockQuestions(req?: any): Observable<HttpResponse<IQuestionBase[]>> {
-
-    const queries: IQuestionBase[] = [
-      {
-        ...new QuestionBase(),
-        id: 1001,
-        context: 'Payments',
-        serial: 'f102727b-1b31-4d90-8228-61496c0b8032',
-        questionBaseValue: '',
-        questionBaseKey: 'gender',
-        questionBaseLabel: 'Gender',
-        required: true,
-        order: 1,
-        controlType: ControlTypes.TEXTBOX,
-        placeholder: '',
-        iterable: false,
-        parameters: [],
-        placeholderItems: [],
-      },
-      {
-        ...new QuestionBase(),
-        id: 1001,
-        context: 'Payments',
-        serial: '86ffcc9d-1ba2-4af6-aa95-f182d4622023',
-        questionBaseValue: '',
-        questionBaseKey: 'profession',
-        questionBaseLabel: 'Profession',
-        required: true,
-        order: 3,
-        controlType: ControlTypes.TEXTBOX,
-        placeholder: '',
-        iterable: false,
-        parameters: [],
-        placeholderItems: [],
-      },
-      {
-        ...new QuestionBase(),
-        id: 1001,
-        context: 'Payments',
-        serial: 'ccf1812e-ee50-47f6-be4d-e2693730fbc8',
-        questionBaseValue: '',
-        questionBaseKey: 'address',
-        questionBaseLabel: 'Address',
-        required: true,
-        order: 3,
-        controlType: ControlTypes.TEXTBOX,
-        placeholder: '',
-        iterable: false,
-        parameters: [],
-        placeholderItems: [],
-      },
-    ];
-
-    const mockHeaders: HttpHeaders = new HttpHeaders();
-
-    const response: HttpResponse<IQuestionBase[]> = {
-        headers: mockHeaders,
-        ok: true,
-        status: 200,
-        statusText: '',
-        url: null,
-        body: queries,
-    };
-
-    return of(response)
-  }
 
   private controlTypeToStringMapping(controlType: ControlTypes): string {
     switch (controlType) {
