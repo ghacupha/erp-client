@@ -16,22 +16,29 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DynamicQuestion } from '../../dynamic-question.model';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
   selector: 'jhi-app-question',
   templateUrl: './dynamic-form-question.component.html'
 })
-export class DynamicFormQuestionComponent {
+export class DynamicFormQuestionComponent implements OnInit {
   @Input() question!: DynamicQuestion<string>;
   @Input() form!: FormGroup;
+
+
+  constructor(protected log: NGXLogger) {
+  }
+
+  ngOnInit(): void {
+    this.log.debug(`Initializing form item for question: ${this.question.key}`)
+  }
+
+
   get isValid(): boolean {
-    if(this.question.key) {
-      return this.form.controls[this.question.key].valid;
-    } else {
-      return false;
-    }
+    return this.form.controls[this.question.key].valid;
   }
 }
