@@ -114,6 +114,18 @@
             <span>Dynamic Form Test 2</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="test/dynamic-form/test-3"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Dynamic Form Test 3</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
             class="dropdown-item"

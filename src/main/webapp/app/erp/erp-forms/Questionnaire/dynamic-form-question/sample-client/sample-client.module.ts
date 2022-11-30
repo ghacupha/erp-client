@@ -19,32 +19,49 @@
 import { NgModule } from '@angular/core';
 import { SampleClientComponent } from './sample-client.component';
 import { DynamicFormModule } from '../dynamic-form/dynamic-form.module';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { SampleClientTest2Component } from './sample-client-test2.component';
+import { SampleClientTest3Component } from './sample-client-test3.component';
+
+const routes: Route[] = [
+  {
+    path: 'test/dynamic-form/test-1',
+    data: { pageTitle: 'ERP | Dynamic Form Test' },
+    component: SampleClientComponent
+  },
+  {
+    path: 'test/dynamic-form/test-2',
+    data: { pageTitle: 'ERP | Dynamic Form Test 2' },
+    component: SampleClientTest2Component
+  },
+  {
+    path: 'test/dynamic-form/test-3',
+    data: { pageTitle: 'ERP | Dynamic Form Test 3' },
+    component: SampleClientTest3Component
+  }
+]
 
 /**
  * This test uses the base angular tutorial model for creating dynamic form
  */
 @NgModule({
-  declarations: [SampleClientComponent, SampleClientTest2Component],
+  declarations: [
+    SampleClientComponent,
+    SampleClientTest2Component,
+    SampleClientTest3Component
+  ],
   imports: [
     DynamicFormModule,
-    RouterModule.forRoot([
-      {
-        path: 'test/dynamic-form/test-1',
-        data: { pageTitle: 'ERP | Dynamic Form Test' },
-        component: SampleClientComponent
-      },
-      {
-        path: 'test/dynamic-form/test-2',
-        data: { pageTitle: 'ERP | Dynamic Form Test 2' },
-        component: SampleClientTest2Component
-      }
-    ]),
+    RouterModule.forRoot(routes),
     SharedModule
   ],
-  exports: [DynamicFormModule, SampleClientComponent, SampleClientTest2Component]
+  exports: [
+    DynamicFormModule,
+    SampleClientComponent,
+    SampleClientTest2Component,
+    SampleClientTest3Component
+  ]
 })
 export class SampleClientModule {
 }
