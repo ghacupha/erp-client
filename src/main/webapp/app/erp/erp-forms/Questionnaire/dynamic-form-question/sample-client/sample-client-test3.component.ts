@@ -20,6 +20,7 @@ import { Component } from '@angular/core';
 import { QuestionService } from '../../question.service';
 import { Observable } from 'rxjs';
 import { DynamicQuestion } from '../../dynamic-question.model';
+import { QuestionServiceTest3Service } from './QuestionServiceTest3.service';
 
 /**
  * This is the famous dynamic forms tutorial from the site https://angular.io/guide/dynamic-form
@@ -37,7 +38,7 @@ export class SampleClientTest3Component {
 
   questions$: Observable<DynamicQuestion<any>[]>;
 
-  constructor(service: QuestionService) {
+  constructor(service: QuestionServiceTest3Service) {
     // Apply mapping using the QuestionBase entity
     this.questions$ = service.getQuestions();
   }
