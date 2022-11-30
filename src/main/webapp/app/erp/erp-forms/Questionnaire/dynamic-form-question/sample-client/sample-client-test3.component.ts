@@ -19,7 +19,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DynamicQuestion } from '../../dynamic-question.model';
-import { QuestionServiceTest3Service } from './QuestionServiceTest3.service';
+import { SampleClientTest3Service } from './sample-client-test3.service';
 
 /**
  * This is the famous dynamic forms tutorial from the site https://angular.io/guide/dynamic-form
@@ -31,13 +31,13 @@ import { QuestionServiceTest3Service } from './QuestionServiceTest3.service';
 @Component({
   selector: 'jhi-sample-client',
   templateUrl: './sample-client-test3.component.html',
-  providers:  [QuestionServiceTest3Service]
+  providers:  [SampleClientTest3Service]
 })
 export class SampleClientTest3Component {
 
   questions$: Observable<DynamicQuestion<any>[]>;
 
-  constructor(service: QuestionServiceTest3Service) {
+  constructor(service: SampleClientTest3Service) {
     // Apply mapping using the QuestionBase entity
     this.questions$ = service.getQuestions();
   }

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { DropdownQuestion, DynamicQuestion, TextboxQuestion } from '../../dynamic-question.model';
 
 @Injectable({providedIn: 'root'})
-export class QuestionServiceTest3Service {
+export class SampleClientTest3Service {
 
   keyCounter = 0;
 
