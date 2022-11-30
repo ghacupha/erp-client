@@ -17,7 +17,6 @@
 ///
 
 import { Component } from '@angular/core';
-import { QuestionService } from '../../question.service';
 import { Observable } from 'rxjs';
 import { DynamicQuestion } from '../../dynamic-question.model';
 import { QuestionServiceTest3Service } from './QuestionServiceTest3.service';
@@ -32,7 +31,7 @@ import { QuestionServiceTest3Service } from './QuestionServiceTest3.service';
 @Component({
   selector: 'jhi-sample-client',
   templateUrl: './sample-client-test3.component.html',
-  providers:  [QuestionService]
+  providers:  [QuestionServiceTest3Service]
 })
 export class SampleClientTest3Component {
 
