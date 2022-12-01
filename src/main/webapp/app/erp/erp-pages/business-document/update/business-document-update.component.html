@@ -172,7 +172,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
           <select
             class="form-control"
@@ -203,7 +203,17 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['fileChecksumAlgorithm'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
+
+        <jhi-algorithm-form-control
+          ngDefaultControl
+          formControlName='fileChecksumAlgorithm'
+          [inputValue]="editForm.get(['fileChecksumAlgorithm'])!.value"
+          (valueSelected)='updateFileChecksumAlgorithm($event)'
+          inputControlLabel='File Checksum Algorithm'
+        >
+          <option [ngValue]="editForm.get('fileChecksumAlgorithm')!.value"></option>
+        </jhi-algorithm-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_documentFileChecksum">Document File Checksum</label>
@@ -258,7 +268,7 @@
           <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
           <select
             class="form-control"
@@ -289,10 +299,20 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
+
+        <jhi-m21-security-clearance-form-control
+          ngDefaultControl
+          formControlName='securityClearance'
+          [inputValue]="editForm.get(['securityClearance'])!.value"
+          (valueSelected)='updateSecurityClearance($event)'
+          inputControlLabel='Security Clearance'
+        >
+          <option [ngValue]="editForm.get('securityClearance')!.value"></option>
+        </jhi-m21-security-clearance-form-control>
 
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_applicationMappings">Application Mappings</label>
           <select
             class="form-control"
@@ -312,26 +332,27 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='applicationMappings'
+          [inputValues]="editForm.get(['applicationMappings'])!.value"
+          (selectedValues)='updateMappings($event)'
+          inputControlLabel='Application Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
       </div>
 
       <div>

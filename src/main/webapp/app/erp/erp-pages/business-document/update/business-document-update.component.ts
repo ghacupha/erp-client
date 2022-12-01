@@ -26,7 +26,7 @@ import { finalize, map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
-import { IBusinessDocument, BusinessDocument } from '../business-document.model';
+import { BusinessDocument, IBusinessDocument } from '../business-document.model';
 import { BusinessDocumentService } from '../service/business-document.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -101,8 +101,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         businessDocument.documentSerial = uuidv4();
       }
 
-      const today = dayjs();
-      businessDocument.lastModified = today;
+      businessDocument.lastModified = dayjs();
 
       this.updateForm(businessDocument);
 
@@ -120,6 +119,34 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         "documentFileChecksum",
         algo.name ?? "sha512"
       );
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      applicationMappings: [ ...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [ ...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateSecurityClearance(Update: ISecurityClearance): void {
+    this.editForm.patchValue({
+      securityClearance: Update,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateFileChecksumAlgorithm(update: IAlgorithm): void {
+    this.editForm.patchValue({
+      fileChecksumAlgorithm: update,
     });
   }
 
