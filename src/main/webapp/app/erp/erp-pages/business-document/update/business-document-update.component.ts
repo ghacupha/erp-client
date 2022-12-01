@@ -42,6 +42,8 @@ import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/univ
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IDealer } from '../../dealers/dealer/dealer.model';
 import { v4 as uuidv4 } from 'uuid';
+import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
+import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -55,6 +57,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   algorithmsSharedCollection: IAlgorithm[] = [];
+  securityClearancesSharedCollection: ISecurityClearance[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -73,6 +76,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     applicationMappings: [],
     placeholders: [],
     fileChecksumAlgorithm: [null, Validators.required],
+    securityClearance: [null, Validators.required],
   });
 
   constructor(
@@ -84,6 +88,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
     protected algorithmService: AlgorithmService,
+    protected securityClearanceService: SecurityClearanceService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -173,6 +178,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
+    return item.id!;
+  }
+
   getSelectedUniversallyUniqueMapping(
     option: IUniversallyUniqueMapping,
     selectedVals?: IUniversallyUniqueMapping[]
@@ -235,6 +244,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       applicationMappings: businessDocument.applicationMappings,
       placeholders: businessDocument.placeholders,
       fileChecksumAlgorithm: businessDocument.fileChecksumAlgorithm,
+      securityClearance: businessDocument.securityClearance,
     });
 
     this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
@@ -257,6 +267,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
       this.algorithmsSharedCollection,
       businessDocument.fileChecksumAlgorithm
+    );
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+      this.securityClearancesSharedCollection,
+      businessDocument.securityClearance
     );
   }
 
@@ -320,6 +334,19 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         )
       )
       .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
+
+    this.securityClearanceService
+      .query()
+      .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
+      .pipe(
+        map((securityClearances: ISecurityClearance[]) =>
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+            securityClearances,
+            this.editForm.get('securityClearance')!.value
+          )
+        )
+      )
+      .subscribe((securityClearances: ISecurityClearance[]) => (this.securityClearancesSharedCollection = securityClearances));
   }
 
   protected createFromForm(): IBusinessDocument {
@@ -343,6 +370,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       applicationMappings: this.editForm.get(['applicationMappings'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       fileChecksumAlgorithm: this.editForm.get(['fileChecksumAlgorithm'])!.value,
+      securityClearance: this.editForm.get(['securityClearance'])!.value,
     };
   }
 }

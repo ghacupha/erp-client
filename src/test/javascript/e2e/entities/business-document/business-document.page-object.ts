@@ -63,6 +63,7 @@ export class BusinessDocumentUpdatePage {
   applicationMappingsSelect = element(by.id('field_applicationMappings'));
   placeholderSelect = element(by.id('field_placeholder'));
   fileChecksumAlgorithmSelect = element(by.id('field_fileChecksumAlgorithm'));
+  securityClearanceSelect = element(by.id('field_securityClearance'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -230,6 +231,22 @@ export class BusinessDocumentUpdatePage {
 
   async getFileChecksumAlgorithmSelectedOption(): Promise<string> {
     return await this.fileChecksumAlgorithmSelect.element(by.css('option:checked')).getText();
+  }
+
+  async securityClearanceSelectLastOption(): Promise<void> {
+    await this.securityClearanceSelect.all(by.tagName('option')).last().click();
+  }
+
+  async securityClearanceSelectOption(option: string): Promise<void> {
+    await this.securityClearanceSelect.sendKeys(option);
+  }
+
+  getSecurityClearanceSelect(): ElementFinder {
+    return this.securityClearanceSelect;
+  }
+
+  async getSecurityClearanceSelectedOption(): Promise<string> {
+    return await this.securityClearanceSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

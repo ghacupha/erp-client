@@ -86,6 +86,7 @@ describe('BusinessDocument e2e test', () => {
             // businessDocumentUpdatePage.applicationMappingsSelectLastOption(),
             // businessDocumentUpdatePage.placeholderSelectLastOption(),
             businessDocumentUpdatePage.fileChecksumAlgorithmSelectLastOption(),
+            businessDocumentUpdatePage.securityClearanceSelectLastOption(),
         ]);
 
         await businessDocumentUpdatePage.save();

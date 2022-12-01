@@ -47,6 +47,7 @@ describe('BusinessDocument e2e test', () => {
   //let applicationUser: any;
   //let dealer: any;
   //let algorithm: any;
+  //let securityClearance: any;
 
   before(() => {
     cy.window().then(win => {
@@ -83,6 +84,14 @@ describe('BusinessDocument e2e test', () => {
     }).then(({ body }) => {
       algorithm = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/security-clearances',
+      body: {"clearanceLevel":"Bedfordshire"},
+    }).then(({ body }) => {
+      securityClearance = body;
+    });
   });
    */
 
@@ -118,6 +127,11 @@ describe('BusinessDocument e2e test', () => {
     cy.intercept('GET', '/api/algorithms', {
       statusCode: 200,
       body: [algorithm],
+    });
+
+    cy.intercept('GET', '/api/security-clearances', {
+      statusCode: 200,
+      body: [securityClearance],
     });
 
   });
@@ -158,6 +172,14 @@ describe('BusinessDocument e2e test', () => {
         url: `/api/algorithms/${algorithm.id}`,
       }).then(() => {
         algorithm = undefined;
+      });
+    }
+    if (securityClearance) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/security-clearances/${securityClearance.id}`,
+      }).then(() => {
+        securityClearance = undefined;
       });
     }
   });
@@ -209,6 +231,7 @@ describe('BusinessDocument e2e test', () => {
             createdBy: applicationUser,
             originatingDepartment: dealer,
             fileChecksumAlgorithm: algorithm,
+            securityClearance: securityClearance,
           },
         }).then(({ body }) => {
           businessDocument = body;
@@ -311,6 +334,7 @@ describe('BusinessDocument e2e test', () => {
       cy.get(`[data-cy="createdBy"]`).select(1);
       cy.get(`[data-cy="originatingDepartment"]`).select(1);
       cy.get(`[data-cy="fileChecksumAlgorithm"]`).select(1);
+      cy.get(`[data-cy="securityClearance"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

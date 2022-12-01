@@ -20,6 +20,7 @@ import * as dayjs from 'dayjs';
 import { IApplicationUser } from '../application-user/application-user.model';
 import { IPlaceholder } from '../placeholder/placeholder.model';
 import { IAlgorithm } from '../algorithm/algorithm.model';
+import { ISecurityClearance } from '../security-clearance/security-clearance.model';
 import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../dealers/dealer/dealer.model';
 
@@ -40,6 +41,7 @@ export interface IBusinessDocument {
   applicationMappings?: IUniversallyUniqueMapping[] | null;
   placeholders?: IPlaceholder[] | null;
   fileChecksumAlgorithm?: IAlgorithm;
+  securityClearance?: ISecurityClearance;
 }
 
 export class BusinessDocument implements IBusinessDocument {
@@ -59,7 +61,8 @@ export class BusinessDocument implements IBusinessDocument {
     public originatingDepartment?: IDealer,
     public applicationMappings?: IUniversallyUniqueMapping[] | null,
     public placeholders?: IPlaceholder[] | null,
-    public fileChecksumAlgorithm?: IAlgorithm
+    public fileChecksumAlgorithm?: IAlgorithm,
+    public securityClearance?: ISecurityClearance
   ) {
     this.fileTampered = this.fileTampered ?? false;
   }

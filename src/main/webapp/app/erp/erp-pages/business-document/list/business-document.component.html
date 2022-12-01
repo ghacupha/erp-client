@@ -90,6 +90,7 @@
             <span>Originating Department</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="fileChecksumAlgorithm.name"><span>File Checksum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -140,6 +141,13 @@
             <div *ngIf="businessDocument.fileChecksumAlgorithm">
               <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
                 businessDocument.fileChecksumAlgorithm?.name
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="businessDocument.securityClearance">
+              <a [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{
+                businessDocument.securityClearance?.clearanceLevel
               }}</a>
             </div>
           </td>

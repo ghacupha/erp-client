@@ -114,6 +114,14 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Security Clearance</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.securityClearance">
+            <a [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{
+              businessDocument.securityClearance?.clearanceLevel
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

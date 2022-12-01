@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
 
 jest.mock('@angular/router');
 
@@ -31,10 +31,12 @@ import { BusinessDocumentService } from '../service/business-document.service';
 import { IBusinessDocument, BusinessDocument } from '../business-document.model';
 
 import { BusinessDocumentUpdateComponent } from './business-document-update.component';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
 import { IAlgorithm } from '../../algorithm/algorithm.model';
 import { DealerService } from '../../dealers/dealer/service/dealer.service';
 import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { IApplicationUser } from '../../application-user/application-user.model';
+import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { ApplicationUserService } from '../../application-user/service/application-user.service';
 import { AlgorithmService } from '../../algorithm/service/algorithm.service';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
@@ -51,6 +53,7 @@ describe('BusinessDocument Management Update Component', () => {
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
   let algorithmService: AlgorithmService;
+  let securityClearanceService: SecurityClearanceService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -69,6 +72,7 @@ describe('BusinessDocument Management Update Component', () => {
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
     algorithmService = TestBed.inject(AlgorithmService);
+    securityClearanceService = TestBed.inject(SecurityClearanceService);
 
     comp = fixture.componentInstance;
   });
@@ -182,6 +186,28 @@ describe('BusinessDocument Management Update Component', () => {
       expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call SecurityClearance query and add missing value', () => {
+      const businessDocument: IBusinessDocument = { id: 456 };
+      const securityClearance: ISecurityClearance = { id: 58295 };
+      businessDocument.securityClearance = securityClearance;
+
+      const securityClearanceCollection: ISecurityClearance[] = [{ id: 20851 }];
+      jest.spyOn(securityClearanceService, 'query').mockReturnValue(of(new HttpResponse({ body: securityClearanceCollection })));
+      const additionalSecurityClearances = [securityClearance];
+      const expectedCollection: ISecurityClearance[] = [...additionalSecurityClearances, ...securityClearanceCollection];
+      jest.spyOn(securityClearanceService, 'addSecurityClearanceToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ businessDocument });
+      comp.ngOnInit();
+
+      expect(securityClearanceService.query).toHaveBeenCalled();
+      expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
+        securityClearanceCollection,
+        ...additionalSecurityClearances
+      );
+      expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const businessDocument: IBusinessDocument = { id: 456 };
       const createdBy: IApplicationUser = { id: 13811 };
@@ -196,6 +222,8 @@ describe('BusinessDocument Management Update Component', () => {
       businessDocument.placeholders = [placeholders];
       const fileChecksumAlgorithm: IAlgorithm = { id: 65209 };
       businessDocument.fileChecksumAlgorithm = fileChecksumAlgorithm;
+      const securityClearance: ISecurityClearance = { id: 95179 };
+      businessDocument.securityClearance = securityClearance;
 
       activatedRoute.data = of({ businessDocument });
       comp.ngOnInit();
@@ -207,6 +235,7 @@ describe('BusinessDocument Management Update Component', () => {
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMappings);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.algorithmsSharedCollection).toContain(fileChecksumAlgorithm);
+      expect(comp.securityClearancesSharedCollection).toContain(securityClearance);
     });
   });
 
@@ -311,6 +340,14 @@ describe('BusinessDocument Management Update Component', () => {
       it('Should return tracked Algorithm primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackAlgorithmById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSecurityClearanceById', () => {
+      it('Should return tracked SecurityClearance primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSecurityClearanceById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
