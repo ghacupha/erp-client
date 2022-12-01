@@ -23,9 +23,10 @@ import { BusinessDocumentDetailComponent } from './detail/business-document-deta
 import { BusinessDocumentUpdateComponent } from './update/business-document-update.component';
 import { BusinessDocumentDeleteDialogComponent } from './delete/business-document-delete-dialog.component';
 import { BusinessDocumentRoutingModule } from './route/business-document-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessDocumentRoutingModule],
+  imports: [SharedModule, BusinessDocumentRoutingModule, ErpCommonModule],
   declarations: [
     BusinessDocumentComponent,
     BusinessDocumentDetailComponent,

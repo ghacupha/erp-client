@@ -160,79 +160,35 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option *ngIf="!editForm.get('createdBy')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['createdBy'])!.invalid && (editForm.get(['createdBy'])!.dirty || editForm.get(['createdBy'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['createdBy'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastModifiedBy">Last Modified By</label>
-          <select
-            class="form-control"
-            id="field_lastModifiedBy"
-            data-cy="lastModifiedBy"
-            name="lastModifiedBy"
-            formControlName="lastModifiedBy"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('lastModifiedBy')!.value?.id
-                  ? editForm.get('lastModifiedBy')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_originatingDepartment">Originating Department</label>
-          <select
-            class="form-control"
-            id="field_originatingDepartment"
-            data-cy="originatingDepartment"
-            name="originatingDepartment"
-            formControlName="originatingDepartment"
-          >
-            <option *ngIf="!editForm.get('originatingDepartment')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('originatingDepartment')!.value?.id
-                  ? editForm.get('originatingDepartment')!.value
-                  : dealerOption
-              "
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['originatingDepartment'])!.invalid &&
-            (editForm.get(['originatingDepartment'])!.dirty || editForm.get(['originatingDepartment'])!.touched)
-          "
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='createdBy'
+          [inputValue]="editForm.get(['createdBy'])!.value"
+          (valueSelected)='updateCreatedBy($event)'
+          inputControlLabel='Created By:'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['originatingDepartment'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get('createdBy')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='lastModifiedBy'
+          [inputValue]="editForm.get(['lastModifiedBy'])!.value"
+          (valueSelected)='updateLastModifiedBy($event)'
+          inputControlLabel='Last Modified By:'
+        >
+          <option [ngValue]="editForm.get('lastModifiedBy')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='originatingDepartment'
+          [inputValue]="editForm.get(['originatingDepartment'])!.value"
+          (valueSelected)='updateOriginatingDepartment($event)'
+          inputControlLabel='Originating Department'
+        >
+          <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
+        </jhi-m21-dealer-form-control>
 
         <div class="form-group">
           <label for="field_applicationMappings">Application Mappings</label>

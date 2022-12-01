@@ -84,14 +84,36 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessDocument }) => {
       if (businessDocument.id === undefined) {
-        const today = dayjs();
-        businessDocument.lastModified = today;
         businessDocument.documentSerial = uuidv4();
       }
+
+      const today = dayjs();
+      businessDocument.lastModified = today;
 
       this.updateForm(businessDocument);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateOriginatingDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      originatingDepartment: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateLastModifiedBy(dealerUpdate: IApplicationUser): void {
+    this.editForm.patchValue({
+      lastModifiedBy: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateCreatedBy(dealerUpdate: IApplicationUser): void {
+    this.editForm.patchValue({
+      createdBy: dealerUpdate,
     });
   }
 
