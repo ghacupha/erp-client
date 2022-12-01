@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { sha512 } from 'hash-wasm';
+import { crc32, md5, ripemd160, sha1, sha256, sha384, sha512, sm3, whirlpool } from 'hash-wasm';
 import { FormGroup } from '@angular/forms';
 import { Injectable } from '@angular/core';
 
@@ -29,11 +29,107 @@ export class FileUploadChecksumService {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateFileUploadChecksum(editForm: FormGroup, fileUploadField: string, fileUploadCheckSumField: string, checksumAlgorithm: string): void {
-    editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => {
-      sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
-        editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha512Token)
-      });
+
+    switch (checksumAlgorithm) {
+      case "sha512": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculate512(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "sha256": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculate256(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "sha384": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculate384(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "md5": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateMD5(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "crc32": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateCRC32(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "ripemd160": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateRIPEMD160(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "sha1": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateSHA1(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "whirlpool": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateWhirlPool(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      case "sm3": {
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.calculateSM3(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+      default: {
+        // TODO use sha512
+        editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => this.unsupportedAlgorithmUpdate(fileAttachment, editForm, fileUploadCheckSumField));
+        break;
+      }
+    }
+  }
+
+  calculateSM3(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    sm3(this.fileDataArray(fileAttachment)).then(sha512Token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha512Token)
     });
+  }
+
+  calculateWhirlPool(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    whirlpool(this.fileDataArray(fileAttachment)).then(sha512Token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha512Token)
+    });
+  }
+  calculate512(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha512Token)
+    });
+  }
+
+  calculate256(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    sha256(this.fileDataArray(fileAttachment)).then(sha256Token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha256Token)
+    });
+  }
+
+  calculate384(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    sha384(this.fileDataArray(fileAttachment)).then(sha384Token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(sha384Token)
+    });
+  }
+
+  calculateMD5(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    md5(this.fileDataArray(fileAttachment)).then(token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(token)
+    });
+  }
+
+  calculateCRC32(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    crc32(this.fileDataArray(fileAttachment)).then(token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(token)
+    });
+  }
+
+  calculateRIPEMD160(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    ripemd160(this.fileDataArray(fileAttachment)).then(token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(token)
+    });
+  }
+
+  calculateSHA1(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+    sha1(this.fileDataArray(fileAttachment)).then(token => {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue(token)
+    });
+  }
+
+  unsupportedAlgorithmUpdate(fileAttachment: any, editForm: FormGroup, fileUploadCheckSumField: string): void {
+      editForm.get([`${fileUploadCheckSumField}`])?.setValue("Unsupported algorithm, Please select a cryptographic hashing algorithm")
   }
 
   fileDataArray(b64String: string): Uint8Array {

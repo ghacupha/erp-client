@@ -118,7 +118,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         this.editForm,
         "documentFile",
         "documentFileChecksum",
-        algo ?? "sha512"
+        algo.name ?? "sha512"
       );
     });
   }
