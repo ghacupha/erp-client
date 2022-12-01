@@ -44,7 +44,7 @@ import { IDealer } from '../../dealers/dealer/dealer.model';
 import { v4 as uuidv4 } from 'uuid';
 import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
-import { FileUploadChecksumService } from '../file-upload-checksum.service';
+import { FileUploadChecksumService } from '../../../erp-common/form-components/services/file-upload-checksum.service';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -109,12 +109,18 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
-    this.fileUploadChecksumService.updateFileUploadChecksum(
-      this.editForm,
-      "documentFile",
-      "documentFileChecksum",
-      "sha512"
-    );
+    this.runFileChecksums();
+  }
+
+  runFileChecksums(): void {
+    this.editForm.get(['fileChecksumAlgorithm'])?.valueChanges.subscribe(algo => {
+      this.fileUploadChecksumService.updateFileUploadChecksum(
+        this.editForm,
+        "documentFile",
+        "documentFileChecksum",
+        algo ?? "sha512"
+      );
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering

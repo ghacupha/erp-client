@@ -173,6 +173,39 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
+          <select
+            class="form-control"
+            id="field_fileChecksumAlgorithm"
+            data-cy="fileChecksumAlgorithm"
+            name="fileChecksumAlgorithm"
+            formControlName="fileChecksumAlgorithm"
+          >
+            <option *ngIf="!editForm.get('fileChecksumAlgorithm')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                algorithmOption.id === editForm.get('fileChecksumAlgorithm')!.value?.id
+                  ? editForm.get('fileChecksumAlgorithm')!.value
+                  : algorithmOption
+              "
+              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
+            >
+              {{ algorithmOption.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['fileChecksumAlgorithm'])!.invalid &&
+            (editForm.get(['fileChecksumAlgorithm'])!.dirty || editForm.get(['fileChecksumAlgorithm'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fileChecksumAlgorithm'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_documentFileChecksum">Document File Checksum</label>
           <input
             type="text"
@@ -224,39 +257,6 @@
         >
           <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
         </jhi-m21-dealer-form-control>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
-          <select
-            class="form-control"
-            id="field_fileChecksumAlgorithm"
-            data-cy="fileChecksumAlgorithm"
-            name="fileChecksumAlgorithm"
-            formControlName="fileChecksumAlgorithm"
-          >
-            <option *ngIf="!editForm.get('fileChecksumAlgorithm')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                algorithmOption.id === editForm.get('fileChecksumAlgorithm')!.value?.id
-                  ? editForm.get('fileChecksumAlgorithm')!.value
-                  : algorithmOption
-              "
-              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
-            >
-              {{ algorithmOption.name }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['fileChecksumAlgorithm'])!.invalid &&
-            (editForm.get(['fileChecksumAlgorithm'])!.dirty || editForm.get(['fileChecksumAlgorithm'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fileChecksumAlgorithm'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
 
         <div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>

@@ -27,6 +27,7 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class FileUploadChecksumService {
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateFileUploadChecksum(editForm: FormGroup, fileUploadField: string, fileUploadCheckSumField: string, checksumAlgorithm: string): void {
     editForm.get([`${fileUploadField}`])?.valueChanges.subscribe((fileAttachment) => {
       sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
