@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "0.2.0-SNAPSHOT",
+  "version": "0.3.0-SNAPSHOT",
   "private": true,
-  "description": "Mark III No 3 (Caleb Series) Client 0.2.0-SNAPSHOT",
+  "description": "Mark III No 4 (Caleb Series) Client 0.3.0-SNAPSHOT",
   "license": "GPLv3",
   "scripts": {
     "build": "npm run webapp:prod --",
