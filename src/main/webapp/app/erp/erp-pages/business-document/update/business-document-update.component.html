@@ -70,6 +70,7 @@
             id="field_documentSerial"
             data-cy="documentSerial"
             formControlName="documentSerial"
+            [readonly]="editForm.get('id')!.value == null"
           />
           <div
             *ngIf="

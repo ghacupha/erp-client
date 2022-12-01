@@ -36,6 +36,7 @@ import { ApplicationUserService } from '../../application-user/service/applicati
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IDealer } from '../../dealers/dealer/dealer.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -76,8 +77,9 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessDocument }) => {
       if (businessDocument.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         businessDocument.lastModified = today;
+        businessDocument.documentSerial = uuidv4();
       }
 
       this.updateForm(businessDocument);
