@@ -78,11 +78,14 @@ describe('BusinessDocument e2e test', () => {
             businessDocumentUpdatePage.setLastModifiedInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             businessDocumentUpdatePage.setAttachmentFilePathInput('attachmentFilePath'),
             businessDocumentUpdatePage.setDocumentFileInput(absolutePath),
+            businessDocumentUpdatePage.getFileTamperedInput().click(),
+            businessDocumentUpdatePage.setDocumentFileChecksumInput('documentFileChecksum'),
             businessDocumentUpdatePage.createdBySelectLastOption(),
             businessDocumentUpdatePage.lastModifiedBySelectLastOption(),
             businessDocumentUpdatePage.originatingDepartmentSelectLastOption(),
             // businessDocumentUpdatePage.applicationMappingsSelectLastOption(),
             // businessDocumentUpdatePage.placeholderSelectLastOption(),
+            businessDocumentUpdatePage.fileChecksumAlgorithmSelectLastOption(),
         ]);
 
         await businessDocumentUpdatePage.save();

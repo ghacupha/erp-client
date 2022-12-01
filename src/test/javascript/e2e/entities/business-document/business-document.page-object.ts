@@ -54,12 +54,15 @@ export class BusinessDocumentUpdatePage {
   lastModifiedInput = element(by.id('field_lastModified'));
   attachmentFilePathInput = element(by.id('field_attachmentFilePath'));
   documentFileInput = element(by.id('file_documentFile'));
+  fileTamperedInput = element(by.id('field_fileTampered'));
+  documentFileChecksumInput = element(by.id('field_documentFileChecksum'));
 
   createdBySelect = element(by.id('field_createdBy'));
   lastModifiedBySelect = element(by.id('field_lastModifiedBy'));
   originatingDepartmentSelect = element(by.id('field_originatingDepartment'));
   applicationMappingsSelect = element(by.id('field_applicationMappings'));
   placeholderSelect = element(by.id('field_placeholder'));
+  fileChecksumAlgorithmSelect = element(by.id('field_fileChecksumAlgorithm'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -119,6 +122,18 @@ export class BusinessDocumentUpdatePage {
 
   async getDocumentFileInput(): Promise<string> {
     return await this.documentFileInput.getAttribute('value');
+  }
+
+  getFileTamperedInput(): ElementFinder {
+    return this.fileTamperedInput;
+  }
+
+  async setDocumentFileChecksumInput(documentFileChecksum: string): Promise<void> {
+    await this.documentFileChecksumInput.sendKeys(documentFileChecksum);
+  }
+
+  async getDocumentFileChecksumInput(): Promise<string> {
+    return await this.documentFileChecksumInput.getAttribute('value');
   }
 
   async createdBySelectLastOption(): Promise<void> {
@@ -199,6 +214,22 @@ export class BusinessDocumentUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fileChecksumAlgorithmSelectLastOption(): Promise<void> {
+    await this.fileChecksumAlgorithmSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fileChecksumAlgorithmSelectOption(option: string): Promise<void> {
+    await this.fileChecksumAlgorithmSelect.sendKeys(option);
+  }
+
+  getFileChecksumAlgorithmSelect(): ElementFinder {
+    return this.fileChecksumAlgorithmSelect;
+  }
+
+  async getFileChecksumAlgorithmSelectedOption(): Promise<string> {
+    return await this.fileChecksumAlgorithmSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

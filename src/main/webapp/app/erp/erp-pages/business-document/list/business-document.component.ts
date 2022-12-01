@@ -98,7 +98,12 @@ export class BusinessDocumentComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['documentTitle', 'description', 'documentSerial', 'attachmentFilePath', 'documentFile'].includes(this.predicate)) {
+    if (
+      query &&
+      ['documentTitle', 'description', 'documentSerial', 'attachmentFilePath', 'documentFile', 'documentFileChecksum'].includes(
+        this.predicate
+      )
+    ) {
       this.predicate = 'id';
       this.ascending = true;
     }

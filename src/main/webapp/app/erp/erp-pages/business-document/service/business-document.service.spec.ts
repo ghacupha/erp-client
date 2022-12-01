@@ -50,6 +50,8 @@ describe('BusinessDocument Service', () => {
       attachmentFilePath: 'AAAAAAA',
       documentFileContentType: 'image/png',
       documentFile: 'AAAAAAA',
+      fileTampered: false,
+      documentFileChecksum: 'AAAAAAA',
     };
   });
 
@@ -102,6 +104,8 @@ describe('BusinessDocument Service', () => {
           lastModified: currentDate.format(DATE_TIME_FORMAT),
           attachmentFilePath: 'BBBBBB',
           documentFile: 'BBBBBB',
+          fileTampered: true,
+          documentFileChecksum: 'BBBBBB',
         },
         elemDefault
       );
@@ -158,6 +162,8 @@ describe('BusinessDocument Service', () => {
           lastModified: currentDate.format(DATE_TIME_FORMAT),
           attachmentFilePath: 'BBBBBB',
           documentFile: 'BBBBBB',
+          fileTampered: true,
+          documentFileChecksum: 'BBBBBB',
         },
         elemDefault
       );
@@ -214,7 +220,7 @@ describe('BusinessDocument Service', () => {
       });
 
       it('should add only unique BusinessDocument to an array', () => {
-        const businessDocumentArray: IBusinessDocument[] = [{ id: 123 }, { id: 456 }, { id: 12601 }];
+        const businessDocumentArray: IBusinessDocument[] = [{ id: 123 }, { id: 456 }, { id: 91443 }];
         const businessDocumentCollection: IBusinessDocument[] = [{ id: 123 }];
         expectedResult = service.addBusinessDocumentToCollectionIfMissing(businessDocumentCollection, ...businessDocumentArray);
         expect(expectedResult).toHaveLength(3);

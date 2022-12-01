@@ -28,6 +28,15 @@
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any",
       "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "fileTampered",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "documentFileChecksum",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [
@@ -66,6 +75,13 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "businessDocument"
+    },
+    {
+      "relationshipName": "fileChecksumAlgorithm",
+      "otherEntityName": "algorithm",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "name"
     }
   ],
   "service": "serviceImpl",

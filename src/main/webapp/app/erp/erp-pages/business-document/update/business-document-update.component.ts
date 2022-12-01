@@ -28,18 +28,20 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IBusinessDocument, BusinessDocument } from '../business-document.model';
 import { BusinessDocumentService } from '../service/business-document.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IAlgorithm } from '../../algorithm/algorithm.model';
 import { DealerService } from '../../dealers/dealer/service/dealer.service';
 import { IApplicationUser } from '../../application-user/application-user.model';
 import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { ApplicationUserService } from '../../application-user/service/application-user.service';
+import { AlgorithmService } from '../../algorithm/service/algorithm.service';
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IDealer } from '../../dealers/dealer/dealer.model';
 import { v4 as uuidv4 } from 'uuid';
-import { DataUtils, FileLoadError } from '../../../../core/util/data-util.service';
-import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
-import { AlertError } from '../../../../shared/alert/alert-error.model';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -52,6 +54,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  algorithmsSharedCollection: IAlgorithm[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -62,11 +65,14 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     attachmentFilePath: [null, [Validators.required]],
     documentFile: [null, [Validators.required]],
     documentFileContentType: [],
+    fileTampered: [],
+    documentFileChecksum: [null, [Validators.required]],
     createdBy: [null, Validators.required],
     lastModifiedBy: [],
     originatingDepartment: [null, Validators.required],
     applicationMappings: [],
     placeholders: [],
+    fileChecksumAlgorithm: [null, Validators.required],
   });
 
   constructor(
@@ -77,6 +83,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
+    protected algorithmService: AlgorithmService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -162,6 +169,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAlgorithmById(index: number, item: IAlgorithm): number {
+    return item.id!;
+  }
+
   getSelectedUniversallyUniqueMapping(
     option: IUniversallyUniqueMapping,
     selectedVals?: IUniversallyUniqueMapping[]
@@ -216,11 +227,14 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       attachmentFilePath: businessDocument.attachmentFilePath,
       documentFile: businessDocument.documentFile,
       documentFileContentType: businessDocument.documentFileContentType,
+      fileTampered: businessDocument.fileTampered,
+      documentFileChecksum: businessDocument.documentFileChecksum,
       createdBy: businessDocument.createdBy,
       lastModifiedBy: businessDocument.lastModifiedBy,
       originatingDepartment: businessDocument.originatingDepartment,
       applicationMappings: businessDocument.applicationMappings,
       placeholders: businessDocument.placeholders,
+      fileChecksumAlgorithm: businessDocument.fileChecksumAlgorithm,
     });
 
     this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
@@ -239,6 +253,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(businessDocument.placeholders ?? [])
+    );
+    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
+      this.algorithmsSharedCollection,
+      businessDocument.fileChecksumAlgorithm
     );
   }
 
@@ -292,6 +310,16 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.algorithmService
+      .query()
+      .pipe(map((res: HttpResponse<IAlgorithm[]>) => res.body ?? []))
+      .pipe(
+        map((algorithms: IAlgorithm[]) =>
+          this.algorithmService.addAlgorithmToCollectionIfMissing(algorithms, this.editForm.get('fileChecksumAlgorithm')!.value)
+        )
+      )
+      .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
   }
 
   protected createFromForm(): IBusinessDocument {
@@ -307,11 +335,14 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       attachmentFilePath: this.editForm.get(['attachmentFilePath'])!.value,
       documentFileContentType: this.editForm.get(['documentFileContentType'])!.value,
       documentFile: this.editForm.get(['documentFile'])!.value,
+      fileTampered: this.editForm.get(['fileTampered'])!.value,
+      documentFileChecksum: this.editForm.get(['documentFileChecksum'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,
       lastModifiedBy: this.editForm.get(['lastModifiedBy'])!.value,
       originatingDepartment: this.editForm.get(['originatingDepartment'])!.value,
       applicationMappings: this.editForm.get(['applicationMappings'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      fileChecksumAlgorithm: this.editForm.get(['fileChecksumAlgorithm'])!.value,
     };
   }
 }

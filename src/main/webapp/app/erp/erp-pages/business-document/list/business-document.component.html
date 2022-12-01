@@ -80,11 +80,16 @@
             <span>Attachment File Path</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="documentFile"><span>Document File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileTampered"><span>File Tampered</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="documentFileChecksum">
+            <span>Document File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastModifiedBy.applicationIdentity"><span>Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="originatingDepartment.dealerName">
             <span>Originating Department</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="fileChecksumAlgorithm.name"><span>File Checksum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -108,6 +113,8 @@
               >{{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}</span
             >
           </td>
+          <td>{{ businessDocument.fileTampered }}</td>
+          <td>{{ businessDocument.documentFileChecksum }}</td>
           <td>
             <div *ngIf="businessDocument.createdBy">
               <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{
@@ -126,6 +133,13 @@
             <div *ngIf="businessDocument.originatingDepartment">
               <a [routerLink]="['/dealer', businessDocument.originatingDepartment?.id, 'view']">{{
                 businessDocument.originatingDepartment?.dealerName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="businessDocument.fileChecksumAlgorithm">
+              <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
+                businessDocument.fileChecksumAlgorithm?.name
               }}</a>
             </div>
           </td>

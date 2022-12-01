@@ -31,10 +31,12 @@ import { BusinessDocumentService } from '../service/business-document.service';
 import { IBusinessDocument, BusinessDocument } from '../business-document.model';
 
 import { BusinessDocumentUpdateComponent } from './business-document-update.component';
+import { IAlgorithm } from '../../algorithm/algorithm.model';
 import { DealerService } from '../../dealers/dealer/service/dealer.service';
 import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { IApplicationUser } from '../../application-user/application-user.model';
 import { ApplicationUserService } from '../../application-user/service/application-user.service';
+import { AlgorithmService } from '../../algorithm/service/algorithm.service';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../dealers/dealer/dealer.model';
@@ -48,6 +50,7 @@ describe('BusinessDocument Management Update Component', () => {
   let dealerService: DealerService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
+  let algorithmService: AlgorithmService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -65,6 +68,7 @@ describe('BusinessDocument Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
+    algorithmService = TestBed.inject(AlgorithmService);
 
     comp = fixture.componentInstance;
   });
@@ -159,6 +163,25 @@ describe('BusinessDocument Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Algorithm query and add missing value', () => {
+      const businessDocument: IBusinessDocument = { id: 456 };
+      const fileChecksumAlgorithm: IAlgorithm = { id: 84406 };
+      businessDocument.fileChecksumAlgorithm = fileChecksumAlgorithm;
+
+      const algorithmCollection: IAlgorithm[] = [{ id: 66206 }];
+      jest.spyOn(algorithmService, 'query').mockReturnValue(of(new HttpResponse({ body: algorithmCollection })));
+      const additionalAlgorithms = [fileChecksumAlgorithm];
+      const expectedCollection: IAlgorithm[] = [...additionalAlgorithms, ...algorithmCollection];
+      jest.spyOn(algorithmService, 'addAlgorithmToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ businessDocument });
+      comp.ngOnInit();
+
+      expect(algorithmService.query).toHaveBeenCalled();
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const businessDocument: IBusinessDocument = { id: 456 };
       const createdBy: IApplicationUser = { id: 13811 };
@@ -171,6 +194,8 @@ describe('BusinessDocument Management Update Component', () => {
       businessDocument.applicationMappings = [applicationMappings];
       const placeholders: IPlaceholder = { id: 51999 };
       businessDocument.placeholders = [placeholders];
+      const fileChecksumAlgorithm: IAlgorithm = { id: 65209 };
+      businessDocument.fileChecksumAlgorithm = fileChecksumAlgorithm;
 
       activatedRoute.data = of({ businessDocument });
       comp.ngOnInit();
@@ -181,6 +206,7 @@ describe('BusinessDocument Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(originatingDepartment);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMappings);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.algorithmsSharedCollection).toContain(fileChecksumAlgorithm);
     });
   });
 
@@ -277,6 +303,14 @@ describe('BusinessDocument Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAlgorithmById', () => {
+      it('Should return tracked Algorithm primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAlgorithmById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

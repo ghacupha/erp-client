@@ -82,48 +82,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_documentFile">Document File</label>
-          <div>
-            <div *ngIf="editForm.get('documentFile')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('documentFile')!.value, editForm.get('documentFileContentType')!.value)"
-              >open</a
-              ><br />
-              <span class="pull-left"
-              >{{ editForm.get('documentFileContentType')!.value }}, {{ byteSize(editForm.get('documentFile')!.value) }}</span
-              >
-              <button
-                type="button"
-                (click)="editForm.patchValue({ documentFile: null }); editForm.patchValue({ documentFileContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
-              >
-                <fa-icon icon="times"></fa-icon>
-              </button>
-            </div>
-            <input type="file" id="file_documentFile" data-cy="documentFile" (change)="setFileData($event, 'documentFile', false)" />
-          </div>
-          <input
-            type="hidden"
-            class="form-control"
-            name="documentFile"
-            id="field_documentFile"
-            data-cy="documentFile"
-            formControlName="documentFile"
-          />
-          <input
-            type="hidden"
-            class="form-control"
-            name="documentFileContentType"
-            id="field_documentFileContentType"
-            formControlName="documentFileContentType"
-          />
-          <div
-            *ngIf="editForm.get('documentFile')!.invalid && (editForm.get('documentFile')!.dirty || editForm.get('documentFile')!.touched)"
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('documentFile')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_lastModified">Last Modified</label>
           <div class="d-flex">
             <input
@@ -160,6 +118,82 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentFile">Document File</label>
+          <div>
+            <div *ngIf="editForm.get('documentFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('documentFile')!.value, editForm.get('documentFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('documentFileContentType')!.value }}, {{ byteSize(editForm.get('documentFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ documentFile: null }); editForm.patchValue({ documentFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_documentFile" data-cy="documentFile" (change)="setFileData($event, 'documentFile', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="documentFile"
+            id="field_documentFile"
+            data-cy="documentFile"
+            formControlName="documentFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="documentFileContentType"
+            id="field_documentFileContentType"
+            formControlName="documentFileContentType"
+          />
+          <div
+            *ngIf="editForm.get('documentFile')!.invalid && (editForm.get('documentFile')!.dirty || editForm.get('documentFile')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentFile')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileTampered">File Tampered</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="fileTampered"
+            id="field_fileTampered"
+            data-cy="fileTampered"
+            formControlName="fileTampered"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentFileChecksum">Document File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentFileChecksum"
+            id="field_documentFileChecksum"
+            data-cy="documentFileChecksum"
+            formControlName="documentFileChecksum"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentFileChecksum')!.invalid &&
+              (editForm.get('documentFileChecksum')!.dirty || editForm.get('documentFileChecksum')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentFileChecksum')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
         <jhi-m21-application-user-form-control
           ngDefaultControl
           formControlName='createdBy'
@@ -189,6 +223,39 @@
         >
           <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
         </jhi-m21-dealer-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
+          <select
+            class="form-control"
+            id="field_fileChecksumAlgorithm"
+            data-cy="fileChecksumAlgorithm"
+            name="fileChecksumAlgorithm"
+            formControlName="fileChecksumAlgorithm"
+          >
+            <option *ngIf="!editForm.get('fileChecksumAlgorithm')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                algorithmOption.id === editForm.get('fileChecksumAlgorithm')!.value?.id
+                  ? editForm.get('fileChecksumAlgorithm')!.value
+                  : algorithmOption
+              "
+              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
+            >
+              {{ algorithmOption.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['fileChecksumAlgorithm'])!.invalid &&
+            (editForm.get(['fileChecksumAlgorithm'])!.dirty || editForm.get(['fileChecksumAlgorithm'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fileChecksumAlgorithm'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
 
         <div class="form-group">
           <label for="field_applicationMappings">Application Mappings</label>

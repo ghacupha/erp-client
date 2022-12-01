@@ -19,6 +19,7 @@
 import * as dayjs from 'dayjs';
 import { IApplicationUser } from '../application-user/application-user.model';
 import { IPlaceholder } from '../placeholder/placeholder.model';
+import { IAlgorithm } from '../algorithm/algorithm.model';
 import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../dealers/dealer/dealer.model';
 
@@ -31,11 +32,14 @@ export interface IBusinessDocument {
   attachmentFilePath?: string;
   documentFileContentType?: string;
   documentFile?: string;
+  fileTampered?: boolean | null;
+  documentFileChecksum?: string;
   createdBy?: IApplicationUser;
   lastModifiedBy?: IApplicationUser | null;
   originatingDepartment?: IDealer;
   applicationMappings?: IUniversallyUniqueMapping[] | null;
   placeholders?: IPlaceholder[] | null;
+  fileChecksumAlgorithm?: IAlgorithm;
 }
 
 export class BusinessDocument implements IBusinessDocument {
@@ -48,12 +52,17 @@ export class BusinessDocument implements IBusinessDocument {
     public attachmentFilePath?: string,
     public documentFileContentType?: string,
     public documentFile?: string,
+    public fileTampered?: boolean | null,
+    public documentFileChecksum?: string,
     public createdBy?: IApplicationUser,
     public lastModifiedBy?: IApplicationUser | null,
     public originatingDepartment?: IDealer,
     public applicationMappings?: IUniversallyUniqueMapping[] | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
+    public placeholders?: IPlaceholder[] | null,
+    public fileChecksumAlgorithm?: IAlgorithm
+  ) {
+    this.fileTampered = this.fileTampered ?? false;
+  }
 }
 
 export function getBusinessDocumentIdentifier(businessDocument: IBusinessDocument): number | undefined {

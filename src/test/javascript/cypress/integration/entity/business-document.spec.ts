@@ -35,16 +35,18 @@ describe('BusinessDocument e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const businessDocumentSample = {
-    documentTitle: 'leverage',
-    documentSerial: '30be25c7-cf12-416e-bf92-04c08008e726',
-    attachmentFilePath: 'Markets',
+    documentTitle: 'capacitor',
+    documentSerial: '5c7cf121-6ebf-4920-8c08-008e7261e60c',
+    attachmentFilePath: 'multi-byte Island International',
     documentFile: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=',
     documentFileContentType: 'unknown',
+    documentFileChecksum: 'backing of',
   };
 
   let businessDocument: any;
   //let applicationUser: any;
   //let dealer: any;
+  //let algorithm: any;
 
   before(() => {
     cy.window().then(win => {
@@ -72,6 +74,14 @@ describe('BusinessDocument e2e test', () => {
       body: {"dealerName":"Data Product Beauty","taxNumber":"bandwidth yellow deposit","identificationDocumentNumber":"Plastic JSON","organizationName":"Fish Credit","department":"JBOD deposit Wooden","position":"Program","postalAddress":"Direct leverage","physicalAddress":"Future dynamic Facilitator","accountName":"Home Loan Account","accountNumber":"invoice Australia Berkshire","bankersName":"bypassing","bankersBranch":"Outdoors Market mobile","bankersSwiftCode":"Buckinghamshire calculating","fileUploadToken":"Exclusive Assurance","compilationToken":"online digital Unbranded","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","otherNames":"Borders PCI"},
     }).then(({ body }) => {
       dealer = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/algorithms',
+      body: {"name":"Metal Loan Sleek"},
+    }).then(({ body }) => {
+      algorithm = body;
     });
   });
    */
@@ -105,6 +115,11 @@ describe('BusinessDocument e2e test', () => {
       body: [],
     });
 
+    cy.intercept('GET', '/api/algorithms', {
+      statusCode: 200,
+      body: [algorithm],
+    });
+
   });
    */
 
@@ -135,6 +150,14 @@ describe('BusinessDocument e2e test', () => {
         url: `/api/dealers/${dealer.id}`,
       }).then(() => {
         dealer = undefined;
+      });
+    }
+    if (algorithm) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/algorithms/${algorithm.id}`,
+      }).then(() => {
+        algorithm = undefined;
       });
     }
   });
@@ -185,6 +208,7 @@ describe('BusinessDocument e2e test', () => {
             ...businessDocumentSample,
             createdBy: applicationUser,
             originatingDepartment: dealer,
+            fileChecksumAlgorithm: algorithm,
           },
         }).then(({ body }) => {
           businessDocument = body;
@@ -279,8 +303,14 @@ describe('BusinessDocument e2e test', () => {
 
       cy.setFieldImageAsBytesOfEntity('documentFile', 'integration-test.png', 'image/png');
 
+      cy.get(`[data-cy="fileTampered"]`).should('not.be.checked');
+      cy.get(`[data-cy="fileTampered"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="documentFileChecksum"]`).type('Montana').should('have.value', 'Montana');
+
       cy.get(`[data-cy="createdBy"]`).select(1);
       cy.get(`[data-cy="originatingDepartment"]`).select(1);
+      cy.get(`[data-cy="fileChecksumAlgorithm"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

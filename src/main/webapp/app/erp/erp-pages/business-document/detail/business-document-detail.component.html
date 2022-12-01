@@ -60,6 +60,14 @@
             {{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}
           </div>
         </dd>
+        <dt><span>File Tampered</span></dt>
+        <dd>
+          <span>{{ businessDocument.fileTampered }}</span>
+        </dd>
+        <dt><span>Document File Checksum</span></dt>
+        <dd>
+          <span>{{ businessDocument.documentFileChecksum }}</span>
+        </dd>
         <dt><span>Created By</span></dt>
         <dd>
           <div *ngIf="businessDocument.createdBy">
@@ -97,6 +105,14 @@
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>File Checksum Algorithm</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.fileChecksumAlgorithm">
+            <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
+              businessDocument.fileChecksumAlgorithm?.name
+            }}</a>
+          </div>
         </dd>
       </dl>
 
