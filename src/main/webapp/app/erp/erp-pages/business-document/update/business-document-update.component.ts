@@ -44,6 +44,7 @@ import { IDealer } from '../../dealers/dealer/dealer.model';
 import { v4 as uuidv4 } from 'uuid';
 import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
+import { FileUploadChecksumService } from '../file-upload-checksum.service';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -90,7 +91,8 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     protected algorithmService: AlgorithmService,
     protected securityClearanceService: SecurityClearanceService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected fileUploadChecksumService: FileUploadChecksumService
   ) {}
 
   ngOnInit(): void {
@@ -106,6 +108,13 @@ export class BusinessDocumentUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.fileUploadChecksumService.updateFileUploadChecksum(
+      this.editForm,
+      "documentFile",
+      "documentFileChecksum",
+      "sha512"
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
