@@ -26,7 +26,7 @@ export class FormatApplicationUserPipe implements PipeTransform {
 
   transform(value: IApplicationUser): string {
 
-    const accountDetail = `Selected User Id: ${value.id} | Name: ${value.applicationIdentity}`;
+    const accountDetail = `Selected User Id: ${value.id} | Designation: ${value.designation}`;
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return value ? accountDetail :'';

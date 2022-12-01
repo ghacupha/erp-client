@@ -22,7 +22,7 @@ import { IApplicationUser } from '../../erp-pages/application-user/application-u
 @Component({
   selector: 'jhi-application-user-option-view',
   template: `
-    id #: {{ item.id }} name: {{ item.applicationIdentity }} designation: {{ item.designation }}
+    name: {{ item.applicationIdentity }}  designation: {{ item.designation }}
   `
 })
 export class ApplicationUserOptionViewComponent {
