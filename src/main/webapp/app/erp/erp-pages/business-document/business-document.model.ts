@@ -17,8 +17,8 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../placeholder/placeholder.model';
 import { IApplicationUser } from '../application-user/application-user.model';
+import { IPlaceholder } from '../placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../dealers/dealer/dealer.model';
 
@@ -29,6 +29,8 @@ export interface IBusinessDocument {
   documentSerial?: string;
   lastModified?: dayjs.Dayjs | null;
   attachmentFilePath?: string;
+  documentFileContentType?: string;
+  documentFile?: string;
   createdBy?: IApplicationUser;
   lastModifiedBy?: IApplicationUser | null;
   originatingDepartment?: IDealer;
@@ -44,6 +46,8 @@ export class BusinessDocument implements IBusinessDocument {
     public documentSerial?: string,
     public lastModified?: dayjs.Dayjs | null,
     public attachmentFilePath?: string,
+    public documentFileContentType?: string,
+    public documentFile?: string,
     public createdBy?: IApplicationUser,
     public lastModifiedBy?: IApplicationUser | null,
     public originatingDepartment?: IDealer,

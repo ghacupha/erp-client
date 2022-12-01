@@ -22,6 +22,12 @@
       "fieldName": "attachmentFilePath",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "documentFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [

@@ -24,6 +24,7 @@ import {
   /* BusinessDocumentDeleteDialog, */
   BusinessDocumentUpdatePage,
 } from './business-document.page-object';
+import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -33,6 +34,9 @@ describe('BusinessDocument e2e test', () => {
   let businessDocumentComponentsPage: BusinessDocumentComponentsPage;
   let businessDocumentUpdatePage: BusinessDocumentUpdatePage;
   /* let businessDocumentDeleteDialog: BusinessDocumentDeleteDialog; */
+  const fileNameToUpload = 'logo-jhipster.png';
+  const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  const absolutePath = path.resolve(__dirname, fileToUpload);
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -73,6 +77,7 @@ describe('BusinessDocument e2e test', () => {
             businessDocumentUpdatePage.setDocumentSerialInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             businessDocumentUpdatePage.setLastModifiedInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
             businessDocumentUpdatePage.setAttachmentFilePathInput('attachmentFilePath'),
+            businessDocumentUpdatePage.setDocumentFileInput(absolutePath),
             businessDocumentUpdatePage.createdBySelectLastOption(),
             businessDocumentUpdatePage.lastModifiedBySelectLastOption(),
             businessDocumentUpdatePage.originatingDepartmentSelectLastOption(),

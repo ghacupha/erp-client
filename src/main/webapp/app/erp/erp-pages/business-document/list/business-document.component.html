@@ -79,6 +79,7 @@
           <th scope="col" jhiSortBy="attachmentFilePath">
             <span>Attachment File Path</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="documentFile"><span>Document File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastModifiedBy.applicationIdentity"><span>Last Modified By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="originatingDepartment.dealerName">
@@ -97,6 +98,16 @@
           <td>{{ businessDocument.documentSerial }}</td>
           <td>{{ businessDocument.lastModified | formatMediumDatetime }}</td>
           <td>{{ businessDocument.attachmentFilePath }}</td>
+          <td>
+            <a
+              *ngIf="businessDocument.documentFile"
+              (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)"
+              >open</a
+            >
+            <span *ngIf="businessDocument.documentFile"
+              >{{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}</span
+            >
+          </td>
           <td>
             <div *ngIf="businessDocument.createdBy">
               <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{

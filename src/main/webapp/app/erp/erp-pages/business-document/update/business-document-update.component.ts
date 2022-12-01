@@ -37,6 +37,9 @@ import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/univ
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IDealer } from '../../dealers/dealer/dealer.model';
 import { v4 as uuidv4 } from 'uuid';
+import { DataUtils, FileLoadError } from '../../../../core/util/data-util.service';
+import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
+import { AlertError } from '../../../../shared/alert/alert-error.model';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -57,6 +60,8 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     documentSerial: [null, [Validators.required]],
     lastModified: [],
     attachmentFilePath: [null, [Validators.required]],
+    documentFile: [null, [Validators.required]],
+    documentFileContentType: [],
     createdBy: [null, Validators.required],
     lastModifiedBy: [],
     originatingDepartment: [null, Validators.required],
@@ -65,6 +70,8 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected businessDocumentService: BusinessDocumentService,
     protected applicationUserService: ApplicationUserService,
     protected dealerService: DealerService,
@@ -85,6 +92,21 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       this.updateForm(businessDocument);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -170,6 +192,8 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       documentSerial: businessDocument.documentSerial,
       lastModified: businessDocument.lastModified ? businessDocument.lastModified.format(DATE_TIME_FORMAT) : null,
       attachmentFilePath: businessDocument.attachmentFilePath,
+      documentFile: businessDocument.documentFile,
+      documentFileContentType: businessDocument.documentFileContentType,
       createdBy: businessDocument.createdBy,
       lastModifiedBy: businessDocument.lastModifiedBy,
       originatingDepartment: businessDocument.originatingDepartment,
@@ -259,6 +283,8 @@ export class BusinessDocumentUpdateComponent implements OnInit {
         ? dayjs(this.editForm.get(['lastModified'])!.value, DATE_TIME_FORMAT)
         : undefined,
       attachmentFilePath: this.editForm.get(['attachmentFilePath'])!.value,
+      documentFileContentType: this.editForm.get(['documentFileContentType'])!.value,
+      documentFile: this.editForm.get(['documentFile'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,
       lastModifiedBy: this.editForm.get(['lastModifiedBy'])!.value,
       originatingDepartment: this.editForm.get(['originatingDepartment'])!.value,

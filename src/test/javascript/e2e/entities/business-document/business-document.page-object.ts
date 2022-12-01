@@ -53,6 +53,7 @@ export class BusinessDocumentUpdatePage {
   documentSerialInput = element(by.id('field_documentSerial'));
   lastModifiedInput = element(by.id('field_lastModified'));
   attachmentFilePathInput = element(by.id('field_attachmentFilePath'));
+  documentFileInput = element(by.id('file_documentFile'));
 
   createdBySelect = element(by.id('field_createdBy'));
   lastModifiedBySelect = element(by.id('field_lastModifiedBy'));
@@ -110,6 +111,14 @@ export class BusinessDocumentUpdatePage {
 
   async getAttachmentFilePathInput(): Promise<string> {
     return await this.attachmentFilePathInput.getAttribute('value');
+  }
+
+  async setDocumentFileInput(documentFile: string): Promise<void> {
+    await this.documentFileInput.sendKeys(documentFile);
+  }
+
+  async getDocumentFileInput(): Promise<string> {
+    return await this.documentFileInput.getAttribute('value');
   }
 
   async createdBySelectLastOption(): Promise<void> {

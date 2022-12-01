@@ -53,6 +53,13 @@
         <dd>
           <span>{{ businessDocument.attachmentFilePath }}</span>
         </dd>
+        <dt><span>Document File</span></dt>
+        <dd>
+          <div *ngIf="businessDocument.documentFile">
+            <a (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">open</a>
+            {{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}
+          </div>
+        </dd>
         <dt><span>Created By</span></dt>
         <dd>
           <div *ngIf="businessDocument.createdBy">

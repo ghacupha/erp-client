@@ -38,6 +38,8 @@ describe('BusinessDocument e2e test', () => {
     documentTitle: 'leverage',
     documentSerial: '30be25c7-cf12-416e-bf92-04c08008e726',
     attachmentFilePath: 'Markets',
+    documentFile: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=',
+    documentFileContentType: 'unknown',
   };
 
   let businessDocument: any;
@@ -275,9 +277,13 @@ describe('BusinessDocument e2e test', () => {
 
       cy.get(`[data-cy="attachmentFilePath"]`).type('background').should('have.value', 'background');
 
+      cy.setFieldImageAsBytesOfEntity('documentFile', 'integration-test.png', 'image/png');
+
       cy.get(`[data-cy="createdBy"]`).select(1);
       cy.get(`[data-cy="originatingDepartment"]`).select(1);
 
+      // since cypress clicks submit too fast before the blob fields are validated
+      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
