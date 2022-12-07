@@ -45,6 +45,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ISecurityClearance } from '../../security-clearance/security-clearance.model';
 import { SecurityClearanceService } from '../../security-clearance/service/security-clearance.service';
 import { FileUploadChecksumService } from '../../../erp-common/form-components/services/file-upload-checksum.service';
+import { SearchWithPagination } from '../../../../core/request/request.model';
 
 @Component({
   selector: 'jhi-business-document-update',
@@ -108,7 +109,23 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    this.updatePreferredFileChecksumAlgorithm();
     this.runFileChecksums();
+
+  }
+
+  updatePreferredFileChecksumAlgorithm(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredBusinessDocumentUpdateFileChecksumAlgorithm")
+      .subscribe((mapped) => {
+        this.algorithmService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                fileChecksumAlgorithm: vals[0]
+              });
+            }
+          });
+      });
   }
 
   runFileChecksums(): void {
