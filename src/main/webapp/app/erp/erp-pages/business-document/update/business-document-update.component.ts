@@ -109,9 +109,22 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       this.loadRelationshipsOptions();
     });
 
+    this.updatePreferredBusinessDocumentFilePath();
+
     this.updatePreferredFileChecksumAlgorithm();
     this.runFileChecksums();
 
+  }
+
+  updatePreferredBusinessDocumentFilePath(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredBusinessDocumentAttachmentFilePath")
+      .subscribe(({ body: vals }) => {
+        if (vals) {
+          this.editForm.patchValue({
+            attachmentFilePath: vals.mappedValue
+          });
+        }
+      });
   }
 
   updatePreferredFileChecksumAlgorithm(): void {
