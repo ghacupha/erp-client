@@ -45,6 +45,7 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { SystemModuleService } from '../../../erp-pages/system-module/service/system-module.service';
 import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
+import { FileUploadChecksumService } from '../../../erp-common/form-components/services/file-upload-checksum.service';
 
 @Component({
   selector: 'jhi-report-design-update',
@@ -95,7 +96,8 @@ export class ReportDesignUpdateComponent implements OnInit {
     protected systemModuleService: SystemModuleService,
     protected algorithmService: AlgorithmService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected fileUploadChecksumService: FileUploadChecksumService
   ) {}
 
   ngOnInit(): void {
@@ -112,6 +114,34 @@ export class ReportDesignUpdateComponent implements OnInit {
     this.updatePreferredDepartment();
 
     this.updatePreferredOrganization();
+
+    this.updatePreferredFileChecksumAlgorithm();
+    this.runFileChecksums();
+  }
+
+  updatePreferredFileChecksumAlgorithm(): void {
+    this.universallyUniqueMappingService.findMap("globallyPreferredReportDesignUpdateFileChecksumAlgorithm")
+      .subscribe((mapped) => {
+        this.algorithmService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                fileCheckSumAlgorithm: vals[0]
+              });
+            }
+          });
+      });
+  }
+
+  runFileChecksums(): void {
+    this.editForm.get(['fileChecksumAlgorithm'])?.valueChanges.subscribe(algo => {
+      this.fileUploadChecksumService.updateFileUploadChecksum(
+        this.editForm,
+        "reportFile",
+        "reportFileChecksum",
+        algo.name ?? "sha512"
+      );
+    });
   }
 
   updatePreferredDepartment(): void {
