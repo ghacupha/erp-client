@@ -115,6 +115,8 @@ export class ReportDesignUpdateComponent implements OnInit {
 
     this.updatePreferredOrganization();
 
+    this.updatePreferredSecurityClearance();
+
     this.updatePreferredFileChecksumAlgorithm();
     this.runFileChecksums();
   }
@@ -172,7 +174,24 @@ export class ReportDesignUpdateComponent implements OnInit {
             }
           }
         });
-    }
+  }
+  updatePreferredSecurityClearance(): void {
+      // TODO Replace with entity filters
+      // TODO Add Mapping relationship in the security-clearance entity
+      this.placeholderService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignSecurityClearance"})
+        .subscribe(({ body }) => {
+          if (body!.length > 0) {
+            if (body) {
+              this.securityClearanceService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].token })
+                .subscribe(({ body: clearance }) => {
+                  if (clearance) {
+                    this.editForm.get(['securityClearance'])?.setValue(clearance[0]);
+                  }
+                });
+            }
+          }
+        });
+  }
 
   updateFileUploadChecksum(): void {
     this.editForm.get(['reportFile'])?.valueChanges.subscribe((fileAttachment) => {
@@ -192,6 +211,18 @@ export class ReportDesignUpdateComponent implements OnInit {
     this.editForm.patchValue({
       placeholders: [...update]
     });
+  }
+
+  updateParameters(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      parameters: [...update]
+    });
+  }
+
+  updateSecurityClearance(update: ISecurityClearance): void {
+    this.editForm.patchValue({
+      securityClearance: update
+    })
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
