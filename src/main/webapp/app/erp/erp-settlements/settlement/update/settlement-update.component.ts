@@ -195,8 +195,12 @@ export class SettlementUpdateComponent implements OnInit {
           this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
             .subscribe(({ body: vals }) => {
               if (vals) {
-                this.editForm.patchValue({
-                  signatories: [...vals]
+                this.editForm.get(['signatories'])?.valueChanges.subscribe((signatories) => {
+                  const p_signatories: IDealer[] = [];
+                  signatories.forEach((sign: IDealer) => {
+                    p_signatories.push(sign);
+                  })
+                  this.editForm.get(['biller'])?.setValue(p_signatories)
                 });
               }
             });
