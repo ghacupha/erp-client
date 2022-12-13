@@ -24,9 +24,14 @@ import { SettlementRequisitionUpdateComponent } from './update/settlement-requis
 import { SettlementRequisitionDeleteDialogComponent } from './delete/settlement-requisition-delete-dialog.component';
 import { SettlementRequisitionRoutingModule } from './route/settlement-requisition-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { SettlementRequisitionCustomRoutingModule } from './route/settlement-requisition-custom-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SettlementRequisitionRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    SettlementRequisitionRoutingModule,
+    SettlementRequisitionCustomRoutingModule,
+    ErpCommonModule],
   declarations: [
     SettlementRequisitionComponent,
     SettlementRequisitionDetailComponent,

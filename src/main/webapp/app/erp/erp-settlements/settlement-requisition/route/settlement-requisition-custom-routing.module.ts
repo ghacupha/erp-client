@@ -28,39 +28,12 @@ import { Authority } from '../../../../config/authority.constants';
 
 const settlementRequisitionRoute: Routes = [
   {
-    path: '',
-    component: SettlementRequisitionComponent,
-    data: {
-      defaultSort: 'id,asc',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/view',
-    component: SettlementRequisitionDetailComponent,
-    resolve: {
-      settlementRequisition: SettlementRequisitionRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: 'new',
+    path: ':id/copy',
     component: SettlementRequisitionUpdateComponent,
     resolve: {
       settlementRequisition: SettlementRequisitionRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/edit',
-    component: SettlementRequisitionUpdateComponent,
-    resolve: {
-      settlementRequisition: SettlementRequisitionRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-    data: {
-      authorities: [Authority.DEV],
-    }
   },
 ];
 
@@ -68,4 +41,4 @@ const settlementRequisitionRoute: Routes = [
   imports: [RouterModule.forChild(settlementRequisitionRoute)],
   exports: [RouterModule],
 })
-export class SettlementRequisitionRoutingModule {}
+export class SettlementRequisitionCustomRoutingModule {}

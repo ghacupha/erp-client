@@ -98,7 +98,7 @@ export class SettlementRequisitionComponent implements OnInit {
   search(query: string): void {
     if (query && ['description', 'serialNumber', 'requisitionNumber', 'paymentStatus'].includes(this.predicate)) {
       this.predicate = 'id';
-      this.ascending = true;
+      this.ascending = false;
     }
     this.currentSearch = query;
     this.loadPage(1);
@@ -124,7 +124,7 @@ export class SettlementRequisitionComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
+    const result = [this.predicate + ',' + (this.ascending ? DESC : ASC)];
     if (this.predicate !== 'id') {
       result.push('id');
     }
@@ -156,7 +156,7 @@ export class SettlementRequisitionComponent implements OnInit {
           page: this.page,
           size: this.itemsPerPage,
           search: this.currentSearch,
-          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+          sort: this.predicate + ',' + (this.ascending ? DESC : ASC),
         },
       });
     }
