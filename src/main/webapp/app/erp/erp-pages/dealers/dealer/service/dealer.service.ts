@@ -34,6 +34,7 @@ export class DealerService {
   protected reportUrl = this.applicationConfigService.getEndpointFor('api/reports/dealers-listing');
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/dealers');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');
+  protected resourceSearchIndexUrl = this.applicationConfigService.getEndpointFor('api/dealers/elasticsearch/re-index');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -69,6 +70,12 @@ export class DealerService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IDealer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+  }
+
+  indexAll(req: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<IDealer[]>(this.resourceSearchIndexUrl, { params: options, observe: 'response' });
   }
 
   addDealerToCollectionIfMissing(dealerCollection: IDealer[], ...dealersToCheck: (IDealer | null | undefined)[]): IDealer[] {

@@ -36,6 +36,7 @@ export type EntityArrayResponseType = HttpResponse<ISettlement[]>;
 export class SettlementService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/settlements');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/settlements');
+  protected resourceSearchIndexUrl = this.applicationConfigService.getEndpointFor('api/payments/elasticsearch/re-index');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -81,6 +82,13 @@ export class SettlementService {
     const options = createRequestOption(req);
     return this.http
       .get<ISettlement[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  indexAll(req: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<ISettlement[]>(this.resourceSearchIndexUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 

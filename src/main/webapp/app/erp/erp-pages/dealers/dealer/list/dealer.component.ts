@@ -34,6 +34,7 @@ import {NGXLogger} from "ngx-logger";
 import { IDealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
 import { DealerCategoryService } from '../service/dealer-category.service';
+import { ISettlement } from '../../../../erp-settlements/settlement/settlement.model';
 
 @Component({
   selector: 'jhi-dealer',
@@ -60,6 +61,41 @@ export class DealerComponent implements OnInit {
     protected log: NGXLogger
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  indexList(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    this.dealerService.indexAll({
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    }).subscribe((res: HttpResponse<ISettlement[]>) => {
+        this.isLoading = false;
+        this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+      },
+      () => {
+        this.isLoading = false;
+        this.onError();
+      });
+
+    this.dealerService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe(
+        (res: HttpResponse<ISettlement[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

@@ -26,6 +26,10 @@
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
+      <button class="btn btn-info mr-2" (click)="indexList()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Reindex List</span>
+      </button>
 
       <button
         id="jh-create-entity"
