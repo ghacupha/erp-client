@@ -20,12 +20,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { SettlementRequisitionComponent } from '../list/settlement-requisition.component';
-import { SettlementRequisitionDetailComponent } from '../detail/settlement-requisition-detail.component';
 import { SettlementRequisitionUpdateComponent } from '../update/settlement-requisition-update.component';
 import { SettlementRequisitionRoutingResolveService } from './settlement-requisition-routing-resolve.service';
-import { Authority } from '../../../../config/authority.constants';
 
+/**
+ * Custom navigation when copy data between instances of the same entity. The settlement-requisition
+ * is intended to be mostly immutable, in that you can create it or delete it but not modify it.
+ */
 const settlementRequisitionRoute: Routes = [
   {
     path: ':id/copy',
