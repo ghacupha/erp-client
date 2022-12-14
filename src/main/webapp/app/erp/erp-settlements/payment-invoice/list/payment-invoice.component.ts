@@ -27,6 +27,7 @@ import { IPaymentInvoice } from '../payment-invoice.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
 import { PaymentInvoiceDeleteDialogComponent } from '../delete/payment-invoice-delete-dialog.component';
+import { ISettlement } from '../../settlement/settlement.model';
 
 @Component({
   selector: 'jhi-payment-invoice',
@@ -76,6 +77,41 @@ export class PaymentInvoiceComponent implements OnInit {
         );
       return;
     }
+
+    this.paymentInvoiceService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe(
+        (res: HttpResponse<IPaymentInvoice[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
+  }
+
+  indexList(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    this.paymentInvoiceService.indexAll({
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    }).subscribe((res: HttpResponse<IPaymentInvoice[]>) => {
+        this.isLoading = false;
+        this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+      },
+      () => {
+        this.isLoading = false;
+        this.onError();
+      });
 
     this.paymentInvoiceService
       .query({

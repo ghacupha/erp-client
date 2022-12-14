@@ -28,6 +28,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IPaymentInvoice, getPaymentInvoiceIdentifier } from '../payment-invoice.model';
+import { ISettlement } from '../../settlement/settlement.model';
 
 export type EntityResponseType = HttpResponse<IPaymentInvoice>;
 export type EntityArrayResponseType = HttpResponse<IPaymentInvoice[]>;
@@ -36,6 +37,7 @@ export type EntityArrayResponseType = HttpResponse<IPaymentInvoice[]>;
 export class PaymentInvoiceService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/payment-invoices');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-invoices');
+  protected resourceSearchIndexUrl = this.applicationConfigService.getEndpointFor('api/payments/payment-invoices/elasticsearch/re-index');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -81,6 +83,13 @@ export class PaymentInvoiceService {
     const options = createRequestOption(req);
     return this.http
       .get<IPaymentInvoice[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  indexAll(req: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<IPaymentInvoice[]>(this.resourceSearchIndexUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
