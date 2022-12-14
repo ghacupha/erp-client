@@ -27,6 +27,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { ISettlementRequisition, getSettlementRequisitionIdentifier } from '../settlement-requisition.model';
+import { ISettlement } from '../../settlement/settlement.model';
 
 export type EntityResponseType = HttpResponse<ISettlementRequisition>;
 export type EntityArrayResponseType = HttpResponse<ISettlementRequisition[]>;
@@ -35,6 +36,7 @@ export type EntityArrayResponseType = HttpResponse<ISettlementRequisition[]>;
 export class SettlementRequisitionService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/requisition/settlement-requisitions');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/requisition/_search/settlement-requisitions');
+  protected resourceSearchIndexUrl = this.applicationConfigService.getEndpointFor('api/requisition/elasticsearch/re-index');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -84,6 +86,13 @@ export class SettlementRequisitionService {
     const options = createRequestOption(req);
     return this.http
       .get<ISettlementRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  indexAll(req: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<ISettlementRequisition[]>(this.resourceSearchIndexUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 

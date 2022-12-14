@@ -27,6 +27,7 @@ import { ISettlementRequisition } from '../settlement-requisition.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { SettlementRequisitionService } from '../service/settlement-requisition.service';
 import { SettlementRequisitionDeleteDialogComponent } from '../delete/settlement-requisition-delete-dialog.component';
+import { ISettlement } from '../../settlement/settlement.model';
 
 @Component({
   selector: 'jhi-settlement-requisition',
@@ -76,6 +77,41 @@ export class SettlementRequisitionComponent implements OnInit {
         );
       return;
     }
+
+    this.settlementRequisitionService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe(
+        (res: HttpResponse<ISettlementRequisition[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
+  }
+
+  indexList(page?: number, dontNavigate?: boolean): void {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    this.settlementRequisitionService.indexAll({
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    }).subscribe((res: HttpResponse<ISettlementRequisition[]>) => {
+        this.isLoading = false;
+        this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+      },
+      () => {
+        this.isLoading = false;
+        this.onError();
+      });
 
     this.settlementRequisitionService
       .query({
