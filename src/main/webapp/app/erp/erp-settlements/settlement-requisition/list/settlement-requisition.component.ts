@@ -27,7 +27,6 @@ import { ISettlementRequisition } from '../settlement-requisition.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { SettlementRequisitionService } from '../service/settlement-requisition.service';
 import { SettlementRequisitionDeleteDialogComponent } from '../delete/settlement-requisition-delete-dialog.component';
-import { ISettlement } from '../../settlement/settlement.model';
 
 @Component({
   selector: 'jhi-settlement-requisition',

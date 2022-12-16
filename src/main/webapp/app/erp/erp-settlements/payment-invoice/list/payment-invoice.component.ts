@@ -27,7 +27,6 @@ import { IPaymentInvoice } from '../payment-invoice.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
 import { PaymentInvoiceDeleteDialogComponent } from '../delete/payment-invoice-delete-dialog.component';
-import { ISettlement } from '../../settlement/settlement.model';
 
 @Component({
   selector: 'jhi-payment-invoice',

@@ -28,7 +28,6 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IPaymentInvoice, getPaymentInvoiceIdentifier } from '../payment-invoice.model';
-import { ISettlement } from '../../settlement/settlement.model';
 
 export type EntityResponseType = HttpResponse<IPaymentInvoice>;
 export type EntityArrayResponseType = HttpResponse<IPaymentInvoice[]>;

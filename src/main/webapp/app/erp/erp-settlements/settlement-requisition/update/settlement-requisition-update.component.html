@@ -166,30 +166,6 @@
           <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
         </jhi-m21-settlement-currency-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_currentOwner">Current Owner</label>
-          <select class="form-control" id="field_currentOwner" data-cy="currentOwner" name="currentOwner" formControlName="currentOwner">
-            <option *ngIf="!editForm.get('currentOwner')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('currentOwner')!.value?.id
-                  ? editForm.get('currentOwner')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['currentOwner'])!.invalid && (editForm.get(['currentOwner'])!.dirty || editForm.get(['currentOwner'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['currentOwner'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
         <jhi-m21-application-user-form-control
           ngDefaultControl
           formControlName='currentOwner'
@@ -199,28 +175,6 @@
         >
           <option [ngValue]="editForm.get(['currentOwner'])!.value"></option>
         </jhi-m21-application-user-form-control>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_nativeOwner">Native Owner</label>
-          <select class="form-control" id="field_nativeOwner" data-cy="nativeOwner" name="nativeOwner" formControlName="nativeOwner">
-            <option *ngIf="!editForm.get('nativeOwner')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('nativeOwner')!.value?.id
-                  ? editForm.get('nativeOwner')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['nativeOwner'])!.invalid && (editForm.get(['nativeOwner'])!.dirty || editForm.get(['nativeOwner'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['nativeOwner'])?.errors?.required"> This field is required. </small>
-        </div>-->
 
         <jhi-m21-application-user-form-control
           ngDefaultControl

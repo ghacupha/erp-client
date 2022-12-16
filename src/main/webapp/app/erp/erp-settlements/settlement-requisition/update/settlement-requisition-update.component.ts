@@ -57,6 +57,7 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 export class SettlementRequisitionUpdateComponent implements OnInit {
   isSaving = false;
   paymentStatusValues = Object.keys(PaymentStatus);
+  tod = dayjs();
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
@@ -107,24 +108,25 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const tod = dayjs();
     this.activatedRoute.data.subscribe(({ settlementRequisition }) => {
       if (settlementRequisition.id === undefined) {
-        settlementRequisition.timeOfRequisition = tod;
+        // settlementRequisition.timeOfRequisition = dayjs();
         settlementRequisition.paymentStatus = PaymentStatus.IN_PROCESS;
 
         const reqSerial = uuidv4();
         this.editForm.patchValue({
           serialNumber: reqSerial,
-          requisitionNumber: reqSerial.substring(0,8)
+          requisitionNumber: reqSerial.substring(0,8),
+          timeOfRequisition: this.tod.format(DATE_TIME_FORMAT)
         })
       }
 
       if (settlementRequisition.id !== undefined) {
-        settlementRequisition.timeOfRequisition = tod;
         this.copyForm(settlementRequisition);
       }
     });
+    //
+    // this.editForm.get(['timeOfRequisition'])?.setValue(tod);
 
     this.loadRelationshipsOptions();
 
@@ -429,7 +431,8 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       // id: settlementRequisition.id,
       description: settlementRequisition.description,
       serialNumber: settlementRequisition.serialNumber,
-      timeOfRequisition: settlementRequisition.timeOfRequisition ? settlementRequisition.timeOfRequisition.format(DATE_TIME_FORMAT) : null,
+      // timeOfRequisition: settlementRequisition.timeOfRequisition ? settlementRequisition.timeOfRequisition.format(DATE_TIME_FORMAT) : this.tod.format(DATE_TIME_FORMAT),
+      timeOfRequisition: this.tod.format(DATE_TIME_FORMAT),
       requisitionNumber: settlementRequisition.requisitionNumber,
       paymentAmount: settlementRequisition.paymentAmount,
       paymentStatus: settlementRequisition.paymentStatus,
