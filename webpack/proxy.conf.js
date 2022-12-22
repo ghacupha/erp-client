@@ -1,5 +1,5 @@
 /*
- * Erp System - Mark III No 5 (Caleb Series) Client 0.5.0-SNAPSHOT
+ * Erp System - Mark III No 6 (Caleb Series) Client 0.6.0
  * Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
