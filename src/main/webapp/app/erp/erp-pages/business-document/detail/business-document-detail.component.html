@@ -66,7 +66,7 @@
         </dd>
         <dt><span>Document File Checksum</span></dt>
         <dd>
-          <span>{{ businessDocument.documentFileChecksum }}</span>
+          <span *jhiHasAnyAuthority="'ROLE_DEV'">{{ businessDocument.documentFileChecksum }}</span>
         </dd>
         <dt><span>Created By</span></dt>
         <dd>

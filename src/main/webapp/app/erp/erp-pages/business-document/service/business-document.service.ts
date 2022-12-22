@@ -33,8 +33,8 @@ export type EntityArrayResponseType = HttpResponse<IBusinessDocument[]>;
 
 @Injectable({ providedIn: 'root' })
 export class BusinessDocumentService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/business-documents');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/business-documents');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/docs/business-documents');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/docs/_search/business-documents');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

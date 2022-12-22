@@ -76,12 +76,12 @@
             <span>Document Serial</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="lastModified"><span>Last Modified</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="attachmentFilePath">
+          <th *jhiHasAnyAuthority="'ROLE_DEV'" scope="col" jhiSortBy="attachmentFilePath">
             <span>Attachment File Path</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="documentFile"><span>Document File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th *jhiHasAnyAuthority="'ROLE_DEV'" scope="col" jhiSortBy="documentFile"><span>Document File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fileTampered"><span>File Tampered</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="documentFileChecksum">
+          <th *jhiHasAnyAuthority="'ROLE_DEV'" scope="col" jhiSortBy="documentFileChecksum">
             <span>Document File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
@@ -89,7 +89,7 @@
           <th scope="col" jhiSortBy="originatingDepartment.dealerName">
             <span>Originating Department</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="fileChecksumAlgorithm.name"><span>File Checksum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
+          <th *jhiHasAnyAuthority="'ROLE_DEV'" scope="col" jhiSortBy="fileChecksumAlgorithm.name"><span>File Checksum Algorithm</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -103,8 +103,8 @@
           <td>{{ businessDocument.description }}</td>
           <td>{{ businessDocument.documentSerial }}</td>
           <td>{{ businessDocument.lastModified | formatMediumDatetime }}</td>
-          <td>{{ businessDocument.attachmentFilePath }}</td>
-          <td>
+          <td *jhiHasAnyAuthority="'ROLE_DEV'">{{ businessDocument.attachmentFilePath }}</td>
+          <td *jhiHasAnyAuthority="'ROLE_DEV'">
             <a
               *ngIf="businessDocument.documentFile"
               (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)"
@@ -115,7 +115,7 @@
             >
           </td>
           <td>{{ businessDocument.fileTampered }}</td>
-          <td>{{ businessDocument.documentFileChecksum }}</td>
+          <td *jhiHasAnyAuthority="'ROLE_DEV'">{{ businessDocument.documentFileChecksum }}</td>
           <td>
             <div *ngIf="businessDocument.createdBy">
               <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{
@@ -137,7 +137,7 @@
               }}</a>
             </div>
           </td>
-          <td>
+          <td *jhiHasAnyAuthority="'ROLE_DEV'">
             <div *ngIf="businessDocument.fileChecksumAlgorithm">
               <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
                 businessDocument.fileChecksumAlgorithm?.name
