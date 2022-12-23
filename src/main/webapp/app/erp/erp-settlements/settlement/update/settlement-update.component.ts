@@ -20,17 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  finalize,
-  map,
-  switchMap,
-  tap
-} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map,} from 'rxjs/operators';
 
 import { ISettlement, Settlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
@@ -49,12 +40,6 @@ import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment
 import { PaymentInvoiceService } from 'app/erp/erp-settlements/payment-invoice/service/payment-invoice.service';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IPayment } from '../../../erp-pages/payments/payment/payment.model';
-import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
-import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
-import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
-import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
-import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
@@ -97,24 +82,6 @@ export class SettlementUpdateComponent implements OnInit {
     signatories: [],
   });
 
-  minAccountLengthTerm = 3;
-
-  categoriesLoading = false;
-  categoryControlInput$ = new Subject<string>();
-  categoryLookups$: Observable<IPaymentCategory[]> = of([]);
-
-  labelsLoading = false;
-  labelControlInput$ = new Subject<string>();
-  labelLookups$: Observable<IPaymentLabel[]> = of([]);
-
-  settlementCurrenciesLoading = false;
-  settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
-
-  paymentInvoicesLoading = false;
-  paymentInvoiceControlInput$ = new Subject<string>();
-  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
-
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -126,11 +93,6 @@ export class SettlementUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected activatedRoute: ActivatedRoute,
-    protected categorySuggestionService: CategorySuggestionService,
-    protected labelSuggestionService: LabelSuggestionService,
-    protected settlementSuggestionService: SettlementSuggestionService,
-    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
-    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected paymentCalculatorService: PaymentCalculatorService,
     protected fb: FormBuilder
@@ -147,11 +109,6 @@ export class SettlementUpdateComponent implements OnInit {
       paymentDate: dayjs().startOf('day')
     });
 
-    // fire-up typeahead items
-    this.loadLabels();
-    this.loadCategories();
-    this.loadCurrencies();
-    this.loadPaymentInvoices();
     this.updatePreferredCurrency();
     this.updatePreferredCategory();
     this.updatePreferredSignatories();
@@ -200,7 +157,7 @@ export class SettlementUpdateComponent implements OnInit {
                   signatories.forEach((sign: IDealer) => {
                     p_signatories.push(sign);
                   })
-                  this.editForm.get(['biller'])?.setValue(p_signatories)
+                  this.editForm.get(['signatories'])?.setValue(p_signatories)
                 });
               }
             });
@@ -312,6 +269,12 @@ export class SettlementUpdateComponent implements OnInit {
     });
   }
 
+  updatePaymentLabels(update: IPaymentLabel[]): void {
+    this.editForm.patchValue({
+      paymentLabels: [...update]
+    });
+  }
+
   updateSettlementGroup(update: ISettlement): void {
     this.editForm.patchValue({
       groupSettlement: update
@@ -334,102 +297,6 @@ export class SettlementUpdateComponent implements OnInit {
     this.editForm.patchValue({
       paymentInvoices: update
     });
-  }
-
-  loadPaymentInvoices(): void {
-    this.paymentInvoiceLookups$ = concat(
-      of([]), // default items
-      this.paymentInvoiceControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.paymentInvoicesLoading = true),
-        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.paymentInvoicesLoading = false)
-        ))
-      ),
-      of([...this.paymentInvoicesSharedCollection])
-    );
-  }
-
-  loadCurrencies(): void {
-    this.settlementCurrencyLookups$ = concat(
-      of([]), // default items
-      this.settlementCurrencyControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementCurrenciesLoading = true),
-        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementCurrenciesLoading = false)
-        ))
-      ),
-      of([...this.settlementCurrenciesSharedCollection])
-    );
-  }
-
-  loadCategories(): void {
-    this.categoryLookups$ = concat(
-      of([]), // default items
-      this.categoryControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.categoriesLoading = true),
-        switchMap(term => this.categorySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.categoriesLoading = false)
-        ))
-      ),
-      of([...this.paymentCategoriesSharedCollection])
-    );
-  }
-
-  loadLabels(): void {
-    this.labelLookups$ = concat(
-      of([]), // default items
-      this.labelControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.labelsLoading = true),
-        switchMap(term => this.labelSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.labelsLoading = false)
-        ))
-      ),
-      of([...this.paymentLabelsSharedCollection])
-    );
-  }
-
-  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackCurrencyByFn(item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPaymentByFn(item: IPayment): number {
-    return item.id!;
-  }
-
-  trackCategoryByFn(item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackLabelByFn(item: IPaymentLabel): number {
-    return item.id!;
   }
 
   byteSize(base64String: string): string {
@@ -461,78 +328,6 @@ export class SettlementUpdateComponent implements OnInit {
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackSettlementById(index: number, item: ISettlement): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlement>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -560,6 +355,7 @@ export class SettlementUpdateComponent implements OnInit {
       paymentAmount: settlement.paymentAmount,
       description: settlement.description,
       notes: settlement.notes,
+      remarks: settlement.remarks,
       calculationFile: settlement.calculationFile,
       calculationFileContentType: settlement.calculationFileContentType,
       fileUploadToken: settlement.fileUploadToken,
@@ -699,6 +495,7 @@ export class SettlementUpdateComponent implements OnInit {
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       description: this.editForm.get(['description'])!.value,
       notes: this.editForm.get(['notes'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
       calculationFile: this.editForm.get(['calculationFile'])!.value,
       fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,

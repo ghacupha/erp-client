@@ -126,6 +126,15 @@
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
 
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='signatories'
+          [inputValues]="editForm.get(['signatories'])!.value"
+          (valueSelected)='updateSignatories($event)'
+          inputControlLabel='Signatories'
+        >
+        </jhi-m2m-dealer-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_notes">Notes</label>
           <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
@@ -180,29 +189,14 @@
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label">Payment Labels</label>
-          <ng-select
-            [items]="labelLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackLabelByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="labelsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="labelControlInput$"
-            formControlName="paymentLabels"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of labelLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['paymentLabels'])!.value|json}}</div>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='paymentLabels'
+          [inputValues]="editForm.get(['paymentLabels'])!.value"
+          (selectedValues)='updatePaymentLabels($event)'
+          inputControlLabel='Payment Labels'
+        >
+        </jhi-m2m-placeholder-form-control>
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
@@ -212,15 +206,6 @@
           inputControlLabel='Placeholder Items'
         >
         </jhi-m2m-placeholder-form-control>
-
-        <jhi-m2m-dealer-form-control
-          ngDefaultControl
-          formControlName='signatories'
-          [inputValues]="editForm.get(['signatories'])!.value"
-          (valueSelected)='updateSignatories($event)'
-          inputControlLabel=Signatories
-        >
-        </jhi-m2m-dealer-form-control>
 
         <jhi-m21-settlement-form-control
           ngDefaultControl

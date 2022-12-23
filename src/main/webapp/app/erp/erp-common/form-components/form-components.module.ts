@@ -44,6 +44,7 @@ import { M21PrepaymentAccountFormControlComponent } from './prepayment-account-f
 import { M21ReportDesignControlComponent } from './report-design-form-components/m21-report-design-control.component';
 import { M21AlgorithmFormControlComponent } from './algorithm-form-components/m21-algorithm-form-control.component';
 import { M21SystemModuleFormControlComponent } from './system-module-form-components/m21-system-module-form-control.component';
+import { M2mPaymentLabelFormControlComponent } from './payment-label-form-components/m2m-payment-label-form-control.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { M21SystemModuleFormControlComponent } from './system-module-form-compon
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
+    M2mPaymentLabelFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -101,6 +103,7 @@ import { M21SystemModuleFormControlComponent } from './system-module-form-compon
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
+    M2mPaymentLabelFormControlComponent,
   ]
 })
 export class FormComponentsModule {

@@ -49,6 +49,7 @@ import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SampleClientTest3ResolverService } from './erp/erp-forms/Questionnaire/dynamic-form-question/sample-client/sample-client-test3-resolver.service';
+import { ErpCommonModule } from './erp/erp-common/erp-common.module';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import { SampleClientTest3ResolverService } from './erp/erp-forms/Questionnaire/
     BrowserAnimationsModule,
     SharedModule,
     HomeModule,
+    ErpCommonModule,
     ErpSystemModule,
     NgSelectModule,
     ErpStoreModule,

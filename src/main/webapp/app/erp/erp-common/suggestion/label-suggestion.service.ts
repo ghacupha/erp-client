@@ -17,7 +17,6 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
@@ -25,7 +24,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class LabelSuggestionService {
 
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/payment-labels');
