@@ -7,9 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
-    <version>0.6.0</version>
+    <version>0.7.0</version>
     <name>Erp System</name>
-    <description>Mark III No 6 (Caleb Series) Client 0.6.0</description>
+    <description>Mark III No 6 (Caleb Series) Client 0.7.0</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
