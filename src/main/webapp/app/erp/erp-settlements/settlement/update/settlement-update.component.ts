@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 6 (Caleb Series) Client 0.7.0
+/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -100,13 +100,14 @@ export class SettlementUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlement }) => {
-      this.updateForm(settlement);
-
+      if (settlement.id) {
+        this.updateForm(settlement);
+      } else  {
+        this.editForm.patchValue({
+          paymentDate: dayjs().startOf('day')
+        });
+      }
       this.loadRelationshipsOptions();
-    });
-
-    this.editForm.patchValue({
-      paymentDate: dayjs().startOf('day')
     });
 
     this.updatePreferredCurrency();
@@ -117,7 +118,7 @@ export class SettlementUpdateComponent implements OnInit {
     this.updatePreferredPaymentAmountGivenInvoice();
     this.updatePreferredCurrencyGivenInvoice();
     this.updatePreferredPaymentLabelsGivenInvoice();
-    this.updatePaymentAmountGivenPaymentCategory();
+    // TODO this.updatePaymentAmountGivenPaymentCategory();
     this.updateDescriptionGivenInvoicePurchaseOrder();
   }
 
@@ -208,32 +209,36 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredPaymentAmountGivenInvoice(): void {
-    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
-      let settlementAmount = 0;
-      invoices.forEach(({ invoiceAmount }: IPaymentInvoice) => {
-        settlementAmount += invoiceAmount ?? 0;
-      })
+    if (this.editForm.get(['paymentInvoices'])?.value === null ) {
+      this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+        let settlementAmount = 0;
+        invoices.forEach(({ invoiceAmount }: IPaymentInvoice) => {
+          settlementAmount += invoiceAmount ?? 0;
+        })
 
-      this.paymentCalculatorService.calculatePayableAmount(settlementAmount, this.editForm.get(['paymentCategory'])?.value)
-      .subscribe(calculatedAmount => {
-        this.editForm.patchValue({ paymentAmount: calculatedAmount})
+        this.paymentCalculatorService.calculatePayableAmount(settlementAmount, this.editForm.get(['paymentCategory'])?.value)
+          .subscribe(calculatedAmount => {
+            this.editForm.patchValue({ paymentAmount: calculatedAmount })
+          });
       });
-    });
+    }
   }
 
   updatePaymentAmountGivenPaymentCategory(): void {
-    this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
+    if (this.editForm.get(['paymentInvoices'])?.value === null ) {
+      this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
 
-      let settlementAmount = 0;
-      this.editForm.get(['paymentInvoices'])?.value.forEach(({ invoiceAmount }: IPaymentInvoice) => {
-        settlementAmount += invoiceAmount ?? 0;
-      })
+        let settlementAmount = 0;
+        this.editForm.get(['paymentInvoices'])?.value.forEach(({ invoiceAmount }: IPaymentInvoice) => {
+          settlementAmount += invoiceAmount ?? 0;
+        })
 
-      this.paymentCalculatorService.calculatePayableAmount(settlementAmount,  cat)
-        .subscribe(calculatedAmount => {
-          this.editForm.patchValue({ paymentAmount: calculatedAmount })
-        });
-    });
+        this.paymentCalculatorService.calculatePayableAmount(settlementAmount, cat)
+          .subscribe(calculatedAmount => {
+            this.editForm.patchValue({ paymentAmount: calculatedAmount })
+          });
+      });
+    }
   }
 
   updatePreferredPaymentLabels(): void {
