@@ -118,11 +118,12 @@ export class SettlementUpdateComponent implements OnInit {
     this.updatePreferredPaymentAmountGivenInvoice();
     this.updatePreferredCurrencyGivenInvoice();
     this.updatePreferredPaymentLabelsGivenInvoice();
-    // TODO this.updatePaymentAmountGivenPaymentCategory();
+    this.updatePaymentAmountGivenPaymentCategory();
     this.updateDescriptionGivenInvoicePurchaseOrder();
   }
 
   updatePreferredCurrency(): void {
+    if (this.editForm.get(['id'])?.value === null ) {
     this.universallyUniqueMappingService.findMap("globallyPreferredSettlementIso4217CurrencyCode")
       .subscribe(mapped => {
           this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
@@ -133,9 +134,11 @@ export class SettlementUpdateComponent implements OnInit {
             });
         }
       );
+    }
   }
 
   updatePreferredCategory(): void {
+    if (this.editForm.get(['id'])?.value === null ) {
     this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentCategoryName")
       .subscribe((mapped) => {
           this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
@@ -145,9 +148,11 @@ export class SettlementUpdateComponent implements OnInit {
               }
             });
       });
+    }
   }
 
   updatePreferredSignatories(): void {
+    if (this.editForm.get(['id'])?.value === null ) {
     this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
       .subscribe((mapped) => {
           this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
@@ -163,53 +168,62 @@ export class SettlementUpdateComponent implements OnInit {
               }
             });
       });
+    }
   }
 
   updatePreferredBillerGivenInvoice(): void {
-    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
-      const p_dealers: IDealer[] = [];
-      invoices.forEach((inv: { biller: IDealer; }) => {
-        p_dealers.push(inv.biller);
-      })
-      this.editForm.get(['biller'])?.setValue(p_dealers[0])
-    });
+    if (this.editForm.get(['id'])?.value === null ) {
+      this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+        const p_dealers: IDealer[] = [];
+        invoices.forEach((inv: { biller: IDealer; }) => {
+          p_dealers.push(inv.biller);
+        })
+        this.editForm.get(['biller'])?.setValue(p_dealers[0])
+      });
+    }
   }
 
   updatePreferredCurrencyGivenInvoice(): void {
-    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
-      const p_crn: ISettlementCurrency[] = [];
-      invoices.forEach((inv: { settlementCurrency: ISettlementCurrency; }) => {
-        p_crn.push(inv.settlementCurrency);
-      })
-      this.editForm.get(['settlementCurrency'])?.setValue(p_crn[0])
-    });
+    if (this.editForm.get(['id'])?.value === null ) {
+      this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+        const p_crn: ISettlementCurrency[] = [];
+        invoices.forEach((inv: { settlementCurrency: ISettlementCurrency; }) => {
+          p_crn.push(inv.settlementCurrency);
+        })
+        this.editForm.get(['settlementCurrency'])?.setValue(p_crn[0])
+      });
+    }
   }
 
   updateDescriptionGivenInvoicePurchaseOrder(): void {
-    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
-      const description = invoices[0].purchaseOrder.description;
+    if (this.editForm.get(['id'])?.value === null ) {
+      this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+        const description = invoices[0].purchaseOrder.description;
 
-      this.editForm.patchValue({
-        description,
-        remarks: description,
-      })
+        this.editForm.patchValue({
+          description,
+          remarks: description,
+        })
 
-    });
+      });
+    }
   }
 
   updatePreferredPaymentLabelsGivenInvoice(): void {
-    this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
-      const p_labels: IPaymentLabel[] = [];
-      invoices.forEach((inv: { paymentLabels: IPaymentLabel[]; }) => {
-        p_labels.push(...inv.paymentLabels);
+    if (this.editForm.get(['id'])?.value === null ) {
+      this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
+        const p_labels: IPaymentLabel[] = [];
+        invoices.forEach((inv: { paymentLabels: IPaymentLabel[]; }) => {
+          p_labels.push(...inv.paymentLabels);
+        });
+        const labels = [...this.editForm.get(['paymentLabels'])?.value, ...p_labels];
+        this.editForm.get(['paymentLabels'])?.setValue(labels)
       });
-      const labels = [...this.editForm.get(['paymentLabels'])?.value, ...p_labels];
-      this.editForm.get(['paymentLabels'])?.setValue(labels)
-    });
+    }
   }
 
   updatePreferredPaymentAmountGivenInvoice(): void {
-    if (this.editForm.get(['paymentInvoices'])?.value === null ) {
+    if (this.editForm.get(['id'])?.value === null ) {
       this.editForm.get(['paymentInvoices'])?.valueChanges.subscribe((invoices) => {
         let settlementAmount = 0;
         invoices.forEach(({ invoiceAmount }: IPaymentInvoice) => {
@@ -225,7 +239,7 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePaymentAmountGivenPaymentCategory(): void {
-    if (this.editForm.get(['paymentInvoices'])?.value === null ) {
+    if (this.editForm.get(['id'])?.value === null ) {
       this.editForm.get(['paymentCategory'])?.valueChanges.subscribe(cat => {
 
         let settlementAmount = 0;
@@ -242,17 +256,19 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredPaymentLabels(): void {
-    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentLabel")
-      .subscribe((mapped) => {
-        this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-          .subscribe(({ body: vals }) => {
-            if (vals) {
-              this.editForm.patchValue({
-                paymentLabels: [...vals]
-              });
-            }
-          });
-      });
+    if (this.editForm.get(['id'])?.value === null ) {
+      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentLabel")
+        .subscribe((mapped) => {
+          this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+            .subscribe(({ body: vals }) => {
+              if (vals) {
+                this.editForm.patchValue({
+                  paymentLabels: [...vals]
+                });
+              }
+            });
+        });
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
