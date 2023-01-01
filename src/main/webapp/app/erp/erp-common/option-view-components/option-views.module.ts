@@ -34,6 +34,7 @@ import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.c
 import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
 import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
 import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
+import { BusinessDocumentOptionViewComponent } from './business-document-option-view.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ReportDesignOptionViewComponent } from './report-design-option-view.com
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
+    BusinessDocumentOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -74,6 +76,7 @@ import { ReportDesignOptionViewComponent } from './report-design-option-view.com
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
+    BusinessDocumentOptionViewComponent,
   ]
 })
 export class OptionViewsModule {
