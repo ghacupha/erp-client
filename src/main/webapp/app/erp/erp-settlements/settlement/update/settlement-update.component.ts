@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 6 (Caleb Series) Client 0.7.0
+/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -44,6 +44,8 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import * as dayjs from 'dayjs';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -59,6 +61,7 @@ export class SettlementUpdateComponent implements OnInit {
   settlementsSharedCollection: ISettlement[] = [];
   dealersSharedCollection: IDealer[] = [];
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
+  businessDocumentCollection: IBusinessDocument[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -80,6 +83,7 @@ export class SettlementUpdateComponent implements OnInit {
     biller: [null, Validators.required],
     paymentInvoices: [],
     signatories: [],
+    businessDocuments: [],
   });
 
   constructor(
@@ -95,6 +99,7 @@ export class SettlementUpdateComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected paymentCalculatorService: PaymentCalculatorService,
+    protected businessDocumentService: BusinessDocumentService,
     protected fb: FormBuilder
   ) {}
 
@@ -265,6 +270,13 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   updateDealer(dealerUpdate: IDealer): void {
     this.editForm.patchValue({
       biller: dealerUpdate,
@@ -382,7 +394,13 @@ export class SettlementUpdateComponent implements OnInit {
       biller: settlement.biller,
       paymentInvoices: settlement.paymentInvoices,
       signatories: settlement.signatories,
+      businessDocuments: settlement.businessDocuments,
     });
+
+    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentCollection,
+      ...(settlement.businessDocuments ?? [])
+    );
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -438,6 +456,19 @@ export class SettlementUpdateComponent implements OnInit {
         )
       )
       .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            this.editForm.get('businessDocument')!.value
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentCollection = businessDocuments));
 
     this.paymentLabelService
       .query()
@@ -522,6 +553,7 @@ export class SettlementUpdateComponent implements OnInit {
       biller: this.editForm.get(['biller'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
       signatories: this.editForm.get(['signatories'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
   }
 }
