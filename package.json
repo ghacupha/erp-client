@@ -2,7 +2,7 @@
   "name": "erp-system",
   "version": "0.7.0",
   "private": true,
-  "description": "Mark III No 6 (Caleb Series) Client 0.7.0",
+  "description": "Mark III No 8 (Caleb Series) Client 0.9.0",
   "license": "GPLv3",
   "scripts": {
     "build": "npm run webapp:prod --",

@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+    Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
     Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookUps$ | async"
-    bindLabel="mappedValue"
+    bindLabel="documentTitle"
     [trackByFn]="trackValuesByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"
@@ -36,7 +36,6 @@
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <!--{{ item.universalKey }}: {{ item.mappedValue }}-->
       {{ item|formatBusinessDocument }}
     </ng-template>
   </ng-select>

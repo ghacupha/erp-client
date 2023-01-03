@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+/// Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import { IPaymentLabel } from '../../erp-pages/payment-label/payment-label.model
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IDeliveryNote } from '../delivery-note/delivery-note.model';
 import { IJobSheet } from '../job-sheet/job-sheet.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 
 export interface IPaymentInvoice {
   id?: number;
@@ -40,6 +41,7 @@ export interface IPaymentInvoice {
   biller?: IDealer;
   deliveryNotes?: IDeliveryNote[] | null;
   jobSheets?: IJobSheet[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
 }
 
 export class PaymentInvoice implements IPaymentInvoice {
@@ -57,7 +59,8 @@ export class PaymentInvoice implements IPaymentInvoice {
     public settlementCurrency?: ISettlementCurrency,
     public biller?: IDealer,
     public deliveryNotes?: IDeliveryNote[] | null,
-    public jobSheets?: IJobSheet[] | null
+    public jobSheets?: IJobSheet[] | null,
+    public businessDocuments?: IBusinessDocument[] | null,
   ) {}
 }
 

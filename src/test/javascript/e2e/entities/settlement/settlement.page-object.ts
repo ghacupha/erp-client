@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+/// Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -66,6 +66,7 @@ export class SettlementUpdatePage {
   billerSelect = element(by.id('field_biller'));
   paymentInvoiceSelect = element(by.id('field_paymentInvoice'));
   signatoriesSelect = element(by.id('field_signatories'));
+  businessDocumentSelect = element(by.id('field_businessDocument'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -277,6 +278,22 @@ export class SettlementUpdatePage {
 
   async getSignatoriesSelectedOption(): Promise<string> {
     return await this.signatoriesSelect.element(by.css('option:checked')).getText();
+  }
+
+  async businessDocumentSelectLastOption(): Promise<void> {
+    await this.businessDocumentSelect.all(by.tagName('option')).last().click();
+  }
+
+  async businessDocumentSelectOption(option: string): Promise<void> {
+    await this.businessDocumentSelect.sendKeys(option);
+  }
+
+  getBusinessDocumentSelect(): ElementFinder {
+    return this.businessDocumentSelect;
+  }
+
+  async getBusinessDocumentSelectedOption(): Promise<string> {
+    return await this.businessDocumentSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

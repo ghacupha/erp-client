@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+/// Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -86,6 +86,7 @@ describe('Settlement e2e test', () => {
             settlementUpdatePage.billerSelectLastOption(),
             // settlementUpdatePage.paymentInvoiceSelectLastOption(),
             // settlementUpdatePage.signatoriesSelectLastOption(),
+            // settlementUpdatePage.businessDocumentSelectLastOption(),
         ]);
 
         await settlementUpdatePage.save();

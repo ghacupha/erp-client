@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+/// Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -101,6 +101,11 @@ describe('JobSheet e2e test', () => {
     });
 
     cy.intercept('GET', '/api/payment-labels', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/business-documents', {
       statusCode: 200,
       body: [],
     });

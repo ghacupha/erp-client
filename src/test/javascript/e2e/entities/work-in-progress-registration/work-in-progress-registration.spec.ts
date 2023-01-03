@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 7 (Caleb Series) Client 0.8.0
+/// Erp System - Mark III No 8 (Caleb Series) Client 0.9.0
 /// Copyright © 2021 - 2022 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
+import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import {
   WorkInProgressRegistrationComponentsPage,
-  /* WorkInProgressRegistrationDeleteDialog, */
+  WorkInProgressRegistrationDeleteDialog,
   WorkInProgressRegistrationUpdatePage,
 } from './work-in-progress-registration.page-object';
 import * as path from 'path';
@@ -33,7 +33,7 @@ describe('WorkInProgressRegistration e2e test', () => {
   let signInPage: SignInPage;
   let workInProgressRegistrationComponentsPage: WorkInProgressRegistrationComponentsPage;
   let workInProgressRegistrationUpdatePage: WorkInProgressRegistrationUpdatePage;
-  /* let workInProgressRegistrationDeleteDialog: WorkInProgressRegistrationDeleteDialog; */
+  let workInProgressRegistrationDeleteDialog: WorkInProgressRegistrationDeleteDialog;
   const fileNameToUpload = 'logo-jhipster.png';
   const fileToUpload = '../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
   const absolutePath = path.resolve(__dirname, fileToUpload);
@@ -69,47 +69,52 @@ describe('WorkInProgressRegistration e2e test', () => {
     await workInProgressRegistrationUpdatePage.cancel();
   });
 
-  /* it('should create and save WorkInProgressRegistrations', async () => {
-        const nbButtonsBeforeCreate = await workInProgressRegistrationComponentsPage.countDeleteButtons();
+  it('should create and save WorkInProgressRegistrations', async () => {
+    const nbButtonsBeforeCreate = await workInProgressRegistrationComponentsPage.countDeleteButtons();
 
-        await workInProgressRegistrationComponentsPage.clickOnCreateButton();
+    await workInProgressRegistrationComponentsPage.clickOnCreateButton();
 
-        await promise.all([
-            workInProgressRegistrationUpdatePage.setSequenceNumberInput('sequenceNumber'),
-            workInProgressRegistrationUpdatePage.setParticularsInput('particulars'),
-            workInProgressRegistrationUpdatePage.setInstalmentAmountInput('5'),
-            workInProgressRegistrationUpdatePage.setCommentsInput(absolutePath),
-            // workInProgressRegistrationUpdatePage.placeholderSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.serviceOutletSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.settlementSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.purchaseOrderSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.deliveryNoteSelectLastOption(),
-            // workInProgressRegistrationUpdatePage.jobSheetSelectLastOption(),
-            workInProgressRegistrationUpdatePage.dealerSelectLastOption(),
-            workInProgressRegistrationUpdatePage.workInProgressGroupSelectLastOption(),
-            workInProgressRegistrationUpdatePage.settlementCurrencySelectLastOption(),
-            workInProgressRegistrationUpdatePage.workProjectRegisterSelectLastOption(),
-        ]);
+    await promise.all([
+      workInProgressRegistrationUpdatePage.setSequenceNumberInput('sequenceNumber'),
+      workInProgressRegistrationUpdatePage.setParticularsInput('particulars'),
+      workInProgressRegistrationUpdatePage.setInstalmentAmountInput('5'),
+      workInProgressRegistrationUpdatePage.setCommentsInput(absolutePath),
+      // workInProgressRegistrationUpdatePage.placeholderSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.serviceOutletSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.settlementSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.purchaseOrderSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.deliveryNoteSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.jobSheetSelectLastOption(),
+      workInProgressRegistrationUpdatePage.dealerSelectLastOption(),
+      workInProgressRegistrationUpdatePage.workInProgressGroupSelectLastOption(),
+      workInProgressRegistrationUpdatePage.settlementCurrencySelectLastOption(),
+      workInProgressRegistrationUpdatePage.workProjectRegisterSelectLastOption(),
+      // workInProgressRegistrationUpdatePage.businessDocumentSelectLastOption(),
+    ]);
 
-        await workInProgressRegistrationUpdatePage.save();
-        expect(await workInProgressRegistrationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+    await workInProgressRegistrationUpdatePage.save();
+    expect(await workInProgressRegistrationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-        expect(await workInProgressRegistrationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
-    }); */
+    expect(await workInProgressRegistrationComponentsPage.countDeleteButtons()).to.eq(
+      nbButtonsBeforeCreate + 1,
+      'Expected one more entry in the table'
+    );
+  });
 
-  /* it('should delete last WorkInProgressRegistration', async () => {
-        const nbButtonsBeforeDelete = await workInProgressRegistrationComponentsPage.countDeleteButtons();
-        await workInProgressRegistrationComponentsPage.clickOnLastDeleteButton();
+  it('should delete last WorkInProgressRegistration', async () => {
+    const nbButtonsBeforeDelete = await workInProgressRegistrationComponentsPage.countDeleteButtons();
+    await workInProgressRegistrationComponentsPage.clickOnLastDeleteButton();
 
-        workInProgressRegistrationDeleteDialog = new WorkInProgressRegistrationDeleteDialog();
-        expect(await workInProgressRegistrationDeleteDialog.getDialogTitle())
-            .to.eq('Are you sure you want to delete this Work In Progress Registration?');
-        await workInProgressRegistrationDeleteDialog.clickOnConfirmButton();
-        await browser.wait(ec.visibilityOf(workInProgressRegistrationComponentsPage.title), 5000);
+    workInProgressRegistrationDeleteDialog = new WorkInProgressRegistrationDeleteDialog();
+    expect(await workInProgressRegistrationDeleteDialog.getDialogTitle()).to.eq(
+      'Are you sure you want to delete this Work In Progress Registration?'
+    );
+    await workInProgressRegistrationDeleteDialog.clickOnConfirmButton();
+    await browser.wait(ec.visibilityOf(workInProgressRegistrationComponentsPage.title), 5000);
 
-        expect(await workInProgressRegistrationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-    }); */
+    expect(await workInProgressRegistrationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+  });
 
   after(async () => {
     await navBarPage.autoSignOut();
