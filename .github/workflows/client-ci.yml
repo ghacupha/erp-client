@@ -32,7 +32,7 @@ jobs:
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Build docker image
-              run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:0.9.0-SNAPSHOT
+              run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:0.9.0
 
             - name: Push docker image
-              run: docker push ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:0.9.0-SNAPSHOT
+              run: docker push ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:0.9.0
