@@ -3,6 +3,7 @@ server {
     index index.html;
     server_name ${SERVER_API_DOCKER_DEPLOY_HOST};
     error_log  /var/log/nginx/error.log;
+    client_max_body_size ${ERP_DOCUMENTS_MAX_FILE_SIZE};
 
     root /usr/share/nginx/html;
 
