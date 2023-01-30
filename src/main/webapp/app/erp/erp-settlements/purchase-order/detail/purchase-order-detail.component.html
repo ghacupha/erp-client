@@ -93,6 +93,13 @@
             <a [routerLink]="['/erp/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
           </div>
         </dd>
+        <dt><span>Business Documents</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of purchaseOrder.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

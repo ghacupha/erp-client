@@ -20,6 +20,7 @@ import * as dayjs from 'dayjs';
 import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 
 export interface IPurchaseOrder {
   id?: number;
@@ -35,6 +36,7 @@ export interface IPurchaseOrder {
   placeholders?: IPlaceholder[] | null;
   signatories?: IDealer[] | null;
   vendor?: IDealer;
+  businessDocuments?: IBusinessDocument[] | null;
 }
 
 export class PurchaseOrder implements IPurchaseOrder {
@@ -51,7 +53,8 @@ export class PurchaseOrder implements IPurchaseOrder {
     public settlementCurrency?: ISettlementCurrency | null,
     public placeholders?: IPlaceholder[] | null,
     public signatories?: IDealer[] | null,
-    public vendor?: IDealer
+    public vendor?: IDealer,
+    public businessDocuments?: IBusinessDocument[] | null
   ) {}
 }
 

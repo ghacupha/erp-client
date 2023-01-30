@@ -40,6 +40,8 @@ import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-s
 import { IPayment } from '../../../erp-pages/payments/payment/payment.model';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 @Component({
   selector: 'jhi-purchase-order-update',
@@ -49,6 +51,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
   isSaving = false;
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   dealersSharedCollection: IDealer[] = [];
 
@@ -66,6 +69,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     placeholders: [],
     signatories: [],
     vendor: [null, Validators.required],
+    businessDocuments: [],
   });
 
   minAccountLengthTerm = 3;
@@ -98,6 +102,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     protected settlementSuggestionService: SettlementSuggestionService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected dealerSuggestionService: DealerSuggestionService,
+    protected businessDocumentService: BusinessDocumentService,
     protected fb: FormBuilder
   ) {}
 
@@ -109,7 +114,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     });
 
     // fire-up typeahead items
-    this.loadPlaceholders();
+    // this.loadPlaceholders();
     this.loadCurrencies();
     this.loadSignatories();
     this.loadVendors();
@@ -172,23 +177,29 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     );
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
+  // loadPlaceholders(): void {
+  //   this.placeholderLookups$ = concat(
+  //     of([]), // default items
+  //     this.placeholderControlInput$.pipe(
+  //       /!* filter(res => res.length >= this.minAccountLengthTerm), *!/
+  //       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  //       filter(res => res !== null),
+  //       distinctUntilChanged(),
+  //       debounceTime(800),
+  //       tap(() => this.placeholdersLoading = true),
+  //       switchMap(term => this.placeholderSuggestionService.search(term).pipe(
+  //         catchError(() => of([])),
+  //         tap(() => this.placeholdersLoading = false)
+  //       ))
+  //     ),
+  //     of([...this.placeholdersSharedCollection])
+  //   );
+  // }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
   }
 
   trackBillerByFn(item: IDealer): number {
@@ -207,9 +218,9 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackCategoryByFn(item: IPaymentCategory): number {
-    return item.id!;
-  }
+  // trackCategoryByFn(item: IPaymentCategory): number {
+  //   return item.id!;
+  // }
 
   trackLabelByFn(item: IPaymentLabel): number {
     return item.id!;
@@ -301,6 +312,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       placeholders: purchaseOrder.placeholders,
       signatories: purchaseOrder.signatories,
       vendor: purchaseOrder.vendor,
+      businessDocuments: purchaseOrder.businessDocuments,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -315,6 +327,10 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       this.dealersSharedCollection,
       ...(purchaseOrder.signatories ?? []),
       purchaseOrder.vendor
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(purchaseOrder.businessDocuments ?? [])
     );
   }
 
@@ -355,6 +371,19 @@ export class PurchaseOrderUpdateComponent implements OnInit {
         )
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            ...(this.editForm.get('businessDocuments')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 
   protected createFromForm(): IPurchaseOrder {
@@ -372,6 +401,7 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       signatories: this.editForm.get(['signatories'])!.value,
       vendor: this.editForm.get(['vendor'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
   }
 }

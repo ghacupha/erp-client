@@ -158,7 +158,25 @@
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <div class="form-group">
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label">Placeholders</label>
           <ng-select
             [items]="placeholderLookups$ | async"
@@ -175,12 +193,12 @@
               {{ option.description }}
             </ng-option>
             <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              &lt;!&ndash; // TODO Check if we need to track selection on the many to many entities with selected: boolean&ndash;&gt;
               <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label class="form-control-label">Signatories</label>
