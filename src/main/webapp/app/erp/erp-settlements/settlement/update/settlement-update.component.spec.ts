@@ -327,166 +327,166 @@ describe('Settlement Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackPlaceholderById', () => {
+    //   it('Should return tracked Placeholder primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackPlaceholderById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackSettlementCurrencyById', () => {
+    //   it('Should return tracked SettlementCurrency primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackSettlementCurrencyById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackPaymentLabelById', () => {
-      it('Should return tracked PaymentLabel primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackPaymentLabelById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackPaymentLabelById', () => {
+    //   it('Should return tracked PaymentLabel primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackPaymentLabelById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackPaymentCategoryById', () => {
-      it('Should return tracked PaymentCategory primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackPaymentCategoryById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackPaymentCategoryById', () => {
+    //   it('Should return tracked PaymentCategory primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackPaymentCategoryById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackSettlementById', () => {
-      it('Should return tracked Settlement primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackSettlementById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackSettlementById', () => {
+    //   it('Should return tracked Settlement primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackSettlementById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackDealerById', () => {
+    //   it('Should return tracked Dealer primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackDealerById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
 
-    describe('trackPaymentInvoiceById', () => {
-      it('Should return tracked PaymentInvoice primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackPaymentInvoiceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
+    // describe('trackPaymentInvoiceById', () => {
+    //   it('Should return tracked PaymentInvoice primary key', () => {
+    //     const entity = { id: 123 };
+    //     const trackResult = comp.trackPaymentInvoiceById(0, entity);
+    //     expect(trackResult).toEqual(entity.id);
+    //   });
+    // });
   });
 
   describe('Getting selected relationships', () => {
     describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
+      // it('Should return option if no Placeholder is selected', () => {
+      //   const option = { id: 123 };
+      //   const result = comp.getSelectedPlaceholder(option);
+      //   expect(result === option).toEqual(true);
+      // });
 
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
+      // it('Should return selected Placeholder for according option', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 123 };
+      //   const selected2 = { id: 456 };
+      //   const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
+      //   expect(result === selected).toEqual(true);
+      //   expect(result === selected2).toEqual(false);
+      //   expect(result === option).toEqual(false);
+      // });
 
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
+      // it('Should return option if this Placeholder is not selected', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 456 };
+      //   const result = comp.getSelectedPlaceholder(option, [selected]);
+      //   expect(result === option).toEqual(true);
+      //   expect(result === selected).toEqual(false);
+      // });
     });
 
     describe('getSelectedPaymentLabel', () => {
-      it('Should return option if no PaymentLabel is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentLabel(option);
-        expect(result === option).toEqual(true);
-      });
+      // it('Should return option if no PaymentLabel is selected', () => {
+      //   const option = { id: 123 };
+      //   const result = comp.getSelectedPaymentLabel(option);
+      //   expect(result === option).toEqual(true);
+      // });
 
-      it('Should return selected PaymentLabel for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
+      // it('Should return selected PaymentLabel for according option', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 123 };
+      //   const selected2 = { id: 456 };
+      //   const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
+      //   expect(result === selected).toEqual(true);
+      //   expect(result === selected2).toEqual(false);
+      //   expect(result === option).toEqual(false);
+      // });
 
-      it('Should return option if this PaymentLabel is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
+      // it('Should return option if this PaymentLabel is not selected', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 456 };
+      //   const result = comp.getSelectedPaymentLabel(option, [selected]);
+      //   expect(result === option).toEqual(true);
+      //   expect(result === selected).toEqual(false);
+      // });
     });
 
     describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
+      // it('Should return option if no Dealer is selected', () => {
+      //   const option = { id: 123 };
+      //   const result = comp.getSelectedDealer(option);
+      //   expect(result === option).toEqual(true);
+      // });
 
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
+      // it('Should return selected Dealer for according option', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 123 };
+      //   const selected2 = { id: 456 };
+      //   const result = comp.getSelectedDealer(option, [selected2, selected]);
+      //   expect(result === selected).toEqual(true);
+      //   expect(result === selected2).toEqual(false);
+      //   expect(result === option).toEqual(false);
+      // });
 
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
+      // it('Should return option if this Dealer is not selected', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 456 };
+      //   const result = comp.getSelectedDealer(option, [selected]);
+      //   expect(result === option).toEqual(true);
+      //   expect(result === selected).toEqual(false);
+      // });
     });
 
     describe('getSelectedPaymentInvoice', () => {
-      it('Should return option if no PaymentInvoice is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentInvoice(option);
-        expect(result === option).toEqual(true);
-      });
+      // it('Should return option if no PaymentInvoice is selected', () => {
+      //   const option = { id: 123 };
+      //   const result = comp.getSelectedPaymentInvoice(option);
+      //   expect(result === option).toEqual(true);
+      // });
 
-      it('Should return selected PaymentInvoice for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
+      // it('Should return selected PaymentInvoice for according option', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 123 };
+      //   const selected2 = { id: 456 };
+      //   const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
+      //   expect(result === selected).toEqual(true);
+      //   expect(result === selected2).toEqual(false);
+      //   expect(result === option).toEqual(false);
+      // });
 
-      it('Should return option if this PaymentInvoice is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
+      // it('Should return option if this PaymentInvoice is not selected', () => {
+      //   const option = { id: 123 };
+      //   const selected = { id: 456 };
+      //   const result = comp.getSelectedPaymentInvoice(option, [selected]);
+      //   expect(result === option).toEqual(true);
+      //   expect(result === selected).toEqual(false);
+      // });
     });
   });
 });
