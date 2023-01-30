@@ -28,6 +28,7 @@ import { GranularDataNavComponent } from './granular-data-nav/granular-data-nav.
 import { PrepaymentsNavComponent } from './prepayments/prepayments-nav.component';
 import { ReportsNavComponent } from './reports-nav/reports-nav.component';
 import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.component';
+import { LeasesNavComponent } from './leases-nav/leases-nav.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.com
     PrepaymentsNavComponent,
     ReportsNavComponent,
     SystemAdminNavComponent,
+    LeasesNavComponent,
   ],
   imports: [
     SharedModule,
@@ -54,6 +56,7 @@ import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.com
     PrepaymentsNavComponent,
     ReportsNavComponent,
     SystemAdminNavComponent,
+    LeasesNavComponent,
   ]
 })
 export class ErpNavigationModule {}

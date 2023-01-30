@@ -37,14 +37,14 @@
   </a>
   <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="account !== null">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <!--<li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         <a class="nav-link" routerLink="/" (click)="collapseNavbar()">
           <span>
             <fa-icon icon="home"></fa-icon>
             <span>Home</span>
           </span>
         </a>
-      </li>
+      </li>-->
 
       <jhi-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']"></jhi-reports-nav>
 
@@ -59,6 +59,8 @@
       <jhi-granular-data-nav *jhiHasAnyAuthority="'ROLE_GRANULAR_REPORTS_USER'"></jhi-granular-data-nav>
 
       <jhi-prepayments-nav *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'"></jhi-prepayments-nav>
+
+      <jhi-leases-nav *jhiHasAnyAuthority="'ROLE_LEASE_MODULE_USER'"></jhi-leases-nav>
 
       <jhi-system-admin-nav *jhiHasAnyAuthority="'ROLE_ADMIN'"></jhi-system-admin-nav>
 
