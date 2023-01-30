@@ -39,7 +39,6 @@ import { SettlementCurrencySuggestionService } from '../../../erp-common/suggest
 import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
 import { IPayment } from '../../../erp-pages/payments/payment/payment.model';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
-import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 

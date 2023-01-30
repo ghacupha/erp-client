@@ -53,6 +53,8 @@ import { DeliveryNoteService } from '../../delivery-note/service/delivery-note.s
 import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -68,6 +70,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
+  businessDocumentCollection: IBusinessDocument[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -84,6 +87,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     biller: [null, Validators.required],
     deliveryNotes: [],
     jobSheets: [],
+    businessDocuments: [],
   });
 
   minAccountLengthTerm = 3;
@@ -136,7 +140,8 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
-    protected universallyUniqueMappingService: UniversallyUniqueMappingService
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected businessDocumentService: BusinessDocumentService,
   ) {}
 
   ngOnInit(): void {
@@ -157,6 +162,13 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.updatePreferredCurrency();
     this.updatePreferredPaymentLabels();
     this.updateInputsGivenPurchaseOrder();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
   }
 
   updateInputsGivenPurchaseOrder(): void {
@@ -519,7 +531,13 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       biller: paymentInvoice.biller,
       deliveryNotes: paymentInvoice.deliveryNotes,
       jobSheets: paymentInvoice.jobSheets,
+      businessDocuments: paymentInvoice.businessDocuments,
     });
+
+    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentCollection,
+      ...(paymentInvoice.businessDocuments ?? [])
+    );
 
     this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
       this.purchaseOrdersSharedCollection,
@@ -549,6 +567,19 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            this.editForm.get('businessDocument')!.value
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentCollection = businessDocuments));
+
     this.purchaseOrderService
       .query()
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
@@ -638,6 +669,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       biller: this.editForm.get(['biller'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
   }
 }

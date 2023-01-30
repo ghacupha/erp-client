@@ -113,6 +113,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Business Documents</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of paymentInvoice.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
