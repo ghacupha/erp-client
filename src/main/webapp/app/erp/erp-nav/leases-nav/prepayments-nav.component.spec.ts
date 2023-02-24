@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { LeasesNavComponent } from './prepayments-nav.component';
+import { LeasesNavComponent } from './leases-nav.component';
 
 jest.mock('@angular/router');
 jest.mock('app/login/login.service');

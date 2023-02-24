@@ -16,29 +16,15 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+export interface IUser {
+  id?: number;
+  login?: string;
+}
 
-import { DynamicFormComponent } from './dynamic-form.component';
-import { DynamicFormModule } from './dynamic-form.module';
+export class User implements IUser {
+  constructor(public id: number, public login: string) {}
+}
 
-describe('DynamicFormComponent', () => {
-  let component: DynamicFormComponent;
-  let fixture: ComponentFixture<DynamicFormComponent>;
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [ DynamicFormModule ]
-    })
-      .compileComponents();
-  }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DynamicFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+export function getUserIdentifier(user: IUser): number | undefined {
+  return user.id;
+}

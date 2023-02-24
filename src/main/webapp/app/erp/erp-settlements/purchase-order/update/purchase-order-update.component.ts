@@ -176,24 +176,12 @@ export class PurchaseOrderUpdateComponent implements OnInit {
     );
   }
 
-  // loadPlaceholders(): void {
-  //   this.placeholderLookups$ = concat(
-  //     of([]), // default items
-  //     this.placeholderControlInput$.pipe(
-  //       /!* filter(res => res.length >= this.minAccountLengthTerm), *!/
-  //       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  //       filter(res => res !== null),
-  //       distinctUntilChanged(),
-  //       debounceTime(800),
-  //       tap(() => this.placeholdersLoading = true),
-  //       switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-  //         catchError(() => of([])),
-  //         tap(() => this.placeholdersLoading = false)
-  //       ))
-  //     ),
-  //     of([...this.placeholdersSharedCollection])
-  //   );
-  // }
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
+  }
 
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
