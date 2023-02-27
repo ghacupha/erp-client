@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
 
 jest.mock('@angular/router');
 
@@ -31,12 +31,12 @@ import { SettlementRequisitionService } from '../service/settlement-requisition.
 import { ISettlementRequisition, SettlementRequisition } from '../settlement-requisition.model';
 
 import { SettlementRequisitionUpdateComponent } from './settlement-requisition-update.component';
+import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
 import { IJobSheet } from '../../job-sheet/job-sheet.model';
 import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
 import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
-import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
 import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
 import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
@@ -48,6 +48,11 @@ import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+
+// TODO Someday when we grow up we'll find out why the error says there's a null injector even when clearly
+// TODO we are mocking it outright. It could be a problem with one of these libraries we have used on these
+// TODO expensive component. And it is expensive, and also pivotal to almost every module that we are using
+// TODO or data point that we are tracking
 
 describe('SettlementRequisition Management Update Component', () => {
   let comp: SettlementRequisitionUpdateComponent;
