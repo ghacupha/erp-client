@@ -29,6 +29,7 @@ import { PrepaymentsNavComponent } from './prepayments/prepayments-nav.component
 import { ReportsNavComponent } from './reports-nav/reports-nav.component';
 import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.component';
 import { LeasesNavComponent } from './leases-nav/leases-nav.component';
+import { TablesNavComponent } from './tables-nav/tables-nav.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { LeasesNavComponent } from './leases-nav/leases-nav.component';
     ReportsNavComponent,
     SystemAdminNavComponent,
     LeasesNavComponent,
+    TablesNavComponent,
   ],
   imports: [
     SharedModule,
@@ -57,6 +59,7 @@ import { LeasesNavComponent } from './leases-nav/leases-nav.component';
     ReportsNavComponent,
     SystemAdminNavComponent,
     LeasesNavComponent,
+    TablesNavComponent,
   ]
 })
 export class ErpNavigationModule {}
