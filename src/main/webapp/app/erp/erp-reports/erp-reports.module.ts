@@ -22,6 +22,19 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [RouterModule.forChild([
     {
+      path: 'datatables',
+      data: {
+        pageTitle: 'ERP | Datatables',
+        authorities: [
+          'ROLE_FIXED_ASSETS_USER',
+          'ROLE_PREPAYMENTS_MODULE_USER',
+          'ROLE_BOOK_KEEPING',
+        ],
+      },
+      loadChildren: () => import('./ledger-data-display/ledger-data-display.module')
+        .then(m => m.LedgerDataDisplayModule),
+    },
+    {
       path: 'report-template',
       data: {
         pageTitle: 'ERP | Report Template',

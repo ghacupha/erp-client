@@ -19,7 +19,7 @@
 version: '3'
 services:
   erp-client:
-    image: ghacupha/erp-client:0.9.0
+    image: ghacupha/erp-client:1.1.1-SNAPSHOT
     volumes:
     - ./templates:/etc/nginx/templates
     environment:

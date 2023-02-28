@@ -15,12 +15,14 @@
     "importHelpers": true,
     "target": "es2017",
     "module": "es2020",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "allowSyntheticDefaultImports": true,
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "preserveWhitespaces": true
+    "preserveWhitespaces": true,
+    "allowSyntheticDefaultImports": true
   }
 }

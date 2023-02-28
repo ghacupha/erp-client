@@ -31,4 +31,7 @@ $web-font-path: '../fonts/google-fonts.css';
 @import '~bootswatch/dist/journal/bootswatch';
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
+
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+@import "~datatables.net-datetime/css/dataTables.dateTime";
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */

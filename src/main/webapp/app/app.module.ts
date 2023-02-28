@@ -15,6 +15,7 @@
 /// You should have received a copy of the GNU General Public License
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
+// noinspection ES6UnusedImports
 
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
@@ -26,6 +27,8 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+
+import './vendor';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';

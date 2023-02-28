@@ -30,5 +30,5 @@ if (!DEBUG_INFO_ENABLED) {
 platformBrowserDynamic()
   .bootstrapModule(AppModule, { preserveWhitespaces: true })
   // eslint-disable-next-line no-console
-  .then(() => console.log('Application started'))
+  .then(() => console.log('The ERP Client is now Live!'))
   .catch(err => console.error(err));
