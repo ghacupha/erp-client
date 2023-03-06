@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 10 (Caleb Series) Client 1.1.0
+/// Erp System - Mark III No 11 (Caleb Series) Client 1.1.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -33,6 +33,17 @@ import { RouterModule } from '@angular/router';
       },
       loadChildren: () => import('./ledger-data-display/ledger-data-display.module')
         .then(m => m.LedgerDataDisplayModule),
+    },
+    {
+      path: 'datatables',
+      data: {
+        pageTitle: 'ERP | Requisitions By Biller',
+        authorities: [
+          'ROLE_REQUISITION_MANAGER',
+        ],
+      },
+      loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')
+        .then(m => m.SettlementRequisitionReportsModule),
     },
     {
       path: 'report-template',
