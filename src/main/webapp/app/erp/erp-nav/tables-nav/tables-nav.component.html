@@ -19,7 +19,14 @@
 -->
 <div  [ngSwitch]="isAuthenticated()">
   <ul  class="navbar-nav ml-auto">
-     <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+     <li *jhiHasAnyAuthority="[
+     'ROLE_DEV',
+     'ROLE_REPORT_DESIGNER',
+     'ROLE_BOOK_KEEPING',
+     'ROLE_REQUISITION_MANAGER',
+     'ROLE_PAYMENTS_USER',
+     'ROLE_PREPAYMENTS_MODULE_USER',
+     ]" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
         routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
       <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="report-definition-menu">
           <span>
@@ -30,7 +37,10 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="report-definition-menu">
-        <li *jhiHasAnyAuthority="['ROLE_BOOK_KEEPING']">
+        <li *jhiHasAnyAuthority="[
+        'ROLE_BOOK_KEEPING',
+        'ROLE_PREPAYMENTS_MODULE_USER',
+        ]">
           <a
             class="dropdown-item"
             routerLink="datatables/ledgers"
@@ -42,7 +52,10 @@
             <span>Ledgers</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="['ROLE_REQUISITION_MANAGER']">
+        <li *jhiHasAnyAuthority="[
+        'ROLE_REQUISITION_MANAGER',
+        'ROLE_PAYMENTS_USER',
+        ]">
           <a
             class="dropdown-item"
             routerLink="datatables/requisitions/by/billers"

@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [RouterModule.forChild([
     {
-      path: 'datatables',
+      path: 'datatables/ledgers',
       data: {
         pageTitle: 'ERP | Datatables',
         authorities: [
@@ -35,11 +35,13 @@ import { RouterModule } from '@angular/router';
         .then(m => m.LedgerDataDisplayModule),
     },
     {
-      path: 'datatables',
+      path: 'datatables/requisitions',
       data: {
         pageTitle: 'ERP | Requisitions By Biller',
         authorities: [
           'ROLE_REQUISITION_MANAGER',
+          'ROLE_PAYMENTS_USER',
+          'ROLE_PREPAYMENTS_MODULE_USER',
         ],
       },
       loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')

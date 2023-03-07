@@ -23,6 +23,6 @@ import { LedgerDtViewComponent } from './ledger-dt-view.component';
  * This is the main route for accessing the ledger listing from the data display tables
  */
 export const LEDGER_DT_ROUTE: Route = {
-  path: 'ledgers',
+  path: '',
   component: LedgerDtViewComponent,
 };

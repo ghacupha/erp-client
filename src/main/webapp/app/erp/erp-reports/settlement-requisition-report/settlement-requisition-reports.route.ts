@@ -23,6 +23,6 @@ import { SettlementRequisitionBillerReportComponent } from './settlement-requisi
  * This is the main route for accessing the ledger listing from the data display tables
  */
 export const SETTLEMENT_REQUISITION_BILLER_REPORT_ROUTE: Route = {
-  path: 'requisitions/by/billers',
+  path: 'by/billers',
   component: SettlementRequisitionBillerReportComponent,
 };
