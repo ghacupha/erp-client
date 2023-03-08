@@ -38,7 +38,10 @@ import { RouterModule } from '@angular/router';
       path: 'datatables/requisitions/by/billers',
       data: {
         pageTitle: 'ERP | Requisitions By Biller',
-        authorities: [],
+        authorities: [
+          'ROLE_REQUISITION_MANAGER',
+          'ROLE_PAYMENTS_USER',
+        ],
       },
       loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')
         .then(m => m.SettlementRequisitionReportsModule),
