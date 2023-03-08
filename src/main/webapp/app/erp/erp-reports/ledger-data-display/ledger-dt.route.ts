@@ -18,6 +18,7 @@
 
 import { Route } from '@angular/router';
 import { LedgerDtViewComponent } from './ledger-dt-view.component';
+import { UserRouteAccessService } from '../../../core/auth/user-route-access.service';
 
 /**
  * This is the main route for accessing the ledger listing from the data display tables
@@ -25,4 +26,5 @@ import { LedgerDtViewComponent } from './ledger-dt-view.component';
 export const LEDGER_DT_ROUTE: Route = {
   path: '',
   component: LedgerDtViewComponent,
+  canActivate: [UserRouteAccessService],
 };

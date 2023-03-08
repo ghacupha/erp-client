@@ -165,7 +165,7 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
-        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
             routerLink="report-requisition"
@@ -213,7 +213,7 @@
             <span>Excel Report</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
             routerLink="pdf-report-requisition"
