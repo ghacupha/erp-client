@@ -18,11 +18,13 @@
 
 import { Route } from '@angular/router';
 import { SettlementRequisitionBillerReportComponent } from './settlement-requisition-biller-report.component';
+import { UserRouteAccessService } from '../../../core/auth/user-route-access.service';
 
 /**
  * This is the main route for accessing the ledger listing from the data display tables
  */
 export const SETTLEMENT_REQUISITION_BILLER_REPORT_ROUTE: Route = {
-  path: 'by/billers',
+  path: '',
   component: SettlementRequisitionBillerReportComponent,
+  canActivate: [UserRouteAccessService],
 };

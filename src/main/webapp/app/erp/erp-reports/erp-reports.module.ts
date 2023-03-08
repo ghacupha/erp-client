@@ -35,14 +35,10 @@ import { RouterModule } from '@angular/router';
         .then(m => m.LedgerDataDisplayModule),
     },
     {
-      path: 'datatables/requisitions',
+      path: 'datatables/requisitions/by/billers',
       data: {
         pageTitle: 'ERP | Requisitions By Biller',
-        authorities: [
-          'ROLE_REQUISITION_MANAGER',
-          'ROLE_PAYMENTS_USER',
-          'ROLE_PREPAYMENTS_MODULE_USER',
-        ],
+        authorities: [],
       },
       loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')
         .then(m => m.SettlementRequisitionReportsModule),
