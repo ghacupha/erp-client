@@ -22,7 +22,10 @@
     "e2e:protractor": "protractor src/test/javascript/protractor.conf.js",
     "e2e:protractor:headless": "npm run e2e:protractor --",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-    "postinstall": "npm run e2e:update-webdriver",
+    "postinstall": [
+      "node version.js",
+      "npm run e2e:update-webdriver"
+    ],
     "jest": "jest --coverage --log-heap-usage --max-workers=6 --config jest.conf.js --detect-open-handles",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "npm run lint -- --fix",

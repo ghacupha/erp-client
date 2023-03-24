@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 ///
 /// Erp System - Mark III No 11 (Caleb Series) Client 1.1.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
@@ -19,5 +20,7 @@
 export const environment = {
   production: false,
   apiUrl: window["env"]["apiUrl"] || "default",
-  debug: window["env"]["debug"] || false
+  debug: window["env"]["debug"] || false,
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  appVersion: require('../../package.json').version + '-dev',
 };

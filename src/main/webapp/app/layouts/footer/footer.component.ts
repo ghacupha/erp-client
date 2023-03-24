@@ -16,12 +16,17 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, VERSION } from '@angular/core';
+import { Component } from '@angular/core';
+import { VERSION as AngularVersion } from '@angular/core';
+import { VERSION } from '../../app.constants';
+import { environment } from '../../../environment';
+// import { VERSION as EnvVersion } from 'environments/version';
 
 @Component({
   selector: 'jhi-footer',
   templateUrl: './footer.component.html',
 })
 export class FooterComponent {
-  version = VERSION.full;
+  version = AngularVersion.full;
+  clientVersion = environment.appVersion;
 }
