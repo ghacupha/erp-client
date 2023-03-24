@@ -18,8 +18,9 @@
 
 import { Component } from '@angular/core';
 import { VERSION as AngularVersion } from '@angular/core';
-import { VERSION } from '../../app.constants';
-import { environment } from '../../../environment';
+// import { VERSION } from '../../app.constants';
+// import { environment } from '../../../environment';
+import { versionInfo } from '../../../version-info';
 // import { VERSION as EnvVersion } from 'environments/version';
 
 @Component({
@@ -28,5 +29,6 @@ import { environment } from '../../../environment';
 })
 export class FooterComponent {
   version = AngularVersion.full;
-  clientVersion = environment.appVersion;
+  // clientVersion = environment.appVersion;
+  clientVersion = versionInfo
 }

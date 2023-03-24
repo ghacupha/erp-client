@@ -5,7 +5,7 @@
   "description": "Mark III No 11 (Caleb Series) Client 1.1.1",
   "license": "GPLv3",
   "scripts": {
-    "build": "npm run webapp:prod --",
+    "build": "node git-version.js && npm run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'",
     "ci:frontend:build": "npm run webapp:build:$npm_package_config_default_environment",
     "ci:frontend:test": "npm run ci:frontend:build && npm test",
@@ -146,6 +146,7 @@
     "express": "^4.17.1",
     "forever": "^4.0.3",
     "generator-jhipster": "7.3.1",
+    "git-describe": "^4.1.1",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^2.0.1",
     "jest": "27.3.0",

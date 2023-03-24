@@ -17,10 +17,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+
 export const environment = {
   production: false,
   apiUrl: window["env"]["apiUrl"] || "default",
   debug: window["env"]["debug"] || false,
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  appVersion: require('../../package.json').version + '-dev',
+  // appVersion: require('../../package.json').version + '-dev',
 };
