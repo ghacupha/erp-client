@@ -142,6 +142,15 @@ import {RouterModule} from '@angular/router';
         loadChildren: () => import('./business-document/business-document.module')
           .then(m => m.BusinessDocumentModule),
       },
+      {
+        path: 'contract-metadata',
+        data: {
+          pageTitle: 'ERP | Contracts',
+          authorities: ['ROLE_CONTRACTS_MANAGER'],
+        },
+        loadChildren: () => import('./contract-metadata/contract-metadata.module')
+          .then(m => m.ContractMetadataModule),
+      },
   ])]
 })
 export class ErpPagesModule {}
