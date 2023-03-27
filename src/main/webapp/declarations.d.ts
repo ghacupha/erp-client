@@ -17,3 +17,4 @@
 ///
 
 declare const SERVER_API_URL: string;
+declare const fs: any;

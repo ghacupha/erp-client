@@ -1,4 +1,4 @@
-import * as git_version from './git-version';
+import * as git_version from '../../../git-version.json';
 
 export const versionInfo = (() => {
   try {

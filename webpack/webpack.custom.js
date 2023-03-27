@@ -49,6 +49,10 @@ module.exports = async (config, options, targetOptions) => {
     config.plugins.push(
       new ESLintPlugin({
         extensions: ['js', 'ts'],
+        fallback: {
+          "child_process": false,
+          // and also other packages that are not found
+        }
       }),
       new WebpackNotifierPlugin({
         title: 'Erp System',
@@ -103,6 +107,10 @@ module.exports = async (config, options, targetOptions) => {
       new BundleAnalyzerPlugin({
         analyzerMode: 'static',
         openAnalyzer: false,
+        fallback: {
+          "child_process": false,
+          // and also other packages that are not found
+        },
         // Webpack statistics in target folder
         reportFilename: '../stats.html',
       })

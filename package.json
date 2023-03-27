@@ -4,6 +4,12 @@
   "private": true,
   "description": "Mark III No 11 (Caleb Series) Client 1.1.1",
   "license": "GPLv3",
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "child_process": false
+  },
   "scripts": {
     "build": "node git-version.js && npm run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'",
