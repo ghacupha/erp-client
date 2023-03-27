@@ -27,7 +27,7 @@ export interface IBillerRequisitionQuery {
 export interface IBillerRequisitionList {
   id?: number;
   description?: string;
-  timeOfRequisition?: string;
+  timeOfRequisition?: dayjs.Dayjs;
   requisitionNumber?: string;
   iso4217CurrencyCode?: string;
   paymentAmount?: number;
@@ -42,7 +42,7 @@ export class BillerRequisitionList implements IBillerRequisitionList {
   constructor(
     public id?: number,
     public description?: string,
-    public timeOfRequisition?: string,
+    public timeOfRequisition?: dayjs.Dayjs,
     public requisitionNumber?: string,
     public iso4217CurrencyCode?: string,
     public paymentAmount?: number,

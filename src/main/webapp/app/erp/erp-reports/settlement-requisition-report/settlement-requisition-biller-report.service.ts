@@ -20,6 +20,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBillerRequisitionList, IBillerRequisitionQuery } from './biller-requisition-list.model';
+import { ISettlementRequisition } from '../../erp-settlements/settlement-requisition/settlement-requisition.model';
+import * as dayjs from 'dayjs';
+import { map } from 'rxjs/operators';
 
 type EntityArrayResponseType = HttpResponse<IBillerRequisitionList[]>;
 
@@ -30,6 +33,16 @@ export class SettlementRequisitionBillerReportService {
   constructor(protected http: HttpClient) {}
 
   query(billerRequisitionQuery: IBillerRequisitionQuery): Observable<EntityArrayResponseType> {
-    return this.http.post<IBillerRequisitionList[]>(this.resourceUrl, billerRequisitionQuery, { observe: 'response' });
+    return this.http.post<IBillerRequisitionList[]>(this.resourceUrl, billerRequisitionQuery, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((listItem: IBillerRequisitionList) => {
+        listItem.timeOfRequisition = listItem.timeOfRequisition ? dayjs(listItem.timeOfRequisition): undefined;
+      });
+    }
+    return res;
   }
 }

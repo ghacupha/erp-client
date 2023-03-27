@@ -30,6 +30,12 @@ import { versionInfo } from '../../../version-info';
 export class FooterComponent {
   version = AngularVersion.full;
   // clientVersion = environment.appVersion;
+
   clientHash = versionInfo.hash.substring(0,8);
-  clientVersion = versionInfo.tag
+
+  serverHash = versionInfo.hash.substring(0,8);
+
+  clientVersion = versionInfo.tag;
+
+  serverVersion = versionInfo.tag;
 }
