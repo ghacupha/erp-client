@@ -30,6 +30,7 @@ import { ReportsNavComponent } from './reports-nav/reports-nav.component';
 import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.component';
 import { LeasesNavComponent } from './leases-nav/leases-nav.component';
 import { TablesNavComponent } from './tables-nav/tables-nav.component';
+import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-nav.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TablesNavComponent } from './tables-nav/tables-nav.component';
     SystemAdminNavComponent,
     LeasesNavComponent,
     TablesNavComponent,
+    ErpMaintenanceNavComponent,
   ],
   imports: [
     SharedModule,
@@ -60,6 +62,7 @@ import { TablesNavComponent } from './tables-nav/tables-nav.component';
     SystemAdminNavComponent,
     LeasesNavComponent,
     TablesNavComponent,
+    ErpMaintenanceNavComponent
   ]
 })
 export class ErpNavigationModule {}
