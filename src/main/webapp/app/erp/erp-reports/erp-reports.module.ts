@@ -47,6 +47,17 @@ import { RouterModule } from '@angular/router';
         .then(m => m.SettlementRequisitionReportsModule),
     },
     {
+      path: 'datatables/lease-contract-listing',
+      data: {
+        pageTitle: 'ERP | Lease Contracts',
+        authorities: [
+          'ROLE_LEASE_MANAGER',
+        ],
+      },
+      loadChildren: () => import('./lease-contract-listing/lease-contract-reports.module')
+        .then(m => m.LeaseContractReportsModule),
+    },
+    {
       path: 'report-template',
       data: {
         pageTitle: 'ERP | Report Template',
