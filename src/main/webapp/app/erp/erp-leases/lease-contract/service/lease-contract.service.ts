@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<ILeaseContract[]>;
 
 @Injectable({ providedIn: 'root' })
 export class LeaseContractService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/lease-contracts');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/lease-contracts');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/lease-contracts');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases /_search/lease-contracts');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
