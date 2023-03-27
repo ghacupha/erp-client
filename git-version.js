@@ -5,7 +5,7 @@ const { gitDescribeSync } = require('git-describe');
 const { writeFileSync } = require('fs');
 
 const gitInfo = gitDescribeSync(__dirname, {
-  longSemver: true,
+  longSemver: false,
   dirtySemver: false,
   customArguments: ['--abbrev=16']
 });
