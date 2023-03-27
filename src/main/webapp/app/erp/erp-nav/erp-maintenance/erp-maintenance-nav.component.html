@@ -1,151 +1,155 @@
-<li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
-    routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-  <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="general-maintenance-menu">
+<div [ngSwitch]='isAuthenticated()'>
+  <ul class='navbar-nav ml-auto'>
+    <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
+        routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
+      <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='general-maintenance-menu'>
           <span>
-              <fa-icon icon="wrench"></fa-icon>
+              <fa-icon icon='wrench'></fa-icon>
               <span>
                  Maintenance
               </span>
           </span>
-  </a>
-  <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="general-maintenance-menu">
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="depreciation-method"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Depreciation Method</span>
       </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="prepayment-mapping"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Prepayment Parameters</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="amortization-sequence"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Amortization Sequence</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="transaction-account"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Transaction Account</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="settlement"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Settlements</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="payment-invoice"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Invoices</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="service-outlet"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Service Outlet</span>
-      </a>
-    </li>
-    <li *jhiHasAnyAuthority="'ROLE_CONTRACT_MANAGER'">
-      <a
-        class="dropdown-item"
-        routerLink="contract-metadata"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
-        <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-        <span>Contract Metadata</span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="/erp/dealer"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
+      <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='general-maintenance-menu'>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='depreciation-method'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Depreciation Method</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='prepayment-mapping'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Prepayment Parameters</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='amortization-sequence'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Amortization Sequence</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='transaction-account'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Transaction Account</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='settlement'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Settlements</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='payment-invoice'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Invoices</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='service-outlet'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Service Outlet</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_CONTRACT_MANAGER'">
+          <a
+            class='dropdown-item'
+            routerLink='contract-metadata'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Contract Metadata</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/erp/dealer'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
           <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
               <span>Dealers</span>
           </span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="/placeholder"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/placeholder'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
           <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
               <span>Placeholders</span>
           </span>
-      </a>
-    </li>
-    <li>
-      <a
-        class="dropdown-item"
-        routerLink="/universally-unique-mapping"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="collapseNavbar()"
-      >
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='/universally-unique-mapping'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
           <span>
-              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
               <span>Application Mapping</span>
           </span>
-      </a>
+          </a>
+        </li>
+      </ul>
     </li>
   </ul>
-</li>
+</div>

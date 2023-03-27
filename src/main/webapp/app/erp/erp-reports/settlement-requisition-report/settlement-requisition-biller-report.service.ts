@@ -20,7 +20,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IBillerRequisitionList, IBillerRequisitionQuery } from './biller-requisition-list.model';
-import { ISettlementRequisition } from '../../erp-settlements/settlement-requisition/settlement-requisition.model';
 import * as dayjs from 'dayjs';
 import { map } from 'rxjs/operators';
 
