@@ -249,7 +249,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -266,9 +266,18 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--<div class="form-group">
           <label for="field_leaseMappings">Lease Mapping</label>
           <select
             class="form-control"
@@ -288,7 +297,16 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='leaseMappings'
+          [inputValues]="editForm.get(['leaseMappings'])!.value"
+          (selectedValues)='updateLeaseMapping($event)'
+          inputControlLabel='Lease Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
@@ -403,7 +421,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_modelAttachments">Model Attachments</label>
           <select
             class="form-control"
@@ -424,7 +442,16 @@
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='modelAttachments'
+          [inputValues]="editForm.get(['modelAttachments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Lease Model Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>

@@ -5,9 +5,10 @@ import { LeaseModelMetadataDetailComponent } from './detail/lease-model-metadata
 import { LeaseModelMetadataUpdateComponent } from './update/lease-model-metadata-update.component';
 import { LeaseModelMetadataDeleteDialogComponent } from './delete/lease-model-metadata-delete-dialog.component';
 import { LeaseModelMetadataRoutingModule } from './route/lease-model-metadata-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseModelMetadataRoutingModule],
+  imports: [SharedModule, LeaseModelMetadataRoutingModule, ErpCommonModule],
   declarations: [
     LeaseModelMetadataComponent,
     LeaseModelMetadataDetailComponent,

@@ -95,6 +95,25 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      modelAttachments: [...update],
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateLeaseMapping(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      leaseMappings: [...update]
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
