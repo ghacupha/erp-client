@@ -213,6 +213,49 @@
           />
         </div>
 
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_liabilityCurrency">Liability Currency</label>
+          <select
+            class="form-control"
+            id="field_liabilityCurrency"
+            data-cy="liabilityCurrency"
+            name="liabilityCurrency"
+            formControlName="liabilityCurrency"
+          >
+            <option *ngIf="!editForm.get('liabilityCurrency')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('liabilityCurrency')!.value?.id
+                  ? editForm.get('liabilityCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['liabilityCurrency'])!.invalid &&
+            (editForm.get(['liabilityCurrency'])!.dirty || editForm.get(['liabilityCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['liabilityCurrency'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>-->
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='liabilityCurrency'
+          [inputValue]="editForm.get(['liabilityCurrency'])!.value"
+          (valueSelected)='updateLiabilityCurrency($event)'
+          inputControlLabel='Liability Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['liabilityCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_initialLiabilityAmount">Initial Liability Amount</label>
           <input
@@ -224,6 +267,16 @@
             formControlName="initialLiabilityAmount"
           />
         </div>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='rouAssetCurrency'
+          [inputValue]="editForm.get(['rouAssetCurrency'])!.value"
+          (valueSelected)='updateROUAssetCurrency($event)'
+          inputControlLabel='ROU Asset Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['rouAssetCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_initialROUAmount">Initial ROU Amount</label>
@@ -355,40 +408,7 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_liabilityCurrency">Liability Currency</label>
-          <select
-            class="form-control"
-            id="field_liabilityCurrency"
-            data-cy="liabilityCurrency"
-            name="liabilityCurrency"
-            formControlName="liabilityCurrency"
-          >
-            <option *ngIf="!editForm.get('liabilityCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('liabilityCurrency')!.value?.id
-                  ? editForm.get('liabilityCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['liabilityCurrency'])!.invalid &&
-            (editForm.get(['liabilityCurrency'])!.dirty || editForm.get(['liabilityCurrency'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['liabilityCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
-
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_rouAssetCurrency">Rou Asset Currency</label>
           <select
             class="form-control"
@@ -419,7 +439,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['rouAssetCurrency'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_modelAttachments">Model Attachments</label>
@@ -476,7 +496,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_leaseLiabilityAccount">Lease Liability Account</label>
           <select
             class="form-control"
@@ -497,9 +517,19 @@
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='leaseLiabilityAccount'
+          [inputValue]="editForm.get('leaseLiabilityAccount')!.value"
+          (valueSelected)='updateLeaseLiabilityAccount($event)'
+          inputControlLabel="Liability Account Credited (on IFRS16 Classification and Recognition)"
+        >
+          <option [ngValue]="editForm.get('leaseLiabilityAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_interestPayableAccount">Interest Payable Account</label>
           <select
             class="form-control"
@@ -520,9 +550,19 @@
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='interestPayableAccount'
+          [inputValue]="editForm.get('interestPayableAccount')!.value"
+          (valueSelected)='updateInterestPayableAccount($event)'
+          inputControlLabel="Liability Account Credited (on Interest Accrual)"
+        >
+          <option [ngValue]="editForm.get('interestPayableAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_interestExpenseAccount">Interest Expense Account</label>
           <select
             class="form-control"
@@ -543,9 +583,19 @@
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='interestExpenseAccount'
+          [inputValue]="editForm.get('interestExpenseAccount')!.value"
+          (valueSelected)='updateInterestExpenseAccount($event)'
+          inputControlLabel="Expense Account Debited (on Interest Accrual)"
+        >
+          <option [ngValue]="editForm.get('interestExpenseAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_rouAssetAccount">Rou Asset Account</label>
           <select
             class="form-control"
@@ -566,9 +616,19 @@
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='rouAssetAccount'
+          [inputValue]="editForm.get('rouAssetAccount')!.value"
+          (valueSelected)='updateROUAssetAccount($event)'
+          inputControlLabel="Asset Account Debited (on IFRS16 Classification and Recognition)"
+        >
+          <option [ngValue]="editForm.get('rouAssetAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_rouDepreciationAccount">Rou Depreciation Account</label>
           <select
             class="form-control"
@@ -589,7 +649,18 @@
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='rouDepreciationAccount'
+          [inputValue]="editForm.get('rouDepreciationAccount')!.value"
+          (valueSelected)='updateROUDepreciationAccount($event)'
+          inputControlLabel="Expense Account Debited (on Depreciation)"
+        >
+          <option [ngValue]="editForm.get('rouDepreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
       </div>
 
       <div>

@@ -25,8 +25,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
-            import('./lease-contract/lease-contract.module').then(
-              m => m.LeaseContractModule
+            import('./lease-model-metadata/lease-model-metadata.module').then(
+              m => m.LeaseModelMetadataModule
             ),
         },
       ]

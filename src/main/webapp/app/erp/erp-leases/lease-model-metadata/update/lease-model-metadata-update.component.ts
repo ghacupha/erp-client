@@ -114,6 +114,48 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
     });
   }
 
+  updateROUAssetCurrency(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      rouAssetCurrency: update
+    });
+  }
+
+  updateLiabilityCurrency(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      liabilityCurrency: update
+    });
+  }
+
+  updateLeaseLiabilityAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      leaseLiabilityAccount: update,
+    });
+  }
+
+  updateInterestPayableAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      interestPayableAccount: update,
+    });
+  }
+
+  updateInterestExpenseAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      interestExpenseAccount: update,
+    });
+  }
+
+  updateROUAssetAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      rouAssetAccount: update,
+    });
+  }
+
+  updateROUDepreciationAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      rouDepreciationAccount: update,
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
