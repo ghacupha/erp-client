@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Account } from '../../../core/auth/account.model';
 import { LoginService } from '../../../login/login.service';
 import { AccountService } from '../../../core/auth/account.service';
@@ -10,7 +10,7 @@ import { VERSION } from '../../../app.constants';
   selector: "jhi-maintenance-nav",
   templateUrl: "./erp-maintenance-nav.component.html"
 })
-export class ErpMaintenanceNavComponent {
+export class ErpMaintenanceNavComponent implements OnInit {
 
   inProduction?: boolean;
   isNavbarCollapsed = true;

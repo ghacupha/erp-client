@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "node git-version.js && npm run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'",
+    "build-watch": "concurrently 'node git-version.js && npm run webapp:build:dev -- --watch'",
     "ci:frontend:build": "npm run webapp:build:$npm_package_config_default_environment",
     "ci:frontend:test": "npm run ci:frontend:build && npm test",
     "clean-www": "rimraf target/classes/static/app/{src,target/}",
@@ -28,10 +28,7 @@
     "e2e:protractor": "protractor src/test/javascript/protractor.conf.js",
     "e2e:protractor:headless": "npm run e2e:protractor --",
     "e2e:update-webdriver": "webdriver-manager update --gecko false",
-    "postinstall": [
-      "node version.js",
-      "npm run e2e:update-webdriver"
-    ],
+    "postinstall": "node git-version.js && npm run e2e:update-webdriver",
     "jest": "jest --coverage --log-heap-usage --max-workers=6 --config jest.conf.js --detect-open-handles",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "npm run lint -- --fix",
@@ -39,7 +36,7 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss}\"",
     "serve": "npm run start --",
     "sonar": "sonar-scanner",
-    "start": "ng serve --hmr",
+    "start": "node git-version.js && ng serve --hmr",
     "start-tls": "npm run webapp:dev-ssl",
     "pretest": "npm run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
