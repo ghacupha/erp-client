@@ -113,7 +113,8 @@
       "SettlementRequisition",
       "StringQuestionBase",
       "LeaseContract",
-      "ContractMetadata"
+      "ContractMetadata",
+      "LeaseModelMetadata"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

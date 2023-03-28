@@ -146,7 +146,7 @@ import {RouterModule} from '@angular/router';
         path: 'contract-metadata',
         data: {
           pageTitle: 'ERP | Contracts',
-          authorities: ['ROLE_CONTRACTS_MANAGER'],
+          authorities: ['ROLE_CONTRACT_MANAGER'],
         },
         loadChildren: () => import('./contract-metadata/contract-metadata.module')
           .then(m => m.ContractMetadataModule),

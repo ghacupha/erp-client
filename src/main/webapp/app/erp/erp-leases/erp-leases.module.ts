@@ -17,6 +17,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseContractModule
             ),
         },
+      {
+          path: 'lease-model-metadata',
+          data: {
+            pageTitle: 'ERP | leases',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-contract/lease-contract.module').then(
+              m => m.LeaseContractModule
+            ),
+        },
       ]
     )
   ]
