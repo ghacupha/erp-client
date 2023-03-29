@@ -1,3 +1,5 @@
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -9,22 +11,20 @@ import { of, Subject } from 'rxjs';
 
 import { LeaseModelMetadataService } from '../service/lease-model-metadata.service';
 import { ILeaseModelMetadata, LeaseModelMetadata } from '../lease-model-metadata.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ILeaseContract } from 'app/entities/lease-contract/lease-contract.model';
-import { LeaseContractService } from 'app/entities/lease-contract/service/lease-contract.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
-import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
-import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
-import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
 
 import { LeaseModelMetadataUpdateComponent } from './lease-model-metadata-update.component';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { SecurityClearanceService } from '../../../erp-pages/security-clearance/service/security-clearance.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { LeaseContractService } from '../../lease-contract/service/lease-contract.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('LeaseModelMetadata Management Update Component', () => {
   let comp: LeaseModelMetadataUpdateComponent;

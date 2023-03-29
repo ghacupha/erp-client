@@ -114,7 +114,8 @@
       "StringQuestionBase",
       "LeaseContract",
       "ContractMetadata",
-      "LeaseModelMetadata"
+      "LeaseModelMetadata",
+      "LeaseLiabilityScheduleItem"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

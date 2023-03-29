@@ -57,6 +57,7 @@ export class LeaseModelMetadataUpdatePage {
   interestExpenseAccountSelect = element(by.id('field_interestExpenseAccount'));
   rouAssetAccountSelect = element(by.id('field_rouAssetAccount'));
   rouDepreciationAccountSelect = element(by.id('field_rouDepreciationAccount'));
+  accruedDepreciationAccountSelect = element(by.id('field_accruedDepreciationAccount'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -380,6 +381,22 @@ export class LeaseModelMetadataUpdatePage {
 
   async getRouDepreciationAccountSelectedOption(): Promise<string> {
     return await this.rouDepreciationAccountSelect.element(by.css('option:checked')).getText();
+  }
+
+  async accruedDepreciationAccountSelectLastOption(): Promise<void> {
+    await this.accruedDepreciationAccountSelect.all(by.tagName('option')).last().click();
+  }
+
+  async accruedDepreciationAccountSelectOption(option: string): Promise<void> {
+    await this.accruedDepreciationAccountSelect.sendKeys(option);
+  }
+
+  getAccruedDepreciationAccountSelect(): ElementFinder {
+    return this.accruedDepreciationAccountSelect;
+  }
+
+  async getAccruedDepreciationAccountSelectedOption(): Promise<string> {
+    return await this.accruedDepreciationAccountSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

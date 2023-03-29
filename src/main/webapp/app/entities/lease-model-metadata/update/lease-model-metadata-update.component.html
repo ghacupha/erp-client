@@ -563,6 +563,29 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
+          <select
+            class="form-control"
+            id="field_accruedDepreciationAccount"
+            data-cy="accruedDepreciationAccount"
+            name="accruedDepreciationAccount"
+            formControlName="accruedDepreciationAccount"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                transactionAccountOption.id === editForm.get('accruedDepreciationAccount')!.value?.id
+                  ? editForm.get('accruedDepreciationAccount')!.value
+                  : transactionAccountOption
+              "
+              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
+            >
+              {{ transactionAccountOption.accountNumber }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

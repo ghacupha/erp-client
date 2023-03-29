@@ -661,6 +661,16 @@
           <option [ngValue]="editForm.get('rouDepreciationAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
 
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='accruedDepreciationAccount'
+          [inputValue]="editForm.get('accruedDepreciationAccount')!.value"
+          (valueSelected)='updateAccruedDepreciationAccount($event)'
+          inputControlLabel="Expense Account Debited (on Depreciation)"
+        >
+          <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
       </div>
 
       <div>

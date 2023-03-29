@@ -229,8 +229,10 @@ describe('LeaseModelMetadata Management Update Component', () => {
       leaseModelMetadata.rouAssetAccount = rouAssetAccount;
       const rouDepreciationAccount: ITransactionAccount = { id: 32893 };
       leaseModelMetadata.rouDepreciationAccount = rouDepreciationAccount;
+      const accruedDepreciationAccount: ITransactionAccount = { id: 91478 };
+      leaseModelMetadata.accruedDepreciationAccount = accruedDepreciationAccount;
 
-      const transactionAccountCollection: ITransactionAccount[] = [{ id: 91478 }];
+      const transactionAccountCollection: ITransactionAccount[] = [{ id: 38893 }];
       jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: transactionAccountCollection })));
       const additionalTransactionAccounts = [
         leaseLiabilityAccount,
@@ -238,6 +240,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
         interestExpenseAccount,
         rouAssetAccount,
         rouDepreciationAccount,
+        accruedDepreciationAccount,
       ];
       const expectedCollection: ITransactionAccount[] = [...additionalTransactionAccounts, ...transactionAccountCollection];
       jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing').mockReturnValue(expectedCollection);
@@ -271,16 +274,18 @@ describe('LeaseModelMetadata Management Update Component', () => {
       leaseModelMetadata.modelAttachments = modelAttachments;
       const securityClearance: ISecurityClearance = { id: 95339 };
       leaseModelMetadata.securityClearance = securityClearance;
-      const leaseLiabilityAccount: ITransactionAccount = { id: 38893 };
+      const leaseLiabilityAccount: ITransactionAccount = { id: 38026 };
       leaseModelMetadata.leaseLiabilityAccount = leaseLiabilityAccount;
-      const interestPayableAccount: ITransactionAccount = { id: 38026 };
+      const interestPayableAccount: ITransactionAccount = { id: 67813 };
       leaseModelMetadata.interestPayableAccount = interestPayableAccount;
-      const interestExpenseAccount: ITransactionAccount = { id: 67813 };
+      const interestExpenseAccount: ITransactionAccount = { id: 35990 };
       leaseModelMetadata.interestExpenseAccount = interestExpenseAccount;
-      const rouAssetAccount: ITransactionAccount = { id: 35990 };
+      const rouAssetAccount: ITransactionAccount = { id: 54688 };
       leaseModelMetadata.rouAssetAccount = rouAssetAccount;
-      const rouDepreciationAccount: ITransactionAccount = { id: 54688 };
+      const rouDepreciationAccount: ITransactionAccount = { id: 19365 };
       leaseModelMetadata.rouDepreciationAccount = rouDepreciationAccount;
+      const accruedDepreciationAccount: ITransactionAccount = { id: 21954 };
+      leaseModelMetadata.accruedDepreciationAccount = accruedDepreciationAccount;
 
       activatedRoute.data = of({ leaseModelMetadata });
       comp.ngOnInit();
@@ -299,6 +304,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(interestExpenseAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(rouAssetAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(rouDepreciationAccount);
+      expect(comp.transactionAccountsSharedCollection).toContain(accruedDepreciationAccount);
     });
   });
 

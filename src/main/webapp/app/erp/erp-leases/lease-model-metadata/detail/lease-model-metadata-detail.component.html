@@ -171,6 +171,14 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Accrued Depreciation Account</span></dt>
+        <dd>
+          <div *ngIf="leaseModelMetadata.accruedDepreciationAccount">
+            <a [routerLink]="['/transaction-account', leaseModelMetadata.accruedDepreciationAccount?.id, 'view']">{{
+              leaseModelMetadata.accruedDepreciationAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

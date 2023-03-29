@@ -10,20 +10,20 @@ import { LeaseModelMetadataService } from '../service/lease-model-metadata.servi
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ILeaseContract } from 'app/entities/lease-contract/lease-contract.model';
-import { LeaseContractService } from 'app/entities/lease-contract/service/lease-contract.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
-import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
-import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
-import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
-import { SecurityClearanceService } from 'app/entities/security-clearance/service/security-clearance.service';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/transaction-account/service/transaction-account.service';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { SecurityClearanceService } from '../../../erp-pages/security-clearance/service/security-clearance.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { LeaseContractService } from '../../lease-contract/service/lease-contract.service';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { ILeaseContract } from '../../lease-contract/lease-contract.model';
 
 @Component({
   selector: 'jhi-lease-model-metadata-update',
@@ -70,6 +70,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
     interestExpenseAccount: [],
     rouAssetAccount: [],
     rouDepreciationAccount: [],
+    accruedDepreciationAccount: [],
   });
 
   constructor(
@@ -153,6 +154,12 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
   updateROUDepreciationAccount(update: ITransactionAccount): void {
     this.editForm.patchValue({
       rouDepreciationAccount: update,
+    });
+  }
+
+  updateAccruedDepreciationAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      accruedDepreciationAccount: update,
     });
   }
 
@@ -291,6 +298,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       interestExpenseAccount: leaseModelMetadata.interestExpenseAccount,
       rouAssetAccount: leaseModelMetadata.rouAssetAccount,
       rouDepreciationAccount: leaseModelMetadata.rouDepreciationAccount,
+      accruedDepreciationAccount: leaseModelMetadata.accruedDepreciationAccount,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -328,7 +336,81 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       leaseModelMetadata.interestPayableAccount,
       leaseModelMetadata.interestExpenseAccount,
       leaseModelMetadata.rouAssetAccount,
-      leaseModelMetadata.rouDepreciationAccount
+      leaseModelMetadata.rouDepreciationAccount,
+      leaseModelMetadata.accruedDepreciationAccount,
+    );
+  }
+
+  protected copyForm(leaseModelMetadata: ILeaseModelMetadata): void {
+    this.editForm.patchValue({
+      id: leaseModelMetadata.id,
+      modelTitle: leaseModelMetadata.modelTitle,
+      modelVersion: leaseModelMetadata.modelVersion,
+      description: leaseModelMetadata.description,
+      modelNotes: leaseModelMetadata.modelNotes,
+      modelNotesContentType: leaseModelMetadata.modelNotesContentType,
+      annualDiscountingRate: leaseModelMetadata.annualDiscountingRate,
+      commencementDate: leaseModelMetadata.commencementDate,
+      terminalDate: leaseModelMetadata.terminalDate,
+      totalReportingPeriods: leaseModelMetadata.totalReportingPeriods,
+      reportingPeriodsPerYear: leaseModelMetadata.reportingPeriodsPerYear,
+      settlementPeriodsPerYear: leaseModelMetadata.settlementPeriodsPerYear,
+      initialLiabilityAmount: leaseModelMetadata.initialLiabilityAmount,
+      initialROUAmount: leaseModelMetadata.initialROUAmount,
+      totalDepreciationPeriods: leaseModelMetadata.totalDepreciationPeriods,
+      placeholders: leaseModelMetadata.placeholders,
+      leaseMappings: leaseModelMetadata.leaseMappings,
+      leaseContract: leaseModelMetadata.leaseContract,
+      predecessor: leaseModelMetadata.predecessor,
+      liabilityCurrency: leaseModelMetadata.liabilityCurrency,
+      rouAssetCurrency: leaseModelMetadata.rouAssetCurrency,
+      modelAttachments: leaseModelMetadata.modelAttachments,
+      securityClearance: leaseModelMetadata.securityClearance,
+      leaseLiabilityAccount: leaseModelMetadata.leaseLiabilityAccount,
+      interestPayableAccount: leaseModelMetadata.interestPayableAccount,
+      interestExpenseAccount: leaseModelMetadata.interestExpenseAccount,
+      rouAssetAccount: leaseModelMetadata.rouAssetAccount,
+      rouDepreciationAccount: leaseModelMetadata.rouDepreciationAccount,
+      accruedDepreciationAccount: leaseModelMetadata.accruedDepreciationAccount,
+    });
+
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(leaseModelMetadata.placeholders ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(leaseModelMetadata.leaseMappings ?? [])
+    );
+    this.leaseContractsSharedCollection = this.leaseContractService.addLeaseContractToCollectionIfMissing(
+      this.leaseContractsSharedCollection,
+      leaseModelMetadata.leaseContract
+    );
+    this.predecessorsCollection = this.leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing(
+      this.predecessorsCollection,
+      leaseModelMetadata.predecessor
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      leaseModelMetadata.liabilityCurrency,
+      leaseModelMetadata.rouAssetCurrency
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      leaseModelMetadata.modelAttachments
+    );
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+      this.securityClearancesSharedCollection,
+      leaseModelMetadata.securityClearance
+    );
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      leaseModelMetadata.leaseLiabilityAccount,
+      leaseModelMetadata.interestPayableAccount,
+      leaseModelMetadata.interestExpenseAccount,
+      leaseModelMetadata.rouAssetAccount,
+      leaseModelMetadata.rouDepreciationAccount,
+      leaseModelMetadata.accruedDepreciationAccount,
     );
   }
 
@@ -433,7 +515,8 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
             this.editForm.get('interestPayableAccount')!.value,
             this.editForm.get('interestExpenseAccount')!.value,
             this.editForm.get('rouAssetAccount')!.value,
-            this.editForm.get('rouDepreciationAccount')!.value
+            this.editForm.get('rouDepreciationAccount')!.value,
+            this.editForm.get('accruedDepreciationAccount')!.value
           )
         )
       )
@@ -471,6 +554,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       interestExpenseAccount: this.editForm.get(['interestExpenseAccount'])!.value,
       rouAssetAccount: this.editForm.get(['rouAssetAccount'])!.value,
       rouDepreciationAccount: this.editForm.get(['rouDepreciationAccount'])!.value,
+      accruedDepreciationAccount: this.editForm.get(['accruedDepreciationAccount'])!.value,
     };
   }
 }

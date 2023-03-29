@@ -70,6 +70,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
     interestExpenseAccount: [],
     rouAssetAccount: [],
     rouDepreciationAccount: [],
+    accruedDepreciationAccount: [],
   });
 
   constructor(
@@ -230,6 +231,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       interestExpenseAccount: leaseModelMetadata.interestExpenseAccount,
       rouAssetAccount: leaseModelMetadata.rouAssetAccount,
       rouDepreciationAccount: leaseModelMetadata.rouDepreciationAccount,
+      accruedDepreciationAccount: leaseModelMetadata.accruedDepreciationAccount,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -267,7 +269,8 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       leaseModelMetadata.interestPayableAccount,
       leaseModelMetadata.interestExpenseAccount,
       leaseModelMetadata.rouAssetAccount,
-      leaseModelMetadata.rouDepreciationAccount
+      leaseModelMetadata.rouDepreciationAccount,
+      leaseModelMetadata.accruedDepreciationAccount
     );
   }
 
@@ -372,7 +375,8 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
             this.editForm.get('interestPayableAccount')!.value,
             this.editForm.get('interestExpenseAccount')!.value,
             this.editForm.get('rouAssetAccount')!.value,
-            this.editForm.get('rouDepreciationAccount')!.value
+            this.editForm.get('rouDepreciationAccount')!.value,
+            this.editForm.get('accruedDepreciationAccount')!.value
           )
         )
       )
@@ -410,6 +414,7 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
       interestExpenseAccount: this.editForm.get(['interestExpenseAccount'])!.value,
       rouAssetAccount: this.editForm.get(['rouAssetAccount'])!.value,
       rouDepreciationAccount: this.editForm.get(['rouDepreciationAccount'])!.value,
+      accruedDepreciationAccount: this.editForm.get(['accruedDepreciationAccount'])!.value,
     };
   }
 }

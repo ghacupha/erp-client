@@ -87,6 +87,9 @@
           <th scope="col" jhiSortBy="rouDepreciationAccount.accountNumber">
             <span>Rou Depreciation Account</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="accruedDepreciationAccount.accountNumber">
+            <span>Accrued Depreciation Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -191,6 +194,13 @@
             <div *ngIf="leaseModelMetadata.rouDepreciationAccount">
               <a [routerLink]="['/transaction-account', leaseModelMetadata.rouDepreciationAccount?.id, 'view']">{{
                 leaseModelMetadata.rouDepreciationAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseModelMetadata.accruedDepreciationAccount">
+              <a [routerLink]="['/transaction-account', leaseModelMetadata.accruedDepreciationAccount?.id, 'view']">{{
+                leaseModelMetadata.accruedDepreciationAccount?.accountNumber
               }}</a>
             </div>
           </td>

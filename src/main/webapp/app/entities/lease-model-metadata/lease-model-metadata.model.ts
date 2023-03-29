@@ -36,6 +36,7 @@ export interface ILeaseModelMetadata {
   interestExpenseAccount?: ITransactionAccount | null;
   rouAssetAccount?: ITransactionAccount | null;
   rouDepreciationAccount?: ITransactionAccount | null;
+  accruedDepreciationAccount?: ITransactionAccount | null;
 }
 
 export class LeaseModelMetadata implements ILeaseModelMetadata {
@@ -67,7 +68,8 @@ export class LeaseModelMetadata implements ILeaseModelMetadata {
     public interestPayableAccount?: ITransactionAccount | null,
     public interestExpenseAccount?: ITransactionAccount | null,
     public rouAssetAccount?: ITransactionAccount | null,
-    public rouDepreciationAccount?: ITransactionAccount | null
+    public rouDepreciationAccount?: ITransactionAccount | null,
+    public accruedDepreciationAccount?: ITransactionAccount | null
   ) {}
 }
 

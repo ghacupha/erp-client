@@ -80,6 +80,7 @@ describe('LeaseModelMetadata e2e test', () => {
             leaseModelMetadataUpdatePage.interestExpenseAccountSelectLastOption(),
             leaseModelMetadataUpdatePage.rouAssetAccountSelectLastOption(),
             leaseModelMetadataUpdatePage.rouDepreciationAccountSelectLastOption(),
+            leaseModelMetadataUpdatePage.accruedDepreciationAccountSelectLastOption(),
         ]);
 
         await leaseModelMetadataUpdatePage.save();

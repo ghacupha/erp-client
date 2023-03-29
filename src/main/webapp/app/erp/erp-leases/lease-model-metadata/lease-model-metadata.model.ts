@@ -1,11 +1,11 @@
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
-import { ILeaseContract } from 'app/entities/lease-contract/lease-contract.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
-import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
-import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import { ISecurityClearance } from '../../erp-pages/security-clearance/security-clearance.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ILeaseContract } from '../lease-contract/lease-contract.model';
 
 export interface ILeaseModelMetadata {
   id?: number;
@@ -36,6 +36,7 @@ export interface ILeaseModelMetadata {
   interestExpenseAccount?: ITransactionAccount | null;
   rouAssetAccount?: ITransactionAccount | null;
   rouDepreciationAccount?: ITransactionAccount | null;
+  accruedDepreciationAccount?: ITransactionAccount | null;
 }
 
 export class LeaseModelMetadata implements ILeaseModelMetadata {
@@ -67,7 +68,8 @@ export class LeaseModelMetadata implements ILeaseModelMetadata {
     public interestPayableAccount?: ITransactionAccount | null,
     public interestExpenseAccount?: ITransactionAccount | null,
     public rouAssetAccount?: ITransactionAccount | null,
-    public rouDepreciationAccount?: ITransactionAccount | null
+    public rouDepreciationAccount?: ITransactionAccount | null,
+    public accruedDepreciationAccount?: ITransactionAccount | null
   ) {}
 }
 
