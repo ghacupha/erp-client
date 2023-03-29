@@ -46,6 +46,11 @@ import { M21AlgorithmFormControlComponent } from './algorithm-form-components/m2
 import { M21SystemModuleFormControlComponent } from './system-module-form-components/m21-system-module-form-control.component';
 import { M2mPaymentLabelFormControlComponent } from './payment-label-form-components/m2m-payment-label-form-control.component';
 import { M2mBusinessDocumentFormControlComponent } from './business-document-components/m2m-business-document-form-control.component';
+import { M2mContractMetadataFormControlComponent } from './contract-metadata-form-componets/m2m-contract-metadata-form-control.component';
+import { M21ContractMetadataFormControlComponent } from './contract-metadata-form-componets/m21-contract-metadata-form-control.component';
+import { M21LeaseContractFormControlComponent } from './lease-contract-form-components/m21-lease-contract-form-control.component';
+import { M2mLeaseContractFormControlComponent } from './lease-contract-form-components/m2m-lease-contract-form-control.component';
+import { M21LeaseModelMetadataFormControlComponent } from './lease-model-metadata/m21-lease-model-metadata-form-control.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +78,12 @@ import { M2mBusinessDocumentFormControlComponent } from './business-document-com
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
     M2mPaymentLabelFormControlComponent,
-    M2mBusinessDocumentFormControlComponent
+    M2mBusinessDocumentFormControlComponent,
+    M2mContractMetadataFormControlComponent,
+    M21ContractMetadataFormControlComponent,
+    M21LeaseContractFormControlComponent,
+    M2mLeaseContractFormControlComponent,
+    M21LeaseModelMetadataFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -106,7 +116,12 @@ import { M2mBusinessDocumentFormControlComponent } from './business-document-com
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
     M2mPaymentLabelFormControlComponent,
-    M2mBusinessDocumentFormControlComponent
+    M2mBusinessDocumentFormControlComponent,
+    M2mContractMetadataFormControlComponent,
+    M21ContractMetadataFormControlComponent,
+    M21LeaseContractFormControlComponent,
+    M2mLeaseContractFormControlComponent,
+    M21LeaseModelMetadataFormControlComponent,
   ]
 })
 export class FormComponentsModule {

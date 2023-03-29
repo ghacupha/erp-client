@@ -29,6 +29,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseModelMetadataModule
             ),
         },
+      {
+          path: 'lease-liability-schedule-item',
+          data: {
+            pageTitle: 'ERP | Schedule',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-schedule-item/lease-liability-schedule-item.module').then(
+              m => m.LeaseLiabilityScheduleItemModule
+            ),
+        },
       ]
     )
   ]

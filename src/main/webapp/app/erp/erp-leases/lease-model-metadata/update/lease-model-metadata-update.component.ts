@@ -127,6 +127,18 @@ export class LeaseModelMetadataUpdateComponent implements OnInit {
     });
   }
 
+  updateLeaseContract(update: ILeaseContract): void {
+    this.editForm.patchValue({
+      leaseContract: update
+    });
+  }
+
+  updateLeaseModelMetadata(update: ILeaseModelMetadata): void {
+    this.editForm.patchValue({
+      predecessor: update
+    });
+  }
+
   updateLeaseLiabilityAccount(update: ITransactionAccount): void {
     this.editForm.patchValue({
       leaseLiabilityAccount: update,

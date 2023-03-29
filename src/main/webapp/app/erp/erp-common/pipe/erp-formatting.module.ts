@@ -36,6 +36,9 @@ import { FormatReportDesignPipe } from './format-report-design.pipe';
 import { FormatAlgorithmPipe } from './format-algorithm.pipe';
 import { FormatSystemModulePipe } from './format-system-module.pipe';
 import { FormatBusinessDocumentPipe } from './format-business-document.pipe';
+import { FormatContractMetadataPipe } from './format-contract-metadata.pipe';
+import { FormatLeaseContractPipe } from './format-lease-contract.pipe';
+import { FormatLeaseModelMetadataPipe } from './format-lease-model-metadata.pipe';
 
 @NgModule({
   declarations: [
@@ -57,6 +60,9 @@ import { FormatBusinessDocumentPipe } from './format-business-document.pipe';
     FormatAlgorithmPipe,
     FormatSystemModulePipe,
     FormatBusinessDocumentPipe,
+    FormatContractMetadataPipe,
+    FormatLeaseContractPipe,
+    FormatLeaseModelMetadataPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -78,6 +84,9 @@ import { FormatBusinessDocumentPipe } from './format-business-document.pipe';
     FormatAlgorithmPipe,
     FormatSystemModulePipe,
     FormatBusinessDocumentPipe,
+    FormatContractMetadataPipe,
+    FormatLeaseContractPipe,
+    FormatLeaseModelMetadataPipe,
   ]
 })
 export class ErpFormattingModule{}

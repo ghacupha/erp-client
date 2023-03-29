@@ -35,6 +35,11 @@ import { ApplicationUserOptionViewComponent } from './application-user-option-vi
 import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
 import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
 import { BusinessDocumentOptionViewComponent } from './business-document-option-view.component';
+import { ContractMetadataSelectedOptionViewComponent } from './contract-metadata-selected-option-view.component';
+import { ContractMetadataOptionViewComponent } from './contract-metadata-option-view.component';
+import { LeaseContractOptionViewComponent } from './lease-contract-option-view.component';
+import { LeaseContractSelectedOptionViewComponent } from './lease-contract-selected-option-view.component';
+import { LeaseModelMetadataOptionViewComponent } from './lease-model-metadata-option-view.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +60,11 @@ import { BusinessDocumentOptionViewComponent } from './business-document-option-
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
     BusinessDocumentOptionViewComponent,
+    ContractMetadataSelectedOptionViewComponent,
+    ContractMetadataOptionViewComponent,
+    LeaseContractOptionViewComponent,
+    LeaseContractSelectedOptionViewComponent,
+    LeaseModelMetadataOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -77,6 +87,11 @@ import { BusinessDocumentOptionViewComponent } from './business-document-option-
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
     BusinessDocumentOptionViewComponent,
+    ContractMetadataSelectedOptionViewComponent,
+    ContractMetadataOptionViewComponent,
+    LeaseContractOptionViewComponent,
+    LeaseContractSelectedOptionViewComponent,
+    LeaseModelMetadataOptionViewComponent,
   ]
 })
 export class OptionViewsModule {

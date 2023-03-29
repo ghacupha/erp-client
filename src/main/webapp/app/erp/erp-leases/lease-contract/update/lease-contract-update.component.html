@@ -118,84 +118,43 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
-        <div class="form-group">
-          <label for="field_systemMappings">System Mappings</label>
-          <select
-            class="form-control"
-            id="field_systemMappings"
-            data-cy="systemMappings"
-            multiple
-            name="systemMappings"
-            formControlName="systemMappings"
-          >
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('systemMappings')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.mappedValue }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='systemMappings'
+          [inputValues]="editForm.get(['systemMappings'])!.value"
+          (selectedValues)='updateLeaseMapping($event)'
+          inputControlLabel='Lease Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
-        <div class="form-group">
-          <label for="field_businessDocuments">Business Document</label>
-          <select
-            class="form-control"
-            id="field_businessDocuments"
-            data-cy="businessDocument"
-            multiple
-            name="businessDocuments"
-            formControlName="businessDocuments"
-          >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
-              {{ businessDocumentOption.documentTitle }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Dcouments'
+        >
+        </jhi-m2m-business-document-form-control>
 
-        <div class="form-group">
-          <label for="field_contractMetadata">Contract Metadata</label>
-          <select
-            class="form-control"
-            id="field_contractMetadata"
-            data-cy="contractMetadata"
-            multiple
-            name="contractMetadata"
-            formControlName="contractMetadata"
-          >
-            <option
-              [ngValue]="getSelectedContractMetadata(contractMetadataOption, editForm.get('contractMetadata')!.value)"
-              *ngFor="let contractMetadataOption of contractMetadataSharedCollection; trackBy: trackContractMetadataById"
-            >
-              {{ contractMetadataOption.contractTitle }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-contract-metadata-form-control
+          ngDefaultControl
+          formControlName='contractMetadata'
+          [inputValue]="editForm.get(['contractMetadata'])!.value"
+          (valueSelected)='updateContractMetadata($event)'
+          inputControlLabel='Contract Metadata'
+        >
+          <option [ngValue]="editForm.get(['contractMetadata'])!.value"></option>
+        </jhi-m21-contract-metadata-form-control>
+
       </div>
 
       <div>

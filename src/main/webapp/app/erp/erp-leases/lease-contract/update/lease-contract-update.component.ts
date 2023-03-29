@@ -15,6 +15,7 @@ import { ContractMetadataService } from '../../../erp-pages/contract-metadata/se
 import { IContractMetadata } from '../../../erp-pages/contract-metadata/contract-metadata.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { ILeaseModelMetadata } from '../../lease-model-metadata/lease-model-metadata.model';
 
 @Component({
   selector: 'jhi-lease-contract-update',
@@ -72,6 +73,37 @@ export class LeaseContractUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.leaseContractService.create(leaseContract));
     }
+  }
+
+  updateLeaseMapping(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      systemMappings: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
+  }
+
+  updateLeaseContract(update: ILeaseContract): void {
+    this.editForm.patchValue({
+      leaseContract: update
+    });
+  }
+
+  updateContractMetadata(update: IContractMetadata): void {
+    this.editForm.patchValue({
+      contractMetadata: update
+    });
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
