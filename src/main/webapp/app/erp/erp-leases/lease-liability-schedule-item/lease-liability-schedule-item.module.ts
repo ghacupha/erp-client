@@ -5,9 +5,10 @@ import { LeaseLiabilityScheduleItemDetailComponent } from './detail/lease-liabil
 import { LeaseLiabilityScheduleItemUpdateComponent } from './update/lease-liability-schedule-item-update.component';
 import { LeaseLiabilityScheduleItemDeleteDialogComponent } from './delete/lease-liability-schedule-item-delete-dialog.component';
 import { LeaseLiabilityScheduleItemRoutingModule } from './route/lease-liability-schedule-item-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule],
+  imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule, ErpCommonModule],
   declarations: [
     LeaseLiabilityScheduleItemComponent,
     LeaseLiabilityScheduleItemDetailComponent,

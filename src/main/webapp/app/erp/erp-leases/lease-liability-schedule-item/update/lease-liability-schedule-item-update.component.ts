@@ -66,6 +66,30 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     });
   }
 
+  updateLeaseMapping(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateLeaseContract(update: ILeaseContract): void {
+    this.editForm.patchValue({
+      leaseContract: update
+    });
+  }
+
+  updateLeaseModelMetadata(update: ILeaseModelMetadata): void {
+    this.editForm.patchValue({
+      leaseModelMetadata: update
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

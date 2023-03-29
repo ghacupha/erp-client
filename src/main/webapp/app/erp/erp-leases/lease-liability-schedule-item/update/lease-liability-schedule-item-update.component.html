@@ -175,101 +175,44 @@
           />
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
-          <select
-            class="form-control"
-            id="field_leaseContract"
-            data-cy="leaseContract"
-            name="leaseContract"
-            formControlName="leaseContract"
-          >
-            <option *ngIf="!editForm.get('leaseContract')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                leaseContractOption.id === editForm.get('leaseContract')!.value?.id
-                  ? editForm.get('leaseContract')!.value
-                  : leaseContractOption
-              "
-              *ngFor="let leaseContractOption of leaseContractsSharedCollection; trackBy: trackLeaseContractById"
-            >
-              {{ leaseContractOption.bookingId }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['leaseContract'])!.invalid && (editForm.get(['leaseContract'])!.dirty || editForm.get(['leaseContract'])!.touched)
-          "
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
-        </div>
+        </jhi-m2m-placeholder-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseModelMetadata">Lease Model Metadata</label>
-          <select
-            class="form-control"
-            id="field_leaseModelMetadata"
-            data-cy="leaseModelMetadata"
-            name="leaseModelMetadata"
-            formControlName="leaseModelMetadata"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                leaseModelMetadataOption.id === editForm.get('leaseModelMetadata')!.value?.id
-                  ? editForm.get('leaseModelMetadata')!.value
-                  : leaseModelMetadataOption
-              "
-              *ngFor="let leaseModelMetadataOption of leaseModelMetadataSharedCollection; trackBy: trackLeaseModelMetadataById"
-            >
-              {{ leaseModelMetadataOption.modelTitle }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-lease-contract-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel='Lease Contract'
+        >
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
+        </jhi-m21-lease-contract-form-control>
 
-        <div class="form-group">
-          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
-          <select
-            class="form-control"
-            id="field_universallyUniqueMappings"
-            data-cy="universallyUniqueMapping"
-            multiple
-            name="universallyUniqueMappings"
-            formControlName="universallyUniqueMappings"
-          >
-            <option
-              [ngValue]="
-                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
-              "
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.universalKey }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-lease-model-metadata-form-control
+          ngDefaultControl
+          formControlName='leaseModelMetadata'
+          [inputValue]="editForm.get(['leaseModelMetadata'])!.value"
+          (valueSelected)='updateLeaseModelMetadata($event)'
+          inputControlLabel='Lease Model Metadata'
+        >
+          <option [ngValue]="editForm.get(['leaseModelMetadata'])!.value"></option>
+        </jhi-m21-lease-model-metadata-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateLeaseMapping($event)'
+          inputControlLabel='Lease Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
       </div>
 
       <div>

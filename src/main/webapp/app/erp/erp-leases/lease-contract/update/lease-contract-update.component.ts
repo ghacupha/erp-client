@@ -15,7 +15,6 @@ import { ContractMetadataService } from '../../../erp-pages/contract-metadata/se
 import { IContractMetadata } from '../../../erp-pages/contract-metadata/contract-metadata.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { ILeaseModelMetadata } from '../../lease-model-metadata/lease-model-metadata.model';
 
 @Component({
   selector: 'jhi-lease-contract-update',
