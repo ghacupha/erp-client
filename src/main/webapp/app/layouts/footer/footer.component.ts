@@ -16,18 +16,19 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { VERSION as AngularVersion } from '@angular/core';
 // import { VERSION } from '../../app.constants';
 // import { environment } from '../../../environment';
 import { versionInfo } from '../../../version-info';
+import { ApplicationStatusService } from './application-status.service';
 // import { VERSION as EnvVersion } from 'environments/version';
 
 @Component({
   selector: 'jhi-footer',
   templateUrl: './footer.component.html',
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   version = AngularVersion.full;
   // clientVersion = environment.appVersion;
 
@@ -38,4 +39,16 @@ export class FooterComponent {
   clientVersion = versionInfo.tag;
 
   serverVersion = versionInfo.tag;
+
+  constructor(protected serverInformationService: ApplicationStatusService) {
+  }
+
+  ngOnInit(): void {
+    this.serverInformationService.fetch().subscribe(appStatus => {
+      if (appStatus.body) {
+        this.serverVersion = appStatus.body.version ?? 'development';
+        this.serverHash = appStatus.body.build ?? 'dev-build';
+      }
+    });
+  }
 }
