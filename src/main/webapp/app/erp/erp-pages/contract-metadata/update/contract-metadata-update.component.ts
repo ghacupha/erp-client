@@ -104,6 +104,61 @@ export class ContractMetadataUpdateComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateRelatedContracts(update: IContractMetadata[]): void {
+    this.editForm.patchValue({
+      relatedContracts: [...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateContractMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      contractMappings: [...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateSignatories(update: IDealer[]): void {
+    this.editForm.patchValue({
+      signatories: [...update],
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateContractDocuments(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      contractDocumentFiles: [...update],
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDepartment(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      department: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateContractPartner(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      contractPartner: dealerUpdate,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateResponsiblePerson(update: IApplicationUser): void {
+    this.editForm.patchValue({
+      responsiblePerson: update,
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

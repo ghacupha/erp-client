@@ -214,7 +214,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_relatedContracts">Related Contracts</label>
           <select
             class="form-control"
@@ -231,9 +231,18 @@
               {{ contractMetadataOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-contract-metadata-form-control
+          ngDefaultControl
+          formControlName="relatedContracts"
+          [inputValues]="editForm.get(['relatedContracts'])!.value"
+          (valueSelected)='updateRelatedContracts($event)'
+          inputControlLabel='Related Contracts'
+        >
+        </jhi-m2m-contract-metadata-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_department">Department</label>
           <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
             <option [ngValue]="null"></option>
@@ -244,9 +253,20 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName="department"
+          [inputValue]="editForm.get('department')!.value"
+          (valueSelected)='updateDepartment($event)'
+          inputControlLabel="Department"
+        >
+          <option [ngValue]="editForm.get('department')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_contractPartner">Contract Partner</label>
           <select
             class="form-control"
@@ -265,9 +285,19 @@
               {{ dealerOption.dealerName }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName="contractPartner"
+          [inputValue]="editForm.get('contractPartner')!.value"
+          (valueSelected)='updateContractPartner($event)'
+          inputControlLabel='Contract Partner'
+        >
+         <option [ngValue]="editForm.get('contractPartner')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_responsiblePerson">Responsible Person</label>
           <select
             class="form-control"
@@ -288,9 +318,19 @@
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName="responsiblePerson"
+          [inputValue]="editForm.get('responsiblePerson')!.value"
+          (valueSelected)='updateResponsiblePerson($event)'
+          inputControlLabel='Responsible Person'
+        >
+          <option [ngValue]="editForm.get('responsiblePerson')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <!--<div class="form-group">
           <label for="field_signatories">Signatory</label>
           <select class="form-control" id="field_signatories" data-cy="signatory" multiple name="signatories" formControlName="signatories">
             <option
@@ -300,7 +340,16 @@
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName="signatories"
+          [inputValues]="editForm.get(['signatories'])!.value"
+          (valueSelected)='updateSignatories($event)'
+          inputControlLabel='Signatories'
+        >
+        </jhi-m2m-dealer-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
@@ -325,7 +374,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -342,9 +391,18 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <!--<div class="form-group">
           <label for="field_contractDocumentFiles">Contract Document File</label>
           <select
             class="form-control"
@@ -361,9 +419,18 @@
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName="contractDocumentFiles"
+          [inputValues]="editForm.get(['contractDocumentFiles'])!.value"
+          (selectedValues)='updateContractDocuments($event)'
+          inputControlLabel='Contract Document Files'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <!--<div class="form-group">
           <label for="field_contractMappings">Contract Mappings</label>
           <select
             class="form-control"
@@ -383,7 +450,17 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName="contractMappings"
+          [inputValues]="editForm.get(['contractMappings'])!.value"
+          (selectedValues)='updateContractMappings($event)'
+          inputControlLabel='Contract Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
       </div>
 
       <div>
