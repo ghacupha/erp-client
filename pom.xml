@@ -9,7 +9,7 @@
     <artifactId>erp-client</artifactId>
     <version>1.2.5</version>
     <name>Erp System</name>
-    <description>Mark III No 12 (Caleb Series) Client 1.2.5</description>
+    <description>Mark III No 12 (Caleb Series) Client 1.2.6</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

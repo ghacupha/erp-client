@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark III No 12 (Caleb Series) Client 1.2.5
+    Erp System - Mark III No 12 (Caleb Series) Client 1.2.6
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -373,7 +373,7 @@
           formControlName='interestPayableAccount'
           [inputValue]="editForm.get('interestPayableAccount')!.value"
           (valueSelected)='updateInterestPayableAccount($event)'
-          inputControlLabel="Liability Account Credited (on Interest Accrual)"
+          inputControlLabel="Interest Payable Account Credited (on Interest Accrual)"
         >
           <option [ngValue]="editForm.get('interestPayableAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
@@ -383,7 +383,7 @@
           formControlName='interestExpenseAccount'
           [inputValue]="editForm.get('interestExpenseAccount')!.value"
           (valueSelected)='updateInterestExpenseAccount($event)'
-          inputControlLabel="Expense Account Debited (on Interest Accrual)"
+          inputControlLabel="Interest Expense Account Debited (on Interest Accrual)"
         >
           <option [ngValue]="editForm.get('interestExpenseAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
@@ -393,7 +393,7 @@
           formControlName='rouAssetAccount'
           [inputValue]="editForm.get('rouAssetAccount')!.value"
           (valueSelected)='updateROUAssetAccount($event)'
-          inputControlLabel="Asset Account Debited (on IFRS16 Classification and Recognition)"
+          inputControlLabel="ROU Asset Account Debited (on IFRS16 Classification and Recognition)"
         >
           <option [ngValue]="editForm.get('rouAssetAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
@@ -403,7 +403,7 @@
           formControlName='rouDepreciationAccount'
           [inputValue]="editForm.get('rouDepreciationAccount')!.value"
           (valueSelected)='updateROUDepreciationAccount($event)'
-          inputControlLabel="Expense Account Debited (on Depreciation)"
+          inputControlLabel="ROU Depreciation Expense Account Debited (on Depreciation)"
         >
           <option [ngValue]="editForm.get('rouDepreciationAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
@@ -413,7 +413,7 @@
           formControlName='accruedDepreciationAccount'
           [inputValue]="editForm.get('accruedDepreciationAccount')!.value"
           (valueSelected)='updateAccruedDepreciationAccount($event)'
-          inputControlLabel="Expense Account Debited (on Depreciation)"
+          inputControlLabel="Accrued Depreciation Account Credited (on Depreciation)"
         >
           <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>

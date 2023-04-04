@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.5
+/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.6
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ import { ILeaseContract } from '../../erp-leases/lease-contract/lease-contract.m
 
 @Injectable({ providedIn: 'root' })
 export class LeaseContractSuggestionService {
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-contract');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-contracts');
 
   constructor(
     protected http: HttpClient,
