@@ -27,7 +27,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'asset-registration',
         data: {
           pageTitle: 'ERP | FA Registration',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -39,7 +39,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'work-in-progress-registration',
         data: {
           pageTitle: 'ERP | W.I.P. Registration',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -51,7 +51,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'work-in-progress-transfer',
         data: {
           pageTitle: 'ERP | W.I.P. Transfer',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -63,7 +63,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'work-project-register',
         data: {
           pageTitle: 'ERP | Work Project',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -75,7 +75,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'fixed-asset-net-book-value',
         data: {
           pageTitle: 'ERP | Fixed Asset NetBookValue',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -87,7 +87,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'fixed-asset-depreciation',
         data: {
           pageTitle: 'ERP | Fixed Asset Depreciation',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -97,7 +97,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'fixed-asset-acquisition',
         data: {
           pageTitle: 'ERP | Fixed Asset Acquisition',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -107,7 +107,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'asset-category',
         data: {
           pageTitle: 'ERP | Asset Categories',
-          authorities: ['ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -120,6 +120,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           authorities: [
             'ROLE_FIXED_ASSETS_USER',
             'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_LEASE_MANAGER',
           ],
         },
         canActivate: [UserRouteAccessService],

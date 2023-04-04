@@ -30,7 +30,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           authorities: [
             'ROLE_PAYMENTS_USER',
             'ROLE_PREPAYMENTS_MODULE_USER',
-            'ROLE_FIXED_ASSETS_USER'
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER'
           ],
         },
         canActivate: [UserRouteAccessService],
@@ -52,7 +53,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           authorities: [
             'ROLE_PAYMENTS_USER',
             'ROLE_PREPAYMENTS_MODULE_USER',
-            'ROLE_TAX_MODULE_USER'
+            'ROLE_TAX_MODULE_USER',
+            'ROLE_LEASE_MANAGER',
           ],
         },
         canActivate: [UserRouteAccessService],
@@ -78,7 +80,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           authorities: [
             'ROLE_PAYMENTS_USER',
             'ROLE_PREPAYMENTS_MODULE_USER',
-            'ROLE_FIXED_ASSETS_USER'
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER'
           ],
         },
         canActivate: [UserRouteAccessService],
@@ -90,7 +93,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           pageTitle: 'ERP-Payments | Delivery Notes',
           authorities: [
             'ROLE_PAYMENTS_USER',
-            'ROLE_FIXED_ASSETS_USER'
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
           ],
         },
         canActivate: [UserRouteAccessService],
@@ -140,6 +144,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           pageTitle: 'ERP-Payments | Requisition',
           authorities: [
             'ROLE_REQUISITION_MANAGER',
+            'ROLE_LEASE_MANAGER'
           ],
         },
         canActivate: [UserRouteAccessService],

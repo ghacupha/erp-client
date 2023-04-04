@@ -99,7 +99,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'outlet-status',
         data: {
           pageTitle: 'ERP | Outlet Status',
-          authorities: ['ROLE_GRANULAR_REPORTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_GRANULAR_REPORTS_USER', 'ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -111,7 +111,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         path: 'outlet-type',
         data: {
           pageTitle: 'ERP | Outlet Type',
-          authorities: ['ROLE_GRANULAR_REPORTS_USER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_GRANULAR_REPORTS_USER', 'ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
         },
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
@@ -126,7 +126,8 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           authorities: [
             'ROLE_GRANULAR_REPORTS_USER',
             'ROLE_FIXED_ASSETS_USER',
-            'ROLE_PREPAYMENTS_MODULE_USER'
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_LEASE_MANAGER',
           ],
         },
         canActivate: [UserRouteAccessService],

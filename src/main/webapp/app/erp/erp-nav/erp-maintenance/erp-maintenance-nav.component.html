@@ -30,7 +30,7 @@
           </span>
       </a>
       <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='general-maintenance-menu'>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_LEASE_MANAGER'">
           <a
             class='dropdown-item'
             routerLink='depreciation-method'
@@ -42,7 +42,7 @@
             <span>Depreciation Method</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENT_MODULE_USER'">
           <a
             class='dropdown-item'
             routerLink='prepayment-mapping'
@@ -54,7 +54,7 @@
             <span>Prepayment Parameters</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENT_MODULE_USER'">
           <a
             class='dropdown-item'
             routerLink='amortization-sequence'
@@ -66,7 +66,7 @@
             <span>Amortization Sequence</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_BOOK_KEEPING'">
           <a
             class='dropdown-item'
             routerLink='transaction-account'
@@ -78,7 +78,12 @@
             <span>Transaction Account</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority=
+              "[
+                'ROLE_PREPAYMENT_MODULE_USER',
+                'ROLE_LEASE_MANAGER',
+                ]"
+        >
           <a
             class='dropdown-item'
             routerLink='settlement'
@@ -90,7 +95,11 @@
             <span>Settlements</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority=
+          "[
+          'ROLE_PREPAYMENT_MODULE_USER',
+          'ROLE_LEASE_MANAGER',
+          ]">
           <a
             class='dropdown-item'
             routerLink='payment-invoice'
@@ -102,7 +111,12 @@
             <span>Invoices</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority=
+              "[
+                'ROLE_PREPAYMENT_MODULE_USER',
+                'ROLE_FIXED_ASSETS_USER',
+                'ROLE_LEASE_MANAGER',
+                ]">
           <a
             class='dropdown-item'
             routerLink='service-outlet'
@@ -114,7 +128,7 @@
             <span>Service Outlet</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="'ROLE_CONTRACT_MANAGER'">
+        <li *jhiHasAnyAuthority="['ROLE_CONTRACT_MANAGER', 'ROLE_LEASE_MANAGER']">
           <a
             class='dropdown-item'
             routerLink='contract-metadata'
