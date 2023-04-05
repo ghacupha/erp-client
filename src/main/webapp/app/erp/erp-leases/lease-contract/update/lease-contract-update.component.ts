@@ -33,6 +33,7 @@ import { ContractMetadataService } from '../../../erp-pages/contract-metadata/se
 import { IContractMetadata } from '../../../erp-pages/contract-metadata/contract-metadata.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-lease-contract-update',
@@ -71,10 +72,23 @@ export class LeaseContractUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ leaseContract }) => {
-      this.updateForm(leaseContract);
+    const reqSerial = uuidv4();
 
-      this.loadRelationshipsOptions();
+    this.activatedRoute.data.subscribe(({ leaseContract }) => {
+      if (leaseContract.id === undefined) {
+
+        this.editForm.patchValue({
+          identifier: reqSerial,
+        });
+
+        this.updateForm(leaseContract);
+
+        this.loadRelationshipsOptions();
+      }
+
+      this.editForm.patchValue({
+        identifier: reqSerial,
+      });
     });
   }
 
