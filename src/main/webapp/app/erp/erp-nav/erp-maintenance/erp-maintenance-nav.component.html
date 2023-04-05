@@ -182,6 +182,20 @@
           </span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class='dropdown-item'
+            routerLink='/business-document'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+          <span>
+              <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+              <span>Business Documents</span>
+          </span>
+          </a>
+        </li>
       </ul>
     </li>
   </ul>
