@@ -42,6 +42,7 @@ import { UniversallyUniqueMappingService } from '../../universally-unique-mappin
 import { BusinessDocumentService } from '../../business-document/service/business-document.service';
 import { ContractType } from '../../../erp-common/enumerations/contract-type.model';
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-contract-metadata-update',
@@ -97,10 +98,27 @@ export class ContractMetadataUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ contractMetadata }) => {
-      this.updateForm(contractMetadata);
+    const reqSerial = uuidv4();
 
-      this.loadRelationshipsOptions();
+    this.activatedRoute.data.subscribe(({ contractMetadata }) => {
+
+      if (contractMetadata.id === undefined) {
+
+
+        this.editForm.patchValue({
+          contractIdentifier: reqSerial,
+          contractIdentifierShort: reqSerial.substring(0, 8),
+        });
+
+        this.updateForm(contractMetadata);
+
+        this.loadRelationshipsOptions();
+      }
+    });
+
+    this.editForm.patchValue({
+      contractIdentifier: reqSerial,
+      contractIdentifierShort: reqSerial.substring(0, 8),
     });
   }
 

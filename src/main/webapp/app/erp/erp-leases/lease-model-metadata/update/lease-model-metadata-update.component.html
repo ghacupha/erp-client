@@ -288,24 +288,6 @@
           />
         </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='leaseMappings'
-          [inputValues]="editForm.get(['leaseMappings'])!.value"
-          (selectedValues)='updateLeaseMapping($event)'
-          inputControlLabel='Lease Mappings'
-        >
-        </jhi-m2m-universally-unique-mapping-form-control>
-
         <jhi-m21-lease-contract-form-control
           ngDefaultControl
           formControlName='leaseContract'
@@ -325,38 +307,6 @@
         >
           <option [ngValue]="editForm.get(['predecessor'])!.value"></option>
         </jhi-m21-lease-model-metadata-form-control>
-
-        <jhi-m2m-business-document-form-control
-          ngDefaultControl
-          formControlName='modelAttachments'
-          [inputValues]="editForm.get(['modelAttachments'])!.value"
-          (selectedValues)='updateBusinessDocument($event)'
-          inputControlLabel='Lease Model Attachments'
-        >
-        </jhi-m2m-business-document-form-control>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
-          <select
-            class="form-control"
-            id="field_securityClearance"
-            data-cy="securityClearance"
-            name="securityClearance"
-            formControlName="securityClearance"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
-              {{ securityClearanceOption.clearanceLevel }}
-            </option>
-          </select>
-        </div>
 
         <jhi-m21-transaction-account-form-control
           ngDefaultControl
@@ -417,6 +367,56 @@
         >
           <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='modelAttachments'
+          [inputValues]="editForm.get(['modelAttachments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Lease Model Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+          <select
+            class="form-control"
+            id="field_securityClearance"
+            data-cy="securityClearance"
+            name="securityClearance"
+            formControlName="securityClearance"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
+                  ? editForm.get('securityClearance')!.value
+                  : securityClearanceOption
+              "
+              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
+            >
+              {{ securityClearanceOption.clearanceLevel }}
+            </option>
+          </select>
+        </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='leaseMappings'
+          [inputValues]="editForm.get(['leaseMappings'])!.value"
+          (selectedValues)='updateLeaseMapping($event)'
+          inputControlLabel='Lease Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
       </div>
 

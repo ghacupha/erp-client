@@ -52,7 +52,7 @@
             data-cy="typeOfContract"
           >
             <option [ngValue]="null"></option>
-            <option *ngFor="let contractType of contractTypeValues" [value]="contractType">contractType</option>
+            <option *ngFor="let contractType of contractTypeValues" [value]="contractType">{{ contractType }}</option>
           </select>
           <div
             *ngIf="
@@ -73,7 +73,7 @@
             data-cy="contractStatus"
           >
             <option [ngValue]="null"></option>
-            <option *ngFor="let contractStatus of contractStatusValues" [value]="contractStatus">contractStatus</option>
+            <option *ngFor="let contractStatus of contractStatusValues" [value]="contractStatus">{{ contractStatus }}</option>
           </select>
           <div
             *ngIf="
@@ -176,6 +176,7 @@
             id="field_contractIdentifier"
             data-cy="contractIdentifier"
             formControlName="contractIdentifier"
+            [readonly]="true"
           />
           <div
             *ngIf="
@@ -198,6 +199,7 @@
             id="field_contractIdentifierShort"
             data-cy="contractIdentifierShort"
             formControlName="contractIdentifierShort"
+            [readonly]="true"
           />
           <div
             *ngIf="
@@ -214,25 +216,6 @@
           </div>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_relatedContracts">Related Contracts</label>
-          <select
-            class="form-control"
-            id="field_relatedContracts"
-            data-cy="relatedContracts"
-            multiple
-            name="relatedContracts"
-            formControlName="relatedContracts"
-          >
-            <option
-              [ngValue]="getSelectedContractMetadata(contractMetadataOption, editForm.get('relatedContracts')!.value)"
-              *ngFor="let contractMetadataOption of contractMetadataSharedCollection; trackBy: trackContractMetadataById"
-            >
-              {{ contractMetadataOption.description }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-contract-metadata-form-control
           ngDefaultControl
           formControlName="relatedContracts"
@@ -241,19 +224,6 @@
           inputControlLabel='Related Contracts'
         >
         </jhi-m2m-contract-metadata-form-control>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
-          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m21-dealer-form-control
           ngDefaultControl
@@ -265,28 +235,6 @@
           <option [ngValue]="editForm.get('department')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_contractPartner">Contract Partner</label>
-          <select
-            class="form-control"
-            id="field_contractPartner"
-            data-cy="contractPartner"
-            name="contractPartner"
-            formControlName="contractPartner"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('contractPartner')!.value?.id ? editForm.get('contractPartner')!.value : dealerOption
-              "
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName="contractPartner"
@@ -297,29 +245,6 @@
          <option [ngValue]="editForm.get('contractPartner')!.value"></option>
         </jhi-m21-dealer-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_responsiblePerson">Responsible Person</label>
-          <select
-            class="form-control"
-            id="field_responsiblePerson"
-            data-cy="responsiblePerson"
-            name="responsiblePerson"
-            formControlName="responsiblePerson"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('responsiblePerson')!.value?.id
-                  ? editForm.get('responsiblePerson')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m21-application-user-form-control
           ngDefaultControl
           formControlName="responsiblePerson"
@@ -329,18 +254,6 @@
         >
           <option [ngValue]="editForm.get('responsiblePerson')!.value"></option>
         </jhi-m21-application-user-form-control>
-
-        <!--<div class="form-group">
-          <label for="field_signatories">Signatory</label>
-          <select class="form-control" id="field_signatories" data-cy="signatory" multiple name="signatories" formControlName="signatories">
-            <option
-              [ngValue]="getSelectedApplicationUser(applicationUserOption, editForm.get('signatories')!.value)"
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m2m-dealer-form-control
           ngDefaultControl
@@ -374,25 +287,6 @@
           </select>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
           formControlName='placeholders'
@@ -402,25 +296,6 @@
         >
         </jhi-m2m-placeholder-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_contractDocumentFiles">Contract Document File</label>
-          <select
-            class="form-control"
-            id="field_contractDocumentFiles"
-            data-cy="contractDocumentFile"
-            multiple
-            name="contractDocumentFiles"
-            formControlName="contractDocumentFiles"
-          >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('contractDocumentFiles')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
-              {{ businessDocumentOption.documentTitle }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-business-document-form-control
           ngDefaultControl
           formControlName="contractDocumentFiles"
@@ -429,28 +304,6 @@
           inputControlLabel='Contract Document Files'
         >
         </jhi-m2m-business-document-form-control>
-
-        <!--<div class="form-group">
-          <label for="field_contractMappings">Contract Mappings</label>
-          <select
-            class="form-control"
-            id="field_contractMappings"
-            data-cy="contractMappings"
-            multiple
-            name="contractMappings"
-            formControlName="contractMappings"
-          >
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('contractMappings')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.universalKey }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m2m-universally-unique-mapping-form-control
           ngDefaultControl
