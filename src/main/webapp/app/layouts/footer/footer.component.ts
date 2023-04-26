@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.8
+/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = versionInfo.hash.substring(0,8);
 
-  clientVersion = versionInfo.tag;
+  clientVersion = '1.2.9';
 
   serverVersion = versionInfo.tag;
 
