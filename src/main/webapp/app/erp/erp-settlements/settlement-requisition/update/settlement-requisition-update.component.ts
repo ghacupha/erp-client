@@ -146,6 +146,13 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       );
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
+  }
+
   updateCurrencies(update: ISettlementCurrency): void {
     this.editForm.patchValue({
       settlementCurrency: update
