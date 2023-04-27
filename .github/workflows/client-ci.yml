@@ -32,7 +32,7 @@ jobs:
                 password: ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Build docker image
-              run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:1.3.0
+              run: docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:1.3.1
 
             - name: Push docker image
-              run: docker push ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:1.3.0
+              run: docker push ${{ secrets.DOCKERHUB_ORG }}/${{ secrets.DOCKERHUB_REPO }}:1.3.1

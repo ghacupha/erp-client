@@ -27,6 +27,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { ISettlementRequisition, getSettlementRequisitionIdentifier } from '../settlement-requisition.model';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 export type EntityResponseType = HttpResponse<ISettlementRequisition>;
 export type EntityArrayResponseType = HttpResponse<ISettlementRequisition[]>;
@@ -123,12 +124,16 @@ export class SettlementRequisitionService {
   protected convertDateFromClient(settlementRequisition: ISettlementRequisition): ISettlementRequisition {
     return Object.assign({}, settlementRequisition, {
       timeOfRequisition: settlementRequisition.timeOfRequisition?.isValid() ? settlementRequisition.timeOfRequisition.toJSON() : undefined,
+      transactionDate: settlementRequisition.transactionDate?.isValid()
+        ? settlementRequisition.transactionDate.format(DATE_FORMAT)
+        : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.timeOfRequisition = res.body.timeOfRequisition ? dayjs(res.body.timeOfRequisition) : undefined;
+      res.body.transactionDate = res.body.transactionDate ? dayjs(res.body.transactionDate) : undefined;
     }
     return res;
   }
@@ -138,6 +143,9 @@ export class SettlementRequisitionService {
       res.body.forEach((settlementRequisition: ISettlementRequisition) => {
         settlementRequisition.timeOfRequisition = settlementRequisition.timeOfRequisition
           ? dayjs(settlementRequisition.timeOfRequisition)
+          : undefined;
+        settlementRequisition.transactionDate = settlementRequisition.transactionDate
+          ? dayjs(settlementRequisition.transactionDate)
           : undefined;
       });
     }

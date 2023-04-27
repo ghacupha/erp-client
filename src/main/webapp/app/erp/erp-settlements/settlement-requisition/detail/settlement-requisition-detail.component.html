@@ -113,7 +113,7 @@
         <dt><span>Settlement</span></dt>
         <dd>
           <span *ngFor="let settlement of settlementRequisition.settlements; let last = last">
-            <a [routerLink]="['/settlement', settlement?.id, 'view']">ID:{{ settlement.paymentNumber }} DATED:{{ settlement.paymentDate | formatMediumDate }}</a
+            <a [routerLink]="['/settlement', settlement?.id, 'view']">ID: {{ settlement.paymentNumber }} DATED: {{ settlement.paymentDate }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
