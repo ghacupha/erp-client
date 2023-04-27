@@ -49,6 +49,8 @@ import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique
 import { PaymentStatus } from '../../../erp-common/enumerations/payment-status.model';
 import { v4 as uuidv4 } from 'uuid';
 import { SearchWithPagination } from '../../../../core/request/request.model';
+import { ISettlement } from '../../settlement/settlement.model';
+import { SettlementService } from '../../settlement/service/settlement.service';
 
 @Component({
   selector: 'jhi-settlement-requisition-update',
@@ -68,6 +70,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  settlementsSharedCollection: ISettlement[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -89,6 +92,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     businessDocuments: [],
     applicationMappings: [],
     placeholders: [],
+    transactionId: [],
+    transactionDate: [],
+    settlements: [],
   });
 
   constructor(
@@ -103,6 +109,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
+    protected settlementService: SettlementService,
     protected router: Router,
     protected fb: FormBuilder
   ) {}
@@ -195,6 +202,12 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     });
   }
 
+  updateSettlements(updates: ISettlement[]): void {
+    this.editForm.patchValue({
+      settlements: [...updates]
+    });
+  }
+
   updatePlaceholders(update: IPlaceholder[]): void {
     this.editForm.patchValue({
       placeholders: [...update]
@@ -234,6 +247,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     }
   }
 
+  trackSettlementById(index: number, item: ISettlement): number {
+    return item.id!;
+  }
+
   trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
     return item.id!;
   }
@@ -268,6 +285,17 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
@@ -390,6 +418,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       businessDocuments: settlementRequisition.businessDocuments,
       applicationMappings: settlementRequisition.applicationMappings,
       placeholders: settlementRequisition.placeholders,
+      transactionId: settlementRequisition.transactionId,
+      transactionDate: settlementRequisition.transactionDate,
+      settlements: settlementRequisition.settlements,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -430,6 +461,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(settlementRequisition.placeholders ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(settlementRequisition.settlements ?? [])
     );
   }
 
@@ -455,6 +490,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       businessDocuments: settlementRequisition.businessDocuments,
       applicationMappings: settlementRequisition.applicationMappings,
       placeholders: settlementRequisition.placeholders,
+      transactionId: settlementRequisition.transactionId,
+      transactionDate: settlementRequisition.transactionDate,
+      settlements: settlementRequisition.settlements,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -495,6 +533,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(settlementRequisition.placeholders ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(settlementRequisition.settlements ?? [])
     );
   }
 
@@ -612,6 +654,16 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.settlementService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
+      .pipe(
+        map((settlements: ISettlement[]) =>
+          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+        )
+      )
+      .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
   }
 
   protected createFromForm(): ISettlementRequisition {
@@ -638,6 +690,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       applicationMappings: this.editForm.get(['applicationMappings'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      transactionId: this.editForm.get(['transactionId'])!.value,
+      transactionDate: this.editForm.get(['transactionDate'])!.value,
+      settlements: this.editForm.get(['settlements'])!.value,
     };
   }
 }

@@ -27,6 +27,7 @@ import { IApplicationUser } from '../../erp-pages/application-user/application-u
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { PaymentStatus } from '../../erp-common/enumerations/payment-status.model';
+import { ISettlement } from '../settlement/settlement.model';
 
 export interface ISettlementRequisition {
   id?: number;
@@ -36,6 +37,8 @@ export interface ISettlementRequisition {
   requisitionNumber?: string;
   paymentAmount?: number;
   paymentStatus?: PaymentStatus;
+  transactionId?: string | null;
+  transactionDate?: dayjs.Dayjs | null;
   settlementCurrency?: ISettlementCurrency;
   currentOwner?: IApplicationUser;
   nativeOwner?: IApplicationUser;
@@ -48,6 +51,7 @@ export interface ISettlementRequisition {
   businessDocuments?: IBusinessDocument[] | null;
   applicationMappings?: IUniversallyUniqueMapping[] | null;
   placeholders?: IPlaceholder[] | null;
+  settlements?: ISettlement[] | null;
 }
 
 export class SettlementRequisition implements ISettlementRequisition {
@@ -59,6 +63,8 @@ export class SettlementRequisition implements ISettlementRequisition {
     public requisitionNumber?: string,
     public paymentAmount?: number,
     public paymentStatus?: PaymentStatus,
+    public transactionId?: string | null,
+    public transactionDate?: dayjs.Dayjs | null,
     public settlementCurrency?: ISettlementCurrency,
     public currentOwner?: IApplicationUser,
     public nativeOwner?: IApplicationUser,
@@ -70,7 +76,8 @@ export class SettlementRequisition implements ISettlementRequisition {
     public signatures?: IDealer[] | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public applicationMappings?: IUniversallyUniqueMapping[] | null,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public settlements?: ISettlement[] | null
   ) {}
 }
 

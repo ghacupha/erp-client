@@ -206,6 +206,39 @@
           <option [ngValue]="editForm.get('biller')!.value"></option>
         </jhi-m21-dealer-form-control>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionId">Transaction Id</label>
+          <input
+            type="text"
+            class="form-control"
+            name="transactionId"
+            id="field_transactionId"
+            data-cy="transactionId"
+            formControlName="transactionId"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionDate">Transaction Date</label>
+          <div class="input-group">
+            <input
+              id="field_transactionDate"
+              data-cy="transactionDate"
+              type="text"
+              class="form-control"
+              name="transactionDate"
+              ngbDatepicker
+              #transactionDateDp="ngbDatepicker"
+              formControlName="transactionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="transactionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
         <jhi-m2m-payment-invoice-form-control
           ngDefaultControl
           formControlName='invoiceNumber'
@@ -214,6 +247,15 @@
           inputControlLabel='Invoices (Could be multiple)'
         >
         </jhi-m2m-payment-invoice-form-control>
+
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Settlement(s)'
+        >
+        </jhi-m2m-settlement-form-control>
 
         <jhi-m2m-delivery-note-form-control
           ngDefaultControl
@@ -241,25 +283,6 @@
           inputControlLabel='Signatories (Multiple)'
         >
         </jhi-m2m-dealer-form-control>
-
-        <!--<div class="form-group">
-          <label for="field_businessDocuments">Business Document</label>
-          <select
-            class="form-control"
-            id="field_businessDocuments"
-            data-cy="businessDocument"
-            multiple
-            name="businessDocuments"
-            formControlName="businessDocuments"
-          >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
-              {{ businessDocumentOption.documentTitle }}
-            </option>
-          </select>
-        </div>-->
 
         <jhi-m2m-business-document-form-control
           ngDefaultControl
