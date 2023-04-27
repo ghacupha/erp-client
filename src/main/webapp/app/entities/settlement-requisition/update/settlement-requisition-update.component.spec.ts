@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -45,6 +27,8 @@ import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mappi
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISettlement } from 'app/entities/settlement/settlement.model';
+import { SettlementService } from 'app/entities/settlement/service/settlement.service';
 
 import { SettlementRequisitionUpdateComponent } from './settlement-requisition-update.component';
 
@@ -62,6 +46,7 @@ describe('SettlementRequisition Management Update Component', () => {
   let businessDocumentService: BusinessDocumentService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
+  let settlementService: SettlementService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -84,6 +69,7 @@ describe('SettlementRequisition Management Update Component', () => {
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
+    settlementService = TestBed.inject(SettlementService);
 
     comp = fixture.componentInstance;
   });
@@ -289,6 +275,25 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Settlement query and add missing value', () => {
+      const settlementRequisition: ISettlementRequisition = { id: 456 };
+      const settlements: ISettlement[] = [{ id: 35776 }];
+      settlementRequisition.settlements = settlements;
+
+      const settlementCollection: ISettlement[] = [{ id: 60099 }];
+      jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
+      const additionalSettlements = [...settlements];
+      const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
+      jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ settlementRequisition });
+      comp.ngOnInit();
+
+      expect(settlementService.query).toHaveBeenCalled();
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(settlementCollection, ...additionalSettlements);
+      expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const settlementRequisition: ISettlementRequisition = { id: 456 };
       const settlementCurrency: ISettlementCurrency = { id: 18727 };
@@ -315,6 +320,8 @@ describe('SettlementRequisition Management Update Component', () => {
       settlementRequisition.applicationMappings = [applicationMappings];
       const placeholders: IPlaceholder = { id: 9021 };
       settlementRequisition.placeholders = [placeholders];
+      const settlements: ISettlement = { id: 89183 };
+      settlementRequisition.settlements = [settlements];
 
       activatedRoute.data = of({ settlementRequisition });
       comp.ngOnInit();
@@ -332,6 +339,7 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMappings);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.settlementsSharedCollection).toContain(settlements);
     });
   });
 
@@ -468,6 +476,14 @@ describe('SettlementRequisition Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSettlementById', () => {
+      it('Should return tracked Settlement primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
@@ -651,6 +667,32 @@ describe('SettlementRequisition Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedSettlement', () => {
+      it('Should return option if no Settlement is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedSettlement(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected Settlement for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedSettlement(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this Settlement is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedSettlement(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

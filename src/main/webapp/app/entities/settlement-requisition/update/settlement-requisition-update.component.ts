@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -46,6 +28,8 @@ import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mappi
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { ISettlement } from 'app/entities/settlement/settlement.model';
+import { SettlementService } from 'app/entities/settlement/service/settlement.service';
 import { PaymentStatus } from 'app/entities/enumerations/payment-status.model';
 
 @Component({
@@ -65,6 +49,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  settlementsSharedCollection: ISettlement[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -74,6 +59,8 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     requisitionNumber: [null, [Validators.required]],
     paymentAmount: [null, [Validators.required]],
     paymentStatus: [null, [Validators.required]],
+    transactionId: [],
+    transactionDate: [],
     settlementCurrency: [null, Validators.required],
     currentOwner: [null, Validators.required],
     nativeOwner: [null, Validators.required],
@@ -86,6 +73,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     businessDocuments: [],
     applicationMappings: [],
     placeholders: [],
+    settlements: [],
   });
 
   constructor(
@@ -99,6 +87,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
+    protected settlementService: SettlementService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -163,6 +152,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackSettlementById(index: number, item: ISettlement): number {
     return item.id!;
   }
 
@@ -246,6 +239,17 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     return option;
   }
 
+  getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlementRequisition>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -274,6 +278,8 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       requisitionNumber: settlementRequisition.requisitionNumber,
       paymentAmount: settlementRequisition.paymentAmount,
       paymentStatus: settlementRequisition.paymentStatus,
+      transactionId: settlementRequisition.transactionId,
+      transactionDate: settlementRequisition.transactionDate,
       settlementCurrency: settlementRequisition.settlementCurrency,
       currentOwner: settlementRequisition.currentOwner,
       nativeOwner: settlementRequisition.nativeOwner,
@@ -286,6 +292,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       businessDocuments: settlementRequisition.businessDocuments,
       applicationMappings: settlementRequisition.applicationMappings,
       placeholders: settlementRequisition.placeholders,
+      settlements: settlementRequisition.settlements,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -326,6 +333,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(settlementRequisition.placeholders ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(settlementRequisition.settlements ?? [])
     );
   }
 
@@ -443,6 +454,16 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.settlementService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
+      .pipe(
+        map((settlements: ISettlement[]) =>
+          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+        )
+      )
+      .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
   }
 
   protected createFromForm(): ISettlementRequisition {
@@ -457,6 +478,8 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       requisitionNumber: this.editForm.get(['requisitionNumber'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       paymentStatus: this.editForm.get(['paymentStatus'])!.value,
+      transactionId: this.editForm.get(['transactionId'])!.value,
+      transactionDate: this.editForm.get(['transactionDate'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       currentOwner: this.editForm.get(['currentOwner'])!.value,
       nativeOwner: this.editForm.get(['nativeOwner'])!.value,
@@ -469,6 +492,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       applicationMappings: this.editForm.get(['applicationMappings'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      settlements: this.editForm.get(['settlements'])!.value,
     };
   }
 }

@@ -1,26 +1,8 @@
-///
-/// Erp System - Mark III No 12 (Caleb Series) Client 1.2.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { PaymentStatus } from 'app/entities/enumerations/payment-status.model';
 import { ISettlementRequisition, SettlementRequisition } from '../settlement-requisition.model';
 
@@ -50,6 +32,8 @@ describe('SettlementRequisition Service', () => {
       requisitionNumber: 'AAAAAAA',
       paymentAmount: 0,
       paymentStatus: PaymentStatus.PROCESSED,
+      transactionId: 'AAAAAAA',
+      transactionDate: currentDate,
     };
   });
 
@@ -58,6 +42,7 @@ describe('SettlementRequisition Service', () => {
       const returnedFromService = Object.assign(
         {
           timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+          transactionDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -74,6 +59,7 @@ describe('SettlementRequisition Service', () => {
         {
           id: 0,
           timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+          transactionDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -81,6 +67,7 @@ describe('SettlementRequisition Service', () => {
       const expected = Object.assign(
         {
           timeOfRequisition: currentDate,
+          transactionDate: currentDate,
         },
         returnedFromService
       );
@@ -102,6 +89,8 @@ describe('SettlementRequisition Service', () => {
           requisitionNumber: 'BBBBBB',
           paymentAmount: 1,
           paymentStatus: 'BBBBBB',
+          transactionId: 'BBBBBB',
+          transactionDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -109,6 +98,7 @@ describe('SettlementRequisition Service', () => {
       const expected = Object.assign(
         {
           timeOfRequisition: currentDate,
+          transactionDate: currentDate,
         },
         returnedFromService
       );
@@ -134,6 +124,7 @@ describe('SettlementRequisition Service', () => {
       const expected = Object.assign(
         {
           timeOfRequisition: currentDate,
+          transactionDate: currentDate,
         },
         returnedFromService
       );
@@ -155,6 +146,8 @@ describe('SettlementRequisition Service', () => {
           requisitionNumber: 'BBBBBB',
           paymentAmount: 1,
           paymentStatus: 'BBBBBB',
+          transactionId: 'BBBBBB',
+          transactionDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -162,6 +155,7 @@ describe('SettlementRequisition Service', () => {
       const expected = Object.assign(
         {
           timeOfRequisition: currentDate,
+          transactionDate: currentDate,
         },
         returnedFromService
       );
@@ -211,7 +205,7 @@ describe('SettlementRequisition Service', () => {
       });
 
       it('should add only unique SettlementRequisition to an array', () => {
-        const settlementRequisitionArray: ISettlementRequisition[] = [{ id: 123 }, { id: 456 }, { id: 40587 }];
+        const settlementRequisitionArray: ISettlementRequisition[] = [{ id: 123 }, { id: 456 }, { id: 53984 }];
         const settlementRequisitionCollection: ISettlementRequisition[] = [{ id: 123 }];
         expectedResult = service.addSettlementRequisitionToCollectionIfMissing(
           settlementRequisitionCollection,

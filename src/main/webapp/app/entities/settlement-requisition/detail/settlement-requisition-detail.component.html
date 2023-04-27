@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark III No 12 (Caleb Series) Client 1.2.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="settlementRequisition">
@@ -56,6 +37,14 @@
         <dt><span>Payment Status</span></dt>
         <dd>
           <span>{{ settlementRequisition.paymentStatus }}</span>
+        </dd>
+        <dt><span>Transaction Id</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.transactionId }}</span>
+        </dd>
+        <dt><span>Transaction Date</span></dt>
+        <dd>
+          <span>{{ settlementRequisition.transactionDate | formatMediumDate }}</span>
         </dd>
         <dt><span>Settlement Currency</span></dt>
         <dd>
@@ -141,6 +130,13 @@
         <dd>
           <span *ngFor="let placeholder of settlementRequisition.placeholders; let last = last">
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Settlement</span></dt>
+        <dd>
+          <span *ngFor="let settlement of settlementRequisition.settlements; let last = last">
+            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
