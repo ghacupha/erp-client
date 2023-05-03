@@ -46,7 +46,7 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
-        this.serverVersion = appStatus.body.version ?? 'development';
+        this.serverVersion = appStatus.body.version ?? '1.1.3-SNAPSHOT';
         this.serverHash = appStatus.body.build ?? 'dev-build';
       }
     });

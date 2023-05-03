@@ -37,6 +37,7 @@ export class SettlementService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/payments/settlements');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/payments/_search/settlements');
   protected resourceSearchIndexUrl = this.applicationConfigService.getEndpointFor('api/payments/settlements/elasticsearch/re-index');
+  protected resourceSystemIndexUrl = this.applicationConfigService.getEndpointFor('api/index/run-index');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -83,6 +84,11 @@ export class SettlementService {
     return this.http
       .get<ISettlement[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  indexSystem(req: any): Observable<any> {
+    const options = createRequestOption(req);
+    return this.http.get(this.resourceSystemIndexUrl, { params: options, observe: 'response' });
   }
 
   indexAll(req: any): Observable<EntityArrayResponseType> {

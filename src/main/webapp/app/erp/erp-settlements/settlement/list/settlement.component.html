@@ -27,8 +27,12 @@
         <span>Refresh List</span>
       </button>
       <button class="btn btn-info mr-2" (click)="indexList()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <fa-icon icon="sync" [spin]="isIndexing"></fa-icon>
         <span>Reindex List</span>
+      </button>
+      <button class="btn btn-info mr-2" (click)="indexSystem()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isIndexing"></fa-icon>
+        <span>Index System</span>
       </button>
 
       <button

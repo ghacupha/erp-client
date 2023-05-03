@@ -37,6 +37,7 @@ export class SettlementComponent implements OnInit {
   settlements?: ISettlement[];
   currentSearch: string;
   isLoading = false;
+  isIndexing = false;
   totalItems = 0;
   itemsPerPage = ITEMS_PER_PAGE;
   page?: number;
@@ -97,8 +98,36 @@ export class SettlementComponent implements OnInit {
       );
   }
 
+  indexSystem(page?: number, dontNavigate?: boolean): void {
+    this.isIndexing = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
+    this.settlementService.indexSystem({
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    }).subscribe(()=>{this.isIndexing = false;}, () => { this.isIndexing = false; } );
+
+    this.settlementService
+      .query({
+        page: pageToLoad - 1,
+        size: this.itemsPerPage,
+        sort: this.sort(),
+      })
+      .subscribe(
+        (res: HttpResponse<ISettlement[]>) => {
+          this.isLoading = false;
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
+        },
+        () => {
+          this.isLoading = false;
+          this.onError();
+        }
+      );
+  }
+
   indexList(page?: number, dontNavigate?: boolean): void {
-    this.isLoading = true;
+    this.isIndexing = true;
     const pageToLoad: number = page ?? this.page ?? 1;
 
     this.settlementService.indexAll({
@@ -106,14 +135,15 @@ export class SettlementComponent implements OnInit {
       size: this.itemsPerPage,
       sort: this.sort(),
     }).subscribe((res: HttpResponse<ISettlement[]>) => {
-        this.isLoading = false;
+        this.isIndexing = false;
         this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
       },
       () => {
-        this.isLoading = false;
+        this.isIndexing = false;
         this.onError();
       });
 
+    this.isLoading = true;
     this.settlementService
       .query({
         page: pageToLoad - 1,
