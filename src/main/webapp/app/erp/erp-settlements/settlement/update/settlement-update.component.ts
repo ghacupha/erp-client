@@ -160,21 +160,17 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredSignatories(): void {
-    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
-      .subscribe((mapped) => {
-        this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-          .subscribe(({ body: vals }) => {
-            if (vals) {
-              this.editForm.get(['signatories'])?.valueChanges.subscribe((signatories) => {
-                const p_signatories: IDealer[] = [];
-                signatories.forEach((sign: IDealer) => {
-                  p_signatories.push(sign);
-                })
-                this.editForm.get(['signatories'])?.setValue(p_signatories)
-              });
-            }
-          });
-      });
+    if (this.editForm.get(['id'])?.value === undefined ) {
+      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
+        .subscribe((mapped) => {
+          this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
+            .subscribe(({ body: vals }) => {
+              if (vals) {
+                  this.editForm.get(['signatories'])?.setValue(vals)
+              }
+            });
+        });
+    }
   }
 
   updatePreferredBillerGivenInvoice(): void {

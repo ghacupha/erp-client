@@ -131,13 +131,27 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       if (settlementRequisition.id !== undefined) {
         this.copyForm(settlementRequisition);
       }
+
+      this.loadRelationshipsOptions();
     });
-    //
-    // this.editForm.get(['timeOfRequisition'])?.setValue(tod);
 
-    this.loadRelationshipsOptions();
-
+    this.updatePreferredSignatories();
     this.updatePreferredCurrency();
+
+  }
+
+  updatePreferredSignatories(): void {
+    if (this.editForm.get(['id'])?.value === undefined ) {
+      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementRequisitionUpdateSignatoryName")
+        .subscribe((mapped) => {
+          this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
+            .subscribe(({ body: vals }) => {
+              if (vals) {
+                this.editForm.get(['signatures'])?.setValue(vals)
+              }
+            });
+        });
+    }
   }
 
   updatePreferredCurrency(): void {
