@@ -35,6 +35,9 @@
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
       <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
     </ng-template>
+    <ng-template ng-footer-tmp>
+      <p class="create-new" (click)="createNew()">Create New </p>
+    </ng-template>
   </ng-select>
   <div>{{inputValue|formatSettlement: [35, '...']}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>

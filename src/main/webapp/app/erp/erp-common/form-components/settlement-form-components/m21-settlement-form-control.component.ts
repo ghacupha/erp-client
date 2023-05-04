@@ -22,10 +22,12 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-m21-settlement-form-control',
   templateUrl: './m21-settlement-form-control.component.html',
+  styleUrls: ['./m21-settlement-form-control.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -48,6 +50,7 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
   valueLookUps$: Observable<ISettlement[]> = of([]);
 
   constructor(
+    protected router: Router,
     protected valueSuggestionService: SettlementSuggestionService
   ) {}
 
@@ -109,5 +112,10 @@ export class M21SettlementFormControlComponent implements OnInit, ControlValueAc
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  createNew(): void {
+
+    this.router.navigate(['settlement/extension/new']);
   }
 }
