@@ -36,6 +36,11 @@
         <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
         <span class="ng-value-icon right" (click)="clear(item)">×</span>
       </ng-template>
+
+      <ng-template ng-footer-tmp>
+        <p class="create-new" (click)="createNew()">Create New </p>
+      </ng-template>
+
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />

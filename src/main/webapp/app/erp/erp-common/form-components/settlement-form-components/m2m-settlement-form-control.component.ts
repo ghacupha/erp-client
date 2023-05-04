@@ -23,11 +23,13 @@ import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap 
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
 import { SettlementSuggestionService } from '../../suggestion/settlement-suggestion.service';
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'jhi-m2m-settlement-form-control',
   templateUrl: './m2m-settlement-form-control.component.html',
+  styleUrls: ['./m2m-settlement-form-control.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -50,9 +52,16 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
   valueLookups$: Observable<ISettlement[]> = of([]);
 
   constructor(
+    protected router: Router,
     protected valueService: SettlementService,
     protected valueSuggestionService: SettlementSuggestionService
-  ) {}
+  ) {
+    // if (this.router.getCurrentNavigation() !== null) {
+    //   if (this.router.getCurrentNavigation().extras.state) {
+    //     this.inputValues = [...this.router.getCurrentNavigation().extras.state.inputValues ?? []];
+    //   }
+    // }
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onChange: any = () => {
@@ -62,7 +71,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
   onTouched: any = () => {};
 
   ngOnInit(): void {
-    this.loadDealers();
+    this.loadData();
   }
 
   ngOnDestroy(): void {
@@ -70,7 +79,7 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
     this.inputValues = [];
   }
 
-  loadDealers(): void {
+  loadData(): void {
     this.valueLookups$ = concat(
       of([]), // default items
       this.valueInputControl$.pipe(
@@ -117,5 +126,10 @@ export class M2MSettlementFormControlComponent implements OnInit, OnDestroy, Con
 
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  createNew(): void {
+
+    this.router.navigate(['settlement/extension/new']);
   }
 }
