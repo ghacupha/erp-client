@@ -32,12 +32,13 @@
     [multiple]='true'
   >
     <ng-option *ngFor="let option of valueLookups$ | async" [value]="option">
-      <!--// TODO Display additional details about the value-->
-      <jhi-settlement-selected-option-view [item]='option'></jhi-settlement-selected-option-view>
+      <ng-template ng-label-tmp let-item="item" let-clear="clear">
+        <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
+        <span class="ng-value-icon right" (click)="clear(item)">×</span>
+      </ng-template>
     </ng-option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <!--// TODO Display additional details about the value-->
       <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
     </ng-template>
   </ng-select>

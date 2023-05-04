@@ -170,7 +170,6 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
     // fire-up typeahead items
     this.loadPlaceholders();
-    this.loadSettlements();
     this.loadDealers();
     this.loadPaymentInvoices();
     this.loadDesignatedUsers();
@@ -338,23 +337,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
   }
 
-  loadSettlements(): void {
-    this.settlementLookups$ = concat(
-      of([]), // default items
-      this.settlementControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementsLoading = true),
-        switchMap(term => this.settlementSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementsLoading = false)
-        ))
-      ),
-      of([...this.settlementsSharedCollection])
-    );
+  updateSettlements(updates: ISettlement[]): void {
+    this.editForm.patchValue({
+      settlements: [...updates]
+    });
   }
 
   loadPurchaseOrders(): void {

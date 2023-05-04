@@ -191,35 +191,14 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <!--// TODO Settlements-->
-        <div class="form-group">
-          <label class="form-control-label">Settlement(s)</label>
-          <ng-select
-            [items]="settlementLookups$ | async"
-            bindLabel="paymentNumber"
-            [trackByFn]="trackSettlementByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="settlementsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="settlementControlInput$"
-            formControlName="settlements"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of settlementLookups$ | async" [value]="option">
-              <!--{{ option.paymentNumber }} DATED: {{ option.paymentDate }}-->
-              <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                <jhi-settlement-selected-option-view [item]='item'></jhi-settlement-selected-option-view>
-                <span class="ng-value-icon right" (click)="clear(item)">×</span>
-              </ng-template>
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-settlement-option-view [item]='item'></jhi-settlement-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
-        </div>
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Settlement(s)'
+        >
+        </jhi-m2m-settlement-form-control>
 
         <!--// TODO Asset Category-->
         <div class="form-group">
