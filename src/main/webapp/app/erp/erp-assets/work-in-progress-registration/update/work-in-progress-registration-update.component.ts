@@ -55,6 +55,10 @@ import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sh
 import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
 import { AssetCategorySuggestionService } from '../../../erp-common/suggestion/asset-category-suggestion.service';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { IAssetWarranty } from '../../asset-warranty/asset-warranty.model';
+import { IAssetAccessory } from '../../asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from '../../asset-accessory/service/asset-accessory.service';
+import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -71,6 +75,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
+  assetAccessoriesSharedCollection: IAssetAccessory[] = [];
+  assetWarrantiesSharedCollection: IAssetWarranty[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -87,6 +93,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     deliveryNotes: [],
     jobSheets: [],
     dealer: [null, Validators.required],
+    assetAccessories: [],
+    assetWarranties: [],
   });
 
   minAccountLengthTerm = 3;
@@ -154,6 +162,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
     protected assetCategorySuggestionService: AssetCategorySuggestionService,
+    protected assetAccessoryService: AssetAccessoryService,
+    protected assetWarrantyService: AssetWarrantyService,
   ) {}
 
   ngOnInit(): void {
@@ -375,6 +385,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
+    return item.id!;
+  }
+
   trackServiceOutletByFn(item: IServiceOutlet): number {
     return item.id!;
   }
@@ -466,6 +484,28 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
 
   trackDealerById(index: number, item: IDealer): number {
     return item.id!;
+  }
+
+  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -580,6 +620,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: workInProgressRegistration.deliveryNotes,
       jobSheets: workInProgressRegistration.jobSheets,
       dealer: workInProgressRegistration.dealer,
+      assetAccessories: workInProgressRegistration.assetAccessories,
+      assetWarranties: workInProgressRegistration.assetWarranties,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -613,6 +655,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
       this.dealersSharedCollection,
       workInProgressRegistration.dealer
+    );
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+      this.assetAccessoriesSharedCollection,
+      ...(workInProgressRegistration.assetAccessories ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(workInProgressRegistration.assetWarranties ?? [])
     );
   }
 
@@ -701,6 +751,31 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+    this.assetAccessoryService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
+      .pipe(
+        map((assetAccessories: IAssetAccessory[]) =>
+          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+            assetAccessories,
+            ...(this.editForm.get('assetAccessories')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
+
+    this.assetWarrantyService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
+      .pipe(
+        map((assetWarranties: IAssetWarranty[]) =>
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+            assetWarranties,
+            ...(this.editForm.get('assetWarranties')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
   }
 
   protected createFromForm(): IWorkInProgressRegistration {
@@ -720,6 +795,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
+      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
     };
   }
 }

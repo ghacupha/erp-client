@@ -1,22 +1,3 @@
-<!--
-
-    Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
@@ -151,39 +132,6 @@
             "
           >
             <small class="form-text text-danger" *ngIf="editForm.get('paymentStatus')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_transactionId">Transaction Id</label>
-          <input
-            type="text"
-            class="form-control"
-            name="transactionId"
-            id="field_transactionId"
-            data-cy="transactionId"
-            formControlName="transactionId"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_transactionDate">Transaction Date</label>
-          <div class="input-group">
-            <input
-              id="field_transactionDate"
-              data-cy="transactionDate"
-              type="text"
-              class="form-control"
-              name="transactionDate"
-              ngbDatepicker
-              #transactionDateDp="ngbDatepicker"
-              formControlName="transactionDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="transactionDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
           </div>
         </div>
 
@@ -431,25 +379,6 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_settlements">Settlement</label>
-          <select
-            class="form-control"
-            id="field_settlements"
-            data-cy="settlement"
-            multiple
-            name="settlements"
-            formControlName="settlements"
-          >
-            <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
-              {{ settlementOption.paymentNumber }}
             </option>
           </select>
         </div>

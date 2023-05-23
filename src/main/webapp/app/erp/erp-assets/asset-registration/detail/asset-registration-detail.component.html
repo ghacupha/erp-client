@@ -49,6 +49,14 @@
         <dd>
           <span>{{ assetRegistration.assetCost }}</span>
         </dd>
+        <dt><span>Model Number</span></dt>
+        <dd>
+          <span>{{ assetRegistration.modelNumber }}</span>
+        </dd>
+        <dt><span>Serial Number</span></dt>
+        <dd>
+          <span>{{ assetRegistration.serialNumber }}</span>
+        </dd>
         <dt><span>Comments</span></dt>
         <dd>
           <div *ngIf="assetRegistration.comments">
@@ -123,6 +131,29 @@
         <dd>
           <span *ngFor="let designatedUsers of assetRegistration.designatedUsers; let last = last">
             <a [routerLink]="['/erp/dealer', designatedUsers?.id, 'view']">{{ designatedUsers.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of assetRegistration.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Warranty</span></dt>
+        <dd>
+          <span *ngFor="let assetWarranty of assetRegistration.assetWarranties; let last = last">
+            <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Universally Unique Mapping</span></dt>
+        <dd>
+          <span *ngFor="let universallyUniqueMapping of assetRegistration.universallyUniqueMappings; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+              universallyUniqueMapping.universalKey
+              }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

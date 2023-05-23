@@ -19,6 +19,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
+import { AssetWarrantyModule } from './asset-warranty/asset-warranty.module';
 
 @NgModule({
   imports: [
@@ -126,6 +127,34 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         canActivate: [UserRouteAccessService],
         loadChildren: () =>
           import('./depreciation-method/depreciation-method.module').then(m => m.DepreciationMethodModule),
+      },
+      {
+        path: 'asset-warranty',
+        data: {
+          pageTitle: 'ERP | Warranties',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-warranty/asset-warranty.module').then(m => m.AssetWarrantyModule),
+      },
+      {
+        path: 'asset-accessory',
+        data: {
+          pageTitle: 'ERP | Accessories',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_PREPAYMENTS_MODULE_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-accessory/asset-accessory.module').then(m => m.AssetAccessoryModule),
       },
     ])
   ]

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { element, by, ElementFinder } from 'protractor';
 
 export class AssetRegistrationComponentsPage {
@@ -53,6 +35,8 @@ export class AssetRegistrationUpdatePage {
   assetDetailsInput = element(by.id('field_assetDetails'));
   assetCostInput = element(by.id('field_assetCost'));
   commentsInput = element(by.id('file_comments'));
+  modelNumberInput = element(by.id('field_modelNumber'));
+  serialNumberInput = element(by.id('field_serialNumber'));
 
   placeholderSelect = element(by.id('field_placeholder'));
   paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
@@ -66,6 +50,8 @@ export class AssetRegistrationUpdatePage {
   designatedUsersSelect = element(by.id('field_designatedUsers'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   businessDocumentSelect = element(by.id('field_businessDocument'));
+  assetWarrantySelect = element(by.id('field_assetWarranty'));
+  universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -117,6 +103,22 @@ export class AssetRegistrationUpdatePage {
 
   async getCommentsInput(): Promise<string> {
     return await this.commentsInput.getAttribute('value');
+  }
+
+  async setModelNumberInput(modelNumber: string): Promise<void> {
+    await this.modelNumberInput.sendKeys(modelNumber);
+  }
+
+  async getModelNumberInput(): Promise<string> {
+    return await this.modelNumberInput.getAttribute('value');
+  }
+
+  async setSerialNumberInput(serialNumber: string): Promise<void> {
+    await this.serialNumberInput.sendKeys(serialNumber);
+  }
+
+  async getSerialNumberInput(): Promise<string> {
+    return await this.serialNumberInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {
@@ -309,6 +311,38 @@ export class AssetRegistrationUpdatePage {
 
   async getBusinessDocumentSelectedOption(): Promise<string> {
     return await this.businessDocumentSelect.element(by.css('option:checked')).getText();
+  }
+
+  async assetWarrantySelectLastOption(): Promise<void> {
+    await this.assetWarrantySelect.all(by.tagName('option')).last().click();
+  }
+
+  async assetWarrantySelectOption(option: string): Promise<void> {
+    await this.assetWarrantySelect.sendKeys(option);
+  }
+
+  getAssetWarrantySelect(): ElementFinder {
+    return this.assetWarrantySelect;
+  }
+
+  async getAssetWarrantySelectedOption(): Promise<string> {
+    return await this.assetWarrantySelect.element(by.css('option:checked')).getText();
+  }
+
+  async universallyUniqueMappingSelectLastOption(): Promise<void> {
+    await this.universallyUniqueMappingSelect.all(by.tagName('option')).last().click();
+  }
+
+  async universallyUniqueMappingSelectOption(option: string): Promise<void> {
+    await this.universallyUniqueMappingSelect.sendKeys(option);
+  }
+
+  getUniversallyUniqueMappingSelect(): ElementFinder {
+    return this.universallyUniqueMappingSelect;
+  }
+
+  async getUniversallyUniqueMappingSelectedOption(): Promise<string> {
+    return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
@@ -45,6 +27,8 @@ describe('AssetRegistration Service', () => {
       assetCost: 0,
       commentsContentType: 'image/png',
       comments: 'AAAAAAA',
+      modelNumber: 'AAAAAAA',
+      serialNumber: 'AAAAAAA',
     };
   });
 
@@ -85,6 +69,8 @@ describe('AssetRegistration Service', () => {
           assetDetails: 'BBBBBB',
           assetCost: 1,
           comments: 'BBBBBB',
+          modelNumber: 'BBBBBB',
+          serialNumber: 'BBBBBB',
         },
         elemDefault
       );
@@ -103,6 +89,7 @@ describe('AssetRegistration Service', () => {
         {
           assetNumber: 'BBBBBB',
           assetCost: 1,
+          serialNumber: 'BBBBBB',
         },
         new AssetRegistration()
       );
@@ -127,6 +114,8 @@ describe('AssetRegistration Service', () => {
           assetDetails: 'BBBBBB',
           assetCost: 1,
           comments: 'BBBBBB',
+          modelNumber: 'BBBBBB',
+          serialNumber: 'BBBBBB',
         },
         elemDefault
       );
@@ -178,7 +167,7 @@ describe('AssetRegistration Service', () => {
       });
 
       it('should add only unique AssetRegistration to an array', () => {
-        const assetRegistrationArray: IAssetRegistration[] = [{ id: 123 }, { id: 456 }, { id: 49404 }];
+        const assetRegistrationArray: IAssetRegistration[] = [{ id: 123 }, { id: 456 }, { id: 42595 }];
         const assetRegistrationCollection: IAssetRegistration[] = [{ id: 123 }];
         expectedResult = service.addAssetRegistrationToCollectionIfMissing(assetRegistrationCollection, ...assetRegistrationArray);
         expect(expectedResult).toHaveLength(3);

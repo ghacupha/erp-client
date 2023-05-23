@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -23,7 +5,6 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
-import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
@@ -116,16 +97,12 @@ export class SettlementRequisitionService {
   protected convertDateFromClient(settlementRequisition: ISettlementRequisition): ISettlementRequisition {
     return Object.assign({}, settlementRequisition, {
       timeOfRequisition: settlementRequisition.timeOfRequisition?.isValid() ? settlementRequisition.timeOfRequisition.toJSON() : undefined,
-      transactionDate: settlementRequisition.transactionDate?.isValid()
-        ? settlementRequisition.transactionDate.format(DATE_FORMAT)
-        : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.timeOfRequisition = res.body.timeOfRequisition ? dayjs(res.body.timeOfRequisition) : undefined;
-      res.body.transactionDate = res.body.transactionDate ? dayjs(res.body.transactionDate) : undefined;
     }
     return res;
   }
@@ -135,9 +112,6 @@ export class SettlementRequisitionService {
       res.body.forEach((settlementRequisition: ISettlementRequisition) => {
         settlementRequisition.timeOfRequisition = settlementRequisition.timeOfRequisition
           ? dayjs(settlementRequisition.timeOfRequisition)
-          : undefined;
-        settlementRequisition.transactionDate = settlementRequisition.transactionDate
-          ? dayjs(settlementRequisition.transactionDate)
           : undefined;
       });
     }

@@ -55,6 +55,12 @@ import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/d
 import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
 import { ServiceOutletSuggestionService } from '../../../erp-common/suggestion/service-outlet-suggestion.service';
 import { AssetCategorySuggestionService } from '../../../erp-common/suggestion/asset-category-suggestion.service';
+import { IAssetWarranty } from '../../asset-warranty/asset-warranty.model';
+import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -72,6 +78,9 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
+  assetWarrantiesSharedCollection: IAssetWarranty[] = [];
+  universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -91,6 +100,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     jobSheets: [],
     dealer: [null, Validators.required],
     designatedUsers: [],
+    modelNumber: [],
+    serialNumber: [],
+    businessDocuments: [],
+    assetWarranties: [],
+    universallyUniqueMappings: [],
   });
 
   minAccountLengthTerm = 3;
@@ -159,6 +173,9 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
     protected assetCategorySuggestionService: AssetCategorySuggestionService,
+    protected businessDocumentService: BusinessDocumentService,
+    protected assetWarrantyService: AssetWarrantyService,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
   ) {}
 
   ngOnInit(): void {
@@ -362,6 +379,18 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
   }
 
+  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
+    return item.id!;
+  }
+
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
+  }
+
   trackPurchaseOrderByFn(item: IPurchaseOrder): number {
     return item.id!;
   }
@@ -461,6 +490,42 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
   trackDealerById(index: number, item: IDealer): number {
     return item.id!;
+  }
+
+  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedUniversallyUniqueMapping(
+    option: IUniversallyUniqueMapping,
+    selectedVals?: IUniversallyUniqueMapping[]
+  ): IUniversallyUniqueMapping {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -589,6 +654,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       jobSheets: assetRegistration.jobSheets,
       dealer: assetRegistration.dealer,
       designatedUsers: assetRegistration.designatedUsers,
+      modelNumber: assetRegistration.modelNumber,
+      serialNumber: assetRegistration.serialNumber,
+      businessDocuments: assetRegistration.businessDocuments,
+      assetWarranties: assetRegistration.assetWarranties,
+      universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -627,6 +697,18 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       this.dealersSharedCollection,
       assetRegistration.dealer,
       ...(assetRegistration.designatedUsers ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(assetRegistration.businessDocuments ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(assetRegistration.assetWarranties ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(assetRegistration.universallyUniqueMappings ?? [])
     );
   }
 
@@ -733,6 +815,47 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         )
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+    this.assetWarrantyService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
+      .pipe(
+        map((assetWarranties: IAssetWarranty[]) =>
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+            assetWarranties,
+            ...(this.editForm.get('assetWarranties')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
+
+    this.universallyUniqueMappingService
+      .query()
+      .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
+      .pipe(
+        map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+            universallyUniqueMappings,
+            ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
+          )
+        )
+      )
+      .subscribe(
+        (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
+      );
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            ...(this.editForm.get('businessDocuments')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
   }
 
   protected createFromForm(): IAssetRegistration {
@@ -755,6 +878,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
       designatedUsers: this.editForm.get(['designatedUsers'])!.value,
+      modelNumber: this.editForm.get(['modelNumber'])!.value,
+      serialNumber: this.editForm.get(['serialNumber'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
+      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
     };
   }
 }

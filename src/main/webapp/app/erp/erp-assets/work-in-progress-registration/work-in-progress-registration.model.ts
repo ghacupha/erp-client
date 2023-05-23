@@ -24,6 +24,9 @@ import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-order.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
+import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;
@@ -40,6 +43,9 @@ export interface IWorkInProgressRegistration {
   deliveryNotes?: IDeliveryNote[] | null;
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
+  businessDocuments?: IBusinessDocument[] | null;
+  assetAccessories?: IAssetAccessory[] | null;
+  assetWarranties?: IAssetWarranty[] | null;
 }
 
 export class WorkInProgressRegistration implements IWorkInProgressRegistration {
@@ -57,7 +63,10 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public purchaseOrders?: IPurchaseOrder[] | null,
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
-    public dealer?: IDealer
+    public dealer?: IDealer,
+    public businessDocuments?: IBusinessDocument[] | null,
+    public assetAccessories?: IAssetAccessory[] | null,
+    public assetWarranties?: IAssetWarranty[] | null
   ) {}
 }
 

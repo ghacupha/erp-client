@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -50,6 +32,10 @@ import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
+import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -69,6 +55,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
+  assetWarrantiesSharedCollection: IAssetWarranty[] = [];
+  universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -78,6 +66,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     assetCost: [null, [Validators.required]],
     comments: [],
     commentsContentType: [],
+    modelNumber: [],
+    serialNumber: [],
     placeholders: [],
     paymentInvoices: [],
     serviceOutlets: [null, Validators.required],
@@ -90,6 +80,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     designatedUsers: [],
     settlementCurrency: [],
     businessDocuments: [],
+    assetWarranties: [],
+    universallyUniqueMappings: [],
   });
 
   constructor(
@@ -107,6 +99,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected businessDocumentService: BusinessDocumentService,
+    protected assetWarrantyService: AssetWarrantyService,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -189,6 +183,14 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
+    return item.id!;
+  }
+
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
     return item.id!;
   }
 
@@ -291,6 +293,31 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     return option;
   }
 
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedUniversallyUniqueMapping(
+    option: IUniversallyUniqueMapping,
+    selectedVals?: IUniversallyUniqueMapping[]
+  ): IUniversallyUniqueMapping {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssetRegistration>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -319,6 +346,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       assetCost: assetRegistration.assetCost,
       comments: assetRegistration.comments,
       commentsContentType: assetRegistration.commentsContentType,
+      modelNumber: assetRegistration.modelNumber,
+      serialNumber: assetRegistration.serialNumber,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
       serviceOutlets: assetRegistration.serviceOutlets,
@@ -331,6 +360,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       designatedUsers: assetRegistration.designatedUsers,
       settlementCurrency: assetRegistration.settlementCurrency,
       businessDocuments: assetRegistration.businessDocuments,
+      assetWarranties: assetRegistration.assetWarranties,
+      universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -377,6 +408,14 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
       this.businessDocumentsSharedCollection,
       ...(assetRegistration.businessDocuments ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(assetRegistration.assetWarranties ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(assetRegistration.universallyUniqueMappings ?? [])
     );
   }
 
@@ -509,6 +548,35 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
+    this.assetWarrantyService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
+      .pipe(
+        map((assetWarranties: IAssetWarranty[]) =>
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+            assetWarranties,
+            ...(this.editForm.get('assetWarranties')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
+
+    this.universallyUniqueMappingService
+      .query()
+      .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
+      .pipe(
+        map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+            universallyUniqueMappings,
+            ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
+          )
+        )
+      )
+      .subscribe(
+        (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+          (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
+      );
   }
 
   protected createFromForm(): IAssetRegistration {
@@ -521,6 +589,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       assetCost: this.editForm.get(['assetCost'])!.value,
       commentsContentType: this.editForm.get(['commentsContentType'])!.value,
       comments: this.editForm.get(['comments'])!.value,
+      modelNumber: this.editForm.get(['modelNumber'])!.value,
+      serialNumber: this.editForm.get(['serialNumber'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
       serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
@@ -533,6 +603,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       designatedUsers: this.editForm.get(['designatedUsers'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
+      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
     };
   }
 }

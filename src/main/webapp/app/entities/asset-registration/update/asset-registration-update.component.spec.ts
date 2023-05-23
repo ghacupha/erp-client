@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -49,6 +31,10 @@ import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
+import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { AssetRegistrationUpdateComponent } from './asset-registration-update.component';
 
@@ -68,6 +54,8 @@ describe('AssetRegistration Management Update Component', () => {
   let dealerService: DealerService;
   let settlementCurrencyService: SettlementCurrencyService;
   let businessDocumentService: BusinessDocumentService;
+  let assetWarrantyService: AssetWarrantyService;
+  let universallyUniqueMappingService: UniversallyUniqueMappingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -92,6 +80,8 @@ describe('AssetRegistration Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
+    assetWarrantyService = TestBed.inject(AssetWarrantyService);
+    universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
 
     comp = fixture.componentInstance;
   });
@@ -329,6 +319,55 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call AssetWarranty query and add missing value', () => {
+      const assetRegistration: IAssetRegistration = { id: 456 };
+      const assetWarranties: IAssetWarranty[] = [{ id: 22327 }];
+      assetRegistration.assetWarranties = assetWarranties;
+
+      const assetWarrantyCollection: IAssetWarranty[] = [{ id: 8018 }];
+      jest.spyOn(assetWarrantyService, 'query').mockReturnValue(of(new HttpResponse({ body: assetWarrantyCollection })));
+      const additionalAssetWarranties = [...assetWarranties];
+      const expectedCollection: IAssetWarranty[] = [...additionalAssetWarranties, ...assetWarrantyCollection];
+      jest.spyOn(assetWarrantyService, 'addAssetWarrantyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ assetRegistration });
+      comp.ngOnInit();
+
+      expect(assetWarrantyService.query).toHaveBeenCalled();
+      expect(assetWarrantyService.addAssetWarrantyToCollectionIfMissing).toHaveBeenCalledWith(
+        assetWarrantyCollection,
+        ...additionalAssetWarranties
+      );
+      expect(comp.assetWarrantiesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call UniversallyUniqueMapping query and add missing value', () => {
+      const assetRegistration: IAssetRegistration = { id: 456 };
+      const universallyUniqueMappings: IUniversallyUniqueMapping[] = [{ id: 30947 }];
+      assetRegistration.universallyUniqueMappings = universallyUniqueMappings;
+
+      const universallyUniqueMappingCollection: IUniversallyUniqueMapping[] = [{ id: 64874 }];
+      jest
+        .spyOn(universallyUniqueMappingService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: universallyUniqueMappingCollection })));
+      const additionalUniversallyUniqueMappings = [...universallyUniqueMappings];
+      const expectedCollection: IUniversallyUniqueMapping[] = [
+        ...additionalUniversallyUniqueMappings,
+        ...universallyUniqueMappingCollection,
+      ];
+      jest.spyOn(universallyUniqueMappingService, 'addUniversallyUniqueMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ assetRegistration });
+      comp.ngOnInit();
+
+      expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+      expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+        universallyUniqueMappingCollection,
+        ...additionalUniversallyUniqueMappings
+      );
+      expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 78776 };
@@ -355,6 +394,10 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.settlementCurrency = settlementCurrency;
       const businessDocuments: IBusinessDocument = { id: 72895 };
       assetRegistration.businessDocuments = [businessDocuments];
+      const assetWarranties: IAssetWarranty = { id: 40730 };
+      assetRegistration.assetWarranties = [assetWarranties];
+      const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 7146 };
+      assetRegistration.universallyUniqueMappings = [universallyUniqueMappings];
 
       activatedRoute.data = of({ assetRegistration });
       comp.ngOnInit();
@@ -372,6 +415,8 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(designatedUsers);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
     });
   });
 
@@ -524,6 +569,22 @@ describe('AssetRegistration Management Update Component', () => {
       it('Should return tracked BusinessDocument primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetWarrantyById', () => {
+      it('Should return tracked AssetWarranty primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetWarrantyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackUniversallyUniqueMappingById', () => {
+      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
@@ -759,6 +820,58 @@ describe('AssetRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedBusinessDocument(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetWarranty', () => {
+      it('Should return option if no AssetWarranty is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetWarranty(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetWarranty for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetWarranty is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedUniversallyUniqueMapping', () => {
+      it('Should return option if no UniversallyUniqueMapping is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected UniversallyUniqueMapping for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

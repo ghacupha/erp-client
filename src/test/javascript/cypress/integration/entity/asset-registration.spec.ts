@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { entityItemSelector } from '../../support/commands';
 import {
   entityTableSelector,
@@ -34,7 +16,7 @@ describe('AssetRegistration e2e test', () => {
   const assetRegistrationPageUrlPattern = new RegExp('/asset-registration(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const assetRegistrationSample = { assetNumber: 'B2B', assetTag: 'Latvian', assetCost: 63854 };
+  const assetRegistrationSample = { assetNumber: 'Strategist compress', assetTag: 'Communications heuristic', assetCost: 66620 };
 
   let assetRegistration: any;
   //let serviceOutlet: any;
@@ -148,6 +130,21 @@ describe('AssetRegistration e2e test', () => {
     });
 
     cy.intercept('GET', '/api/business-documents', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/asset-warranties', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/universally-unique-mappings', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/asset-accessories', {
       statusCode: 200,
       body: [],
     });
@@ -340,6 +337,10 @@ describe('AssetRegistration e2e test', () => {
       cy.get(`[data-cy="assetCost"]`).type('97088').should('have.value', '97088');
 
       cy.setFieldImageAsBytesOfEntity('comments', 'integration-test.png', 'image/png');
+
+      cy.get(`[data-cy="modelNumber"]`).type('B2B').should('have.value', 'B2B');
+
+      cy.get(`[data-cy="serialNumber"]`).type('Latvian').should('have.value', 'Latvian');
 
       cy.get(`[data-cy="serviceOutlet"]`).select([0]);
       cy.get(`[data-cy="settlement"]`).select([0]);

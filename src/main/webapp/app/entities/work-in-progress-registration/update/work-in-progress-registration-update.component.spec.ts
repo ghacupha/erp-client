@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -49,6 +31,10 @@ import { IWorkProjectRegister } from 'app/entities/work-project-register/work-pr
 import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
+import { IAssetAccessory } from 'app/entities/asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from 'app/entities/asset-accessory/service/asset-accessory.service';
+import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
 
 import { WorkInProgressRegistrationUpdateComponent } from './work-in-progress-registration-update.component';
 
@@ -68,6 +54,8 @@ describe('WorkInProgressRegistration Management Update Component', () => {
   let settlementCurrencyService: SettlementCurrencyService;
   let workProjectRegisterService: WorkProjectRegisterService;
   let businessDocumentService: BusinessDocumentService;
+  let assetAccessoryService: AssetAccessoryService;
+  let assetWarrantyService: AssetWarrantyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -92,6 +80,8 @@ describe('WorkInProgressRegistration Management Update Component', () => {
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     workProjectRegisterService = TestBed.inject(WorkProjectRegisterService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
+    assetAccessoryService = TestBed.inject(AssetAccessoryService);
+    assetWarrantyService = TestBed.inject(AssetWarrantyService);
 
     comp = fixture.componentInstance;
   });
@@ -356,6 +346,50 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call AssetAccessory query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const assetAccessories: IAssetAccessory[] = [{ id: 36726 }];
+      workInProgressRegistration.assetAccessories = assetAccessories;
+
+      const assetAccessoryCollection: IAssetAccessory[] = [{ id: 28409 }];
+      jest.spyOn(assetAccessoryService, 'query').mockReturnValue(of(new HttpResponse({ body: assetAccessoryCollection })));
+      const additionalAssetAccessories = [...assetAccessories];
+      const expectedCollection: IAssetAccessory[] = [...additionalAssetAccessories, ...assetAccessoryCollection];
+      jest.spyOn(assetAccessoryService, 'addAssetAccessoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(assetAccessoryService.query).toHaveBeenCalled();
+      expect(assetAccessoryService.addAssetAccessoryToCollectionIfMissing).toHaveBeenCalledWith(
+        assetAccessoryCollection,
+        ...additionalAssetAccessories
+      );
+      expect(comp.assetAccessoriesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call AssetWarranty query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const assetWarranties: IAssetWarranty[] = [{ id: 21548 }];
+      workInProgressRegistration.assetWarranties = assetWarranties;
+
+      const assetWarrantyCollection: IAssetWarranty[] = [{ id: 35876 }];
+      jest.spyOn(assetWarrantyService, 'query').mockReturnValue(of(new HttpResponse({ body: assetWarrantyCollection })));
+      const additionalAssetWarranties = [...assetWarranties];
+      const expectedCollection: IAssetWarranty[] = [...additionalAssetWarranties, ...assetWarrantyCollection];
+      jest.spyOn(assetWarrantyService, 'addAssetWarrantyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(assetWarrantyService.query).toHaveBeenCalled();
+      expect(assetWarrantyService.addAssetWarrantyToCollectionIfMissing).toHaveBeenCalledWith(
+        assetWarrantyCollection,
+        ...additionalAssetWarranties
+      );
+      expect(comp.assetWarrantiesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 54597 };
@@ -382,6 +416,10 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       workInProgressRegistration.workProjectRegister = workProjectRegister;
       const businessDocuments: IBusinessDocument = { id: 65752 };
       workInProgressRegistration.businessDocuments = [businessDocuments];
+      const assetAccessories: IAssetAccessory = { id: 17611 };
+      workInProgressRegistration.assetAccessories = [assetAccessories];
+      const assetWarranties: IAssetWarranty = { id: 48566 };
+      workInProgressRegistration.assetWarranties = [assetWarranties];
 
       activatedRoute.data = of({ workInProgressRegistration });
       comp.ngOnInit();
@@ -399,6 +437,8 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.workProjectRegistersSharedCollection).toContain(workProjectRegister);
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.assetAccessoriesSharedCollection).toContain(assetAccessories);
+      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
     });
   });
 
@@ -559,6 +599,22 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       it('Should return tracked BusinessDocument primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetAccessoryById', () => {
+      it('Should return tracked AssetAccessory primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetAccessoryById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetWarrantyById', () => {
+      it('Should return tracked AssetWarranty primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetWarrantyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
@@ -768,6 +824,58 @@ describe('WorkInProgressRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedBusinessDocument(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetAccessory', () => {
+      it('Should return option if no AssetAccessory is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetAccessory(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetAccessory for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetAccessory is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetWarranty', () => {
+      it('Should return option if no AssetWarranty is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetWarranty(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetWarranty for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetWarranty is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

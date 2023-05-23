@@ -25,6 +25,10 @@ import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-order.model';
+import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAssetRegistration {
   id?: number;
@@ -44,6 +48,12 @@ export interface IAssetRegistration {
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
   designatedUsers?: IDealer[] | null;
+  modelNumber?: string | null;
+  serialNumber?: string | null;
+  businessDocuments?: IBusinessDocument[] | null;
+  assetWarranties?: IAssetWarranty[] | null;
+  universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
+  assetAccessories?: IAssetAccessory[] | null;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -64,7 +74,13 @@ export class AssetRegistration implements IAssetRegistration {
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
     public dealer?: IDealer,
-    public designatedUsers?: IDealer[] | null
+    public modelNumber?: string | null,
+    public serialNumber?: string | null,
+    public designatedUsers?: IDealer[] | null,
+    public businessDocuments?: IBusinessDocument[] | null,
+    public assetWarranties?: IAssetWarranty[] | null,
+    public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
+    public assetAccessories?: IAssetAccessory[] | null
   ) {}
 }
 

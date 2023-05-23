@@ -77,6 +77,30 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_modelNumber">Model Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modelNumber"
+            id="field_modelNumber"
+            data-cy="modelNumber"
+            formControlName="modelNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_comments">Comment(s)</label>
           <div>
             <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
@@ -350,6 +374,49 @@
             </ng-template>
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('designatedUsers')!.value|json}}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_assetWarranties">Asset Warranty</label>
+          <select
+            class="form-control"
+            id="field_assetWarranties"
+            data-cy="assetWarranty"
+            multiple
+            name="assetWarranties"
+            formControlName="assetWarranties"
+          >
+            <option
+              [ngValue]="getSelectedAssetWarranty(assetWarrantyOption, editForm.get('assetWarranties')!.value)"
+              *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
+            >
+              {{ assetWarrantyOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
+          <select
+            class="form-control"
+            id="field_universallyUniqueMappings"
+            data-cy="universallyUniqueMapping"
+            multiple
+            name="universallyUniqueMappings"
+            formControlName="universallyUniqueMappings"
+          >
+            <option
+              [ngValue]="
+                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
+              "
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
         </div>
 
       </div>

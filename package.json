@@ -10,6 +10,7 @@
     "path": false,
     "child_process": false
   },
+  "max_old_space_size": 6144,
   "scripts": {
     "build": "node git-version.js && npm run webapp:prod --",
     "build-watch": "concurrently 'node git-version.js && npm run webapp:build:dev -- --watch'",
@@ -36,7 +37,7 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss}\"",
     "serve": "npm run start --",
     "sonar": "sonar-scanner",
-    "start": "node git-version.js && ng serve --hmr",
+    "start": "node git-version.js && node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --hmr",
     "start-tls": "npm run webapp:dev-ssl",
     "pretest": "npm run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark III No 14 (Caleb Series) Client 1.3.3
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -50,6 +32,10 @@ import { IWorkProjectRegister } from 'app/entities/work-project-register/work-pr
 import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
+import { IAssetAccessory } from 'app/entities/asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from 'app/entities/asset-accessory/service/asset-accessory.service';
+import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -70,6 +56,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   workProjectRegistersSharedCollection: IWorkProjectRegister[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
+  assetAccessoriesSharedCollection: IAssetAccessory[] = [];
+  assetWarrantiesSharedCollection: IAssetWarranty[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -90,6 +78,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     settlementCurrency: [],
     workProjectRegister: [],
     businessDocuments: [],
+    assetAccessories: [],
+    assetWarranties: [],
   });
 
   constructor(
@@ -107,6 +97,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected settlementCurrencyService: SettlementCurrencyService,
     protected workProjectRegisterService: WorkProjectRegisterService,
     protected businessDocumentService: BusinessDocumentService,
+    protected assetAccessoryService: AssetAccessoryService,
+    protected assetWarrantyService: AssetWarrantyService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -193,6 +185,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   }
 
   trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
     return item.id!;
   }
 
@@ -284,6 +284,28 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return option;
   }
 
+  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkInProgressRegistration>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -323,6 +345,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       settlementCurrency: workInProgressRegistration.settlementCurrency,
       workProjectRegister: workInProgressRegistration.workProjectRegister,
       businessDocuments: workInProgressRegistration.businessDocuments,
+      assetAccessories: workInProgressRegistration.assetAccessories,
+      assetWarranties: workInProgressRegistration.assetWarranties,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -373,6 +397,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
       this.businessDocumentsSharedCollection,
       ...(workInProgressRegistration.businessDocuments ?? [])
+    );
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+      this.assetAccessoriesSharedCollection,
+      ...(workInProgressRegistration.assetAccessories ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(workInProgressRegistration.assetWarranties ?? [])
     );
   }
 
@@ -516,6 +548,32 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
+    this.assetAccessoryService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
+      .pipe(
+        map((assetAccessories: IAssetAccessory[]) =>
+          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+            assetAccessories,
+            ...(this.editForm.get('assetAccessories')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
+
+    this.assetWarrantyService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
+      .pipe(
+        map((assetWarranties: IAssetWarranty[]) =>
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+            assetWarranties,
+            ...(this.editForm.get('assetWarranties')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
   }
 
   protected createFromForm(): IWorkInProgressRegistration {
@@ -539,6 +597,8 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
     };
   }
 }

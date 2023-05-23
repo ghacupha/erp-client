@@ -115,7 +115,9 @@
       "LeaseContract",
       "ContractMetadata",
       "LeaseModelMetadata",
-      "LeaseLiabilityScheduleItem"
+      "LeaseLiabilityScheduleItem",
+      "AssetAccessory",
+      "AssetWarranty"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,
