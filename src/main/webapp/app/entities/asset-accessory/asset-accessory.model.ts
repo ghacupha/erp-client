@@ -16,7 +16,6 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IAssetRegistration } from 'app/entities/asset-registration/asset-registration.model';
 import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
@@ -27,7 +26,6 @@ import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model
 import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
 import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 
@@ -39,7 +37,6 @@ export interface IAssetAccessory {
   comments?: string | null;
   modelNumber?: string | null;
   serialNumber?: string | null;
-  assetRegistration?: IAssetRegistration | null;
   assetWarranties?: IAssetWarranty[] | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
@@ -51,7 +48,6 @@ export interface IAssetAccessory {
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
   designatedUsers?: IDealer[] | null;
-  settlementCurrency?: ISettlementCurrency | null;
   businessDocuments?: IBusinessDocument[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
 }
@@ -65,7 +61,6 @@ export class AssetAccessory implements IAssetAccessory {
     public comments?: string | null,
     public modelNumber?: string | null,
     public serialNumber?: string | null,
-    public assetRegistration?: IAssetRegistration | null,
     public assetWarranties?: IAssetWarranty[] | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
@@ -77,7 +72,6 @@ export class AssetAccessory implements IAssetAccessory {
     public jobSheets?: IJobSheet[] | null,
     public dealer?: IDealer,
     public designatedUsers?: IDealer[] | null,
-    public settlementCurrency?: ISettlementCurrency | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null
   ) {}

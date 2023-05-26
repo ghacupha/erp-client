@@ -53,6 +53,8 @@ import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model
 import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IAssetAccessory } from 'app/entities/asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from 'app/entities/asset-accessory/service/asset-accessory.service';
 
 import { AssetRegistrationUpdateComponent } from './asset-registration-update.component';
 
@@ -74,6 +76,7 @@ describe('AssetRegistration Management Update Component', () => {
   let businessDocumentService: BusinessDocumentService;
   let assetWarrantyService: AssetWarrantyService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let assetAccessoryService: AssetAccessoryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -100,6 +103,7 @@ describe('AssetRegistration Management Update Component', () => {
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     assetWarrantyService = TestBed.inject(AssetWarrantyService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    assetAccessoryService = TestBed.inject(AssetAccessoryService);
 
     comp = fixture.componentInstance;
   });
@@ -386,6 +390,28 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call AssetAccessory query and add missing value', () => {
+      const assetRegistration: IAssetRegistration = { id: 456 };
+      const assetAccessories: IAssetAccessory[] = [{ id: 53192 }];
+      assetRegistration.assetAccessories = assetAccessories;
+
+      const assetAccessoryCollection: IAssetAccessory[] = [{ id: 46584 }];
+      jest.spyOn(assetAccessoryService, 'query').mockReturnValue(of(new HttpResponse({ body: assetAccessoryCollection })));
+      const additionalAssetAccessories = [...assetAccessories];
+      const expectedCollection: IAssetAccessory[] = [...additionalAssetAccessories, ...assetAccessoryCollection];
+      jest.spyOn(assetAccessoryService, 'addAssetAccessoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ assetRegistration });
+      comp.ngOnInit();
+
+      expect(assetAccessoryService.query).toHaveBeenCalled();
+      expect(assetAccessoryService.addAssetAccessoryToCollectionIfMissing).toHaveBeenCalledWith(
+        assetAccessoryCollection,
+        ...additionalAssetAccessories
+      );
+      expect(comp.assetAccessoriesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 78776 };
@@ -416,6 +442,8 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.assetWarranties = [assetWarranties];
       const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 7146 };
       assetRegistration.universallyUniqueMappings = [universallyUniqueMappings];
+      const assetAccessories: IAssetAccessory = { id: 45463 };
+      assetRegistration.assetAccessories = [assetAccessories];
 
       activatedRoute.data = of({ assetRegistration });
       comp.ngOnInit();
@@ -435,6 +463,7 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
       expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
+      expect(comp.assetAccessoriesSharedCollection).toContain(assetAccessories);
     });
   });
 
@@ -603,6 +632,14 @@ describe('AssetRegistration Management Update Component', () => {
       it('Should return tracked UniversallyUniqueMapping primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetAccessoryById', () => {
+      it('Should return tracked AssetAccessory primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetAccessoryById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
@@ -890,6 +927,32 @@ describe('AssetRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetAccessory', () => {
+      it('Should return option if no AssetAccessory is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetAccessory(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetAccessory for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetAccessory is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

@@ -75,12 +75,8 @@
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetRegistration.assetNumber"><span>Asset Registration</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -98,13 +94,6 @@
           <td>{{ assetAccessory.modelNumber }}</td>
           <td>{{ assetAccessory.serialNumber }}</td>
           <td>
-            <div *ngIf="assetAccessory.assetRegistration">
-              <a [routerLink]="['/asset-registration', assetAccessory.assetRegistration?.id, 'view']">{{
-                assetAccessory.assetRegistration?.assetNumber
-              }}</a>
-            </div>
-          </td>
-          <td>
             <div *ngIf="assetAccessory.assetCategory">
               <a [routerLink]="['/asset-category', assetAccessory.assetCategory?.id, 'view']">{{
                 assetAccessory.assetCategory?.assetCategoryName
@@ -114,13 +103,6 @@
           <td>
             <div *ngIf="assetAccessory.dealer">
               <a [routerLink]="['/dealer', assetAccessory.dealer?.id, 'view']">{{ assetAccessory.dealer?.dealerName }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="assetAccessory.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', assetAccessory.settlementCurrency?.id, 'view']">{{
-                assetAccessory.settlementCurrency?.iso4217CurrencyCode
-              }}</a>
             </div>
           </td>
           <td class="text-right">

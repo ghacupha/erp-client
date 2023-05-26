@@ -16,10 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IAssetRegistration } from '../asset-registration/asset-registration.model';
 import { IAssetCategory } from '../asset-category/asset-category.model';
 import { IJobSheet } from '../../erp-settlements/job-sheet/job-sheet.model';
-import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IDeliveryNote } from '../../erp-settlements/delivery-note/delivery-note.model';
 import { IPaymentInvoice } from '../../erp-settlements/payment-invoice/payment-invoice.model';
 import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
@@ -39,7 +37,6 @@ export interface IAssetAccessory {
   comments?: string | null;
   modelNumber?: string | null;
   serialNumber?: string | null;
-  assetRegistration?: IAssetRegistration | null;
   assetWarranties?: IAssetWarranty[] | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
@@ -51,7 +48,6 @@ export interface IAssetAccessory {
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
   designatedUsers?: IDealer[] | null;
-  settlementCurrency?: ISettlementCurrency | null;
   businessDocuments?: IBusinessDocument[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
 }
@@ -65,7 +61,6 @@ export class AssetAccessory implements IAssetAccessory {
     public comments?: string | null,
     public modelNumber?: string | null,
     public serialNumber?: string | null,
-    public assetRegistration?: IAssetRegistration | null,
     public assetWarranties?: IAssetWarranty[] | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
@@ -77,7 +72,6 @@ export class AssetAccessory implements IAssetAccessory {
     public jobSheets?: IJobSheet[] | null,
     public dealer?: IDealer,
     public designatedUsers?: IDealer[] | null,
-    public settlementCurrency?: ISettlementCurrency | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null
   ) {}

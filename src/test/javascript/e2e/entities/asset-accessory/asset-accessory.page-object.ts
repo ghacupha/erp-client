@@ -54,7 +54,6 @@ export class AssetAccessoryUpdatePage {
   modelNumberInput = element(by.id('field_modelNumber'));
   serialNumberInput = element(by.id('field_serialNumber'));
 
-  assetRegistrationSelect = element(by.id('field_assetRegistration'));
   assetWarrantySelect = element(by.id('field_assetWarranty'));
   placeholderSelect = element(by.id('field_placeholder'));
   paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
@@ -66,7 +65,6 @@ export class AssetAccessoryUpdatePage {
   jobSheetSelect = element(by.id('field_jobSheet'));
   dealerSelect = element(by.id('field_dealer'));
   designatedUsersSelect = element(by.id('field_designatedUsers'));
-  settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   businessDocumentSelect = element(by.id('field_businessDocument'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
 
@@ -120,22 +118,6 @@ export class AssetAccessoryUpdatePage {
 
   async getSerialNumberInput(): Promise<string> {
     return await this.serialNumberInput.getAttribute('value');
-  }
-
-  async assetRegistrationSelectLastOption(): Promise<void> {
-    await this.assetRegistrationSelect.all(by.tagName('option')).last().click();
-  }
-
-  async assetRegistrationSelectOption(option: string): Promise<void> {
-    await this.assetRegistrationSelect.sendKeys(option);
-  }
-
-  getAssetRegistrationSelect(): ElementFinder {
-    return this.assetRegistrationSelect;
-  }
-
-  async getAssetRegistrationSelectedOption(): Promise<string> {
-    return await this.assetRegistrationSelect.element(by.css('option:checked')).getText();
   }
 
   async assetWarrantySelectLastOption(): Promise<void> {
@@ -312,22 +294,6 @@ export class AssetAccessoryUpdatePage {
 
   async getDesignatedUsersSelectedOption(): Promise<string> {
     return await this.designatedUsersSelect.element(by.css('option:checked')).getText();
-  }
-
-  async settlementCurrencySelectLastOption(): Promise<void> {
-    await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
-  }
-
-  async settlementCurrencySelectOption(option: string): Promise<void> {
-    await this.settlementCurrencySelect.sendKeys(option);
-  }
-
-  getSettlementCurrencySelect(): ElementFinder {
-    return this.settlementCurrencySelect;
-  }
-
-  async getSettlementCurrencySelectedOption(): Promise<string> {
-    return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
   }
 
   async businessDocumentSelectLastOption(): Promise<void> {

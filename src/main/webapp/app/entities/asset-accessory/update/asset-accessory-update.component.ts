@@ -28,8 +28,6 @@ import { AssetAccessoryService } from '../service/asset-accessory.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IAssetRegistration } from 'app/entities/asset-registration/asset-registration.model';
-import { AssetRegistrationService } from 'app/entities/asset-registration/service/asset-registration.service';
 import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -50,8 +48,6 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
@@ -64,7 +60,6 @@ import { UniversallyUniqueMappingService } from 'app/entities/universally-unique
 export class AssetAccessoryUpdateComponent implements OnInit {
   isSaving = false;
 
-  assetRegistrationsSharedCollection: IAssetRegistration[] = [];
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
@@ -75,7 +70,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
-  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
@@ -87,7 +81,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     commentsContentType: [],
     modelNumber: [],
     serialNumber: [],
-    assetRegistration: [],
     assetWarranties: [],
     placeholders: [],
     paymentInvoices: [],
@@ -99,7 +92,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     jobSheets: [],
     dealer: [null, Validators.required],
     designatedUsers: [],
-    settlementCurrency: [],
     businessDocuments: [],
     universallyUniqueMappings: [],
   });
@@ -108,7 +100,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected assetAccessoryService: AssetAccessoryService,
-    protected assetRegistrationService: AssetRegistrationService,
     protected assetWarrantyService: AssetWarrantyService,
     protected placeholderService: PlaceholderService,
     protected paymentInvoiceService: PaymentInvoiceService,
@@ -119,7 +110,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
-    protected settlementCurrencyService: SettlementCurrencyService,
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
@@ -163,10 +153,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     }
   }
 
-  trackAssetRegistrationById(index: number, item: IAssetRegistration): number {
-    return item.id!;
-  }
-
   trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
     return item.id!;
   }
@@ -204,10 +190,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   }
 
   trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
     return item.id!;
   }
 
@@ -371,7 +353,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       commentsContentType: assetAccessory.commentsContentType,
       modelNumber: assetAccessory.modelNumber,
       serialNumber: assetAccessory.serialNumber,
-      assetRegistration: assetAccessory.assetRegistration,
       assetWarranties: assetAccessory.assetWarranties,
       placeholders: assetAccessory.placeholders,
       paymentInvoices: assetAccessory.paymentInvoices,
@@ -383,15 +364,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       jobSheets: assetAccessory.jobSheets,
       dealer: assetAccessory.dealer,
       designatedUsers: assetAccessory.designatedUsers,
-      settlementCurrency: assetAccessory.settlementCurrency,
       businessDocuments: assetAccessory.businessDocuments,
       universallyUniqueMappings: assetAccessory.universallyUniqueMappings,
     });
 
-    this.assetRegistrationsSharedCollection = this.assetRegistrationService.addAssetRegistrationToCollectionIfMissing(
-      this.assetRegistrationsSharedCollection,
-      assetAccessory.assetRegistration
-    );
     this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
       this.assetWarrantiesSharedCollection,
       ...(assetAccessory.assetWarranties ?? [])
@@ -433,10 +409,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       assetAccessory.dealer,
       ...(assetAccessory.designatedUsers ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      assetAccessory.settlementCurrency
-    );
     this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
       this.businessDocumentsSharedCollection,
       ...(assetAccessory.businessDocuments ?? [])
@@ -448,19 +420,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.assetRegistrationService
-      .query()
-      .pipe(map((res: HttpResponse<IAssetRegistration[]>) => res.body ?? []))
-      .pipe(
-        map((assetRegistrations: IAssetRegistration[]) =>
-          this.assetRegistrationService.addAssetRegistrationToCollectionIfMissing(
-            assetRegistrations,
-            this.editForm.get('assetRegistration')!.value
-          )
-        )
-      )
-      .subscribe((assetRegistrations: IAssetRegistration[]) => (this.assetRegistrationsSharedCollection = assetRegistrations));
-
     this.assetWarrantyService
       .query()
       .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
@@ -577,19 +536,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
-    this.settlementCurrencyService
-      .query()
-      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
-      .pipe(
-        map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-            settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
-          )
-        )
-      )
-      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
-
     this.businessDocumentService
       .query()
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
@@ -630,7 +576,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       comments: this.editForm.get(['comments'])!.value,
       modelNumber: this.editForm.get(['modelNumber'])!.value,
       serialNumber: this.editForm.get(['serialNumber'])!.value,
-      assetRegistration: this.editForm.get(['assetRegistration'])!.value,
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
@@ -642,7 +587,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
       designatedUsers: this.editForm.get(['designatedUsers'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
     };

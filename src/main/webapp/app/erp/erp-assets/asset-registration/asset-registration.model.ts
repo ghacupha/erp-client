@@ -29,6 +29,7 @@ import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 
 export interface IAssetRegistration {
   id?: number;
@@ -38,6 +39,8 @@ export interface IAssetRegistration {
   assetCost?: number;
   commentsContentType?: string | null;
   comments?: string | null;
+  modelNumber?: string | null;
+  serialNumber?: string | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
   serviceOutlets?: IServiceOutlet[];
@@ -48,8 +51,7 @@ export interface IAssetRegistration {
   jobSheets?: IJobSheet[] | null;
   dealer?: IDealer;
   designatedUsers?: IDealer[] | null;
-  modelNumber?: string | null;
-  serialNumber?: string | null;
+  settlementCurrency?: ISettlementCurrency | null;
   businessDocuments?: IBusinessDocument[] | null;
   assetWarranties?: IAssetWarranty[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
@@ -65,6 +67,8 @@ export class AssetRegistration implements IAssetRegistration {
     public assetCost?: number,
     public commentsContentType?: string | null,
     public comments?: string | null,
+    public modelNumber?: string | null,
+    public serialNumber?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
     public serviceOutlets?: IServiceOutlet[],
@@ -74,9 +78,8 @@ export class AssetRegistration implements IAssetRegistration {
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
     public dealer?: IDealer,
-    public modelNumber?: string | null,
-    public serialNumber?: string | null,
     public designatedUsers?: IDealer[] | null,
+    public settlementCurrency?: ISettlementCurrency | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,

@@ -93,6 +93,7 @@ describe('AssetRegistration e2e test', () => {
             // assetRegistrationUpdatePage.businessDocumentSelectLastOption(),
             // assetRegistrationUpdatePage.assetWarrantySelectLastOption(),
             // assetRegistrationUpdatePage.universallyUniqueMappingSelectLastOption(),
+            // assetRegistrationUpdatePage.assetAccessorySelectLastOption(),
         ]);
 
         await assetRegistrationUpdatePage.save();

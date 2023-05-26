@@ -165,6 +165,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Asset Accessory</span></dt>
+        <dd>
+          <span *ngFor="let assetAccessory of assetRegistration.assetAccessories; let last = last">
+            <a [routerLink]="['/asset-accessory', assetAccessory?.id, 'view']">{{ assetAccessory.assetDetails }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

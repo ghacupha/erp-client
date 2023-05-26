@@ -77,7 +77,6 @@ describe('AssetAccessory e2e test', () => {
             assetAccessoryUpdatePage.setCommentsInput(absolutePath),
             assetAccessoryUpdatePage.setModelNumberInput('modelNumber'),
             assetAccessoryUpdatePage.setSerialNumberInput('serialNumber'),
-            assetAccessoryUpdatePage.assetRegistrationSelectLastOption(),
             // assetAccessoryUpdatePage.assetWarrantySelectLastOption(),
             // assetAccessoryUpdatePage.placeholderSelectLastOption(),
             // assetAccessoryUpdatePage.paymentInvoicesSelectLastOption(),
@@ -89,7 +88,6 @@ describe('AssetAccessory e2e test', () => {
             // assetAccessoryUpdatePage.jobSheetSelectLastOption(),
             assetAccessoryUpdatePage.dealerSelectLastOption(),
             // assetAccessoryUpdatePage.designatedUsersSelectLastOption(),
-            assetAccessoryUpdatePage.settlementCurrencySelectLastOption(),
             // assetAccessoryUpdatePage.businessDocumentSelectLastOption(),
             // assetAccessoryUpdatePage.universallyUniqueMappingSelectLastOption(),
         ]);

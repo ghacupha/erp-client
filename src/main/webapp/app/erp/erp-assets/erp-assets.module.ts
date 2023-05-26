@@ -19,7 +19,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
-import { AssetWarrantyModule } from './asset-warranty/asset-warranty.module';
 
 @NgModule({
   imports: [

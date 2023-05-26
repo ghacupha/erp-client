@@ -70,6 +70,7 @@ export class AssetRegistrationUpdatePage {
   businessDocumentSelect = element(by.id('field_businessDocument'));
   assetWarrantySelect = element(by.id('field_assetWarranty'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
+  assetAccessorySelect = element(by.id('field_assetAccessory'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -361,6 +362,22 @@ export class AssetRegistrationUpdatePage {
 
   async getUniversallyUniqueMappingSelectedOption(): Promise<string> {
     return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
+  }
+
+  async assetAccessorySelectLastOption(): Promise<void> {
+    await this.assetAccessorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async assetAccessorySelectOption(option: string): Promise<void> {
+    await this.assetAccessorySelect.sendKeys(option);
+  }
+
+  getAssetAccessorySelect(): ElementFinder {
+    return this.assetAccessorySelect;
+  }
+
+  async getAssetAccessorySelectedOption(): Promise<string> {
+    return await this.assetAccessorySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

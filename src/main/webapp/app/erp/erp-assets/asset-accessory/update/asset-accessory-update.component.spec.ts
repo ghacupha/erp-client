@@ -16,8 +16,6 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { AssetRegistrationService } from '../../asset-registration/service/asset-registration.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -31,10 +29,7 @@ import { AssetAccessoryService } from '../service/asset-accessory.service';
 import { IAssetAccessory, AssetAccessory } from '../asset-accessory.model';
 
 import { AssetAccessoryUpdateComponent } from './asset-accessory-update.component';
-import { IAssetRegistration } from '../../asset-registration/asset-registration.model';
-import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { IAssetWarranty } from '../../asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
@@ -64,7 +59,6 @@ describe('AssetAccessory Management Update Component', () => {
   let fixture: ComponentFixture<AssetAccessoryUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let assetAccessoryService: AssetAccessoryService;
-  let assetRegistrationService: AssetRegistrationService;
   let assetWarrantyService: AssetWarrantyService;
   let placeholderService: PlaceholderService;
   let paymentInvoiceService: PaymentInvoiceService;
@@ -75,7 +69,6 @@ describe('AssetAccessory Management Update Component', () => {
   let deliveryNoteService: DeliveryNoteService;
   let jobSheetService: JobSheetService;
   let dealerService: DealerService;
-  let settlementCurrencyService: SettlementCurrencyService;
   let businessDocumentService: BusinessDocumentService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
 
@@ -91,7 +84,6 @@ describe('AssetAccessory Management Update Component', () => {
     fixture = TestBed.createComponent(AssetAccessoryUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     assetAccessoryService = TestBed.inject(AssetAccessoryService);
-    assetRegistrationService = TestBed.inject(AssetRegistrationService);
     assetWarrantyService = TestBed.inject(AssetWarrantyService);
     placeholderService = TestBed.inject(PlaceholderService);
     paymentInvoiceService = TestBed.inject(PaymentInvoiceService);
@@ -102,7 +94,6 @@ describe('AssetAccessory Management Update Component', () => {
     deliveryNoteService = TestBed.inject(DeliveryNoteService);
     jobSheetService = TestBed.inject(JobSheetService);
     dealerService = TestBed.inject(DealerService);
-    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
 
@@ -110,27 +101,6 @@ describe('AssetAccessory Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-    it('Should call AssetRegistration query and add missing value', () => {
-      const assetAccessory: IAssetAccessory = { id: 456 };
-      const assetRegistration: IAssetRegistration = { id: 75457 };
-      assetAccessory.assetRegistration = assetRegistration;
-
-      const assetRegistrationCollection: IAssetRegistration[] = [{ id: 64191 }];
-      jest.spyOn(assetRegistrationService, 'query').mockReturnValue(of(new HttpResponse({ body: assetRegistrationCollection })));
-      const additionalAssetRegistrations = [assetRegistration];
-      const expectedCollection: IAssetRegistration[] = [...additionalAssetRegistrations, ...assetRegistrationCollection];
-      jest.spyOn(assetRegistrationService, 'addAssetRegistrationToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ assetAccessory });
-      comp.ngOnInit();
-
-      expect(assetRegistrationService.query).toHaveBeenCalled();
-      expect(assetRegistrationService.addAssetRegistrationToCollectionIfMissing).toHaveBeenCalledWith(
-        assetRegistrationCollection,
-        ...additionalAssetRegistrations
-      );
-      expect(comp.assetRegistrationsSharedCollection).toEqual(expectedCollection);
-    });
 
     it('Should call AssetWarranty query and add missing value', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
@@ -342,28 +312,6 @@ describe('AssetAccessory Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call SettlementCurrency query and add missing value', () => {
-      const assetAccessory: IAssetAccessory = { id: 456 };
-      const settlementCurrency: ISettlementCurrency = { id: 22588 };
-      assetAccessory.settlementCurrency = settlementCurrency;
-
-      const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 61581 }];
-      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCurrencyCollection })));
-      const additionalSettlementCurrencies = [settlementCurrency];
-      const expectedCollection: ISettlementCurrency[] = [...additionalSettlementCurrencies, ...settlementCurrencyCollection];
-      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ assetAccessory });
-      comp.ngOnInit();
-
-      expect(settlementCurrencyService.query).toHaveBeenCalled();
-      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
-        settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
-      );
-      expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should call BusinessDocument query and add missing value', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
       const businessDocuments: IBusinessDocument[] = [{ id: 96268 }];
@@ -415,8 +363,6 @@ describe('AssetAccessory Management Update Component', () => {
 
     it('Should update editForm', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
-      const assetRegistration: IAssetRegistration = { id: 76874 };
-      assetAccessory.assetRegistration = assetRegistration;
       const assetWarranties: IAssetWarranty = { id: 76781 };
       assetAccessory.assetWarranties = [assetWarranties];
       const placeholders: IPlaceholder = { id: 71731 };
@@ -439,8 +385,6 @@ describe('AssetAccessory Management Update Component', () => {
       assetAccessory.dealer = dealer;
       const designatedUsers: IDealer = { id: 98263 };
       assetAccessory.designatedUsers = [designatedUsers];
-      const settlementCurrency: ISettlementCurrency = { id: 17510 };
-      assetAccessory.settlementCurrency = settlementCurrency;
       const businessDocuments: IBusinessDocument = { id: 82834 };
       assetAccessory.businessDocuments = [businessDocuments];
       const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 64758 };
@@ -450,7 +394,6 @@ describe('AssetAccessory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetAccessory));
-      expect(comp.assetRegistrationsSharedCollection).toContain(assetRegistration);
       expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
@@ -462,7 +405,6 @@ describe('AssetAccessory Management Update Component', () => {
       expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
       expect(comp.dealersSharedCollection).toContain(dealer);
       expect(comp.dealersSharedCollection).toContain(designatedUsers);
-      expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
     });
@@ -533,13 +475,6 @@ describe('AssetAccessory Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackAssetRegistrationById', () => {
-      it('Should return tracked AssetRegistration primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackAssetRegistrationById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
 
     describe('trackAssetWarrantyById', () => {
       it('Should return tracked AssetWarranty primary key', () => {
@@ -617,14 +552,6 @@ describe('AssetAccessory Management Update Component', () => {
       it('Should return tracked Dealer primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

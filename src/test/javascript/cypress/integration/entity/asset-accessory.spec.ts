@@ -97,11 +97,6 @@ describe('AssetAccessory e2e test', () => {
   /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/asset-registrations', {
-      statusCode: 200,
-      body: [],
-    });
-
     cy.intercept('GET', '/api/asset-warranties', {
       statusCode: 200,
       body: [],
@@ -150,11 +145,6 @@ describe('AssetAccessory e2e test', () => {
     cy.intercept('GET', '/api/dealers', {
       statusCode: 200,
       body: [dealer],
-    });
-
-    cy.intercept('GET', '/api/settlement-currencies', {
-      statusCode: 200,
-      body: [],
     });
 
     cy.intercept('GET', '/api/business-documents', {

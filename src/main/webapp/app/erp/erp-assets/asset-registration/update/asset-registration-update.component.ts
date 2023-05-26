@@ -61,6 +61,8 @@ import { BusinessDocumentService } from '../../../erp-pages/business-document/se
 import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { IAssetAccessory } from '../../asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from '../../asset-accessory/service/asset-accessory.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -81,6 +83,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+  assetAccessoriesSharedCollection: IAssetAccessory[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -175,6 +178,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected assetCategorySuggestionService: AssetCategorySuggestionService,
     protected businessDocumentService: BusinessDocumentService,
     protected assetWarrantyService: AssetWarrantyService,
+    protected assetAccessoryService: AssetAccessoryService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
   ) {}
 
@@ -427,6 +431,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
+    return item.id!;
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
@@ -490,6 +498,17 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
   trackDealerById(index: number, item: IDealer): number {
     return item.id!;
+  }
+
+  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
@@ -659,6 +678,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       businessDocuments: assetRegistration.businessDocuments,
       assetWarranties: assetRegistration.assetWarranties,
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
+      assetAccessories: assetRegistration.assetAccessories,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -709,6 +729,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
       ...(assetRegistration.universallyUniqueMappings ?? [])
+    );
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+      this.assetAccessoriesSharedCollection,
+      ...(assetRegistration.assetAccessories ?? [])
     );
   }
 
@@ -856,6 +880,19 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
 
+
+    this.assetAccessoryService
+      .query()
+      .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
+      .pipe(
+        map((assetAccessories: IAssetAccessory[]) =>
+          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+            assetAccessories,
+            ...(this.editForm.get('assetAccessories')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
   }
 
   protected createFromForm(): IAssetRegistration {
@@ -883,6 +920,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
+      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
     };
   }
 }

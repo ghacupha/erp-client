@@ -419,6 +419,25 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="field_assetAccessories">Asset Accessory</label>
+          <select
+            class="form-control"
+            id="field_assetAccessories"
+            data-cy="assetAccessory"
+            multiple
+            name="assetAccessories"
+            formControlName="assetAccessories"
+          >
+            <option
+              [ngValue]="getSelectedAssetAccessory(assetAccessoryOption, editForm.get('assetAccessories')!.value)"
+              *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
+            >
+              {{ assetAccessoryOption.assetDetails }}
+            </option>
+          </select>
+        </div>
+
       </div>
 
       <div>
