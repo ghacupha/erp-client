@@ -8,7 +8,7 @@ jobs:
         timeout-minutes: 40
         env:
             NODE_VERSION: 12.16.1
-            NODE_OPTIONS="--max-old-space-size=8192"
+            NODE_OPTIONS: "--max-old-space-size=8192"
             JHI_DISABLE_WEBPACK_LOGS: true
             NG_CLI_ANALYTICS: false
         steps:
