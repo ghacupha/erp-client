@@ -29,6 +29,7 @@ COPY . /opt/app
 RUN npm install --silent
 
 ENV PATH="./node_modules/.bin:$PATH"
+ENV NODE_OPTIONS="--max-old-space-size=8192"
 
 RUN npm run webapp:build:prod
 
