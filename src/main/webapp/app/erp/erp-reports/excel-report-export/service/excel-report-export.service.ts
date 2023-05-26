@@ -33,8 +33,8 @@ export type EntityArrayResponseType = HttpResponse<IExcelReportExport[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ExcelReportExportService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/excel-report-exports');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/excel-report-exports');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/excel-report-exports');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/excel-report-exports');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

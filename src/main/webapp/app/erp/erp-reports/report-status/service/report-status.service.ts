@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<IReportStatus[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ReportStatusService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/report-statuses');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/report-statuses');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/report-statuses');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/report-statuses');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

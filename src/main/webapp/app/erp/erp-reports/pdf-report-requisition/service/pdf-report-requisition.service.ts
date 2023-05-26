@@ -35,8 +35,8 @@ export type EntityArrayResponseType = HttpResponse<IPdfReportRequisition[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PdfReportRequisitionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/pdf-report-requisitions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/pdf-report-requisitions');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/pdf-report-requisitions');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/pdf-report-requisitions');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
