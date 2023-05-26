@@ -28,8 +28,8 @@ COPY package-lock.json /opt/app
 COPY . /opt/app
 RUN npm install --silent
 
-ENV PATH="./node_modules/.bin:$PATH"
-ENV NODE_OPTIONS="--max-old-space-size=8192"
+ENV PATH="./node_modules/.bin:$PATH" \
+    NODE_OPTIONS="--max-old-space-size=8192"
 
 RUN npm run webapp:build:prod
 
