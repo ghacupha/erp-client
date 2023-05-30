@@ -18,7 +18,7 @@
 
 // noinspection ES6UnusedImports
 
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/en';
@@ -52,8 +52,8 @@ import { ErpSystemModule } from './erp/erp-system.module';
 import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SampleClientTest3ResolverService } from './erp/erp-forms/Questionnaire/dynamic-form-question/sample-client/sample-client-test3-resolver.service';
 import { ErpCommonModule } from './erp/erp-common/erp-common.module';
+import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler.service';
 
 @NgModule({
   imports: [
@@ -71,16 +71,16 @@ import { ErpCommonModule } from './erp/erp-common/erp-common.module';
     // jhipster-needle-angular-add-module JHipster will add new module here
     AppRoutingModule,
     // Set this to true to enable service worker (PWA)
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: true }),
     HttpClientModule,
     NgxWebstorageModule.forRoot({ prefix: 'jhi', separator: '-', caseSensitive: true }),
   ],
   providers: [
     Title,
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     httpInterceptorProviders,
-    SampleClientTest3ResolverService,
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent],
   bootstrap: [MainComponent],
