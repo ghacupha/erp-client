@@ -108,6 +108,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     businessDocuments: [],
     assetWarranties: [],
     universallyUniqueMappings: [],
+    assetAccessories: [],
   });
 
   minAccountLengthTerm = 3;
