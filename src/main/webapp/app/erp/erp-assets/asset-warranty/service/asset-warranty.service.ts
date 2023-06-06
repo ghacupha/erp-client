@@ -34,8 +34,8 @@ export type EntityArrayResponseType = HttpResponse<IAssetWarranty[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AssetWarrantyService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/asset-warranties');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/asset-warranties');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/asset-warranties');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/asset-warranties');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
