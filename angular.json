@@ -21,7 +21,8 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "customWebpackConfig": {
-              "path": "./webpack/webpack.custom.js"
+              "path": "./webpack/webpack.custom.js",
+              "exclude": ["src/main/webapp/app/entities"]
             },
             "outputPath": "target/classes/static/",
             "index": "src/main/webapp/index.html",
