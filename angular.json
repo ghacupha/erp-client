@@ -48,6 +48,9 @@
           },
           "configurations": {
             "production": {
+              "options": {
+                "exclude": ["src/main/webapp/app/entities"]
+              },
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": true,
