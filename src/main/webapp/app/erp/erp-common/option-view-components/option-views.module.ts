@@ -40,6 +40,8 @@ import { ContractMetadataOptionViewComponent } from './contract-metadata-option-
 import { LeaseContractOptionViewComponent } from './lease-contract-option-view.component';
 import { LeaseContractSelectedOptionViewComponent } from './lease-contract-selected-option-view.component';
 import { LeaseModelMetadataOptionViewComponent } from './lease-model-metadata-option-view.component';
+import { AssetWarrantyOptionViewComponent } from './asset-warranty-option-view.component';
+import { AssetAccessoryOptionViewComponent } from './asset-accessory-option-view.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +67,8 @@ import { LeaseModelMetadataOptionViewComponent } from './lease-model-metadata-op
     LeaseContractOptionViewComponent,
     LeaseContractSelectedOptionViewComponent,
     LeaseModelMetadataOptionViewComponent,
+    AssetWarrantyOptionViewComponent,
+    AssetAccessoryOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -92,6 +96,8 @@ import { LeaseModelMetadataOptionViewComponent } from './lease-model-metadata-op
     LeaseContractOptionViewComponent,
     LeaseContractSelectedOptionViewComponent,
     LeaseModelMetadataOptionViewComponent,
+    AssetWarrantyOptionViewComponent,
+    AssetAccessoryOptionViewComponent,
   ]
 })
 export class OptionViewsModule {

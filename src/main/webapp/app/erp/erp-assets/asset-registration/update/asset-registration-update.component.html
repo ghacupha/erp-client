@@ -376,7 +376,7 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('designatedUsers')!.value|json}}</div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_assetWarranties">Asset Warranty</label>
           <select
             class="form-control"
@@ -393,9 +393,36 @@
               {{ assetWarrantyOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-asset-warranty-form-control
+          ngDefaultControl
+          formControlName='assetWarranties'
+          [inputValues]="editForm.get(['assetWarranties'])!.value"
+          (selectedValues)='updateAssetWarranties($event)'
+          inputControlLabel='Asset Warrant(y/ies)'
+        >
+        </jhi-m2m-asset-warranty-form-control>
+
+        <jhi-m2m-asset-accessory-form-control
+          ngDefaultControl
+          formControlName='assetAccessories'
+          [inputValues]="editForm.get(['assetAccessories'])!.value"
+          (selectedValues)='updateAssetAccessories($event)'
+          inputControlLabel='Asset Accessor(y/ies)'
+        >
+        </jhi-m2m-asset-accessory-form-control>
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateUniversallyUniqueMappings($event)'
+          inputControlLabel='System Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+        <!--<div class="form-group">
           <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
           <select
             class="form-control"
@@ -417,9 +444,9 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_assetAccessories">Asset Accessory</label>
           <select
             class="form-control"
@@ -436,7 +463,7 @@
               {{ assetAccessoryOption.assetDetails }}
             </option>
           </select>
-        </div>
+        </div>-->
 
       </div>
 

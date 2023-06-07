@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = versionInfo.hash.substring(0,8);
 
-  clientVersion = '1.3.6';
+  clientVersion = '1.3.7';
 
   serverVersion = versionInfo.tag;
 
@@ -46,7 +46,7 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
-        this.serverVersion = appStatus.body.version ?? '1.2.5';
+        this.serverVersion = appStatus.body.version ?? '1.2.6';
         this.serverHash = appStatus.body.build ?? 'dev-build';
       }
     });

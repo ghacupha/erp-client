@@ -365,6 +365,24 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     });
   }
 
+  updateAssetWarranties(updates: IAssetWarranty[]): void {
+    this.editForm.patchValue({
+      assetWarranties: [...updates]
+    });
+  }
+
+  updateAssetAccessories(updates: IAssetAccessory[]): void {
+    this.editForm.patchValue({
+      assetAccessories: [...updates]
+    });
+  }
+
+  updateUniversallyUniqueMappings(updates: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...updates]
+    });
+  }
+
   loadPurchaseOrders(): void {
     this.purchaseOrderLookups$ = concat(
       of([]), // default items
