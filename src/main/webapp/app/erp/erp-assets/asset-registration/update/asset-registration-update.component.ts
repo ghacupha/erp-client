@@ -383,6 +383,13 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
+  }
+
   loadPurchaseOrders(): void {
     this.purchaseOrderLookups$ = concat(
       of([]), // default items
