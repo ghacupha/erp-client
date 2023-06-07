@@ -23,9 +23,10 @@ import { AssetAccessoryDetailComponent } from './detail/asset-accessory-detail.c
 import { AssetAccessoryUpdateComponent } from './update/asset-accessory-update.component';
 import { AssetAccessoryDeleteDialogComponent } from './delete/asset-accessory-delete-dialog.component';
 import { AssetAccessoryRoutingModule } from './route/asset-accessory-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetAccessoryRoutingModule],
+  imports: [SharedModule, AssetAccessoryRoutingModule, ErpCommonModule],
   declarations: [
     AssetAccessoryComponent,
     AssetAccessoryDetailComponent,

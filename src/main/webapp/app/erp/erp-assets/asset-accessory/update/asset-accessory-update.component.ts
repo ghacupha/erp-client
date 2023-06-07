@@ -124,6 +124,84 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     });
   }
 
+  updateDealer(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      dealer: dealerUpdate,
+    });
+  }
+
+  updateAssetCategory(assetCategoryUpdate: IAssetCategory): void {
+    this.editForm.patchValue({
+      assetCategory: assetCategoryUpdate
+    });
+  }
+
+  updateServiceOutlet(serviceOutletUpdate: IServiceOutlet): void {
+    this.editForm.patchValue({
+      serviceOutlets: [serviceOutletUpdate]
+    });
+  }
+
+  updateDesignatedUsers(update: IDealer[]): void {
+    this.editForm.patchValue({
+      designatedUsers: [...update]
+    });
+  }
+
+  updateSettlements(update: ISettlement[]): void {
+    this.editForm.patchValue({
+      settlements: [...update]
+    });
+  }
+
+  updatePurchaseOrders(update: IPurchaseOrder[]): void {
+    this.editForm.patchValue({
+      purchaseOrders: [...update]
+    });
+  }
+
+  updateDeliveryNotes(update: IDeliveryNote[]): void {
+    this.editForm.patchValue({
+      deliveryNotes: [...update]
+    });
+  }
+
+  updateJobSheets(update: IJobSheet[]): void {
+    this.editForm.patchValue({
+      jobSheets: [...update]
+    });
+  }
+
+  updateBusinessDocuments(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update]
+    });
+  }
+
+  updateUniversallyUniqueMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...update]
+    });
+  }
+
+  updateAssetWarranties(update: IAssetWarranty[]): void {
+    this.editForm.patchValue({
+      assetWarranties: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updatePaymentInvoices(update: IPaymentInvoice[]): void {
+    this.editForm.patchValue({
+      paymentInvoices: update
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

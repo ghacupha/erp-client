@@ -53,6 +53,8 @@ import { M2mLeaseContractFormControlComponent } from './lease-contract-form-comp
 import { M21LeaseModelMetadataFormControlComponent } from './lease-model-metadata/m21-lease-model-metadata-form-control.component';
 import { M2mAssetAccessoryFormComponent } from './asset-accessory-components/m2m-asset-accessory-form-component';
 import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/m2m-asset-warranty-form-component';
+import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
+import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
 
 @NgModule({
   declarations: [
@@ -88,6 +90,8 @@ import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/
     M21LeaseModelMetadataFormControlComponent,
     M2mAssetAccessoryFormComponent,
     M2mAssetWarrantyFormComponent,
+    M21AssetCategoryFormControlComponent,
+    M2mPurchaseOrderFormComponent,
   ],
   imports: [
     CommonModule,
@@ -128,6 +132,8 @@ import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/
     M21LeaseModelMetadataFormControlComponent,
     M2mAssetAccessoryFormComponent,
     M2mAssetWarrantyFormComponent,
+    M21AssetCategoryFormControlComponent,
+    M2mPurchaseOrderFormComponent,
   ]
 })
 export class FormComponentsModule {
