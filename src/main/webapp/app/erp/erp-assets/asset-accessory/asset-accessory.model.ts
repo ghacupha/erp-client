@@ -40,7 +40,7 @@ export interface IAssetAccessory {
   assetWarranties?: IAssetWarranty[] | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[];
+  serviceOutlet?: IServiceOutlet;
   settlements?: ISettlement[];
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
@@ -64,7 +64,7 @@ export class AssetAccessory implements IAssetAccessory {
     public assetWarranties?: IAssetWarranty[] | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[],
+    public serviceOutlet?: IServiceOutlet,
     public settlements?: ISettlement[],
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,

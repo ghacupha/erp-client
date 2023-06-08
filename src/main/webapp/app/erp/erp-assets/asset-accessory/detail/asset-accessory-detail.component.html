@@ -79,10 +79,11 @@
         </dd>
         <dt><span>Service Outlet</span></dt>
         <dd>
-          <span *ngFor="let serviceOutlet of assetAccessory.serviceOutlets; let last = last">
-            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <div *ngIf="assetAccessory.serviceOutlet">
+            <a [routerLink]="['/service-outlet', assetAccessory.serviceOutlet?.id, 'view']">{{
+              assetAccessory.serviceOutlet?.outletCode
+              }}</a>
+          </div>
         </dd>
         <dt><span>Settlement</span></dt>
         <dd>

@@ -84,7 +84,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     assetWarranties: [],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlets: [null, Validators.required],
+    serviceOutlet: [null, Validators.required],
     settlements: [null, Validators.required],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
@@ -136,9 +136,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     });
   }
 
-  updateServiceOutlet(serviceOutletUpdate: IServiceOutlet): void {
+  updateServiceOutlet(update: IServiceOutlet): void {
     this.editForm.patchValue({
-      serviceOutlets: [serviceOutletUpdate]
+      serviceOutlet: update
     });
   }
 
@@ -312,17 +312,6 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     return option;
   }
 
-  getSelectedServiceOutlet(option: IServiceOutlet, selectedVals?: IServiceOutlet[]): IServiceOutlet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -434,7 +423,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       assetWarranties: assetAccessory.assetWarranties,
       placeholders: assetAccessory.placeholders,
       paymentInvoices: assetAccessory.paymentInvoices,
-      serviceOutlets: assetAccessory.serviceOutlets,
+      serviceOutlet: assetAccessory.serviceOutlet,
       settlements: assetAccessory.settlements,
       assetCategory: assetAccessory.assetCategory,
       purchaseOrders: assetAccessory.purchaseOrders,
@@ -460,7 +449,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetAccessory.serviceOutlets ?? [])
+      assetAccessory.serviceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
@@ -539,10 +528,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-            serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? [])
-          )
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
         )
       )
       .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
@@ -657,7 +643,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
       settlements: this.editForm.get(['settlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,

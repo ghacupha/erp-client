@@ -20,8 +20,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { IAssetRegistration, AssetRegistration } from '../asset-registration.model';
 import { AssetRegistrationService } from '../service/asset-registration.service';
@@ -95,7 +95,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     commentsContentType: [],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlets: [null, Validators.required],
+    serviceOutlet: [null, Validators.required],
     settlements: [null, Validators.required],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
@@ -110,48 +110,6 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     universallyUniqueMappings: [],
     assetAccessories: [],
   });
-
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  paymentInvoicesLoading = false;
-  paymentInvoiceControlInput$ = new Subject<string>();
-  paymentInvoiceLookups$: Observable<IPaymentInvoice[]> = of([]);
-
-  settlementsLoading = false;
-  settlementControlInput$ = new Subject<string>();
-  settlementLookups$: Observable<ISettlement[]> = of([]);
-
-  dealersLoading = false;
-  dealersInput$ = new Subject<string>();
-  dealerLookups$: Observable<IDealer[]> = of([]);
-
-  designatedUsersLoading = false;
-  designatedUsersControlInput$ = new Subject<string>();
-  designatedUsersLookups$: Observable<IDealer[]> = of([]);
-
-  purchaseOrdersLoading = false;
-  purchaseOrderControlInput$ = new Subject<string>();
-  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
-
-  serviceOutletsLoading = false;
-  serviceOutletControlInput$ = new Subject<string>();
-  serviceOutletLookups$: Observable<IServiceOutlet[]> = of([]);
-
-  assetCategoriesLoading = false;
-  assetCategoryControlInput$ = new Subject<string>();
-  assetCategoryLookups$: Observable<IAssetCategory[]> = of([]);
-
-  deliveryNotesLoading = false;
-  deliveryNotesControlInput$ = new Subject<string>();
-  deliveryNoteLookups$: Observable<IDeliveryNote[]> = of([]);
-
-  jobSheetsLoading = false;
-  jobSheetsControlInput$ = new Subject<string>();
-  jobSheetLookups$: Observable<IJobSheet[]> = of([]);
 
   constructor(
     protected dataUtils: DataUtils,
@@ -189,174 +147,66 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
-
-    // fire-up typeahead items
-    this.loadPlaceholders();
-    this.loadDealers();
-    this.loadPaymentInvoices();
-    this.loadDesignatedUsers();
-    this.loadPurchaseOrders();
-
-    this.loadDeliveryNotes();
-    this.loadJobSheets();
-    this.loadServiceOutlets();
-    this.loadAssetCategory();
   }
 
-  // Load dynamic AssetCategory instances from the input-search stream
-  loadAssetCategory(): void {
-    this.assetCategoryLookups$ = concat(
-      of([]), // default items
-      this.assetCategoryControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.assetCategoriesLoading = true),
-        switchMap(term => this.assetCategorySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.assetCategoriesLoading = false)
-        ))
-      ),
-      of([...this.serviceOutletsSharedCollection])
-    );
+  updateServiceOutlet(update: IServiceOutlet): void {
+    this.editForm.patchValue({
+      serviceOutlet: update
+    });
   }
 
-  // Load dynamic ServiceOutlet instances from the input-search stream
-  loadServiceOutlets(): void {
-    this.serviceOutletLookups$ = concat(
-      of([]), // default items
-      this.serviceOutletControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.serviceOutletsLoading = true),
-        switchMap(term => this.serviceOutletSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.serviceOutletsLoading = false)
-        ))
-      ),
-      of([...this.serviceOutletsSharedCollection])
-    );
+  updateDealer(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      dealer: dealerUpdate,
+    });
   }
 
-  // Load dynamic JobSheets instances from input-search stream
-  loadJobSheets(): void {
-    this.jobSheetLookups$ = concat(
-      of([]), // default items
-      this.jobSheetsControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.jobSheetsLoading = true),
-        switchMap(term => this.jobSheetsSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.jobSheetsLoading = false)
-        ))
-      ),
-      of([...this.jobSheetsSharedCollection])
-    );
+  updateAssetCategory(update: IAssetCategory): void {
+    this.editForm.patchValue({
+      assetCategory: update
+    });
   }
 
-  // Load dynamic DeliveryNotes from input stream
-  loadDeliveryNotes(): void {
-    this.deliveryNoteLookups$ = concat(
-      of([]), // default items
-      this.deliveryNotesControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.deliveryNotesLoading = true),
-        switchMap(term => this.deliveryNotesSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.deliveryNotesLoading = false)
-        ))
-      ),
-      of([...this.deliveryNotesSharedCollection])
-    );
+  updateDesignatedUsers(update: IDealer[]): void {
+    this.editForm.patchValue({
+      designatedUsers: [...update]
+    });
   }
 
-  loadPaymentInvoices(): void {
-    this.paymentInvoiceLookups$ = concat(
-      of([]), // default items
-      this.paymentInvoiceControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.paymentInvoicesLoading = true),
-        switchMap(term => this.paymentInvoiceSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.paymentInvoicesLoading = false)
-        ))
-      ),
-      of([...this.paymentInvoicesSharedCollection])
-    );
+  updatePurchaseOrders(update: IPurchaseOrder[]): void {
+    this.editForm.patchValue({
+      purchaseOrders: [...update]
+    });
   }
 
-  loadDealers(): void {
-    this.dealerLookups$ = concat(
-      of([]), // default items
-      this.dealersInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.dealersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.dealersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
+  updateDeliveryNotes(update: IDeliveryNote[]): void {
+    this.editForm.patchValue({
+      deliveryNotes: [...update]
+    });
   }
 
-  loadDesignatedUsers(): void {
-    this.designatedUsersLookups$ = concat(
-      of([]), // default items
-      this.designatedUsersControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.designatedUsersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.designatedUsersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
+  updateJobSheets(update: IJobSheet[]): void {
+    this.editForm.patchValue({
+      jobSheets: [...update]
+    });
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
+  updateBusinessDocuments(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updatePaymentInvoices(update: IPaymentInvoice[]): void {
+    this.editForm.patchValue({
+      paymentInvoices: update
+    });
   }
 
   updateSettlements(updates: ISettlement[]): void {
@@ -388,25 +238,6 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.editForm.patchValue({
       businessDocuments: [...update],
     });
-  }
-
-  loadPurchaseOrders(): void {
-    this.purchaseOrderLookups$ = concat(
-      of([]), // default items
-      this.purchaseOrderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this. purchaseOrdersLoading = true),
-        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this. purchaseOrdersLoading = false)
-        ))
-      ),
-      of([...this.purchaseOrdersSharedCollection])
-    );
   }
 
   trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
@@ -595,17 +426,6 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     return option;
   }
 
-  getSelectedServiceOutlet(option: IServiceOutlet, selectedVals?: IServiceOutlet[]): IServiceOutlet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -691,7 +511,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       commentsContentType: assetRegistration.commentsContentType,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlets: assetRegistration.serviceOutlets,
+        serviceOutlet: assetRegistration.serviceOutlet,
       settlements: assetRegistration.settlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
@@ -717,7 +537,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetRegistration.serviceOutlets ?? [])
+      assetRegistration.serviceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
@@ -791,10 +611,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-            serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? [])
-          )
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
         )
       )
       .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
@@ -933,7 +750,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       comments: this.editForm.get(['comments'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
       settlements: this.editForm.get(['settlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,

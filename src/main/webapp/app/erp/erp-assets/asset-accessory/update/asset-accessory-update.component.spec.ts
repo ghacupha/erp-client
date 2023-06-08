@@ -101,7 +101,6 @@ describe('AssetAccessory Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
-
     it('Should call AssetWarranty query and add missing value', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
       const assetWarranties: IAssetWarranty[] = [{ id: 53648 }];
@@ -167,12 +166,12 @@ describe('AssetAccessory Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
-      const serviceOutlets: IServiceOutlet[] = [{ id: 9184 }];
-      assetAccessory.serviceOutlets = serviceOutlets;
+      const serviceOutlet: IServiceOutlet = { id: 9184 };
+      assetAccessory.serviceOutlet = serviceOutlet;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 42194 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [...serviceOutlets];
+      const additionalServiceOutlets = [serviceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -369,8 +368,8 @@ describe('AssetAccessory Management Update Component', () => {
       assetAccessory.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 15323 };
       assetAccessory.paymentInvoices = [paymentInvoices];
-      const serviceOutlets: IServiceOutlet = { id: 18389 };
-      assetAccessory.serviceOutlets = [serviceOutlets];
+      const serviceOutlet: IServiceOutlet = { id: 18389 };
+      assetAccessory.serviceOutlet = serviceOutlet;
       const settlements: ISettlement = { id: 7422 };
       assetAccessory.settlements = [settlements];
       const assetCategory: IAssetCategory = { id: 53139 };
@@ -397,7 +396,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
+      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
       expect(comp.settlementsSharedCollection).toContain(settlements);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
@@ -475,7 +474,6 @@ describe('AssetAccessory Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-
     describe('trackAssetWarrantyById', () => {
       it('Should return tracked AssetWarranty primary key', () => {
         const entity = { id: 123 };
@@ -647,32 +645,6 @@ describe('AssetAccessory Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedServiceOutlet', () => {
-      it('Should return option if no ServiceOutlet is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedServiceOutlet(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected ServiceOutlet for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this ServiceOutlet is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });
@@ -861,3 +833,4 @@ describe('AssetAccessory Management Update Component', () => {
     });
   });
 });
+

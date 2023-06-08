@@ -129,12 +129,12 @@
 
         <jhi-m21-service-outlet-form-control
           ngDefaultControl
-          formControlName='serviceOutlets'
-          [inputValue]="editForm.get('serviceOutlets')!.value"
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
           (valueSelected)='updateServiceOutlet($event)'
           inputControlLabel='Service Outlet'
         >
-          <option [ngValue]="editForm.get('serviceOutlets')!.value"></option>
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
         </jhi-m21-service-outlet-form-control>
 
         <jhi-m2m-settlement-form-control

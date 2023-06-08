@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark III No 15 (Caleb Series) Client 1.3.7
+/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -134,12 +152,12 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const serviceOutlets: IServiceOutlet[] = [{ id: 10495 }];
-      assetRegistration.serviceOutlets = serviceOutlets;
+      const serviceOutlet: IServiceOutlet = { id: 10495 };
+      assetRegistration.serviceOutlet = serviceOutlet;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 12055 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [...serviceOutlets];
+      const additionalServiceOutlets = [serviceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -400,8 +418,8 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const serviceOutlets: IServiceOutlet = { id: 40506 };
-      assetRegistration.serviceOutlets = [serviceOutlets];
+      const serviceOutlet: IServiceOutlet = { id: 40506 };
+      assetRegistration.serviceOutlet = serviceOutlet;
       const settlements: ISettlement = { id: 26803 };
       assetRegistration.settlements = [settlements];
       const assetCategory: IAssetCategory = { id: 64108 };
@@ -433,7 +451,7 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
+      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
       expect(comp.settlementsSharedCollection).toContain(settlements);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
@@ -675,32 +693,6 @@ describe('AssetRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedServiceOutlet', () => {
-      it('Should return option if no ServiceOutlet is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedServiceOutlet(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected ServiceOutlet for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this ServiceOutlet is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

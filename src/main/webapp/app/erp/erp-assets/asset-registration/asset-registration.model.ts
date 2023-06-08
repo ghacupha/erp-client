@@ -43,7 +43,7 @@ export interface IAssetRegistration {
   serialNumber?: string | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[];
+  serviceOutlet?: IServiceOutlet;
   settlements?: ISettlement[];
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
@@ -71,7 +71,7 @@ export class AssetRegistration implements IAssetRegistration {
     public serialNumber?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[],
+    public serviceOutlet?: IServiceOutlet,
     public settlements?: ISettlement[],
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,

@@ -60,10 +60,8 @@
     {
       "otherEntityField": "outletCode",
       "otherEntityName": "serviceOutlet",
-      "otherEntityRelationshipName": "assetRegistration",
-      "ownerSide": true,
       "relationshipName": "serviceOutlet",
-      "relationshipType": "many-to-many",
+      "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"]
     },
     {
