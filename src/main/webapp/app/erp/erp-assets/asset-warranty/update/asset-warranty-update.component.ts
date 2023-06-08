@@ -77,6 +77,30 @@ export class AssetWarrantyUpdateComponent implements OnInit {
     });
   }
 
+  updateDealer(dealerUpdate: IDealer): void {
+    this.editForm.patchValue({
+      dealer: dealerUpdate,
+    });
+  }
+
+  updateWarrantyAttachments(update: IAssetWarranty[]): void {
+    this.editForm.patchValue({
+      warrantyAttachments: [...update]
+    });
+  }
+
+  updateUniversallyUniqueMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

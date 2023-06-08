@@ -23,9 +23,10 @@ import { AssetWarrantyDetailComponent } from './detail/asset-warranty-detail.com
 import { AssetWarrantyUpdateComponent } from './update/asset-warranty-update.component';
 import { AssetWarrantyDeleteDialogComponent } from './delete/asset-warranty-delete-dialog.component';
 import { AssetWarrantyRoutingModule } from './route/asset-warranty-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetWarrantyRoutingModule],
+  imports: [SharedModule, AssetWarrantyRoutingModule, ErpCommonModule],
   declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent],
   entryComponents: [AssetWarrantyDeleteDialogComponent],
 })

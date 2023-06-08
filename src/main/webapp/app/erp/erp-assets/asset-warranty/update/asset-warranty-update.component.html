@@ -92,83 +92,46 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
-        <div class="form-group">
-          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
-          <select
-            class="form-control"
-            id="field_universallyUniqueMappings"
-            data-cy="universallyUniqueMapping"
-            multiple
-            name="universallyUniqueMappings"
-            formControlName="universallyUniqueMappings"
-          >
-            <option
-              [ngValue]="
-                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
-              "
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.universalKey }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateUniversallyUniqueMappings($event)'
+          inputControlLabel='System Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get('dealer')!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel=Biller
+        >
+          <option [ngValue]="editForm.get('dealer')!.value"></option>
+        </jhi-m21-dealer-form-control>
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_warrantyAttachments">Warranty Attachment</label>
-          <select
-            class="form-control"
-            id="field_warrantyAttachments"
-            data-cy="warrantyAttachment"
-            multiple
-            name="warrantyAttachments"
-            formControlName="warrantyAttachments"
-          >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('warrantyAttachments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
-              {{ businessDocumentOption.documentTitle }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='warrantyAttachments'
+          [inputValues]="editForm.get(['warrantyAttachments'])!.value"
+          (selectedValues)='updateWarrantyAttachments($event)'
+          inputControlLabel='Warranty Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
       </div>
 
       <div>
