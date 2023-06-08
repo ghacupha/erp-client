@@ -33,10 +33,9 @@
     <option [ngValue]="inputValue"></option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      id: {{ item.id }} | {{ item.assetCategoryName }} | {{ item.description }}
+      <div>id: {{ item.id }} | {{ item.assetCategoryName }} | {{ item.description }}</div>
     </ng-template>
   </ng-select>
-  <!--// TODO Add entity-specific views-->
-  <div>id: {{ inputValue.id }} | {{inputValue.assetCategoryName}}</div>
+  <div>{{inputValue|formatAssetCategory}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>

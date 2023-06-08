@@ -130,9 +130,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     });
   }
 
-  updateAssetCategory(assetCategoryUpdate: IAssetCategory): void {
+  updateAssetCategory(update: IAssetCategory): void {
     this.editForm.patchValue({
-      assetCategory: assetCategoryUpdate
+      assetCategory: update
     });
   }
 
