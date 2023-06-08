@@ -17,7 +17,6 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
@@ -25,7 +24,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { IDepreciationMethod } from '../../erp-assets/depreciation-method/depreciation-method.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class DepreciationMethodSuggestionService {
 
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/depreciation-methods');

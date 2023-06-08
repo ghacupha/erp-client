@@ -17,7 +17,6 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { createRequestOption } from '../../../core/request/request-util';
 import { Observable, of } from 'rxjs';
@@ -25,7 +24,7 @@ import { ApplicationConfigService } from '../../../core/config/application-confi
 import { HttpClient } from '@angular/common/http';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class DealerSuggestionService {
 
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/dealers');

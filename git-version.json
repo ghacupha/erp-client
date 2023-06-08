@@ -1,8 +1,8 @@
 {
-  "dirty": true,
-  "raw": "v1.1.2-69-g40b01f457c36a965-dirty",
-  "hash": "g40b01f457c36a965",
-  "distance": 69,
+  "dirty": false,
+  "raw": "v1.1.2-70-gf738425a53bb0471",
+  "hash": "gf738425a53bb0471",
+  "distance": 70,
   "tag": "v1.1.2",
   "semver": {
     "options": {
@@ -18,6 +18,6 @@
     "build": [],
     "version": "1.1.2"
   },
-  "suffix": "69-g40b01f457c36a965-dirty",
-  "semverString": "1.1.2+69.g40b01f457c36a965"
+  "suffix": "70-gf738425a53bb0471",
+  "semverString": "1.1.2+70.gf738425a53bb0471"
 }

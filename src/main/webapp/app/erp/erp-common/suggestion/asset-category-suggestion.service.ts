@@ -23,9 +23,8 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { ASC, DESC } from '../../../config/pagination.constants';
 import { IAssetCategory } from '../../erp-assets/asset-category/asset-category.model';
 import { Injectable } from '@angular/core';
-import { ErpCommonModule } from '../erp-common.module';
 
-@Injectable({ providedIn: ErpCommonModule })
+@Injectable({ providedIn: 'root' })
 export class AssetCategorySuggestionService {
 
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/asset-categories');
