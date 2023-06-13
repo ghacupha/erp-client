@@ -129,15 +129,6 @@
           />
         </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
         <jhi-m2m-payment-invoice-form-control
           ngDefaultControl
           formControlName='paymentInvoices'
@@ -147,7 +138,7 @@
         >
         </jhi-m2m-payment-invoice-form-control>
 
-        <jhi-m21-service-outlet-form-control
+        <!--<jhi-m2m-service-outlet-form-control
           ngDefaultControl
           formControlName='serviceOutlet'
           [inputValue]="editForm.get('serviceOutlet')!.value"
@@ -155,16 +146,7 @@
           inputControlLabel='Service Outlet'
         >
           <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
-        </jhi-m21-service-outlet-form-control>
-
-        <div
-          *ngIf="
-            editForm.get(['serviceOutlets'])!.invalid &&
-            (editForm.get(['serviceOutlets'])!.dirty || editForm.get(['serviceOutlets'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
-        </div>
+        </jhi-m2m-service-outlet-form-control>-->
 
         <jhi-m2m-settlement-form-control
           ngDefaultControl
@@ -277,6 +259,15 @@
           inputControlLabel='System Mapping(s)'
         >
         </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
       </div>
 

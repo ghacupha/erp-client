@@ -63,6 +63,8 @@ import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { IAssetAccessory } from '../../asset-accessory/asset-accessory.model';
 import { AssetAccessoryService } from '../../asset-accessory/service/asset-accessory.service';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -84,6 +86,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   assetAccessoriesSharedCollection: IAssetAccessory[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -139,6 +142,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected assetWarrantyService: AssetWarrantyService,
     protected assetAccessoryService: AssetAccessoryService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected settlementCurrencyService: SettlementCurrencyService,
   ) {}
 
   ngOnInit(): void {
@@ -525,6 +529,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       assetWarranties: assetRegistration.assetWarranties,
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
+      settlementCurrency: assetRegistration.settlementCurrency
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -736,6 +741,19 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         )
       )
       .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
   }
 
   protected createFromForm(): IAssetRegistration {
@@ -760,6 +778,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       designatedUsers: this.editForm.get(['designatedUsers'])!.value,
       modelNumber: this.editForm.get(['modelNumber'])!.value,
       serialNumber: this.editForm.get(['serialNumber'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
