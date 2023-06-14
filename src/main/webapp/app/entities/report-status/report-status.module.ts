@@ -25,8 +25,7 @@ import { ReportStatusDeleteDialogComponent } from './delete/report-status-delete
 import { ReportStatusRoutingModule } from './route/report-status-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ReportStatusRoutingModule],
-  declarations: [ReportStatusComponent, ReportStatusDetailComponent, ReportStatusUpdateComponent, ReportStatusDeleteDialogComponent],
-  entryComponents: [ReportStatusDeleteDialogComponent],
+    imports: [SharedModule, ReportStatusRoutingModule],
+    declarations: [ReportStatusComponent, ReportStatusDetailComponent, ReportStatusUpdateComponent, ReportStatusDeleteDialogComponent]
 })
 export class ReportStatusModule {}

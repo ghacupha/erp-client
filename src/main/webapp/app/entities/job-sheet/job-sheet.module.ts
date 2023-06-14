@@ -25,8 +25,7 @@ import { JobSheetDeleteDialogComponent } from './delete/job-sheet-delete-dialog.
 import { JobSheetRoutingModule } from './route/job-sheet-routing.module';
 
 @NgModule({
-  imports: [SharedModule, JobSheetRoutingModule],
-  declarations: [JobSheetComponent, JobSheetDetailComponent, JobSheetUpdateComponent, JobSheetDeleteDialogComponent],
-  entryComponents: [JobSheetDeleteDialogComponent],
+    imports: [SharedModule, JobSheetRoutingModule],
+    declarations: [JobSheetComponent, JobSheetDetailComponent, JobSheetUpdateComponent, JobSheetDeleteDialogComponent]
 })
 export class JobSheetModule {}

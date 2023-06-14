@@ -26,13 +26,12 @@ import { PrepaymentAccountRoutingModule } from './route/prepayment-account-routi
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentAccountRoutingModule, ErpCommonModule],
-  declarations: [
-    PrepaymentAccountComponent,
-    PrepaymentAccountDetailComponent,
-    PrepaymentAccountUpdateComponent,
-    PrepaymentAccountDeleteDialogComponent,
-  ],
-  entryComponents: [PrepaymentAccountDeleteDialogComponent],
+    imports: [SharedModule, PrepaymentAccountRoutingModule, ErpCommonModule],
+    declarations: [
+        PrepaymentAccountComponent,
+        PrepaymentAccountDetailComponent,
+        PrepaymentAccountUpdateComponent,
+        PrepaymentAccountDeleteDialogComponent,
+    ]
 })
 export class PrepaymentAccountModule {}

@@ -25,8 +25,7 @@ import { AlgorithmDeleteDialogComponent } from './delete/algorithm-delete-dialog
 import { AlgorithmRoutingModule } from './route/algorithm-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AlgorithmRoutingModule],
-  declarations: [AlgorithmComponent, AlgorithmDetailComponent, AlgorithmUpdateComponent, AlgorithmDeleteDialogComponent],
-  entryComponents: [AlgorithmDeleteDialogComponent],
+    imports: [SharedModule, AlgorithmRoutingModule],
+    declarations: [AlgorithmComponent, AlgorithmDetailComponent, AlgorithmUpdateComponent, AlgorithmDeleteDialogComponent]
 })
 export class AlgorithmModule {}

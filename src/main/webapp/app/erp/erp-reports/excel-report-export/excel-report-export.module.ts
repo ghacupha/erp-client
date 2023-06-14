@@ -26,13 +26,12 @@ import { ExcelReportExportRoutingModule } from './route/excel-report-export-rout
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ExcelReportExportRoutingModule, ErpCommonModule],
-  declarations: [
-    ExcelReportExportComponent,
-    ExcelReportExportDetailComponent,
-    ExcelReportExportUpdateComponent,
-    ExcelReportExportDeleteDialogComponent,
-  ],
-  entryComponents: [ExcelReportExportDeleteDialogComponent],
+    imports: [SharedModule, ExcelReportExportRoutingModule, ErpCommonModule],
+    declarations: [
+        ExcelReportExportComponent,
+        ExcelReportExportDetailComponent,
+        ExcelReportExportUpdateComponent,
+        ExcelReportExportDeleteDialogComponent,
+    ]
 })
 export class ExcelReportExportModule {}

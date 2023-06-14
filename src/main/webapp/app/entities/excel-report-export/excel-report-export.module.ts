@@ -25,13 +25,12 @@ import { ExcelReportExportDeleteDialogComponent } from './delete/excel-report-ex
 import { ExcelReportExportRoutingModule } from './route/excel-report-export-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ExcelReportExportRoutingModule],
-  declarations: [
-    ExcelReportExportComponent,
-    ExcelReportExportDetailComponent,
-    ExcelReportExportUpdateComponent,
-    ExcelReportExportDeleteDialogComponent,
-  ],
-  entryComponents: [ExcelReportExportDeleteDialogComponent],
+    imports: [SharedModule, ExcelReportExportRoutingModule],
+    declarations: [
+        ExcelReportExportComponent,
+        ExcelReportExportDetailComponent,
+        ExcelReportExportUpdateComponent,
+        ExcelReportExportDeleteDialogComponent,
+    ]
 })
 export class ExcelReportExportModule {}

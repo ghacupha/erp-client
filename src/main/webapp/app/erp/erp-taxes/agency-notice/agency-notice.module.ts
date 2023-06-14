@@ -26,8 +26,7 @@ import { AgencyNoticeRoutingModule } from './route/agency-notice-routing.module'
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AgencyNoticeRoutingModule, ErpCommonModule],
-  declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent],
-  entryComponents: [AgencyNoticeDeleteDialogComponent],
+    imports: [SharedModule, AgencyNoticeRoutingModule, ErpCommonModule],
+    declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent]
 })
 export class AgencyNoticeModule {}

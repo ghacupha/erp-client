@@ -25,8 +25,7 @@ import { AssetCategoryDeleteDialogComponent } from './delete/asset-category-dele
 import { AssetCategoryRoutingModule } from './route/asset-category-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetCategoryRoutingModule],
-  declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent],
-  entryComponents: [AssetCategoryDeleteDialogComponent],
+    imports: [SharedModule, AssetCategoryRoutingModule],
+    declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent]
 })
 export class AssetCategoryModule {}

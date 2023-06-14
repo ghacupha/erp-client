@@ -25,13 +25,12 @@ import { SettlementRequisitionDeleteDialogComponent } from './delete/settlement-
 import { SettlementRequisitionRoutingModule } from './route/settlement-requisition-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SettlementRequisitionRoutingModule],
-  declarations: [
-    SettlementRequisitionComponent,
-    SettlementRequisitionDetailComponent,
-    SettlementRequisitionUpdateComponent,
-    SettlementRequisitionDeleteDialogComponent,
-  ],
-  entryComponents: [SettlementRequisitionDeleteDialogComponent],
+    imports: [SharedModule, SettlementRequisitionRoutingModule],
+    declarations: [
+        SettlementRequisitionComponent,
+        SettlementRequisitionDetailComponent,
+        SettlementRequisitionUpdateComponent,
+        SettlementRequisitionDeleteDialogComponent,
+    ]
 })
 export class SettlementRequisitionModule {}

@@ -25,13 +25,12 @@ import { FixedAssetNetBookValueDeleteDialogComponent } from './delete/fixed-asse
 import { FixedAssetNetBookValueRoutingModule } from './route/fixed-asset-net-book-value-routing.module';
 
 @NgModule({
-  imports: [SharedModule, FixedAssetNetBookValueRoutingModule],
-  declarations: [
-    FixedAssetNetBookValueComponent,
-    FixedAssetNetBookValueDetailComponent,
-    FixedAssetNetBookValueUpdateComponent,
-    FixedAssetNetBookValueDeleteDialogComponent,
-  ],
-  entryComponents: [FixedAssetNetBookValueDeleteDialogComponent],
+    imports: [SharedModule, FixedAssetNetBookValueRoutingModule],
+    declarations: [
+        FixedAssetNetBookValueComponent,
+        FixedAssetNetBookValueDetailComponent,
+        FixedAssetNetBookValueUpdateComponent,
+        FixedAssetNetBookValueDeleteDialogComponent,
+    ]
 })
 export class ErpServiceFixedAssetNetBookValueModule {}

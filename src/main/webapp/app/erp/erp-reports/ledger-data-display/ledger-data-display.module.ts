@@ -32,9 +32,8 @@ const routes: Routes = [LEDGER_DT_ROUTE];
  * exportable format on the web view
  */
 @NgModule({
-  declarations: [LedgerDtViewComponent, LedgerTranslationListDeleteDialogComponent],
-  imports: [RouterModule.forChild(routes), CommonModule, SharedModule, DTModule],
-  exports: [RouterModule, LedgerDtViewComponent],
-  entryComponents: [LedgerDtViewComponent],
+    declarations: [LedgerDtViewComponent, LedgerTranslationListDeleteDialogComponent],
+    imports: [RouterModule.forChild(routes), CommonModule, SharedModule, DTModule],
+    exports: [RouterModule, LedgerDtViewComponent]
 })
 export class LedgerDataDisplayModule {}

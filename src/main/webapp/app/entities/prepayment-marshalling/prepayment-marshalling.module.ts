@@ -25,13 +25,12 @@ import { PrepaymentMarshallingDeleteDialogComponent } from './delete/prepayment-
 import { PrepaymentMarshallingRoutingModule } from './route/prepayment-marshalling-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentMarshallingRoutingModule],
-  declarations: [
-    PrepaymentMarshallingComponent,
-    PrepaymentMarshallingDetailComponent,
-    PrepaymentMarshallingUpdateComponent,
-    PrepaymentMarshallingDeleteDialogComponent,
-  ],
-  entryComponents: [PrepaymentMarshallingDeleteDialogComponent],
+    imports: [SharedModule, PrepaymentMarshallingRoutingModule],
+    declarations: [
+        PrepaymentMarshallingComponent,
+        PrepaymentMarshallingDetailComponent,
+        PrepaymentMarshallingUpdateComponent,
+        PrepaymentMarshallingDeleteDialogComponent,
+    ]
 })
 export class PrepaymentMarshallingModule {}

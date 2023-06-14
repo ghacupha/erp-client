@@ -25,13 +25,12 @@ import { UniversallyUniqueMappingDeleteDialogComponent } from './delete/universa
 import { UniversallyUniqueMappingRoutingModule } from './route/universally-unique-mapping-routing.module';
 
 @NgModule({
-  imports: [SharedModule, UniversallyUniqueMappingRoutingModule],
-  declarations: [
-    UniversallyUniqueMappingComponent,
-    UniversallyUniqueMappingDetailComponent,
-    UniversallyUniqueMappingUpdateComponent,
-    UniversallyUniqueMappingDeleteDialogComponent,
-  ],
-  entryComponents: [UniversallyUniqueMappingDeleteDialogComponent],
+    imports: [SharedModule, UniversallyUniqueMappingRoutingModule],
+    declarations: [
+        UniversallyUniqueMappingComponent,
+        UniversallyUniqueMappingDetailComponent,
+        UniversallyUniqueMappingUpdateComponent,
+        UniversallyUniqueMappingDeleteDialogComponent,
+    ]
 })
 export class UniversallyUniqueMappingModule {}

@@ -25,8 +25,7 @@ import { LeaseContractDeleteDialogComponent } from './delete/lease-contract-dele
 import { LeaseContractRoutingModule } from './route/lease-contract-routing.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseContractRoutingModule],
-  declarations: [LeaseContractComponent, LeaseContractDetailComponent, LeaseContractUpdateComponent, LeaseContractDeleteDialogComponent],
-  entryComponents: [LeaseContractDeleteDialogComponent],
+    imports: [SharedModule, LeaseContractRoutingModule],
+    declarations: [LeaseContractComponent, LeaseContractDetailComponent, LeaseContractUpdateComponent, LeaseContractDeleteDialogComponent]
 })
 export class LeaseContractModule {}

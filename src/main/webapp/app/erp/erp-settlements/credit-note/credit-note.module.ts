@@ -26,8 +26,7 @@ import { CreditNoteRoutingModule } from './route/credit-note-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, CreditNoteRoutingModule, ErpCommonModule],
-  declarations: [CreditNoteComponent, CreditNoteDetailComponent, CreditNoteUpdateComponent, CreditNoteDeleteDialogComponent],
-  entryComponents: [CreditNoteDeleteDialogComponent],
+    imports: [SharedModule, CreditNoteRoutingModule, ErpCommonModule],
+    declarations: [CreditNoteComponent, CreditNoteDetailComponent, CreditNoteUpdateComponent, CreditNoteDeleteDialogComponent]
 })
 export class CreditNoteModule {}

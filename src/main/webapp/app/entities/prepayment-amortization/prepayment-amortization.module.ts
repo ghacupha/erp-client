@@ -25,13 +25,12 @@ import { PrepaymentAmortizationDeleteDialogComponent } from './delete/prepayment
 import { PrepaymentAmortizationRoutingModule } from './route/prepayment-amortization-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentAmortizationRoutingModule],
-  declarations: [
-    PrepaymentAmortizationComponent,
-    PrepaymentAmortizationDetailComponent,
-    PrepaymentAmortizationUpdateComponent,
-    PrepaymentAmortizationDeleteDialogComponent,
-  ],
-  entryComponents: [PrepaymentAmortizationDeleteDialogComponent],
+    imports: [SharedModule, PrepaymentAmortizationRoutingModule],
+    declarations: [
+        PrepaymentAmortizationComponent,
+        PrepaymentAmortizationDetailComponent,
+        PrepaymentAmortizationUpdateComponent,
+        PrepaymentAmortizationDeleteDialogComponent,
+    ]
 })
 export class PrepaymentAmortizationModule {}

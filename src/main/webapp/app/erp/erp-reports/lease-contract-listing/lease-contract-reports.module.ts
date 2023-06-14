@@ -31,17 +31,16 @@ const routes: Routes = [LEASE_CONTRACT_REPORT_ROUTE];
  * exportable format on the web view
  */
 @NgModule({
-  declarations: [LeaseContractReportComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule,
-    SharedModule,
-    DTModule
-  ],
-  exports: [
-    RouterModule,
-    LeaseContractReportComponent
-  ],
-  entryComponents: [LeaseContractReportComponent],
+    declarations: [LeaseContractReportComponent],
+    imports: [
+        RouterModule.forChild(routes),
+        CommonModule,
+        SharedModule,
+        DTModule
+    ],
+    exports: [
+        RouterModule,
+        LeaseContractReportComponent
+    ]
 })
 export class LeaseContractReportsModule {}

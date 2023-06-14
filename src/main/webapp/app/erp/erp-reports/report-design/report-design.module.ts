@@ -26,8 +26,7 @@ import { ReportDesignRoutingModule } from './route/report-design-routing.module'
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ReportDesignRoutingModule, ErpCommonModule],
-  declarations: [ReportDesignComponent, ReportDesignDetailComponent, ReportDesignUpdateComponent, ReportDesignDeleteDialogComponent],
-  entryComponents: [ReportDesignDeleteDialogComponent],
+    imports: [SharedModule, ReportDesignRoutingModule, ErpCommonModule],
+    declarations: [ReportDesignComponent, ReportDesignDetailComponent, ReportDesignUpdateComponent, ReportDesignDeleteDialogComponent]
 })
 export class ReportDesignModule {}

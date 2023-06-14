@@ -25,13 +25,12 @@ import { ApplicationUserDeleteDialogComponent } from './delete/application-user-
 import { ApplicationUserRoutingModule } from './route/application-user-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ApplicationUserRoutingModule],
-  declarations: [
-    ApplicationUserComponent,
-    ApplicationUserDetailComponent,
-    ApplicationUserUpdateComponent,
-    ApplicationUserDeleteDialogComponent,
-  ],
-  entryComponents: [ApplicationUserDeleteDialogComponent],
+    imports: [SharedModule, ApplicationUserRoutingModule],
+    declarations: [
+        ApplicationUserComponent,
+        ApplicationUserDetailComponent,
+        ApplicationUserUpdateComponent,
+        ApplicationUserDeleteDialogComponent,
+    ]
 })
 export class ApplicationUserModule {}

@@ -25,8 +25,7 @@ import { InvoiceDeleteDialogComponent } from './delete/invoice-delete-dialog.com
 import { InvoiceRoutingModule } from './route/invoice-routing.module';
 
 @NgModule({
-  imports: [SharedModule, InvoiceRoutingModule],
-  declarations: [InvoiceComponent, InvoiceDetailComponent, InvoiceUpdateComponent, InvoiceDeleteDialogComponent],
-  entryComponents: [InvoiceDeleteDialogComponent],
+    imports: [SharedModule, InvoiceRoutingModule],
+    declarations: [InvoiceComponent, InvoiceDetailComponent, InvoiceUpdateComponent, InvoiceDeleteDialogComponent]
 })
 export class ErpServiceInvoiceModule {}

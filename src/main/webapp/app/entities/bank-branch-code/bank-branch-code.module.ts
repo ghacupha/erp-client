@@ -25,13 +25,12 @@ import { BankBranchCodeDeleteDialogComponent } from './delete/bank-branch-code-d
 import { BankBranchCodeRoutingModule } from './route/bank-branch-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, BankBranchCodeRoutingModule],
-  declarations: [
-    BankBranchCodeComponent,
-    BankBranchCodeDetailComponent,
-    BankBranchCodeUpdateComponent,
-    BankBranchCodeDeleteDialogComponent,
-  ],
-  entryComponents: [BankBranchCodeDeleteDialogComponent],
+    imports: [SharedModule, BankBranchCodeRoutingModule],
+    declarations: [
+        BankBranchCodeComponent,
+        BankBranchCodeDetailComponent,
+        BankBranchCodeUpdateComponent,
+        BankBranchCodeDeleteDialogComponent,
+    ]
 })
 export class BankBranchCodeModule {}

@@ -26,13 +26,12 @@ import { SecurityClearanceRoutingModule } from './route/security-clearance-routi
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, SecurityClearanceRoutingModule, ErpCommonModule],
-  declarations: [
-    SecurityClearanceComponent,
-    SecurityClearanceDetailComponent,
-    SecurityClearanceUpdateComponent,
-    SecurityClearanceDeleteDialogComponent,
-  ],
-  entryComponents: [SecurityClearanceDeleteDialogComponent],
+    imports: [SharedModule, SecurityClearanceRoutingModule, ErpCommonModule],
+    declarations: [
+        SecurityClearanceComponent,
+        SecurityClearanceDetailComponent,
+        SecurityClearanceUpdateComponent,
+        SecurityClearanceDeleteDialogComponent,
+    ]
 })
 export class SecurityClearanceModule {}

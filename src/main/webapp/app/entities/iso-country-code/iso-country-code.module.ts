@@ -25,13 +25,12 @@ import { IsoCountryCodeDeleteDialogComponent } from './delete/iso-country-code-d
 import { IsoCountryCodeRoutingModule } from './route/iso-country-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, IsoCountryCodeRoutingModule],
-  declarations: [
-    IsoCountryCodeComponent,
-    IsoCountryCodeDetailComponent,
-    IsoCountryCodeUpdateComponent,
-    IsoCountryCodeDeleteDialogComponent,
-  ],
-  entryComponents: [IsoCountryCodeDeleteDialogComponent],
+    imports: [SharedModule, IsoCountryCodeRoutingModule],
+    declarations: [
+        IsoCountryCodeComponent,
+        IsoCountryCodeDetailComponent,
+        IsoCountryCodeUpdateComponent,
+        IsoCountryCodeDeleteDialogComponent,
+    ]
 })
 export class IsoCountryCodeModule {}

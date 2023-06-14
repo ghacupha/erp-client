@@ -25,8 +25,7 @@ import { MessageTokenDeleteDialogComponent } from './delete/message-token-delete
 import { MessageTokenRoutingModule } from './route/message-token-routing.module';
 
 @NgModule({
-  imports: [SharedModule, MessageTokenRoutingModule],
-  declarations: [MessageTokenComponent, MessageTokenDetailComponent, MessageTokenUpdateComponent, MessageTokenDeleteDialogComponent],
-  entryComponents: [MessageTokenDeleteDialogComponent],
+    imports: [SharedModule, MessageTokenRoutingModule],
+    declarations: [MessageTokenComponent, MessageTokenDetailComponent, MessageTokenUpdateComponent, MessageTokenDeleteDialogComponent]
 })
 export class ErpServiceMessageTokenModule {}

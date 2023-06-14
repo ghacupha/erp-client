@@ -25,13 +25,12 @@ import { WorkProjectRegisterDeleteDialogComponent } from './delete/work-project-
 import { WorkProjectRegisterRoutingModule } from './route/work-project-register-routing.module';
 
 @NgModule({
-  imports: [SharedModule, WorkProjectRegisterRoutingModule],
-  declarations: [
-    WorkProjectRegisterComponent,
-    WorkProjectRegisterDetailComponent,
-    WorkProjectRegisterUpdateComponent,
-    WorkProjectRegisterDeleteDialogComponent,
-  ],
-  entryComponents: [WorkProjectRegisterDeleteDialogComponent],
+    imports: [SharedModule, WorkProjectRegisterRoutingModule],
+    declarations: [
+        WorkProjectRegisterComponent,
+        WorkProjectRegisterDetailComponent,
+        WorkProjectRegisterUpdateComponent,
+        WorkProjectRegisterDeleteDialogComponent,
+    ]
 })
 export class WorkProjectRegisterModule {}

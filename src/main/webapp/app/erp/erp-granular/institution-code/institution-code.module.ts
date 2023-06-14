@@ -25,13 +25,12 @@ import { InstitutionCodeDeleteDialogComponent } from './delete/institution-code-
 import { InstitutionCodeRoutingModule } from './route/institution-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, InstitutionCodeRoutingModule],
-  declarations: [
-    InstitutionCodeComponent,
-    InstitutionCodeDetailComponent,
-    InstitutionCodeUpdateComponent,
-    InstitutionCodeDeleteDialogComponent,
-  ],
-  entryComponents: [InstitutionCodeDeleteDialogComponent],
+    imports: [SharedModule, InstitutionCodeRoutingModule],
+    declarations: [
+        InstitutionCodeComponent,
+        InstitutionCodeDetailComponent,
+        InstitutionCodeUpdateComponent,
+        InstitutionCodeDeleteDialogComponent,
+    ]
 })
 export class InstitutionCodeModule {}

@@ -26,13 +26,12 @@ import { ContractMetadataRoutingModule } from './route/contract-metadata-routing
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ContractMetadataRoutingModule, ErpCommonModule],
-  declarations: [
-    ContractMetadataComponent,
-    ContractMetadataDetailComponent,
-    ContractMetadataUpdateComponent,
-    ContractMetadataDeleteDialogComponent,
-  ],
-  entryComponents: [ContractMetadataDeleteDialogComponent],
+    imports: [SharedModule, ContractMetadataRoutingModule, ErpCommonModule],
+    declarations: [
+        ContractMetadataComponent,
+        ContractMetadataDetailComponent,
+        ContractMetadataUpdateComponent,
+        ContractMetadataDeleteDialogComponent,
+    ]
 })
 export class ContractMetadataModule {}

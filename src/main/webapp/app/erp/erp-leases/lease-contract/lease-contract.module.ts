@@ -26,8 +26,7 @@ import { LeaseContractRoutingModule } from './route/lease-contract-routing.modul
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseContractRoutingModule, ErpCommonModule],
-  declarations: [LeaseContractComponent, LeaseContractDetailComponent, LeaseContractUpdateComponent, LeaseContractDeleteDialogComponent],
-  entryComponents: [LeaseContractDeleteDialogComponent],
+    imports: [SharedModule, LeaseContractRoutingModule, ErpCommonModule],
+    declarations: [LeaseContractComponent, LeaseContractDetailComponent, LeaseContractUpdateComponent, LeaseContractDeleteDialogComponent]
 })
 export class LeaseContractModule {}

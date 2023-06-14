@@ -25,8 +25,7 @@ import { ProcessStatusDeleteDialogComponent } from './delete/process-status-dele
 import { ProcessStatusRoutingModule } from './route/process-status-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ProcessStatusRoutingModule],
-  declarations: [ProcessStatusComponent, ProcessStatusDetailComponent, ProcessStatusUpdateComponent, ProcessStatusDeleteDialogComponent],
-  entryComponents: [ProcessStatusDeleteDialogComponent],
+    imports: [SharedModule, ProcessStatusRoutingModule],
+    declarations: [ProcessStatusComponent, ProcessStatusDetailComponent, ProcessStatusUpdateComponent, ProcessStatusDeleteDialogComponent]
 })
 export class ProcessStatusModule {}

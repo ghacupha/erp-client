@@ -25,13 +25,12 @@ import { CustomerIDDocumentTypeDeleteDialogComponent } from './delete/customer-i
 import { CustomerIDDocumentTypeRoutingModule } from './route/customer-id-document-type-routing.module';
 
 @NgModule({
-  imports: [SharedModule, CustomerIDDocumentTypeRoutingModule],
-  declarations: [
-    CustomerIDDocumentTypeComponent,
-    CustomerIDDocumentTypeDetailComponent,
-    CustomerIDDocumentTypeUpdateComponent,
-    CustomerIDDocumentTypeDeleteDialogComponent,
-  ],
-  entryComponents: [CustomerIDDocumentTypeDeleteDialogComponent],
+    imports: [SharedModule, CustomerIDDocumentTypeRoutingModule],
+    declarations: [
+        CustomerIDDocumentTypeComponent,
+        CustomerIDDocumentTypeDetailComponent,
+        CustomerIDDocumentTypeUpdateComponent,
+        CustomerIDDocumentTypeDeleteDialogComponent,
+    ]
 })
 export class CustomerIDDocumentTypeModule {}

@@ -26,12 +26,11 @@ import { DealerRoutingModule } from './route/dealer-routing.module';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    DealerRoutingModule,
-    ErpCommonModule
-  ],
-  declarations: [DealerComponent, DealerDetailComponent, DealerUpdateComponent, DealerDeleteDialogComponent],
-  entryComponents: [DealerDeleteDialogComponent],
+    imports: [
+        SharedModule,
+        DealerRoutingModule,
+        ErpCommonModule
+    ],
+    declarations: [DealerComponent, DealerDetailComponent, DealerUpdateComponent, DealerDeleteDialogComponent]
 })
 export class ErpServiceDealerModule {}

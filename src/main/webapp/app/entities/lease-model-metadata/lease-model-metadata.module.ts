@@ -25,13 +25,12 @@ import { LeaseModelMetadataDeleteDialogComponent } from './delete/lease-model-me
 import { LeaseModelMetadataRoutingModule } from './route/lease-model-metadata-routing.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseModelMetadataRoutingModule],
-  declarations: [
-    LeaseModelMetadataComponent,
-    LeaseModelMetadataDetailComponent,
-    LeaseModelMetadataUpdateComponent,
-    LeaseModelMetadataDeleteDialogComponent,
-  ],
-  entryComponents: [LeaseModelMetadataDeleteDialogComponent],
+    imports: [SharedModule, LeaseModelMetadataRoutingModule],
+    declarations: [
+        LeaseModelMetadataComponent,
+        LeaseModelMetadataDetailComponent,
+        LeaseModelMetadataUpdateComponent,
+        LeaseModelMetadataDeleteDialogComponent,
+    ]
 })
 export class LeaseModelMetadataModule {}

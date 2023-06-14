@@ -25,8 +25,7 @@ import { AssetWarrantyDeleteDialogComponent } from './delete/asset-warranty-dele
 import { AssetWarrantyRoutingModule } from './route/asset-warranty-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetWarrantyRoutingModule],
-  declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent],
-  entryComponents: [AssetWarrantyDeleteDialogComponent],
+    imports: [SharedModule, AssetWarrantyRoutingModule],
+    declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent]
 })
 export class AssetWarrantyModule {}

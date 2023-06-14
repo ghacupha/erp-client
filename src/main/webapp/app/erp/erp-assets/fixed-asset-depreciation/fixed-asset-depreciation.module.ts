@@ -25,13 +25,12 @@ import { FixedAssetDepreciationDeleteDialogComponent } from './delete/fixed-asse
 import { FixedAssetDepreciationRoutingModule } from './route/fixed-asset-depreciation-routing.module';
 
 @NgModule({
-  imports: [SharedModule, FixedAssetDepreciationRoutingModule],
-  declarations: [
-    FixedAssetDepreciationComponent,
-    FixedAssetDepreciationDetailComponent,
-    FixedAssetDepreciationUpdateComponent,
-    FixedAssetDepreciationDeleteDialogComponent,
-  ],
-  entryComponents: [FixedAssetDepreciationDeleteDialogComponent],
+    imports: [SharedModule, FixedAssetDepreciationRoutingModule],
+    declarations: [
+        FixedAssetDepreciationComponent,
+        FixedAssetDepreciationDetailComponent,
+        FixedAssetDepreciationUpdateComponent,
+        FixedAssetDepreciationDeleteDialogComponent,
+    ]
 })
 export class ErpServiceFixedAssetDepreciationModule {}

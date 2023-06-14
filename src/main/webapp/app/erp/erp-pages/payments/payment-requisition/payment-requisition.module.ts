@@ -25,13 +25,12 @@ import { PaymentRequisitionDeleteDialogComponent } from './delete/payment-requis
 import { PaymentRequisitionRoutingModule } from './route/payment-requisition-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PaymentRequisitionRoutingModule],
-  declarations: [
-    PaymentRequisitionComponent,
-    PaymentRequisitionDetailComponent,
-    PaymentRequisitionUpdateComponent,
-    PaymentRequisitionDeleteDialogComponent,
-  ],
-  entryComponents: [PaymentRequisitionDeleteDialogComponent],
+    imports: [SharedModule, PaymentRequisitionRoutingModule],
+    declarations: [
+        PaymentRequisitionComponent,
+        PaymentRequisitionDetailComponent,
+        PaymentRequisitionUpdateComponent,
+        PaymentRequisitionDeleteDialogComponent,
+    ]
 })
 export class ErpServicePaymentRequisitionModule {}

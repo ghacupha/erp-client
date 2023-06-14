@@ -25,13 +25,12 @@ import { BusinessDocumentDeleteDialogComponent } from './delete/business-documen
 import { BusinessDocumentRoutingModule } from './route/business-document-routing.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessDocumentRoutingModule],
-  declarations: [
-    BusinessDocumentComponent,
-    BusinessDocumentDetailComponent,
-    BusinessDocumentUpdateComponent,
-    BusinessDocumentDeleteDialogComponent,
-  ],
-  entryComponents: [BusinessDocumentDeleteDialogComponent],
+    imports: [SharedModule, BusinessDocumentRoutingModule],
+    declarations: [
+        BusinessDocumentComponent,
+        BusinessDocumentDetailComponent,
+        BusinessDocumentUpdateComponent,
+        BusinessDocumentDeleteDialogComponent,
+    ]
 })
 export class BusinessDocumentModule {}

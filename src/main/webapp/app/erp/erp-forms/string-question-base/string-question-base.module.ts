@@ -25,13 +25,12 @@ import { StringQuestionBaseDeleteDialogComponent } from './delete/string-questio
 import { StringQuestionBaseRoutingModule } from './route/string-question-base-routing.module';
 
 @NgModule({
-  imports: [SharedModule, StringQuestionBaseRoutingModule],
-  declarations: [
-    StringQuestionBaseComponent,
-    StringQuestionBaseDetailComponent,
-    StringQuestionBaseUpdateComponent,
-    StringQuestionBaseDeleteDialogComponent,
-  ],
-  entryComponents: [StringQuestionBaseDeleteDialogComponent],
+    imports: [SharedModule, StringQuestionBaseRoutingModule],
+    declarations: [
+        StringQuestionBaseComponent,
+        StringQuestionBaseDetailComponent,
+        StringQuestionBaseUpdateComponent,
+        StringQuestionBaseDeleteDialogComponent,
+    ]
 })
 export class StringQuestionBaseModule {}

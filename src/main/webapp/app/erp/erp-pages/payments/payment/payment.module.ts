@@ -26,12 +26,11 @@ import { PaymentRoutingModule } from './route/payment-routing.module';
 import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    PaymentRoutingModule,
-    ErpCommonModule
-  ],
-  declarations: [PaymentComponent, PaymentDetailComponent, PaymentUpdateComponent, PaymentDeleteDialogComponent],
-  entryComponents: [PaymentDeleteDialogComponent],
+    imports: [
+        SharedModule,
+        PaymentRoutingModule,
+        ErpCommonModule
+    ],
+    declarations: [PaymentComponent, PaymentDetailComponent, PaymentUpdateComponent, PaymentDeleteDialogComponent]
 })
 export class ErpServicePaymentModule {}

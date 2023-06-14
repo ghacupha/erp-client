@@ -25,8 +25,7 @@ import { CountyCodeDeleteDialogComponent } from './delete/county-code-delete-dia
 import { CountyCodeRoutingModule } from './route/county-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, CountyCodeRoutingModule],
-  declarations: [CountyCodeComponent, CountyCodeDetailComponent, CountyCodeUpdateComponent, CountyCodeDeleteDialogComponent],
-  entryComponents: [CountyCodeDeleteDialogComponent],
+    imports: [SharedModule, CountyCodeRoutingModule],
+    declarations: [CountyCodeComponent, CountyCodeDetailComponent, CountyCodeUpdateComponent, CountyCodeDeleteDialogComponent]
 })
 export class CountyCodeModule {}

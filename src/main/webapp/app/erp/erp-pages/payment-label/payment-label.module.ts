@@ -25,8 +25,7 @@ import { PaymentLabelDeleteDialogComponent } from './delete/payment-label-delete
 import { PaymentLabelRoutingModule } from './route/payment-label-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PaymentLabelRoutingModule],
-  declarations: [PaymentLabelComponent, PaymentLabelDetailComponent, PaymentLabelUpdateComponent, PaymentLabelDeleteDialogComponent],
-  entryComponents: [PaymentLabelDeleteDialogComponent],
+    imports: [SharedModule, PaymentLabelRoutingModule],
+    declarations: [PaymentLabelComponent, PaymentLabelDetailComponent, PaymentLabelUpdateComponent, PaymentLabelDeleteDialogComponent]
 })
 export class PaymentLabelModule {}

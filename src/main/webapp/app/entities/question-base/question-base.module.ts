@@ -25,8 +25,7 @@ import { QuestionBaseDeleteDialogComponent } from './delete/question-base-delete
 import { QuestionBaseRoutingModule } from './route/question-base-routing.module';
 
 @NgModule({
-  imports: [SharedModule, QuestionBaseRoutingModule],
-  declarations: [QuestionBaseComponent, QuestionBaseDetailComponent, QuestionBaseUpdateComponent, QuestionBaseDeleteDialogComponent],
-  entryComponents: [QuestionBaseDeleteDialogComponent],
+    imports: [SharedModule, QuestionBaseRoutingModule],
+    declarations: [QuestionBaseComponent, QuestionBaseDetailComponent, QuestionBaseUpdateComponent, QuestionBaseDeleteDialogComponent]
 })
 export class QuestionBaseModule {}

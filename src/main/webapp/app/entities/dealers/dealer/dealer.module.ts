@@ -25,8 +25,7 @@ import { DealerDeleteDialogComponent } from './delete/dealer-delete-dialog.compo
 import { DealerRoutingModule } from './route/dealer-routing.module';
 
 @NgModule({
-  imports: [SharedModule, DealerRoutingModule],
-  declarations: [DealerComponent, DealerDetailComponent, DealerUpdateComponent, DealerDeleteDialogComponent],
-  entryComponents: [DealerDeleteDialogComponent],
+    imports: [SharedModule, DealerRoutingModule],
+    declarations: [DealerComponent, DealerDetailComponent, DealerUpdateComponent, DealerDeleteDialogComponent]
 })
 export class ErpServiceDealerModule {}

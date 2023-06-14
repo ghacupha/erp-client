@@ -31,17 +31,16 @@ const routes: Routes = [SETTLEMENT_REQUISITION_BILLER_REPORT_ROUTE];
  * exportable format on the web view
  */
 @NgModule({
-  declarations: [SettlementRequisitionBillerReportComponent],
-  imports: [
-    RouterModule.forChild(routes),
-    CommonModule,
-    SharedModule,
-    DTModule
-  ],
-  exports: [
-    RouterModule,
-    SettlementRequisitionBillerReportComponent
-  ],
-  entryComponents: [SettlementRequisitionBillerReportComponent],
+    declarations: [SettlementRequisitionBillerReportComponent],
+    imports: [
+        RouterModule.forChild(routes),
+        CommonModule,
+        SharedModule,
+        DTModule
+    ],
+    exports: [
+        RouterModule,
+        SettlementRequisitionBillerReportComponent
+    ]
 })
 export class SettlementRequisitionReportsModule {}

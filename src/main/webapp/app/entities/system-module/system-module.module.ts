@@ -25,8 +25,7 @@ import { SystemModuleDeleteDialogComponent } from './delete/system-module-delete
 import { SystemModuleRoutingModule } from './route/system-module-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SystemModuleRoutingModule],
-  declarations: [SystemModuleComponent, SystemModuleDetailComponent, SystemModuleUpdateComponent, SystemModuleDeleteDialogComponent],
-  entryComponents: [SystemModuleDeleteDialogComponent],
+    imports: [SharedModule, SystemModuleRoutingModule],
+    declarations: [SystemModuleComponent, SystemModuleDetailComponent, SystemModuleUpdateComponent, SystemModuleDeleteDialogComponent]
 })
 export class SystemModuleModule {}

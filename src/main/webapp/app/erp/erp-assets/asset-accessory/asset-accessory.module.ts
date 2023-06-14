@@ -26,13 +26,12 @@ import { AssetAccessoryRoutingModule } from './route/asset-accessory-routing.mod
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetAccessoryRoutingModule, ErpCommonModule],
-  declarations: [
-    AssetAccessoryComponent,
-    AssetAccessoryDetailComponent,
-    AssetAccessoryUpdateComponent,
-    AssetAccessoryDeleteDialogComponent,
-  ],
-  entryComponents: [AssetAccessoryDeleteDialogComponent],
+    imports: [SharedModule, AssetAccessoryRoutingModule, ErpCommonModule],
+    declarations: [
+        AssetAccessoryComponent,
+        AssetAccessoryDetailComponent,
+        AssetAccessoryUpdateComponent,
+        AssetAccessoryDeleteDialogComponent,
+    ]
 })
 export class AssetAccessoryModule {}

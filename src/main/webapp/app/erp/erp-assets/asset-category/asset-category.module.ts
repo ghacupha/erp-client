@@ -26,8 +26,7 @@ import { AssetCategoryRoutingModule } from './route/asset-category-routing.modul
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetCategoryRoutingModule, ErpCommonModule],
-  declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent],
-  entryComponents: [AssetCategoryDeleteDialogComponent],
+    imports: [SharedModule, AssetCategoryRoutingModule, ErpCommonModule],
+    declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent]
 })
 export class AssetCategoryModule {}

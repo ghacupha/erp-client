@@ -26,8 +26,7 @@ import { BusinessStampRoutingModule } from './route/business-stamp-routing.modul
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessStampRoutingModule, ErpCommonModule],
-  declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent],
-  entryComponents: [BusinessStampDeleteDialogComponent],
+    imports: [SharedModule, BusinessStampRoutingModule, ErpCommonModule],
+    declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent]
 })
 export class BusinessStampModule {}

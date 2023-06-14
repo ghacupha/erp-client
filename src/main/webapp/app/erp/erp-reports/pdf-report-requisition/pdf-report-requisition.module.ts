@@ -25,13 +25,12 @@ import { PdfReportRequisitionDeleteDialogComponent } from './delete/pdf-report-r
 import { PdfReportRequisitionRoutingModule } from './route/pdf-report-requisition-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PdfReportRequisitionRoutingModule],
-  declarations: [
-    PdfReportRequisitionComponent,
-    PdfReportRequisitionDetailComponent,
-    PdfReportRequisitionUpdateComponent,
-    PdfReportRequisitionDeleteDialogComponent,
-  ],
-  entryComponents: [PdfReportRequisitionDeleteDialogComponent],
+    imports: [SharedModule, PdfReportRequisitionRoutingModule],
+    declarations: [
+        PdfReportRequisitionComponent,
+        PdfReportRequisitionDetailComponent,
+        PdfReportRequisitionUpdateComponent,
+        PdfReportRequisitionDeleteDialogComponent,
+    ]
 })
 export class PdfReportRequisitionModule {}

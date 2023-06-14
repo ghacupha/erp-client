@@ -26,8 +26,7 @@ import { DeliveryNoteRoutingModule } from './route/delivery-note-routing.module'
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, DeliveryNoteRoutingModule, ErpCommonModule],
-  declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent],
-  entryComponents: [DeliveryNoteDeleteDialogComponent],
+    imports: [SharedModule, DeliveryNoteRoutingModule, ErpCommonModule],
+    declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent]
 })
 export class DeliveryNoteModule {}

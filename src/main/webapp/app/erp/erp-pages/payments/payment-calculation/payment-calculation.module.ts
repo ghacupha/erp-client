@@ -25,13 +25,12 @@ import { PaymentCalculationDeleteDialogComponent } from './delete/payment-calcul
 import { PaymentCalculationRoutingModule } from './route/payment-calculation-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PaymentCalculationRoutingModule],
-  declarations: [
-    PaymentCalculationComponent,
-    PaymentCalculationDetailComponent,
-    PaymentCalculationUpdateComponent,
-    PaymentCalculationDeleteDialogComponent,
-  ],
-  entryComponents: [PaymentCalculationDeleteDialogComponent],
+    imports: [SharedModule, PaymentCalculationRoutingModule],
+    declarations: [
+        PaymentCalculationComponent,
+        PaymentCalculationDetailComponent,
+        PaymentCalculationUpdateComponent,
+        PaymentCalculationDeleteDialogComponent,
+    ]
 })
 export class ErpServicePaymentCalculationModule {}

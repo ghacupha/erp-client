@@ -25,13 +25,12 @@ import { SecurityClearanceDeleteDialogComponent } from './delete/security-cleara
 import { SecurityClearanceRoutingModule } from './route/security-clearance-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SecurityClearanceRoutingModule],
-  declarations: [
-    SecurityClearanceComponent,
-    SecurityClearanceDetailComponent,
-    SecurityClearanceUpdateComponent,
-    SecurityClearanceDeleteDialogComponent,
-  ],
-  entryComponents: [SecurityClearanceDeleteDialogComponent],
+    imports: [SharedModule, SecurityClearanceRoutingModule],
+    declarations: [
+        SecurityClearanceComponent,
+        SecurityClearanceDetailComponent,
+        SecurityClearanceUpdateComponent,
+        SecurityClearanceDeleteDialogComponent,
+    ]
 })
 export class SecurityClearanceModule {}

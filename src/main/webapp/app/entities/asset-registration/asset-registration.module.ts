@@ -25,13 +25,12 @@ import { AssetRegistrationDeleteDialogComponent } from './delete/asset-registrat
 import { AssetRegistrationRoutingModule } from './route/asset-registration-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetRegistrationRoutingModule],
-  declarations: [
-    AssetRegistrationComponent,
-    AssetRegistrationDetailComponent,
-    AssetRegistrationUpdateComponent,
-    AssetRegistrationDeleteDialogComponent,
-  ],
-  entryComponents: [AssetRegistrationDeleteDialogComponent],
+    imports: [SharedModule, AssetRegistrationRoutingModule],
+    declarations: [
+        AssetRegistrationComponent,
+        AssetRegistrationDetailComponent,
+        AssetRegistrationUpdateComponent,
+        AssetRegistrationDeleteDialogComponent,
+    ]
 })
 export class AssetRegistrationModule {}

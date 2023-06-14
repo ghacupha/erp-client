@@ -26,13 +26,12 @@ import { WorkInProgressRegistrationRoutingModule } from './route/work-in-progres
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, WorkInProgressRegistrationRoutingModule, ErpCommonModule],
-  declarations: [
-    WorkInProgressRegistrationComponent,
-    WorkInProgressRegistrationDetailComponent,
-    WorkInProgressRegistrationUpdateComponent,
-    WorkInProgressRegistrationDeleteDialogComponent,
-  ],
-  entryComponents: [WorkInProgressRegistrationDeleteDialogComponent],
+    imports: [SharedModule, WorkInProgressRegistrationRoutingModule, ErpCommonModule],
+    declarations: [
+        WorkInProgressRegistrationComponent,
+        WorkInProgressRegistrationDetailComponent,
+        WorkInProgressRegistrationUpdateComponent,
+        WorkInProgressRegistrationDeleteDialogComponent,
+    ]
 })
 export class WorkInProgressRegistrationModule {}

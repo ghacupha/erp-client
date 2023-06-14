@@ -25,8 +25,7 @@ import { TaxReferenceDeleteDialogComponent } from './delete/tax-reference-delete
 import { TaxReferenceRoutingModule } from './route/tax-reference-routing.module';
 
 @NgModule({
-  imports: [SharedModule, TaxReferenceRoutingModule],
-  declarations: [TaxReferenceComponent, TaxReferenceDetailComponent, TaxReferenceUpdateComponent, TaxReferenceDeleteDialogComponent],
-  entryComponents: [TaxReferenceDeleteDialogComponent],
+    imports: [SharedModule, TaxReferenceRoutingModule],
+    declarations: [TaxReferenceComponent, TaxReferenceDetailComponent, TaxReferenceUpdateComponent, TaxReferenceDeleteDialogComponent]
 })
 export class ErpServiceTaxReferenceModule {}

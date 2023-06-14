@@ -25,13 +25,12 @@ import { DepreciationMethodDeleteDialogComponent } from './delete/depreciation-m
 import { DepreciationMethodRoutingModule } from './route/depreciation-method-routing.module';
 
 @NgModule({
-  imports: [SharedModule, DepreciationMethodRoutingModule],
-  declarations: [
-    DepreciationMethodComponent,
-    DepreciationMethodDetailComponent,
-    DepreciationMethodUpdateComponent,
-    DepreciationMethodDeleteDialogComponent,
-  ],
-  entryComponents: [DepreciationMethodDeleteDialogComponent],
+    imports: [SharedModule, DepreciationMethodRoutingModule],
+    declarations: [
+        DepreciationMethodComponent,
+        DepreciationMethodDetailComponent,
+        DepreciationMethodUpdateComponent,
+        DepreciationMethodDeleteDialogComponent,
+    ]
 })
 export class DepreciationMethodModule {}

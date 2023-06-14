@@ -25,8 +25,7 @@ import { CreditNoteDeleteDialogComponent } from './delete/credit-note-delete-dia
 import { CreditNoteRoutingModule } from './route/credit-note-routing.module';
 
 @NgModule({
-  imports: [SharedModule, CreditNoteRoutingModule],
-  declarations: [CreditNoteComponent, CreditNoteDetailComponent, CreditNoteUpdateComponent, CreditNoteDeleteDialogComponent],
-  entryComponents: [CreditNoteDeleteDialogComponent],
+    imports: [SharedModule, CreditNoteRoutingModule],
+    declarations: [CreditNoteComponent, CreditNoteDetailComponent, CreditNoteUpdateComponent, CreditNoteDeleteDialogComponent]
 })
 export class CreditNoteModule {}

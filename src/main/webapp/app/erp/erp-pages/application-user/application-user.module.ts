@@ -26,13 +26,12 @@ import { ApplicationUserRoutingModule } from './route/application-user-routing.m
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ApplicationUserRoutingModule, ErpCommonModule],
-  declarations: [
-    ApplicationUserComponent,
-    ApplicationUserDetailComponent,
-    ApplicationUserUpdateComponent,
-    ApplicationUserDeleteDialogComponent,
-  ],
-  entryComponents: [ApplicationUserDeleteDialogComponent],
+    imports: [SharedModule, ApplicationUserRoutingModule, ErpCommonModule],
+    declarations: [
+        ApplicationUserComponent,
+        ApplicationUserDetailComponent,
+        ApplicationUserUpdateComponent,
+        ApplicationUserDeleteDialogComponent,
+    ]
 })
 export class ApplicationUserModule {}

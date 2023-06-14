@@ -25,8 +25,7 @@ import { BusinessStampDeleteDialogComponent } from './delete/business-stamp-dele
 import { BusinessStampRoutingModule } from './route/business-stamp-routing.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessStampRoutingModule],
-  declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent],
-  entryComponents: [BusinessStampDeleteDialogComponent],
+    imports: [SharedModule, BusinessStampRoutingModule],
+    declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent]
 })
 export class BusinessStampModule {}

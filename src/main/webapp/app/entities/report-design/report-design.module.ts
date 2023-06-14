@@ -25,8 +25,7 @@ import { ReportDesignDeleteDialogComponent } from './delete/report-design-delete
 import { ReportDesignRoutingModule } from './route/report-design-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ReportDesignRoutingModule],
-  declarations: [ReportDesignComponent, ReportDesignDetailComponent, ReportDesignUpdateComponent, ReportDesignDeleteDialogComponent],
-  entryComponents: [ReportDesignDeleteDialogComponent],
+    imports: [SharedModule, ReportDesignRoutingModule],
+    declarations: [ReportDesignComponent, ReportDesignDetailComponent, ReportDesignUpdateComponent, ReportDesignDeleteDialogComponent]
 })
 export class ReportDesignModule {}

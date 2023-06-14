@@ -25,13 +25,12 @@ import { PrepaymentMappingDeleteDialogComponent } from './delete/prepayment-mapp
 import { PrepaymentMappingRoutingModule } from './route/prepayment-mapping-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentMappingRoutingModule],
-  declarations: [
-    PrepaymentMappingComponent,
-    PrepaymentMappingDetailComponent,
-    PrepaymentMappingUpdateComponent,
-    PrepaymentMappingDeleteDialogComponent,
-  ],
-  entryComponents: [PrepaymentMappingDeleteDialogComponent],
+    imports: [SharedModule, PrepaymentMappingRoutingModule],
+    declarations: [
+        PrepaymentMappingComponent,
+        PrepaymentMappingDetailComponent,
+        PrepaymentMappingUpdateComponent,
+        PrepaymentMappingDeleteDialogComponent,
+    ]
 })
 export class PrepaymentMappingModule {}

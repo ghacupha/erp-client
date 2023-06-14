@@ -25,13 +25,12 @@ import { SettlementCurrencyDeleteDialogComponent } from './delete/settlement-cur
 import { SettlementCurrencyRoutingModule } from './route/settlement-currency-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SettlementCurrencyRoutingModule],
-  declarations: [
-    SettlementCurrencyComponent,
-    SettlementCurrencyDetailComponent,
-    SettlementCurrencyUpdateComponent,
-    SettlementCurrencyDeleteDialogComponent,
-  ],
-  entryComponents: [SettlementCurrencyDeleteDialogComponent],
+    imports: [SharedModule, SettlementCurrencyRoutingModule],
+    declarations: [
+        SettlementCurrencyComponent,
+        SettlementCurrencyDetailComponent,
+        SettlementCurrencyUpdateComponent,
+        SettlementCurrencyDeleteDialogComponent,
+    ]
 })
 export class SettlementCurrencyModule {}

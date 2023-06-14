@@ -25,8 +25,7 @@ import { PurchaseOrderDeleteDialogComponent } from './delete/purchase-order-dele
 import { PurchaseOrderRoutingModule } from './route/purchase-order-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PurchaseOrderRoutingModule],
-  declarations: [PurchaseOrderComponent, PurchaseOrderDetailComponent, PurchaseOrderUpdateComponent, PurchaseOrderDeleteDialogComponent],
-  entryComponents: [PurchaseOrderDeleteDialogComponent],
+    imports: [SharedModule, PurchaseOrderRoutingModule],
+    declarations: [PurchaseOrderComponent, PurchaseOrderDetailComponent, PurchaseOrderUpdateComponent, PurchaseOrderDeleteDialogComponent]
 })
 export class PurchaseOrderModule {}

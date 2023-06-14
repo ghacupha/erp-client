@@ -25,13 +25,12 @@ import { AssetAccessoryDeleteDialogComponent } from './delete/asset-accessory-de
 import { AssetAccessoryRoutingModule } from './route/asset-accessory-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetAccessoryRoutingModule],
-  declarations: [
-    AssetAccessoryComponent,
-    AssetAccessoryDetailComponent,
-    AssetAccessoryUpdateComponent,
-    AssetAccessoryDeleteDialogComponent,
-  ],
-  entryComponents: [AssetAccessoryDeleteDialogComponent],
+    imports: [SharedModule, AssetAccessoryRoutingModule],
+    declarations: [
+        AssetAccessoryComponent,
+        AssetAccessoryDetailComponent,
+        AssetAccessoryUpdateComponent,
+        AssetAccessoryDeleteDialogComponent,
+    ]
 })
 export class AssetAccessoryModule {}

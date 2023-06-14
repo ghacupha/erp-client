@@ -26,13 +26,12 @@ import { BusinessDocumentRoutingModule } from './route/business-document-routing
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, BusinessDocumentRoutingModule, ErpCommonModule],
-  declarations: [
-    BusinessDocumentComponent,
-    BusinessDocumentDetailComponent,
-    BusinessDocumentUpdateComponent,
-    BusinessDocumentDeleteDialogComponent,
-  ],
-  entryComponents: [BusinessDocumentDeleteDialogComponent],
+    imports: [SharedModule, BusinessDocumentRoutingModule, ErpCommonModule],
+    declarations: [
+        BusinessDocumentComponent,
+        BusinessDocumentDetailComponent,
+        BusinessDocumentUpdateComponent,
+        BusinessDocumentDeleteDialogComponent,
+    ]
 })
 export class BusinessDocumentModule {}

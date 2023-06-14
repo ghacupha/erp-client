@@ -26,13 +26,12 @@ import { LeaseModelMetadataRoutingModule } from './route/lease-model-metadata-ro
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseModelMetadataRoutingModule, ErpCommonModule],
-  declarations: [
-    LeaseModelMetadataComponent,
-    LeaseModelMetadataDetailComponent,
-    LeaseModelMetadataUpdateComponent,
-    LeaseModelMetadataDeleteDialogComponent,
-  ],
-  entryComponents: [LeaseModelMetadataDeleteDialogComponent],
+    imports: [SharedModule, LeaseModelMetadataRoutingModule, ErpCommonModule],
+    declarations: [
+        LeaseModelMetadataComponent,
+        LeaseModelMetadataDetailComponent,
+        LeaseModelMetadataUpdateComponent,
+        LeaseModelMetadataDeleteDialogComponent,
+    ]
 })
 export class LeaseModelMetadataModule {}

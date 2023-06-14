@@ -26,13 +26,12 @@ import { LeaseLiabilityScheduleItemRoutingModule } from './route/lease-liability
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule, ErpCommonModule],
-  declarations: [
-    LeaseLiabilityScheduleItemComponent,
-    LeaseLiabilityScheduleItemDetailComponent,
-    LeaseLiabilityScheduleItemUpdateComponent,
-    LeaseLiabilityScheduleItemDeleteDialogComponent,
-  ],
-  entryComponents: [LeaseLiabilityScheduleItemDeleteDialogComponent],
+    imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule, ErpCommonModule],
+    declarations: [
+        LeaseLiabilityScheduleItemComponent,
+        LeaseLiabilityScheduleItemDetailComponent,
+        LeaseLiabilityScheduleItemUpdateComponent,
+        LeaseLiabilityScheduleItemDeleteDialogComponent,
+    ]
 })
 export class LeaseLiabilityScheduleItemModule {}

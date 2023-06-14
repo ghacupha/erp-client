@@ -26,13 +26,12 @@ import { AmortizationRecurrenceRoutingModule } from './route/amortization-recurr
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AmortizationRecurrenceRoutingModule, ErpCommonModule],
-  declarations: [
-    AmortizationRecurrenceComponent,
-    AmortizationRecurrenceDetailComponent,
-    AmortizationRecurrenceUpdateComponent,
-    AmortizationRecurrenceDeleteDialogComponent,
-  ],
-  entryComponents: [AmortizationRecurrenceDeleteDialogComponent],
+    imports: [SharedModule, AmortizationRecurrenceRoutingModule, ErpCommonModule],
+    declarations: [
+        AmortizationRecurrenceComponent,
+        AmortizationRecurrenceDetailComponent,
+        AmortizationRecurrenceUpdateComponent,
+        AmortizationRecurrenceDeleteDialogComponent,
+    ]
 })
 export class AmortizationRecurrenceModule {}

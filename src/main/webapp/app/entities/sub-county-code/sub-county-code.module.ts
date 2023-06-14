@@ -25,8 +25,7 @@ import { SubCountyCodeDeleteDialogComponent } from './delete/sub-county-code-del
 import { SubCountyCodeRoutingModule } from './route/sub-county-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SubCountyCodeRoutingModule],
-  declarations: [SubCountyCodeComponent, SubCountyCodeDetailComponent, SubCountyCodeUpdateComponent, SubCountyCodeDeleteDialogComponent],
-  entryComponents: [SubCountyCodeDeleteDialogComponent],
+    imports: [SharedModule, SubCountyCodeRoutingModule],
+    declarations: [SubCountyCodeComponent, SubCountyCodeDetailComponent, SubCountyCodeUpdateComponent, SubCountyCodeDeleteDialogComponent]
 })
 export class SubCountyCodeModule {}

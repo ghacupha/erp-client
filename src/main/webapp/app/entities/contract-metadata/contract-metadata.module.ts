@@ -25,13 +25,12 @@ import { ContractMetadataDeleteDialogComponent } from './delete/contract-metadat
 import { ContractMetadataRoutingModule } from './route/contract-metadata-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ContractMetadataRoutingModule],
-  declarations: [
-    ContractMetadataComponent,
-    ContractMetadataDetailComponent,
-    ContractMetadataUpdateComponent,
-    ContractMetadataDeleteDialogComponent,
-  ],
-  entryComponents: [ContractMetadataDeleteDialogComponent],
+    imports: [SharedModule, ContractMetadataRoutingModule],
+    declarations: [
+        ContractMetadataComponent,
+        ContractMetadataDetailComponent,
+        ContractMetadataUpdateComponent,
+        ContractMetadataDeleteDialogComponent,
+    ]
 })
 export class ContractMetadataModule {}

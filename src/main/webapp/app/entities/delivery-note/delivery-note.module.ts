@@ -25,8 +25,7 @@ import { DeliveryNoteDeleteDialogComponent } from './delete/delivery-note-delete
 import { DeliveryNoteRoutingModule } from './route/delivery-note-routing.module';
 
 @NgModule({
-  imports: [SharedModule, DeliveryNoteRoutingModule],
-  declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent],
-  entryComponents: [DeliveryNoteDeleteDialogComponent],
+    imports: [SharedModule, DeliveryNoteRoutingModule],
+    declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent]
 })
 export class DeliveryNoteModule {}

@@ -25,8 +25,7 @@ import { FileUploadDeleteDialogComponent } from './delete/file-upload-delete-dia
 import { FileUploadRoutingModule } from './route/file-upload-routing.module';
 
 @NgModule({
-  imports: [SharedModule, FileUploadRoutingModule],
-  declarations: [FileUploadComponent, FileUploadDetailComponent, FileUploadUpdateComponent, FileUploadDeleteDialogComponent],
-  entryComponents: [FileUploadDeleteDialogComponent],
+    imports: [SharedModule, FileUploadRoutingModule],
+    declarations: [FileUploadComponent, FileUploadDetailComponent, FileUploadUpdateComponent, FileUploadDeleteDialogComponent]
 })
 export class ErpServiceFileUploadModule {}

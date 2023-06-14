@@ -26,13 +26,12 @@ import { TransactionAccountRoutingModule } from './route/transaction-account-rou
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, TransactionAccountRoutingModule, ErpCommonModule],
-  declarations: [
-    TransactionAccountComponent,
-    TransactionAccountDetailComponent,
-    TransactionAccountUpdateComponent,
-    TransactionAccountDeleteDialogComponent,
-  ],
-  entryComponents: [TransactionAccountDeleteDialogComponent],
+    imports: [SharedModule, TransactionAccountRoutingModule, ErpCommonModule],
+    declarations: [
+        TransactionAccountComponent,
+        TransactionAccountDetailComponent,
+        TransactionAccountUpdateComponent,
+        TransactionAccountDeleteDialogComponent,
+    ]
 })
 export class TransactionAccountModule {}

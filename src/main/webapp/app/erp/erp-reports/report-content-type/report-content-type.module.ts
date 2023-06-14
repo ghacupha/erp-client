@@ -25,13 +25,12 @@ import { ReportContentTypeDeleteDialogComponent } from './delete/report-content-
 import { ReportContentTypeRoutingModule } from './route/report-content-type-routing.module';
 
 @NgModule({
-  imports: [SharedModule, ReportContentTypeRoutingModule],
-  declarations: [
-    ReportContentTypeComponent,
-    ReportContentTypeDetailComponent,
-    ReportContentTypeUpdateComponent,
-    ReportContentTypeDeleteDialogComponent,
-  ],
-  entryComponents: [ReportContentTypeDeleteDialogComponent],
+    imports: [SharedModule, ReportContentTypeRoutingModule],
+    declarations: [
+        ReportContentTypeComponent,
+        ReportContentTypeDetailComponent,
+        ReportContentTypeUpdateComponent,
+        ReportContentTypeDeleteDialogComponent,
+    ]
 })
 export class ReportContentTypeModule {}

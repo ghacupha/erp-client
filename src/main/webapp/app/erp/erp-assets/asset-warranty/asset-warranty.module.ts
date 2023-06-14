@@ -26,8 +26,7 @@ import { AssetWarrantyRoutingModule } from './route/asset-warranty-routing.modul
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetWarrantyRoutingModule, ErpCommonModule],
-  declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent],
-  entryComponents: [AssetWarrantyDeleteDialogComponent],
+    imports: [SharedModule, AssetWarrantyRoutingModule, ErpCommonModule],
+    declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent]
 })
 export class AssetWarrantyModule {}

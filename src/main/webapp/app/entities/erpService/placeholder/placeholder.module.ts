@@ -25,8 +25,7 @@ import { PlaceholderDeleteDialogComponent } from './delete/placeholder-delete-di
 import { PlaceholderRoutingModule } from './route/placeholder-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PlaceholderRoutingModule],
-  declarations: [PlaceholderComponent, PlaceholderDetailComponent, PlaceholderUpdateComponent, PlaceholderDeleteDialogComponent],
-  entryComponents: [PlaceholderDeleteDialogComponent],
+    imports: [SharedModule, PlaceholderRoutingModule],
+    declarations: [PlaceholderComponent, PlaceholderDetailComponent, PlaceholderUpdateComponent, PlaceholderDeleteDialogComponent]
 })
 export class ErpServicePlaceholderModule {}

@@ -25,13 +25,12 @@ import { FixedAssetAcquisitionDeleteDialogComponent } from './delete/fixed-asset
 import { FixedAssetAcquisitionRoutingModule } from './route/fixed-asset-acquisition-routing.module';
 
 @NgModule({
-  imports: [SharedModule, FixedAssetAcquisitionRoutingModule],
-  declarations: [
-    FixedAssetAcquisitionComponent,
-    FixedAssetAcquisitionDetailComponent,
-    FixedAssetAcquisitionUpdateComponent,
-    FixedAssetAcquisitionDeleteDialogComponent,
-  ],
-  entryComponents: [FixedAssetAcquisitionDeleteDialogComponent],
+    imports: [SharedModule, FixedAssetAcquisitionRoutingModule],
+    declarations: [
+        FixedAssetAcquisitionComponent,
+        FixedAssetAcquisitionDetailComponent,
+        FixedAssetAcquisitionUpdateComponent,
+        FixedAssetAcquisitionDeleteDialogComponent,
+    ]
 })
 export class ErpServiceFixedAssetAcquisitionModule {}

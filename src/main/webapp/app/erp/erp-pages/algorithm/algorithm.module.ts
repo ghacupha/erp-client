@@ -26,8 +26,7 @@ import { AlgorithmRoutingModule } from './route/algorithm-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AlgorithmRoutingModule, ErpCommonModule],
-  declarations: [AlgorithmComponent, AlgorithmDetailComponent, AlgorithmUpdateComponent, AlgorithmDeleteDialogComponent],
-  entryComponents: [AlgorithmDeleteDialogComponent],
+    imports: [SharedModule, AlgorithmRoutingModule, ErpCommonModule],
+    declarations: [AlgorithmComponent, AlgorithmDetailComponent, AlgorithmUpdateComponent, AlgorithmDeleteDialogComponent]
 })
 export class AlgorithmModule {}

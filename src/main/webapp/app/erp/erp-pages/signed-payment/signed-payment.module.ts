@@ -25,8 +25,7 @@ import { SignedPaymentDeleteDialogComponent } from './delete/signed-payment-dele
 import { SignedPaymentRoutingModule } from './route/signed-payment-routing.module';
 
 @NgModule({
-  imports: [SharedModule, SignedPaymentRoutingModule],
-  declarations: [SignedPaymentComponent, SignedPaymentDetailComponent, SignedPaymentUpdateComponent, SignedPaymentDeleteDialogComponent],
-  entryComponents: [SignedPaymentDeleteDialogComponent],
+    imports: [SharedModule, SignedPaymentRoutingModule],
+    declarations: [SignedPaymentComponent, SignedPaymentDetailComponent, SignedPaymentUpdateComponent, SignedPaymentDeleteDialogComponent]
 })
 export class SignedPaymentModule {}

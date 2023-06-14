@@ -25,8 +25,7 @@ import { AgencyNoticeDeleteDialogComponent } from './delete/agency-notice-delete
 import { AgencyNoticeRoutingModule } from './route/agency-notice-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AgencyNoticeRoutingModule],
-  declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent],
-  entryComponents: [AgencyNoticeDeleteDialogComponent],
+    imports: [SharedModule, AgencyNoticeRoutingModule],
+    declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent]
 })
 export class AgencyNoticeModule {}

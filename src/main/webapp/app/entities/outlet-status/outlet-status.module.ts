@@ -25,8 +25,7 @@ import { OutletStatusDeleteDialogComponent } from './delete/outlet-status-delete
 import { OutletStatusRoutingModule } from './route/outlet-status-routing.module';
 
 @NgModule({
-  imports: [SharedModule, OutletStatusRoutingModule],
-  declarations: [OutletStatusComponent, OutletStatusDetailComponent, OutletStatusUpdateComponent, OutletStatusDeleteDialogComponent],
-  entryComponents: [OutletStatusDeleteDialogComponent],
+    imports: [SharedModule, OutletStatusRoutingModule],
+    declarations: [OutletStatusComponent, OutletStatusDetailComponent, OutletStatusUpdateComponent, OutletStatusDeleteDialogComponent]
 })
 export class OutletStatusModule {}

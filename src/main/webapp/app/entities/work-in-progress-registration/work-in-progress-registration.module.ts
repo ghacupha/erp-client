@@ -25,13 +25,12 @@ import { WorkInProgressRegistrationDeleteDialogComponent } from './delete/work-i
 import { WorkInProgressRegistrationRoutingModule } from './route/work-in-progress-registration-routing.module';
 
 @NgModule({
-  imports: [SharedModule, WorkInProgressRegistrationRoutingModule],
-  declarations: [
-    WorkInProgressRegistrationComponent,
-    WorkInProgressRegistrationDetailComponent,
-    WorkInProgressRegistrationUpdateComponent,
-    WorkInProgressRegistrationDeleteDialogComponent,
-  ],
-  entryComponents: [WorkInProgressRegistrationDeleteDialogComponent],
+    imports: [SharedModule, WorkInProgressRegistrationRoutingModule],
+    declarations: [
+        WorkInProgressRegistrationComponent,
+        WorkInProgressRegistrationDetailComponent,
+        WorkInProgressRegistrationUpdateComponent,
+        WorkInProgressRegistrationDeleteDialogComponent,
+    ]
 })
 export class WorkInProgressRegistrationModule {}

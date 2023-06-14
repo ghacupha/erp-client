@@ -25,13 +25,12 @@ import { PaymentCategoryDeleteDialogComponent } from './delete/payment-category-
 import { PaymentCategoryRoutingModule } from './route/payment-category-routing.module';
 
 @NgModule({
-  imports: [SharedModule, PaymentCategoryRoutingModule],
-  declarations: [
-    PaymentCategoryComponent,
-    PaymentCategoryDetailComponent,
-    PaymentCategoryUpdateComponent,
-    PaymentCategoryDeleteDialogComponent,
-  ],
-  entryComponents: [PaymentCategoryDeleteDialogComponent],
+    imports: [SharedModule, PaymentCategoryRoutingModule],
+    declarations: [
+        PaymentCategoryComponent,
+        PaymentCategoryDetailComponent,
+        PaymentCategoryUpdateComponent,
+        PaymentCategoryDeleteDialogComponent,
+    ]
 })
 export class ErpServicePaymentCategoryModule {}

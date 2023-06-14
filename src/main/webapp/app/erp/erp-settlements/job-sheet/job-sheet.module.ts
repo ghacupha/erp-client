@@ -26,8 +26,7 @@ import { JobSheetRoutingModule } from './route/job-sheet-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, JobSheetRoutingModule, ErpCommonModule],
-  declarations: [JobSheetComponent, JobSheetDetailComponent, JobSheetUpdateComponent, JobSheetDeleteDialogComponent],
-  entryComponents: [JobSheetDeleteDialogComponent],
+    imports: [SharedModule, JobSheetRoutingModule, ErpCommonModule],
+    declarations: [JobSheetComponent, JobSheetDetailComponent, JobSheetUpdateComponent, JobSheetDeleteDialogComponent]
 })
 export class JobSheetModule {}

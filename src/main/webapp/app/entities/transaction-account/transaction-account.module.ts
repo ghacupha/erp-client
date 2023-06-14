@@ -25,13 +25,12 @@ import { TransactionAccountDeleteDialogComponent } from './delete/transaction-ac
 import { TransactionAccountRoutingModule } from './route/transaction-account-routing.module';
 
 @NgModule({
-  imports: [SharedModule, TransactionAccountRoutingModule],
-  declarations: [
-    TransactionAccountComponent,
-    TransactionAccountDetailComponent,
-    TransactionAccountUpdateComponent,
-    TransactionAccountDeleteDialogComponent,
-  ],
-  entryComponents: [TransactionAccountDeleteDialogComponent],
+    imports: [SharedModule, TransactionAccountRoutingModule],
+    declarations: [
+        TransactionAccountComponent,
+        TransactionAccountDetailComponent,
+        TransactionAccountUpdateComponent,
+        TransactionAccountDeleteDialogComponent,
+    ]
 })
 export class TransactionAccountModule {}

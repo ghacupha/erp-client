@@ -25,13 +25,12 @@ import { WorkInProgressTransferDeleteDialogComponent } from './delete/work-in-pr
 import { WorkInProgressTransferRoutingModule } from './route/work-in-progress-transfer-routing.module';
 
 @NgModule({
-  imports: [SharedModule, WorkInProgressTransferRoutingModule],
-  declarations: [
-    WorkInProgressTransferComponent,
-    WorkInProgressTransferDetailComponent,
-    WorkInProgressTransferUpdateComponent,
-    WorkInProgressTransferDeleteDialogComponent,
-  ],
-  entryComponents: [WorkInProgressTransferDeleteDialogComponent],
+    imports: [SharedModule, WorkInProgressTransferRoutingModule],
+    declarations: [
+        WorkInProgressTransferComponent,
+        WorkInProgressTransferDetailComponent,
+        WorkInProgressTransferUpdateComponent,
+        WorkInProgressTransferDeleteDialogComponent,
+    ]
 })
 export class WorkInProgressTransferModule {}

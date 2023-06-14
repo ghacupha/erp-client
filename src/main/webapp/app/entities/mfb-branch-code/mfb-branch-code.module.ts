@@ -25,8 +25,7 @@ import { MfbBranchCodeDeleteDialogComponent } from './delete/mfb-branch-code-del
 import { MfbBranchCodeRoutingModule } from './route/mfb-branch-code-routing.module';
 
 @NgModule({
-  imports: [SharedModule, MfbBranchCodeRoutingModule],
-  declarations: [MfbBranchCodeComponent, MfbBranchCodeDetailComponent, MfbBranchCodeUpdateComponent, MfbBranchCodeDeleteDialogComponent],
-  entryComponents: [MfbBranchCodeDeleteDialogComponent],
+    imports: [SharedModule, MfbBranchCodeRoutingModule],
+    declarations: [MfbBranchCodeComponent, MfbBranchCodeDetailComponent, MfbBranchCodeUpdateComponent, MfbBranchCodeDeleteDialogComponent]
 })
 export class MfbBranchCodeModule {}

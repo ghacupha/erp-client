@@ -25,13 +25,12 @@ import { LeaseLiabilityScheduleItemDeleteDialogComponent } from './delete/lease-
 import { LeaseLiabilityScheduleItemRoutingModule } from './route/lease-liability-schedule-item-routing.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule],
-  declarations: [
-    LeaseLiabilityScheduleItemComponent,
-    LeaseLiabilityScheduleItemDetailComponent,
-    LeaseLiabilityScheduleItemUpdateComponent,
-    LeaseLiabilityScheduleItemDeleteDialogComponent,
-  ],
-  entryComponents: [LeaseLiabilityScheduleItemDeleteDialogComponent],
+    imports: [SharedModule, LeaseLiabilityScheduleItemRoutingModule],
+    declarations: [
+        LeaseLiabilityScheduleItemComponent,
+        LeaseLiabilityScheduleItemDetailComponent,
+        LeaseLiabilityScheduleItemUpdateComponent,
+        LeaseLiabilityScheduleItemDeleteDialogComponent,
+    ]
 })
 export class LeaseLiabilityScheduleItemModule {}

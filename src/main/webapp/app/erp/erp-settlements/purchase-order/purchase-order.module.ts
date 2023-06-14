@@ -26,8 +26,7 @@ import { PurchaseOrderRoutingModule } from './route/purchase-order-routing.modul
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, PurchaseOrderRoutingModule, ErpCommonModule],
-  declarations: [PurchaseOrderComponent, PurchaseOrderDetailComponent, PurchaseOrderUpdateComponent, PurchaseOrderDeleteDialogComponent],
-  entryComponents: [PurchaseOrderDeleteDialogComponent],
+    imports: [SharedModule, PurchaseOrderRoutingModule, ErpCommonModule],
+    declarations: [PurchaseOrderComponent, PurchaseOrderDetailComponent, PurchaseOrderUpdateComponent, PurchaseOrderDeleteDialogComponent]
 })
 export class PurchaseOrderModule {}

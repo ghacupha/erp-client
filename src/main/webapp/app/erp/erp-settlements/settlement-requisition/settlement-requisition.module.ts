@@ -27,17 +27,17 @@ import { ErpCommonModule } from '../../erp-common/erp-common.module';
 import { SettlementRequisitionCustomRoutingModule } from './route/settlement-requisition-custom-routing.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    SettlementRequisitionRoutingModule,
-    SettlementRequisitionCustomRoutingModule,
-    ErpCommonModule],
-  declarations: [
-    SettlementRequisitionComponent,
-    SettlementRequisitionDetailComponent,
-    SettlementRequisitionUpdateComponent,
-    SettlementRequisitionDeleteDialogComponent,
-  ],
-  entryComponents: [SettlementRequisitionDeleteDialogComponent],
+    imports: [
+        SharedModule,
+        SettlementRequisitionRoutingModule,
+        SettlementRequisitionCustomRoutingModule,
+        ErpCommonModule
+    ],
+    declarations: [
+        SettlementRequisitionComponent,
+        SettlementRequisitionDetailComponent,
+        SettlementRequisitionUpdateComponent,
+        SettlementRequisitionDeleteDialogComponent,
+    ]
 })
 export class SettlementRequisitionModule {}

@@ -25,8 +25,7 @@ import { TaxRuleDeleteDialogComponent } from './delete/tax-rule-delete-dialog.co
 import { TaxRuleRoutingModule } from './route/tax-rule-routing.module';
 
 @NgModule({
-  imports: [SharedModule, TaxRuleRoutingModule],
-  declarations: [TaxRuleComponent, TaxRuleDetailComponent, TaxRuleUpdateComponent, TaxRuleDeleteDialogComponent],
-  entryComponents: [TaxRuleDeleteDialogComponent],
+    imports: [SharedModule, TaxRuleRoutingModule],
+    declarations: [TaxRuleComponent, TaxRuleDetailComponent, TaxRuleUpdateComponent, TaxRuleDeleteDialogComponent]
 })
 export class ErpServiceTaxRuleModule {}

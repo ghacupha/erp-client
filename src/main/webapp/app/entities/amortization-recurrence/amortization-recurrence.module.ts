@@ -25,13 +25,12 @@ import { AmortizationRecurrenceDeleteDialogComponent } from './delete/amortizati
 import { AmortizationRecurrenceRoutingModule } from './route/amortization-recurrence-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AmortizationRecurrenceRoutingModule],
-  declarations: [
-    AmortizationRecurrenceComponent,
-    AmortizationRecurrenceDetailComponent,
-    AmortizationRecurrenceUpdateComponent,
-    AmortizationRecurrenceDeleteDialogComponent,
-  ],
-  entryComponents: [AmortizationRecurrenceDeleteDialogComponent],
+    imports: [SharedModule, AmortizationRecurrenceRoutingModule],
+    declarations: [
+        AmortizationRecurrenceComponent,
+        AmortizationRecurrenceDetailComponent,
+        AmortizationRecurrenceUpdateComponent,
+        AmortizationRecurrenceDeleteDialogComponent,
+    ]
 })
 export class AmortizationRecurrenceModule {}
