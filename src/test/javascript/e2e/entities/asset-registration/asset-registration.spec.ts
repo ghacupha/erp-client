@@ -81,7 +81,7 @@ describe('AssetRegistration e2e test', () => {
             assetRegistrationUpdatePage.setSerialNumberInput('serialNumber'),
             // assetRegistrationUpdatePage.placeholderSelectLastOption(),
             // assetRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
-            assetRegistrationUpdatePage.serviceOutletSelectLastOption(),
+            assetRegistrationUpdatePage.mainServiceOutletSelectLastOption(),
             // assetRegistrationUpdatePage.settlementSelectLastOption(),
             assetRegistrationUpdatePage.assetCategorySelectLastOption(),
             // assetRegistrationUpdatePage.purchaseOrderSelectLastOption(),
@@ -94,6 +94,7 @@ describe('AssetRegistration e2e test', () => {
             // assetRegistrationUpdatePage.assetWarrantySelectLastOption(),
             // assetRegistrationUpdatePage.universallyUniqueMappingSelectLastOption(),
             // assetRegistrationUpdatePage.assetAccessorySelectLastOption(),
+            // assetRegistrationUpdatePage.serviceOutletSelectLastOption(),
         ]);
 
         await assetRegistrationUpdatePage.save();

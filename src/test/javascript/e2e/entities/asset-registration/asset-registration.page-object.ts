@@ -58,7 +58,7 @@ export class AssetRegistrationUpdatePage {
 
   placeholderSelect = element(by.id('field_placeholder'));
   paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
-  serviceOutletSelect = element(by.id('field_serviceOutlet'));
+  mainServiceOutletSelect = element(by.id('field_mainServiceOutlet'));
   settlementSelect = element(by.id('field_settlement'));
   assetCategorySelect = element(by.id('field_assetCategory'));
   purchaseOrderSelect = element(by.id('field_purchaseOrder'));
@@ -71,6 +71,7 @@ export class AssetRegistrationUpdatePage {
   assetWarrantySelect = element(by.id('field_assetWarranty'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
   assetAccessorySelect = element(by.id('field_assetAccessory'));
+  serviceOutletSelect = element(by.id('field_serviceOutlet'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -172,20 +173,20 @@ export class AssetRegistrationUpdatePage {
     return await this.paymentInvoicesSelect.element(by.css('option:checked')).getText();
   }
 
-  async serviceOutletSelectLastOption(): Promise<void> {
-    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
+  async mainServiceOutletSelectLastOption(): Promise<void> {
+    await this.mainServiceOutletSelect.all(by.tagName('option')).last().click();
   }
 
-  async serviceOutletSelectOption(option: string): Promise<void> {
-    await this.serviceOutletSelect.sendKeys(option);
+  async mainServiceOutletSelectOption(option: string): Promise<void> {
+    await this.mainServiceOutletSelect.sendKeys(option);
   }
 
-  getServiceOutletSelect(): ElementFinder {
-    return this.serviceOutletSelect;
+  getMainServiceOutletSelect(): ElementFinder {
+    return this.mainServiceOutletSelect;
   }
 
-  async getServiceOutletSelectedOption(): Promise<string> {
-    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
+  async getMainServiceOutletSelectedOption(): Promise<string> {
+    return await this.mainServiceOutletSelect.element(by.css('option:checked')).getText();
   }
 
   async settlementSelectLastOption(): Promise<void> {
@@ -378,6 +379,22 @@ export class AssetRegistrationUpdatePage {
 
   async getAssetAccessorySelectedOption(): Promise<string> {
     return await this.assetAccessorySelect.element(by.css('option:checked')).getText();
+  }
+
+  async serviceOutletSelectLastOption(): Promise<void> {
+    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
+  }
+
+  async serviceOutletSelectOption(option: string): Promise<void> {
+    await this.serviceOutletSelect.sendKeys(option);
+  }
+
+  getServiceOutletSelect(): ElementFinder {
+    return this.serviceOutletSelect;
+  }
+
+  async getServiceOutletSelectedOption(): Promise<string> {
+    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

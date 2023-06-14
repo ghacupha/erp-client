@@ -168,19 +168,19 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
+          <label class="form-control-label" for="field_mainServiceOutlet">Main Service Outlet</label>
           <select
             class="form-control"
-            id="field_serviceOutlet"
-            data-cy="serviceOutlet"
-            name="serviceOutlet"
-            formControlName="serviceOutlet"
+            id="field_mainServiceOutlet"
+            data-cy="mainServiceOutlet"
+            name="mainServiceOutlet"
+            formControlName="mainServiceOutlet"
           >
-            <option *ngIf="!editForm.get('serviceOutlet')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
-                  ? editForm.get('serviceOutlet')!.value
+                serviceOutletOption.id === editForm.get('mainServiceOutlet')!.value?.id
+                  ? editForm.get('mainServiceOutlet')!.value
                   : serviceOutletOption
               "
               *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
@@ -188,13 +188,6 @@
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['serviceOutlet'])!.invalid && (editForm.get(['serviceOutlet'])!.dirty || editForm.get(['serviceOutlet'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlet'])?.errors?.required"> This field is required. </small>
         </div>
 
         <div class="form-group">
@@ -436,6 +429,25 @@
               *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
             >
               {{ assetAccessoryOption.assetDetails }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_serviceOutlets">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlets"
+            data-cy="serviceOutlet"
+            multiple
+            name="serviceOutlets"
+            formControlName="serviceOutlets"
+          >
+            <option
+              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
             </option>
           </select>
         </div>

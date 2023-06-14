@@ -91,7 +91,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     serialNumber: [],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlet: [null, Validators.required],
+    mainServiceOutlet: [],
     settlements: [null, Validators.required],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
@@ -104,6 +104,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     assetWarranties: [],
     universallyUniqueMappings: [],
     assetAccessories: [],
+    serviceOutlets: [],
   });
 
   constructor(
@@ -233,6 +234,17 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedServiceOutlet(option: IServiceOutlet, selectedVals?: IServiceOutlet[]): IServiceOutlet {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -377,7 +389,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       serialNumber: assetRegistration.serialNumber,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlet: assetRegistration.serviceOutlet,
+      mainServiceOutlet: assetRegistration.mainServiceOutlet,
       settlements: assetRegistration.settlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
@@ -390,6 +402,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       assetWarranties: assetRegistration.assetWarranties,
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
+      serviceOutlets: assetRegistration.serviceOutlets,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -402,7 +415,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      assetRegistration.serviceOutlet
+      assetRegistration.mainServiceOutlet,
+      ...(assetRegistration.serviceOutlets ?? [])
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
@@ -480,7 +494,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+            serviceOutlets,
+            this.editForm.get('mainServiceOutlet')!.value,
+            ...(this.editForm.get('serviceOutlets')!.value ?? [])
+          )
         )
       )
       .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
@@ -635,7 +653,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       serialNumber: this.editForm.get(['serialNumber'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
       settlements: this.editForm.get(['settlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
@@ -648,6 +666,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
+      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
     };
   }
 }

@@ -55,6 +55,7 @@ import { M2mAssetAccessoryFormComponent } from './asset-accessory-components/m2m
 import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/m2m-asset-warranty-form-component';
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
 import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
+import { M2mServiceOutletFormControlComponent } from './service-outlet-form-components/m2m-service-outlet-form-control.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-com
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
+    M2mServiceOutletFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -134,6 +136,7 @@ import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-com
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
+    M2mServiceOutletFormControlComponent,
   ]
 })
 export class FormComponentsModule {

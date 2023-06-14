@@ -37,7 +37,6 @@ describe('AssetRegistration e2e test', () => {
   const assetRegistrationSample = { assetNumber: 'Strategist compress', assetTag: 'Communications heuristic', assetCost: 66620 };
 
   let assetRegistration: any;
-  //let serviceOutlet: any;
   //let settlement: any;
   //let assetCategory: any;
   //let dealer: any;
@@ -53,14 +52,6 @@ describe('AssetRegistration e2e test', () => {
 
   /* Disabled due to incompatibility
   beforeEach(() => {
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/service-outlets',
-      body: {"outletCode":"Wyoming","outletName":"Central Track Springs","town":"Senior","parliamentaryConstituency":"visualize deposit bypass","gpsCoordinates":"Handmade programming wireless","outletOpeningDate":"2022-03-01","regulatorApprovalDate":"2022-03-01","outletClosureDate":"2022-02-28","dateLastModified":"2022-02-28","licenseFeePayable":87476},
-    }).then(({ body }) => {
-      serviceOutlet = body;
-    });
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
@@ -109,7 +100,7 @@ describe('AssetRegistration e2e test', () => {
 
     cy.intercept('GET', '/api/service-outlets', {
       statusCode: 200,
-      body: [serviceOutlet],
+      body: [],
     });
 
     cy.intercept('GET', '/api/settlements', {
@@ -183,14 +174,6 @@ describe('AssetRegistration e2e test', () => {
 
   /* Disabled due to incompatibility
   afterEach(() => {
-    if (serviceOutlet) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/service-outlets/${serviceOutlet.id}`,
-      }).then(() => {
-        serviceOutlet = undefined;
-      });
-    }
     if (settlement) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -261,7 +244,6 @@ describe('AssetRegistration e2e test', () => {
   
           body: {
             ...assetRegistrationSample,
-            serviceOutlet: serviceOutlet,
             settlement: settlement,
             assetCategory: assetCategory,
             dealer: dealer,
@@ -360,7 +342,6 @@ describe('AssetRegistration e2e test', () => {
 
       cy.get(`[data-cy="serialNumber"]`).type('Latvian').should('have.value', 'Latvian');
 
-      cy.get(`[data-cy="serviceOutlet"]`).select(1);
       cy.get(`[data-cy="settlement"]`).select([0]);
       cy.get(`[data-cy="assetCategory"]`).select(1);
       cy.get(`[data-cy="dealer"]`).select(1);

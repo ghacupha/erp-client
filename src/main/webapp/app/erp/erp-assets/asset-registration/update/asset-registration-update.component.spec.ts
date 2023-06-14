@@ -119,7 +119,6 @@ describe('AssetRegistration Management Update Component', () => {
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
       const serviceOutlet: IServiceOutlet = { id: 40506 };
-      assetRegistration.serviceOutlet = serviceOutlet;
       const settlements: ISettlement = { id: 26803 };
       assetRegistration.settlements = [settlements];
       const assetCategory: IAssetCategory = { id: 64108 };

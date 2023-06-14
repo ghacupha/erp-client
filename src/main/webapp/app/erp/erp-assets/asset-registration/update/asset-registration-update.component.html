@@ -138,16 +138,15 @@
         >
         </jhi-m2m-payment-invoice-form-control>
 
-        <!--// TODO Service Outlets-->
-        <!--<jhi-m2m-service-outlet-form-control
+        <jhi-m21-service-outlet-form-control
           ngDefaultControl
-          formControlName='serviceOutlet'
-          [inputValue]="editForm.get('serviceOutlet')!.value"
-          (valueSelected)='updateServiceOutlet($event)'
-          inputControlLabel='Service Outlet'
+          formControlName='mainServiceOutlet'
+          [inputValue]="editForm.get('mainServiceOutlet')!.value"
+          (valueSelected)='updateMainServiceOutlet($event)'
+          inputControlLabel='Main Service Outlet'
         >
-          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
-        </jhi-m2m-service-outlet-form-control>-->
+          <option [ngValue]="editForm.get('mainServiceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
 
         <jhi-m2m-settlement-form-control
           ngDefaultControl
@@ -259,6 +258,15 @@
           inputControlLabel='System Mapping(s)'
         >
         </jhi-m2m-universally-unique-mapping-form-control>
+
+        <jhi-m2m-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlets'
+          [inputValues]="editForm.get(['serviceOutlets'])!.value"
+          (selectedValues)='updateServiceOutlets($event)'
+          inputControlLabel='Other Service Outlet(s)'
+        >
+        </jhi-m2m-service-outlet-form-control>
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl

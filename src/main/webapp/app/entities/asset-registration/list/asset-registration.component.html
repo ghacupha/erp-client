@@ -77,7 +77,7 @@
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
@@ -106,9 +106,9 @@
           <td>{{ assetRegistration.modelNumber }}</td>
           <td>{{ assetRegistration.serialNumber }}</td>
           <td>
-            <div *ngIf="assetRegistration.serviceOutlet">
-              <a [routerLink]="['/service-outlet', assetRegistration.serviceOutlet?.id, 'view']">{{
-                assetRegistration.serviceOutlet?.outletCode
+            <div *ngIf="assetRegistration.mainServiceOutlet">
+              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+                assetRegistration.mainServiceOutlet?.outletCode
               }}</a>
             </div>
           </td>

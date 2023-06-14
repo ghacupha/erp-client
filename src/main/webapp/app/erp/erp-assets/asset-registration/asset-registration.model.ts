@@ -43,7 +43,7 @@ export interface IAssetRegistration {
   serialNumber?: string | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlet?: IServiceOutlet;
+  mainServiceOutlet?: IServiceOutlet | null;
   settlements?: ISettlement[];
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
@@ -56,6 +56,7 @@ export interface IAssetRegistration {
   assetWarranties?: IAssetWarranty[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
+  serviceOutlets?: IServiceOutlet[] | null;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -71,7 +72,7 @@ export class AssetRegistration implements IAssetRegistration {
     public serialNumber?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlet?: IServiceOutlet,
+    public mainServiceOutlet?: IServiceOutlet | null,
     public settlements?: ISettlement[],
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,
@@ -83,7 +84,8 @@ export class AssetRegistration implements IAssetRegistration {
     public businessDocuments?: IBusinessDocument[] | null,
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
-    public assetAccessories?: IAssetAccessory[] | null
+    public assetAccessories?: IAssetAccessory[] | null,
+    public serviceOutlets?: IServiceOutlet[] | null
   ) {}
 }
 

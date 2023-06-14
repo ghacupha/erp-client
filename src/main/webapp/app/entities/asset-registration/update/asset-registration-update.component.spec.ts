@@ -152,12 +152,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const serviceOutlet: IServiceOutlet = { id: 10495 };
-      assetRegistration.serviceOutlet = serviceOutlet;
+      const mainServiceOutlet: IServiceOutlet = { id: 10495 };
+      assetRegistration.mainServiceOutlet = mainServiceOutlet;
+      const serviceOutlets: IServiceOutlet[] = [{ id: 12055 }];
+      assetRegistration.serviceOutlets = serviceOutlets;
 
-      const serviceOutletCollection: IServiceOutlet[] = [{ id: 12055 }];
+      const serviceOutletCollection: IServiceOutlet[] = [{ id: 40506 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [serviceOutlet];
+      const additionalServiceOutlets = [mainServiceOutlet, ...serviceOutlets];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -418,8 +420,10 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const serviceOutlet: IServiceOutlet = { id: 40506 };
-      assetRegistration.serviceOutlet = serviceOutlet;
+      const mainServiceOutlet: IServiceOutlet = { id: 53824 };
+      assetRegistration.mainServiceOutlet = mainServiceOutlet;
+      const serviceOutlets: IServiceOutlet = { id: 72754 };
+      assetRegistration.serviceOutlets = [serviceOutlets];
       const settlements: ISettlement = { id: 26803 };
       assetRegistration.settlements = [settlements];
       const assetCategory: IAssetCategory = { id: 64108 };
@@ -451,7 +455,8 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
+      expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
+      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
       expect(comp.settlementsSharedCollection).toContain(settlements);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
@@ -693,6 +698,32 @@ describe('AssetRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPaymentInvoice(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedServiceOutlet', () => {
+      it('Should return option if no ServiceOutlet is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedServiceOutlet(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected ServiceOutlet for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedServiceOutlet(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this ServiceOutlet is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedServiceOutlet(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

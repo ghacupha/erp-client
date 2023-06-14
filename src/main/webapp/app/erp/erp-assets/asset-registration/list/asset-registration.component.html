@@ -73,8 +73,13 @@
           <th scope="col" jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetTag"><span>Asset Tag</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetDetails"><span>Asset Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="assetCost"><span>Asset Cost</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="mainServiceOutlet"><span>Outlet</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -88,14 +93,22 @@
           <td>{{ assetRegistration.assetNumber }}</td>
           <td>{{ assetRegistration.assetTag }}</td>
           <td>{{ assetRegistration.assetDetails }}</td>
-          <td>{{ assetRegistration.assetCost }}</td>
           <td>
-            <a *ngIf="assetRegistration.comments" (click)="openFile(assetRegistration.comments, assetRegistration.commentsContentType)"
-              >open</a
-            >
-            <span *ngIf="assetRegistration.comments"
-              >{{ assetRegistration.commentsContentType }}, {{ byteSize(assetRegistration.comments) }}</span
-            >
+            <div *ngIf="assetRegistration.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
+                assetRegistration.settlementCurrency?.iso4217CurrencyCode
+                }}</a>
+            </div>
+          </td>
+          <td>{{ assetRegistration.assetCost }}</td>
+          <td>{{ assetRegistration.modelNumber }}</td>
+          <td>{{ assetRegistration.serialNumber }}</td>
+          <td>
+            <div *ngIf="assetRegistration.mainServiceOutlet">
+              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+                assetRegistration.mainServiceOutlet?.outletCode
+                }}</a>
+            </div>
           </td>
           <td>
             <div *ngIf="assetRegistration.assetCategory">

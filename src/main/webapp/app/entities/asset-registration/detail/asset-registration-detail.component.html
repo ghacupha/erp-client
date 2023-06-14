@@ -78,11 +78,11 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Service Outlet</span></dt>
+        <dt><span>Main Service Outlet</span></dt>
         <dd>
-          <div *ngIf="assetRegistration.serviceOutlet">
-            <a [routerLink]="['/service-outlet', assetRegistration.serviceOutlet?.id, 'view']">{{
-              assetRegistration.serviceOutlet?.outletCode
+          <div *ngIf="assetRegistration.mainServiceOutlet">
+            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+              assetRegistration.mainServiceOutlet?.outletCode
             }}</a>
           </div>
         </dd>
@@ -170,6 +170,13 @@
         <dd>
           <span *ngFor="let assetAccessory of assetRegistration.assetAccessories; let last = last">
             <a [routerLink]="['/asset-accessory', assetAccessory?.id, 'view']">{{ assetAccessory.assetDetails }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
+            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
