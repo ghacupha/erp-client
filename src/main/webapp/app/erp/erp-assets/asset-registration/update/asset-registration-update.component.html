@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark III No 16 (Caleb Series) Client 1.3.8
+    Erp System - Mark III No 16 (Caleb Series) Client 1.3.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -77,31 +77,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_modelNumber">Model Number</label>
-          <input
-            type="text"
-            class="form-control"
-            name="modelNumber"
-            id="field_modelNumber"
-            data-cy="modelNumber"
-            formControlName="modelNumber"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
-          <input
-            type="text"
-            class="form-control"
-            name="serialNumber"
-            id="field_serialNumber"
-            data-cy="serialNumber"
-            formControlName="serialNumber"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_comments">Comment(s)</label>
+          <label class="form-control-label" for="field_comments">Comments</label>
           <div>
             <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
               <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
@@ -129,43 +105,137 @@
           />
         </div>
 
-        <jhi-m2m-payment-invoice-form-control
-          ngDefaultControl
-          formControlName='paymentInvoices'
-          [inputValues]="editForm.get(['paymentInvoices'])!.value"
-          (valueSelected)='updatePaymentInvoices($event)'
-          inputControlLabel='Invoice(s)'
-        >
-        </jhi-m2m-payment-invoice-form-control>
+        <div class="form-group">
+          <label class="form-control-label" for="field_modelNumber">Model Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="modelNumber"
+            id="field_modelNumber"
+            data-cy="modelNumber"
+            formControlName="modelNumber"
+          />
+        </div>
 
-        <jhi-m21-service-outlet-form-control
-          ngDefaultControl
-          formControlName='mainServiceOutlet'
-          [inputValue]="editForm.get('mainServiceOutlet')!.value"
-          (valueSelected)='updateMainServiceOutlet($event)'
-          inputControlLabel='Main Service Outlet'
-        >
-          <option [ngValue]="editForm.get('mainServiceOutlet')!.value"></option>
-        </jhi-m21-service-outlet-form-control>
+        <div class="form-group">
+          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serialNumber"
+            id="field_serialNumber"
+            data-cy="serialNumber"
+            formControlName="serialNumber"
+          />
+        </div>
 
-        <jhi-m2m-settlement-form-control
-          ngDefaultControl
-          formControlName='settlements'
-          [inputValues]="editForm.get(['settlements'])!.value"
-          (valueSelected)='updateSettlements($event)'
-          inputControlLabel='Settlement(s)'
-        >
-        </jhi-m2m-settlement-form-control>
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m21-asset-category-form-control
-          ngDefaultControl
-          formControlName='assetCategory'
-          [inputValue]="editForm.get('assetCategory')!.value"
-          (valueSelected)='updateAssetCategory($event)'
-          inputControlLabel='Asset Category'
+        <div class="form-group">
+          <label for="field_paymentInvoices">Payment Invoices</label>
+          <select
+            class="form-control"
+            id="field_paymentInvoices"
+            data-cy="paymentInvoices"
+            multiple
+            name="paymentInvoices"
+            formControlName="paymentInvoices"
+          >
+            <option
+              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
+              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
+            >
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_mainServiceOutlet">Main Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_mainServiceOutlet"
+            data-cy="mainServiceOutlet"
+            name="mainServiceOutlet"
+            formControlName="mainServiceOutlet"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('mainServiceOutlet')!.value?.id
+                  ? editForm.get('mainServiceOutlet')!.value
+                  : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_settlements">Settlement</label>
+          <select
+            class="form-control"
+            id="field_settlements"
+            data-cy="settlement"
+            multiple
+            name="settlements"
+            formControlName="settlements"
+          >
+            <option
+              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentNumber }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
         >
-          <option [ngValue]="editForm.get('assetCategory')!.value"></option>
-        </jhi-m21-asset-category-form-control>
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
+          <select
+            class="form-control"
+            id="field_assetCategory"
+            data-cy="assetCategory"
+            name="assetCategory"
+            formControlName="assetCategory"
+          >
+            <option *ngIf="!editForm.get('assetCategory')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
+                  ? editForm.get('assetCategory')!.value
+                  : assetCategoryOption
+              "
+              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
+            >
+              {{ assetCategoryOption.assetCategoryName }}
+            </option>
+          </select>
+        </div>
         <div
           *ngIf="
             editForm.get(['assetCategory'])!.invalid && (editForm.get(['assetCategory'])!.dirty || editForm.get(['assetCategory'])!.touched)
@@ -174,109 +244,213 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <jhi-m2m-purchase-order-form-control
-          ngDefaultControl
-          formControlName='purchaseOrders'
-          [inputValues]="editForm.get(['purchaseOrders'])!.value"
-          (selectedValues)='updatePurchaseOrders($event)'
-          inputControlLabel='Purchase Orders(s)'
-        >
-        </jhi-m2m-purchase-order-form-control>
+        <div class="form-group">
+          <label for="field_purchaseOrders">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrders"
+            data-cy="purchaseOrder"
+            multiple
+            name="purchaseOrders"
+            formControlName="purchaseOrders"
+          >
+            <option
+              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-delivery-note-form-control
-          ngDefaultControl
-          formControlName='deliveryNotes'
-          [inputValues]="editForm.get(['deliveryNotes'])!.value"
-          (selectedValues)='updateDeliveryNotes($event)'
-          inputControlLabel='Delivery Note(s)'
-        >
-        </jhi-m2m-delivery-note-form-control>
+        <div class="form-group">
+          <label for="field_deliveryNotes">Delivery Note</label>
+          <select
+            class="form-control"
+            id="field_deliveryNotes"
+            data-cy="deliveryNote"
+            multiple
+            name="deliveryNotes"
+            formControlName="deliveryNotes"
+          >
+            <option
+              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
+              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
+            >
+              {{ deliveryNoteOption.deliveryNoteNumber }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-job-sheet-form-control
-          ngDefaultControl
-          formControlName='jobSheets'
-          [inputValues]="editForm.get(['jobSheets'])!.value"
-          (selectedValues)='updateJobSheets($event)'
-          inputControlLabel='Job Sheet(s)'
-        >
-        </jhi-m2m-job-sheet-form-control>
+        <div class="form-group">
+          <label for="field_jobSheets">Job Sheet</label>
+          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
+            <option
+              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
+              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
+            >
+              {{ jobSheetOption.serialNumber }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='dealer'
-          [inputValue]="editForm.get('dealer')!.value"
-          (valueSelected)='updateDealer($event)'
-          inputControlLabel=Biller
-        >
-          <option [ngValue]="editForm.get('dealer')!.value"></option>
-        </jhi-m21-dealer-form-control>
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealer">Dealer</label>
+          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+            <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <jhi-m2m-dealer-form-control
-          ngDefaultControl
-          formControlName='designatedUsers'
-          [inputValues]="editForm.get(['designatedUsers'])!.value"
-          (valueSelected)='updateDesignatedUsers($event)'
-          inputControlLabel='Designated User(s)'
-        >
-        </jhi-m2m-dealer-form-control>
+        <div class="form-group">
+          <label for="field_designatedUsers">Designated Users</label>
+          <select
+            class="form-control"
+            id="field_designatedUsers"
+            data-cy="designatedUsers"
+            multiple
+            name="designatedUsers"
+            formControlName="designatedUsers"
+          >
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('designatedUsers')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-business-document-form-control
-          ngDefaultControl
-          formControlName='businessDocuments'
-          [inputValues]="editForm.get(['businessDocuments'])!.value"
-          (selectedValues)='updateBusinessDocument($event)'
-          inputControlLabel='Business Document Attachments'
-        >
-        </jhi-m2m-business-document-form-control>
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
+            class="form-control"
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
+                  ? editForm.get('settlementCurrency')!.value
+                  : settlementCurrencyOption
+              "
+              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
+            >
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-asset-warranty-form-control
-          ngDefaultControl
-          formControlName='assetWarranties'
-          [inputValues]="editForm.get(['assetWarranties'])!.value"
-          (selectedValues)='updateAssetWarranties($event)'
-          inputControlLabel='Asset Warrant(y/ies)'
-        >
-        </jhi-m2m-asset-warranty-form-control>
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-asset-accessory-form-control
-          ngDefaultControl
-          formControlName='assetAccessories'
-          [inputValues]="editForm.get(['assetAccessories'])!.value"
-          (selectedValues)='updateAssetAccessories($event)'
-          inputControlLabel='Asset Accessor(y/ies)'
-        >
-        </jhi-m2m-asset-accessory-form-control>
+        <div class="form-group">
+          <label for="field_assetWarranties">Asset Warranty</label>
+          <select
+            class="form-control"
+            id="field_assetWarranties"
+            data-cy="assetWarranty"
+            multiple
+            name="assetWarranties"
+            formControlName="assetWarranties"
+          >
+            <option
+              [ngValue]="getSelectedAssetWarranty(assetWarrantyOption, editForm.get('assetWarranties')!.value)"
+              *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
+            >
+              {{ assetWarrantyOption.description }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='universallyUniqueMappings'
-          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
-          (selectedValues)='updateUniversallyUniqueMappings($event)'
-          inputControlLabel='System Mapping(s)'
-        >
-        </jhi-m2m-universally-unique-mapping-form-control>
+        <div class="form-group">
+          <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
+          <select
+            class="form-control"
+            id="field_universallyUniqueMappings"
+            data-cy="universallyUniqueMapping"
+            multiple
+            name="universallyUniqueMappings"
+            formControlName="universallyUniqueMappings"
+          >
+            <option
+              [ngValue]="
+                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
+              "
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-service-outlet-form-control
-          ngDefaultControl
-          formControlName='serviceOutlets'
-          [inputValues]="editForm.get(['serviceOutlets'])!.value"
-          (selectedValues)='updateServiceOutlets($event)'
-          inputControlLabel='Other Service Outlet(s)'
-        >
-        </jhi-m2m-service-outlet-form-control>
+        <div class="form-group">
+          <label for="field_assetAccessories">Asset Accessory</label>
+          <select
+            class="form-control"
+            id="field_assetAccessories"
+            data-cy="assetAccessory"
+            multiple
+            name="assetAccessories"
+            formControlName="assetAccessories"
+          >
+            <option
+              [ngValue]="getSelectedAssetAccessory(assetAccessoryOption, editForm.get('assetAccessories')!.value)"
+              *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
+            >
+              {{ assetAccessoryOption.assetDetails }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
+        <div class="form-group">
+          <label for="field_serviceOutlets">Service Outlet</label>
+          <select
+            class="form-control"
+            id="field_serviceOutlets"
+            data-cy="serviceOutlet"
+            multiple
+            name="serviceOutlets"
+            formControlName="serviceOutlets"
+          >
+            <option
+              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

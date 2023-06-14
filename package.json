@@ -177,7 +177,7 @@
     "webpack-notifier": "1.14.1"
   },
   "engines": {
-    "node": ">=14.17.6"
+    "node": ">=16.17.0"
   },
   "cacheDirectories": [
     "node_modules"

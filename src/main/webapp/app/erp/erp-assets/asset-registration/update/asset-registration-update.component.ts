@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark III No 16 (Caleb Series) Client 1.3.8
+/// Erp System - Mark III No 16 (Caleb Series) Client 1.3.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { IAssetRegistration, AssetRegistration } from '../asset-registration.model';
@@ -28,34 +28,34 @@ import { AssetRegistrationService } from '../service/asset-registration.service'
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IAssetCategory } from '../../asset-category/asset-category.model';
-import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
-import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
-import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
-import { IAssetWarranty } from '../../asset-warranty/asset-warranty.model';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
-import { IAssetAccessory } from '../../asset-accessory/asset-accessory.model';
-import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
-import { AssetAccessoryService } from '../../asset-accessory/service/asset-accessory.service';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
-import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
-import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
-import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
-import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
-import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
-import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
+import { PaymentInvoiceService } from 'app/entities/payment-invoice/service/payment-invoice.service';
+import { IServiceOutlet } from 'app/entities/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/service-outlet/service/service-outlet.service';
+import { ISettlement } from 'app/entities/settlement/settlement.model';
+import { SettlementService } from 'app/entities/settlement/service/settlement.service';
+import { IAssetCategory } from 'app/entities/asset-category/asset-category.model';
+import { AssetCategoryService } from 'app/entities/asset-category/service/asset-category.service';
+import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
+import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
+import { IDeliveryNote } from 'app/entities/delivery-note/delivery-note.model';
+import { DeliveryNoteService } from 'app/entities/delivery-note/service/delivery-note.service';
+import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
+import { JobSheetService } from 'app/entities/job-sheet/service/job-sheet.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
+import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
+import { BusinessDocumentService } from 'app/entities/business-document/service/business-document.service';
+import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
+import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IAssetAccessory } from 'app/entities/asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from 'app/entities/asset-accessory/service/asset-accessory.service';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -111,8 +111,6 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected assetRegistrationService: AssetRegistrationService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
     protected placeholderService: PlaceholderService,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected serviceOutletService: ServiceOutletService,
@@ -127,110 +125,15 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected assetWarrantyService: AssetWarrantyService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected assetAccessoryService: AssetAccessoryService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetRegistration }) => {
       this.updateForm(assetRegistration);
-    }).unsubscribe();
 
-    this.loadRelationshipsOptions();
-  }
-
-  updateMainServiceOutlet(update: IServiceOutlet): void {
-    this.editForm.patchValue({
-      mainServiceOutlet: update
-    });
-  }
-
-  updateDealer(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      dealer: dealerUpdate,
-    });
-  }
-
-  updateAssetCategory(update: IAssetCategory): void {
-    this.editForm.patchValue({
-      assetCategory: update
-    });
-  }
-
-  updateDesignatedUsers(update: IDealer[]): void {
-    this.editForm.patchValue({
-      designatedUsers: [...update]
-    });
-  }
-
-  updateServiceOutlets(update: IServiceOutlet []): void {
-    this.editForm.patchValue({
-      serviceOutlets: [...update]
-    });
-  }
-
-  updatePurchaseOrders(update: IPurchaseOrder[]): void {
-    this.editForm.patchValue({
-      purchaseOrders: [...update]
-    });
-  }
-
-  updateDeliveryNotes(update: IDeliveryNote[]): void {
-    this.editForm.patchValue({
-      deliveryNotes: [...update]
-    });
-  }
-
-  updateJobSheets(update: IJobSheet[]): void {
-    this.editForm.patchValue({
-      jobSheets: [...update]
-    });
-  }
-
-  updateBusinessDocuments(update: IBusinessDocument[]): void {
-    this.editForm.patchValue({
-      businessDocuments: [...update]
-    });
-  }
-
-  updatePlaceholders(update: IPlaceholder[]): void {
-    this.editForm.patchValue({
-      placeholders: [...update]
-    });
-  }
-
-  updatePaymentInvoices(update: IPaymentInvoice[]): void {
-    this.editForm.patchValue({
-      paymentInvoices: update
-    });
-  }
-
-  updateSettlements(updates: ISettlement[]): void {
-    this.editForm.patchValue({
-      settlements: [...updates]
-    });
-  }
-
-  updateAssetWarranties(updates: IAssetWarranty[]): void {
-    this.editForm.patchValue({
-      assetWarranties: [...updates]
-    });
-  }
-
-  updateAssetAccessories(updates: IAssetAccessory[]): void {
-    this.editForm.patchValue({
-      assetAccessories: [...updates]
-    });
-  }
-
-  updateUniversallyUniqueMappings(updates: IUniversallyUniqueMapping[]): void {
-    this.editForm.patchValue({
-      universallyUniqueMappings: [...updates]
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateBusinessDocument(update: IBusinessDocument[]): void {
-    this.editForm.patchValue({
-      businessDocuments: [...update],
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -261,6 +164,197 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.assetRegistrationService.create(assetRegistration));
     }
+  }
+
+  trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
+    return item.id!;
+  }
+
+  trackServiceOutletById(index: number, item: IServiceOutlet): number {
+    return item.id!;
+  }
+
+  trackSettlementById(index: number, item: ISettlement): number {
+    return item.id!;
+  }
+
+  trackAssetCategoryById(index: number, item: IAssetCategory): number {
+    return item.id!;
+  }
+
+  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
+    return item.id!;
+  }
+
+  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
+    return item.id!;
+  }
+
+  trackJobSheetById(index: number, item: IJobSheet): number {
+    return item.id!;
+  }
+
+  trackDealerById(index: number, item: IDealer): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
+    return item.id!;
+  }
+
+  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
+  }
+
+  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
+    return item.id!;
+  }
+
+  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedServiceOutlet(option: IServiceOutlet, selectedVals?: IServiceOutlet[]): IServiceOutlet {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedUniversallyUniqueMapping(
+    option: IUniversallyUniqueMapping,
+    selectedVals?: IUniversallyUniqueMapping[]
+  ): IUniversallyUniqueMapping {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssetRegistration>>): void {
