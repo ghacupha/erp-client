@@ -11,3 +11,4 @@ dist/
 node/
 postcss.config.js
 server.js
+git-version.js

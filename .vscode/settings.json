@@ -9,5 +9,6 @@
         "ERP_SYSTEM_DEV_DB": "erp-system-dev",
         "ERP_SYSTEM_PROD_DB": "erp-system"
     },
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "typescript.tsdk": "node_modules\\typescript\\lib"
 }
