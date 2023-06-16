@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.3.8",
+  "version": "1.4.0",
   "private": true,
-  "description": "Mark III No 16 (Caleb Series) Client 1.3.8",
+  "description": "Mark IV No 1 (David Series) Client 1.4.0",
   "license": "GPLv3",
   "browser": {
     "fs": false,
