@@ -14,6 +14,5 @@ import { PrepaymentMarshallingRoutingModule } from './route/prepayment-marshalli
     PrepaymentMarshallingUpdateComponent,
     PrepaymentMarshallingDeleteDialogComponent,
   ],
-  entryComponents: [PrepaymentMarshallingDeleteDialogComponent],
 })
 export class PrepaymentMarshallingModule {}

@@ -1,29 +1,14 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPaymentLabel {
-  id?: number;
-  description?: string;
+  id: number;
+  description?: string | null;
   comments?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   remarks?: string | null;
-  containingPaymentLabel?: IPaymentLabel | null;
-  placeholders?: IPlaceholder[] | null;
+  containingPaymentLabel?: Pick<IPaymentLabel, 'id' | 'description'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PaymentLabel implements IPaymentLabel {
-  constructor(
-    public id?: number,
-    public description?: string,
-    public comments?: string | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public remarks?: string | null,
-    public containingPaymentLabel?: IPaymentLabel | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getPaymentLabelIdentifier(paymentLabel: IPaymentLabel): number | undefined {
-  return paymentLabel.id;
-}
+export type NewPaymentLabel = Omit<IPaymentLabel, 'id'> & { id: null };

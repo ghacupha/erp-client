@@ -6,7 +6,7 @@ import {
   /* AmortizationRecurrenceDeleteDialog, */
   AmortizationRecurrenceUpdatePage,
 } from './amortization-recurrence.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICountyCode } from '../county-code.model';
 import { CountyCodeService } from '../service/county-code.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './county-code-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class CountyCodeDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.countyCodeService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

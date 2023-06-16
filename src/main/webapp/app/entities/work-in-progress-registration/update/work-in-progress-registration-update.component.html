@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-work-in-progress-registration-heading" data-cy="WorkInProgressRegistrationCreateUpdateHeading">
@@ -8,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_sequenceNumber">Sequence Number</label>
           <input
             type="text"
             class="form-control"
@@ -32,8 +32,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_particulars">Particulars</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_particulars">Particulars</label>
           <input
             type="text"
             class="form-control"
@@ -44,8 +44,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_instalmentAmount">Instalment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -56,19 +56,20 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_comments">Comments</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_comments">Comments</label>
           <div>
             <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('comments')!.value, editForm.get('commentsContentType')!.value)">open</a
+              <a class="pull-start" (click)="openFile(editForm.get('comments')!.value!, editForm.get('commentsContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('commentsContentType')!.value }}, {{ byteSize(editForm.get('comments')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ comments: null }); editForm.patchValue({ commentsContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ comments: undefined, commentsContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -85,7 +86,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -94,17 +95,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentInvoices">Payment Invoices</label>
           <select
             class="form-control"
@@ -113,17 +112,15 @@
             multiple
             name="paymentInvoices"
             formControlName="paymentInvoices"
+            [compareWith]="comparePaymentInvoice"
           >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
+            <option [ngValue]="paymentInvoiceOption" *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection">
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_serviceOutlets">Service Outlet</label>
           <select
             class="form-control"
@@ -132,17 +129,15 @@
             multiple
             name="serviceOutlets"
             formControlName="serviceOutlets"
+            [compareWith]="compareServiceOutlet"
           >
-            <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
+            <option [ngValue]="serviceOutletOption" *ngFor="let serviceOutletOption of serviceOutletsSharedCollection">
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_settlements">Settlement</label>
           <select
             class="form-control"
@@ -151,17 +146,15 @@
             multiple
             name="settlements"
             formControlName="settlements"
+            [compareWith]="compareSettlement"
           >
-            <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
+            <option [ngValue]="settlementOption" *ngFor="let settlementOption of settlementsSharedCollection">
               {{ settlementOption.paymentNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_purchaseOrders">Purchase Order</label>
           <select
             class="form-control"
@@ -170,17 +163,15 @@
             multiple
             name="purchaseOrders"
             formControlName="purchaseOrders"
+            [compareWith]="comparePurchaseOrder"
           >
-            <option
-              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
-              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
-            >
+            <option [ngValue]="purchaseOrderOption" *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection">
               {{ purchaseOrderOption.purchaseOrderNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_deliveryNotes">Delivery Note</label>
           <select
             class="form-control"
@@ -189,114 +180,101 @@
             multiple
             name="deliveryNotes"
             formControlName="deliveryNotes"
+            [compareWith]="compareDeliveryNote"
           >
-            <option
-              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
-              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
-            >
+            <option [ngValue]="deliveryNoteOption" *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection">
               {{ deliveryNoteOption.deliveryNoteNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_jobSheets">Job Sheet</label>
-          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
-            <option
-              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
-              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
-            >
+          <select
+            class="form-control"
+            id="field_jobSheets"
+            data-cy="jobSheet"
+            multiple
+            name="jobSheets"
+            formControlName="jobSheets"
+            [compareWith]="compareJobSheet"
+          >
+            <option [ngValue]="jobSheetOption" *ngFor="let jobSheetOption of jobSheetsSharedCollection">
               {{ jobSheetOption.serialNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+        <div class="row mb-3">
+          <label class="form-label" for="field_dealer">Dealer</label>
+          <select
+            class="form-control"
+            id="field_dealer"
+            data-cy="dealer"
+            name="dealer"
+            formControlName="dealer"
+            [compareWith]="compareDealer"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_workInProgressGroup">Work In Progress Group</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_workInProgressGroup">Work In Progress Group</label>
           <select
             class="form-control"
             id="field_workInProgressGroup"
             data-cy="workInProgressGroup"
             name="workInProgressGroup"
             formControlName="workInProgressGroup"
+            [compareWith]="compareWorkInProgressRegistration"
           >
             <option [ngValue]="null"></option>
             <option
-              [ngValue]="
-                workInProgressRegistrationOption.id === editForm.get('workInProgressGroup')!.value?.id
-                  ? editForm.get('workInProgressGroup')!.value
-                  : workInProgressRegistrationOption
-              "
-              *ngFor="
-                let workInProgressRegistrationOption of workInProgressRegistrationsSharedCollection;
-                trackBy: trackWorkInProgressRegistrationById
-              "
+              [ngValue]="workInProgressRegistrationOption"
+              *ngFor="let workInProgressRegistrationOption of workInProgressRegistrationsSharedCollection"
             >
               {{ workInProgressRegistrationOption.sequenceNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
             id="field_settlementCurrency"
             data-cy="settlementCurrency"
             name="settlementCurrency"
             formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_workProjectRegister">Work Project Register</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_workProjectRegister">Work Project Register</label>
           <select
             class="form-control"
             id="field_workProjectRegister"
             data-cy="workProjectRegister"
             name="workProjectRegister"
             formControlName="workProjectRegister"
+            [compareWith]="compareWorkProjectRegister"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                workProjectRegisterOption.id === editForm.get('workProjectRegister')!.value?.id
-                  ? editForm.get('workProjectRegister')!.value
-                  : workProjectRegisterOption
-              "
-              *ngFor="let workProjectRegisterOption of workProjectRegistersSharedCollection; trackBy: trackWorkProjectRegisterById"
-            >
+            <option [ngValue]="workProjectRegisterOption" *ngFor="let workProjectRegisterOption of workProjectRegistersSharedCollection">
               {{ workProjectRegisterOption.catalogueNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_businessDocuments">Business Document</label>
           <select
             class="form-control"
@@ -305,17 +283,15 @@
             multiple
             name="businessDocuments"
             formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
           >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_assetAccessories">Asset Accessory</label>
           <select
             class="form-control"
@@ -324,17 +300,15 @@
             multiple
             name="assetAccessories"
             formControlName="assetAccessories"
+            [compareWith]="compareAssetAccessory"
           >
-            <option
-              [ngValue]="getSelectedAssetAccessory(assetAccessoryOption, editForm.get('assetAccessories')!.value)"
-              *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
-            >
+            <option [ngValue]="assetAccessoryOption" *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection">
               {{ assetAccessoryOption.assetDetails }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_assetWarranties">Asset Warranty</label>
           <select
             class="form-control"
@@ -343,11 +317,9 @@
             multiple
             name="assetWarranties"
             formControlName="assetWarranties"
+            [compareWith]="compareAssetWarranty"
           >
-            <option
-              [ngValue]="getSelectedAssetWarranty(assetWarrantyOption, editForm.get('assetWarranties')!.value)"
-              *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
-            >
+            <option [ngValue]="assetWarrantyOption" *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection">
               {{ assetWarrantyOption.description }}
             </option>
           </select>

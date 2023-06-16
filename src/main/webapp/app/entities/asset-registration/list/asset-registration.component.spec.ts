@@ -1,26 +1,29 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { AssetRegistrationService } from '../service/asset-registration.service';
 
 import { AssetRegistrationComponent } from './asset-registration.component';
+import SpyInstance = jest.SpyInstance;
 
 describe('AssetRegistration Management Component', () => {
   let comp: AssetRegistrationComponent;
   let fixture: ComponentFixture<AssetRegistrationComponent>;
   let service: AssetRegistrationService;
+  let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: 'asset-registration', component: AssetRegistrationComponent }]),
+        HttpClientTestingModule,
+      ],
       declarations: [AssetRegistrationComponent],
       providers: [
-        Router,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -32,6 +35,7 @@ describe('AssetRegistration Management Component', () => {
                 page: '1',
                 size: '1',
                 sort: 'id,desc',
+                'filter[someId.in]': 'dc4279ea-cfb9-11ec-9d64-0242ac120002',
               })
             ),
             snapshot: { queryParams: {} },
@@ -45,6 +49,7 @@ describe('AssetRegistration Management Component', () => {
     fixture = TestBed.createComponent(AssetRegistrationComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(AssetRegistrationService);
+    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
 
     const headers = new HttpHeaders();
     jest.spyOn(service, 'query').mockReturnValue(
@@ -66,13 +71,22 @@ describe('AssetRegistration Management Component', () => {
     expect(comp.assetRegistrations?.[0]).toEqual(expect.objectContaining({ id: 123 }));
   });
 
+  describe('trackId', () => {
+    it('Should forward to assetRegistrationService', () => {
+      const entity = { id: 123 };
+      jest.spyOn(service, 'getAssetRegistrationIdentifier');
+      const id = comp.trackId(0, entity);
+      expect(service.getAssetRegistrationIdentifier).toHaveBeenCalledWith(entity);
+      expect(id).toBe(entity.id);
+    });
+  });
+
   it('should load a page', () => {
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToPage(1);
 
     // THEN
-    expect(service.query).toHaveBeenCalled();
-    expect(comp.assetRegistrations?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(routerNavigateSpy).toHaveBeenCalled();
   });
 
   it('should calculate the sort attribute for an id', () => {
@@ -80,20 +94,32 @@ describe('AssetRegistration Management Component', () => {
     comp.ngOnInit();
 
     // THEN
-    expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
   });
 
   it('should calculate the sort attribute for a non-id attribute', () => {
-    // INIT
-    comp.ngOnInit();
-
     // GIVEN
     comp.predicate = 'name';
 
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToWithComponentValues();
 
     // THEN
-    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,desc', 'id'] }));
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ['name,asc'],
+        }),
+      })
+    );
+  });
+
+  it('should calculate the filter attribute', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
   });
 });

@@ -3,9 +3,9 @@
     <span>Prepayment Accounts</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,52 +24,105 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Prepayment Account</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="prepaymentAccounts?.length === 0">
-    <span>No prepaymentAccounts found</span>
+    <span>No Prepayment Accounts found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="prepaymentAccounts && prepaymentAccounts.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="prepaymentAccounts && prepaymentAccounts.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="catalogueNumber">
-            <span>Catalogue Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="prepaymentAmount"><span>Prepayment Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="catalogueNumber">
+            <div class="d-flex">
+              <span>Catalogue Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="particulars">
+            <div class="d-flex">
+              <span>Particulars</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="notes">
+            <div class="d-flex">
+              <span>Notes</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="prepaymentAmount">
+            <div class="d-flex">
+              <span>Prepayment Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="prepaymentGuid">
-            <span>Prepayment Guid</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Prepayment Guid</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Settlement Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="prepaymentTransaction.paymentNumber">
-            <span>Prepayment Transaction</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Prepayment Transaction</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="debitAccount.accountName"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="transferAccount.accountName"><span>Transfer Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serviceOutlet.outletCode">
+            <div class="d-flex">
+              <span>Service Outlet</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dealer.dealerName">
+            <div class="d-flex">
+              <span>Dealer</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="debitAccount.accountName">
+            <div class="d-flex">
+              <span>Debit Account</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="transferAccount.accountName">
+            <div class="d-flex">
+              <span>Transfer Account</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -85,45 +138,45 @@
           <td>{{ prepaymentAccount.prepaymentGuid }}</td>
           <td>
             <div *ngIf="prepaymentAccount.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{
-                prepaymentAccount.settlementCurrency?.iso4217CurrencyCode
+              <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency.id, 'view']">{{
+                prepaymentAccount.settlementCurrency.iso4217CurrencyCode
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="prepaymentAccount.prepaymentTransaction">
-              <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{
-                prepaymentAccount.prepaymentTransaction?.paymentNumber
+              <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction.id, 'view']">{{
+                prepaymentAccount.prepaymentTransaction.paymentNumber
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="prepaymentAccount.serviceOutlet">
-              <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{
-                prepaymentAccount.serviceOutlet?.outletCode
+              <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet.id, 'view']">{{
+                prepaymentAccount.serviceOutlet.outletCode
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="prepaymentAccount.dealer">
-              <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
+              <a [routerLink]="['/dealer', prepaymentAccount.dealer.id, 'view']">{{ prepaymentAccount.dealer.dealerName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="prepaymentAccount.debitAccount">
-              <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
-                prepaymentAccount.debitAccount?.accountName
+              <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount.id, 'view']">{{
+                prepaymentAccount.debitAccount.accountName
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="prepaymentAccount.transferAccount">
-              <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{
-                prepaymentAccount.transferAccount?.accountName
+              <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount.id, 'view']">{{
+                prepaymentAccount.transferAccount.accountName
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -157,19 +210,19 @@
   </div>
 
   <div *ngIf="prepaymentAccounts && prepaymentAccounts.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

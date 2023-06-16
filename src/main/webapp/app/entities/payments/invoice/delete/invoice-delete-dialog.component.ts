@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IInvoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './invoice-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class InvoiceDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.invoiceService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

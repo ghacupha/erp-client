@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ILeaseContract, LeaseContract } from '../lease-contract.model';
+import { ILeaseContract } from '../lease-contract.model';
 import { LeaseContractService } from '../service/lease-contract.service';
 
 @Injectable({ providedIn: 'root' })
-export class LeaseContractRoutingResolveService implements Resolve<ILeaseContract> {
+export class LeaseContractRoutingResolveService implements Resolve<ILeaseContract | null> {
   constructor(protected service: LeaseContractService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseContract> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseContract | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((leaseContract: HttpResponse<LeaseContract>) => {
+        mergeMap((leaseContract: HttpResponse<ILeaseContract>) => {
           if (leaseContract.body) {
             return of(leaseContract.body);
           } else {
@@ -25,6 +25,6 @@ export class LeaseContractRoutingResolveService implements Resolve<ILeaseContrac
         })
       );
     }
-    return of(new LeaseContract());
+    return of(null);
   }
 }

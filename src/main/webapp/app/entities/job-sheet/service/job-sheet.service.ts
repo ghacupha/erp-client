@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IJobSheet, getJobSheetIdentifier } from '../job-sheet.model';
+import { IJobSheet, NewJobSheet } from '../job-sheet.model';
+
+export type PartialUpdateJobSheet = Partial<IJobSheet> & Pick<IJobSheet, 'id'>;
+
+type RestOf<T extends IJobSheet | NewJobSheet> = Omit<T, 'jobSheetDate'> & {
+  jobSheetDate?: string | null;
+};
+
+export type RestJobSheet = RestOf<IJobSheet>;
+
+export type NewRestJobSheet = RestOf<NewJobSheet>;
+
+export type PartialUpdateRestJobSheet = RestOf<PartialUpdateJobSheet>;
 
 export type EntityResponseType = HttpResponse<IJobSheet>;
 export type EntityArrayResponseType = HttpResponse<IJobSheet[]>;
@@ -21,38 +33,38 @@ export class JobSheetService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(jobSheet: IJobSheet): Observable<EntityResponseType> {
+  create(jobSheet: NewJobSheet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(jobSheet);
     return this.http
-      .post<IJobSheet>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestJobSheet>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(jobSheet: IJobSheet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(jobSheet);
     return this.http
-      .put<IJobSheet>(`${this.resourceUrl}/${getJobSheetIdentifier(jobSheet) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestJobSheet>(`${this.resourceUrl}/${this.getJobSheetIdentifier(jobSheet)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(jobSheet: IJobSheet): Observable<EntityResponseType> {
+  partialUpdate(jobSheet: PartialUpdateJobSheet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(jobSheet);
     return this.http
-      .patch<IJobSheet>(`${this.resourceUrl}/${getJobSheetIdentifier(jobSheet) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestJobSheet>(`${this.resourceUrl}/${this.getJobSheetIdentifier(jobSheet)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IJobSheet>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestJobSheet>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IJobSheet[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestJobSheet[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -62,17 +74,28 @@ export class JobSheetService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IJobSheet[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestJobSheet[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addJobSheetToCollectionIfMissing(jobSheetCollection: IJobSheet[], ...jobSheetsToCheck: (IJobSheet | null | undefined)[]): IJobSheet[] {
-    const jobSheets: IJobSheet[] = jobSheetsToCheck.filter(isPresent);
+  getJobSheetIdentifier(jobSheet: Pick<IJobSheet, 'id'>): number {
+    return jobSheet.id;
+  }
+
+  compareJobSheet(o1: Pick<IJobSheet, 'id'> | null, o2: Pick<IJobSheet, 'id'> | null): boolean {
+    return o1 && o2 ? this.getJobSheetIdentifier(o1) === this.getJobSheetIdentifier(o2) : o1 === o2;
+  }
+
+  addJobSheetToCollectionIfMissing<Type extends Pick<IJobSheet, 'id'>>(
+    jobSheetCollection: Type[],
+    ...jobSheetsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const jobSheets: Type[] = jobSheetsToCheck.filter(isPresent);
     if (jobSheets.length > 0) {
-      const jobSheetCollectionIdentifiers = jobSheetCollection.map(jobSheetItem => getJobSheetIdentifier(jobSheetItem)!);
+      const jobSheetCollectionIdentifiers = jobSheetCollection.map(jobSheetItem => this.getJobSheetIdentifier(jobSheetItem)!);
       const jobSheetsToAdd = jobSheets.filter(jobSheetItem => {
-        const jobSheetIdentifier = getJobSheetIdentifier(jobSheetItem);
-        if (jobSheetIdentifier == null || jobSheetCollectionIdentifiers.includes(jobSheetIdentifier)) {
+        const jobSheetIdentifier = this.getJobSheetIdentifier(jobSheetItem);
+        if (jobSheetCollectionIdentifiers.includes(jobSheetIdentifier)) {
           return false;
         }
         jobSheetCollectionIdentifiers.push(jobSheetIdentifier);
@@ -83,25 +106,29 @@ export class JobSheetService {
     return jobSheetCollection;
   }
 
-  protected convertDateFromClient(jobSheet: IJobSheet): IJobSheet {
-    return Object.assign({}, jobSheet, {
-      jobSheetDate: jobSheet.jobSheetDate?.isValid() ? jobSheet.jobSheetDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IJobSheet | NewJobSheet | PartialUpdateJobSheet>(jobSheet: T): RestOf<T> {
+    return {
+      ...jobSheet,
+      jobSheetDate: jobSheet.jobSheetDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restJobSheet: RestJobSheet): IJobSheet {
+    return {
+      ...restJobSheet,
+      jobSheetDate: restJobSheet.jobSheetDate ? dayjs(restJobSheet.jobSheetDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestJobSheet>): HttpResponse<IJobSheet> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.jobSheetDate = res.body.jobSheetDate ? dayjs(res.body.jobSheetDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((jobSheet: IJobSheet) => {
-        jobSheet.jobSheetDate = jobSheet.jobSheetDate ? dayjs(jobSheet.jobSheetDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestJobSheet[]>): HttpResponse<IJobSheet[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

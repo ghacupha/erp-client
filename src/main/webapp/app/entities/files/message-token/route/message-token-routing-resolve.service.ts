@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IMessageToken, MessageToken } from '../message-token.model';
+import { IMessageToken } from '../message-token.model';
 import { MessageTokenService } from '../service/message-token.service';
 
 @Injectable({ providedIn: 'root' })
-export class MessageTokenRoutingResolveService implements Resolve<IMessageToken> {
+export class MessageTokenRoutingResolveService implements Resolve<IMessageToken | null> {
   constructor(protected service: MessageTokenService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IMessageToken> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IMessageToken | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((messageToken: HttpResponse<MessageToken>) => {
+        mergeMap((messageToken: HttpResponse<IMessageToken>) => {
           if (messageToken.body) {
             return of(messageToken.body);
           } else {
@@ -25,6 +25,6 @@ export class MessageTokenRoutingResolveService implements Resolve<IMessageToken>
         })
       );
     }
-    return of(new MessageToken());
+    return of(null);
   }
 }

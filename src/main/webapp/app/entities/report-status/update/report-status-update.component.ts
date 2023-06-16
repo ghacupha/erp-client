@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IReportStatus, ReportStatus } from '../report-status.model';
+import { ReportStatusFormService, ReportStatusFormGroup } from './report-status-form.service';
+import { IReportStatus } from '../report-status.model';
 import { ReportStatusService } from '../service/report-status.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -18,29 +18,32 @@ import { ProcessStatusService } from 'app/entities/process-status/service/proces
 })
 export class ReportStatusUpdateComponent implements OnInit {
   isSaving = false;
+  reportStatus: IReportStatus | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   processStatusesSharedCollection: IProcessStatus[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    reportName: [null, [Validators.required]],
-    reportId: [null, [Validators.required]],
-    placeholders: [],
-    processStatus: [],
-  });
+  editForm: ReportStatusFormGroup = this.reportStatusFormService.createReportStatusFormGroup();
 
   constructor(
     protected reportStatusService: ReportStatusService,
+    protected reportStatusFormService: ReportStatusFormService,
     protected placeholderService: PlaceholderService,
     protected processStatusService: ProcessStatusService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareProcessStatus = (o1: IProcessStatus | null, o2: IProcessStatus | null): boolean =>
+    this.processStatusService.compareProcessStatus(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportStatus }) => {
-      this.updateForm(reportStatus);
+      this.reportStatus = reportStatus;
+      if (reportStatus) {
+        this.updateForm(reportStatus);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -52,38 +55,19 @@ export class ReportStatusUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const reportStatus = this.createFromForm();
-    if (reportStatus.id !== undefined) {
+    const reportStatus = this.reportStatusFormService.getReportStatus(this.editForm);
+    if (reportStatus.id !== null) {
       this.subscribeToSaveResponse(this.reportStatusService.update(reportStatus));
     } else {
       this.subscribeToSaveResponse(this.reportStatusService.create(reportStatus));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackProcessStatusById(index: number, item: IProcessStatus): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IReportStatus>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -99,19 +83,14 @@ export class ReportStatusUpdateComponent implements OnInit {
   }
 
   protected updateForm(reportStatus: IReportStatus): void {
-    this.editForm.patchValue({
-      id: reportStatus.id,
-      reportName: reportStatus.reportName,
-      reportId: reportStatus.reportId,
-      placeholders: reportStatus.placeholders,
-      processStatus: reportStatus.processStatus,
-    });
+    this.reportStatus = reportStatus;
+    this.reportStatusFormService.resetForm(this.editForm, reportStatus);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(reportStatus.placeholders ?? [])
     );
-    this.processStatusesSharedCollection = this.processStatusService.addProcessStatusToCollectionIfMissing(
+    this.processStatusesSharedCollection = this.processStatusService.addProcessStatusToCollectionIfMissing<IProcessStatus>(
       this.processStatusesSharedCollection,
       reportStatus.processStatus
     );
@@ -123,7 +102,10 @@ export class ReportStatusUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.reportStatus?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -133,20 +115,9 @@ export class ReportStatusUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IProcessStatus[]>) => res.body ?? []))
       .pipe(
         map((processStatuses: IProcessStatus[]) =>
-          this.processStatusService.addProcessStatusToCollectionIfMissing(processStatuses, this.editForm.get('processStatus')!.value)
+          this.processStatusService.addProcessStatusToCollectionIfMissing<IProcessStatus>(processStatuses, this.reportStatus?.processStatus)
         )
       )
       .subscribe((processStatuses: IProcessStatus[]) => (this.processStatusesSharedCollection = processStatuses));
-  }
-
-  protected createFromForm(): IReportStatus {
-    return {
-      ...new ReportStatus(),
-      id: this.editForm.get(['id'])!.value,
-      reportName: this.editForm.get(['reportName'])!.value,
-      reportId: this.editForm.get(['reportId'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      processStatus: this.editForm.get(['processStatus'])!.value,
-    };
   }
 }

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="paymentLabel">
       <h2 data-cy="paymentLabelDetailsHeading"><span>Payment Label</span></h2>
@@ -37,15 +37,15 @@
         <dt><span>Containing Payment Label</span></dt>
         <dd>
           <div *ngIf="paymentLabel.containingPaymentLabel">
-            <a [routerLink]="['/payment-label', paymentLabel.containingPaymentLabel?.id, 'view']">{{
-              paymentLabel.containingPaymentLabel?.description
+            <a [routerLink]="['/payment-label', paymentLabel.containingPaymentLabel.id, 'view']">{{
+              paymentLabel.containingPaymentLabel.description
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of paymentLabel.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

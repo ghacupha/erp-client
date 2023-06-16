@@ -9,6 +9,5 @@ import { PurchaseOrderRoutingModule } from './route/purchase-order-routing.modul
 @NgModule({
   imports: [SharedModule, PurchaseOrderRoutingModule],
   declarations: [PurchaseOrderComponent, PurchaseOrderDetailComponent, PurchaseOrderUpdateComponent, PurchaseOrderDeleteDialogComponent],
-  entryComponents: [PurchaseOrderDeleteDialogComponent],
 })
 export class PurchaseOrderModule {}

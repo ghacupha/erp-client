@@ -1,23 +1,11 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IOutletType {
-  id?: number;
-  outletTypeCode?: string;
-  outletType?: string;
+  id: number;
+  outletTypeCode?: string | null;
+  outletType?: string | null;
   outletTypeDetails?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class OutletType implements IOutletType {
-  constructor(
-    public id?: number,
-    public outletTypeCode?: string,
-    public outletType?: string,
-    public outletTypeDetails?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getOutletTypeIdentifier(outletType: IOutletType): number | undefined {
-  return outletType.id;
-}
+export type NewOutletType = Omit<IOutletType, 'id'> & { id: null };

@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IInvoice, Invoice } from '../invoice.model';
+import { IInvoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
 
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('Invoice routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: InvoiceRoutingResolveService;
   let service: InvoiceService;
-  let resultInvoice: IInvoice | undefined;
+  let resultInvoice: IInvoice | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(InvoiceRoutingResolveService);
     service = TestBed.inject(InvoiceService);
     resultInvoice = undefined;
@@ -46,7 +55,7 @@ describe('Invoice routing resolve service', () => {
       expect(resultInvoice).toEqual({ id: 123 });
     });
 
-    it('should return new IInvoice if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('Invoice routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultInvoice).toEqual(new Invoice());
+      expect(resultInvoice).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as Invoice })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IInvoice>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

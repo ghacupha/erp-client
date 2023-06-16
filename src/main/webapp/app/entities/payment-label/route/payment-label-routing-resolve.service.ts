@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
+import { IPaymentLabel } from '../payment-label.model';
 import { PaymentLabelService } from '../service/payment-label.service';
 
 @Injectable({ providedIn: 'root' })
-export class PaymentLabelRoutingResolveService implements Resolve<IPaymentLabel> {
+export class PaymentLabelRoutingResolveService implements Resolve<IPaymentLabel | null> {
   constructor(protected service: PaymentLabelService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentLabel> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentLabel | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((paymentLabel: HttpResponse<PaymentLabel>) => {
+        mergeMap((paymentLabel: HttpResponse<IPaymentLabel>) => {
           if (paymentLabel.body) {
             return of(paymentLabel.body);
           } else {
@@ -25,6 +25,6 @@ export class PaymentLabelRoutingResolveService implements Resolve<IPaymentLabel>
         })
       );
     }
-    return of(new PaymentLabel());
+    return of(null);
   }
 }

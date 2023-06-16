@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { IBusinessStamp } from 'app/entities/business-stamp/business-stamp.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -6,37 +6,18 @@ import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 
 export interface IJobSheet {
-  id?: number;
-  serialNumber?: string;
+  id: number;
+  serialNumber?: string | null;
   jobSheetDate?: dayjs.Dayjs | null;
   details?: string | null;
   remarks?: string | null;
-  biller?: IDealer;
-  signatories?: IDealer[] | null;
-  contactPerson?: IDealer | null;
-  businessStamps?: IBusinessStamp[] | null;
-  placeholders?: IPlaceholder[] | null;
-  paymentLabels?: IPaymentLabel[] | null;
-  businessDocuments?: IBusinessDocument[] | null;
+  biller?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  signatories?: Pick<IDealer, 'id' | 'dealerName'>[] | null;
+  contactPerson?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  businessStamps?: Pick<IBusinessStamp, 'id' | 'details'>[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  paymentLabels?: Pick<IPaymentLabel, 'id' | 'description'>[] | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
 }
 
-export class JobSheet implements IJobSheet {
-  constructor(
-    public id?: number,
-    public serialNumber?: string,
-    public jobSheetDate?: dayjs.Dayjs | null,
-    public details?: string | null,
-    public remarks?: string | null,
-    public biller?: IDealer,
-    public signatories?: IDealer[] | null,
-    public contactPerson?: IDealer | null,
-    public businessStamps?: IBusinessStamp[] | null,
-    public placeholders?: IPlaceholder[] | null,
-    public paymentLabels?: IPaymentLabel[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
-  ) {}
-}
-
-export function getJobSheetIdentifier(jobSheet: IJobSheet): number | undefined {
-  return jobSheet.id;
-}
+export type NewJobSheet = Omit<IJobSheet, 'id'> & { id: null };

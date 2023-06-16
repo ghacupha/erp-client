@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="reportDesign">
       <h2 data-cy="reportDesignDetailsHeading"><span>Report Design</span></h2>
@@ -29,14 +29,14 @@
         <dt><span>Notes</span></dt>
         <dd>
           <div *ngIf="reportDesign.notes">
-            <a (click)="openFile(reportDesign.notes, reportDesign.notesContentType)">open</a>
+            <a (click)="openFile(reportDesign.notes, reportDesign.notesContentType)">Open</a>
             {{ reportDesign.notesContentType }}, {{ byteSize(reportDesign.notes) }}
           </div>
         </dd>
         <dt><span>Report File</span></dt>
         <dd>
           <div *ngIf="reportDesign.reportFile">
-            <a (click)="openFile(reportDesign.reportFile, reportDesign.reportFileContentType)">open</a>
+            <a (click)="openFile(reportDesign.reportFile, reportDesign.reportFileContentType)">Open</a>
             {{ reportDesign.reportFileContentType }}, {{ byteSize(reportDesign.reportFile) }}
           </div>
         </dd>
@@ -47,56 +47,56 @@
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of reportDesign.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Security Clearance</span></dt>
         <dd>
           <div *ngIf="reportDesign.securityClearance">
-            <a [routerLink]="['/security-clearance', reportDesign.securityClearance?.id, 'view']">{{
-              reportDesign.securityClearance?.clearanceLevel
+            <a [routerLink]="['/security-clearance', reportDesign.securityClearance.id, 'view']">{{
+              reportDesign.securityClearance.clearanceLevel
             }}</a>
           </div>
         </dd>
         <dt><span>Report Designer</span></dt>
         <dd>
           <div *ngIf="reportDesign.reportDesigner">
-            <a [routerLink]="['/application-user', reportDesign.reportDesigner?.id, 'view']">{{
-              reportDesign.reportDesigner?.applicationIdentity
+            <a [routerLink]="['/application-user', reportDesign.reportDesigner.id, 'view']">{{
+              reportDesign.reportDesigner.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Organization</span></dt>
         <dd>
           <div *ngIf="reportDesign.organization">
-            <a [routerLink]="['/dealer', reportDesign.organization?.id, 'view']">{{ reportDesign.organization?.dealerName }}</a>
+            <a [routerLink]="['/dealer', reportDesign.organization.id, 'view']">{{ reportDesign.organization.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Department</span></dt>
         <dd>
           <div *ngIf="reportDesign.department">
-            <a [routerLink]="['/dealer', reportDesign.department?.id, 'view']">{{ reportDesign.department?.dealerName }}</a>
+            <a [routerLink]="['/dealer', reportDesign.department.id, 'view']">{{ reportDesign.department.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of reportDesign.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>System Module</span></dt>
         <dd>
           <div *ngIf="reportDesign.systemModule">
-            <a [routerLink]="['/system-module', reportDesign.systemModule?.id, 'view']">{{ reportDesign.systemModule?.moduleName }}</a>
+            <a [routerLink]="['/system-module', reportDesign.systemModule.id, 'view']">{{ reportDesign.systemModule.moduleName }}</a>
           </div>
         </dd>
         <dt><span>File Check Sum Algorithm</span></dt>
         <dd>
           <div *ngIf="reportDesign.fileCheckSumAlgorithm">
-            <a [routerLink]="['/algorithm', reportDesign.fileCheckSumAlgorithm?.id, 'view']">{{
-              reportDesign.fileCheckSumAlgorithm?.name
+            <a [routerLink]="['/algorithm', reportDesign.fileCheckSumAlgorithm.id, 'view']">{{
+              reportDesign.fileCheckSumAlgorithm.name
             }}</a>
           </div>
         </dd>

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="applicationUser">
       <h2 data-cy="applicationUserDetailsHeading"><span>Application User</span></h2>
@@ -25,20 +25,20 @@
         <dt><span>Organization</span></dt>
         <dd>
           <div *ngIf="applicationUser.organization">
-            <a [routerLink]="['/dealer', applicationUser.organization?.id, 'view']">{{ applicationUser.organization?.dealerName }}</a>
+            <a [routerLink]="['/dealer', applicationUser.organization.id, 'view']">{{ applicationUser.organization.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Department</span></dt>
         <dd>
           <div *ngIf="applicationUser.department">
-            <a [routerLink]="['/dealer', applicationUser.department?.id, 'view']">{{ applicationUser.department?.dealerName }}</a>
+            <a [routerLink]="['/dealer', applicationUser.department.id, 'view']">{{ applicationUser.department.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Security Clearance</span></dt>
         <dd>
           <div *ngIf="applicationUser.securityClearance">
-            <a [routerLink]="['/security-clearance', applicationUser.securityClearance?.id, 'view']">{{
-              applicationUser.securityClearance?.clearanceLevel
+            <a [routerLink]="['/security-clearance', applicationUser.securityClearance.id, 'view']">{{
+              applicationUser.securityClearance.clearanceLevel
             }}</a>
           </div>
         </dd>
@@ -49,14 +49,14 @@
         <dt><span>User Properties</span></dt>
         <dd>
           <span *ngFor="let userProperties of applicationUser.userProperties; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', userProperties?.id, 'view']">{{ userProperties.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', userProperties.id, 'view']">{{ userProperties.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Dealer Identity</span></dt>
         <dd>
           <div *ngIf="applicationUser.dealerIdentity">
-            <a [routerLink]="['/dealer', applicationUser.dealerIdentity?.id, 'view']">{{ applicationUser.dealerIdentity?.dealerName }}</a>
+            <a [routerLink]="['/dealer', applicationUser.dealerIdentity.id, 'view']">{{ applicationUser.dealerIdentity.dealerName }}</a>
           </div>
         </dd>
       </dl>

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IBankBranchCode, BankBranchCode } from '../bank-branch-code.model';
+import { BankBranchCodeFormService, BankBranchCodeFormGroup } from './bank-branch-code-form.service';
+import { IBankBranchCode } from '../bank-branch-code.model';
 import { BankBranchCodeService } from '../service/bank-branch-code.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -16,29 +16,27 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class BankBranchCodeUpdateComponent implements OnInit {
   isSaving = false;
+  bankBranchCode: IBankBranchCode | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    bankCode: [],
-    bankName: [null, [Validators.required]],
-    branchCode: [null, []],
-    branchName: [],
-    notes: [],
-    placeholders: [],
-  });
+  editForm: BankBranchCodeFormGroup = this.bankBranchCodeFormService.createBankBranchCodeFormGroup();
 
   constructor(
     protected bankBranchCodeService: BankBranchCodeService,
+    protected bankBranchCodeFormService: BankBranchCodeFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ bankBranchCode }) => {
-      this.updateForm(bankBranchCode);
+      this.bankBranchCode = bankBranchCode;
+      if (bankBranchCode) {
+        this.updateForm(bankBranchCode);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -50,34 +48,19 @@ export class BankBranchCodeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const bankBranchCode = this.createFromForm();
-    if (bankBranchCode.id !== undefined) {
+    const bankBranchCode = this.bankBranchCodeFormService.getBankBranchCode(this.editForm);
+    if (bankBranchCode.id !== null) {
       this.subscribeToSaveResponse(this.bankBranchCodeService.update(bankBranchCode));
     } else {
       this.subscribeToSaveResponse(this.bankBranchCodeService.create(bankBranchCode));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBankBranchCode>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -93,17 +76,10 @@ export class BankBranchCodeUpdateComponent implements OnInit {
   }
 
   protected updateForm(bankBranchCode: IBankBranchCode): void {
-    this.editForm.patchValue({
-      id: bankBranchCode.id,
-      bankCode: bankBranchCode.bankCode,
-      bankName: bankBranchCode.bankName,
-      branchCode: bankBranchCode.branchCode,
-      branchName: bankBranchCode.branchName,
-      notes: bankBranchCode.notes,
-      placeholders: bankBranchCode.placeholders,
-    });
+    this.bankBranchCode = bankBranchCode;
+    this.bankBranchCodeFormService.resetForm(this.editForm, bankBranchCode);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(bankBranchCode.placeholders ?? [])
     );
@@ -115,22 +91,12 @@ export class BankBranchCodeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.bankBranchCode?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IBankBranchCode {
-    return {
-      ...new BankBranchCode(),
-      id: this.editForm.get(['id'])!.value,
-      bankCode: this.editForm.get(['bankCode'])!.value,
-      bankName: this.editForm.get(['bankName'])!.value,
-      branchCode: this.editForm.get(['branchCode'])!.value,
-      branchName: this.editForm.get(['branchName'])!.value,
-      notes: this.editForm.get(['notes'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

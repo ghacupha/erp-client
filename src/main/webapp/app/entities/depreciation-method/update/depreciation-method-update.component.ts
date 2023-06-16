@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
+import { DepreciationMethodFormService, DepreciationMethodFormGroup } from './depreciation-method-form.service';
+import { IDepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -20,31 +20,30 @@ import { DepreciationTypes } from 'app/entities/enumerations/depreciation-types.
 })
 export class DepreciationMethodUpdateComponent implements OnInit {
   isSaving = false;
+  depreciationMethod: IDepreciationMethod | null = null;
   depreciationTypesValues = Object.keys(DepreciationTypes);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    depreciationMethodName: [null, [Validators.required]],
-    description: [],
-    depreciationType: [null, [Validators.required]],
-    remarks: [],
-    placeholders: [],
-  });
+  editForm: DepreciationMethodFormGroup = this.depreciationMethodFormService.createDepreciationMethodFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected depreciationMethodService: DepreciationMethodService,
+    protected depreciationMethodFormService: DepreciationMethodFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationMethod }) => {
-      this.updateForm(depreciationMethod);
+      this.depreciationMethod = depreciationMethod;
+      if (depreciationMethod) {
+        this.updateForm(depreciationMethod);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -71,34 +70,19 @@ export class DepreciationMethodUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const depreciationMethod = this.createFromForm();
-    if (depreciationMethod.id !== undefined) {
+    const depreciationMethod = this.depreciationMethodFormService.getDepreciationMethod(this.editForm);
+    if (depreciationMethod.id !== null) {
       this.subscribeToSaveResponse(this.depreciationMethodService.update(depreciationMethod));
     } else {
       this.subscribeToSaveResponse(this.depreciationMethodService.create(depreciationMethod));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepreciationMethod>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -114,16 +98,10 @@ export class DepreciationMethodUpdateComponent implements OnInit {
   }
 
   protected updateForm(depreciationMethod: IDepreciationMethod): void {
-    this.editForm.patchValue({
-      id: depreciationMethod.id,
-      depreciationMethodName: depreciationMethod.depreciationMethodName,
-      description: depreciationMethod.description,
-      depreciationType: depreciationMethod.depreciationType,
-      remarks: depreciationMethod.remarks,
-      placeholders: depreciationMethod.placeholders,
-    });
+    this.depreciationMethod = depreciationMethod;
+    this.depreciationMethodFormService.resetForm(this.editForm, depreciationMethod);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(depreciationMethod.placeholders ?? [])
     );
@@ -135,21 +113,12 @@ export class DepreciationMethodUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.depreciationMethod?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IDepreciationMethod {
-    return {
-      ...new DepreciationMethod(),
-      id: this.editForm.get(['id'])!.value,
-      depreciationMethodName: this.editForm.get(['depreciationMethodName'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      depreciationType: this.editForm.get(['depreciationType'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

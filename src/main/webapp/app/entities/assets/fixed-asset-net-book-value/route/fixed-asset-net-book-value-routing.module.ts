@@ -6,13 +6,14 @@ import { FixedAssetNetBookValueComponent } from '../list/fixed-asset-net-book-va
 import { FixedAssetNetBookValueDetailComponent } from '../detail/fixed-asset-net-book-value-detail.component';
 import { FixedAssetNetBookValueUpdateComponent } from '../update/fixed-asset-net-book-value-update.component';
 import { FixedAssetNetBookValueRoutingResolveService } from './fixed-asset-net-book-value-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const fixedAssetNetBookValueRoute: Routes = [
   {
     path: '',
     component: FixedAssetNetBookValueComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

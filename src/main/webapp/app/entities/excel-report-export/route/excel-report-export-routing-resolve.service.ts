@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IExcelReportExport, ExcelReportExport } from '../excel-report-export.model';
+import { IExcelReportExport } from '../excel-report-export.model';
 import { ExcelReportExportService } from '../service/excel-report-export.service';
 
 @Injectable({ providedIn: 'root' })
-export class ExcelReportExportRoutingResolveService implements Resolve<IExcelReportExport> {
+export class ExcelReportExportRoutingResolveService implements Resolve<IExcelReportExport | null> {
   constructor(protected service: ExcelReportExportService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IExcelReportExport> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IExcelReportExport | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((excelReportExport: HttpResponse<ExcelReportExport>) => {
+        mergeMap((excelReportExport: HttpResponse<IExcelReportExport>) => {
           if (excelReportExport.body) {
             return of(excelReportExport.body);
           } else {
@@ -25,6 +25,6 @@ export class ExcelReportExportRoutingResolveService implements Resolve<IExcelRep
         })
       );
     }
-    return of(new ExcelReportExport());
+    return of(null);
   }
 }

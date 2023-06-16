@@ -6,13 +6,14 @@ import { JobSheetComponent } from '../list/job-sheet.component';
 import { JobSheetDetailComponent } from '../detail/job-sheet-detail.component';
 import { JobSheetUpdateComponent } from '../update/job-sheet-update.component';
 import { JobSheetRoutingResolveService } from './job-sheet-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const jobSheetRoute: Routes = [
   {
     path: '',
     component: JobSheetComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

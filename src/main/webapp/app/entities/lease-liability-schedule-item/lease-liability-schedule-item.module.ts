@@ -14,6 +14,5 @@ import { LeaseLiabilityScheduleItemRoutingModule } from './route/lease-liability
     LeaseLiabilityScheduleItemUpdateComponent,
     LeaseLiabilityScheduleItemDeleteDialogComponent,
   ],
-  entryComponents: [LeaseLiabilityScheduleItemDeleteDialogComponent],
 })
 export class LeaseLiabilityScheduleItemModule {}

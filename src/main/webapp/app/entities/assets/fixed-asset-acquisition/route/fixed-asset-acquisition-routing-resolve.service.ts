@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IFixedAssetAcquisition, FixedAssetAcquisition } from '../fixed-asset-acquisition.model';
+import { IFixedAssetAcquisition } from '../fixed-asset-acquisition.model';
 import { FixedAssetAcquisitionService } from '../service/fixed-asset-acquisition.service';
 
 @Injectable({ providedIn: 'root' })
-export class FixedAssetAcquisitionRoutingResolveService implements Resolve<IFixedAssetAcquisition> {
+export class FixedAssetAcquisitionRoutingResolveService implements Resolve<IFixedAssetAcquisition | null> {
   constructor(protected service: FixedAssetAcquisitionService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IFixedAssetAcquisition> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IFixedAssetAcquisition | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((fixedAssetAcquisition: HttpResponse<FixedAssetAcquisition>) => {
+        mergeMap((fixedAssetAcquisition: HttpResponse<IFixedAssetAcquisition>) => {
           if (fixedAssetAcquisition.body) {
             return of(fixedAssetAcquisition.body);
           } else {
@@ -25,6 +25,6 @@ export class FixedAssetAcquisitionRoutingResolveService implements Resolve<IFixe
         })
       );
     }
-    return of(new FixedAssetAcquisition());
+    return of(null);
   }
 }

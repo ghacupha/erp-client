@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IWorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './work-in-progress-registration-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class WorkInProgressRegistrationDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.workInProgressRegistrationService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

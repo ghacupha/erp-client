@@ -4,37 +4,18 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 
 export interface IWorkProjectRegister {
-  id?: number;
-  catalogueNumber?: string;
-  description?: string;
-  detailsContentType?: string | null;
+  id: number;
+  catalogueNumber?: string | null;
+  description?: string | null;
   details?: string | null;
+  detailsContentType?: string | null;
   totalProjectCost?: number | null;
-  additionalNotesContentType?: string | null;
   additionalNotes?: string | null;
-  dealers?: IDealer[];
-  settlementCurrency?: ISettlementCurrency | null;
-  placeholders?: IPlaceholder[] | null;
-  businessDocuments?: IBusinessDocument[] | null;
+  additionalNotesContentType?: string | null;
+  dealers?: Pick<IDealer, 'id' | 'dealerName'>[] | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
 }
 
-export class WorkProjectRegister implements IWorkProjectRegister {
-  constructor(
-    public id?: number,
-    public catalogueNumber?: string,
-    public description?: string,
-    public detailsContentType?: string | null,
-    public details?: string | null,
-    public totalProjectCost?: number | null,
-    public additionalNotesContentType?: string | null,
-    public additionalNotes?: string | null,
-    public dealers?: IDealer[],
-    public settlementCurrency?: ISettlementCurrency | null,
-    public placeholders?: IPlaceholder[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
-  ) {}
-}
-
-export function getWorkProjectRegisterIdentifier(workProjectRegister: IWorkProjectRegister): number | undefined {
-  return workProjectRegister.id;
-}
+export type NewWorkProjectRegister = Omit<IWorkProjectRegister, 'id'> & { id: null };

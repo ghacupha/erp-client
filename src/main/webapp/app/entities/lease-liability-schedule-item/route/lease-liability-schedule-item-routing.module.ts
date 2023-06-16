@@ -6,13 +6,14 @@ import { LeaseLiabilityScheduleItemComponent } from '../list/lease-liability-sch
 import { LeaseLiabilityScheduleItemDetailComponent } from '../detail/lease-liability-schedule-item-detail.component';
 import { LeaseLiabilityScheduleItemUpdateComponent } from '../update/lease-liability-schedule-item-update.component';
 import { LeaseLiabilityScheduleItemRoutingResolveService } from './lease-liability-schedule-item-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const leaseLiabilityScheduleItemRoute: Routes = [
   {
     path: '',
     component: LeaseLiabilityScheduleItemComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

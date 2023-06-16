@@ -2,21 +2,10 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAlgorithm {
-  id?: number;
-  name?: string;
-  placeholders?: IPlaceholder[] | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
+  id: number;
+  name?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
 }
 
-export class Algorithm implements IAlgorithm {
-  constructor(
-    public id?: number,
-    public name?: string,
-    public placeholders?: IPlaceholder[] | null,
-    public parameters?: IUniversallyUniqueMapping[] | null
-  ) {}
-}
-
-export function getAlgorithmIdentifier(algorithm: IAlgorithm): number | undefined {
-  return algorithm.id;
-}
+export type NewAlgorithm = Omit<IAlgorithm, 'id'> & { id: null };

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IStringQuestionBase } from '../string-question-base.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
-import { StringQuestionBaseService } from '../service/string-question-base.service';
+import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
+import { EntityArrayResponseType, StringQuestionBaseService } from '../service/string-question-base.service';
 import { StringQuestionBaseDeleteDialogComponent } from '../delete/string-question-base-delete-dialog.component';
 
 @Component({
@@ -15,138 +16,151 @@ import { StringQuestionBaseDeleteDialogComponent } from '../delete/string-questi
   templateUrl: './string-question-base.component.html',
 })
 export class StringQuestionBaseComponent implements OnInit {
+  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['value', 'key', 'label', 'controlType', 'placeholder'];
+
   stringQuestionBases?: IStringQuestionBase[];
-  currentSearch: string;
   isLoading = false;
-  totalItems = 0;
+
+  predicate = 'id';
+  ascending = true;
+  currentSearch = '';
+
   itemsPerPage = ITEMS_PER_PAGE;
-  page?: number;
-  predicate!: string;
-  ascending!: boolean;
-  ngbPaginationPage = 1;
+  totalItems = 0;
+  page = 1;
 
   constructor(
     protected stringQuestionBaseService: StringQuestionBaseService,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router,
+    public router: Router,
     protected modalService: NgbModal
-  ) {
-    this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-  }
+  ) {}
 
-  loadPage(page?: number, dontNavigate?: boolean): void {
-    this.isLoading = true;
-    const pageToLoad: number = page ?? this.page ?? 1;
-
-    if (this.currentSearch) {
-      this.stringQuestionBaseService
-        .search({
-          page: pageToLoad - 1,
-          query: this.currentSearch,
-          size: this.itemsPerPage,
-          sort: this.sort(),
-        })
-        .subscribe(
-          (res: HttpResponse<IStringQuestionBase[]>) => {
-            this.isLoading = false;
-            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-          },
-          () => {
-            this.isLoading = false;
-            this.onError();
-          }
-        );
-      return;
-    }
-
-    this.stringQuestionBaseService
-      .query({
-        page: pageToLoad - 1,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe(
-        (res: HttpResponse<IStringQuestionBase[]>) => {
-          this.isLoading = false;
-          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
-        },
-        () => {
-          this.isLoading = false;
-          this.onError();
-        }
-      );
-  }
+  trackId = (_index: number, item: IStringQuestionBase): number => this.stringQuestionBaseService.getStringQuestionBaseIdentifier(item);
 
   search(query: string): void {
-    if (query && ['value', 'key', 'label', 'controlType', 'placeholder'].includes(this.predicate)) {
+    if (query && StringQuestionBaseComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
+    this.page = 1;
     this.currentSearch = query;
-    this.loadPage(1);
+    this.navigateToWithComponentValues();
   }
 
   ngOnInit(): void {
-    this.handleNavigation();
-  }
-
-  trackId(index: number, item: IStringQuestionBase): number {
-    return item.id!;
+    this.load();
   }
 
   delete(stringQuestionBase: IStringQuestionBase): void {
     const modalRef = this.modalService.open(StringQuestionBaseDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.stringQuestionBase = stringQuestionBase;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadPage();
-      }
-    });
-  }
-
-  protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-    if (this.predicate !== 'id') {
-      result.push('id');
-    }
-    return result;
-  }
-
-  protected handleNavigation(): void {
-    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-      const page = params.get('page');
-      const pageNumber = +(page ?? 1);
-      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
-      const predicate = sort[0];
-      const ascending = sort[1] === ASC;
-      if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
-        this.predicate = predicate;
-        this.ascending = ascending;
-        this.loadPage(pageNumber, true);
-      }
-    });
-  }
-
-  protected onSuccess(data: IStringQuestionBase[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
-    this.totalItems = Number(headers.get('X-Total-Count'));
-    this.page = page;
-    this.ngbPaginationPage = this.page;
-    if (navigate) {
-      this.router.navigate(['/string-question-base'], {
-        queryParams: {
-          page: this.page,
-          size: this.itemsPerPage,
-          search: this.currentSearch,
-          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        switchMap(() => this.loadFromBackendWithRouteInformations())
+      )
+      .subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
         },
       });
-    }
-    this.stringQuestionBases = data ?? [];
-    this.ngbPaginationPage = this.page;
   }
 
-  protected onError(): void {
-    this.ngbPaginationPage = this.page ?? 1;
+  load(): void {
+    this.loadFromBackendWithRouteInformations().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
+    });
+  }
+
+  navigateToWithComponentValues(): void {
+    this.handleNavigation(this.page, this.predicate, this.ascending, this.currentSearch);
+  }
+
+  navigateToPage(page = this.page): void {
+    this.handleNavigation(page, this.predicate, this.ascending, this.currentSearch);
+  }
+
+  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
+    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending, this.currentSearch))
+    );
+  }
+
+  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const page = params.get(PAGE_HEADER);
+    this.page = +(page ?? 1);
+    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
+    this.predicate = sort[0];
+    this.ascending = sort[1] === ASC;
+    if (params.has('search') && params.get('search') !== '') {
+      this.currentSearch = params.get('search') as string;
+      if (StringQuestionBaseComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+        this.predicate = '';
+      }
+    }
+  }
+
+  protected onResponseSuccess(response: EntityArrayResponseType): void {
+    this.fillComponentAttributesFromResponseHeader(response.headers);
+    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+    this.stringQuestionBases = dataFromBody;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: IStringQuestionBase[] | null): IStringQuestionBase[] {
+    return data ?? [];
+  }
+
+  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+    this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+  }
+
+  protected queryBackend(
+    page?: number,
+    predicate?: string,
+    ascending?: boolean,
+    currentSearch?: string
+  ): Observable<EntityArrayResponseType> {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? 1;
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      eagerload: true,
+      query: currentSearch,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+    if (this.currentSearch && this.currentSearch !== '') {
+      return this.stringQuestionBaseService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
+    } else {
+      return this.stringQuestionBaseService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    }
+  }
+
+  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean, currentSearch?: string): void {
+    const queryParamsObj = {
+      search: currentSearch,
+      page,
+      size: this.itemsPerPage,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+
+    this.router.navigate(['./'], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParamsObj,
+    });
+  }
+
+  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
+    const ascendingQueryParam = ascending ? ASC : DESC;
+    if (predicate === '') {
+      return [];
+    } else {
+      return [predicate + ',' + ascendingQueryParam];
+    }
   }
 }

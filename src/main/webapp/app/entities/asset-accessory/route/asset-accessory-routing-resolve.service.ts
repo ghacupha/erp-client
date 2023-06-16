@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IAssetAccessory, AssetAccessory } from '../asset-accessory.model';
+import { IAssetAccessory } from '../asset-accessory.model';
 import { AssetAccessoryService } from '../service/asset-accessory.service';
 
 @Injectable({ providedIn: 'root' })
-export class AssetAccessoryRoutingResolveService implements Resolve<IAssetAccessory> {
+export class AssetAccessoryRoutingResolveService implements Resolve<IAssetAccessory | null> {
   constructor(protected service: AssetAccessoryService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IAssetAccessory> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IAssetAccessory | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((assetAccessory: HttpResponse<AssetAccessory>) => {
+        mergeMap((assetAccessory: HttpResponse<IAssetAccessory>) => {
           if (assetAccessory.body) {
             return of(assetAccessory.body);
           } else {
@@ -25,6 +25,6 @@ export class AssetAccessoryRoutingResolveService implements Resolve<IAssetAccess
         })
       );
     }
-    return of(new AssetAccessory());
+    return of(null);
   }
 }

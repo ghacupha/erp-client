@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-payment-calculation-heading" data-cy="PaymentCalculationCreateUpdateHeading">Create or edit a Payment Calculation</h2>
@@ -6,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentExpense">Payment Expense</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentExpense">Payment Expense</label>
           <input
             type="number"
             class="form-control"
@@ -23,8 +23,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingVAT">Withholding VAT</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingVAT">Withholding VAT</label>
           <input
             type="number"
             class="form-control"
@@ -35,8 +35,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingTax">Withholding Tax</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingTax">Withholding Tax</label>
           <input
             type="number"
             class="form-control"
@@ -47,8 +47,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -59,8 +59,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -71,8 +71,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -83,7 +83,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentLabels">Payment Label</label>
           <select
             class="form-control"
@@ -92,40 +92,32 @@
             multiple
             name="paymentLabels"
             formControlName="paymentLabels"
+            [compareWith]="comparePaymentLabel"
           >
-            <option
-              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
-              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
-            >
+            <option [ngValue]="paymentLabelOption" *ngFor="let paymentLabelOption of paymentLabelsSharedCollection">
               {{ paymentLabelOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
             id="field_paymentCategory"
             data-cy="paymentCategory"
             name="paymentCategory"
             formControlName="paymentCategory"
+            [compareWith]="comparePaymentCategory"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
-                  ? editForm.get('paymentCategory')!.value
-                  : paymentCategoryOption
-              "
-              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
-            >
+            <option [ngValue]="paymentCategoryOption" *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection">
               {{ paymentCategoryOption.id }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -134,11 +126,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

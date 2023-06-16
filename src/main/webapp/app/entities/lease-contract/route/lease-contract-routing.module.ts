@@ -6,13 +6,14 @@ import { LeaseContractComponent } from '../list/lease-contract.component';
 import { LeaseContractDetailComponent } from '../detail/lease-contract-detail.component';
 import { LeaseContractUpdateComponent } from '../update/lease-contract-update.component';
 import { LeaseContractRoutingResolveService } from './lease-contract-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const leaseContractRoute: Routes = [
   {
     path: '',
     component: LeaseContractComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

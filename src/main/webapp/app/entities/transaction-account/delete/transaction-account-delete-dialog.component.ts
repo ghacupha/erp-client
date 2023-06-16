@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITransactionAccount } from '../transaction-account.model';
 import { TransactionAccountService } from '../service/transaction-account.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './transaction-account-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class TransactionAccountDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.transactionAccountService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

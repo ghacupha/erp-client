@@ -14,6 +14,5 @@ import { PaymentRequisitionRoutingModule } from './route/payment-requisition-rou
     PaymentRequisitionUpdateComponent,
     PaymentRequisitionDeleteDialogComponent,
   ],
-  entryComponents: [PaymentRequisitionDeleteDialogComponent],
 })
 export class ErpServicePaymentRequisitionModule {}

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
+import { IDepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 
 @Injectable({ providedIn: 'root' })
-export class DepreciationMethodRoutingResolveService implements Resolve<IDepreciationMethod> {
+export class DepreciationMethodRoutingResolveService implements Resolve<IDepreciationMethod | null> {
   constructor(protected service: DepreciationMethodService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IDepreciationMethod> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IDepreciationMethod | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((depreciationMethod: HttpResponse<DepreciationMethod>) => {
+        mergeMap((depreciationMethod: HttpResponse<IDepreciationMethod>) => {
           if (depreciationMethod.body) {
             return of(depreciationMethod.body);
           } else {
@@ -25,6 +25,6 @@ export class DepreciationMethodRoutingResolveService implements Resolve<IDepreci
         })
       );
     }
-    return of(new DepreciationMethod());
+    return of(null);
   }
 }

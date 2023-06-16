@@ -6,13 +6,14 @@ import { InvoiceComponent } from '../list/invoice.component';
 import { InvoiceDetailComponent } from '../detail/invoice-detail.component';
 import { InvoiceUpdateComponent } from '../update/invoice-update.component';
 import { InvoiceRoutingResolveService } from './invoice-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const invoiceRoute: Routes = [
   {
     path: '',
     component: InvoiceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

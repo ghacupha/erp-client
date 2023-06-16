@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IBusinessStamp, getBusinessStampIdentifier } from '../business-stamp.model';
+import { IBusinessStamp, NewBusinessStamp } from '../business-stamp.model';
+
+export type PartialUpdateBusinessStamp = Partial<IBusinessStamp> & Pick<IBusinessStamp, 'id'>;
+
+type RestOf<T extends IBusinessStamp | NewBusinessStamp> = Omit<T, 'stampDate'> & {
+  stampDate?: string | null;
+};
+
+export type RestBusinessStamp = RestOf<IBusinessStamp>;
+
+export type NewRestBusinessStamp = RestOf<NewBusinessStamp>;
+
+export type PartialUpdateRestBusinessStamp = RestOf<PartialUpdateBusinessStamp>;
 
 export type EntityResponseType = HttpResponse<IBusinessStamp>;
 export type EntityArrayResponseType = HttpResponse<IBusinessStamp[]>;
@@ -21,38 +33,38 @@ export class BusinessStampService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(businessStamp: IBusinessStamp): Observable<EntityResponseType> {
+  create(businessStamp: NewBusinessStamp): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(businessStamp);
     return this.http
-      .post<IBusinessStamp>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestBusinessStamp>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(businessStamp: IBusinessStamp): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(businessStamp);
     return this.http
-      .put<IBusinessStamp>(`${this.resourceUrl}/${getBusinessStampIdentifier(businessStamp) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestBusinessStamp>(`${this.resourceUrl}/${this.getBusinessStampIdentifier(businessStamp)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(businessStamp: IBusinessStamp): Observable<EntityResponseType> {
+  partialUpdate(businessStamp: PartialUpdateBusinessStamp): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(businessStamp);
     return this.http
-      .patch<IBusinessStamp>(`${this.resourceUrl}/${getBusinessStampIdentifier(businessStamp) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestBusinessStamp>(`${this.resourceUrl}/${this.getBusinessStampIdentifier(businessStamp)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IBusinessStamp>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestBusinessStamp>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IBusinessStamp[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestBusinessStamp[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -62,22 +74,30 @@ export class BusinessStampService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IBusinessStamp[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestBusinessStamp[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addBusinessStampToCollectionIfMissing(
-    businessStampCollection: IBusinessStamp[],
-    ...businessStampsToCheck: (IBusinessStamp | null | undefined)[]
-  ): IBusinessStamp[] {
-    const businessStamps: IBusinessStamp[] = businessStampsToCheck.filter(isPresent);
+  getBusinessStampIdentifier(businessStamp: Pick<IBusinessStamp, 'id'>): number {
+    return businessStamp.id;
+  }
+
+  compareBusinessStamp(o1: Pick<IBusinessStamp, 'id'> | null, o2: Pick<IBusinessStamp, 'id'> | null): boolean {
+    return o1 && o2 ? this.getBusinessStampIdentifier(o1) === this.getBusinessStampIdentifier(o2) : o1 === o2;
+  }
+
+  addBusinessStampToCollectionIfMissing<Type extends Pick<IBusinessStamp, 'id'>>(
+    businessStampCollection: Type[],
+    ...businessStampsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const businessStamps: Type[] = businessStampsToCheck.filter(isPresent);
     if (businessStamps.length > 0) {
       const businessStampCollectionIdentifiers = businessStampCollection.map(
-        businessStampItem => getBusinessStampIdentifier(businessStampItem)!
+        businessStampItem => this.getBusinessStampIdentifier(businessStampItem)!
       );
       const businessStampsToAdd = businessStamps.filter(businessStampItem => {
-        const businessStampIdentifier = getBusinessStampIdentifier(businessStampItem);
-        if (businessStampIdentifier == null || businessStampCollectionIdentifiers.includes(businessStampIdentifier)) {
+        const businessStampIdentifier = this.getBusinessStampIdentifier(businessStampItem);
+        if (businessStampCollectionIdentifiers.includes(businessStampIdentifier)) {
           return false;
         }
         businessStampCollectionIdentifiers.push(businessStampIdentifier);
@@ -88,25 +108,29 @@ export class BusinessStampService {
     return businessStampCollection;
   }
 
-  protected convertDateFromClient(businessStamp: IBusinessStamp): IBusinessStamp {
-    return Object.assign({}, businessStamp, {
-      stampDate: businessStamp.stampDate?.isValid() ? businessStamp.stampDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IBusinessStamp | NewBusinessStamp | PartialUpdateBusinessStamp>(businessStamp: T): RestOf<T> {
+    return {
+      ...businessStamp,
+      stampDate: businessStamp.stampDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restBusinessStamp: RestBusinessStamp): IBusinessStamp {
+    return {
+      ...restBusinessStamp,
+      stampDate: restBusinessStamp.stampDate ? dayjs(restBusinessStamp.stampDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestBusinessStamp>): HttpResponse<IBusinessStamp> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.stampDate = res.body.stampDate ? dayjs(res.body.stampDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((businessStamp: IBusinessStamp) => {
-        businessStamp.stampDate = businessStamp.stampDate ? dayjs(businessStamp.stampDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestBusinessStamp[]>): HttpResponse<IBusinessStamp[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

@@ -6,13 +6,14 @@ import { DeliveryNoteComponent } from '../list/delivery-note.component';
 import { DeliveryNoteDetailComponent } from '../detail/delivery-note-detail.component';
 import { DeliveryNoteUpdateComponent } from '../update/delivery-note-update.component';
 import { DeliveryNoteRoutingResolveService } from './delivery-note-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const deliveryNoteRoute: Routes = [
   {
     path: '',
     component: DeliveryNoteComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

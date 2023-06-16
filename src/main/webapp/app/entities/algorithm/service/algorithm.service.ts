@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAlgorithm, getAlgorithmIdentifier } from '../algorithm.model';
+import { IAlgorithm, NewAlgorithm } from '../algorithm.model';
+
+export type PartialUpdateAlgorithm = Partial<IAlgorithm> & Pick<IAlgorithm, 'id'>;
 
 export type EntityResponseType = HttpResponse<IAlgorithm>;
 export type EntityArrayResponseType = HttpResponse<IAlgorithm[]>;
@@ -18,20 +20,16 @@ export class AlgorithmService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(algorithm: IAlgorithm): Observable<EntityResponseType> {
+  create(algorithm: NewAlgorithm): Observable<EntityResponseType> {
     return this.http.post<IAlgorithm>(this.resourceUrl, algorithm, { observe: 'response' });
   }
 
   update(algorithm: IAlgorithm): Observable<EntityResponseType> {
-    return this.http.put<IAlgorithm>(`${this.resourceUrl}/${getAlgorithmIdentifier(algorithm) as number}`, algorithm, {
-      observe: 'response',
-    });
+    return this.http.put<IAlgorithm>(`${this.resourceUrl}/${this.getAlgorithmIdentifier(algorithm)}`, algorithm, { observe: 'response' });
   }
 
-  partialUpdate(algorithm: IAlgorithm): Observable<EntityResponseType> {
-    return this.http.patch<IAlgorithm>(`${this.resourceUrl}/${getAlgorithmIdentifier(algorithm) as number}`, algorithm, {
-      observe: 'response',
-    });
+  partialUpdate(algorithm: PartialUpdateAlgorithm): Observable<EntityResponseType> {
+    return this.http.patch<IAlgorithm>(`${this.resourceUrl}/${this.getAlgorithmIdentifier(algorithm)}`, algorithm, { observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -52,16 +50,24 @@ export class AlgorithmService {
     return this.http.get<IAlgorithm[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addAlgorithmToCollectionIfMissing(
-    algorithmCollection: IAlgorithm[],
-    ...algorithmsToCheck: (IAlgorithm | null | undefined)[]
-  ): IAlgorithm[] {
-    const algorithms: IAlgorithm[] = algorithmsToCheck.filter(isPresent);
+  getAlgorithmIdentifier(algorithm: Pick<IAlgorithm, 'id'>): number {
+    return algorithm.id;
+  }
+
+  compareAlgorithm(o1: Pick<IAlgorithm, 'id'> | null, o2: Pick<IAlgorithm, 'id'> | null): boolean {
+    return o1 && o2 ? this.getAlgorithmIdentifier(o1) === this.getAlgorithmIdentifier(o2) : o1 === o2;
+  }
+
+  addAlgorithmToCollectionIfMissing<Type extends Pick<IAlgorithm, 'id'>>(
+    algorithmCollection: Type[],
+    ...algorithmsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const algorithms: Type[] = algorithmsToCheck.filter(isPresent);
     if (algorithms.length > 0) {
-      const algorithmCollectionIdentifiers = algorithmCollection.map(algorithmItem => getAlgorithmIdentifier(algorithmItem)!);
+      const algorithmCollectionIdentifiers = algorithmCollection.map(algorithmItem => this.getAlgorithmIdentifier(algorithmItem)!);
       const algorithmsToAdd = algorithms.filter(algorithmItem => {
-        const algorithmIdentifier = getAlgorithmIdentifier(algorithmItem);
-        if (algorithmIdentifier == null || algorithmCollectionIdentifiers.includes(algorithmIdentifier)) {
+        const algorithmIdentifier = this.getAlgorithmIdentifier(algorithmItem);
+        if (algorithmCollectionIdentifiers.includes(algorithmIdentifier)) {
           return false;
         }
         algorithmCollectionIdentifiers.push(algorithmIdentifier);

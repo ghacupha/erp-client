@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IAssetCategory, AssetCategory } from '../asset-category.model';
+import { IAssetCategory } from '../asset-category.model';
 import { AssetCategoryService } from '../service/asset-category.service';
 
 @Injectable({ providedIn: 'root' })
-export class AssetCategoryRoutingResolveService implements Resolve<IAssetCategory> {
+export class AssetCategoryRoutingResolveService implements Resolve<IAssetCategory | null> {
   constructor(protected service: AssetCategoryService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IAssetCategory> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IAssetCategory | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((assetCategory: HttpResponse<AssetCategory>) => {
+        mergeMap((assetCategory: HttpResponse<IAssetCategory>) => {
           if (assetCategory.body) {
             return of(assetCategory.body);
           } else {
@@ -25,6 +25,6 @@ export class AssetCategoryRoutingResolveService implements Resolve<IAssetCategor
         })
       );
     }
-    return of(new AssetCategory());
+    return of(null);
   }
 }

@@ -1,29 +1,15 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IBusinessStamp {
-  id?: number;
+  id: number;
   stampDate?: dayjs.Dayjs | null;
   purpose?: string | null;
   details?: string | null;
   remarks?: string | null;
-  stampHolder?: IDealer;
-  placeholders?: IPlaceholder[] | null;
+  stampHolder?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class BusinessStamp implements IBusinessStamp {
-  constructor(
-    public id?: number,
-    public stampDate?: dayjs.Dayjs | null,
-    public purpose?: string | null,
-    public details?: string | null,
-    public remarks?: string | null,
-    public stampHolder?: IDealer,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getBusinessStampIdentifier(businessStamp: IBusinessStamp): number | undefined {
-  return businessStamp.id;
-}
+export type NewBusinessStamp = Omit<IBusinessStamp, 'id'> & { id: null };

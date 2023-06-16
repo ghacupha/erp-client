@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { IPaymentRequisition } from '../payment-requisition.model';
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 
 @Injectable({ providedIn: 'root' })
-export class PaymentRequisitionRoutingResolveService implements Resolve<IPaymentRequisition> {
+export class PaymentRequisitionRoutingResolveService implements Resolve<IPaymentRequisition | null> {
   constructor(protected service: PaymentRequisitionService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentRequisition> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentRequisition | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((paymentRequisition: HttpResponse<PaymentRequisition>) => {
+        mergeMap((paymentRequisition: HttpResponse<IPaymentRequisition>) => {
           if (paymentRequisition.body) {
             return of(paymentRequisition.body);
           } else {
@@ -25,6 +25,6 @@ export class PaymentRequisitionRoutingResolveService implements Resolve<IPayment
         })
       );
     }
-    return of(new PaymentRequisition());
+    return of(null);
   }
 }

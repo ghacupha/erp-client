@@ -6,7 +6,7 @@ import {
   /* LeaseModelMetadataDeleteDialog, */
   LeaseModelMetadataUpdatePage,
 } from './lease-model-metadata.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

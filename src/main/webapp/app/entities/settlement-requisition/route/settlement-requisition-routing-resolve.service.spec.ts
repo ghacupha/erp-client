@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { ISettlementRequisition, SettlementRequisition } from '../settlement-requisition.model';
+import { ISettlementRequisition } from '../settlement-requisition.model';
 import { SettlementRequisitionService } from '../service/settlement-requisition.service';
 
 import { SettlementRequisitionRoutingResolveService } from './settlement-requisition-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('SettlementRequisition routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: SettlementRequisitionRoutingResolveService;
   let service: SettlementRequisitionService;
-  let resultSettlementRequisition: ISettlementRequisition | undefined;
+  let resultSettlementRequisition: ISettlementRequisition | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(SettlementRequisitionRoutingResolveService);
     service = TestBed.inject(SettlementRequisitionService);
     resultSettlementRequisition = undefined;
@@ -46,7 +55,7 @@ describe('SettlementRequisition routing resolve service', () => {
       expect(resultSettlementRequisition).toEqual({ id: 123 });
     });
 
-    it('should return new ISettlementRequisition if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('SettlementRequisition routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultSettlementRequisition).toEqual(new SettlementRequisition());
+      expect(resultSettlementRequisition).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as SettlementRequisition })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<ISettlementRequisition>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
@@ -9,43 +9,21 @@ import { IJobSheet } from 'app/entities/job-sheet/job-sheet.model';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 
 export interface IPaymentInvoice {
-  id?: number;
-  invoiceNumber?: string;
+  id: number;
+  invoiceNumber?: string | null;
   invoiceDate?: dayjs.Dayjs | null;
   invoiceAmount?: number | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   remarks?: string | null;
-  purchaseOrders?: IPurchaseOrder[] | null;
-  placeholders?: IPlaceholder[] | null;
-  paymentLabels?: IPaymentLabel[] | null;
-  settlementCurrency?: ISettlementCurrency;
-  biller?: IDealer;
-  deliveryNotes?: IDeliveryNote[] | null;
-  jobSheets?: IJobSheet[] | null;
-  businessDocuments?: IBusinessDocument[] | null;
+  purchaseOrders?: Pick<IPurchaseOrder, 'id' | 'purchaseOrderNumber'>[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  paymentLabels?: Pick<IPaymentLabel, 'id' | 'description'>[] | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  biller?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  deliveryNotes?: Pick<IDeliveryNote, 'id' | 'deliveryNoteNumber'>[] | null;
+  jobSheets?: Pick<IJobSheet, 'id' | 'serialNumber'>[] | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
 }
 
-export class PaymentInvoice implements IPaymentInvoice {
-  constructor(
-    public id?: number,
-    public invoiceNumber?: string,
-    public invoiceDate?: dayjs.Dayjs | null,
-    public invoiceAmount?: number | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public remarks?: string | null,
-    public purchaseOrders?: IPurchaseOrder[] | null,
-    public placeholders?: IPlaceholder[] | null,
-    public paymentLabels?: IPaymentLabel[] | null,
-    public settlementCurrency?: ISettlementCurrency,
-    public biller?: IDealer,
-    public deliveryNotes?: IDeliveryNote[] | null,
-    public jobSheets?: IJobSheet[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
-  ) {}
-}
-
-export function getPaymentInvoiceIdentifier(paymentInvoice: IPaymentInvoice): number | undefined {
-  return paymentInvoice.id;
-}
+export type NewPaymentInvoice = Omit<IPaymentInvoice, 'id'> & { id: null };

@@ -6,13 +6,14 @@ import { TaxReferenceComponent } from '../list/tax-reference.component';
 import { TaxReferenceDetailComponent } from '../detail/tax-reference-detail.component';
 import { TaxReferenceUpdateComponent } from '../update/tax-reference-update.component';
 import { TaxReferenceRoutingResolveService } from './tax-reference-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const taxReferenceRoute: Routes = [
   {
     path: '',
     component: TaxReferenceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

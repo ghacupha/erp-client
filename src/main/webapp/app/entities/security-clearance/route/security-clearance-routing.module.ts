@@ -6,13 +6,14 @@ import { SecurityClearanceComponent } from '../list/security-clearance.component
 import { SecurityClearanceDetailComponent } from '../detail/security-clearance-detail.component';
 import { SecurityClearanceUpdateComponent } from '../update/security-clearance-update.component';
 import { SecurityClearanceRoutingResolveService } from './security-clearance-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const securityClearanceRoute: Routes = [
   {
     path: '',
     component: SecurityClearanceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

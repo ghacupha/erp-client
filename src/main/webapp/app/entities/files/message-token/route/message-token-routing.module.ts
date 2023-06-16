@@ -6,13 +6,14 @@ import { MessageTokenComponent } from '../list/message-token.component';
 import { MessageTokenDetailComponent } from '../detail/message-token-detail.component';
 import { MessageTokenUpdateComponent } from '../update/message-token-update.component';
 import { MessageTokenRoutingResolveService } from './message-token-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const messageTokenRoute: Routes = [
   {
     path: '',
     component: MessageTokenComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

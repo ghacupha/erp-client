@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IJobSheet, JobSheet } from '../job-sheet.model';
+import { IJobSheet } from '../job-sheet.model';
 import { JobSheetService } from '../service/job-sheet.service';
 
 @Injectable({ providedIn: 'root' })
-export class JobSheetRoutingResolveService implements Resolve<IJobSheet> {
+export class JobSheetRoutingResolveService implements Resolve<IJobSheet | null> {
   constructor(protected service: JobSheetService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IJobSheet> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IJobSheet | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((jobSheet: HttpResponse<JobSheet>) => {
+        mergeMap((jobSheet: HttpResponse<IJobSheet>) => {
           if (jobSheet.body) {
             return of(jobSheet.body);
           } else {
@@ -25,6 +25,6 @@ export class JobSheetRoutingResolveService implements Resolve<IJobSheet> {
         })
       );
     }
-    return of(new JobSheet());
+    return of(null);
   }
 }

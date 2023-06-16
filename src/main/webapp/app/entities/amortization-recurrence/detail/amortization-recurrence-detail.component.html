@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="amortizationRecurrence">
       <h2 data-cy="amortizationRecurrenceDetailsHeading"><span>Amortization Recurrence</span></h2>
@@ -29,7 +29,7 @@
         <dt><span>Notes</span></dt>
         <dd>
           <div *ngIf="amortizationRecurrence.notes">
-            <a (click)="openFile(amortizationRecurrence.notes, amortizationRecurrence.notesContentType)">open</a>
+            <a (click)="openFile(amortizationRecurrence.notes, amortizationRecurrence.notesContentType)">Open</a>
             {{ amortizationRecurrence.notesContentType }}, {{ byteSize(amortizationRecurrence.notes) }}
           </div>
         </dd>
@@ -60,37 +60,37 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of amortizationRecurrence.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of amortizationRecurrence.parameters; let last = last">
-            <a [routerLink]="['/prepayment-mapping', parameters?.id, 'view']">{{ parameters.parameter }}</a
+            <a [routerLink]="['/prepayment-mapping', parameters.id, 'view']">{{ parameters.parameter }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Application Parameters</span></dt>
         <dd>
           <span *ngFor="let applicationParameters of amortizationRecurrence.applicationParameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', applicationParameters?.id, 'view']">{{ applicationParameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', applicationParameters.id, 'view']">{{ applicationParameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Depreciation Method</span></dt>
         <dd>
           <div *ngIf="amortizationRecurrence.depreciationMethod">
-            <a [routerLink]="['/depreciation-method', amortizationRecurrence.depreciationMethod?.id, 'view']">{{
-              amortizationRecurrence.depreciationMethod?.depreciationMethodName
+            <a [routerLink]="['/depreciation-method', amortizationRecurrence.depreciationMethod.id, 'view']">{{
+              amortizationRecurrence.depreciationMethod.depreciationMethodName
             }}</a>
           </div>
         </dd>
         <dt><span>Prepayment Account</span></dt>
         <dd>
           <div *ngIf="amortizationRecurrence.prepaymentAccount">
-            <a [routerLink]="['/prepayment-account', amortizationRecurrence.prepaymentAccount?.id, 'view']">{{
-              amortizationRecurrence.prepaymentAccount?.catalogueNumber
+            <a [routerLink]="['/prepayment-account', amortizationRecurrence.prepaymentAccount.id, 'view']">{{
+              amortizationRecurrence.prepaymentAccount.catalogueNumber
             }}</a>
           </div>
         </dd>

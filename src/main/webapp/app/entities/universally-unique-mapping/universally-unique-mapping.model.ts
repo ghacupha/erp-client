@@ -1,13 +1,7 @@
 export interface IUniversallyUniqueMapping {
-  id?: number;
-  universalKey?: string;
+  id: number;
+  universalKey?: string | null;
   mappedValue?: string | null;
 }
 
-export class UniversallyUniqueMapping implements IUniversallyUniqueMapping {
-  constructor(public id?: number, public universalKey?: string, public mappedValue?: string | null) {}
-}
-
-export function getUniversallyUniqueMappingIdentifier(universallyUniqueMapping: IUniversallyUniqueMapping): number | undefined {
-  return universallyUniqueMapping.id;
-}
+export type NewUniversallyUniqueMapping = Omit<IUniversallyUniqueMapping, 'id'> & { id: null };

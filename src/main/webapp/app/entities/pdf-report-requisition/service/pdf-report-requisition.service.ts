@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPdfReportRequisition, getPdfReportRequisitionIdentifier } from '../pdf-report-requisition.model';
+import { IPdfReportRequisition, NewPdfReportRequisition } from '../pdf-report-requisition.model';
+
+export type PartialUpdatePdfReportRequisition = Partial<IPdfReportRequisition> & Pick<IPdfReportRequisition, 'id'>;
+
+type RestOf<T extends IPdfReportRequisition | NewPdfReportRequisition> = Omit<T, 'reportDate'> & {
+  reportDate?: string | null;
+};
+
+export type RestPdfReportRequisition = RestOf<IPdfReportRequisition>;
+
+export type NewRestPdfReportRequisition = RestOf<NewPdfReportRequisition>;
+
+export type PartialUpdateRestPdfReportRequisition = RestOf<PartialUpdatePdfReportRequisition>;
 
 export type EntityResponseType = HttpResponse<IPdfReportRequisition>;
 export type EntityArrayResponseType = HttpResponse<IPdfReportRequisition[]>;
@@ -21,42 +33,42 @@ export class PdfReportRequisitionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(pdfReportRequisition: IPdfReportRequisition): Observable<EntityResponseType> {
+  create(pdfReportRequisition: NewPdfReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(pdfReportRequisition);
     return this.http
-      .post<IPdfReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestPdfReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(pdfReportRequisition: IPdfReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(pdfReportRequisition);
     return this.http
-      .put<IPdfReportRequisition>(`${this.resourceUrl}/${getPdfReportRequisitionIdentifier(pdfReportRequisition) as number}`, copy, {
+      .put<RestPdfReportRequisition>(`${this.resourceUrl}/${this.getPdfReportRequisitionIdentifier(pdfReportRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(pdfReportRequisition: IPdfReportRequisition): Observable<EntityResponseType> {
+  partialUpdate(pdfReportRequisition: PartialUpdatePdfReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(pdfReportRequisition);
     return this.http
-      .patch<IPdfReportRequisition>(`${this.resourceUrl}/${getPdfReportRequisitionIdentifier(pdfReportRequisition) as number}`, copy, {
+      .patch<RestPdfReportRequisition>(`${this.resourceUrl}/${this.getPdfReportRequisitionIdentifier(pdfReportRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IPdfReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestPdfReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPdfReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPdfReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -66,22 +78,30 @@ export class PdfReportRequisitionService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPdfReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPdfReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addPdfReportRequisitionToCollectionIfMissing(
-    pdfReportRequisitionCollection: IPdfReportRequisition[],
-    ...pdfReportRequisitionsToCheck: (IPdfReportRequisition | null | undefined)[]
-  ): IPdfReportRequisition[] {
-    const pdfReportRequisitions: IPdfReportRequisition[] = pdfReportRequisitionsToCheck.filter(isPresent);
+  getPdfReportRequisitionIdentifier(pdfReportRequisition: Pick<IPdfReportRequisition, 'id'>): number {
+    return pdfReportRequisition.id;
+  }
+
+  comparePdfReportRequisition(o1: Pick<IPdfReportRequisition, 'id'> | null, o2: Pick<IPdfReportRequisition, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPdfReportRequisitionIdentifier(o1) === this.getPdfReportRequisitionIdentifier(o2) : o1 === o2;
+  }
+
+  addPdfReportRequisitionToCollectionIfMissing<Type extends Pick<IPdfReportRequisition, 'id'>>(
+    pdfReportRequisitionCollection: Type[],
+    ...pdfReportRequisitionsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const pdfReportRequisitions: Type[] = pdfReportRequisitionsToCheck.filter(isPresent);
     if (pdfReportRequisitions.length > 0) {
       const pdfReportRequisitionCollectionIdentifiers = pdfReportRequisitionCollection.map(
-        pdfReportRequisitionItem => getPdfReportRequisitionIdentifier(pdfReportRequisitionItem)!
+        pdfReportRequisitionItem => this.getPdfReportRequisitionIdentifier(pdfReportRequisitionItem)!
       );
       const pdfReportRequisitionsToAdd = pdfReportRequisitions.filter(pdfReportRequisitionItem => {
-        const pdfReportRequisitionIdentifier = getPdfReportRequisitionIdentifier(pdfReportRequisitionItem);
-        if (pdfReportRequisitionIdentifier == null || pdfReportRequisitionCollectionIdentifiers.includes(pdfReportRequisitionIdentifier)) {
+        const pdfReportRequisitionIdentifier = this.getPdfReportRequisitionIdentifier(pdfReportRequisitionItem);
+        if (pdfReportRequisitionCollectionIdentifiers.includes(pdfReportRequisitionIdentifier)) {
           return false;
         }
         pdfReportRequisitionCollectionIdentifiers.push(pdfReportRequisitionIdentifier);
@@ -92,25 +112,31 @@ export class PdfReportRequisitionService {
     return pdfReportRequisitionCollection;
   }
 
-  protected convertDateFromClient(pdfReportRequisition: IPdfReportRequisition): IPdfReportRequisition {
-    return Object.assign({}, pdfReportRequisition, {
-      reportDate: pdfReportRequisition.reportDate?.isValid() ? pdfReportRequisition.reportDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IPdfReportRequisition | NewPdfReportRequisition | PartialUpdatePdfReportRequisition>(
+    pdfReportRequisition: T
+  ): RestOf<T> {
+    return {
+      ...pdfReportRequisition,
+      reportDate: pdfReportRequisition.reportDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restPdfReportRequisition: RestPdfReportRequisition): IPdfReportRequisition {
+    return {
+      ...restPdfReportRequisition,
+      reportDate: restPdfReportRequisition.reportDate ? dayjs(restPdfReportRequisition.reportDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestPdfReportRequisition>): HttpResponse<IPdfReportRequisition> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.reportDate = res.body.reportDate ? dayjs(res.body.reportDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((pdfReportRequisition: IPdfReportRequisition) => {
-        pdfReportRequisition.reportDate = pdfReportRequisition.reportDate ? dayjs(pdfReportRequisition.reportDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestPdfReportRequisition[]>): HttpResponse<IPdfReportRequisition[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

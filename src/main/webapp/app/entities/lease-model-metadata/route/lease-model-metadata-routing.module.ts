@@ -6,13 +6,14 @@ import { LeaseModelMetadataComponent } from '../list/lease-model-metadata.compon
 import { LeaseModelMetadataDetailComponent } from '../detail/lease-model-metadata-detail.component';
 import { LeaseModelMetadataUpdateComponent } from '../update/lease-model-metadata-update.component';
 import { LeaseModelMetadataRoutingResolveService } from './lease-model-metadata-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const leaseModelMetadataRoute: Routes = [
   {
     path: '',
     component: LeaseModelMetadataComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

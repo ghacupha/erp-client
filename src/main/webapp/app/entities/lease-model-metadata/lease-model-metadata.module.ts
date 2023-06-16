@@ -14,6 +14,5 @@ import { LeaseModelMetadataRoutingModule } from './route/lease-model-metadata-ro
     LeaseModelMetadataUpdateComponent,
     LeaseModelMetadataDeleteDialogComponent,
   ],
-  entryComponents: [LeaseModelMetadataDeleteDialogComponent],
 })
 export class LeaseModelMetadataModule {}

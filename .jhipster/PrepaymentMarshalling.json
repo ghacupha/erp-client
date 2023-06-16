@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220503161722",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "inactive",
@@ -14,29 +16,27 @@
       "fieldType": "Integer"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentMarshalling",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "prepaymentAccount",
+      "otherEntityField": "catalogueNumber",
       "otherEntityName": "prepaymentAccount",
+      "relationshipName": "prepaymentAccount",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "catalogueNumber"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentMarshalling",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentMarshalling"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PrepaymentMarshalling",
-  "changelogDate": "20220503161722",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

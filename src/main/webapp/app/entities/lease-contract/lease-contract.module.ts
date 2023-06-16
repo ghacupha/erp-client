@@ -9,6 +9,5 @@ import { LeaseContractRoutingModule } from './route/lease-contract-routing.modul
 @NgModule({
   imports: [SharedModule, LeaseContractRoutingModule],
   declarations: [LeaseContractComponent, LeaseContractDetailComponent, LeaseContractUpdateComponent, LeaseContractDeleteDialogComponent],
-  entryComponents: [LeaseContractDeleteDialogComponent],
 })
 export class LeaseContractModule {}

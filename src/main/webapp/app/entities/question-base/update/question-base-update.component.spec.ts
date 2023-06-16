@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { QuestionBaseFormService } from './question-base-form.service';
 import { QuestionBaseService } from '../service/question-base.service';
-import { IQuestionBase, QuestionBase } from '../question-base.model';
+import { IQuestionBase } from '../question-base.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -20,21 +20,31 @@ describe('QuestionBase Management Update Component', () => {
   let comp: QuestionBaseUpdateComponent;
   let fixture: ComponentFixture<QuestionBaseUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let questionBaseFormService: QuestionBaseFormService;
   let questionBaseService: QuestionBaseService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [QuestionBaseUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(QuestionBaseUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(QuestionBaseUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    questionBaseFormService = TestBed.inject(QuestionBaseFormService);
     questionBaseService = TestBed.inject(QuestionBaseService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
@@ -65,7 +75,7 @@ describe('QuestionBase Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -85,7 +95,10 @@ describe('QuestionBase Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -93,23 +106,24 @@ describe('QuestionBase Management Update Component', () => {
       const questionBase: IQuestionBase = { id: 456 };
       const parameters: IUniversallyUniqueMapping = { id: 66315 };
       questionBase.parameters = [parameters];
-      const placeholderItems: IPlaceholder = { id: 16847 };
-      questionBase.placeholderItems = [placeholderItems];
+      const placeholderItem: IPlaceholder = { id: 16847 };
+      questionBase.placeholderItems = [placeholderItem];
 
       activatedRoute.data = of({ questionBase });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(questionBase));
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(parameters);
-      expect(comp.placeholdersSharedCollection).toContain(placeholderItems);
+      expect(comp.placeholdersSharedCollection).toContain(placeholderItem);
+      expect(comp.questionBase).toEqual(questionBase);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+      const saveSubject = new Subject<HttpResponse<IQuestionBase>>();
       const questionBase = { id: 123 };
+      jest.spyOn(questionBaseFormService, 'getQuestionBase').mockReturnValue(questionBase);
       jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ questionBase });
@@ -122,18 +136,20 @@ describe('QuestionBase Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(questionBaseFormService.getQuestionBase).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+      expect(questionBaseService.update).toHaveBeenCalledWith(expect.objectContaining(questionBase));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
-      const questionBase = new QuestionBase();
+      const saveSubject = new Subject<HttpResponse<IQuestionBase>>();
+      const questionBase = { id: 123 };
+      jest.spyOn(questionBaseFormService, 'getQuestionBase').mockReturnValue({ id: null });
       jest.spyOn(questionBaseService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ questionBase });
+      activatedRoute.data = of({ questionBase: null });
       comp.ngOnInit();
 
       // WHEN
@@ -143,14 +159,15 @@ describe('QuestionBase Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(questionBaseService.create).toHaveBeenCalledWith(questionBase);
+      expect(questionBaseFormService.getQuestionBase).toHaveBeenCalled();
+      expect(questionBaseService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<QuestionBase>>();
+      const saveSubject = new Subject<HttpResponse<IQuestionBase>>();
       const questionBase = { id: 123 };
       jest.spyOn(questionBaseService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -163,80 +180,30 @@ describe('QuestionBase Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(questionBaseService.update).toHaveBeenCalledWith(questionBase);
+      expect(questionBaseService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { ILeaseModelMetadata, LeaseModelMetadata } from '../lease-model-metadata.model';
+import { ILeaseModelMetadata } from '../lease-model-metadata.model';
 import { LeaseModelMetadataService } from '../service/lease-model-metadata.service';
 
 import { LeaseModelMetadataRoutingResolveService } from './lease-model-metadata-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('LeaseModelMetadata routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: LeaseModelMetadataRoutingResolveService;
   let service: LeaseModelMetadataService;
-  let resultLeaseModelMetadata: ILeaseModelMetadata | undefined;
+  let resultLeaseModelMetadata: ILeaseModelMetadata | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(LeaseModelMetadataRoutingResolveService);
     service = TestBed.inject(LeaseModelMetadataService);
     resultLeaseModelMetadata = undefined;
@@ -46,7 +55,7 @@ describe('LeaseModelMetadata routing resolve service', () => {
       expect(resultLeaseModelMetadata).toEqual({ id: 123 });
     });
 
-    it('should return new ILeaseModelMetadata if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('LeaseModelMetadata routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultLeaseModelMetadata).toEqual(new LeaseModelMetadata());
+      expect(resultLeaseModelMetadata).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as LeaseModelMetadata })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<ILeaseModelMetadata>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

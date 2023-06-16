@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-invoice-heading" data-cy="InvoiceCreateUpdateHeading">Create or edit a Invoice</h2>
@@ -6,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_invoiceNumber">Invoice Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_invoiceNumber">Invoice Number</label>
           <input
             type="text"
             class="form-control"
@@ -30,8 +30,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_invoiceDate">Invoice Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_invoiceDate">Invoice Date</label>
           <div class="input-group">
             <input
               id="field_invoiceDate"
@@ -43,16 +43,14 @@
               #invoiceDateDp="ngbDatepicker"
               formControlName="invoiceDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="invoiceDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="invoiceDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_invoiceAmount">Invoice Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_invoiceAmount">Invoice Amount</label>
           <input
             type="number"
             class="form-control"
@@ -63,8 +61,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_currency">Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_currency">Currency</label>
           <select class="form-control" name="currency" formControlName="currency" id="field_currency" data-cy="currency">
             <option [ngValue]="null"></option>
             <option *ngFor="let currencyTypes of currencyTypesValues" [value]="currencyTypes">currencyTypes</option>
@@ -74,8 +72,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentReference">Payment Reference</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentReference">Payment Reference</label>
           <input
             type="text"
             class="form-control"
@@ -86,8 +84,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_dealerName">Dealer Name</label>
           <input
             type="text"
             class="form-control"
@@ -98,8 +96,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -110,8 +108,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -122,7 +120,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentLabels">Payment Label</label>
           <select
             class="form-control"
@@ -131,17 +129,15 @@
             multiple
             name="paymentLabels"
             formControlName="paymentLabels"
+            [compareWith]="comparePaymentLabel"
           >
-            <option
-              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
-              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
-            >
+            <option [ngValue]="paymentLabelOption" *ngFor="let paymentLabelOption of paymentLabelsSharedCollection">
               {{ paymentLabelOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -150,11 +146,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

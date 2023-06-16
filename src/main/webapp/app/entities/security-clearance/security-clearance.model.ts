@@ -1,21 +1,10 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface ISecurityClearance {
-  id?: number;
-  clearanceLevel?: string;
-  grantedClearances?: ISecurityClearance[] | null;
-  placeholders?: IPlaceholder[] | null;
+  id: number;
+  clearanceLevel?: string | null;
+  grantedClearances?: Pick<ISecurityClearance, 'id' | 'clearanceLevel'>[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class SecurityClearance implements ISecurityClearance {
-  constructor(
-    public id?: number,
-    public clearanceLevel?: string,
-    public grantedClearances?: ISecurityClearance[] | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getSecurityClearanceIdentifier(securityClearance: ISecurityClearance): number | undefined {
-  return securityClearance.id;
-}
+export type NewSecurityClearance = Omit<ISecurityClearance, 'id'> & { id: null };

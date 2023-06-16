@@ -1,18 +1,22 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { ILeaseModelMetadata, LeaseModelMetadata } from '../lease-model-metadata.model';
+import { ILeaseModelMetadata } from '../lease-model-metadata.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../lease-model-metadata.test-samples';
 
-import { LeaseModelMetadataService } from './lease-model-metadata.service';
+import { LeaseModelMetadataService, RestLeaseModelMetadata } from './lease-model-metadata.service';
+
+const requireRestSample: RestLeaseModelMetadata = {
+  ...sampleWithRequiredData,
+  commencementDate: sampleWithRequiredData.commencementDate?.format(DATE_FORMAT),
+  terminalDate: sampleWithRequiredData.terminalDate?.format(DATE_FORMAT),
+};
 
 describe('LeaseModelMetadata Service', () => {
   let service: LeaseModelMetadataService;
   let httpMock: HttpTestingController;
-  let elemDefault: ILeaseModelMetadata;
   let expectedResult: ILeaseModelMetadata | ILeaseModelMetadata[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,63 +25,27 @@ describe('LeaseModelMetadata Service', () => {
     expectedResult = null;
     service = TestBed.inject(LeaseModelMetadataService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      modelTitle: 'AAAAAAA',
-      modelVersion: 0,
-      description: 'AAAAAAA',
-      modelNotesContentType: 'image/png',
-      modelNotes: 'AAAAAAA',
-      annualDiscountingRate: 0,
-      commencementDate: currentDate,
-      terminalDate: currentDate,
-      totalReportingPeriods: 0,
-      reportingPeriodsPerYear: 0,
-      settlementPeriodsPerYear: 0,
-      initialLiabilityAmount: 0,
-      initialROUAmount: 0,
-      totalDepreciationPeriods: 0,
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          commencementDate: currentDate.format(DATE_FORMAT),
-          terminalDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a LeaseModelMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          commencementDate: currentDate.format(DATE_FORMAT),
-          terminalDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const leaseModelMetadata = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          commencementDate: currentDate,
-          terminalDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new LeaseModelMetadata()).subscribe(resp => (expectedResult = resp.body));
+      service.create(leaseModelMetadata).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -85,35 +53,11 @@ describe('LeaseModelMetadata Service', () => {
     });
 
     it('should update a LeaseModelMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          modelTitle: 'BBBBBB',
-          modelVersion: 1,
-          description: 'BBBBBB',
-          modelNotes: 'BBBBBB',
-          annualDiscountingRate: 1,
-          commencementDate: currentDate.format(DATE_FORMAT),
-          terminalDate: currentDate.format(DATE_FORMAT),
-          totalReportingPeriods: 1,
-          reportingPeriodsPerYear: 1,
-          settlementPeriodsPerYear: 1,
-          initialLiabilityAmount: 1,
-          initialROUAmount: 1,
-          totalDepreciationPeriods: 1,
-        },
-        elemDefault
-      );
+      const leaseModelMetadata = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          commencementDate: currentDate,
-          terminalDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(leaseModelMetadata).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -121,25 +65,9 @@ describe('LeaseModelMetadata Service', () => {
     });
 
     it('should partial update a LeaseModelMetadata', () => {
-      const patchObject = Object.assign(
-        {
-          modelTitle: 'BBBBBB',
-          modelVersion: 1,
-          modelNotes: 'BBBBBB',
-          initialROUAmount: 1,
-        },
-        new LeaseModelMetadata()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          commencementDate: currentDate,
-          terminalDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -149,88 +77,66 @@ describe('LeaseModelMetadata Service', () => {
     });
 
     it('should return a list of LeaseModelMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          modelTitle: 'BBBBBB',
-          modelVersion: 1,
-          description: 'BBBBBB',
-          modelNotes: 'BBBBBB',
-          annualDiscountingRate: 1,
-          commencementDate: currentDate.format(DATE_FORMAT),
-          terminalDate: currentDate.format(DATE_FORMAT),
-          totalReportingPeriods: 1,
-          reportingPeriodsPerYear: 1,
-          settlementPeriodsPerYear: 1,
-          initialLiabilityAmount: 1,
-          initialROUAmount: 1,
-          totalDepreciationPeriods: 1,
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          commencementDate: currentDate,
-          terminalDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a LeaseModelMetadata', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addLeaseModelMetadataToCollectionIfMissing', () => {
       it('should add a LeaseModelMetadata to an empty array', () => {
-        const leaseModelMetadata: ILeaseModelMetadata = { id: 123 };
+        const leaseModelMetadata: ILeaseModelMetadata = sampleWithRequiredData;
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing([], leaseModelMetadata);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(leaseModelMetadata);
       });
 
       it('should not add a LeaseModelMetadata to an array that contains it', () => {
-        const leaseModelMetadata: ILeaseModelMetadata = { id: 123 };
+        const leaseModelMetadata: ILeaseModelMetadata = sampleWithRequiredData;
         const leaseModelMetadataCollection: ILeaseModelMetadata[] = [
           {
             ...leaseModelMetadata,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing(leaseModelMetadataCollection, leaseModelMetadata);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a LeaseModelMetadata to an array that doesn't contain it", () => {
-        const leaseModelMetadata: ILeaseModelMetadata = { id: 123 };
-        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [{ id: 456 }];
+        const leaseModelMetadata: ILeaseModelMetadata = sampleWithRequiredData;
+        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [sampleWithPartialData];
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing(leaseModelMetadataCollection, leaseModelMetadata);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(leaseModelMetadata);
       });
 
       it('should add only unique LeaseModelMetadata to an array', () => {
-        const leaseModelMetadataArray: ILeaseModelMetadata[] = [{ id: 123 }, { id: 456 }, { id: 93121 }];
-        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [{ id: 123 }];
+        const leaseModelMetadataArray: ILeaseModelMetadata[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [sampleWithRequiredData];
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing(leaseModelMetadataCollection, ...leaseModelMetadataArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const leaseModelMetadata: ILeaseModelMetadata = { id: 123 };
-        const leaseModelMetadata2: ILeaseModelMetadata = { id: 456 };
+        const leaseModelMetadata: ILeaseModelMetadata = sampleWithRequiredData;
+        const leaseModelMetadata2: ILeaseModelMetadata = sampleWithPartialData;
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing([], leaseModelMetadata, leaseModelMetadata2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(leaseModelMetadata);
@@ -238,16 +144,60 @@ describe('LeaseModelMetadata Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const leaseModelMetadata: ILeaseModelMetadata = { id: 123 };
+        const leaseModelMetadata: ILeaseModelMetadata = sampleWithRequiredData;
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing([], null, leaseModelMetadata, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(leaseModelMetadata);
       });
 
       it('should return initial array if no LeaseModelMetadata is added', () => {
-        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [{ id: 123 }];
+        const leaseModelMetadataCollection: ILeaseModelMetadata[] = [sampleWithRequiredData];
         expectedResult = service.addLeaseModelMetadataToCollectionIfMissing(leaseModelMetadataCollection, undefined, null);
         expect(expectedResult).toEqual(leaseModelMetadataCollection);
+      });
+    });
+
+    describe('compareLeaseModelMetadata', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareLeaseModelMetadata(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareLeaseModelMetadata(entity1, entity2);
+        const compareResult2 = service.compareLeaseModelMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareLeaseModelMetadata(entity1, entity2);
+        const compareResult2 = service.compareLeaseModelMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareLeaseModelMetadata(entity1, entity2);
+        const compareResult2 = service.compareLeaseModelMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

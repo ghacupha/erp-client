@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IJobSheet, JobSheet } from '../job-sheet.model';
+import { JobSheetFormService, JobSheetFormGroup } from './job-sheet-form.service';
+import { IJobSheet } from '../job-sheet.model';
 import { JobSheetService } from '../service/job-sheet.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -27,6 +27,7 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class JobSheetUpdateComponent implements OnInit {
   isSaving = false;
+  jobSheet: IJobSheet | null = null;
 
   dealersSharedCollection: IDealer[] = [];
   businessStampsSharedCollection: IBusinessStamp[] = [];
@@ -34,37 +35,40 @@ export class JobSheetUpdateComponent implements OnInit {
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    serialNumber: [null, [Validators.required]],
-    jobSheetDate: [],
-    details: [],
-    remarks: [],
-    biller: [null, Validators.required],
-    signatories: [],
-    contactPerson: [],
-    businessStamps: [],
-    placeholders: [],
-    paymentLabels: [],
-    businessDocuments: [],
-  });
+  editForm: JobSheetFormGroup = this.jobSheetFormService.createJobSheetFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected jobSheetService: JobSheetService,
+    protected jobSheetFormService: JobSheetFormService,
     protected dealerService: DealerService,
     protected businessStampService: BusinessStampService,
     protected placeholderService: PlaceholderService,
     protected paymentLabelService: PaymentLabelService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareBusinessStamp = (o1: IBusinessStamp | null, o2: IBusinessStamp | null): boolean =>
+    this.businessStampService.compareBusinessStamp(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ jobSheet }) => {
-      this.updateForm(jobSheet);
+      this.jobSheet = jobSheet;
+      if (jobSheet) {
+        this.updateForm(jobSheet);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -91,94 +95,19 @@ export class JobSheetUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const jobSheet = this.createFromForm();
-    if (jobSheet.id !== undefined) {
+    const jobSheet = this.jobSheetFormService.getJobSheet(this.editForm);
+    if (jobSheet.id !== null) {
       this.subscribeToSaveResponse(this.jobSheetService.update(jobSheet));
     } else {
       this.subscribeToSaveResponse(this.jobSheetService.create(jobSheet));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackBusinessStampById(index: number, item: IBusinessStamp): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessStamp(option: IBusinessStamp, selectedVals?: IBusinessStamp[]): IBusinessStamp {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IJobSheet>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -194,40 +123,28 @@ export class JobSheetUpdateComponent implements OnInit {
   }
 
   protected updateForm(jobSheet: IJobSheet): void {
-    this.editForm.patchValue({
-      id: jobSheet.id,
-      serialNumber: jobSheet.serialNumber,
-      jobSheetDate: jobSheet.jobSheetDate,
-      details: jobSheet.details,
-      remarks: jobSheet.remarks,
-      biller: jobSheet.biller,
-      signatories: jobSheet.signatories,
-      contactPerson: jobSheet.contactPerson,
-      businessStamps: jobSheet.businessStamps,
-      placeholders: jobSheet.placeholders,
-      paymentLabels: jobSheet.paymentLabels,
-      businessDocuments: jobSheet.businessDocuments,
-    });
+    this.jobSheet = jobSheet;
+    this.jobSheetFormService.resetForm(this.editForm, jobSheet);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       jobSheet.biller,
       ...(jobSheet.signatories ?? []),
       jobSheet.contactPerson
     );
-    this.businessStampsSharedCollection = this.businessStampService.addBusinessStampToCollectionIfMissing(
+    this.businessStampsSharedCollection = this.businessStampService.addBusinessStampToCollectionIfMissing<IBusinessStamp>(
       this.businessStampsSharedCollection,
       ...(jobSheet.businessStamps ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(jobSheet.placeholders ?? [])
     );
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(jobSheet.paymentLabels ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(jobSheet.businessDocuments ?? [])
     );
@@ -239,11 +156,11 @@ export class JobSheetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('biller')!.value,
-            ...(this.editForm.get('signatories')!.value ?? []),
-            this.editForm.get('contactPerson')!.value
+            this.jobSheet?.biller,
+            ...(this.jobSheet?.signatories ?? []),
+            this.jobSheet?.contactPerson
           )
         )
       )
@@ -254,9 +171,9 @@ export class JobSheetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessStamp[]>) => res.body ?? []))
       .pipe(
         map((businessStamps: IBusinessStamp[]) =>
-          this.businessStampService.addBusinessStampToCollectionIfMissing(
+          this.businessStampService.addBusinessStampToCollectionIfMissing<IBusinessStamp>(
             businessStamps,
-            ...(this.editForm.get('businessStamps')!.value ?? [])
+            ...(this.jobSheet?.businessStamps ?? [])
           )
         )
       )
@@ -267,7 +184,7 @@ export class JobSheetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.jobSheet?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -277,7 +194,10 @@ export class JobSheetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.jobSheet?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -287,30 +207,12 @@ export class JobSheetUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.jobSheet?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IJobSheet {
-    return {
-      ...new JobSheet(),
-      id: this.editForm.get(['id'])!.value,
-      serialNumber: this.editForm.get(['serialNumber'])!.value,
-      jobSheetDate: this.editForm.get(['jobSheetDate'])!.value,
-      details: this.editForm.get(['details'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      biller: this.editForm.get(['biller'])!.value,
-      signatories: this.editForm.get(['signatories'])!.value,
-      contactPerson: this.editForm.get(['contactPerson'])!.value,
-      businessStamps: this.editForm.get(['businessStamps'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

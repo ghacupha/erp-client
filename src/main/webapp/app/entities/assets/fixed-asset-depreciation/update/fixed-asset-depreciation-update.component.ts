@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IFixedAssetDepreciation, FixedAssetDepreciation } from '../fixed-asset-depreciation.model';
+import { FixedAssetDepreciationFormService, FixedAssetDepreciationFormGroup } from './fixed-asset-depreciation-form.service';
+import { IFixedAssetDepreciation } from '../fixed-asset-depreciation.model';
 import { FixedAssetDepreciationService } from '../service/fixed-asset-depreciation.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -17,35 +17,28 @@ import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regim
 })
 export class FixedAssetDepreciationUpdateComponent implements OnInit {
   isSaving = false;
+  fixedAssetDepreciation: IFixedAssetDepreciation | null = null;
   depreciationRegimeValues = Object.keys(DepreciationRegime);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    assetNumber: [],
-    serviceOutletCode: [],
-    assetTag: [],
-    assetDescription: [],
-    depreciationDate: [],
-    assetCategory: [],
-    depreciationAmount: [],
-    depreciationRegime: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    placeholders: [],
-  });
+  editForm: FixedAssetDepreciationFormGroup = this.fixedAssetDepreciationFormService.createFixedAssetDepreciationFormGroup();
 
   constructor(
     protected fixedAssetDepreciationService: FixedAssetDepreciationService,
+    protected fixedAssetDepreciationFormService: FixedAssetDepreciationFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ fixedAssetDepreciation }) => {
-      this.updateForm(fixedAssetDepreciation);
+      this.fixedAssetDepreciation = fixedAssetDepreciation;
+      if (fixedAssetDepreciation) {
+        this.updateForm(fixedAssetDepreciation);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -57,34 +50,19 @@ export class FixedAssetDepreciationUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const fixedAssetDepreciation = this.createFromForm();
-    if (fixedAssetDepreciation.id !== undefined) {
+    const fixedAssetDepreciation = this.fixedAssetDepreciationFormService.getFixedAssetDepreciation(this.editForm);
+    if (fixedAssetDepreciation.id !== null) {
       this.subscribeToSaveResponse(this.fixedAssetDepreciationService.update(fixedAssetDepreciation));
     } else {
       this.subscribeToSaveResponse(this.fixedAssetDepreciationService.create(fixedAssetDepreciation));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFixedAssetDepreciation>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -100,22 +78,10 @@ export class FixedAssetDepreciationUpdateComponent implements OnInit {
   }
 
   protected updateForm(fixedAssetDepreciation: IFixedAssetDepreciation): void {
-    this.editForm.patchValue({
-      id: fixedAssetDepreciation.id,
-      assetNumber: fixedAssetDepreciation.assetNumber,
-      serviceOutletCode: fixedAssetDepreciation.serviceOutletCode,
-      assetTag: fixedAssetDepreciation.assetTag,
-      assetDescription: fixedAssetDepreciation.assetDescription,
-      depreciationDate: fixedAssetDepreciation.depreciationDate,
-      assetCategory: fixedAssetDepreciation.assetCategory,
-      depreciationAmount: fixedAssetDepreciation.depreciationAmount,
-      depreciationRegime: fixedAssetDepreciation.depreciationRegime,
-      fileUploadToken: fixedAssetDepreciation.fileUploadToken,
-      compilationToken: fixedAssetDepreciation.compilationToken,
-      placeholders: fixedAssetDepreciation.placeholders,
-    });
+    this.fixedAssetDepreciation = fixedAssetDepreciation;
+    this.fixedAssetDepreciationFormService.resetForm(this.editForm, fixedAssetDepreciation);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(fixedAssetDepreciation.placeholders ?? [])
     );
@@ -127,27 +93,12 @@ export class FixedAssetDepreciationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.fixedAssetDepreciation?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IFixedAssetDepreciation {
-    return {
-      ...new FixedAssetDepreciation(),
-      id: this.editForm.get(['id'])!.value,
-      assetNumber: this.editForm.get(['assetNumber'])!.value,
-      serviceOutletCode: this.editForm.get(['serviceOutletCode'])!.value,
-      assetTag: this.editForm.get(['assetTag'])!.value,
-      assetDescription: this.editForm.get(['assetDescription'])!.value,
-      depreciationDate: this.editForm.get(['depreciationDate'])!.value,
-      assetCategory: this.editForm.get(['assetCategory'])!.value,
-      depreciationAmount: this.editForm.get(['depreciationAmount'])!.value,
-      depreciationRegime: this.editForm.get(['depreciationRegime'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

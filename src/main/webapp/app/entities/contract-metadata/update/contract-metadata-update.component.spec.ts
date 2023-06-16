@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { ContractMetadataFormService } from './contract-metadata-form.service';
 import { ContractMetadataService } from '../service/contract-metadata.service';
-import { IContractMetadata, ContractMetadata } from '../contract-metadata.model';
+import { IContractMetadata } from '../contract-metadata.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { IApplicationUser } from 'app/entities/application-user/application-user.model';
@@ -28,6 +28,7 @@ describe('ContractMetadata Management Update Component', () => {
   let comp: ContractMetadataUpdateComponent;
   let fixture: ComponentFixture<ContractMetadataUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let contractMetadataFormService: ContractMetadataFormService;
   let contractMetadataService: ContractMetadataService;
   let dealerService: DealerService;
   let applicationUserService: ApplicationUserService;
@@ -38,15 +39,24 @@ describe('ContractMetadata Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [ContractMetadataUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(ContractMetadataUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(ContractMetadataUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    contractMetadataFormService = TestBed.inject(ContractMetadataFormService);
     contractMetadataService = TestBed.inject(ContractMetadataService);
     dealerService = TestBed.inject(DealerService);
     applicationUserService = TestBed.inject(ApplicationUserService);
@@ -76,7 +86,7 @@ describe('ContractMetadata Management Update Component', () => {
       expect(contractMetadataService.query).toHaveBeenCalled();
       expect(contractMetadataService.addContractMetadataToCollectionIfMissing).toHaveBeenCalledWith(
         contractMetadataCollection,
-        ...additionalContractMetadata
+        ...additionalContractMetadata.map(expect.objectContaining)
       );
       expect(comp.contractMetadataSharedCollection).toEqual(expectedCollection);
     });
@@ -98,7 +108,10 @@ describe('ContractMetadata Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -121,7 +134,7 @@ describe('ContractMetadata Management Update Component', () => {
       expect(applicationUserService.query).toHaveBeenCalled();
       expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
         applicationUserCollection,
-        ...additionalApplicationUsers
+        ...additionalApplicationUsers.map(expect.objectContaining)
       );
       expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
     });
@@ -143,7 +156,7 @@ describe('ContractMetadata Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -163,7 +176,10 @@ describe('ContractMetadata Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -184,7 +200,7 @@ describe('ContractMetadata Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -211,7 +227,7 @@ describe('ContractMetadata Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -226,38 +242,39 @@ describe('ContractMetadata Management Update Component', () => {
       contractMetadata.contractPartner = contractPartner;
       const responsiblePerson: IApplicationUser = { id: 23138 };
       contractMetadata.responsiblePerson = responsiblePerson;
-      const signatories: IApplicationUser = { id: 93456 };
-      contractMetadata.signatories = [signatories];
+      const signatory: IApplicationUser = { id: 93456 };
+      contractMetadata.signatories = [signatory];
       const securityClearance: ISecurityClearance = { id: 77196 };
       contractMetadata.securityClearance = securityClearance;
-      const placeholders: IPlaceholder = { id: 57236 };
-      contractMetadata.placeholders = [placeholders];
-      const contractDocumentFiles: IBusinessDocument = { id: 80794 };
-      contractMetadata.contractDocumentFiles = [contractDocumentFiles];
+      const placeholder: IPlaceholder = { id: 57236 };
+      contractMetadata.placeholders = [placeholder];
+      const contractDocumentFile: IBusinessDocument = { id: 80794 };
+      contractMetadata.contractDocumentFiles = [contractDocumentFile];
       const contractMappings: IUniversallyUniqueMapping = { id: 3275 };
       contractMetadata.contractMappings = [contractMappings];
 
       activatedRoute.data = of({ contractMetadata });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(contractMetadata));
       expect(comp.contractMetadataSharedCollection).toContain(relatedContracts);
       expect(comp.dealersSharedCollection).toContain(department);
       expect(comp.dealersSharedCollection).toContain(contractPartner);
       expect(comp.applicationUsersSharedCollection).toContain(responsiblePerson);
-      expect(comp.applicationUsersSharedCollection).toContain(signatories);
+      expect(comp.applicationUsersSharedCollection).toContain(signatory);
       expect(comp.securityClearancesSharedCollection).toContain(securityClearance);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.businessDocumentsSharedCollection).toContain(contractDocumentFiles);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.businessDocumentsSharedCollection).toContain(contractDocumentFile);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(contractMappings);
+      expect(comp.contractMetadata).toEqual(contractMetadata);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ContractMetadata>>();
+      const saveSubject = new Subject<HttpResponse<IContractMetadata>>();
       const contractMetadata = { id: 123 };
+      jest.spyOn(contractMetadataFormService, 'getContractMetadata').mockReturnValue(contractMetadata);
       jest.spyOn(contractMetadataService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ contractMetadata });
@@ -270,18 +287,20 @@ describe('ContractMetadata Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(contractMetadataFormService.getContractMetadata).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(contractMetadataService.update).toHaveBeenCalledWith(contractMetadata);
+      expect(contractMetadataService.update).toHaveBeenCalledWith(expect.objectContaining(contractMetadata));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ContractMetadata>>();
-      const contractMetadata = new ContractMetadata();
+      const saveSubject = new Subject<HttpResponse<IContractMetadata>>();
+      const contractMetadata = { id: 123 };
+      jest.spyOn(contractMetadataFormService, 'getContractMetadata').mockReturnValue({ id: null });
       jest.spyOn(contractMetadataService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ contractMetadata });
+      activatedRoute.data = of({ contractMetadata: null });
       comp.ngOnInit();
 
       // WHEN
@@ -291,14 +310,15 @@ describe('ContractMetadata Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(contractMetadataService.create).toHaveBeenCalledWith(contractMetadata);
+      expect(contractMetadataFormService.getContractMetadata).toHaveBeenCalled();
+      expect(contractMetadataService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ContractMetadata>>();
+      const saveSubject = new Subject<HttpResponse<IContractMetadata>>();
       const contractMetadata = { id: 123 };
       jest.spyOn(contractMetadataService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -311,198 +331,80 @@ describe('ContractMetadata Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(contractMetadataService.update).toHaveBeenCalledWith(contractMetadata);
+      expect(contractMetadataService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackContractMetadataById', () => {
-      it('Should return tracked ContractMetadata primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareContractMetadata', () => {
+      it('Should forward to contractMetadataService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackContractMetadataById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(contractMetadataService, 'compareContractMetadata');
+        comp.compareContractMetadata(entity, entity2);
+        expect(contractMetadataService.compareContractMetadata).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackApplicationUserById', () => {
-      it('Should return tracked ApplicationUser primary key', () => {
+    describe('compareApplicationUser', () => {
+      it('Should forward to applicationUserService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackApplicationUserById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(applicationUserService, 'compareApplicationUser');
+        comp.compareApplicationUser(entity, entity2);
+        expect(applicationUserService.compareApplicationUser).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedContractMetadata', () => {
-      it('Should return option if no ContractMetadata is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedContractMetadata(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected ContractMetadata for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedContractMetadata(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this ContractMetadata is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedContractMetadata(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedApplicationUser', () => {
-      it('Should return option if no ApplicationUser is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedApplicationUser(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected ApplicationUser for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedApplicationUser(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this ApplicationUser is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedApplicationUser(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

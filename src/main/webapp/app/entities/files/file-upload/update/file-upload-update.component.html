@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-file-upload-heading" data-cy="FileUploadCreateUpdateHeading">Create or edit a File Upload</h2>
@@ -6,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -26,16 +26,16 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileName">File Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileName">File Name</label>
           <input type="text" class="form-control" name="fileName" id="field_fileName" data-cy="fileName" formControlName="fileName" />
           <div *ngIf="editForm.get('fileName')!.invalid && (editForm.get('fileName')!.dirty || editForm.get('fileName')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('fileName')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodFrom">Period From</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_periodFrom">Period From</label>
           <div class="input-group">
             <input
               id="field_periodFrom"
@@ -47,16 +47,12 @@
               #periodFromDp="ngbDatepicker"
               formControlName="periodFrom"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodFromDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="periodFromDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodTo">Period To</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_periodTo">Period To</label>
           <div class="input-group">
             <input
               id="field_periodTo"
@@ -68,14 +64,12 @@
               #periodToDp="ngbDatepicker"
               formControlName="periodTo"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodToDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="periodToDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileTypeId">File Type Id</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileTypeId">File Type Id</label>
           <input
             type="number"
             class="form-control"
@@ -92,19 +86,20 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dataFile">Data File</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_dataFile">Data File</label>
           <div>
             <div *ngIf="editForm.get('dataFile')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('dataFile')!.value, editForm.get('dataFileContentType')!.value)">open</a
+              <a class="pull-start" (click)="openFile(editForm.get('dataFile')!.value!, editForm.get('dataFileContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('dataFileContentType')!.value }}, {{ byteSize(editForm.get('dataFile')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('dataFileContentType')!.value }}, {{ byteSize(editForm.get('dataFile')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ dataFile: null }); editForm.patchValue({ dataFileContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ dataFile: undefined, dataFileContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -124,8 +119,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_uploadSuccessful">Upload Successful</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_uploadSuccessful">Upload Successful</label>
           <input
             type="checkbox"
             class="form-check"
@@ -136,8 +131,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_uploadProcessed">Upload Processed</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_uploadProcessed">Upload Processed</label>
           <input
             type="checkbox"
             class="form-check"
@@ -148,8 +143,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_uploadToken">Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_uploadToken">Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -163,7 +158,7 @@
           ></div>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -172,11 +167,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

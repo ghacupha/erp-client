@@ -6,13 +6,14 @@ import { XlsxReportRequisitionComponent } from '../list/xlsx-report-requisition.
 import { XlsxReportRequisitionDetailComponent } from '../detail/xlsx-report-requisition-detail.component';
 import { XlsxReportRequisitionUpdateComponent } from '../update/xlsx-report-requisition-update.component';
 import { XlsxReportRequisitionRoutingResolveService } from './xlsx-report-requisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const xlsxReportRequisitionRoute: Routes = [
   {
     path: '',
     component: XlsxReportRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

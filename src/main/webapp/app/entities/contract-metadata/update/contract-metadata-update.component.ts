@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IContractMetadata, ContractMetadata } from '../contract-metadata.model';
+import { ContractMetadataFormService, ContractMetadataFormGroup } from './contract-metadata-form.service';
+import { IContractMetadata } from '../contract-metadata.model';
 import { ContractMetadataService } from '../service/contract-metadata.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -31,6 +31,7 @@ import { ContractStatus } from 'app/entities/enumerations/contract-status.model'
 })
 export class ContractMetadataUpdateComponent implements OnInit {
   isSaving = false;
+  contractMetadata: IContractMetadata | null = null;
   contractTypeValues = Object.keys(ContractType);
   contractStatusValues = Object.keys(ContractStatus);
 
@@ -42,45 +43,47 @@ export class ContractMetadataUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [],
-    typeOfContract: [null, [Validators.required]],
-    contractStatus: [null, [Validators.required]],
-    startDate: [null, [Validators.required]],
-    terminationDate: [null, [Validators.required]],
-    commentsAndAttachment: [],
-    contractTitle: [null, [Validators.required]],
-    contractIdentifier: [null, [Validators.required]],
-    contractIdentifierShort: [null, [Validators.required, Validators.minLength(6)]],
-    relatedContracts: [],
-    department: [],
-    contractPartner: [],
-    responsiblePerson: [],
-    signatories: [],
-    securityClearance: [],
-    placeholders: [],
-    contractDocumentFiles: [],
-    contractMappings: [],
-  });
+  editForm: ContractMetadataFormGroup = this.contractMetadataFormService.createContractMetadataFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected contractMetadataService: ContractMetadataService,
+    protected contractMetadataFormService: ContractMetadataFormService,
     protected dealerService: DealerService,
     protected applicationUserService: ApplicationUserService,
     protected securityClearanceService: SecurityClearanceService,
     protected placeholderService: PlaceholderService,
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareContractMetadata = (o1: IContractMetadata | null, o2: IContractMetadata | null): boolean =>
+    this.contractMetadataService.compareContractMetadata(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareApplicationUser = (o1: IApplicationUser | null, o2: IApplicationUser | null): boolean =>
+    this.applicationUserService.compareApplicationUser(o1, o2);
+
+  compareSecurityClearance = (o1: ISecurityClearance | null, o2: ISecurityClearance | null): boolean =>
+    this.securityClearanceService.compareSecurityClearance(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ contractMetadata }) => {
-      this.updateForm(contractMetadata);
+      this.contractMetadata = contractMetadata;
+      if (contractMetadata) {
+        this.updateForm(contractMetadata);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -107,105 +110,19 @@ export class ContractMetadataUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const contractMetadata = this.createFromForm();
-    if (contractMetadata.id !== undefined) {
+    const contractMetadata = this.contractMetadataFormService.getContractMetadata(this.editForm);
+    if (contractMetadata.id !== null) {
       this.subscribeToSaveResponse(this.contractMetadataService.update(contractMetadata));
     } else {
       this.subscribeToSaveResponse(this.contractMetadataService.create(contractMetadata));
     }
   }
 
-  trackContractMetadataById(index: number, item: IContractMetadata): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
-    return item.id!;
-  }
-
-  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  getSelectedContractMetadata(option: IContractMetadata, selectedVals?: IContractMetadata[]): IContractMetadata {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedApplicationUser(option: IApplicationUser, selectedVals?: IApplicationUser[]): IApplicationUser {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IContractMetadata>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -221,58 +138,40 @@ export class ContractMetadataUpdateComponent implements OnInit {
   }
 
   protected updateForm(contractMetadata: IContractMetadata): void {
-    this.editForm.patchValue({
-      id: contractMetadata.id,
-      description: contractMetadata.description,
-      typeOfContract: contractMetadata.typeOfContract,
-      contractStatus: contractMetadata.contractStatus,
-      startDate: contractMetadata.startDate,
-      terminationDate: contractMetadata.terminationDate,
-      commentsAndAttachment: contractMetadata.commentsAndAttachment,
-      contractTitle: contractMetadata.contractTitle,
-      contractIdentifier: contractMetadata.contractIdentifier,
-      contractIdentifierShort: contractMetadata.contractIdentifierShort,
-      relatedContracts: contractMetadata.relatedContracts,
-      department: contractMetadata.department,
-      contractPartner: contractMetadata.contractPartner,
-      responsiblePerson: contractMetadata.responsiblePerson,
-      signatories: contractMetadata.signatories,
-      securityClearance: contractMetadata.securityClearance,
-      placeholders: contractMetadata.placeholders,
-      contractDocumentFiles: contractMetadata.contractDocumentFiles,
-      contractMappings: contractMetadata.contractMappings,
-    });
+    this.contractMetadata = contractMetadata;
+    this.contractMetadataFormService.resetForm(this.editForm, contractMetadata);
 
-    this.contractMetadataSharedCollection = this.contractMetadataService.addContractMetadataToCollectionIfMissing(
+    this.contractMetadataSharedCollection = this.contractMetadataService.addContractMetadataToCollectionIfMissing<IContractMetadata>(
       this.contractMetadataSharedCollection,
       ...(contractMetadata.relatedContracts ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       contractMetadata.department,
       contractMetadata.contractPartner
     );
-    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
       this.applicationUsersSharedCollection,
       contractMetadata.responsiblePerson,
       ...(contractMetadata.signatories ?? [])
     );
-    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
       this.securityClearancesSharedCollection,
       contractMetadata.securityClearance
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(contractMetadata.placeholders ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(contractMetadata.contractDocumentFiles ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(contractMetadata.contractMappings ?? [])
-    );
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(contractMetadata.contractMappings ?? [])
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -281,9 +180,9 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IContractMetadata[]>) => res.body ?? []))
       .pipe(
         map((contractMetadata: IContractMetadata[]) =>
-          this.contractMetadataService.addContractMetadataToCollectionIfMissing(
+          this.contractMetadataService.addContractMetadataToCollectionIfMissing<IContractMetadata>(
             contractMetadata,
-            ...(this.editForm.get('relatedContracts')!.value ?? [])
+            ...(this.contractMetadata?.relatedContracts ?? [])
           )
         )
       )
@@ -294,10 +193,10 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('department')!.value,
-            this.editForm.get('contractPartner')!.value
+            this.contractMetadata?.department,
+            this.contractMetadata?.contractPartner
           )
         )
       )
@@ -308,10 +207,10 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
       .pipe(
         map((applicationUsers: IApplicationUser[]) =>
-          this.applicationUserService.addApplicationUserToCollectionIfMissing(
+          this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
             applicationUsers,
-            this.editForm.get('responsiblePerson')!.value,
-            ...(this.editForm.get('signatories')!.value ?? [])
+            this.contractMetadata?.responsiblePerson,
+            ...(this.contractMetadata?.signatories ?? [])
           )
         )
       )
@@ -322,9 +221,9 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
       .pipe(
         map((securityClearances: ISecurityClearance[]) =>
-          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
             securityClearances,
-            this.editForm.get('securityClearance')!.value
+            this.contractMetadata?.securityClearance
           )
         )
       )
@@ -335,7 +234,10 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.contractMetadata?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -345,9 +247,9 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('contractDocumentFiles')!.value ?? [])
+            ...(this.contractMetadata?.contractDocumentFiles ?? [])
           )
         )
       )
@@ -358,9 +260,9 @@ export class ContractMetadataUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('contractMappings')!.value ?? [])
+            ...(this.contractMetadata?.contractMappings ?? [])
           )
         )
       )
@@ -368,30 +270,5 @@ export class ContractMetadataUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-  }
-
-  protected createFromForm(): IContractMetadata {
-    return {
-      ...new ContractMetadata(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      typeOfContract: this.editForm.get(['typeOfContract'])!.value,
-      contractStatus: this.editForm.get(['contractStatus'])!.value,
-      startDate: this.editForm.get(['startDate'])!.value,
-      terminationDate: this.editForm.get(['terminationDate'])!.value,
-      commentsAndAttachment: this.editForm.get(['commentsAndAttachment'])!.value,
-      contractTitle: this.editForm.get(['contractTitle'])!.value,
-      contractIdentifier: this.editForm.get(['contractIdentifier'])!.value,
-      contractIdentifierShort: this.editForm.get(['contractIdentifierShort'])!.value,
-      relatedContracts: this.editForm.get(['relatedContracts'])!.value,
-      department: this.editForm.get(['department'])!.value,
-      contractPartner: this.editForm.get(['contractPartner'])!.value,
-      responsiblePerson: this.editForm.get(['responsiblePerson'])!.value,
-      signatories: this.editForm.get(['signatories'])!.value,
-      securityClearance: this.editForm.get(['securityClearance'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      contractDocumentFiles: this.editForm.get(['contractDocumentFiles'])!.value,
-      contractMappings: this.editForm.get(['contractMappings'])!.value,
-    };
   }
 }

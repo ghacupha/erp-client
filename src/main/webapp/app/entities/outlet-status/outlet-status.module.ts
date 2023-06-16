@@ -9,6 +9,5 @@ import { OutletStatusRoutingModule } from './route/outlet-status-routing.module'
 @NgModule({
   imports: [SharedModule, OutletStatusRoutingModule],
   declarations: [OutletStatusComponent, OutletStatusDetailComponent, OutletStatusUpdateComponent, OutletStatusDeleteDialogComponent],
-  entryComponents: [OutletStatusDeleteDialogComponent],
 })
 export class OutletStatusModule {}

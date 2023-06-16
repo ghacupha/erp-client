@@ -9,6 +9,5 @@ import { FileTypeRoutingModule } from './route/file-type-routing.module';
 @NgModule({
   imports: [SharedModule, FileTypeRoutingModule],
   declarations: [FileTypeComponent, FileTypeDetailComponent, FileTypeUpdateComponent, FileTypeDeleteDialogComponent],
-  entryComponents: [FileTypeDeleteDialogComponent],
 })
 export class ErpServiceFileTypeModule {}

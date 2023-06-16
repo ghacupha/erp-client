@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ISystemContentType } from '../system-content-type.model';
 import { SystemContentTypeService } from '../service/system-content-type.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './system-content-type-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class SystemContentTypeDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.systemContentTypeService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

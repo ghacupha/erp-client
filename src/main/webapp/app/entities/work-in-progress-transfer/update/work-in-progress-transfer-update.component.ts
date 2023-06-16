@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
+import { WorkInProgressTransferFormService, WorkInProgressTransferFormGroup } from './work-in-progress-transfer-form.service';
+import { IWorkInProgressTransfer } from '../work-in-progress-transfer.model';
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
 import { IWorkInProgressRegistration } from 'app/entities/work-in-progress-registration/work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from 'app/entities/work-in-progress-registration/service/work-in-progress-registration.service';
@@ -20,32 +20,37 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class WorkInProgressTransferUpdateComponent implements OnInit {
   isSaving = false;
+  workInProgressTransfer: IWorkInProgressTransfer | null = null;
 
   workInProgressRegistrationsSharedCollection: IWorkInProgressRegistration[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [],
-    targetAssetNumber: [],
-    workInProgressRegistrations: [],
-    placeholders: [],
-    businessDocuments: [],
-  });
+  editForm: WorkInProgressTransferFormGroup = this.workInProgressTransferFormService.createWorkInProgressTransferFormGroup();
 
   constructor(
     protected workInProgressTransferService: WorkInProgressTransferService,
+    protected workInProgressTransferFormService: WorkInProgressTransferFormService,
     protected workInProgressRegistrationService: WorkInProgressRegistrationService,
     protected placeholderService: PlaceholderService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareWorkInProgressRegistration = (o1: IWorkInProgressRegistration | null, o2: IWorkInProgressRegistration | null): boolean =>
+    this.workInProgressRegistrationService.compareWorkInProgressRegistration(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressTransfer }) => {
-      this.updateForm(workInProgressTransfer);
+      this.workInProgressTransfer = workInProgressTransfer;
+      if (workInProgressTransfer) {
+        this.updateForm(workInProgressTransfer);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -57,67 +62,19 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const workInProgressTransfer = this.createFromForm();
-    if (workInProgressTransfer.id !== undefined) {
+    const workInProgressTransfer = this.workInProgressTransferFormService.getWorkInProgressTransfer(this.editForm);
+    if (workInProgressTransfer.id !== null) {
       this.subscribeToSaveResponse(this.workInProgressTransferService.update(workInProgressTransfer));
     } else {
       this.subscribeToSaveResponse(this.workInProgressTransferService.create(workInProgressTransfer));
     }
   }
 
-  trackWorkInProgressRegistrationById(index: number, item: IWorkInProgressRegistration): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedWorkInProgressRegistration(
-    option: IWorkInProgressRegistration,
-    selectedVals?: IWorkInProgressRegistration[]
-  ): IWorkInProgressRegistration {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkInProgressTransfer>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -133,25 +90,19 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
   }
 
   protected updateForm(workInProgressTransfer: IWorkInProgressTransfer): void {
-    this.editForm.patchValue({
-      id: workInProgressTransfer.id,
-      description: workInProgressTransfer.description,
-      targetAssetNumber: workInProgressTransfer.targetAssetNumber,
-      workInProgressRegistrations: workInProgressTransfer.workInProgressRegistrations,
-      placeholders: workInProgressTransfer.placeholders,
-      businessDocuments: workInProgressTransfer.businessDocuments,
-    });
+    this.workInProgressTransfer = workInProgressTransfer;
+    this.workInProgressTransferFormService.resetForm(this.editForm, workInProgressTransfer);
 
     this.workInProgressRegistrationsSharedCollection =
-      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing<IWorkInProgressRegistration>(
         this.workInProgressRegistrationsSharedCollection,
         ...(workInProgressTransfer.workInProgressRegistrations ?? [])
       );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(workInProgressTransfer.placeholders ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(workInProgressTransfer.businessDocuments ?? [])
     );
@@ -163,9 +114,9 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IWorkInProgressRegistration[]>) => res.body ?? []))
       .pipe(
         map((workInProgressRegistrations: IWorkInProgressRegistration[]) =>
-          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing<IWorkInProgressRegistration>(
             workInProgressRegistrations,
-            ...(this.editForm.get('workInProgressRegistrations')!.value ?? [])
+            ...(this.workInProgressTransfer?.workInProgressRegistrations ?? [])
           )
         )
       )
@@ -179,7 +130,10 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.workInProgressTransfer?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -189,24 +143,12 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.workInProgressTransfer?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IWorkInProgressTransfer {
-    return {
-      ...new WorkInProgressTransfer(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      targetAssetNumber: this.editForm.get(['targetAssetNumber'])!.value,
-      workInProgressRegistrations: this.editForm.get(['workInProgressRegistrations'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

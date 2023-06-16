@@ -9,6 +9,5 @@ import { OutletTypeRoutingModule } from './route/outlet-type-routing.module';
 @NgModule({
   imports: [SharedModule, OutletTypeRoutingModule],
   declarations: [OutletTypeComponent, OutletTypeDetailComponent, OutletTypeUpdateComponent, OutletTypeDeleteDialogComponent],
-  entryComponents: [OutletTypeDeleteDialogComponent],
 })
 export class OutletTypeModule {}

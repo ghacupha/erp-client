@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISettlement, Settlement } from '../settlement.model';
+import { ISettlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
 
 @Injectable({ providedIn: 'root' })
-export class SettlementRoutingResolveService implements Resolve<ISettlement> {
+export class SettlementRoutingResolveService implements Resolve<ISettlement | null> {
   constructor(protected service: SettlementService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISettlement> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISettlement | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((settlement: HttpResponse<Settlement>) => {
+        mergeMap((settlement: HttpResponse<ISettlement>) => {
           if (settlement.body) {
             return of(settlement.body);
           } else {
@@ -25,6 +25,6 @@ export class SettlementRoutingResolveService implements Resolve<ISettlement> {
         })
       );
     }
-    return of(new Settlement());
+    return of(null);
   }
 }

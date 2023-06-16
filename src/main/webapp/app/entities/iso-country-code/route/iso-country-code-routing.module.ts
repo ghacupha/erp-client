@@ -6,11 +6,15 @@ import { IsoCountryCodeComponent } from '../list/iso-country-code.component';
 import { IsoCountryCodeDetailComponent } from '../detail/iso-country-code-detail.component';
 import { IsoCountryCodeUpdateComponent } from '../update/iso-country-code-update.component';
 import { IsoCountryCodeRoutingResolveService } from './iso-country-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const isoCountryCodeRoute: Routes = [
   {
     path: '',
     component: IsoCountryCodeComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
     canActivate: [UserRouteAccessService],
   },
   {

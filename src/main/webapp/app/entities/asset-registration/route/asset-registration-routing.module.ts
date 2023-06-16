@@ -6,13 +6,14 @@ import { AssetRegistrationComponent } from '../list/asset-registration.component
 import { AssetRegistrationDetailComponent } from '../detail/asset-registration-detail.component';
 import { AssetRegistrationUpdateComponent } from '../update/asset-registration-update.component';
 import { AssetRegistrationRoutingResolveService } from './asset-registration-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const assetRegistrationRoute: Routes = [
   {
     path: '',
     component: AssetRegistrationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

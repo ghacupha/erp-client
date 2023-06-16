@@ -6,7 +6,7 @@ import {
   WorkInProgressRegistrationDeleteDialog,
   WorkInProgressRegistrationUpdatePage,
 } from './work-in-progress-registration.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

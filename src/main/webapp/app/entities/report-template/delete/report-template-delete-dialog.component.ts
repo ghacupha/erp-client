@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IReportTemplate } from '../report-template.model';
 import { ReportTemplateService } from '../service/report-template.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './report-template-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class ReportTemplateDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.reportTemplateService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

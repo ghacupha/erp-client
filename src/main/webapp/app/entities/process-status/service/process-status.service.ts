@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IProcessStatus, getProcessStatusIdentifier } from '../process-status.model';
+import { IProcessStatus, NewProcessStatus } from '../process-status.model';
+
+export type PartialUpdateProcessStatus = Partial<IProcessStatus> & Pick<IProcessStatus, 'id'>;
 
 export type EntityResponseType = HttpResponse<IProcessStatus>;
 export type EntityArrayResponseType = HttpResponse<IProcessStatus[]>;
@@ -18,18 +20,18 @@ export class ProcessStatusService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(processStatus: IProcessStatus): Observable<EntityResponseType> {
+  create(processStatus: NewProcessStatus): Observable<EntityResponseType> {
     return this.http.post<IProcessStatus>(this.resourceUrl, processStatus, { observe: 'response' });
   }
 
   update(processStatus: IProcessStatus): Observable<EntityResponseType> {
-    return this.http.put<IProcessStatus>(`${this.resourceUrl}/${getProcessStatusIdentifier(processStatus) as number}`, processStatus, {
+    return this.http.put<IProcessStatus>(`${this.resourceUrl}/${this.getProcessStatusIdentifier(processStatus)}`, processStatus, {
       observe: 'response',
     });
   }
 
-  partialUpdate(processStatus: IProcessStatus): Observable<EntityResponseType> {
-    return this.http.patch<IProcessStatus>(`${this.resourceUrl}/${getProcessStatusIdentifier(processStatus) as number}`, processStatus, {
+  partialUpdate(processStatus: PartialUpdateProcessStatus): Observable<EntityResponseType> {
+    return this.http.patch<IProcessStatus>(`${this.resourceUrl}/${this.getProcessStatusIdentifier(processStatus)}`, processStatus, {
       observe: 'response',
     });
   }
@@ -52,18 +54,26 @@ export class ProcessStatusService {
     return this.http.get<IProcessStatus[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addProcessStatusToCollectionIfMissing(
-    processStatusCollection: IProcessStatus[],
-    ...processStatusesToCheck: (IProcessStatus | null | undefined)[]
-  ): IProcessStatus[] {
-    const processStatuses: IProcessStatus[] = processStatusesToCheck.filter(isPresent);
+  getProcessStatusIdentifier(processStatus: Pick<IProcessStatus, 'id'>): number {
+    return processStatus.id;
+  }
+
+  compareProcessStatus(o1: Pick<IProcessStatus, 'id'> | null, o2: Pick<IProcessStatus, 'id'> | null): boolean {
+    return o1 && o2 ? this.getProcessStatusIdentifier(o1) === this.getProcessStatusIdentifier(o2) : o1 === o2;
+  }
+
+  addProcessStatusToCollectionIfMissing<Type extends Pick<IProcessStatus, 'id'>>(
+    processStatusCollection: Type[],
+    ...processStatusesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const processStatuses: Type[] = processStatusesToCheck.filter(isPresent);
     if (processStatuses.length > 0) {
       const processStatusCollectionIdentifiers = processStatusCollection.map(
-        processStatusItem => getProcessStatusIdentifier(processStatusItem)!
+        processStatusItem => this.getProcessStatusIdentifier(processStatusItem)!
       );
       const processStatusesToAdd = processStatuses.filter(processStatusItem => {
-        const processStatusIdentifier = getProcessStatusIdentifier(processStatusItem);
-        if (processStatusIdentifier == null || processStatusCollectionIdentifiers.includes(processStatusIdentifier)) {
+        const processStatusIdentifier = this.getProcessStatusIdentifier(processStatusItem);
+        if (processStatusCollectionIdentifiers.includes(processStatusIdentifier)) {
           return false;
         }
         processStatusCollectionIdentifiers.push(processStatusIdentifier);

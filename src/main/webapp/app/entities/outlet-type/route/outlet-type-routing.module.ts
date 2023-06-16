@@ -6,13 +6,14 @@ import { OutletTypeComponent } from '../list/outlet-type.component';
 import { OutletTypeDetailComponent } from '../detail/outlet-type-detail.component';
 import { OutletTypeUpdateComponent } from '../update/outlet-type-update.component';
 import { OutletTypeRoutingResolveService } from './outlet-type-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const outletTypeRoute: Routes = [
   {
     path: '',
     component: OutletTypeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

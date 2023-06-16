@@ -14,6 +14,5 @@ import { WorkInProgressRegistrationRoutingModule } from './route/work-in-progres
     WorkInProgressRegistrationUpdateComponent,
     WorkInProgressRegistrationDeleteDialogComponent,
   ],
-  entryComponents: [WorkInProgressRegistrationDeleteDialogComponent],
 })
 export class WorkInProgressRegistrationModule {}

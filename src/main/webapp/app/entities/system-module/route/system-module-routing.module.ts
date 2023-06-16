@@ -6,13 +6,14 @@ import { SystemModuleComponent } from '../list/system-module.component';
 import { SystemModuleDetailComponent } from '../detail/system-module-detail.component';
 import { SystemModuleUpdateComponent } from '../update/system-module-update.component';
 import { SystemModuleRoutingResolveService } from './system-module-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const systemModuleRoute: Routes = [
   {
     path: '',
     component: SystemModuleComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

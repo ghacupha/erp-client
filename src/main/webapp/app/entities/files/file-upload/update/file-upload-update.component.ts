@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IFileUpload, FileUpload } from '../file-upload.model';
+import { FileUploadFormService, FileUploadFormGroup } from './file-upload-form.service';
+import { IFileUpload } from '../file-upload.model';
 import { FileUploadService } from '../service/file-upload.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -19,36 +19,29 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class FileUploadUpdateComponent implements OnInit {
   isSaving = false;
+  fileUpload: IFileUpload | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [null, [Validators.required]],
-    fileName: [null, [Validators.required]],
-    periodFrom: [],
-    periodTo: [],
-    fileTypeId: [null, [Validators.required]],
-    dataFile: [null, [Validators.required]],
-    dataFileContentType: [],
-    uploadSuccessful: [],
-    uploadProcessed: [],
-    uploadToken: [null, []],
-    placeholders: [],
-  });
+  editForm: FileUploadFormGroup = this.fileUploadFormService.createFileUploadFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected fileUploadService: FileUploadService,
+    protected fileUploadFormService: FileUploadFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ fileUpload }) => {
-      this.updateForm(fileUpload);
+      this.fileUpload = fileUpload;
+      if (fileUpload) {
+        this.updateForm(fileUpload);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -75,34 +68,19 @@ export class FileUploadUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const fileUpload = this.createFromForm();
-    if (fileUpload.id !== undefined) {
+    const fileUpload = this.fileUploadFormService.getFileUpload(this.editForm);
+    if (fileUpload.id !== null) {
       this.subscribeToSaveResponse(this.fileUploadService.update(fileUpload));
     } else {
       this.subscribeToSaveResponse(this.fileUploadService.create(fileUpload));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFileUpload>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -118,22 +96,10 @@ export class FileUploadUpdateComponent implements OnInit {
   }
 
   protected updateForm(fileUpload: IFileUpload): void {
-    this.editForm.patchValue({
-      id: fileUpload.id,
-      description: fileUpload.description,
-      fileName: fileUpload.fileName,
-      periodFrom: fileUpload.periodFrom,
-      periodTo: fileUpload.periodTo,
-      fileTypeId: fileUpload.fileTypeId,
-      dataFile: fileUpload.dataFile,
-      dataFileContentType: fileUpload.dataFileContentType,
-      uploadSuccessful: fileUpload.uploadSuccessful,
-      uploadProcessed: fileUpload.uploadProcessed,
-      uploadToken: fileUpload.uploadToken,
-      placeholders: fileUpload.placeholders,
-    });
+    this.fileUpload = fileUpload;
+    this.fileUploadFormService.resetForm(this.editForm, fileUpload);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(fileUpload.placeholders ?? [])
     );
@@ -145,27 +111,9 @@ export class FileUploadUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.fileUpload?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IFileUpload {
-    return {
-      ...new FileUpload(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      fileName: this.editForm.get(['fileName'])!.value,
-      periodFrom: this.editForm.get(['periodFrom'])!.value,
-      periodTo: this.editForm.get(['periodTo'])!.value,
-      fileTypeId: this.editForm.get(['fileTypeId'])!.value,
-      dataFileContentType: this.editForm.get(['dataFileContentType'])!.value,
-      dataFile: this.editForm.get(['dataFile'])!.value,
-      uploadSuccessful: this.editForm.get(['uploadSuccessful'])!.value,
-      uploadProcessed: this.editForm.get(['uploadProcessed'])!.value,
-      uploadToken: this.editForm.get(['uploadToken'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -2,25 +2,12 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { DepreciationTypes } from 'app/entities/enumerations/depreciation-types.model';
 
 export interface IDepreciationMethod {
-  id?: number;
-  depreciationMethodName?: string;
+  id: number;
+  depreciationMethodName?: string | null;
   description?: string | null;
-  depreciationType?: DepreciationTypes;
+  depreciationType?: DepreciationTypes | null;
   remarks?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class DepreciationMethod implements IDepreciationMethod {
-  constructor(
-    public id?: number,
-    public depreciationMethodName?: string,
-    public description?: string | null,
-    public depreciationType?: DepreciationTypes,
-    public remarks?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getDepreciationMethodIdentifier(depreciationMethod: IDepreciationMethod): number | undefined {
-  return depreciationMethod.id;
-}
+export type NewDepreciationMethod = Omit<IDepreciationMethod, 'id'> & { id: null };

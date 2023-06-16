@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-lease-model-metadata-heading" data-cy="LeaseModelMetadataCreateUpdateHeading">Create or edit a Lease Model Metadata</h2>
@@ -6,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_modelTitle">Model Title</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_modelTitle">Model Title</label>
           <input
             type="text"
             class="form-control"
@@ -26,8 +26,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_modelVersion">Model Version</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_modelVersion">Model Version</label>
           <input
             type="number"
             class="form-control"
@@ -46,8 +46,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -58,20 +58,20 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_modelNotes">Model Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_modelNotes">Model Notes</label>
           <div>
             <div *ngIf="editForm.get('modelNotes')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('modelNotes')!.value, editForm.get('modelNotesContentType')!.value)"
-                >open</a
+              <a class="pull-start" (click)="openFile(editForm.get('modelNotes')!.value!, editForm.get('modelNotesContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('modelNotesContentType')!.value }}, {{ byteSize(editForm.get('modelNotes')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('modelNotesContentType')!.value }}, {{ byteSize(editForm.get('modelNotes')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ modelNotes: null }); editForm.patchValue({ modelNotesContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ modelNotes: undefined, modelNotesContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -95,8 +95,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_annualDiscountingRate">Annual Discounting Rate</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_annualDiscountingRate">Annual Discounting Rate</label>
           <input
             type="number"
             class="form-control"
@@ -120,8 +120,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_commencementDate">Commencement Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_commencementDate">Commencement Date</label>
           <div class="input-group">
             <input
               id="field_commencementDate"
@@ -133,11 +133,9 @@
               #commencementDateDp="ngbDatepicker"
               formControlName="commencementDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="commencementDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="commencementDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
           <div
             *ngIf="
@@ -151,8 +149,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_terminalDate">Terminal Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_terminalDate">Terminal Date</label>
           <div class="input-group">
             <input
               id="field_terminalDate"
@@ -164,11 +162,9 @@
               #terminalDateDp="ngbDatepicker"
               formControlName="terminalDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="terminalDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="terminalDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
           <div
             *ngIf="editForm.get('terminalDate')!.invalid && (editForm.get('terminalDate')!.dirty || editForm.get('terminalDate')!.touched)"
@@ -177,8 +173,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_totalReportingPeriods">Total Reporting Periods</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_totalReportingPeriods">Total Reporting Periods</label>
           <input
             type="number"
             class="form-control"
@@ -189,8 +185,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportingPeriodsPerYear">Reporting Periods Per Year</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportingPeriodsPerYear">Reporting Periods Per Year</label>
           <input
             type="number"
             class="form-control"
@@ -201,8 +197,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementPeriodsPerYear">Settlement Periods Per Year</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementPeriodsPerYear">Settlement Periods Per Year</label>
           <input
             type="number"
             class="form-control"
@@ -213,8 +209,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_initialLiabilityAmount">Initial Liability Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_initialLiabilityAmount">Initial Liability Amount</label>
           <input
             type="number"
             class="form-control"
@@ -225,8 +221,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_initialROUAmount">Initial ROU Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_initialROUAmount">Initial ROU Amount</label>
           <input
             type="number"
             class="form-control"
@@ -237,8 +233,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_totalDepreciationPeriods">Total Depreciation Periods</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_totalDepreciationPeriods">Total Depreciation Periods</label>
           <input
             type="number"
             class="form-control"
@@ -249,7 +245,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -258,17 +254,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_leaseMappings">Lease Mapping</label>
           <select
             class="form-control"
@@ -277,37 +271,29 @@
             multiple
             name="leaseMappings"
             formControlName="leaseMappings"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('leaseMappings')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_leaseContract">Lease Contract</label>
           <select
             class="form-control"
             id="field_leaseContract"
             data-cy="leaseContract"
             name="leaseContract"
             formControlName="leaseContract"
+            [compareWith]="compareLeaseContract"
           >
             <option *ngIf="!editForm.get('leaseContract')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                leaseContractOption.id === editForm.get('leaseContract')!.value?.id
-                  ? editForm.get('leaseContract')!.value
-                  : leaseContractOption
-              "
-              *ngFor="let leaseContractOption of leaseContractsSharedCollection; trackBy: trackLeaseContractById"
-            >
+            <option [ngValue]="leaseContractOption" *ngFor="let leaseContractOption of leaseContractsSharedCollection">
               {{ leaseContractOption.bookingId }}
             </option>
           </select>
@@ -320,41 +306,35 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_predecessor">Predecessor</label>
-          <select class="form-control" id="field_predecessor" data-cy="predecessor" name="predecessor" formControlName="predecessor">
+        <div class="row mb-3">
+          <label class="form-label" for="field_predecessor">Predecessor</label>
+          <select
+            class="form-control"
+            id="field_predecessor"
+            data-cy="predecessor"
+            name="predecessor"
+            formControlName="predecessor"
+            [compareWith]="compareLeaseModelMetadata"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                leaseModelMetadataOption.id === editForm.get('predecessor')!.value?.id
-                  ? editForm.get('predecessor')!.value
-                  : leaseModelMetadataOption
-              "
-              *ngFor="let leaseModelMetadataOption of predecessorsCollection; trackBy: trackLeaseModelMetadataById"
-            >
+            <option [ngValue]="leaseModelMetadataOption" *ngFor="let leaseModelMetadataOption of leaseModelMetadataSharedCollection">
               {{ leaseModelMetadataOption.modelTitle }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_liabilityCurrency">Liability Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_liabilityCurrency">Liability Currency</label>
           <select
             class="form-control"
             id="field_liabilityCurrency"
             data-cy="liabilityCurrency"
             name="liabilityCurrency"
             formControlName="liabilityCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option *ngIf="!editForm.get('liabilityCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('liabilityCurrency')!.value?.id
-                  ? editForm.get('liabilityCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
@@ -370,24 +350,18 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_rouAssetCurrency">Rou Asset Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_rouAssetCurrency">Rou Asset Currency</label>
           <select
             class="form-control"
             id="field_rouAssetCurrency"
             data-cy="rouAssetCurrency"
             name="rouAssetCurrency"
             formControlName="rouAssetCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option *ngIf="!editForm.get('rouAssetCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('rouAssetCurrency')!.value?.id
-                  ? editForm.get('rouAssetCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
@@ -403,185 +377,137 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_modelAttachments">Model Attachments</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_modelAttachments">Model Attachments</label>
           <select
             class="form-control"
             id="field_modelAttachments"
             data-cy="modelAttachments"
             name="modelAttachments"
             formControlName="modelAttachments"
+            [compareWith]="compareBusinessDocument"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                businessDocumentOption.id === editForm.get('modelAttachments')!.value?.id
-                  ? editForm.get('modelAttachments')!.value
-                  : businessDocumentOption
-              "
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_securityClearance">Security Clearance</label>
           <select
             class="form-control"
             id="field_securityClearance"
             data-cy="securityClearance"
             name="securityClearance"
             formControlName="securityClearance"
+            [compareWith]="compareSecurityClearance"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
+            <option [ngValue]="securityClearanceOption" *ngFor="let securityClearanceOption of securityClearancesSharedCollection">
               {{ securityClearanceOption.clearanceLevel }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseLiabilityAccount">Lease Liability Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_leaseLiabilityAccount">Lease Liability Account</label>
           <select
             class="form-control"
             id="field_leaseLiabilityAccount"
             data-cy="leaseLiabilityAccount"
             name="leaseLiabilityAccount"
             formControlName="leaseLiabilityAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('leaseLiabilityAccount')!.value?.id
-                  ? editForm.get('leaseLiabilityAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestPayableAccount">Interest Payable Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestPayableAccount">Interest Payable Account</label>
           <select
             class="form-control"
             id="field_interestPayableAccount"
             data-cy="interestPayableAccount"
             name="interestPayableAccount"
             formControlName="interestPayableAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('interestPayableAccount')!.value?.id
-                  ? editForm.get('interestPayableAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestExpenseAccount">Interest Expense Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestExpenseAccount">Interest Expense Account</label>
           <select
             class="form-control"
             id="field_interestExpenseAccount"
             data-cy="interestExpenseAccount"
             name="interestExpenseAccount"
             formControlName="interestExpenseAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('interestExpenseAccount')!.value?.id
-                  ? editForm.get('interestExpenseAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_rouAssetAccount">Rou Asset Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_rouAssetAccount">Rou Asset Account</label>
           <select
             class="form-control"
             id="field_rouAssetAccount"
             data-cy="rouAssetAccount"
             name="rouAssetAccount"
             formControlName="rouAssetAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('rouAssetAccount')!.value?.id
-                  ? editForm.get('rouAssetAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_rouDepreciationAccount">Rou Depreciation Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_rouDepreciationAccount">Rou Depreciation Account</label>
           <select
             class="form-control"
             id="field_rouDepreciationAccount"
             data-cy="rouDepreciationAccount"
             name="rouDepreciationAccount"
             formControlName="rouDepreciationAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('rouDepreciationAccount')!.value?.id
-                  ? editForm.get('rouDepreciationAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
           <select
             class="form-control"
             id="field_accruedDepreciationAccount"
             data-cy="accruedDepreciationAccount"
             name="accruedDepreciationAccount"
             formControlName="accruedDepreciationAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('accruedDepreciationAccount')!.value?.id
-                  ? editForm.get('accruedDepreciationAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>

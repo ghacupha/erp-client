@@ -6,13 +6,14 @@ import { PaymentLabelComponent } from '../list/payment-label.component';
 import { PaymentLabelDetailComponent } from '../detail/payment-label-detail.component';
 import { PaymentLabelUpdateComponent } from '../update/payment-label-update.component';
 import { PaymentLabelRoutingResolveService } from './payment-label-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const paymentLabelRoute: Routes = [
   {
     path: '',
     component: PaymentLabelComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

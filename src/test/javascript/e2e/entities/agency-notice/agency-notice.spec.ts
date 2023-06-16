@@ -2,7 +2,7 @@ import { browser, ExpectedConditions as ec, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../page-objects/jhi-page-objects';
 
 import { AgencyNoticeComponentsPage, AgencyNoticeDeleteDialog, AgencyNoticeUpdatePage } from './agency-notice.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

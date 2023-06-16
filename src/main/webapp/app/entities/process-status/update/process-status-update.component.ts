@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IProcessStatus, ProcessStatus } from '../process-status.model';
+import { ProcessStatusFormService, ProcessStatusFormGroup } from './process-status-form.service';
+import { IProcessStatus } from '../process-status.model';
 import { ProcessStatusService } from '../service/process-status.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -18,29 +18,32 @@ import { UniversallyUniqueMappingService } from 'app/entities/universally-unique
 })
 export class ProcessStatusUpdateComponent implements OnInit {
   isSaving = false;
+  processStatus: IProcessStatus | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    statusCode: [null, [Validators.required]],
-    description: [null, [Validators.required]],
-    placeholders: [],
-    parameters: [],
-  });
+  editForm: ProcessStatusFormGroup = this.processStatusFormService.createProcessStatusFormGroup();
 
   constructor(
     protected processStatusService: ProcessStatusService,
+    protected processStatusFormService: ProcessStatusFormService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ processStatus }) => {
-      this.updateForm(processStatus);
+      this.processStatus = processStatus;
+      if (processStatus) {
+        this.updateForm(processStatus);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -52,52 +55,19 @@ export class ProcessStatusUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const processStatus = this.createFromForm();
-    if (processStatus.id !== undefined) {
+    const processStatus = this.processStatusFormService.getProcessStatus(this.editForm);
+    if (processStatus.id !== null) {
       this.subscribeToSaveResponse(this.processStatusService.update(processStatus));
     } else {
       this.subscribeToSaveResponse(this.processStatusService.create(processStatus));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IProcessStatus>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -113,22 +83,18 @@ export class ProcessStatusUpdateComponent implements OnInit {
   }
 
   protected updateForm(processStatus: IProcessStatus): void {
-    this.editForm.patchValue({
-      id: processStatus.id,
-      statusCode: processStatus.statusCode,
-      description: processStatus.description,
-      placeholders: processStatus.placeholders,
-      parameters: processStatus.parameters,
-    });
+    this.processStatus = processStatus;
+    this.processStatusFormService.resetForm(this.editForm, processStatus);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(processStatus.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(processStatus.parameters ?? [])
-    );
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(processStatus.parameters ?? [])
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -137,7 +103,10 @@ export class ProcessStatusUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.processStatus?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -147,9 +116,9 @@ export class ProcessStatusUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('parameters')!.value ?? [])
+            ...(this.processStatus?.parameters ?? [])
           )
         )
       )
@@ -157,16 +126,5 @@ export class ProcessStatusUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-  }
-
-  protected createFromForm(): IProcessStatus {
-    return {
-      ...new ProcessStatus(),
-      id: this.editForm.get(['id'])!.value,
-      statusCode: this.editForm.get(['statusCode'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      parameters: this.editForm.get(['parameters'])!.value,
-    };
   }
 }

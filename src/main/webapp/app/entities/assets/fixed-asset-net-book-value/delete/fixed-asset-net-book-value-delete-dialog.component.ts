@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IFixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './fixed-asset-net-book-value-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class FixedAssetNetBookValueDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.fixedAssetNetBookValueService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="jobSheet">
       <h2 data-cy="jobSheetDetailsHeading"><span>Job Sheet</span></h2>
@@ -33,47 +33,47 @@
         <dt><span>Biller</span></dt>
         <dd>
           <div *ngIf="jobSheet.biller">
-            <a [routerLink]="['/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
+            <a [routerLink]="['/dealer', jobSheet.biller.id, 'view']">{{ jobSheet.biller.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of jobSheet.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/dealer', signatories.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contact Person</span></dt>
         <dd>
           <div *ngIf="jobSheet.contactPerson">
-            <a [routerLink]="['/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
+            <a [routerLink]="['/dealer', jobSheet.contactPerson.id, 'view']">{{ jobSheet.contactPerson.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Business Stamps</span></dt>
         <dd>
           <span *ngFor="let businessStamps of jobSheet.businessStamps; let last = last">
-            <a [routerLink]="['/business-stamp', businessStamps?.id, 'view']">{{ businessStamps.details }}</a
+            <a [routerLink]="['/business-stamp', businessStamps.id, 'view']">{{ businessStamps.details }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of jobSheet.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of jobSheet.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of jobSheet.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

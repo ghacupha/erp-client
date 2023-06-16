@@ -2,23 +2,11 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IProcessStatus {
-  id?: number;
-  statusCode?: string;
-  description?: string;
-  placeholders?: IPlaceholder[] | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
+  id: number;
+  statusCode?: string | null;
+  description?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
 }
 
-export class ProcessStatus implements IProcessStatus {
-  constructor(
-    public id?: number,
-    public statusCode?: string,
-    public description?: string,
-    public placeholders?: IPlaceholder[] | null,
-    public parameters?: IUniversallyUniqueMapping[] | null
-  ) {}
-}
-
-export function getProcessStatusIdentifier(processStatus: IProcessStatus): number | undefined {
-  return processStatus.id;
-}
+export type NewProcessStatus = Omit<IProcessStatus, 'id'> & { id: null };

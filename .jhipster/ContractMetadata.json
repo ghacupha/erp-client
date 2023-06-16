@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20230321110432",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "description",
@@ -7,14 +9,14 @@
     {
       "fieldName": "typeOfContract",
       "fieldType": "ContractType",
-      "fieldValues": "SUPPLIER,CUSTOMER,BUSINESS_PARTNER,STAFF",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUPPLIER,CUSTOMER,BUSINESS_PARTNER,STAFF"
     },
     {
       "fieldName": "contractStatus",
       "fieldType": "ContractStatus",
-      "fieldValues": "ACTIVE,INACTIVE,UNDER_RENEGOTIATION,TERMINATED",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,INACTIVE,UNDER_RENEGOTIATION,TERMINATED"
     },
     {
       "fieldName": "startDate",
@@ -48,78 +50,76 @@
       "fieldValidateRulesMinlength": "6"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ContractMetadata",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "relatedContracts",
+      "otherEntityField": "description",
       "otherEntityName": "contractMetadata",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
+      "otherEntityRelationshipName": "contractMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "contractMetadata"
+      "relationshipName": "relatedContracts",
+      "relationshipType": "many-to-many"
     },
     {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
       "relationshipName": "department",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
       "relationshipName": "contractPartner",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "responsiblePerson",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
-    },
-    {
-      "relationshipName": "signatory",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-many",
       "otherEntityField": "applicationIdentity",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "contractMetadata"
+      "otherEntityName": "applicationUser",
+      "relationshipName": "responsiblePerson",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "securityClearance",
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
+      "otherEntityRelationshipName": "contractMetadata",
+      "ownerSide": true,
+      "relationshipName": "signatory",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "clearanceLevel",
       "otherEntityName": "securityClearance",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "clearanceLevel"
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "contractMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "contractMetadata"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "contractDocumentFile",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "contractMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "contractMetadata"
+      "relationshipName": "contractDocumentFile",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "contractMappings",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "contractMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "contractMetadata"
+      "relationshipName": "contractMappings",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ContractMetadata",
-  "changelogDate": "20230321110432",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

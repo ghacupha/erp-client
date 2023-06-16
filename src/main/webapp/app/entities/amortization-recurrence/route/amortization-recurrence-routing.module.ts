@@ -6,13 +6,14 @@ import { AmortizationRecurrenceComponent } from '../list/amortization-recurrence
 import { AmortizationRecurrenceDetailComponent } from '../detail/amortization-recurrence-detail.component';
 import { AmortizationRecurrenceUpdateComponent } from '../update/amortization-recurrence-update.component';
 import { AmortizationRecurrenceRoutingResolveService } from './amortization-recurrence-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const amortizationRecurrenceRoute: Routes = [
   {
     path: '',
     component: AmortizationRecurrenceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

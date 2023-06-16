@@ -9,6 +9,5 @@ import { SignedPaymentRoutingModule } from './route/signed-payment-routing.modul
 @NgModule({
   imports: [SharedModule, SignedPaymentRoutingModule],
   declarations: [SignedPaymentComponent, SignedPaymentDetailComponent, SignedPaymentUpdateComponent, SignedPaymentDeleteDialogComponent],
-  entryComponents: [SignedPaymentDeleteDialogComponent],
 })
 export class SignedPaymentModule {}

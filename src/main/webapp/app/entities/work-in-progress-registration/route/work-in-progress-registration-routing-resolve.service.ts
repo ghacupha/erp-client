@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IWorkInProgressRegistration, WorkInProgressRegistration } from '../work-in-progress-registration.model';
+import { IWorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
 
 @Injectable({ providedIn: 'root' })
-export class WorkInProgressRegistrationRoutingResolveService implements Resolve<IWorkInProgressRegistration> {
+export class WorkInProgressRegistrationRoutingResolveService implements Resolve<IWorkInProgressRegistration | null> {
   constructor(protected service: WorkInProgressRegistrationService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IWorkInProgressRegistration> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IWorkInProgressRegistration | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((workInProgressRegistration: HttpResponse<WorkInProgressRegistration>) => {
+        mergeMap((workInProgressRegistration: HttpResponse<IWorkInProgressRegistration>) => {
           if (workInProgressRegistration.body) {
             return of(workInProgressRegistration.body);
           } else {
@@ -25,6 +25,6 @@ export class WorkInProgressRegistrationRoutingResolveService implements Resolve<
         })
       );
     }
-    return of(new WorkInProgressRegistration());
+    return of(null);
   }
 }

@@ -4,31 +4,15 @@ import { IUser } from 'app/entities/user/user.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IApplicationUser {
-  id?: number;
-  designation?: string;
-  applicationIdentity?: string;
-  organization?: IDealer;
-  department?: IDealer;
-  securityClearance?: ISecurityClearance;
-  systemIdentity?: IUser;
-  userProperties?: IUniversallyUniqueMapping[] | null;
-  dealerIdentity?: IDealer;
+  id: number;
+  designation?: string | null;
+  applicationIdentity?: string | null;
+  organization?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  department?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  securityClearance?: Pick<ISecurityClearance, 'id' | 'clearanceLevel'> | null;
+  systemIdentity?: Pick<IUser, 'id' | 'login'> | null;
+  userProperties?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
+  dealerIdentity?: Pick<IDealer, 'id' | 'dealerName'> | null;
 }
 
-export class ApplicationUser implements IApplicationUser {
-  constructor(
-    public id?: number,
-    public designation?: string,
-    public applicationIdentity?: string,
-    public organization?: IDealer,
-    public department?: IDealer,
-    public securityClearance?: ISecurityClearance,
-    public systemIdentity?: IUser,
-    public userProperties?: IUniversallyUniqueMapping[] | null,
-    public dealerIdentity?: IDealer
-  ) {}
-}
-
-export function getApplicationUserIdentifier(applicationUser: IApplicationUser): number | undefined {
-  return applicationUser.id;
-}
+export type NewApplicationUser = Omit<IApplicationUser, 'id'> & { id: null };

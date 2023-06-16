@@ -9,6 +9,5 @@ import { CountyCodeRoutingModule } from './route/county-code-routing.module';
 @NgModule({
   imports: [SharedModule, CountyCodeRoutingModule],
   declarations: [CountyCodeComponent, CountyCodeDetailComponent, CountyCodeUpdateComponent, CountyCodeDeleteDialogComponent],
-  entryComponents: [CountyCodeDeleteDialogComponent],
 })
 export class CountyCodeModule {}

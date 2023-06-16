@@ -1,21 +1,10 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IIsoCountryCode {
-  id?: number;
+  id: number;
   countryCode?: string | null;
   countryDescription?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class IsoCountryCode implements IIsoCountryCode {
-  constructor(
-    public id?: number,
-    public countryCode?: string | null,
-    public countryDescription?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getIsoCountryCodeIdentifier(isoCountryCode: IIsoCountryCode): number | undefined {
-  return isoCountryCode.id;
-}
+export type NewIsoCountryCode = Omit<IIsoCountryCode, 'id'> & { id: null };

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
+import { IPrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 
 @Injectable({ providedIn: 'root' })
-export class PrepaymentAccountRoutingResolveService implements Resolve<IPrepaymentAccount> {
+export class PrepaymentAccountRoutingResolveService implements Resolve<IPrepaymentAccount | null> {
   constructor(protected service: PrepaymentAccountService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentAccount> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentAccount | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((prepaymentAccount: HttpResponse<PrepaymentAccount>) => {
+        mergeMap((prepaymentAccount: HttpResponse<IPrepaymentAccount>) => {
           if (prepaymentAccount.body) {
             return of(prepaymentAccount.body);
           } else {
@@ -25,6 +25,6 @@ export class PrepaymentAccountRoutingResolveService implements Resolve<IPrepayme
         })
       );
     }
-    return of(new PrepaymentAccount());
+    return of(null);
   }
 }

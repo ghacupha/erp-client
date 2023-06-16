@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-lease-liability-schedule-item-heading" data-cy="LeaseLiabilityScheduleItemCreateUpdateHeading">
@@ -8,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_sequenceNumber">Sequence Number</label>
           <input
             type="number"
             class="form-control"
@@ -25,8 +25,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodIncluded">Period Included</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_periodIncluded">Period Included</label>
           <input
             type="checkbox"
             class="form-check"
@@ -37,8 +37,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodStartDate">Period Start Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_periodStartDate">Period Start Date</label>
           <div class="input-group">
             <input
               id="field_periodStartDate"
@@ -50,16 +50,14 @@
               #periodStartDateDp="ngbDatepicker"
               formControlName="periodStartDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodStartDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="periodStartDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodEndDate">Period End Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_periodEndDate">Period End Date</label>
           <div class="input-group">
             <input
               id="field_periodEndDate"
@@ -71,16 +69,14 @@
               #periodEndDateDp="ngbDatepicker"
               formControlName="periodEndDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodEndDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="periodEndDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_openingBalance">Opening Balance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_openingBalance">Opening Balance</label>
           <input
             type="number"
             class="form-control"
@@ -91,8 +87,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_cashPayment">Cash Payment</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_cashPayment">Cash Payment</label>
           <input
             type="number"
             class="form-control"
@@ -103,8 +99,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_principalPayment">Principal Payment</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_principalPayment">Principal Payment</label>
           <input
             type="number"
             class="form-control"
@@ -115,8 +111,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestPayment">Interest Payment</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestPayment">Interest Payment</label>
           <input
             type="number"
             class="form-control"
@@ -127,8 +123,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outstandingBalance">Outstanding Balance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_outstandingBalance">Outstanding Balance</label>
           <input
             type="number"
             class="form-control"
@@ -139,8 +135,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestPayableOpening">Interest Payable Opening</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestPayableOpening">Interest Payable Opening</label>
           <input
             type="number"
             class="form-control"
@@ -151,8 +147,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestExpenseAccrued">Interest Expense Accrued</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestExpenseAccrued">Interest Expense Accrued</label>
           <input
             type="number"
             class="form-control"
@@ -163,8 +159,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_interestPayableBalance">Interest Payable Balance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_interestPayableBalance">Interest Payable Balance</label>
           <input
             type="number"
             class="form-control"
@@ -175,7 +171,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -184,34 +180,26 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_leaseContract">Lease Contract</label>
           <select
             class="form-control"
             id="field_leaseContract"
             data-cy="leaseContract"
             name="leaseContract"
             formControlName="leaseContract"
+            [compareWith]="compareLeaseContract"
           >
             <option *ngIf="!editForm.get('leaseContract')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                leaseContractOption.id === editForm.get('leaseContract')!.value?.id
-                  ? editForm.get('leaseContract')!.value
-                  : leaseContractOption
-              "
-              *ngFor="let leaseContractOption of leaseContractsSharedCollection; trackBy: trackLeaseContractById"
-            >
+            <option [ngValue]="leaseContractOption" *ngFor="let leaseContractOption of leaseContractsSharedCollection">
               {{ leaseContractOption.bookingId }}
             </option>
           </select>
@@ -224,30 +212,24 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseModelMetadata">Lease Model Metadata</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_leaseModelMetadata">Lease Model Metadata</label>
           <select
             class="form-control"
             id="field_leaseModelMetadata"
             data-cy="leaseModelMetadata"
             name="leaseModelMetadata"
             formControlName="leaseModelMetadata"
+            [compareWith]="compareLeaseModelMetadata"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                leaseModelMetadataOption.id === editForm.get('leaseModelMetadata')!.value?.id
-                  ? editForm.get('leaseModelMetadata')!.value
-                  : leaseModelMetadataOption
-              "
-              *ngFor="let leaseModelMetadataOption of leaseModelMetadataSharedCollection; trackBy: trackLeaseModelMetadataById"
-            >
+            <option [ngValue]="leaseModelMetadataOption" *ngFor="let leaseModelMetadataOption of leaseModelMetadataSharedCollection">
               {{ leaseModelMetadataOption.modelTitle }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
           <select
             class="form-control"
@@ -256,15 +238,11 @@
             multiple
             name="universallyUniqueMappings"
             formControlName="universallyUniqueMappings"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="
-                getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('universallyUniqueMappings')!.value)
-              "
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.universalKey }}
             </option>

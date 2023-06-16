@@ -9,6 +9,5 @@ import { BusinessStampRoutingModule } from './route/business-stamp-routing.modul
 @NgModule({
   imports: [SharedModule, BusinessStampRoutingModule],
   declarations: [BusinessStampComponent, BusinessStampDetailComponent, BusinessStampUpdateComponent, BusinessStampDeleteDialogComponent],
-  entryComponents: [BusinessStampDeleteDialogComponent],
 })
 export class BusinessStampModule {}

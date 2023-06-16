@@ -1,18 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { IPaymentRequisition } from '../payment-requisition.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../payment-requisition.test-samples';
 
-import { PaymentRequisitionService } from './payment-requisition.service';
+import { PaymentRequisitionService, RestPaymentRequisition } from './payment-requisition.service';
+
+const requireRestSample: RestPaymentRequisition = {
+  ...sampleWithRequiredData,
+  receptionDate: sampleWithRequiredData.receptionDate?.format(DATE_FORMAT),
+};
 
 describe('PaymentRequisition Service', () => {
   let service: PaymentRequisitionService;
   let httpMock: HttpTestingController;
-  let elemDefault: IPaymentRequisition;
   let expectedResult: IPaymentRequisition | IPaymentRequisition[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,56 +24,27 @@ describe('PaymentRequisition Service', () => {
     expectedResult = null;
     service = TestBed.inject(PaymentRequisitionService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      receptionDate: currentDate,
-      dealerName: 'AAAAAAA',
-      briefDescription: 'AAAAAAA',
-      requisitionNumber: 'AAAAAAA',
-      invoicedAmount: 0,
-      disbursementCost: 0,
-      taxableAmount: 0,
-      requisitionProcessed: false,
-      fileUploadToken: 'AAAAAAA',
-      compilationToken: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          receptionDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a PaymentRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          receptionDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const paymentRequisition = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          receptionDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new PaymentRequisition()).subscribe(resp => (expectedResult = resp.body));
+      service.create(paymentRequisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -78,31 +52,11 @@ describe('PaymentRequisition Service', () => {
     });
 
     it('should update a PaymentRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          receptionDate: currentDate.format(DATE_FORMAT),
-          dealerName: 'BBBBBB',
-          briefDescription: 'BBBBBB',
-          requisitionNumber: 'BBBBBB',
-          invoicedAmount: 1,
-          disbursementCost: 1,
-          taxableAmount: 1,
-          requisitionProcessed: true,
-          fileUploadToken: 'BBBBBB',
-          compilationToken: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const paymentRequisition = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          receptionDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(paymentRequisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -110,27 +64,9 @@ describe('PaymentRequisition Service', () => {
     });
 
     it('should partial update a PaymentRequisition', () => {
-      const patchObject = Object.assign(
-        {
-          receptionDate: currentDate.format(DATE_FORMAT),
-          dealerName: 'BBBBBB',
-          briefDescription: 'BBBBBB',
-          requisitionNumber: 'BBBBBB',
-          invoicedAmount: 1,
-          disbursementCost: 1,
-          fileUploadToken: 'BBBBBB',
-        },
-        new PaymentRequisition()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          receptionDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -140,84 +76,66 @@ describe('PaymentRequisition Service', () => {
     });
 
     it('should return a list of PaymentRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          receptionDate: currentDate.format(DATE_FORMAT),
-          dealerName: 'BBBBBB',
-          briefDescription: 'BBBBBB',
-          requisitionNumber: 'BBBBBB',
-          invoicedAmount: 1,
-          disbursementCost: 1,
-          taxableAmount: 1,
-          requisitionProcessed: true,
-          fileUploadToken: 'BBBBBB',
-          compilationToken: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          receptionDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a PaymentRequisition', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addPaymentRequisitionToCollectionIfMissing', () => {
       it('should add a PaymentRequisition to an empty array', () => {
-        const paymentRequisition: IPaymentRequisition = { id: 123 };
+        const paymentRequisition: IPaymentRequisition = sampleWithRequiredData;
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing([], paymentRequisition);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(paymentRequisition);
       });
 
       it('should not add a PaymentRequisition to an array that contains it', () => {
-        const paymentRequisition: IPaymentRequisition = { id: 123 };
+        const paymentRequisition: IPaymentRequisition = sampleWithRequiredData;
         const paymentRequisitionCollection: IPaymentRequisition[] = [
           {
             ...paymentRequisition,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, paymentRequisition);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a PaymentRequisition to an array that doesn't contain it", () => {
-        const paymentRequisition: IPaymentRequisition = { id: 123 };
-        const paymentRequisitionCollection: IPaymentRequisition[] = [{ id: 456 }];
+        const paymentRequisition: IPaymentRequisition = sampleWithRequiredData;
+        const paymentRequisitionCollection: IPaymentRequisition[] = [sampleWithPartialData];
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, paymentRequisition);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(paymentRequisition);
       });
 
       it('should add only unique PaymentRequisition to an array', () => {
-        const paymentRequisitionArray: IPaymentRequisition[] = [{ id: 123 }, { id: 456 }, { id: 87053 }];
-        const paymentRequisitionCollection: IPaymentRequisition[] = [{ id: 123 }];
+        const paymentRequisitionArray: IPaymentRequisition[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const paymentRequisitionCollection: IPaymentRequisition[] = [sampleWithRequiredData];
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, ...paymentRequisitionArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const paymentRequisition: IPaymentRequisition = { id: 123 };
-        const paymentRequisition2: IPaymentRequisition = { id: 456 };
+        const paymentRequisition: IPaymentRequisition = sampleWithRequiredData;
+        const paymentRequisition2: IPaymentRequisition = sampleWithPartialData;
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing([], paymentRequisition, paymentRequisition2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(paymentRequisition);
@@ -225,16 +143,60 @@ describe('PaymentRequisition Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const paymentRequisition: IPaymentRequisition = { id: 123 };
+        const paymentRequisition: IPaymentRequisition = sampleWithRequiredData;
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing([], null, paymentRequisition, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(paymentRequisition);
       });
 
       it('should return initial array if no PaymentRequisition is added', () => {
-        const paymentRequisitionCollection: IPaymentRequisition[] = [{ id: 123 }];
+        const paymentRequisitionCollection: IPaymentRequisition[] = [sampleWithRequiredData];
         expectedResult = service.addPaymentRequisitionToCollectionIfMissing(paymentRequisitionCollection, undefined, null);
         expect(expectedResult).toEqual(paymentRequisitionCollection);
+      });
+    });
+
+    describe('comparePaymentRequisition', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.comparePaymentRequisition(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.comparePaymentRequisition(entity1, entity2);
+        const compareResult2 = service.comparePaymentRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.comparePaymentRequisition(entity1, entity2);
+        const compareResult2 = service.comparePaymentRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.comparePaymentRequisition(entity1, entity2);
+        const compareResult2 = service.comparePaymentRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

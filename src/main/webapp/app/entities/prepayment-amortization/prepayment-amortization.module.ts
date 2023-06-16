@@ -14,6 +14,5 @@ import { PrepaymentAmortizationRoutingModule } from './route/prepayment-amortiza
     PrepaymentAmortizationUpdateComponent,
     PrepaymentAmortizationDeleteDialogComponent,
   ],
-  entryComponents: [PrepaymentAmortizationDeleteDialogComponent],
 })
 export class PrepaymentAmortizationModule {}

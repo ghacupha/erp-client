@@ -6,13 +6,14 @@ import { ExcelReportExportComponent } from '../list/excel-report-export.componen
 import { ExcelReportExportDetailComponent } from '../detail/excel-report-export-detail.component';
 import { ExcelReportExportUpdateComponent } from '../update/excel-report-export-update.component';
 import { ExcelReportExportRoutingResolveService } from './excel-report-export-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const excelReportExportRoute: Routes = [
   {
     path: '',
     component: ExcelReportExportComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

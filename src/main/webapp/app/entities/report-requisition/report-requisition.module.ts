@@ -14,6 +14,5 @@ import { ReportRequisitionRoutingModule } from './route/report-requisition-routi
     ReportRequisitionUpdateComponent,
     ReportRequisitionDeleteDialogComponent,
   ],
-  entryComponents: [ReportRequisitionDeleteDialogComponent],
 })
 export class ReportRequisitionModule {}

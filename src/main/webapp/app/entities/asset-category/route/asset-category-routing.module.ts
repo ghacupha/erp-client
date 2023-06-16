@@ -6,11 +6,15 @@ import { AssetCategoryComponent } from '../list/asset-category.component';
 import { AssetCategoryDetailComponent } from '../detail/asset-category-detail.component';
 import { AssetCategoryUpdateComponent } from '../update/asset-category-update.component';
 import { AssetCategoryRoutingResolveService } from './asset-category-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const assetCategoryRoute: Routes = [
   {
     path: '',
     component: AssetCategoryComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
     canActivate: [UserRouteAccessService],
   },
   {

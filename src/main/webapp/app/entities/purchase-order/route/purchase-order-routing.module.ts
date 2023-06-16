@@ -6,13 +6,14 @@ import { PurchaseOrderComponent } from '../list/purchase-order.component';
 import { PurchaseOrderDetailComponent } from '../detail/purchase-order-detail.component';
 import { PurchaseOrderUpdateComponent } from '../update/purchase-order-update.component';
 import { PurchaseOrderRoutingResolveService } from './purchase-order-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const purchaseOrderRoute: Routes = [
   {
     path: '',
     component: PurchaseOrderComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

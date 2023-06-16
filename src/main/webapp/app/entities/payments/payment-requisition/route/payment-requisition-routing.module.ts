@@ -6,13 +6,14 @@ import { PaymentRequisitionComponent } from '../list/payment-requisition.compone
 import { PaymentRequisitionDetailComponent } from '../detail/payment-requisition-detail.component';
 import { PaymentRequisitionUpdateComponent } from '../update/payment-requisition-update.component';
 import { PaymentRequisitionRoutingResolveService } from './payment-requisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const paymentRequisitionRoute: Routes = [
   {
     path: '',
     component: PaymentRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

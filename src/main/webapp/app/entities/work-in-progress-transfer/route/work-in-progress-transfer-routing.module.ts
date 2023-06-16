@@ -6,13 +6,14 @@ import { WorkInProgressTransferComponent } from '../list/work-in-progress-transf
 import { WorkInProgressTransferDetailComponent } from '../detail/work-in-progress-transfer-detail.component';
 import { WorkInProgressTransferUpdateComponent } from '../update/work-in-progress-transfer-update.component';
 import { WorkInProgressTransferRoutingResolveService } from './work-in-progress-transfer-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const workInProgressTransferRoute: Routes = [
   {
     path: '',
     component: WorkInProgressTransferComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

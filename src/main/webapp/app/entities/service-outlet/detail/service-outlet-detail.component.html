@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="serviceOutlet">
       <h2 data-cy="serviceOutletDetailsHeading"><span>Service Outlet</span></h2>
@@ -57,40 +57,40 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of serviceOutlet.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Bank Code</span></dt>
         <dd>
           <div *ngIf="serviceOutlet.bankCode">
-            <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode?.id, 'view']">{{ serviceOutlet.bankCode?.branchCode }}</a>
+            <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode.id, 'view']">{{ serviceOutlet.bankCode.branchCode }}</a>
           </div>
         </dd>
         <dt><span>Outlet Type</span></dt>
         <dd>
           <div *ngIf="serviceOutlet.outletType">
-            <a [routerLink]="['/outlet-type', serviceOutlet.outletType?.id, 'view']">{{ serviceOutlet.outletType?.outletType }}</a>
+            <a [routerLink]="['/outlet-type', serviceOutlet.outletType.id, 'view']">{{ serviceOutlet.outletType.outletType }}</a>
           </div>
         </dd>
         <dt><span>Outlet Status</span></dt>
         <dd>
           <div *ngIf="serviceOutlet.outletStatus">
-            <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus?.id, 'view']">{{
-              serviceOutlet.outletStatus?.branchStatusType
+            <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus.id, 'view']">{{
+              serviceOutlet.outletStatus.branchStatusType
             }}</a>
           </div>
         </dd>
         <dt><span>County Name</span></dt>
         <dd>
           <div *ngIf="serviceOutlet.countyName">
-            <a [routerLink]="['/county-code', serviceOutlet.countyName?.id, 'view']">{{ serviceOutlet.countyName?.countyName }}</a>
+            <a [routerLink]="['/county-code', serviceOutlet.countyName.id, 'view']">{{ serviceOutlet.countyName.countyName }}</a>
           </div>
         </dd>
         <dt><span>Sub County Name</span></dt>
         <dd>
           <div *ngIf="serviceOutlet.subCountyName">
-            <a [routerLink]="['/county-code', serviceOutlet.subCountyName?.id, 'view']">{{ serviceOutlet.subCountyName?.subCountyName }}</a>
+            <a [routerLink]="['/county-code', serviceOutlet.subCountyName.id, 'view']">{{ serviceOutlet.subCountyName.subCountyName }}</a>
           </div>
         </dd>
       </dl>

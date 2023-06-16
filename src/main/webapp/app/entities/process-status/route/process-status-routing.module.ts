@@ -6,13 +6,14 @@ import { ProcessStatusComponent } from '../list/process-status.component';
 import { ProcessStatusDetailComponent } from '../detail/process-status-detail.component';
 import { ProcessStatusUpdateComponent } from '../update/process-status-update.component';
 import { ProcessStatusRoutingResolveService } from './process-status-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const processStatusRoute: Routes = [
   {
     path: '',
     component: ProcessStatusComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
+import { PurchaseOrderFormService, PurchaseOrderFormGroup } from './purchase-order-form.service';
+import { IPurchaseOrder } from '../purchase-order.model';
 import { PurchaseOrderService } from '../service/purchase-order.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -25,44 +25,43 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class PurchaseOrderUpdateComponent implements OnInit {
   isSaving = false;
+  purchaseOrder: IPurchaseOrder | null = null;
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   dealersSharedCollection: IDealer[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    purchaseOrderNumber: [null, [Validators.required]],
-    purchaseOrderDate: [],
-    purchaseOrderAmount: [],
-    description: [],
-    notes: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    remarks: [],
-    settlementCurrency: [],
-    placeholders: [],
-    signatories: [],
-    vendor: [null, Validators.required],
-    businessDocuments: [],
-  });
+  editForm: PurchaseOrderFormGroup = this.purchaseOrderFormService.createPurchaseOrderFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected purchaseOrderService: PurchaseOrderService,
+    protected purchaseOrderFormService: PurchaseOrderFormService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
     protected dealerService: DealerService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ purchaseOrder }) => {
-      this.updateForm(purchaseOrder);
+      this.purchaseOrder = purchaseOrder;
+      if (purchaseOrder) {
+        this.updateForm(purchaseOrder);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -89,68 +88,19 @@ export class PurchaseOrderUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const purchaseOrder = this.createFromForm();
-    if (purchaseOrder.id !== undefined) {
+    const purchaseOrder = this.purchaseOrderFormService.getPurchaseOrder(this.editForm);
+    if (purchaseOrder.id !== null) {
       this.subscribeToSaveResponse(this.purchaseOrderService.update(purchaseOrder));
     } else {
       this.subscribeToSaveResponse(this.purchaseOrderService.create(purchaseOrder));
     }
   }
 
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPurchaseOrder>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -166,37 +116,24 @@ export class PurchaseOrderUpdateComponent implements OnInit {
   }
 
   protected updateForm(purchaseOrder: IPurchaseOrder): void {
-    this.editForm.patchValue({
-      id: purchaseOrder.id,
-      purchaseOrderNumber: purchaseOrder.purchaseOrderNumber,
-      purchaseOrderDate: purchaseOrder.purchaseOrderDate,
-      purchaseOrderAmount: purchaseOrder.purchaseOrderAmount,
-      description: purchaseOrder.description,
-      notes: purchaseOrder.notes,
-      fileUploadToken: purchaseOrder.fileUploadToken,
-      compilationToken: purchaseOrder.compilationToken,
-      remarks: purchaseOrder.remarks,
-      settlementCurrency: purchaseOrder.settlementCurrency,
-      placeholders: purchaseOrder.placeholders,
-      signatories: purchaseOrder.signatories,
-      vendor: purchaseOrder.vendor,
-      businessDocuments: purchaseOrder.businessDocuments,
-    });
+    this.purchaseOrder = purchaseOrder;
+    this.purchaseOrderFormService.resetForm(this.editForm, purchaseOrder);
 
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      purchaseOrder.settlementCurrency
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        purchaseOrder.settlementCurrency
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(purchaseOrder.placeholders ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       ...(purchaseOrder.signatories ?? []),
       purchaseOrder.vendor
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(purchaseOrder.businessDocuments ?? [])
     );
@@ -208,9 +145,9 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.purchaseOrder?.settlementCurrency
           )
         )
       )
@@ -221,7 +158,10 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.purchaseOrder?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -231,10 +171,10 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            ...(this.editForm.get('signatories')!.value ?? []),
-            this.editForm.get('vendor')!.value
+            ...(this.purchaseOrder?.signatories ?? []),
+            this.purchaseOrder?.vendor
           )
         )
       )
@@ -245,32 +185,12 @@ export class PurchaseOrderUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.purchaseOrder?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IPurchaseOrder {
-    return {
-      ...new PurchaseOrder(),
-      id: this.editForm.get(['id'])!.value,
-      purchaseOrderNumber: this.editForm.get(['purchaseOrderNumber'])!.value,
-      purchaseOrderDate: this.editForm.get(['purchaseOrderDate'])!.value,
-      purchaseOrderAmount: this.editForm.get(['purchaseOrderAmount'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      notes: this.editForm.get(['notes'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      signatories: this.editForm.get(['signatories'])!.value,
-      vendor: this.editForm.get(['vendor'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

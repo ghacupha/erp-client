@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { AssetAccessoryFormService } from './asset-accessory-form.service';
 import { AssetAccessoryService } from '../service/asset-accessory.service';
-import { IAssetAccessory, AssetAccessory } from '../asset-accessory.model';
+import { IAssetAccessory } from '../asset-accessory.model';
 import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-warranty.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -40,6 +40,7 @@ describe('AssetAccessory Management Update Component', () => {
   let comp: AssetAccessoryUpdateComponent;
   let fixture: ComponentFixture<AssetAccessoryUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let assetAccessoryFormService: AssetAccessoryFormService;
   let assetAccessoryService: AssetAccessoryService;
   let assetWarrantyService: AssetWarrantyService;
   let placeholderService: PlaceholderService;
@@ -56,15 +57,24 @@ describe('AssetAccessory Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [AssetAccessoryUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(AssetAccessoryUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(AssetAccessoryUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    assetAccessoryFormService = TestBed.inject(AssetAccessoryFormService);
     assetAccessoryService = TestBed.inject(AssetAccessoryService);
     assetWarrantyService = TestBed.inject(AssetWarrantyService);
     placeholderService = TestBed.inject(PlaceholderService);
@@ -100,7 +110,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(assetWarrantyService.query).toHaveBeenCalled();
       expect(assetWarrantyService.addAssetWarrantyToCollectionIfMissing).toHaveBeenCalledWith(
         assetWarrantyCollection,
-        ...additionalAssetWarranties
+        ...additionalAssetWarranties.map(expect.objectContaining)
       );
       expect(comp.assetWarrantiesSharedCollection).toEqual(expectedCollection);
     });
@@ -120,7 +130,10 @@ describe('AssetAccessory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -141,7 +154,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(paymentInvoiceService.query).toHaveBeenCalled();
       expect(paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing).toHaveBeenCalledWith(
         paymentInvoiceCollection,
-        ...additionalPaymentInvoices
+        ...additionalPaymentInvoices.map(expect.objectContaining)
       );
       expect(comp.paymentInvoicesSharedCollection).toEqual(expectedCollection);
     });
@@ -163,7 +176,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(serviceOutletService.query).toHaveBeenCalled();
       expect(serviceOutletService.addServiceOutletToCollectionIfMissing).toHaveBeenCalledWith(
         serviceOutletCollection,
-        ...additionalServiceOutlets
+        ...additionalServiceOutlets.map(expect.objectContaining)
       );
       expect(comp.serviceOutletsSharedCollection).toEqual(expectedCollection);
     });
@@ -183,7 +196,10 @@ describe('AssetAccessory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(settlementService.query).toHaveBeenCalled();
-      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(settlementCollection, ...additionalSettlements);
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
       expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -204,7 +220,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(assetCategoryService.query).toHaveBeenCalled();
       expect(assetCategoryService.addAssetCategoryToCollectionIfMissing).toHaveBeenCalledWith(
         assetCategoryCollection,
-        ...additionalAssetCategories
+        ...additionalAssetCategories.map(expect.objectContaining)
       );
       expect(comp.assetCategoriesSharedCollection).toEqual(expectedCollection);
     });
@@ -226,7 +242,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(purchaseOrderService.query).toHaveBeenCalled();
       expect(purchaseOrderService.addPurchaseOrderToCollectionIfMissing).toHaveBeenCalledWith(
         purchaseOrderCollection,
-        ...additionalPurchaseOrders
+        ...additionalPurchaseOrders.map(expect.objectContaining)
       );
       expect(comp.purchaseOrdersSharedCollection).toEqual(expectedCollection);
     });
@@ -248,7 +264,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(deliveryNoteService.query).toHaveBeenCalled();
       expect(deliveryNoteService.addDeliveryNoteToCollectionIfMissing).toHaveBeenCalledWith(
         deliveryNoteCollection,
-        ...additionalDeliveryNotes
+        ...additionalDeliveryNotes.map(expect.objectContaining)
       );
       expect(comp.deliveryNotesSharedCollection).toEqual(expectedCollection);
     });
@@ -268,7 +284,10 @@ describe('AssetAccessory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(jobSheetService.query).toHaveBeenCalled();
-      expect(jobSheetService.addJobSheetToCollectionIfMissing).toHaveBeenCalledWith(jobSheetCollection, ...additionalJobSheets);
+      expect(jobSheetService.addJobSheetToCollectionIfMissing).toHaveBeenCalledWith(
+        jobSheetCollection,
+        ...additionalJobSheets.map(expect.objectContaining)
+      );
       expect(comp.jobSheetsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -289,7 +308,10 @@ describe('AssetAccessory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -310,7 +332,7 @@ describe('AssetAccessory Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -337,65 +359,66 @@ describe('AssetAccessory Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const assetAccessory: IAssetAccessory = { id: 456 };
-      const assetWarranties: IAssetWarranty = { id: 76781 };
-      assetAccessory.assetWarranties = [assetWarranties];
-      const placeholders: IPlaceholder = { id: 71731 };
-      assetAccessory.placeholders = [placeholders];
+      const assetWarranty: IAssetWarranty = { id: 76781 };
+      assetAccessory.assetWarranties = [assetWarranty];
+      const placeholder: IPlaceholder = { id: 71731 };
+      assetAccessory.placeholders = [placeholder];
       const paymentInvoices: IPaymentInvoice = { id: 15323 };
       assetAccessory.paymentInvoices = [paymentInvoices];
       const serviceOutlet: IServiceOutlet = { id: 18389 };
       assetAccessory.serviceOutlet = serviceOutlet;
-      const settlements: ISettlement = { id: 7422 };
-      assetAccessory.settlements = [settlements];
+      const settlement: ISettlement = { id: 7422 };
+      assetAccessory.settlements = [settlement];
       const assetCategory: IAssetCategory = { id: 53139 };
       assetAccessory.assetCategory = assetCategory;
-      const purchaseOrders: IPurchaseOrder = { id: 12965 };
-      assetAccessory.purchaseOrders = [purchaseOrders];
-      const deliveryNotes: IDeliveryNote = { id: 36290 };
-      assetAccessory.deliveryNotes = [deliveryNotes];
-      const jobSheets: IJobSheet = { id: 63356 };
-      assetAccessory.jobSheets = [jobSheets];
+      const purchaseOrder: IPurchaseOrder = { id: 12965 };
+      assetAccessory.purchaseOrders = [purchaseOrder];
+      const deliveryNote: IDeliveryNote = { id: 36290 };
+      assetAccessory.deliveryNotes = [deliveryNote];
+      const jobSheet: IJobSheet = { id: 63356 };
+      assetAccessory.jobSheets = [jobSheet];
       const dealer: IDealer = { id: 40159 };
       assetAccessory.dealer = dealer;
       const designatedUsers: IDealer = { id: 98263 };
       assetAccessory.designatedUsers = [designatedUsers];
-      const businessDocuments: IBusinessDocument = { id: 82834 };
-      assetAccessory.businessDocuments = [businessDocuments];
-      const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 64758 };
-      assetAccessory.universallyUniqueMappings = [universallyUniqueMappings];
+      const businessDocument: IBusinessDocument = { id: 82834 };
+      assetAccessory.businessDocuments = [businessDocument];
+      const universallyUniqueMapping: IUniversallyUniqueMapping = { id: 64758 };
+      assetAccessory.universallyUniqueMappings = [universallyUniqueMapping];
 
       activatedRoute.data = of({ assetAccessory });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(assetAccessory));
-      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranty);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
-      expect(comp.settlementsSharedCollection).toContain(settlements);
+      expect(comp.settlementsSharedCollection).toContain(settlement);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
-      expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
-      expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);
-      expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
+      expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrder);
+      expect(comp.deliveryNotesSharedCollection).toContain(deliveryNote);
+      expect(comp.jobSheetsSharedCollection).toContain(jobSheet);
       expect(comp.dealersSharedCollection).toContain(dealer);
       expect(comp.dealersSharedCollection).toContain(designatedUsers);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
-      expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMapping);
+      expect(comp.assetAccessory).toEqual(assetAccessory);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AssetAccessory>>();
+      const saveSubject = new Subject<HttpResponse<IAssetAccessory>>();
       const assetAccessory = { id: 123 };
+      jest.spyOn(assetAccessoryFormService, 'getAssetAccessory').mockReturnValue(assetAccessory);
       jest.spyOn(assetAccessoryService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ assetAccessory });
@@ -408,18 +431,20 @@ describe('AssetAccessory Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(assetAccessoryFormService.getAssetAccessory).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(assetAccessoryService.update).toHaveBeenCalledWith(assetAccessory);
+      expect(assetAccessoryService.update).toHaveBeenCalledWith(expect.objectContaining(assetAccessory));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AssetAccessory>>();
-      const assetAccessory = new AssetAccessory();
+      const saveSubject = new Subject<HttpResponse<IAssetAccessory>>();
+      const assetAccessory = { id: 123 };
+      jest.spyOn(assetAccessoryFormService, 'getAssetAccessory').mockReturnValue({ id: null });
       jest.spyOn(assetAccessoryService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ assetAccessory });
+      activatedRoute.data = of({ assetAccessory: null });
       comp.ngOnInit();
 
       // WHEN
@@ -429,14 +454,15 @@ describe('AssetAccessory Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(assetAccessoryService.create).toHaveBeenCalledWith(assetAccessory);
+      expect(assetAccessoryFormService.getAssetAccessory).toHaveBeenCalled();
+      expect(assetAccessoryService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AssetAccessory>>();
+      const saveSubject = new Subject<HttpResponse<IAssetAccessory>>();
       const assetAccessory = { id: 123 };
       jest.spyOn(assetAccessoryService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -449,368 +475,130 @@ describe('AssetAccessory Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(assetAccessoryService.update).toHaveBeenCalledWith(assetAccessory);
+      expect(assetAccessoryService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackAssetWarrantyById', () => {
-      it('Should return tracked AssetWarranty primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareAssetWarranty', () => {
+      it('Should forward to assetWarrantyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAssetWarrantyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(assetWarrantyService, 'compareAssetWarranty');
+        comp.compareAssetWarranty(entity, entity2);
+        expect(assetWarrantyService.compareAssetWarranty).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPaymentInvoiceById', () => {
-      it('Should return tracked PaymentInvoice primary key', () => {
+    describe('comparePaymentInvoice', () => {
+      it('Should forward to paymentInvoiceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentInvoiceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentInvoiceService, 'comparePaymentInvoice');
+        comp.comparePaymentInvoice(entity, entity2);
+        expect(paymentInvoiceService.comparePaymentInvoice).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackServiceOutletById', () => {
-      it('Should return tracked ServiceOutlet primary key', () => {
+    describe('compareServiceOutlet', () => {
+      it('Should forward to serviceOutletService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackServiceOutletById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(serviceOutletService, 'compareServiceOutlet');
+        comp.compareServiceOutlet(entity, entity2);
+        expect(serviceOutletService.compareServiceOutlet).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementById', () => {
-      it('Should return tracked Settlement primary key', () => {
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAssetCategoryById', () => {
-      it('Should return tracked AssetCategory primary key', () => {
+    describe('compareAssetCategory', () => {
+      it('Should forward to assetCategoryService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAssetCategoryById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(assetCategoryService, 'compareAssetCategory');
+        comp.compareAssetCategory(entity, entity2);
+        expect(assetCategoryService.compareAssetCategory).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPurchaseOrderById', () => {
-      it('Should return tracked PurchaseOrder primary key', () => {
+    describe('comparePurchaseOrder', () => {
+      it('Should forward to purchaseOrderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPurchaseOrderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(purchaseOrderService, 'comparePurchaseOrder');
+        comp.comparePurchaseOrder(entity, entity2);
+        expect(purchaseOrderService.comparePurchaseOrder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDeliveryNoteById', () => {
-      it('Should return tracked DeliveryNote primary key', () => {
+    describe('compareDeliveryNote', () => {
+      it('Should forward to deliveryNoteService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDeliveryNoteById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(deliveryNoteService, 'compareDeliveryNote');
+        comp.compareDeliveryNote(entity, entity2);
+        expect(deliveryNoteService.compareDeliveryNote).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackJobSheetById', () => {
-      it('Should return tracked JobSheet primary key', () => {
+    describe('compareJobSheet', () => {
+      it('Should forward to jobSheetService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackJobSheetById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(jobSheetService, 'compareJobSheet');
+        comp.compareJobSheet(entity, entity2);
+        expect(jobSheetService.compareJobSheet).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedAssetWarranty', () => {
-      it('Should return option if no AssetWarranty is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedAssetWarranty(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected AssetWarranty for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedAssetWarranty(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this AssetWarranty is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedAssetWarranty(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPaymentInvoice', () => {
-      it('Should return option if no PaymentInvoice is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentInvoice(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentInvoice for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentInvoice is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedSettlement', () => {
-      it('Should return option if no Settlement is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedSettlement(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Settlement for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedSettlement(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Settlement is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedSettlement(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPurchaseOrder', () => {
-      it('Should return option if no PurchaseOrder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPurchaseOrder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PurchaseOrder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PurchaseOrder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedDeliveryNote', () => {
-      it('Should return option if no DeliveryNote is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDeliveryNote(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected DeliveryNote for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDeliveryNote(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this DeliveryNote is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDeliveryNote(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedJobSheet', () => {
-      it('Should return option if no JobSheet is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedJobSheet(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected JobSheet for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedJobSheet(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this JobSheet is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedJobSheet(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

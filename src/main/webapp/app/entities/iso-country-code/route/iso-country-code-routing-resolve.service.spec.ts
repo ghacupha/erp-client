@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IIsoCountryCode, IsoCountryCode } from '../iso-country-code.model';
+import { IIsoCountryCode } from '../iso-country-code.model';
 import { IsoCountryCodeService } from '../service/iso-country-code.service';
 
 import { IsoCountryCodeRoutingResolveService } from './iso-country-code-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('IsoCountryCode routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: IsoCountryCodeRoutingResolveService;
   let service: IsoCountryCodeService;
-  let resultIsoCountryCode: IIsoCountryCode | undefined;
+  let resultIsoCountryCode: IIsoCountryCode | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(IsoCountryCodeRoutingResolveService);
     service = TestBed.inject(IsoCountryCodeService);
     resultIsoCountryCode = undefined;
@@ -46,7 +55,7 @@ describe('IsoCountryCode routing resolve service', () => {
       expect(resultIsoCountryCode).toEqual({ id: 123 });
     });
 
-    it('should return new IIsoCountryCode if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('IsoCountryCode routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultIsoCountryCode).toEqual(new IsoCountryCode());
+      expect(resultIsoCountryCode).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as IsoCountryCode })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IIsoCountryCode>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

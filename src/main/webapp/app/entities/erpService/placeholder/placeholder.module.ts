@@ -9,6 +9,5 @@ import { PlaceholderRoutingModule } from './route/placeholder-routing.module';
 @NgModule({
   imports: [SharedModule, PlaceholderRoutingModule],
   declarations: [PlaceholderComponent, PlaceholderDetailComponent, PlaceholderUpdateComponent, PlaceholderDeleteDialogComponent],
-  entryComponents: [PlaceholderDeleteDialogComponent],
 })
 export class ErpServicePlaceholderModule {}

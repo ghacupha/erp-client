@@ -6,13 +6,14 @@ import { MfbBranchCodeComponent } from '../list/mfb-branch-code.component';
 import { MfbBranchCodeDetailComponent } from '../detail/mfb-branch-code-detail.component';
 import { MfbBranchCodeUpdateComponent } from '../update/mfb-branch-code-update.component';
 import { MfbBranchCodeRoutingResolveService } from './mfb-branch-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const mfbBranchCodeRoute: Routes = [
   {
     path: '',
     component: MfbBranchCodeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

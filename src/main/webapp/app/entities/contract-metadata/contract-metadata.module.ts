@@ -14,6 +14,5 @@ import { ContractMetadataRoutingModule } from './route/contract-metadata-routing
     ContractMetadataUpdateComponent,
     ContractMetadataDeleteDialogComponent,
   ],
-  entryComponents: [ContractMetadataDeleteDialogComponent],
 })
 export class ContractMetadataModule {}

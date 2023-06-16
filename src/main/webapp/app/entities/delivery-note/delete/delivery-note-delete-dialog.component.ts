@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDeliveryNote } from '../delivery-note.model';
 import { DeliveryNoteService } from '../service/delivery-note.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './delivery-note-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class DeliveryNoteDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.deliveryNoteService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

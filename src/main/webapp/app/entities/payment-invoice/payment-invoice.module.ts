@@ -14,6 +14,5 @@ import { PaymentInvoiceRoutingModule } from './route/payment-invoice-routing.mod
     PaymentInvoiceUpdateComponent,
     PaymentInvoiceDeleteDialogComponent,
   ],
-  entryComponents: [PaymentInvoiceDeleteDialogComponent],
 })
 export class PaymentInvoiceModule {}

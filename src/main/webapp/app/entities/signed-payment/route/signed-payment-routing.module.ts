@@ -6,13 +6,14 @@ import { SignedPaymentComponent } from '../list/signed-payment.component';
 import { SignedPaymentDetailComponent } from '../detail/signed-payment-detail.component';
 import { SignedPaymentUpdateComponent } from '../update/signed-payment-update.component';
 import { SignedPaymentRoutingResolveService } from './signed-payment-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const signedPaymentRoute: Routes = [
   {
     path: '',
     component: SignedPaymentComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

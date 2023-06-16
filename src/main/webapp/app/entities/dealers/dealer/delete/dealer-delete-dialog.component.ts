@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IDealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './dealer-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class DealerDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.dealerService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

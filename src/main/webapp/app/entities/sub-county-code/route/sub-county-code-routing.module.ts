@@ -6,13 +6,14 @@ import { SubCountyCodeComponent } from '../list/sub-county-code.component';
 import { SubCountyCodeDetailComponent } from '../detail/sub-county-code-detail.component';
 import { SubCountyCodeUpdateComponent } from '../update/sub-county-code-update.component';
 import { SubCountyCodeRoutingResolveService } from './sub-county-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const subCountyCodeRoute: Routes = [
   {
     path: '',
     component: SubCountyCodeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

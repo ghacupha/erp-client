@@ -6,13 +6,14 @@ import { AssetAccessoryComponent } from '../list/asset-accessory.component';
 import { AssetAccessoryDetailComponent } from '../detail/asset-accessory-detail.component';
 import { AssetAccessoryUpdateComponent } from '../update/asset-accessory-update.component';
 import { AssetAccessoryRoutingResolveService } from './asset-accessory-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const assetAccessoryRoute: Routes = [
   {
     path: '',
     component: AssetAccessoryComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

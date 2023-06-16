@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { SecurityClearanceFormService } from './security-clearance-form.service';
 import { SecurityClearanceService } from '../service/security-clearance.service';
-import { ISecurityClearance, SecurityClearance } from '../security-clearance.model';
+import { ISecurityClearance } from '../security-clearance.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -18,20 +18,30 @@ describe('SecurityClearance Management Update Component', () => {
   let comp: SecurityClearanceUpdateComponent;
   let fixture: ComponentFixture<SecurityClearanceUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let securityClearanceFormService: SecurityClearanceFormService;
   let securityClearanceService: SecurityClearanceService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [SecurityClearanceUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(SecurityClearanceUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(SecurityClearanceUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    securityClearanceFormService = TestBed.inject(SecurityClearanceFormService);
     securityClearanceService = TestBed.inject(SecurityClearanceService);
     placeholderService = TestBed.inject(PlaceholderService);
 
@@ -56,7 +66,7 @@ describe('SecurityClearance Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -76,7 +86,10 @@ describe('SecurityClearance Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -84,23 +97,24 @@ describe('SecurityClearance Management Update Component', () => {
       const securityClearance: ISecurityClearance = { id: 456 };
       const grantedClearances: ISecurityClearance = { id: 37051 };
       securityClearance.grantedClearances = [grantedClearances];
-      const placeholders: IPlaceholder = { id: 16415 };
-      securityClearance.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 16415 };
+      securityClearance.placeholders = [placeholder];
 
       activatedRoute.data = of({ securityClearance });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(securityClearance));
       expect(comp.securityClearancesSharedCollection).toContain(grantedClearances);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.securityClearance).toEqual(securityClearance);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<SecurityClearance>>();
+      const saveSubject = new Subject<HttpResponse<ISecurityClearance>>();
       const securityClearance = { id: 123 };
+      jest.spyOn(securityClearanceFormService, 'getSecurityClearance').mockReturnValue(securityClearance);
       jest.spyOn(securityClearanceService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ securityClearance });
@@ -113,18 +127,20 @@ describe('SecurityClearance Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(securityClearanceFormService.getSecurityClearance).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(securityClearanceService.update).toHaveBeenCalledWith(securityClearance);
+      expect(securityClearanceService.update).toHaveBeenCalledWith(expect.objectContaining(securityClearance));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<SecurityClearance>>();
-      const securityClearance = new SecurityClearance();
+      const saveSubject = new Subject<HttpResponse<ISecurityClearance>>();
+      const securityClearance = { id: 123 };
+      jest.spyOn(securityClearanceFormService, 'getSecurityClearance').mockReturnValue({ id: null });
       jest.spyOn(securityClearanceService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ securityClearance });
+      activatedRoute.data = of({ securityClearance: null });
       comp.ngOnInit();
 
       // WHEN
@@ -134,14 +150,15 @@ describe('SecurityClearance Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(securityClearanceService.create).toHaveBeenCalledWith(securityClearance);
+      expect(securityClearanceFormService.getSecurityClearance).toHaveBeenCalled();
+      expect(securityClearanceService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<SecurityClearance>>();
+      const saveSubject = new Subject<HttpResponse<ISecurityClearance>>();
       const securityClearance = { id: 123 };
       jest.spyOn(securityClearanceService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -154,80 +171,30 @@ describe('SecurityClearance Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(securityClearanceService.update).toHaveBeenCalledWith(securityClearance);
+      expect(securityClearanceService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedSecurityClearance', () => {
-      it('Should return option if no SecurityClearance is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedSecurityClearance(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected SecurityClearance for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedSecurityClearance(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this SecurityClearance is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedSecurityClearance(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

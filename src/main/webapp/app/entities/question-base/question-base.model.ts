@@ -3,42 +3,19 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { ControlTypes } from 'app/entities/enumerations/control-types.model';
 
 export interface IQuestionBase {
-  id?: number;
-  context?: string;
-  serial?: string;
+  id: number;
+  context?: string | null;
+  serial?: string | null;
   questionBaseValue?: string | null;
-  questionBaseKey?: string;
-  questionBaseLabel?: string;
+  questionBaseKey?: string | null;
+  questionBaseLabel?: string | null;
   required?: boolean | null;
-  order?: number;
-  controlType?: ControlTypes;
+  order?: number | null;
+  controlType?: ControlTypes | null;
   placeholder?: string | null;
   iterable?: boolean | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
-  placeholderItems?: IPlaceholder[] | null;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'universalKey'>[] | null;
+  placeholderItems?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class QuestionBase implements IQuestionBase {
-  constructor(
-    public id?: number,
-    public context?: string,
-    public serial?: string,
-    public questionBaseValue?: string | null,
-    public questionBaseKey?: string,
-    public questionBaseLabel?: string,
-    public required?: boolean | null,
-    public order?: number,
-    public controlType?: ControlTypes,
-    public placeholder?: string | null,
-    public iterable?: boolean | null,
-    public parameters?: IUniversallyUniqueMapping[] | null,
-    public placeholderItems?: IPlaceholder[] | null
-  ) {
-    this.required = this.required ?? false;
-    this.iterable = this.iterable ?? false;
-  }
-}
-
-export function getQuestionBaseIdentifier(questionBase: IQuestionBase): number | undefined {
-  return questionBase.id;
-}
+export type NewQuestionBase = Omit<IQuestionBase, 'id'> & { id: null };

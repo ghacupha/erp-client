@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-work-project-register-heading" data-cy="WorkProjectRegisterCreateUpdateHeading">
@@ -8,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_catalogueNumber">Catalogue Number</label>
           <input
             type="text"
             class="form-control"
@@ -33,8 +33,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -48,17 +48,19 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_details">Details</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_details">Details</label>
           <div>
             <div *ngIf="editForm.get('details')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('details')!.value, editForm.get('detailsContentType')!.value)">open</a
+              <a class="pull-start" (click)="openFile(editForm.get('details')!.value!, editForm.get('detailsContentType')!.value!)">Open</a
               ><br />
-              <span class="pull-left">{{ editForm.get('detailsContentType')!.value }}, {{ byteSize(editForm.get('details')!.value) }}</span>
+              <span class="pull-start"
+                >{{ editForm.get('detailsContentType')!.value }}, {{ byteSize(editForm.get('details')!.value!) }}</span
+              >
               <button
                 type="button"
-                (click)="editForm.patchValue({ details: null }); editForm.patchValue({ detailsContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ details: undefined, detailsContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -75,8 +77,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_totalProjectCost">Total Project Cost</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_totalProjectCost">Total Project Cost</label>
           <input
             type="number"
             class="form-control"
@@ -87,22 +89,22 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_additionalNotes">Additional Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_additionalNotes">Additional Notes</label>
           <div>
             <div *ngIf="editForm.get('additionalNotes')!.value" class="form-text text-danger clearfix">
               <a
-                class="pull-left"
-                (click)="openFile(editForm.get('additionalNotes')!.value, editForm.get('additionalNotesContentType')!.value)"
-                >open</a
+                class="pull-start"
+                (click)="openFile(editForm.get('additionalNotes')!.value!, editForm.get('additionalNotesContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('additionalNotesContentType')!.value }}, {{ byteSize(editForm.get('additionalNotes')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('additionalNotesContentType')!.value }}, {{ byteSize(editForm.get('additionalNotes')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ additionalNotes: null }); editForm.patchValue({ additionalNotesContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ additionalNotes: undefined, additionalNotesContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -131,45 +133,42 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_dealers">Dealers</label>
-          <select class="form-control" id="field_dealers" data-cy="dealers" multiple name="dealers" formControlName="dealers">
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('dealers')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+          <select
+            class="form-control"
+            id="field_dealers"
+            data-cy="dealers"
+            multiple
+            name="dealers"
+            formControlName="dealers"
+            [compareWith]="compareDealer"
+          >
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
         <div *ngIf="editForm.get(['dealers'])!.invalid && (editForm.get(['dealers'])!.dirty || editForm.get(['dealers'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealers'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
             id="field_settlementCurrency"
             data-cy="settlementCurrency"
             name="settlementCurrency"
             formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -178,17 +177,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_businessDocuments">Business Document</label>
           <select
             class="form-control"
@@ -197,11 +194,9 @@
             multiple
             name="businessDocuments"
             formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
           >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>

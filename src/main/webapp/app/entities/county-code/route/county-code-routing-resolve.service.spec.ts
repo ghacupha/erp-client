@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { ICountyCode, CountyCode } from '../county-code.model';
+import { ICountyCode } from '../county-code.model';
 import { CountyCodeService } from '../service/county-code.service';
 
 import { CountyCodeRoutingResolveService } from './county-code-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('CountyCode routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: CountyCodeRoutingResolveService;
   let service: CountyCodeService;
-  let resultCountyCode: ICountyCode | undefined;
+  let resultCountyCode: ICountyCode | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(CountyCodeRoutingResolveService);
     service = TestBed.inject(CountyCodeService);
     resultCountyCode = undefined;
@@ -46,7 +55,7 @@ describe('CountyCode routing resolve service', () => {
       expect(resultCountyCode).toEqual({ id: 123 });
     });
 
-    it('should return new ICountyCode if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('CountyCode routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultCountyCode).toEqual(new CountyCode());
+      expect(resultCountyCode).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as CountyCode })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<ICountyCode>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

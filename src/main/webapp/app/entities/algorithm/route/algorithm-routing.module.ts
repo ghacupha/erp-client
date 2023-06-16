@@ -6,13 +6,14 @@ import { AlgorithmComponent } from '../list/algorithm.component';
 import { AlgorithmDetailComponent } from '../detail/algorithm-detail.component';
 import { AlgorithmUpdateComponent } from '../update/algorithm-update.component';
 import { AlgorithmRoutingResolveService } from './algorithm-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const algorithmRoute: Routes = [
   {
     path: '',
     component: AlgorithmComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

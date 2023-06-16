@@ -9,6 +9,5 @@ import { CreditNoteRoutingModule } from './route/credit-note-routing.module';
 @NgModule({
   imports: [SharedModule, CreditNoteRoutingModule],
   declarations: [CreditNoteComponent, CreditNoteDetailComponent, CreditNoteUpdateComponent, CreditNoteDeleteDialogComponent],
-  entryComponents: [CreditNoteDeleteDialogComponent],
 })
 export class CreditNoteModule {}

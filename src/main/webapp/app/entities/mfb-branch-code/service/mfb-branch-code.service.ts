@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IMfbBranchCode, getMfbBranchCodeIdentifier } from '../mfb-branch-code.model';
+import { IMfbBranchCode, NewMfbBranchCode } from '../mfb-branch-code.model';
+
+export type PartialUpdateMfbBranchCode = Partial<IMfbBranchCode> & Pick<IMfbBranchCode, 'id'>;
 
 export type EntityResponseType = HttpResponse<IMfbBranchCode>;
 export type EntityArrayResponseType = HttpResponse<IMfbBranchCode[]>;
@@ -18,18 +20,18 @@ export class MfbBranchCodeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(mfbBranchCode: IMfbBranchCode): Observable<EntityResponseType> {
+  create(mfbBranchCode: NewMfbBranchCode): Observable<EntityResponseType> {
     return this.http.post<IMfbBranchCode>(this.resourceUrl, mfbBranchCode, { observe: 'response' });
   }
 
   update(mfbBranchCode: IMfbBranchCode): Observable<EntityResponseType> {
-    return this.http.put<IMfbBranchCode>(`${this.resourceUrl}/${getMfbBranchCodeIdentifier(mfbBranchCode) as number}`, mfbBranchCode, {
+    return this.http.put<IMfbBranchCode>(`${this.resourceUrl}/${this.getMfbBranchCodeIdentifier(mfbBranchCode)}`, mfbBranchCode, {
       observe: 'response',
     });
   }
 
-  partialUpdate(mfbBranchCode: IMfbBranchCode): Observable<EntityResponseType> {
-    return this.http.patch<IMfbBranchCode>(`${this.resourceUrl}/${getMfbBranchCodeIdentifier(mfbBranchCode) as number}`, mfbBranchCode, {
+  partialUpdate(mfbBranchCode: PartialUpdateMfbBranchCode): Observable<EntityResponseType> {
+    return this.http.patch<IMfbBranchCode>(`${this.resourceUrl}/${this.getMfbBranchCodeIdentifier(mfbBranchCode)}`, mfbBranchCode, {
       observe: 'response',
     });
   }
@@ -52,18 +54,26 @@ export class MfbBranchCodeService {
     return this.http.get<IMfbBranchCode[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addMfbBranchCodeToCollectionIfMissing(
-    mfbBranchCodeCollection: IMfbBranchCode[],
-    ...mfbBranchCodesToCheck: (IMfbBranchCode | null | undefined)[]
-  ): IMfbBranchCode[] {
-    const mfbBranchCodes: IMfbBranchCode[] = mfbBranchCodesToCheck.filter(isPresent);
+  getMfbBranchCodeIdentifier(mfbBranchCode: Pick<IMfbBranchCode, 'id'>): number {
+    return mfbBranchCode.id;
+  }
+
+  compareMfbBranchCode(o1: Pick<IMfbBranchCode, 'id'> | null, o2: Pick<IMfbBranchCode, 'id'> | null): boolean {
+    return o1 && o2 ? this.getMfbBranchCodeIdentifier(o1) === this.getMfbBranchCodeIdentifier(o2) : o1 === o2;
+  }
+
+  addMfbBranchCodeToCollectionIfMissing<Type extends Pick<IMfbBranchCode, 'id'>>(
+    mfbBranchCodeCollection: Type[],
+    ...mfbBranchCodesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const mfbBranchCodes: Type[] = mfbBranchCodesToCheck.filter(isPresent);
     if (mfbBranchCodes.length > 0) {
       const mfbBranchCodeCollectionIdentifiers = mfbBranchCodeCollection.map(
-        mfbBranchCodeItem => getMfbBranchCodeIdentifier(mfbBranchCodeItem)!
+        mfbBranchCodeItem => this.getMfbBranchCodeIdentifier(mfbBranchCodeItem)!
       );
       const mfbBranchCodesToAdd = mfbBranchCodes.filter(mfbBranchCodeItem => {
-        const mfbBranchCodeIdentifier = getMfbBranchCodeIdentifier(mfbBranchCodeItem);
-        if (mfbBranchCodeIdentifier == null || mfbBranchCodeCollectionIdentifiers.includes(mfbBranchCodeIdentifier)) {
+        const mfbBranchCodeIdentifier = this.getMfbBranchCodeIdentifier(mfbBranchCodeItem);
+        if (mfbBranchCodeCollectionIdentifiers.includes(mfbBranchCodeIdentifier)) {
           return false;
         }
         mfbBranchCodeCollectionIdentifiers.push(mfbBranchCodeIdentifier);

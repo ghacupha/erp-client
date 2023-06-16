@@ -14,6 +14,5 @@ import { FixedAssetNetBookValueRoutingModule } from './route/fixed-asset-net-boo
     FixedAssetNetBookValueUpdateComponent,
     FixedAssetNetBookValueDeleteDialogComponent,
   ],
-  entryComponents: [FixedAssetNetBookValueDeleteDialogComponent],
 })
 export class ErpServiceFixedAssetNetBookValueModule {}

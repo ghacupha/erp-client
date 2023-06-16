@@ -14,6 +14,5 @@ import { ReportContentTypeRoutingModule } from './route/report-content-type-rout
     ReportContentTypeUpdateComponent,
     ReportContentTypeDeleteDialogComponent,
   ],
-  entryComponents: [ReportContentTypeDeleteDialogComponent],
 })
 export class ReportContentTypeModule {}

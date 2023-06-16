@@ -6,13 +6,14 @@ import { SystemContentTypeComponent } from '../list/system-content-type.componen
 import { SystemContentTypeDetailComponent } from '../detail/system-content-type-detail.component';
 import { SystemContentTypeUpdateComponent } from '../update/system-content-type-update.component';
 import { SystemContentTypeRoutingResolveService } from './system-content-type-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const systemContentTypeRoute: Routes = [
   {
     path: '',
     component: SystemContentTypeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

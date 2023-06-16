@@ -1,14 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { IApplicationUser, ApplicationUser } from '../application-user.model';
+import { IApplicationUser } from '../application-user.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../application-user.test-samples';
 
 import { ApplicationUserService } from './application-user.service';
+
+const requireRestSample: IApplicationUser = {
+  ...sampleWithRequiredData,
+};
 
 describe('ApplicationUser Service', () => {
   let service: ApplicationUserService;
   let httpMock: HttpTestingController;
-  let elemDefault: IApplicationUser;
   let expectedResult: IApplicationUser | IApplicationUser[] | boolean | null;
 
   beforeEach(() => {
@@ -18,36 +22,27 @@ describe('ApplicationUser Service', () => {
     expectedResult = null;
     service = TestBed.inject(ApplicationUserService);
     httpMock = TestBed.inject(HttpTestingController);
-
-    elemDefault = {
-      id: 0,
-      designation: 'AAAAAAA',
-      applicationIdentity: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a ApplicationUser', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const applicationUser = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign({}, returnedFromService);
-
-      service.create(new ApplicationUser()).subscribe(resp => (expectedResult = resp.body));
+      service.create(applicationUser).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -55,18 +50,11 @@ describe('ApplicationUser Service', () => {
     });
 
     it('should update a ApplicationUser', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          designation: 'BBBBBB',
-          applicationIdentity: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const applicationUser = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign({}, returnedFromService);
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(applicationUser).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -74,17 +62,9 @@ describe('ApplicationUser Service', () => {
     });
 
     it('should partial update a ApplicationUser', () => {
-      const patchObject = Object.assign(
-        {
-          designation: 'BBBBBB',
-          applicationIdentity: 'BBBBBB',
-        },
-        new ApplicationUser()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign({}, returnedFromService);
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -94,71 +74,66 @@ describe('ApplicationUser Service', () => {
     });
 
     it('should return a list of ApplicationUser', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          designation: 'BBBBBB',
-          applicationIdentity: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a ApplicationUser', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addApplicationUserToCollectionIfMissing', () => {
       it('should add a ApplicationUser to an empty array', () => {
-        const applicationUser: IApplicationUser = { id: 123 };
+        const applicationUser: IApplicationUser = sampleWithRequiredData;
         expectedResult = service.addApplicationUserToCollectionIfMissing([], applicationUser);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(applicationUser);
       });
 
       it('should not add a ApplicationUser to an array that contains it', () => {
-        const applicationUser: IApplicationUser = { id: 123 };
+        const applicationUser: IApplicationUser = sampleWithRequiredData;
         const applicationUserCollection: IApplicationUser[] = [
           {
             ...applicationUser,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addApplicationUserToCollectionIfMissing(applicationUserCollection, applicationUser);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a ApplicationUser to an array that doesn't contain it", () => {
-        const applicationUser: IApplicationUser = { id: 123 };
-        const applicationUserCollection: IApplicationUser[] = [{ id: 456 }];
+        const applicationUser: IApplicationUser = sampleWithRequiredData;
+        const applicationUserCollection: IApplicationUser[] = [sampleWithPartialData];
         expectedResult = service.addApplicationUserToCollectionIfMissing(applicationUserCollection, applicationUser);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(applicationUser);
       });
 
       it('should add only unique ApplicationUser to an array', () => {
-        const applicationUserArray: IApplicationUser[] = [{ id: 123 }, { id: 456 }, { id: 37066 }];
-        const applicationUserCollection: IApplicationUser[] = [{ id: 123 }];
+        const applicationUserArray: IApplicationUser[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const applicationUserCollection: IApplicationUser[] = [sampleWithRequiredData];
         expectedResult = service.addApplicationUserToCollectionIfMissing(applicationUserCollection, ...applicationUserArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const applicationUser: IApplicationUser = { id: 123 };
-        const applicationUser2: IApplicationUser = { id: 456 };
+        const applicationUser: IApplicationUser = sampleWithRequiredData;
+        const applicationUser2: IApplicationUser = sampleWithPartialData;
         expectedResult = service.addApplicationUserToCollectionIfMissing([], applicationUser, applicationUser2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(applicationUser);
@@ -166,16 +141,60 @@ describe('ApplicationUser Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const applicationUser: IApplicationUser = { id: 123 };
+        const applicationUser: IApplicationUser = sampleWithRequiredData;
         expectedResult = service.addApplicationUserToCollectionIfMissing([], null, applicationUser, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(applicationUser);
       });
 
       it('should return initial array if no ApplicationUser is added', () => {
-        const applicationUserCollection: IApplicationUser[] = [{ id: 123 }];
+        const applicationUserCollection: IApplicationUser[] = [sampleWithRequiredData];
         expectedResult = service.addApplicationUserToCollectionIfMissing(applicationUserCollection, undefined, null);
         expect(expectedResult).toEqual(applicationUserCollection);
+      });
+    });
+
+    describe('compareApplicationUser', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareApplicationUser(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareApplicationUser(entity1, entity2);
+        const compareResult2 = service.compareApplicationUser(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareApplicationUser(entity1, entity2);
+        const compareResult2 = service.compareApplicationUser(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareApplicationUser(entity1, entity2);
+        const compareResult2 = service.compareApplicationUser(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

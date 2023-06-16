@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPayment, Payment } from '../payment.model';
+import { PaymentFormService, PaymentFormGroup } from './payment-form.service';
+import { IPayment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -24,6 +24,7 @@ import { CurrencyTypes } from 'app/entities/enumerations/currency-types.model';
 })
 export class PaymentUpdateComponent implements OnInit {
   isSaving = false;
+  payment: IPayment | null = null;
   currencyTypesValues = Object.keys(CurrencyTypes);
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
@@ -31,40 +32,35 @@ export class PaymentUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentsSharedCollection: IPayment[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    paymentNumber: [],
-    paymentDate: [],
-    invoicedAmount: [],
-    paymentAmount: [],
-    description: [],
-    settlementCurrency: [null, [Validators.required]],
-    calculationFile: [],
-    calculationFileContentType: [],
-    dealerName: [],
-    purchaseOrderNumber: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    paymentLabels: [],
-    paymentCategory: [],
-    placeholders: [],
-    paymentGroup: [],
-  });
+  editForm: PaymentFormGroup = this.paymentFormService.createPaymentFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected paymentService: PaymentService,
+    protected paymentFormService: PaymentFormService,
     protected paymentLabelService: PaymentLabelService,
     protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePaymentCategory = (o1: IPaymentCategory | null, o2: IPaymentCategory | null): boolean =>
+    this.paymentCategoryService.comparePaymentCategory(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePayment = (o1: IPayment | null, o2: IPayment | null): boolean => this.paymentService.comparePayment(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ payment }) => {
-      this.updateForm(payment);
+      this.payment = payment;
+      if (payment) {
+        this.updateForm(payment);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -91,57 +87,19 @@ export class PaymentUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const payment = this.createFromForm();
-    if (payment.id !== undefined) {
+    const payment = this.paymentFormService.getPayment(this.editForm);
+    if (payment.id !== null) {
       this.subscribeToSaveResponse(this.paymentService.update(payment));
     } else {
       this.subscribeToSaveResponse(this.paymentService.create(payment));
     }
   }
 
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentById(index: number, item: IPayment): number {
-    return item.id!;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPayment>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -157,39 +115,22 @@ export class PaymentUpdateComponent implements OnInit {
   }
 
   protected updateForm(payment: IPayment): void {
-    this.editForm.patchValue({
-      id: payment.id,
-      paymentNumber: payment.paymentNumber,
-      paymentDate: payment.paymentDate,
-      invoicedAmount: payment.invoicedAmount,
-      paymentAmount: payment.paymentAmount,
-      description: payment.description,
-      settlementCurrency: payment.settlementCurrency,
-      calculationFile: payment.calculationFile,
-      calculationFileContentType: payment.calculationFileContentType,
-      dealerName: payment.dealerName,
-      purchaseOrderNumber: payment.purchaseOrderNumber,
-      fileUploadToken: payment.fileUploadToken,
-      compilationToken: payment.compilationToken,
-      paymentLabels: payment.paymentLabels,
-      paymentCategory: payment.paymentCategory,
-      placeholders: payment.placeholders,
-      paymentGroup: payment.paymentGroup,
-    });
+    this.payment = payment;
+    this.paymentFormService.resetForm(this.editForm, payment);
 
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(payment.paymentLabels ?? [])
     );
-    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
       this.paymentCategoriesSharedCollection,
       payment.paymentCategory
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(payment.placeholders ?? [])
     );
-    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing(
+    this.paymentsSharedCollection = this.paymentService.addPaymentToCollectionIfMissing<IPayment>(
       this.paymentsSharedCollection,
       payment.paymentGroup
     );
@@ -201,7 +142,10 @@ export class PaymentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.payment?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -211,9 +155,9 @@ export class PaymentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
       .pipe(
         map((paymentCategories: IPaymentCategory[]) =>
-          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
             paymentCategories,
-            this.editForm.get('paymentCategory')!.value
+            this.payment?.paymentCategory
           )
         )
       )
@@ -224,7 +168,7 @@ export class PaymentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.payment?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -233,33 +177,8 @@ export class PaymentUpdateComponent implements OnInit {
       .query()
       .pipe(map((res: HttpResponse<IPayment[]>) => res.body ?? []))
       .pipe(
-        map((payments: IPayment[]) =>
-          this.paymentService.addPaymentToCollectionIfMissing(payments, this.editForm.get('paymentGroup')!.value)
-        )
+        map((payments: IPayment[]) => this.paymentService.addPaymentToCollectionIfMissing<IPayment>(payments, this.payment?.paymentGroup))
       )
       .subscribe((payments: IPayment[]) => (this.paymentsSharedCollection = payments));
-  }
-
-  protected createFromForm(): IPayment {
-    return {
-      ...new Payment(),
-      id: this.editForm.get(['id'])!.value,
-      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
-      invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
-      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
-      calculationFile: this.editForm.get(['calculationFile'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
-      purchaseOrderNumber: this.editForm.get(['purchaseOrderNumber'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentGroup: this.editForm.get(['paymentGroup'])!.value,
-    };
   }
 }

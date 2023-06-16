@@ -6,7 +6,7 @@ import {
   /* AssetAccessoryDeleteDialog, */
   AssetAccessoryUpdatePage,
 } from './asset-accessory.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

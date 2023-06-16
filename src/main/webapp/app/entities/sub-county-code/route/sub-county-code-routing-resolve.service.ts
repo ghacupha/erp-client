@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISubCountyCode, SubCountyCode } from '../sub-county-code.model';
+import { ISubCountyCode } from '../sub-county-code.model';
 import { SubCountyCodeService } from '../service/sub-county-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class SubCountyCodeRoutingResolveService implements Resolve<ISubCountyCode> {
+export class SubCountyCodeRoutingResolveService implements Resolve<ISubCountyCode | null> {
   constructor(protected service: SubCountyCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISubCountyCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISubCountyCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((subCountyCode: HttpResponse<SubCountyCode>) => {
+        mergeMap((subCountyCode: HttpResponse<ISubCountyCode>) => {
           if (subCountyCode.body) {
             return of(subCountyCode.body);
           } else {
@@ -25,6 +25,6 @@ export class SubCountyCodeRoutingResolveService implements Resolve<ISubCountyCod
         })
       );
     }
-    return of(new SubCountyCode());
+    return of(null);
   }
 }

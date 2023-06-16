@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAssetAccessory, getAssetAccessoryIdentifier } from '../asset-accessory.model';
+import { IAssetAccessory, NewAssetAccessory } from '../asset-accessory.model';
+
+export type PartialUpdateAssetAccessory = Partial<IAssetAccessory> & Pick<IAssetAccessory, 'id'>;
 
 export type EntityResponseType = HttpResponse<IAssetAccessory>;
 export type EntityArrayResponseType = HttpResponse<IAssetAccessory[]>;
@@ -18,22 +20,20 @@ export class AssetAccessoryService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(assetAccessory: IAssetAccessory): Observable<EntityResponseType> {
+  create(assetAccessory: NewAssetAccessory): Observable<EntityResponseType> {
     return this.http.post<IAssetAccessory>(this.resourceUrl, assetAccessory, { observe: 'response' });
   }
 
   update(assetAccessory: IAssetAccessory): Observable<EntityResponseType> {
-    return this.http.put<IAssetAccessory>(`${this.resourceUrl}/${getAssetAccessoryIdentifier(assetAccessory) as number}`, assetAccessory, {
+    return this.http.put<IAssetAccessory>(`${this.resourceUrl}/${this.getAssetAccessoryIdentifier(assetAccessory)}`, assetAccessory, {
       observe: 'response',
     });
   }
 
-  partialUpdate(assetAccessory: IAssetAccessory): Observable<EntityResponseType> {
-    return this.http.patch<IAssetAccessory>(
-      `${this.resourceUrl}/${getAssetAccessoryIdentifier(assetAccessory) as number}`,
-      assetAccessory,
-      { observe: 'response' }
-    );
+  partialUpdate(assetAccessory: PartialUpdateAssetAccessory): Observable<EntityResponseType> {
+    return this.http.patch<IAssetAccessory>(`${this.resourceUrl}/${this.getAssetAccessoryIdentifier(assetAccessory)}`, assetAccessory, {
+      observe: 'response',
+    });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -54,18 +54,26 @@ export class AssetAccessoryService {
     return this.http.get<IAssetAccessory[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addAssetAccessoryToCollectionIfMissing(
-    assetAccessoryCollection: IAssetAccessory[],
-    ...assetAccessoriesToCheck: (IAssetAccessory | null | undefined)[]
-  ): IAssetAccessory[] {
-    const assetAccessories: IAssetAccessory[] = assetAccessoriesToCheck.filter(isPresent);
+  getAssetAccessoryIdentifier(assetAccessory: Pick<IAssetAccessory, 'id'>): number {
+    return assetAccessory.id;
+  }
+
+  compareAssetAccessory(o1: Pick<IAssetAccessory, 'id'> | null, o2: Pick<IAssetAccessory, 'id'> | null): boolean {
+    return o1 && o2 ? this.getAssetAccessoryIdentifier(o1) === this.getAssetAccessoryIdentifier(o2) : o1 === o2;
+  }
+
+  addAssetAccessoryToCollectionIfMissing<Type extends Pick<IAssetAccessory, 'id'>>(
+    assetAccessoryCollection: Type[],
+    ...assetAccessoriesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const assetAccessories: Type[] = assetAccessoriesToCheck.filter(isPresent);
     if (assetAccessories.length > 0) {
       const assetAccessoryCollectionIdentifiers = assetAccessoryCollection.map(
-        assetAccessoryItem => getAssetAccessoryIdentifier(assetAccessoryItem)!
+        assetAccessoryItem => this.getAssetAccessoryIdentifier(assetAccessoryItem)!
       );
       const assetAccessoriesToAdd = assetAccessories.filter(assetAccessoryItem => {
-        const assetAccessoryIdentifier = getAssetAccessoryIdentifier(assetAccessoryItem);
-        if (assetAccessoryIdentifier == null || assetAccessoryCollectionIdentifiers.includes(assetAccessoryIdentifier)) {
+        const assetAccessoryIdentifier = this.getAssetAccessoryIdentifier(assetAccessoryItem);
+        if (assetAccessoryCollectionIdentifiers.includes(assetAccessoryIdentifier)) {
           return false;
         }
         assetAccessoryCollectionIdentifiers.push(assetAccessoryIdentifier);

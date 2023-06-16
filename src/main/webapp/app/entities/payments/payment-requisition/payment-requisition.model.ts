@@ -1,9 +1,9 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPaymentRequisition {
-  id?: number;
+  id: number;
   receptionDate?: dayjs.Dayjs | null;
   dealerName?: string | null;
   briefDescription?: string | null;
@@ -14,30 +14,8 @@ export interface IPaymentRequisition {
   requisitionProcessed?: boolean | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  paymentLabels?: IPaymentLabel[] | null;
-  placeholders?: IPlaceholder[] | null;
+  paymentLabels?: Pick<IPaymentLabel, 'id' | 'description'>[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PaymentRequisition implements IPaymentRequisition {
-  constructor(
-    public id?: number,
-    public receptionDate?: dayjs.Dayjs | null,
-    public dealerName?: string | null,
-    public briefDescription?: string | null,
-    public requisitionNumber?: string | null,
-    public invoicedAmount?: number | null,
-    public disbursementCost?: number | null,
-    public taxableAmount?: number | null,
-    public requisitionProcessed?: boolean | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public paymentLabels?: IPaymentLabel[] | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {
-    this.requisitionProcessed = this.requisitionProcessed ?? false;
-  }
-}
-
-export function getPaymentRequisitionIdentifier(paymentRequisition: IPaymentRequisition): number | undefined {
-  return paymentRequisition.id;
-}
+export type NewPaymentRequisition = Omit<IPaymentRequisition, 'id'> & { id: null };

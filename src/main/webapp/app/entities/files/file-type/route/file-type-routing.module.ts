@@ -6,13 +6,14 @@ import { FileTypeComponent } from '../list/file-type.component';
 import { FileTypeDetailComponent } from '../detail/file-type-detail.component';
 import { FileTypeUpdateComponent } from '../update/file-type-update.component';
 import { FileTypeRoutingResolveService } from './file-type-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const fileTypeRoute: Routes = [
   {
     path: '',
     component: FileTypeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

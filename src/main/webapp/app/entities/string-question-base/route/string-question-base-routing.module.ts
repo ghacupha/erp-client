@@ -6,13 +6,14 @@ import { StringQuestionBaseComponent } from '../list/string-question-base.compon
 import { StringQuestionBaseDetailComponent } from '../detail/string-question-base-detail.component';
 import { StringQuestionBaseUpdateComponent } from '../update/string-question-base-update.component';
 import { StringQuestionBaseRoutingResolveService } from './string-question-base-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const stringQuestionBaseRoute: Routes = [
   {
     path: '',
     component: StringQuestionBaseComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

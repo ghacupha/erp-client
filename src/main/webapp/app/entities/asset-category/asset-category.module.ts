@@ -9,6 +9,5 @@ import { AssetCategoryRoutingModule } from './route/asset-category-routing.modul
 @NgModule({
   imports: [SharedModule, AssetCategoryRoutingModule],
   declarations: [AssetCategoryComponent, AssetCategoryDetailComponent, AssetCategoryUpdateComponent, AssetCategoryDeleteDialogComponent],
-  entryComponents: [AssetCategoryDeleteDialogComponent],
 })
 export class AssetCategoryModule {}

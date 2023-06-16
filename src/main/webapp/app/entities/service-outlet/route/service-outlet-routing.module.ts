@@ -6,11 +6,15 @@ import { ServiceOutletComponent } from '../list/service-outlet.component';
 import { ServiceOutletDetailComponent } from '../detail/service-outlet-detail.component';
 import { ServiceOutletUpdateComponent } from '../update/service-outlet-update.component';
 import { ServiceOutletRoutingResolveService } from './service-outlet-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const serviceOutletRoute: Routes = [
   {
     path: '',
     component: ServiceOutletComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
     canActivate: [UserRouteAccessService],
   },
   {

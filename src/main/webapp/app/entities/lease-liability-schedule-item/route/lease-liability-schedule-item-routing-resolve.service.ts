@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ILeaseLiabilityScheduleItem, LeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
+import { ILeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 import { LeaseLiabilityScheduleItemService } from '../service/lease-liability-schedule-item.service';
 
 @Injectable({ providedIn: 'root' })
-export class LeaseLiabilityScheduleItemRoutingResolveService implements Resolve<ILeaseLiabilityScheduleItem> {
+export class LeaseLiabilityScheduleItemRoutingResolveService implements Resolve<ILeaseLiabilityScheduleItem | null> {
   constructor(protected service: LeaseLiabilityScheduleItemService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseLiabilityScheduleItem> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseLiabilityScheduleItem | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((leaseLiabilityScheduleItem: HttpResponse<LeaseLiabilityScheduleItem>) => {
+        mergeMap((leaseLiabilityScheduleItem: HttpResponse<ILeaseLiabilityScheduleItem>) => {
           if (leaseLiabilityScheduleItem.body) {
             return of(leaseLiabilityScheduleItem.body);
           } else {
@@ -25,6 +25,6 @@ export class LeaseLiabilityScheduleItemRoutingResolveService implements Resolve<
         })
       );
     }
-    return of(new LeaseLiabilityScheduleItem());
+    return of(null);
   }
 }

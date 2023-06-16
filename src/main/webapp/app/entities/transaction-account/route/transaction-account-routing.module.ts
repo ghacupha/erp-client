@@ -6,13 +6,14 @@ import { TransactionAccountComponent } from '../list/transaction-account.compone
 import { TransactionAccountDetailComponent } from '../detail/transaction-account-detail.component';
 import { TransactionAccountUpdateComponent } from '../update/transaction-account-update.component';
 import { TransactionAccountRoutingResolveService } from './transaction-account-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const transactionAccountRoute: Routes = [
   {
     path: '',
     component: TransactionAccountComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

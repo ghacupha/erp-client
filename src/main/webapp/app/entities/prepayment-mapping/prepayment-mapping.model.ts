@@ -1,23 +1,11 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPrepaymentMapping {
-  id?: number;
-  parameterKey?: string;
-  parameterGuid?: string;
-  parameter?: string;
-  placeholders?: IPlaceholder[] | null;
+  id: number;
+  parameterKey?: string | null;
+  parameterGuid?: string | null;
+  parameter?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PrepaymentMapping implements IPrepaymentMapping {
-  constructor(
-    public id?: number,
-    public parameterKey?: string,
-    public parameterGuid?: string,
-    public parameter?: string,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getPrepaymentMappingIdentifier(prepaymentMapping: IPrepaymentMapping): number | undefined {
-  return prepaymentMapping.id;
-}
+export type NewPrepaymentMapping = Omit<IPrepaymentMapping, 'id'> & { id: null };

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="paymentCalculation">
       <h2 data-cy="paymentCalculationDetailsHeading"><span>Payment Calculation</span></h2>
@@ -41,22 +41,22 @@
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentCalculation.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Category</span></dt>
         <dd>
           <div *ngIf="paymentCalculation.paymentCategory">
-            <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory?.id, 'view']">{{
-              paymentCalculation.paymentCategory?.id
+            <a [routerLink]="['/payment-category', paymentCalculation.paymentCategory.id, 'view']">{{
+              paymentCalculation.paymentCategory.id
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of paymentCalculation.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

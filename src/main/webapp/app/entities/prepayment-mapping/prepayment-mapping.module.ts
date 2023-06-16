@@ -14,6 +14,5 @@ import { PrepaymentMappingRoutingModule } from './route/prepayment-mapping-routi
     PrepaymentMappingUpdateComponent,
     PrepaymentMappingDeleteDialogComponent,
   ],
-  entryComponents: [PrepaymentMappingDeleteDialogComponent],
 })
 export class PrepaymentMappingModule {}

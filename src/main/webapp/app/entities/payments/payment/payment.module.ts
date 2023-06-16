@@ -9,6 +9,5 @@ import { PaymentRoutingModule } from './route/payment-routing.module';
 @NgModule({
   imports: [SharedModule, PaymentRoutingModule],
   declarations: [PaymentComponent, PaymentDetailComponent, PaymentUpdateComponent, PaymentDeleteDialogComponent],
-  entryComponents: [PaymentDeleteDialogComponent],
 })
 export class ErpServicePaymentModule {}

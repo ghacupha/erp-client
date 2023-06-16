@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
@@ -8,53 +8,26 @@ import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.mo
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 
 export interface ISettlement {
-  id?: number;
+  id: number;
   paymentNumber?: string | null;
   paymentDate?: dayjs.Dayjs | null;
   paymentAmount?: number | null;
   description?: string | null;
   notes?: string | null;
-  calculationFileContentType?: string | null;
   calculationFile?: string | null;
+  calculationFileContentType?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   remarks?: string | null;
-  placeholders?: IPlaceholder[] | null;
-  settlementCurrency?: ISettlementCurrency;
-  paymentLabels?: IPaymentLabel[] | null;
-  paymentCategory?: IPaymentCategory;
-  groupSettlement?: ISettlement | null;
-  biller?: IDealer;
-  paymentInvoices?: IPaymentInvoice[] | null;
-  signatories?: IDealer[] | null;
-  businessDocuments?: IBusinessDocument[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  paymentLabels?: Pick<IPaymentLabel, 'id' | 'description'>[] | null;
+  paymentCategory?: Pick<IPaymentCategory, 'id' | 'categoryName'> | null;
+  groupSettlement?: Pick<ISettlement, 'id'> | null;
+  biller?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  paymentInvoices?: Pick<IPaymentInvoice, 'id' | 'invoiceNumber'>[] | null;
+  signatories?: Pick<IDealer, 'id' | 'dealerName'>[] | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
 }
 
-export class Settlement implements ISettlement {
-  constructor(
-    public id?: number,
-    public paymentNumber?: string | null,
-    public paymentDate?: dayjs.Dayjs | null,
-    public paymentAmount?: number | null,
-    public description?: string | null,
-    public notes?: string | null,
-    public calculationFileContentType?: string | null,
-    public calculationFile?: string | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public remarks?: string | null,
-    public placeholders?: IPlaceholder[] | null,
-    public settlementCurrency?: ISettlementCurrency,
-    public paymentLabels?: IPaymentLabel[] | null,
-    public paymentCategory?: IPaymentCategory,
-    public groupSettlement?: ISettlement | null,
-    public biller?: IDealer,
-    public paymentInvoices?: IPaymentInvoice[] | null,
-    public signatories?: IDealer[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
-  ) {}
-}
-
-export function getSettlementIdentifier(settlement: ISettlement): number | undefined {
-  return settlement.id;
-}
+export type NewSettlement = Omit<ISettlement, 'id'> & { id: null };

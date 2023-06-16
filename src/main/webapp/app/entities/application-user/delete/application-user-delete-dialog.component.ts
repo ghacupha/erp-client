@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IApplicationUser } from '../application-user.model';
 import { ApplicationUserService } from '../service/application-user.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './application-user-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class ApplicationUserDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.applicationUserService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

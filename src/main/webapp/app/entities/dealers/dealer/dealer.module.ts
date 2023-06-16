@@ -9,6 +9,5 @@ import { DealerRoutingModule } from './route/dealer-routing.module';
 @NgModule({
   imports: [SharedModule, DealerRoutingModule],
   declarations: [DealerComponent, DealerDetailComponent, DealerUpdateComponent, DealerDeleteDialogComponent],
-  entryComponents: [DealerDeleteDialogComponent],
 })
 export class ErpServiceDealerModule {}

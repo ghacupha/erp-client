@@ -1,23 +1,10 @@
 export interface IPlaceholder {
-  id?: number;
-  description?: string;
+  id: number;
+  description?: string | null;
   token?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  containingPlaceholder?: IPlaceholder | null;
+  containingPlaceholder?: Pick<IPlaceholder, 'id' | 'description'> | null;
 }
 
-export class Placeholder implements IPlaceholder {
-  constructor(
-    public id?: number,
-    public description?: string,
-    public token?: string | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public containingPlaceholder?: IPlaceholder | null
-  ) {}
-}
-
-export function getPlaceholderIdentifier(placeholder: IPlaceholder): number | undefined {
-  return placeholder.id;
-}
+export type NewPlaceholder = Omit<IPlaceholder, 'id'> & { id: null };

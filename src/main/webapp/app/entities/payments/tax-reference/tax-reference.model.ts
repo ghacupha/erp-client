@@ -2,29 +2,14 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { taxReferenceTypes } from 'app/entities/enumerations/tax-reference-types.model';
 
 export interface ITaxReference {
-  id?: number;
+  id: number;
   taxName?: string | null;
   taxDescription?: string | null;
-  taxPercentage?: number;
-  taxReferenceType?: taxReferenceTypes;
+  taxPercentage?: number | null;
+  taxReferenceType?: taxReferenceTypes | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class TaxReference implements ITaxReference {
-  constructor(
-    public id?: number,
-    public taxName?: string | null,
-    public taxDescription?: string | null,
-    public taxPercentage?: number,
-    public taxReferenceType?: taxReferenceTypes,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getTaxReferenceIdentifier(taxReference: ITaxReference): number | undefined {
-  return taxReference.id;
-}
+export type NewTaxReference = Omit<ITaxReference, 'id'> & { id: null };

@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
-import { IBusinessDocument, BusinessDocument } from '../business-document.model';
+import { BusinessDocumentFormService, BusinessDocumentFormGroup } from './business-document-form.service';
+import { IBusinessDocument } from '../business-document.model';
 import { BusinessDocumentService } from '../service/business-document.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -32,6 +29,7 @@ import { SecurityClearanceService } from 'app/entities/security-clearance/servic
 })
 export class BusinessDocumentUpdateComponent implements OnInit {
   isSaving = false;
+  businessDocument: IBusinessDocument | null = null;
 
   applicationUsersSharedCollection: IApplicationUser[] = [];
   dealersSharedCollection: IDealer[] = [];
@@ -40,48 +38,43 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   algorithmsSharedCollection: IAlgorithm[] = [];
   securityClearancesSharedCollection: ISecurityClearance[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    documentTitle: [null, [Validators.required]],
-    description: [],
-    documentSerial: [null, [Validators.required]],
-    lastModified: [],
-    attachmentFilePath: [null, [Validators.required]],
-    documentFile: [null, [Validators.required]],
-    documentFileContentType: [],
-    fileTampered: [],
-    documentFileChecksum: [null, [Validators.required]],
-    createdBy: [null, Validators.required],
-    lastModifiedBy: [],
-    originatingDepartment: [null, Validators.required],
-    applicationMappings: [],
-    placeholders: [],
-    fileChecksumAlgorithm: [null, Validators.required],
-    securityClearance: [null, Validators.required],
-  });
+  editForm: BusinessDocumentFormGroup = this.businessDocumentFormService.createBusinessDocumentFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected businessDocumentService: BusinessDocumentService,
+    protected businessDocumentFormService: BusinessDocumentFormService,
     protected applicationUserService: ApplicationUserService,
     protected dealerService: DealerService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
     protected algorithmService: AlgorithmService,
     protected securityClearanceService: SecurityClearanceService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareApplicationUser = (o1: IApplicationUser | null, o2: IApplicationUser | null): boolean =>
+    this.applicationUserService.compareApplicationUser(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareAlgorithm = (o1: IAlgorithm | null, o2: IAlgorithm | null): boolean => this.algorithmService.compareAlgorithm(o1, o2);
+
+  compareSecurityClearance = (o1: ISecurityClearance | null, o2: ISecurityClearance | null): boolean =>
+    this.securityClearanceService.compareSecurityClearance(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessDocument }) => {
-      if (businessDocument.id === undefined) {
-        const today = dayjs().startOf('day');
-        businessDocument.lastModified = today;
+      this.businessDocument = businessDocument;
+      if (businessDocument) {
+        this.updateForm(businessDocument);
       }
-
-      this.updateForm(businessDocument);
 
       this.loadRelationshipsOptions();
     });
@@ -108,68 +101,19 @@ export class BusinessDocumentUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const businessDocument = this.createFromForm();
-    if (businessDocument.id !== undefined) {
+    const businessDocument = this.businessDocumentFormService.getBusinessDocument(this.editForm);
+    if (businessDocument.id !== null) {
       this.subscribeToSaveResponse(this.businessDocumentService.update(businessDocument));
     } else {
       this.subscribeToSaveResponse(this.businessDocumentService.create(businessDocument));
     }
   }
 
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackAlgorithmById(index: number, item: IAlgorithm): number {
-    return item.id!;
-  }
-
-  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
-    return item.id!;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBusinessDocument>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -185,48 +129,32 @@ export class BusinessDocumentUpdateComponent implements OnInit {
   }
 
   protected updateForm(businessDocument: IBusinessDocument): void {
-    this.editForm.patchValue({
-      id: businessDocument.id,
-      documentTitle: businessDocument.documentTitle,
-      description: businessDocument.description,
-      documentSerial: businessDocument.documentSerial,
-      lastModified: businessDocument.lastModified ? businessDocument.lastModified.format(DATE_TIME_FORMAT) : null,
-      attachmentFilePath: businessDocument.attachmentFilePath,
-      documentFile: businessDocument.documentFile,
-      documentFileContentType: businessDocument.documentFileContentType,
-      fileTampered: businessDocument.fileTampered,
-      documentFileChecksum: businessDocument.documentFileChecksum,
-      createdBy: businessDocument.createdBy,
-      lastModifiedBy: businessDocument.lastModifiedBy,
-      originatingDepartment: businessDocument.originatingDepartment,
-      applicationMappings: businessDocument.applicationMappings,
-      placeholders: businessDocument.placeholders,
-      fileChecksumAlgorithm: businessDocument.fileChecksumAlgorithm,
-      securityClearance: businessDocument.securityClearance,
-    });
+    this.businessDocument = businessDocument;
+    this.businessDocumentFormService.resetForm(this.editForm, businessDocument);
 
-    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
       this.applicationUsersSharedCollection,
       businessDocument.createdBy,
       businessDocument.lastModifiedBy
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       businessDocument.originatingDepartment
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(businessDocument.applicationMappings ?? [])
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(businessDocument.applicationMappings ?? [])
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(businessDocument.placeholders ?? [])
     );
-    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
+    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(
       this.algorithmsSharedCollection,
       businessDocument.fileChecksumAlgorithm
     );
-    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
       this.securityClearancesSharedCollection,
       businessDocument.securityClearance
     );
@@ -238,10 +166,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
       .pipe(
         map((applicationUsers: IApplicationUser[]) =>
-          this.applicationUserService.addApplicationUserToCollectionIfMissing(
+          this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
             applicationUsers,
-            this.editForm.get('createdBy')!.value,
-            this.editForm.get('lastModifiedBy')!.value
+            this.businessDocument?.createdBy,
+            this.businessDocument?.lastModifiedBy
           )
         )
       )
@@ -252,7 +180,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('originatingDepartment')!.value)
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.businessDocument?.originatingDepartment)
         )
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
@@ -262,9 +190,9 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('applicationMappings')!.value ?? [])
+            ...(this.businessDocument?.applicationMappings ?? [])
           )
         )
       )
@@ -278,7 +206,10 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.businessDocument?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -288,7 +219,7 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAlgorithm[]>) => res.body ?? []))
       .pipe(
         map((algorithms: IAlgorithm[]) =>
-          this.algorithmService.addAlgorithmToCollectionIfMissing(algorithms, this.editForm.get('fileChecksumAlgorithm')!.value)
+          this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(algorithms, this.businessDocument?.fileChecksumAlgorithm)
         )
       )
       .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
@@ -298,37 +229,12 @@ export class BusinessDocumentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
       .pipe(
         map((securityClearances: ISecurityClearance[]) =>
-          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
             securityClearances,
-            this.editForm.get('securityClearance')!.value
+            this.businessDocument?.securityClearance
           )
         )
       )
       .subscribe((securityClearances: ISecurityClearance[]) => (this.securityClearancesSharedCollection = securityClearances));
-  }
-
-  protected createFromForm(): IBusinessDocument {
-    return {
-      ...new BusinessDocument(),
-      id: this.editForm.get(['id'])!.value,
-      documentTitle: this.editForm.get(['documentTitle'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      documentSerial: this.editForm.get(['documentSerial'])!.value,
-      lastModified: this.editForm.get(['lastModified'])!.value
-        ? dayjs(this.editForm.get(['lastModified'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      attachmentFilePath: this.editForm.get(['attachmentFilePath'])!.value,
-      documentFileContentType: this.editForm.get(['documentFileContentType'])!.value,
-      documentFile: this.editForm.get(['documentFile'])!.value,
-      fileTampered: this.editForm.get(['fileTampered'])!.value,
-      documentFileChecksum: this.editForm.get(['documentFileChecksum'])!.value,
-      createdBy: this.editForm.get(['createdBy'])!.value,
-      lastModifiedBy: this.editForm.get(['lastModifiedBy'])!.value,
-      originatingDepartment: this.editForm.get(['originatingDepartment'])!.value,
-      applicationMappings: this.editForm.get(['applicationMappings'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      fileChecksumAlgorithm: this.editForm.get(['fileChecksumAlgorithm'])!.value,
-      securityClearance: this.editForm.get(['securityClearance'])!.value,
-    };
   }
 }

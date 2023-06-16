@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
+import { IPaymentCategory } from '../payment-category.model';
 import { PaymentCategoryService } from '../service/payment-category.service';
 
 @Injectable({ providedIn: 'root' })
-export class PaymentCategoryRoutingResolveService implements Resolve<IPaymentCategory> {
+export class PaymentCategoryRoutingResolveService implements Resolve<IPaymentCategory | null> {
   constructor(protected service: PaymentCategoryService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentCategory> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPaymentCategory | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((paymentCategory: HttpResponse<PaymentCategory>) => {
+        mergeMap((paymentCategory: HttpResponse<IPaymentCategory>) => {
           if (paymentCategory.body) {
             return of(paymentCategory.body);
           } else {
@@ -25,6 +25,6 @@ export class PaymentCategoryRoutingResolveService implements Resolve<IPaymentCat
         })
       );
     }
-    return of(new PaymentCategory());
+    return of(null);
   }
 }

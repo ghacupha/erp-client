@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ITaxReference, TaxReference } from '../tax-reference.model';
+import { ITaxReference } from '../tax-reference.model';
 import { TaxReferenceService } from '../service/tax-reference.service';
 
 @Injectable({ providedIn: 'root' })
-export class TaxReferenceRoutingResolveService implements Resolve<ITaxReference> {
+export class TaxReferenceRoutingResolveService implements Resolve<ITaxReference | null> {
   constructor(protected service: TaxReferenceService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ITaxReference> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ITaxReference | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((taxReference: HttpResponse<TaxReference>) => {
+        mergeMap((taxReference: HttpResponse<ITaxReference>) => {
           if (taxReference.body) {
             return of(taxReference.body);
           } else {
@@ -25,6 +25,6 @@ export class TaxReferenceRoutingResolveService implements Resolve<ITaxReference>
         })
       );
     }
-    return of(new TaxReference());
+    return of(null);
   }
 }

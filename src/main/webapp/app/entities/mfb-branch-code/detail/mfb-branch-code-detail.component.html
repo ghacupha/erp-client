@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="mfbBranchCode">
       <h2 data-cy="mfbBranchCodeDetailsHeading"><span>Mfb Branch Code</span></h2>
@@ -33,7 +33,7 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of mfbBranchCode.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

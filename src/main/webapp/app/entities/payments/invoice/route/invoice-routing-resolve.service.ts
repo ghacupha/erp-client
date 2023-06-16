@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IInvoice, Invoice } from '../invoice.model';
+import { IInvoice } from '../invoice.model';
 import { InvoiceService } from '../service/invoice.service';
 
 @Injectable({ providedIn: 'root' })
-export class InvoiceRoutingResolveService implements Resolve<IInvoice> {
+export class InvoiceRoutingResolveService implements Resolve<IInvoice | null> {
   constructor(protected service: InvoiceService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IInvoice> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IInvoice | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((invoice: HttpResponse<Invoice>) => {
+        mergeMap((invoice: HttpResponse<IInvoice>) => {
           if (invoice.body) {
             return of(invoice.body);
           } else {
@@ -25,6 +25,6 @@ export class InvoiceRoutingResolveService implements Resolve<IInvoice> {
         })
       );
     }
-    return of(new Invoice());
+    return of(null);
   }
 }

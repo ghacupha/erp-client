@@ -6,13 +6,14 @@ import { CreditNoteComponent } from '../list/credit-note.component';
 import { CreditNoteDetailComponent } from '../detail/credit-note-detail.component';
 import { CreditNoteUpdateComponent } from '../update/credit-note-update.component';
 import { CreditNoteRoutingResolveService } from './credit-note-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const creditNoteRoute: Routes = [
   {
     path: '',
     component: CreditNoteComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

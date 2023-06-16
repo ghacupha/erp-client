@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAssetCategory } from '../asset-category.model';
 import { AssetCategoryService } from '../service/asset-category.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './asset-category-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class AssetCategoryDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.assetCategoryService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

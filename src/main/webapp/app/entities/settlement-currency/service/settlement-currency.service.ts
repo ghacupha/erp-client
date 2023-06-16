@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ISettlementCurrency, getSettlementCurrencyIdentifier } from '../settlement-currency.model';
+import { ISettlementCurrency, NewSettlementCurrency } from '../settlement-currency.model';
+
+export type PartialUpdateSettlementCurrency = Partial<ISettlementCurrency> & Pick<ISettlementCurrency, 'id'>;
 
 export type EntityResponseType = HttpResponse<ISettlementCurrency>;
 export type EntityArrayResponseType = HttpResponse<ISettlementCurrency[]>;
@@ -18,21 +20,21 @@ export class SettlementCurrencyService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(settlementCurrency: ISettlementCurrency): Observable<EntityResponseType> {
+  create(settlementCurrency: NewSettlementCurrency): Observable<EntityResponseType> {
     return this.http.post<ISettlementCurrency>(this.resourceUrl, settlementCurrency, { observe: 'response' });
   }
 
   update(settlementCurrency: ISettlementCurrency): Observable<EntityResponseType> {
     return this.http.put<ISettlementCurrency>(
-      `${this.resourceUrl}/${getSettlementCurrencyIdentifier(settlementCurrency) as number}`,
+      `${this.resourceUrl}/${this.getSettlementCurrencyIdentifier(settlementCurrency)}`,
       settlementCurrency,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(settlementCurrency: ISettlementCurrency): Observable<EntityResponseType> {
+  partialUpdate(settlementCurrency: PartialUpdateSettlementCurrency): Observable<EntityResponseType> {
     return this.http.patch<ISettlementCurrency>(
-      `${this.resourceUrl}/${getSettlementCurrencyIdentifier(settlementCurrency) as number}`,
+      `${this.resourceUrl}/${this.getSettlementCurrencyIdentifier(settlementCurrency)}`,
       settlementCurrency,
       { observe: 'response' }
     );
@@ -56,18 +58,26 @@ export class SettlementCurrencyService {
     return this.http.get<ISettlementCurrency[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addSettlementCurrencyToCollectionIfMissing(
-    settlementCurrencyCollection: ISettlementCurrency[],
-    ...settlementCurrenciesToCheck: (ISettlementCurrency | null | undefined)[]
-  ): ISettlementCurrency[] {
-    const settlementCurrencies: ISettlementCurrency[] = settlementCurrenciesToCheck.filter(isPresent);
+  getSettlementCurrencyIdentifier(settlementCurrency: Pick<ISettlementCurrency, 'id'>): number {
+    return settlementCurrency.id;
+  }
+
+  compareSettlementCurrency(o1: Pick<ISettlementCurrency, 'id'> | null, o2: Pick<ISettlementCurrency, 'id'> | null): boolean {
+    return o1 && o2 ? this.getSettlementCurrencyIdentifier(o1) === this.getSettlementCurrencyIdentifier(o2) : o1 === o2;
+  }
+
+  addSettlementCurrencyToCollectionIfMissing<Type extends Pick<ISettlementCurrency, 'id'>>(
+    settlementCurrencyCollection: Type[],
+    ...settlementCurrenciesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const settlementCurrencies: Type[] = settlementCurrenciesToCheck.filter(isPresent);
     if (settlementCurrencies.length > 0) {
       const settlementCurrencyCollectionIdentifiers = settlementCurrencyCollection.map(
-        settlementCurrencyItem => getSettlementCurrencyIdentifier(settlementCurrencyItem)!
+        settlementCurrencyItem => this.getSettlementCurrencyIdentifier(settlementCurrencyItem)!
       );
       const settlementCurrenciesToAdd = settlementCurrencies.filter(settlementCurrencyItem => {
-        const settlementCurrencyIdentifier = getSettlementCurrencyIdentifier(settlementCurrencyItem);
-        if (settlementCurrencyIdentifier == null || settlementCurrencyCollectionIdentifiers.includes(settlementCurrencyIdentifier)) {
+        const settlementCurrencyIdentifier = this.getSettlementCurrencyIdentifier(settlementCurrencyItem);
+        if (settlementCurrencyCollectionIdentifiers.includes(settlementCurrencyIdentifier)) {
           return false;
         }
         settlementCurrencyCollectionIdentifiers.push(settlementCurrencyIdentifier);

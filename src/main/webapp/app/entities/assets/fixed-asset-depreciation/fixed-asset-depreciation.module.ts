@@ -14,6 +14,5 @@ import { FixedAssetDepreciationRoutingModule } from './route/fixed-asset-depreci
     FixedAssetDepreciationUpdateComponent,
     FixedAssetDepreciationDeleteDialogComponent,
   ],
-  entryComponents: [FixedAssetDepreciationDeleteDialogComponent],
 })
 export class ErpServiceFixedAssetDepreciationModule {}

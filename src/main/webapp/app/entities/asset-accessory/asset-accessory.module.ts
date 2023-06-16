@@ -14,6 +14,5 @@ import { AssetAccessoryRoutingModule } from './route/asset-accessory-routing.mod
     AssetAccessoryUpdateComponent,
     AssetAccessoryDeleteDialogComponent,
   ],
-  entryComponents: [AssetAccessoryDeleteDialogComponent],
 })
 export class AssetAccessoryModule {}

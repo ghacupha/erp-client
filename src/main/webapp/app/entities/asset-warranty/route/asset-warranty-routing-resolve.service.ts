@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IAssetWarranty, AssetWarranty } from '../asset-warranty.model';
+import { IAssetWarranty } from '../asset-warranty.model';
 import { AssetWarrantyService } from '../service/asset-warranty.service';
 
 @Injectable({ providedIn: 'root' })
-export class AssetWarrantyRoutingResolveService implements Resolve<IAssetWarranty> {
+export class AssetWarrantyRoutingResolveService implements Resolve<IAssetWarranty | null> {
   constructor(protected service: AssetWarrantyService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IAssetWarranty> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IAssetWarranty | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((assetWarranty: HttpResponse<AssetWarranty>) => {
+        mergeMap((assetWarranty: HttpResponse<IAssetWarranty>) => {
           if (assetWarranty.body) {
             return of(assetWarranty.body);
           } else {
@@ -25,6 +25,6 @@ export class AssetWarrantyRoutingResolveService implements Resolve<IAssetWarrant
         })
       );
     }
-    return of(new AssetWarranty());
+    return of(null);
   }
 }

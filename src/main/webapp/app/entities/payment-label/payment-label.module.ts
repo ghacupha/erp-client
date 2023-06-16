@@ -9,6 +9,5 @@ import { PaymentLabelRoutingModule } from './route/payment-label-routing.module'
 @NgModule({
   imports: [SharedModule, PaymentLabelRoutingModule],
   declarations: [PaymentLabelComponent, PaymentLabelDetailComponent, PaymentLabelUpdateComponent, PaymentLabelDeleteDialogComponent],
-  entryComponents: [PaymentLabelDeleteDialogComponent],
 })
 export class PaymentLabelModule {}

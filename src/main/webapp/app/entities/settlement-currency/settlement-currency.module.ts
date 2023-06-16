@@ -14,6 +14,5 @@ import { SettlementCurrencyRoutingModule } from './route/settlement-currency-rou
     SettlementCurrencyUpdateComponent,
     SettlementCurrencyDeleteDialogComponent,
   ],
-  entryComponents: [SettlementCurrencyDeleteDialogComponent],
 })
 export class SettlementCurrencyModule {}

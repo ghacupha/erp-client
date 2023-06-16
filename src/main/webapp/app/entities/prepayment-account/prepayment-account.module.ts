@@ -14,6 +14,5 @@ import { PrepaymentAccountRoutingModule } from './route/prepayment-account-routi
     PrepaymentAccountUpdateComponent,
     PrepaymentAccountDeleteDialogComponent,
   ],
-  entryComponents: [PrepaymentAccountDeleteDialogComponent],
 })
 export class PrepaymentAccountModule {}

@@ -1,8 +1,8 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IFixedAssetAcquisition {
-  id?: number;
+  id: number;
   assetNumber?: number | null;
   serviceOutletCode?: string | null;
   assetTag?: string | null;
@@ -11,24 +11,7 @@ export interface IFixedAssetAcquisition {
   assetCategory?: string | null;
   purchasePrice?: number | null;
   fileUploadToken?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class FixedAssetAcquisition implements IFixedAssetAcquisition {
-  constructor(
-    public id?: number,
-    public assetNumber?: number | null,
-    public serviceOutletCode?: string | null,
-    public assetTag?: string | null,
-    public assetDescription?: string | null,
-    public purchaseDate?: dayjs.Dayjs | null,
-    public assetCategory?: string | null,
-    public purchasePrice?: number | null,
-    public fileUploadToken?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getFixedAssetAcquisitionIdentifier(fixedAssetAcquisition: IFixedAssetAcquisition): number | undefined {
-  return fixedAssetAcquisition.id;
-}
+export type NewFixedAssetAcquisition = Omit<IFixedAssetAcquisition, 'id'> & { id: null };

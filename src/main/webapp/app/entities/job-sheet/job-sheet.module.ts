@@ -9,6 +9,5 @@ import { JobSheetRoutingModule } from './route/job-sheet-routing.module';
 @NgModule({
   imports: [SharedModule, JobSheetRoutingModule],
   declarations: [JobSheetComponent, JobSheetDetailComponent, JobSheetUpdateComponent, JobSheetDeleteDialogComponent],
-  entryComponents: [JobSheetDeleteDialogComponent],
 })
 export class JobSheetModule {}

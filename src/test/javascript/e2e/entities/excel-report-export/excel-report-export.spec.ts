@@ -6,7 +6,7 @@ import {
   /* ExcelReportExportDeleteDialog, */
   ExcelReportExportUpdatePage,
 } from './excel-report-export.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

@@ -3,33 +3,16 @@ import { IPaymentCategory } from 'app/entities/payments/payment-category/payment
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPaymentCalculation {
-  id?: number;
+  id: number;
   paymentExpense?: number | null;
   withholdingVAT?: number | null;
   withholdingTax?: number | null;
   paymentAmount?: number | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  paymentLabels?: IPaymentLabel[] | null;
-  paymentCategory?: IPaymentCategory | null;
-  placeholders?: IPlaceholder[] | null;
+  paymentLabels?: Pick<IPaymentLabel, 'id' | 'description'>[] | null;
+  paymentCategory?: Pick<IPaymentCategory, 'id'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PaymentCalculation implements IPaymentCalculation {
-  constructor(
-    public id?: number,
-    public paymentExpense?: number | null,
-    public withholdingVAT?: number | null,
-    public withholdingTax?: number | null,
-    public paymentAmount?: number | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public paymentLabels?: IPaymentLabel[] | null,
-    public paymentCategory?: IPaymentCategory | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getPaymentCalculationIdentifier(paymentCalculation: IPaymentCalculation): number | undefined {
-  return paymentCalculation.id;
-}
+export type NewPaymentCalculation = Omit<IPaymentCalculation, 'id'> & { id: null };

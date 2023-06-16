@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ISubCountyCode, getSubCountyCodeIdentifier } from '../sub-county-code.model';
+import { ISubCountyCode, NewSubCountyCode } from '../sub-county-code.model';
+
+export type PartialUpdateSubCountyCode = Partial<ISubCountyCode> & Pick<ISubCountyCode, 'id'>;
 
 export type EntityResponseType = HttpResponse<ISubCountyCode>;
 export type EntityArrayResponseType = HttpResponse<ISubCountyCode[]>;
@@ -18,18 +20,18 @@ export class SubCountyCodeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(subCountyCode: ISubCountyCode): Observable<EntityResponseType> {
+  create(subCountyCode: NewSubCountyCode): Observable<EntityResponseType> {
     return this.http.post<ISubCountyCode>(this.resourceUrl, subCountyCode, { observe: 'response' });
   }
 
   update(subCountyCode: ISubCountyCode): Observable<EntityResponseType> {
-    return this.http.put<ISubCountyCode>(`${this.resourceUrl}/${getSubCountyCodeIdentifier(subCountyCode) as number}`, subCountyCode, {
+    return this.http.put<ISubCountyCode>(`${this.resourceUrl}/${this.getSubCountyCodeIdentifier(subCountyCode)}`, subCountyCode, {
       observe: 'response',
     });
   }
 
-  partialUpdate(subCountyCode: ISubCountyCode): Observable<EntityResponseType> {
-    return this.http.patch<ISubCountyCode>(`${this.resourceUrl}/${getSubCountyCodeIdentifier(subCountyCode) as number}`, subCountyCode, {
+  partialUpdate(subCountyCode: PartialUpdateSubCountyCode): Observable<EntityResponseType> {
+    return this.http.patch<ISubCountyCode>(`${this.resourceUrl}/${this.getSubCountyCodeIdentifier(subCountyCode)}`, subCountyCode, {
       observe: 'response',
     });
   }
@@ -52,18 +54,26 @@ export class SubCountyCodeService {
     return this.http.get<ISubCountyCode[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addSubCountyCodeToCollectionIfMissing(
-    subCountyCodeCollection: ISubCountyCode[],
-    ...subCountyCodesToCheck: (ISubCountyCode | null | undefined)[]
-  ): ISubCountyCode[] {
-    const subCountyCodes: ISubCountyCode[] = subCountyCodesToCheck.filter(isPresent);
+  getSubCountyCodeIdentifier(subCountyCode: Pick<ISubCountyCode, 'id'>): number {
+    return subCountyCode.id;
+  }
+
+  compareSubCountyCode(o1: Pick<ISubCountyCode, 'id'> | null, o2: Pick<ISubCountyCode, 'id'> | null): boolean {
+    return o1 && o2 ? this.getSubCountyCodeIdentifier(o1) === this.getSubCountyCodeIdentifier(o2) : o1 === o2;
+  }
+
+  addSubCountyCodeToCollectionIfMissing<Type extends Pick<ISubCountyCode, 'id'>>(
+    subCountyCodeCollection: Type[],
+    ...subCountyCodesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const subCountyCodes: Type[] = subCountyCodesToCheck.filter(isPresent);
     if (subCountyCodes.length > 0) {
       const subCountyCodeCollectionIdentifiers = subCountyCodeCollection.map(
-        subCountyCodeItem => getSubCountyCodeIdentifier(subCountyCodeItem)!
+        subCountyCodeItem => this.getSubCountyCodeIdentifier(subCountyCodeItem)!
       );
       const subCountyCodesToAdd = subCountyCodes.filter(subCountyCodeItem => {
-        const subCountyCodeIdentifier = getSubCountyCodeIdentifier(subCountyCodeItem);
-        if (subCountyCodeIdentifier == null || subCountyCodeCollectionIdentifiers.includes(subCountyCodeIdentifier)) {
+        const subCountyCodeIdentifier = this.getSubCountyCodeIdentifier(subCountyCodeItem);
+        if (subCountyCodeCollectionIdentifiers.includes(subCountyCodeIdentifier)) {
           return false;
         }
         subCountyCodeCollectionIdentifiers.push(subCountyCodeIdentifier);

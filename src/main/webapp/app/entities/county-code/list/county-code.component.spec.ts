@@ -1,28 +1,42 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { CountyCodeService } from '../service/county-code.service';
 
 import { CountyCodeComponent } from './county-code.component';
+import SpyInstance = jest.SpyInstance;
 
 describe('CountyCode Management Component', () => {
   let comp: CountyCodeComponent;
   let fixture: ComponentFixture<CountyCodeComponent>;
   let service: CountyCodeService;
+  let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [RouterTestingModule.withRoutes([{ path: 'county-code', component: CountyCodeComponent }]), HttpClientTestingModule],
       declarations: [CountyCodeComponent],
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { queryParams: {} } },
+          useValue: {
+            data: of({
+              defaultSort: 'id,asc',
+            }),
+            queryParamMap: of(
+              jest.requireActual('@angular/router').convertToParamMap({
+                page: '1',
+                size: '1',
+                sort: 'id,desc',
+                'filter[someId.in]': 'dc4279ea-cfb9-11ec-9d64-0242ac120002',
+              })
+            ),
+            snapshot: { queryParams: {} },
+          },
         },
       ],
     })
@@ -32,6 +46,7 @@ describe('CountyCode Management Component', () => {
     fixture = TestBed.createComponent(CountyCodeComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(CountyCodeService);
+    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
 
     const headers = new HttpHeaders();
     jest.spyOn(service, 'query').mockReturnValue(
@@ -50,16 +65,25 @@ describe('CountyCode Management Component', () => {
 
     // THEN
     expect(service.query).toHaveBeenCalled();
-    expect(comp.countyCodes[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(comp.countyCodes?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+  });
+
+  describe('trackId', () => {
+    it('Should forward to countyCodeService', () => {
+      const entity = { id: 123 };
+      jest.spyOn(service, 'getCountyCodeIdentifier');
+      const id = comp.trackId(0, entity);
+      expect(service.getCountyCodeIdentifier).toHaveBeenCalledWith(entity);
+      expect(id).toBe(entity.id);
+    });
   });
 
   it('should load a page', () => {
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToPage(1);
 
     // THEN
-    expect(service.query).toHaveBeenCalled();
-    expect(comp.countyCodes[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(routerNavigateSpy).toHaveBeenCalled();
   });
 
   it('should calculate the sort attribute for an id', () => {
@@ -67,21 +91,25 @@ describe('CountyCode Management Component', () => {
     comp.ngOnInit();
 
     // THEN
-    expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['id,asc'] }));
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
   });
 
   it('should calculate the sort attribute for a non-id attribute', () => {
-    // INIT
-    comp.ngOnInit();
-
     // GIVEN
     comp.predicate = 'name';
 
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToWithComponentValues();
 
     // THEN
-    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,asc', 'id'] }));
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ['name,asc'],
+        }),
+      })
+    );
   });
 
   it('should re-initialize the page', () => {
@@ -90,8 +118,8 @@ describe('CountyCode Management Component', () => {
     comp.reset();
 
     // THEN
-    expect(comp.page).toEqual(0);
+    expect(comp.page).toEqual(1);
     expect(service.query).toHaveBeenCalledTimes(2);
-    expect(comp.countyCodes[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(comp.countyCodes?.[0]).toEqual(expect.objectContaining({ id: 123 }));
   });
 });

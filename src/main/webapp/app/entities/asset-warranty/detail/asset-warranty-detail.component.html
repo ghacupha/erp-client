@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="assetWarranty">
       <h2 data-cy="assetWarrantyDetailsHeading"><span>Asset Warranty</span></h2>
@@ -37,14 +37,14 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of assetWarranty.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Universally Unique Mapping</span></dt>
         <dd>
           <span *ngFor="let universallyUniqueMapping of assetWarranty.universallyUniqueMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping.id, 'view']">{{
               universallyUniqueMapping.universalKey
             }}</a
             >{{ last ? '' : ', ' }}
@@ -53,13 +53,13 @@
         <dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="assetWarranty.dealer">
-            <a [routerLink]="['/dealer', assetWarranty.dealer?.id, 'view']">{{ assetWarranty.dealer?.dealerName }}</a>
+            <a [routerLink]="['/dealer', assetWarranty.dealer.id, 'view']">{{ assetWarranty.dealer.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Warranty Attachment</span></dt>
         <dd>
           <span *ngFor="let warrantyAttachment of assetWarranty.warrantyAttachments; let last = last">
-            <a [routerLink]="['/business-document', warrantyAttachment?.id, 'view']">{{ warrantyAttachment.documentTitle }}</a
+            <a [routerLink]="['/business-document', warrantyAttachment.id, 'view']">{{ warrantyAttachment.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

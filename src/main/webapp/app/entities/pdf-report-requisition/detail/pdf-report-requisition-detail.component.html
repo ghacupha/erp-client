@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="pdfReportRequisition">
       <h2 data-cy="pdfReportRequisitionDetailsHeading"><span>Pdf Report Requisition</span></h2>
@@ -45,22 +45,22 @@
         <dt><span>Report Template</span></dt>
         <dd>
           <div *ngIf="pdfReportRequisition.reportTemplate">
-            <a [routerLink]="['/report-template', pdfReportRequisition.reportTemplate?.id, 'view']">{{
-              pdfReportRequisition.reportTemplate?.catalogueNumber
+            <a [routerLink]="['/report-template', pdfReportRequisition.reportTemplate.id, 'view']">{{
+              pdfReportRequisition.reportTemplate.catalogueNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of pdfReportRequisition.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of pdfReportRequisition.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

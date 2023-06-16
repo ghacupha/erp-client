@@ -14,6 +14,5 @@ import { AssetRegistrationRoutingModule } from './route/asset-registration-routi
     AssetRegistrationUpdateComponent,
     AssetRegistrationDeleteDialogComponent,
   ],
-  entryComponents: [AssetRegistrationDeleteDialogComponent],
 })
 export class AssetRegistrationModule {}

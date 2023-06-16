@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="institutionCode">
       <h2 data-cy="institutionCodeDetailsHeading"><span>Institution Code</span></h2>
@@ -37,7 +37,7 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of institutionCode.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

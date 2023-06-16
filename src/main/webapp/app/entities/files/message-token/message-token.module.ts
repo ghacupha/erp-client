@@ -9,6 +9,5 @@ import { MessageTokenRoutingModule } from './route/message-token-routing.module'
 @NgModule({
   imports: [SharedModule, MessageTokenRoutingModule],
   declarations: [MessageTokenComponent, MessageTokenDetailComponent, MessageTokenUpdateComponent, MessageTokenDeleteDialogComponent],
-  entryComponents: [MessageTokenDeleteDialogComponent],
 })
 export class ErpServiceMessageTokenModule {}

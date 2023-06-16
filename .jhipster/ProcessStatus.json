@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220629144311",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "statusCode",
@@ -11,30 +13,28 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ProcessStatus",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "processStatus",
       "ownerSide": true,
-      "otherEntityRelationshipName": "processStatus"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "processStatus",
       "ownerSide": true,
-      "otherEntityRelationshipName": "processStatus"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ProcessStatus",
-  "changelogDate": "20220629144311",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,39 +1,21 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IReportTemplate } from 'app/entities/report-template/report-template.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 
 export interface IPdfReportRequisition {
-  id?: number;
-  reportName?: string;
+  id: number;
+  reportName?: string | null;
   reportDate?: dayjs.Dayjs | null;
-  userPassword?: string;
-  ownerPassword?: string;
+  userPassword?: string | null;
+  ownerPassword?: string | null;
   reportFileChecksum?: string | null;
   reportStatus?: ReportStatusTypes | null;
-  reportId?: string;
-  reportTemplate?: IReportTemplate;
-  placeholders?: IPlaceholder[] | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
+  reportId?: string | null;
+  reportTemplate?: Pick<IReportTemplate, 'id' | 'catalogueNumber'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
 }
 
-export class PdfReportRequisition implements IPdfReportRequisition {
-  constructor(
-    public id?: number,
-    public reportName?: string,
-    public reportDate?: dayjs.Dayjs | null,
-    public userPassword?: string,
-    public ownerPassword?: string,
-    public reportFileChecksum?: string | null,
-    public reportStatus?: ReportStatusTypes | null,
-    public reportId?: string,
-    public reportTemplate?: IReportTemplate,
-    public placeholders?: IPlaceholder[] | null,
-    public parameters?: IUniversallyUniqueMapping[] | null
-  ) {}
-}
-
-export function getPdfReportRequisitionIdentifier(pdfReportRequisition: IPdfReportRequisition): number | undefined {
-  return pdfReportRequisition.id;
-}
+export type NewPdfReportRequisition = Omit<IPdfReportRequisition, 'id'> & { id: null };

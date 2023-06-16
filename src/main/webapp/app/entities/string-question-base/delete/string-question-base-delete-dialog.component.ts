@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IStringQuestionBase } from '../string-question-base.model';
 import { StringQuestionBaseService } from '../service/string-question-base.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './string-question-base-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class StringQuestionBaseDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.stringQuestionBaseService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

@@ -6,13 +6,14 @@ import { WorkProjectRegisterComponent } from '../list/work-project-register.comp
 import { WorkProjectRegisterDetailComponent } from '../detail/work-project-register-detail.component';
 import { WorkProjectRegisterUpdateComponent } from '../update/work-project-register-update.component';
 import { WorkProjectRegisterRoutingResolveService } from './work-project-register-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const workProjectRegisterRoute: Routes = [
   {
     path: '',
     component: WorkProjectRegisterComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IProcessStatus, ProcessStatus } from '../process-status.model';
+import { IProcessStatus } from '../process-status.model';
 import { ProcessStatusService } from '../service/process-status.service';
 
 @Injectable({ providedIn: 'root' })
-export class ProcessStatusRoutingResolveService implements Resolve<IProcessStatus> {
+export class ProcessStatusRoutingResolveService implements Resolve<IProcessStatus | null> {
   constructor(protected service: ProcessStatusService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IProcessStatus> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IProcessStatus | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((processStatus: HttpResponse<ProcessStatus>) => {
+        mergeMap((processStatus: HttpResponse<IProcessStatus>) => {
           if (processStatus.body) {
             return of(processStatus.body);
           } else {
@@ -25,6 +25,6 @@ export class ProcessStatusRoutingResolveService implements Resolve<IProcessStatu
         })
       );
     }
-    return of(new ProcessStatus());
+    return of(null);
   }
 }

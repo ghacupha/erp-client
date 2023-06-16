@@ -14,6 +14,5 @@ import { ExcelReportExportRoutingModule } from './route/excel-report-export-rout
     ExcelReportExportUpdateComponent,
     ExcelReportExportDeleteDialogComponent,
   ],
-  entryComponents: [ExcelReportExportDeleteDialogComponent],
 })
 export class ExcelReportExportModule {}

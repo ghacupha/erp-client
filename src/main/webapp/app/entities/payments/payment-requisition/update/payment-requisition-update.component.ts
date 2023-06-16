@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentRequisition, PaymentRequisition } from '../payment-requisition.model';
+import { PaymentRequisitionFormService, PaymentRequisitionFormGroup } from './payment-requisition-form.service';
+import { IPaymentRequisition } from '../payment-requisition.model';
 import { PaymentRequisitionService } from '../service/payment-requisition.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
@@ -18,37 +18,32 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class PaymentRequisitionUpdateComponent implements OnInit {
   isSaving = false;
+  paymentRequisition: IPaymentRequisition | null = null;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    receptionDate: [],
-    dealerName: [],
-    briefDescription: [],
-    requisitionNumber: [],
-    invoicedAmount: [],
-    disbursementCost: [],
-    taxableAmount: [],
-    requisitionProcessed: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    paymentLabels: [],
-    placeholders: [],
-  });
+  editForm: PaymentRequisitionFormGroup = this.paymentRequisitionFormService.createPaymentRequisitionFormGroup();
 
   constructor(
     protected paymentRequisitionService: PaymentRequisitionService,
+    protected paymentRequisitionFormService: PaymentRequisitionFormService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentRequisition }) => {
-      this.updateForm(paymentRequisition);
+      this.paymentRequisition = paymentRequisition;
+      if (paymentRequisition) {
+        this.updateForm(paymentRequisition);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -60,49 +55,19 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const paymentRequisition = this.createFromForm();
-    if (paymentRequisition.id !== undefined) {
+    const paymentRequisition = this.paymentRequisitionFormService.getPaymentRequisition(this.editForm);
+    if (paymentRequisition.id !== null) {
       this.subscribeToSaveResponse(this.paymentRequisitionService.update(paymentRequisition));
     } else {
       this.subscribeToSaveResponse(this.paymentRequisitionService.create(paymentRequisition));
     }
   }
 
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentRequisition>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -118,27 +83,14 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
   }
 
   protected updateForm(paymentRequisition: IPaymentRequisition): void {
-    this.editForm.patchValue({
-      id: paymentRequisition.id,
-      receptionDate: paymentRequisition.receptionDate,
-      dealerName: paymentRequisition.dealerName,
-      briefDescription: paymentRequisition.briefDescription,
-      requisitionNumber: paymentRequisition.requisitionNumber,
-      invoicedAmount: paymentRequisition.invoicedAmount,
-      disbursementCost: paymentRequisition.disbursementCost,
-      taxableAmount: paymentRequisition.taxableAmount,
-      requisitionProcessed: paymentRequisition.requisitionProcessed,
-      fileUploadToken: paymentRequisition.fileUploadToken,
-      compilationToken: paymentRequisition.compilationToken,
-      paymentLabels: paymentRequisition.paymentLabels,
-      placeholders: paymentRequisition.placeholders,
-    });
+    this.paymentRequisition = paymentRequisition;
+    this.paymentRequisitionFormService.resetForm(this.editForm, paymentRequisition);
 
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(paymentRequisition.paymentLabels ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(paymentRequisition.placeholders ?? [])
     );
@@ -150,7 +102,10 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.paymentRequisition?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -160,28 +115,12 @@ export class PaymentRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.paymentRequisition?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IPaymentRequisition {
-    return {
-      ...new PaymentRequisition(),
-      id: this.editForm.get(['id'])!.value,
-      receptionDate: this.editForm.get(['receptionDate'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
-      briefDescription: this.editForm.get(['briefDescription'])!.value,
-      requisitionNumber: this.editForm.get(['requisitionNumber'])!.value,
-      invoicedAmount: this.editForm.get(['invoicedAmount'])!.value,
-      disbursementCost: this.editForm.get(['disbursementCost'])!.value,
-      taxableAmount: this.editForm.get(['taxableAmount'])!.value,
-      requisitionProcessed: this.editForm.get(['requisitionProcessed'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -6,13 +6,14 @@ import { WorkInProgressRegistrationComponent } from '../list/work-in-progress-re
 import { WorkInProgressRegistrationDetailComponent } from '../detail/work-in-progress-registration-detail.component';
 import { WorkInProgressRegistrationUpdateComponent } from '../update/work-in-progress-registration-update.component';
 import { WorkInProgressRegistrationRoutingResolveService } from './work-in-progress-registration-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const workInProgressRegistrationRoute: Routes = [
   {
     path: '',
     component: WorkInProgressRegistrationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

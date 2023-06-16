@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPrepaymentMapping, PrepaymentMapping } from '../prepayment-mapping.model';
+import { PrepaymentMappingFormService, PrepaymentMappingFormGroup } from './prepayment-mapping-form.service';
+import { IPrepaymentMapping } from '../prepayment-mapping.model';
 import { PrepaymentMappingService } from '../service/prepayment-mapping.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -16,27 +16,27 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class PrepaymentMappingUpdateComponent implements OnInit {
   isSaving = false;
+  prepaymentMapping: IPrepaymentMapping | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    parameterKey: [null, [Validators.required]],
-    parameterGuid: [null, [Validators.required]],
-    parameter: [null, [Validators.required]],
-    placeholders: [],
-  });
+  editForm: PrepaymentMappingFormGroup = this.prepaymentMappingFormService.createPrepaymentMappingFormGroup();
 
   constructor(
     protected prepaymentMappingService: PrepaymentMappingService,
+    protected prepaymentMappingFormService: PrepaymentMappingFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentMapping }) => {
-      this.updateForm(prepaymentMapping);
+      this.prepaymentMapping = prepaymentMapping;
+      if (prepaymentMapping) {
+        this.updateForm(prepaymentMapping);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -48,34 +48,19 @@ export class PrepaymentMappingUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const prepaymentMapping = this.createFromForm();
-    if (prepaymentMapping.id !== undefined) {
+    const prepaymentMapping = this.prepaymentMappingFormService.getPrepaymentMapping(this.editForm);
+    if (prepaymentMapping.id !== null) {
       this.subscribeToSaveResponse(this.prepaymentMappingService.update(prepaymentMapping));
     } else {
       this.subscribeToSaveResponse(this.prepaymentMappingService.create(prepaymentMapping));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentMapping>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -91,15 +76,10 @@ export class PrepaymentMappingUpdateComponent implements OnInit {
   }
 
   protected updateForm(prepaymentMapping: IPrepaymentMapping): void {
-    this.editForm.patchValue({
-      id: prepaymentMapping.id,
-      parameterKey: prepaymentMapping.parameterKey,
-      parameterGuid: prepaymentMapping.parameterGuid,
-      parameter: prepaymentMapping.parameter,
-      placeholders: prepaymentMapping.placeholders,
-    });
+    this.prepaymentMapping = prepaymentMapping;
+    this.prepaymentMappingFormService.resetForm(this.editForm, prepaymentMapping);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(prepaymentMapping.placeholders ?? [])
     );
@@ -111,20 +91,12 @@ export class PrepaymentMappingUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.prepaymentMapping?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IPrepaymentMapping {
-    return {
-      ...new PrepaymentMapping(),
-      id: this.editForm.get(['id'])!.value,
-      parameterKey: this.editForm.get(['parameterKey'])!.value,
-      parameterGuid: this.editForm.get(['parameterGuid'])!.value,
-      parameter: this.editForm.get(['parameter'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

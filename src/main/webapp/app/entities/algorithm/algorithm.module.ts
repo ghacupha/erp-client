@@ -9,6 +9,5 @@ import { AlgorithmRoutingModule } from './route/algorithm-routing.module';
 @NgModule({
   imports: [SharedModule, AlgorithmRoutingModule],
   declarations: [AlgorithmComponent, AlgorithmDetailComponent, AlgorithmUpdateComponent, AlgorithmDeleteDialogComponent],
-  entryComponents: [AlgorithmDeleteDialogComponent],
 })
 export class AlgorithmModule {}

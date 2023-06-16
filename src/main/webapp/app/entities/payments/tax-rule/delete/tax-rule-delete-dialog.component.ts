@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITaxRule } from '../tax-rule.model';
 import { TaxRuleService } from '../service/tax-rule.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './tax-rule-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class TaxRuleDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.taxRuleService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

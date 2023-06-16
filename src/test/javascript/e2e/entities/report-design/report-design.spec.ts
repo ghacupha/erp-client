@@ -6,7 +6,7 @@ import {
   /* ReportDesignDeleteDialog, */
   ReportDesignUpdatePage,
 } from './report-design.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

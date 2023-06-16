@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IQuestionBase, QuestionBase } from '../question-base.model';
+import { QuestionBaseFormService, QuestionBaseFormGroup } from './question-base-form.service';
+import { IQuestionBase } from '../question-base.model';
 import { QuestionBaseService } from '../service/question-base.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
@@ -19,38 +19,33 @@ import { ControlTypes } from 'app/entities/enumerations/control-types.model';
 })
 export class QuestionBaseUpdateComponent implements OnInit {
   isSaving = false;
+  questionBase: IQuestionBase | null = null;
   controlTypesValues = Object.keys(ControlTypes);
 
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    context: [null, [Validators.required]],
-    serial: [null, [Validators.required]],
-    questionBaseValue: [],
-    questionBaseKey: [null, [Validators.required]],
-    questionBaseLabel: [null, [Validators.required]],
-    required: [],
-    order: [null, [Validators.required]],
-    controlType: [null, [Validators.required]],
-    placeholder: [],
-    iterable: [],
-    parameters: [],
-    placeholderItems: [],
-  });
+  editForm: QuestionBaseFormGroup = this.questionBaseFormService.createQuestionBaseFormGroup();
 
   constructor(
     protected questionBaseService: QuestionBaseService,
+    protected questionBaseFormService: QuestionBaseFormService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ questionBase }) => {
-      this.updateForm(questionBase);
+      this.questionBase = questionBase;
+      if (questionBase) {
+        this.updateForm(questionBase);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -62,52 +57,19 @@ export class QuestionBaseUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const questionBase = this.createFromForm();
-    if (questionBase.id !== undefined) {
+    const questionBase = this.questionBaseFormService.getQuestionBase(this.editForm);
+    if (questionBase.id !== null) {
       this.subscribeToSaveResponse(this.questionBaseService.update(questionBase));
     } else {
       this.subscribeToSaveResponse(this.questionBaseService.create(questionBase));
     }
   }
 
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IQuestionBase>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -123,27 +85,15 @@ export class QuestionBaseUpdateComponent implements OnInit {
   }
 
   protected updateForm(questionBase: IQuestionBase): void {
-    this.editForm.patchValue({
-      id: questionBase.id,
-      context: questionBase.context,
-      serial: questionBase.serial,
-      questionBaseValue: questionBase.questionBaseValue,
-      questionBaseKey: questionBase.questionBaseKey,
-      questionBaseLabel: questionBase.questionBaseLabel,
-      required: questionBase.required,
-      order: questionBase.order,
-      controlType: questionBase.controlType,
-      placeholder: questionBase.placeholder,
-      iterable: questionBase.iterable,
-      parameters: questionBase.parameters,
-      placeholderItems: questionBase.placeholderItems,
-    });
+    this.questionBase = questionBase;
+    this.questionBaseFormService.resetForm(this.editForm, questionBase);
 
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(questionBase.parameters ?? [])
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(questionBase.parameters ?? [])
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(questionBase.placeholderItems ?? [])
     );
@@ -155,9 +105,9 @@ export class QuestionBaseUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('parameters')!.value ?? [])
+            ...(this.questionBase?.parameters ?? [])
           )
         )
       )
@@ -171,28 +121,12 @@ export class QuestionBaseUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholderItems')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.questionBase?.placeholderItems ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IQuestionBase {
-    return {
-      ...new QuestionBase(),
-      id: this.editForm.get(['id'])!.value,
-      context: this.editForm.get(['context'])!.value,
-      serial: this.editForm.get(['serial'])!.value,
-      questionBaseValue: this.editForm.get(['questionBaseValue'])!.value,
-      questionBaseKey: this.editForm.get(['questionBaseKey'])!.value,
-      questionBaseLabel: this.editForm.get(['questionBaseLabel'])!.value,
-      required: this.editForm.get(['required'])!.value,
-      order: this.editForm.get(['order'])!.value,
-      controlType: this.editForm.get(['controlType'])!.value,
-      placeholder: this.editForm.get(['placeholder'])!.value,
-      iterable: this.editForm.get(['iterable'])!.value,
-      parameters: this.editForm.get(['parameters'])!.value,
-      placeholderItems: this.editForm.get(['placeholderItems'])!.value,
-    };
   }
 }

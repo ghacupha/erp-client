@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IDealer, Dealer } from '../dealer.model';
+import { DealerFormService, DealerFormGroup } from './dealer-form.service';
+import { IDealer } from '../dealer.model';
 import { DealerService } from '../service/dealer.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -21,48 +21,37 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class DealerUpdateComponent implements OnInit {
   isSaving = false;
+  dealer: IDealer | null = null;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    dealerName: [null, [Validators.required]],
-    taxNumber: [],
-    identificationDocumentNumber: [],
-    organizationName: [],
-    department: [],
-    position: [],
-    postalAddress: [],
-    physicalAddress: [],
-    accountName: [],
-    accountNumber: [],
-    bankersName: [],
-    bankersBranch: [],
-    bankersSwiftCode: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    remarks: [],
-    otherNames: [],
-    paymentLabels: [],
-    dealerGroup: [],
-    placeholders: [],
-  });
+  editForm: DealerFormGroup = this.dealerFormService.createDealerFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected dealerService: DealerService,
+    protected dealerFormService: DealerFormService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ dealer }) => {
-      this.updateForm(dealer);
+      this.dealer = dealer;
+      if (dealer) {
+        this.updateForm(dealer);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -89,53 +78,19 @@ export class DealerUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const dealer = this.createFromForm();
-    if (dealer.id !== undefined) {
+    const dealer = this.dealerFormService.getDealer(this.editForm);
+    if (dealer.id !== null) {
       this.subscribeToSaveResponse(this.dealerService.update(dealer));
     } else {
       this.subscribeToSaveResponse(this.dealerService.create(dealer));
     }
   }
 
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDealer>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -151,36 +106,18 @@ export class DealerUpdateComponent implements OnInit {
   }
 
   protected updateForm(dealer: IDealer): void {
-    this.editForm.patchValue({
-      id: dealer.id,
-      dealerName: dealer.dealerName,
-      taxNumber: dealer.taxNumber,
-      identificationDocumentNumber: dealer.identificationDocumentNumber,
-      organizationName: dealer.organizationName,
-      department: dealer.department,
-      position: dealer.position,
-      postalAddress: dealer.postalAddress,
-      physicalAddress: dealer.physicalAddress,
-      accountName: dealer.accountName,
-      accountNumber: dealer.accountNumber,
-      bankersName: dealer.bankersName,
-      bankersBranch: dealer.bankersBranch,
-      bankersSwiftCode: dealer.bankersSwiftCode,
-      fileUploadToken: dealer.fileUploadToken,
-      compilationToken: dealer.compilationToken,
-      remarks: dealer.remarks,
-      otherNames: dealer.otherNames,
-      paymentLabels: dealer.paymentLabels,
-      dealerGroup: dealer.dealerGroup,
-      placeholders: dealer.placeholders,
-    });
+    this.dealer = dealer;
+    this.dealerFormService.resetForm(this.editForm, dealer);
 
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(dealer.paymentLabels ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, dealer.dealerGroup);
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
+      this.dealersSharedCollection,
+      dealer.dealerGroup
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(dealer.placeholders ?? [])
     );
@@ -192,7 +129,7 @@ export class DealerUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(paymentLabels, ...(this.dealer?.paymentLabels ?? []))
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -200,9 +137,7 @@ export class DealerUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(
-        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealerGroup')!.value))
-      )
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.dealer?.dealerGroup)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.placeholderService
@@ -210,36 +145,9 @@ export class DealerUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.dealer?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IDealer {
-    return {
-      ...new Dealer(),
-      id: this.editForm.get(['id'])!.value,
-      dealerName: this.editForm.get(['dealerName'])!.value,
-      taxNumber: this.editForm.get(['taxNumber'])!.value,
-      identificationDocumentNumber: this.editForm.get(['identificationDocumentNumber'])!.value,
-      organizationName: this.editForm.get(['organizationName'])!.value,
-      department: this.editForm.get(['department'])!.value,
-      position: this.editForm.get(['position'])!.value,
-      postalAddress: this.editForm.get(['postalAddress'])!.value,
-      physicalAddress: this.editForm.get(['physicalAddress'])!.value,
-      accountName: this.editForm.get(['accountName'])!.value,
-      accountNumber: this.editForm.get(['accountNumber'])!.value,
-      bankersName: this.editForm.get(['bankersName'])!.value,
-      bankersBranch: this.editForm.get(['bankersBranch'])!.value,
-      bankersSwiftCode: this.editForm.get(['bankersSwiftCode'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      otherNames: this.editForm.get(['otherNames'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      dealerGroup: this.editForm.get(['dealerGroup'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ISettlementCurrency } from '../settlement-currency.model';
 import { SettlementCurrencyService } from '../service/settlement-currency.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './settlement-currency-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class SettlementCurrencyDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.settlementCurrencyService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

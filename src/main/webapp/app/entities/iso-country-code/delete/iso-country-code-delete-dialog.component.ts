@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IIsoCountryCode } from '../iso-country-code.model';
 import { IsoCountryCodeService } from '../service/iso-country-code.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './iso-country-code-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class IsoCountryCodeDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.isoCountryCodeService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

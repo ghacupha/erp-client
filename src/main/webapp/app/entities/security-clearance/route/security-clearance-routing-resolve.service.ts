@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISecurityClearance, SecurityClearance } from '../security-clearance.model';
+import { ISecurityClearance } from '../security-clearance.model';
 import { SecurityClearanceService } from '../service/security-clearance.service';
 
 @Injectable({ providedIn: 'root' })
-export class SecurityClearanceRoutingResolveService implements Resolve<ISecurityClearance> {
+export class SecurityClearanceRoutingResolveService implements Resolve<ISecurityClearance | null> {
   constructor(protected service: SecurityClearanceService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISecurityClearance> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISecurityClearance | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((securityClearance: HttpResponse<SecurityClearance>) => {
+        mergeMap((securityClearance: HttpResponse<ISecurityClearance>) => {
           if (securityClearance.body) {
             return of(securityClearance.body);
           } else {
@@ -25,6 +25,6 @@ export class SecurityClearanceRoutingResolveService implements Resolve<ISecurity
         })
       );
     }
-    return of(new SecurityClearance());
+    return of(null);
   }
 }

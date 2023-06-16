@@ -6,13 +6,14 @@ import { FixedAssetAcquisitionComponent } from '../list/fixed-asset-acquisition.
 import { FixedAssetAcquisitionDetailComponent } from '../detail/fixed-asset-acquisition-detail.component';
 import { FixedAssetAcquisitionUpdateComponent } from '../update/fixed-asset-acquisition-update.component';
 import { FixedAssetAcquisitionRoutingResolveService } from './fixed-asset-acquisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const fixedAssetAcquisitionRoute: Routes = [
   {
     path: '',
     component: FixedAssetAcquisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

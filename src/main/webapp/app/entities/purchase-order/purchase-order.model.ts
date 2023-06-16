@@ -1,12 +1,12 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { IBusinessDocument } from 'app/entities/business-document/business-document.model';
 
 export interface IPurchaseOrder {
-  id?: number;
-  purchaseOrderNumber?: string;
+  id: number;
+  purchaseOrderNumber?: string | null;
   purchaseOrderDate?: dayjs.Dayjs | null;
   purchaseOrderAmount?: number | null;
   description?: string | null;
@@ -14,32 +14,11 @@ export interface IPurchaseOrder {
   fileUploadToken?: string | null;
   compilationToken?: string | null;
   remarks?: string | null;
-  settlementCurrency?: ISettlementCurrency | null;
-  placeholders?: IPlaceholder[] | null;
-  signatories?: IDealer[] | null;
-  vendor?: IDealer;
-  businessDocuments?: IBusinessDocument[] | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  signatories?: Pick<IDealer, 'id' | 'dealerName'>[] | null;
+  vendor?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
 }
 
-export class PurchaseOrder implements IPurchaseOrder {
-  constructor(
-    public id?: number,
-    public purchaseOrderNumber?: string,
-    public purchaseOrderDate?: dayjs.Dayjs | null,
-    public purchaseOrderAmount?: number | null,
-    public description?: string | null,
-    public notes?: string | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public remarks?: string | null,
-    public settlementCurrency?: ISettlementCurrency | null,
-    public placeholders?: IPlaceholder[] | null,
-    public signatories?: IDealer[] | null,
-    public vendor?: IDealer,
-    public businessDocuments?: IBusinessDocument[] | null
-  ) {}
-}
-
-export function getPurchaseOrderIdentifier(purchaseOrder: IPurchaseOrder): number | undefined {
-  return purchaseOrder.id;
-}
+export type NewPurchaseOrder = Omit<IPurchaseOrder, 'id'> & { id: null };

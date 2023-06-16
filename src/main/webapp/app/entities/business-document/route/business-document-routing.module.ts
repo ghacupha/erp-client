@@ -6,13 +6,14 @@ import { BusinessDocumentComponent } from '../list/business-document.component';
 import { BusinessDocumentDetailComponent } from '../detail/business-document-detail.component';
 import { BusinessDocumentUpdateComponent } from '../update/business-document-update.component';
 import { BusinessDocumentRoutingResolveService } from './business-document-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const businessDocumentRoute: Routes = [
   {
     path: '',
     component: BusinessDocumentComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

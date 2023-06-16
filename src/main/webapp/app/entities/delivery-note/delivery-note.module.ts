@@ -9,6 +9,5 @@ import { DeliveryNoteRoutingModule } from './route/delivery-note-routing.module'
 @NgModule({
   imports: [SharedModule, DeliveryNoteRoutingModule],
   declarations: [DeliveryNoteComponent, DeliveryNoteDetailComponent, DeliveryNoteUpdateComponent, DeliveryNoteDeleteDialogComponent],
-  entryComponents: [DeliveryNoteDeleteDialogComponent],
 })
 export class DeliveryNoteModule {}

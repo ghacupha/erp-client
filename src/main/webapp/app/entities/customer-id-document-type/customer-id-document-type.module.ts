@@ -14,6 +14,5 @@ import { CustomerIDDocumentTypeRoutingModule } from './route/customer-id-documen
     CustomerIDDocumentTypeUpdateComponent,
     CustomerIDDocumentTypeDeleteDialogComponent,
   ],
-  entryComponents: [CustomerIDDocumentTypeDeleteDialogComponent],
 })
 export class CustomerIDDocumentTypeModule {}

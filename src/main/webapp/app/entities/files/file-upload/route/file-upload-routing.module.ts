@@ -6,13 +6,14 @@ import { FileUploadComponent } from '../list/file-upload.component';
 import { FileUploadDetailComponent } from '../detail/file-upload-detail.component';
 import { FileUploadUpdateComponent } from '../update/file-upload-update.component';
 import { FileUploadRoutingResolveService } from './file-upload-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const fileUploadRoute: Routes = [
   {
     path: '',
     component: FileUploadComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

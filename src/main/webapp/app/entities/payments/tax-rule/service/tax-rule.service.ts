@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ITaxRule, getTaxRuleIdentifier } from '../tax-rule.model';
+import { ITaxRule, NewTaxRule } from '../tax-rule.model';
+
+export type PartialUpdateTaxRule = Partial<ITaxRule> & Pick<ITaxRule, 'id'>;
 
 export type EntityResponseType = HttpResponse<ITaxRule>;
 export type EntityArrayResponseType = HttpResponse<ITaxRule[]>;
@@ -18,16 +20,16 @@ export class TaxRuleService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(taxRule: ITaxRule): Observable<EntityResponseType> {
+  create(taxRule: NewTaxRule): Observable<EntityResponseType> {
     return this.http.post<ITaxRule>(this.resourceUrl, taxRule, { observe: 'response' });
   }
 
   update(taxRule: ITaxRule): Observable<EntityResponseType> {
-    return this.http.put<ITaxRule>(`${this.resourceUrl}/${getTaxRuleIdentifier(taxRule) as number}`, taxRule, { observe: 'response' });
+    return this.http.put<ITaxRule>(`${this.resourceUrl}/${this.getTaxRuleIdentifier(taxRule)}`, taxRule, { observe: 'response' });
   }
 
-  partialUpdate(taxRule: ITaxRule): Observable<EntityResponseType> {
-    return this.http.patch<ITaxRule>(`${this.resourceUrl}/${getTaxRuleIdentifier(taxRule) as number}`, taxRule, { observe: 'response' });
+  partialUpdate(taxRule: PartialUpdateTaxRule): Observable<EntityResponseType> {
+    return this.http.patch<ITaxRule>(`${this.resourceUrl}/${this.getTaxRuleIdentifier(taxRule)}`, taxRule, { observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -48,13 +50,24 @@ export class TaxRuleService {
     return this.http.get<ITaxRule[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addTaxRuleToCollectionIfMissing(taxRuleCollection: ITaxRule[], ...taxRulesToCheck: (ITaxRule | null | undefined)[]): ITaxRule[] {
-    const taxRules: ITaxRule[] = taxRulesToCheck.filter(isPresent);
+  getTaxRuleIdentifier(taxRule: Pick<ITaxRule, 'id'>): number {
+    return taxRule.id;
+  }
+
+  compareTaxRule(o1: Pick<ITaxRule, 'id'> | null, o2: Pick<ITaxRule, 'id'> | null): boolean {
+    return o1 && o2 ? this.getTaxRuleIdentifier(o1) === this.getTaxRuleIdentifier(o2) : o1 === o2;
+  }
+
+  addTaxRuleToCollectionIfMissing<Type extends Pick<ITaxRule, 'id'>>(
+    taxRuleCollection: Type[],
+    ...taxRulesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const taxRules: Type[] = taxRulesToCheck.filter(isPresent);
     if (taxRules.length > 0) {
-      const taxRuleCollectionIdentifiers = taxRuleCollection.map(taxRuleItem => getTaxRuleIdentifier(taxRuleItem)!);
+      const taxRuleCollectionIdentifiers = taxRuleCollection.map(taxRuleItem => this.getTaxRuleIdentifier(taxRuleItem)!);
       const taxRulesToAdd = taxRules.filter(taxRuleItem => {
-        const taxRuleIdentifier = getTaxRuleIdentifier(taxRuleItem);
-        if (taxRuleIdentifier == null || taxRuleCollectionIdentifiers.includes(taxRuleIdentifier)) {
+        const taxRuleIdentifier = this.getTaxRuleIdentifier(taxRuleItem);
+        if (taxRuleCollectionIdentifiers.includes(taxRuleIdentifier)) {
           return false;
         }
         taxRuleCollectionIdentifiers.push(taxRuleIdentifier);

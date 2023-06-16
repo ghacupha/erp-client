@@ -9,6 +9,5 @@ import { ReportStatusRoutingModule } from './route/report-status-routing.module'
 @NgModule({
   imports: [SharedModule, ReportStatusRoutingModule],
   declarations: [ReportStatusComponent, ReportStatusDetailComponent, ReportStatusUpdateComponent, ReportStatusDeleteDialogComponent],
-  entryComponents: [ReportStatusDeleteDialogComponent],
 })
 export class ReportStatusModule {}

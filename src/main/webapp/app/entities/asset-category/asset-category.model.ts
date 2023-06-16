@@ -2,27 +2,13 @@ import { IDepreciationMethod } from 'app/entities/depreciation-method/depreciati
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IAssetCategory {
-  id?: number;
-  assetCategoryName?: string;
+  id: number;
+  assetCategoryName?: string | null;
   description?: string | null;
   notes?: string | null;
   remarks?: string | null;
-  depreciationMethod?: IDepreciationMethod;
-  placeholders?: IPlaceholder[] | null;
+  depreciationMethod?: Pick<IDepreciationMethod, 'id' | 'depreciationMethodName'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class AssetCategory implements IAssetCategory {
-  constructor(
-    public id?: number,
-    public assetCategoryName?: string,
-    public description?: string | null,
-    public notes?: string | null,
-    public remarks?: string | null,
-    public depreciationMethod?: IDepreciationMethod,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getAssetCategoryIdentifier(assetCategory: IAssetCategory): number | undefined {
-  return assetCategory.id;
-}
+export type NewAssetCategory = Omit<IAssetCategory, 'id'> & { id: null };

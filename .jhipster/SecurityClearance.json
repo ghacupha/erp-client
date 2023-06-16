@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220701123538",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "clearanceLevel",
@@ -6,30 +8,28 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SecurityClearance",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "grantedClearances",
-      "otherEntityName": "securityClearance",
-      "relationshipType": "many-to-many",
       "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "otherEntityRelationshipName": "securityClearance",
       "ownerSide": true,
-      "otherEntityRelationshipName": "securityClearance"
+      "relationshipName": "grantedClearances",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "securityClearance",
       "ownerSide": true,
-      "otherEntityRelationshipName": "securityClearance"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "SecurityClearance",
-  "changelogDate": "20220701123538",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

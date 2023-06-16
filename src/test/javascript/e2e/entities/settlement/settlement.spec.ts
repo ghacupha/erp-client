@@ -6,7 +6,7 @@ import {
   /* SettlementDeleteDialog, */
   SettlementUpdatePage,
 } from './settlement.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

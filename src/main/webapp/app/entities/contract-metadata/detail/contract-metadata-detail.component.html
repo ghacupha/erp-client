@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="contractMetadata">
       <h2 data-cy="contractMetadataDetailsHeading"><span>Contract Metadata</span></h2>
@@ -53,65 +53,63 @@
         <dt><span>Related Contracts</span></dt>
         <dd>
           <span *ngFor="let relatedContracts of contractMetadata.relatedContracts; let last = last">
-            <a [routerLink]="['/contract-metadata', relatedContracts?.id, 'view']">{{ relatedContracts.description }}</a
+            <a [routerLink]="['/contract-metadata', relatedContracts.id, 'view']">{{ relatedContracts.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Department</span></dt>
         <dd>
           <div *ngIf="contractMetadata.department">
-            <a [routerLink]="['/dealer', contractMetadata.department?.id, 'view']">{{ contractMetadata.department?.dealerName }}</a>
+            <a [routerLink]="['/dealer', contractMetadata.department.id, 'view']">{{ contractMetadata.department.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Contract Partner</span></dt>
         <dd>
           <div *ngIf="contractMetadata.contractPartner">
-            <a [routerLink]="['/dealer', contractMetadata.contractPartner?.id, 'view']">{{
-              contractMetadata.contractPartner?.dealerName
-            }}</a>
+            <a [routerLink]="['/dealer', contractMetadata.contractPartner.id, 'view']">{{ contractMetadata.contractPartner.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Responsible Person</span></dt>
         <dd>
           <div *ngIf="contractMetadata.responsiblePerson">
-            <a [routerLink]="['/application-user', contractMetadata.responsiblePerson?.id, 'view']">{{
-              contractMetadata.responsiblePerson?.applicationIdentity
+            <a [routerLink]="['/application-user', contractMetadata.responsiblePerson.id, 'view']">{{
+              contractMetadata.responsiblePerson.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Signatory</span></dt>
         <dd>
           <span *ngFor="let signatory of contractMetadata.signatories; let last = last">
-            <a [routerLink]="['/application-user', signatory?.id, 'view']">{{ signatory.applicationIdentity }}</a
+            <a [routerLink]="['/application-user', signatory.id, 'view']">{{ signatory.applicationIdentity }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Security Clearance</span></dt>
         <dd>
           <div *ngIf="contractMetadata.securityClearance">
-            <a [routerLink]="['/security-clearance', contractMetadata.securityClearance?.id, 'view']">{{
-              contractMetadata.securityClearance?.clearanceLevel
+            <a [routerLink]="['/security-clearance', contractMetadata.securityClearance.id, 'view']">{{
+              contractMetadata.securityClearance.clearanceLevel
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of contractMetadata.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contract Document File</span></dt>
         <dd>
           <span *ngFor="let contractDocumentFile of contractMetadata.contractDocumentFiles; let last = last">
-            <a [routerLink]="['/business-document', contractDocumentFile?.id, 'view']">{{ contractDocumentFile.documentTitle }}</a
+            <a [routerLink]="['/business-document', contractDocumentFile.id, 'view']">{{ contractDocumentFile.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contract Mappings</span></dt>
         <dd>
           <span *ngFor="let contractMappings of contractMetadata.contractMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', contractMappings?.id, 'view']">{{ contractMappings.universalKey }}</a
+            <a [routerLink]="['/universally-unique-mapping', contractMappings.id, 'view']">{{ contractMappings.universalKey }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

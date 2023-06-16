@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { ICustomerIDDocumentType, CustomerIDDocumentType } from '../customer-id-document-type.model';
+import { ICustomerIDDocumentType } from '../customer-id-document-type.model';
 import { CustomerIDDocumentTypeService } from '../service/customer-id-document-type.service';
 
 import { CustomerIDDocumentTypeRoutingResolveService } from './customer-id-document-type-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('CustomerIDDocumentType routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: CustomerIDDocumentTypeRoutingResolveService;
   let service: CustomerIDDocumentTypeService;
-  let resultCustomerIDDocumentType: ICustomerIDDocumentType | undefined;
+  let resultCustomerIDDocumentType: ICustomerIDDocumentType | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(CustomerIDDocumentTypeRoutingResolveService);
     service = TestBed.inject(CustomerIDDocumentTypeService);
     resultCustomerIDDocumentType = undefined;
@@ -46,7 +55,7 @@ describe('CustomerIDDocumentType routing resolve service', () => {
       expect(resultCustomerIDDocumentType).toEqual({ id: 123 });
     });
 
-    it('should return new ICustomerIDDocumentType if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('CustomerIDDocumentType routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultCustomerIDDocumentType).toEqual(new CustomerIDDocumentType());
+      expect(resultCustomerIDDocumentType).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as CustomerIDDocumentType })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<ICustomerIDDocumentType>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

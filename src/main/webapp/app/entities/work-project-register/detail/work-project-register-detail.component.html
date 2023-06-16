@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="workProjectRegister">
       <h2 data-cy="workProjectRegisterDetailsHeading"><span>Work Project Register</span></h2>
@@ -25,7 +25,7 @@
         <dt><span>Details</span></dt>
         <dd>
           <div *ngIf="workProjectRegister.details">
-            <a (click)="openFile(workProjectRegister.details, workProjectRegister.detailsContentType)">open</a>
+            <a (click)="openFile(workProjectRegister.details, workProjectRegister.detailsContentType)">Open</a>
             {{ workProjectRegister.detailsContentType }}, {{ byteSize(workProjectRegister.details) }}
           </div>
         </dd>
@@ -36,36 +36,36 @@
         <dt><span>Additional Notes</span></dt>
         <dd>
           <div *ngIf="workProjectRegister.additionalNotes">
-            <a (click)="openFile(workProjectRegister.additionalNotes, workProjectRegister.additionalNotesContentType)">open</a>
+            <a (click)="openFile(workProjectRegister.additionalNotes, workProjectRegister.additionalNotesContentType)">Open</a>
             {{ workProjectRegister.additionalNotesContentType }}, {{ byteSize(workProjectRegister.additionalNotes) }}
           </div>
         </dd>
         <dt><span>Dealers</span></dt>
         <dd>
           <span *ngFor="let dealers of workProjectRegister.dealers; let last = last">
-            <a [routerLink]="['/dealer', dealers?.id, 'view']">{{ dealers.dealerName }}</a
+            <a [routerLink]="['/dealer', dealers.id, 'view']">{{ dealers.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="workProjectRegister.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', workProjectRegister.settlementCurrency?.id, 'view']">{{
-              workProjectRegister.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', workProjectRegister.settlementCurrency.id, 'view']">{{
+              workProjectRegister.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of workProjectRegister.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of workProjectRegister.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

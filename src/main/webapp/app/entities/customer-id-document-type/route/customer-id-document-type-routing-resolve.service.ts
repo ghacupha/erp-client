@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ICustomerIDDocumentType, CustomerIDDocumentType } from '../customer-id-document-type.model';
+import { ICustomerIDDocumentType } from '../customer-id-document-type.model';
 import { CustomerIDDocumentTypeService } from '../service/customer-id-document-type.service';
 
 @Injectable({ providedIn: 'root' })
-export class CustomerIDDocumentTypeRoutingResolveService implements Resolve<ICustomerIDDocumentType> {
+export class CustomerIDDocumentTypeRoutingResolveService implements Resolve<ICustomerIDDocumentType | null> {
   constructor(protected service: CustomerIDDocumentTypeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ICustomerIDDocumentType> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ICustomerIDDocumentType | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((customerIDDocumentType: HttpResponse<CustomerIDDocumentType>) => {
+        mergeMap((customerIDDocumentType: HttpResponse<ICustomerIDDocumentType>) => {
           if (customerIDDocumentType.body) {
             return of(customerIDDocumentType.body);
           } else {
@@ -25,6 +25,6 @@ export class CustomerIDDocumentTypeRoutingResolveService implements Resolve<ICus
         })
       );
     }
-    return of(new CustomerIDDocumentType());
+    return of(null);
   }
 }

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPlaceholder, Placeholder } from '../placeholder.model';
+import { IPlaceholder } from '../placeholder.model';
 import { PlaceholderService } from '../service/placeholder.service';
 
 @Injectable({ providedIn: 'root' })
-export class PlaceholderRoutingResolveService implements Resolve<IPlaceholder> {
+export class PlaceholderRoutingResolveService implements Resolve<IPlaceholder | null> {
   constructor(protected service: PlaceholderService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPlaceholder> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPlaceholder | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((placeholder: HttpResponse<Placeholder>) => {
+        mergeMap((placeholder: HttpResponse<IPlaceholder>) => {
           if (placeholder.body) {
             return of(placeholder.body);
           } else {
@@ -25,6 +25,6 @@ export class PlaceholderRoutingResolveService implements Resolve<IPlaceholder> {
         })
       );
     }
-    return of(new Placeholder());
+    return of(null);
   }
 }

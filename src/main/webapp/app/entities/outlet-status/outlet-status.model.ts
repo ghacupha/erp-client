@@ -2,23 +2,11 @@ import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.mo
 import { BranchStatusType } from 'app/entities/enumerations/branch-status-type.model';
 
 export interface IOutletStatus {
-  id?: number;
-  branchStatusTypeCode?: string;
-  branchStatusType?: BranchStatusType;
+  id: number;
+  branchStatusTypeCode?: string | null;
+  branchStatusType?: BranchStatusType | null;
   branchStatusTypeDescription?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class OutletStatus implements IOutletStatus {
-  constructor(
-    public id?: number,
-    public branchStatusTypeCode?: string,
-    public branchStatusType?: BranchStatusType,
-    public branchStatusTypeDescription?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getOutletStatusIdentifier(outletStatus: IOutletStatus): number | undefined {
-  return outletStatus.id;
-}
+export type NewOutletStatus = Omit<IOutletStatus, 'id'> & { id: null };

@@ -14,6 +14,5 @@ import { ApplicationUserRoutingModule } from './route/application-user-routing.m
     ApplicationUserUpdateComponent,
     ApplicationUserDeleteDialogComponent,
   ],
-  entryComponents: [ApplicationUserDeleteDialogComponent],
 })
 export class ApplicationUserModule {}

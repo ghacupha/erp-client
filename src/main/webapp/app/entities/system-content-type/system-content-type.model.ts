@@ -3,27 +3,13 @@ import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mappi
 import { SystemContentTypeAvailability } from 'app/entities/enumerations/system-content-type-availability.model';
 
 export interface ISystemContentType {
-  id?: number;
-  contentTypeName?: string;
-  contentTypeHeader?: string;
+  id: number;
+  contentTypeName?: string | null;
+  contentTypeHeader?: string | null;
   comments?: string | null;
-  availability?: SystemContentTypeAvailability;
-  placeholders?: IPlaceholder[] | null;
-  sysMaps?: IUniversallyUniqueMapping[] | null;
+  availability?: SystemContentTypeAvailability | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  sysMaps?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
 }
 
-export class SystemContentType implements ISystemContentType {
-  constructor(
-    public id?: number,
-    public contentTypeName?: string,
-    public contentTypeHeader?: string,
-    public comments?: string | null,
-    public availability?: SystemContentTypeAvailability,
-    public placeholders?: IPlaceholder[] | null,
-    public sysMaps?: IUniversallyUniqueMapping[] | null
-  ) {}
-}
-
-export function getSystemContentTypeIdentifier(systemContentType: ISystemContentType): number | undefined {
-  return systemContentType.id;
-}
+export type NewSystemContentType = Omit<ISystemContentType, 'id'> & { id: null };

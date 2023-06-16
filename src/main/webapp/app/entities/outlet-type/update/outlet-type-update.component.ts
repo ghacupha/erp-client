@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IOutletType, OutletType } from '../outlet-type.model';
+import { OutletTypeFormService, OutletTypeFormGroup } from './outlet-type-form.service';
+import { IOutletType } from '../outlet-type.model';
 import { OutletTypeService } from '../service/outlet-type.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -16,27 +16,27 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class OutletTypeUpdateComponent implements OnInit {
   isSaving = false;
+  outletType: IOutletType | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    outletTypeCode: [null, [Validators.required]],
-    outletType: [null, [Validators.required]],
-    outletTypeDetails: [],
-    placeholders: [],
-  });
+  editForm: OutletTypeFormGroup = this.outletTypeFormService.createOutletTypeFormGroup();
 
   constructor(
     protected outletTypeService: OutletTypeService,
+    protected outletTypeFormService: OutletTypeFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ outletType }) => {
-      this.updateForm(outletType);
+      this.outletType = outletType;
+      if (outletType) {
+        this.updateForm(outletType);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -48,34 +48,19 @@ export class OutletTypeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const outletType = this.createFromForm();
-    if (outletType.id !== undefined) {
+    const outletType = this.outletTypeFormService.getOutletType(this.editForm);
+    if (outletType.id !== null) {
       this.subscribeToSaveResponse(this.outletTypeService.update(outletType));
     } else {
       this.subscribeToSaveResponse(this.outletTypeService.create(outletType));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOutletType>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -91,15 +76,10 @@ export class OutletTypeUpdateComponent implements OnInit {
   }
 
   protected updateForm(outletType: IOutletType): void {
-    this.editForm.patchValue({
-      id: outletType.id,
-      outletTypeCode: outletType.outletTypeCode,
-      outletType: outletType.outletType,
-      outletTypeDetails: outletType.outletTypeDetails,
-      placeholders: outletType.placeholders,
-    });
+    this.outletType = outletType;
+    this.outletTypeFormService.resetForm(this.editForm, outletType);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(outletType.placeholders ?? [])
     );
@@ -111,20 +91,9 @@ export class OutletTypeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.outletType?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IOutletType {
-    return {
-      ...new OutletType(),
-      id: this.editForm.get(['id'])!.value,
-      outletTypeCode: this.editForm.get(['outletTypeCode'])!.value,
-      outletType: this.editForm.get(['outletType'])!.value,
-      outletTypeDetails: this.editForm.get(['outletTypeDetails'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

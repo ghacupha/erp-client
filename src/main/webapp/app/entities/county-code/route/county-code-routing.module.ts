@@ -6,11 +6,15 @@ import { CountyCodeComponent } from '../list/county-code.component';
 import { CountyCodeDetailComponent } from '../detail/county-code-detail.component';
 import { CountyCodeUpdateComponent } from '../update/county-code-update.component';
 import { CountyCodeRoutingResolveService } from './county-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const countyCodeRoute: Routes = [
   {
     path: '',
     component: CountyCodeComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
     canActivate: [UserRouteAccessService],
   },
   {

@@ -9,6 +9,5 @@ import { SystemModuleRoutingModule } from './route/system-module-routing.module'
 @NgModule({
   imports: [SharedModule, SystemModuleRoutingModule],
   declarations: [SystemModuleComponent, SystemModuleDetailComponent, SystemModuleUpdateComponent, SystemModuleDeleteDialogComponent],
-  entryComponents: [SystemModuleDeleteDialogComponent],
 })
 export class SystemModuleModule {}

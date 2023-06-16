@@ -14,6 +14,5 @@ import { BusinessDocumentRoutingModule } from './route/business-document-routing
     BusinessDocumentUpdateComponent,
     BusinessDocumentDeleteDialogComponent,
   ],
-  entryComponents: [BusinessDocumentDeleteDialogComponent],
 })
 export class BusinessDocumentModule {}

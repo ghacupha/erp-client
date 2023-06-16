@@ -14,6 +14,5 @@ import { FixedAssetAcquisitionRoutingModule } from './route/fixed-asset-acquisit
     FixedAssetAcquisitionUpdateComponent,
     FixedAssetAcquisitionDeleteDialogComponent,
   ],
-  entryComponents: [FixedAssetAcquisitionDeleteDialogComponent],
 })
 export class ErpServiceFixedAssetAcquisitionModule {}

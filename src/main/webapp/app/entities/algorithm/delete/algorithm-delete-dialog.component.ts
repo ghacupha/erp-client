@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAlgorithm } from '../algorithm.model';
 import { AlgorithmService } from '../service/algorithm.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './algorithm-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class AlgorithmDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.algorithmService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

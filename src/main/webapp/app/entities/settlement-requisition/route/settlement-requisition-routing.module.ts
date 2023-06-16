@@ -6,13 +6,14 @@ import { SettlementRequisitionComponent } from '../list/settlement-requisition.c
 import { SettlementRequisitionDetailComponent } from '../detail/settlement-requisition-detail.component';
 import { SettlementRequisitionUpdateComponent } from '../update/settlement-requisition-update.component';
 import { SettlementRequisitionRoutingResolveService } from './settlement-requisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const settlementRequisitionRoute: Routes = [
   {
     path: '',
     component: SettlementRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

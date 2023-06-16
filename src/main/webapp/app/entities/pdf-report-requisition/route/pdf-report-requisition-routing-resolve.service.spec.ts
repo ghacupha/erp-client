@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IPdfReportRequisition, PdfReportRequisition } from '../pdf-report-requisition.model';
+import { IPdfReportRequisition } from '../pdf-report-requisition.model';
 import { PdfReportRequisitionService } from '../service/pdf-report-requisition.service';
 
 import { PdfReportRequisitionRoutingResolveService } from './pdf-report-requisition-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('PdfReportRequisition routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: PdfReportRequisitionRoutingResolveService;
   let service: PdfReportRequisitionService;
-  let resultPdfReportRequisition: IPdfReportRequisition | undefined;
+  let resultPdfReportRequisition: IPdfReportRequisition | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(PdfReportRequisitionRoutingResolveService);
     service = TestBed.inject(PdfReportRequisitionService);
     resultPdfReportRequisition = undefined;
@@ -46,7 +55,7 @@ describe('PdfReportRequisition routing resolve service', () => {
       expect(resultPdfReportRequisition).toEqual({ id: 123 });
     });
 
-    it('should return new IPdfReportRequisition if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('PdfReportRequisition routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultPdfReportRequisition).toEqual(new PdfReportRequisition());
+      expect(resultPdfReportRequisition).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as PdfReportRequisition })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IPdfReportRequisition>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

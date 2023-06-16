@@ -6,7 +6,7 @@ import {
   /* AssetRegistrationDeleteDialog, */
   AssetRegistrationUpdatePage,
 } from './asset-registration.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

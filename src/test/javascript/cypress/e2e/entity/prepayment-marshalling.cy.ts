@@ -1,0 +1,229 @@
+import {
+  entityTableSelector,
+  entityDetailsButtonSelector,
+  entityDetailsBackButtonSelector,
+  entityCreateButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityCreateCancelButtonSelector,
+  entityEditButtonSelector,
+  entityDeleteButtonSelector,
+  entityConfirmDeleteButtonSelector,
+} from '../../support/entity';
+
+describe('PrepaymentMarshalling e2e test', () => {
+  const prepaymentMarshallingPageUrl = '/prepayment-marshalling';
+  const prepaymentMarshallingPageUrlPattern = new RegExp('/prepayment-marshalling(\\?.*)?$');
+  const username = Cypress.env('E2E_USERNAME') ?? 'user';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const prepaymentMarshallingSample = { inactive: true };
+
+  let prepaymentMarshalling;
+  let prepaymentAccount;
+
+  beforeEach(() => {
+    cy.login(username, password);
+  });
+
+  beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/prepayment-accounts',
+      body: {
+        catalogueNumber: 'open-source',
+        particulars: 'B2B',
+        notes: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+        prepaymentAmount: 1334,
+        prepaymentGuid: '5d7aa4f2-8ada-4579-9b36-9ffab5ac8dd3',
+      },
+    }).then(({ body }) => {
+      prepaymentAccount = body;
+    });
+  });
+
+  beforeEach(() => {
+    cy.intercept('GET', '/api/prepayment-marshallings+(?*|)').as('entitiesRequest');
+    cy.intercept('POST', '/api/prepayment-marshallings').as('postEntityRequest');
+    cy.intercept('DELETE', '/api/prepayment-marshallings/*').as('deleteEntityRequest');
+  });
+
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/prepayment-accounts', {
+      statusCode: 200,
+      body: [prepaymentAccount],
+    });
+
+    cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+  });
+
+  afterEach(() => {
+    if (prepaymentMarshalling) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/prepayment-marshallings/${prepaymentMarshalling.id}`,
+      }).then(() => {
+        prepaymentMarshalling = undefined;
+      });
+    }
+  });
+
+  afterEach(() => {
+    if (prepaymentAccount) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/prepayment-accounts/${prepaymentAccount.id}`,
+      }).then(() => {
+        prepaymentAccount = undefined;
+      });
+    }
+  });
+
+  it('PrepaymentMarshallings menu should load PrepaymentMarshallings page', () => {
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('prepayment-marshalling');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length === 0) {
+        cy.get(entityTableSelector).should('not.exist');
+      } else {
+        cy.get(entityTableSelector).should('exist');
+      }
+    });
+    cy.getEntityHeading('PrepaymentMarshalling').should('exist');
+    cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+  });
+
+  describe('PrepaymentMarshalling page', () => {
+    describe('create button click', () => {
+      beforeEach(() => {
+        cy.visit(prepaymentMarshallingPageUrl);
+        cy.wait('@entitiesRequest');
+      });
+
+      it('should load create PrepaymentMarshalling page', () => {
+        cy.get(entityCreateButtonSelector).click();
+        cy.url().should('match', new RegExp('/prepayment-marshalling/new$'));
+        cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.get(entityCreateCancelButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+      });
+    });
+
+    describe('with existing value', () => {
+      beforeEach(() => {
+        cy.authenticatedRequest({
+          method: 'POST',
+          url: '/api/prepayment-marshallings',
+          body: {
+            ...prepaymentMarshallingSample,
+            prepaymentAccount: prepaymentAccount,
+          },
+        }).then(({ body }) => {
+          prepaymentMarshalling = body;
+
+          cy.intercept(
+            {
+              method: 'GET',
+              url: '/api/prepayment-marshallings+(?*|)',
+              times: 1,
+            },
+            {
+              statusCode: 200,
+              headers: {
+                link: '<http://localhost/api/prepayment-marshallings?page=0&size=20>; rel="last",<http://localhost/api/prepayment-marshallings?page=0&size=20>; rel="first"',
+              },
+              body: [prepaymentMarshalling],
+            }
+          ).as('entitiesRequestInternal');
+        });
+
+        cy.visit(prepaymentMarshallingPageUrl);
+
+        cy.wait('@entitiesRequestInternal');
+      });
+
+      it('detail button click should load details PrepaymentMarshalling page', () => {
+        cy.get(entityDetailsButtonSelector).first().click();
+        cy.getEntityDetailsHeading('prepaymentMarshalling');
+        cy.get(entityDetailsBackButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+      });
+
+      it('edit button click should load edit PrepaymentMarshalling page and go back', () => {
+        cy.get(entityEditButtonSelector).first().click();
+        cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.get(entityCreateCancelButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+      });
+
+      it.skip('edit button click should load edit PrepaymentMarshalling page and save', () => {
+        cy.get(entityEditButtonSelector).first().click();
+        cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+        cy.get(entityCreateSaveButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+      });
+
+      it('last delete button click should delete instance of PrepaymentMarshalling', () => {
+        cy.get(entityDeleteButtonSelector).last().click();
+        cy.getEntityDeleteDialogHeading('prepaymentMarshalling').should('exist');
+        cy.get(entityConfirmDeleteButtonSelector).click();
+        cy.wait('@deleteEntityRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(204);
+        });
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+
+        prepaymentMarshalling = undefined;
+      });
+    });
+  });
+
+  describe('new PrepaymentMarshalling page', () => {
+    beforeEach(() => {
+      cy.visit(`${prepaymentMarshallingPageUrl}`);
+      cy.get(entityCreateButtonSelector).click();
+      cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+    });
+
+    it('should create an instance of PrepaymentMarshalling', () => {
+      cy.get(`[data-cy="inactive"]`).should('not.be.checked');
+      cy.get(`[data-cy="inactive"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="amortizationCommencementDate"]`).type('2022-05-03').blur().should('have.value', '2022-05-03');
+
+      cy.get(`[data-cy="amortizationPeriods"]`).type('34800').should('have.value', '34800');
+
+      cy.get(`[data-cy="prepaymentAccount"]`).select(1);
+
+      cy.get(entityCreateSaveButtonSelector).click();
+
+      cy.wait('@postEntityRequest').then(({ response }) => {
+        expect(response.statusCode).to.equal(201);
+        prepaymentMarshalling = response.body;
+      });
+      cy.wait('@entitiesRequest').then(({ response }) => {
+        expect(response.statusCode).to.equal(200);
+      });
+      cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+    });
+  });
+});

@@ -6,13 +6,14 @@ import { OutletStatusComponent } from '../list/outlet-status.component';
 import { OutletStatusDetailComponent } from '../detail/outlet-status-detail.component';
 import { OutletStatusUpdateComponent } from '../update/outlet-status-update.component';
 import { OutletStatusRoutingResolveService } from './outlet-status-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const outletStatusRoute: Routes = [
   {
     path: '',
     component: OutletStatusComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

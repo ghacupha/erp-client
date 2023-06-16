@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IFixedAssetNetBookValue, getFixedAssetNetBookValueIdentifier } from '../fixed-asset-net-book-value.model';
+import { IFixedAssetNetBookValue, NewFixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
+
+export type PartialUpdateFixedAssetNetBookValue = Partial<IFixedAssetNetBookValue> & Pick<IFixedAssetNetBookValue, 'id'>;
+
+type RestOf<T extends IFixedAssetNetBookValue | NewFixedAssetNetBookValue> = Omit<T, 'netBookValueDate'> & {
+  netBookValueDate?: string | null;
+};
+
+export type RestFixedAssetNetBookValue = RestOf<IFixedAssetNetBookValue>;
+
+export type NewRestFixedAssetNetBookValue = RestOf<NewFixedAssetNetBookValue>;
+
+export type PartialUpdateRestFixedAssetNetBookValue = RestOf<PartialUpdateFixedAssetNetBookValue>;
 
 export type EntityResponseType = HttpResponse<IFixedAssetNetBookValue>;
 export type EntityArrayResponseType = HttpResponse<IFixedAssetNetBookValue[]>;
@@ -21,44 +33,42 @@ export class FixedAssetNetBookValueService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(fixedAssetNetBookValue: IFixedAssetNetBookValue): Observable<EntityResponseType> {
+  create(fixedAssetNetBookValue: NewFixedAssetNetBookValue): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(fixedAssetNetBookValue);
     return this.http
-      .post<IFixedAssetNetBookValue>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestFixedAssetNetBookValue>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(fixedAssetNetBookValue: IFixedAssetNetBookValue): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(fixedAssetNetBookValue);
     return this.http
-      .put<IFixedAssetNetBookValue>(`${this.resourceUrl}/${getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValue) as number}`, copy, {
+      .put<RestFixedAssetNetBookValue>(`${this.resourceUrl}/${this.getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValue)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(fixedAssetNetBookValue: IFixedAssetNetBookValue): Observable<EntityResponseType> {
+  partialUpdate(fixedAssetNetBookValue: PartialUpdateFixedAssetNetBookValue): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(fixedAssetNetBookValue);
     return this.http
-      .patch<IFixedAssetNetBookValue>(
-        `${this.resourceUrl}/${getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValue) as number}`,
-        copy,
-        { observe: 'response' }
-      )
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestFixedAssetNetBookValue>(`${this.resourceUrl}/${this.getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValue)}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IFixedAssetNetBookValue>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestFixedAssetNetBookValue>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IFixedAssetNetBookValue[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestFixedAssetNetBookValue[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -68,25 +78,30 @@ export class FixedAssetNetBookValueService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IFixedAssetNetBookValue[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestFixedAssetNetBookValue[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addFixedAssetNetBookValueToCollectionIfMissing(
-    fixedAssetNetBookValueCollection: IFixedAssetNetBookValue[],
-    ...fixedAssetNetBookValuesToCheck: (IFixedAssetNetBookValue | null | undefined)[]
-  ): IFixedAssetNetBookValue[] {
-    const fixedAssetNetBookValues: IFixedAssetNetBookValue[] = fixedAssetNetBookValuesToCheck.filter(isPresent);
+  getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValue: Pick<IFixedAssetNetBookValue, 'id'>): number {
+    return fixedAssetNetBookValue.id;
+  }
+
+  compareFixedAssetNetBookValue(o1: Pick<IFixedAssetNetBookValue, 'id'> | null, o2: Pick<IFixedAssetNetBookValue, 'id'> | null): boolean {
+    return o1 && o2 ? this.getFixedAssetNetBookValueIdentifier(o1) === this.getFixedAssetNetBookValueIdentifier(o2) : o1 === o2;
+  }
+
+  addFixedAssetNetBookValueToCollectionIfMissing<Type extends Pick<IFixedAssetNetBookValue, 'id'>>(
+    fixedAssetNetBookValueCollection: Type[],
+    ...fixedAssetNetBookValuesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const fixedAssetNetBookValues: Type[] = fixedAssetNetBookValuesToCheck.filter(isPresent);
     if (fixedAssetNetBookValues.length > 0) {
       const fixedAssetNetBookValueCollectionIdentifiers = fixedAssetNetBookValueCollection.map(
-        fixedAssetNetBookValueItem => getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValueItem)!
+        fixedAssetNetBookValueItem => this.getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValueItem)!
       );
       const fixedAssetNetBookValuesToAdd = fixedAssetNetBookValues.filter(fixedAssetNetBookValueItem => {
-        const fixedAssetNetBookValueIdentifier = getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValueItem);
-        if (
-          fixedAssetNetBookValueIdentifier == null ||
-          fixedAssetNetBookValueCollectionIdentifiers.includes(fixedAssetNetBookValueIdentifier)
-        ) {
+        const fixedAssetNetBookValueIdentifier = this.getFixedAssetNetBookValueIdentifier(fixedAssetNetBookValueItem);
+        if (fixedAssetNetBookValueCollectionIdentifiers.includes(fixedAssetNetBookValueIdentifier)) {
           return false;
         }
         fixedAssetNetBookValueCollectionIdentifiers.push(fixedAssetNetBookValueIdentifier);
@@ -97,29 +112,31 @@ export class FixedAssetNetBookValueService {
     return fixedAssetNetBookValueCollection;
   }
 
-  protected convertDateFromClient(fixedAssetNetBookValue: IFixedAssetNetBookValue): IFixedAssetNetBookValue {
-    return Object.assign({}, fixedAssetNetBookValue, {
-      netBookValueDate: fixedAssetNetBookValue.netBookValueDate?.isValid()
-        ? fixedAssetNetBookValue.netBookValueDate.format(DATE_FORMAT)
-        : undefined,
+  protected convertDateFromClient<T extends IFixedAssetNetBookValue | NewFixedAssetNetBookValue | PartialUpdateFixedAssetNetBookValue>(
+    fixedAssetNetBookValue: T
+  ): RestOf<T> {
+    return {
+      ...fixedAssetNetBookValue,
+      netBookValueDate: fixedAssetNetBookValue.netBookValueDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restFixedAssetNetBookValue: RestFixedAssetNetBookValue): IFixedAssetNetBookValue {
+    return {
+      ...restFixedAssetNetBookValue,
+      netBookValueDate: restFixedAssetNetBookValue.netBookValueDate ? dayjs(restFixedAssetNetBookValue.netBookValueDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestFixedAssetNetBookValue>): HttpResponse<IFixedAssetNetBookValue> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.netBookValueDate = res.body.netBookValueDate ? dayjs(res.body.netBookValueDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((fixedAssetNetBookValue: IFixedAssetNetBookValue) => {
-        fixedAssetNetBookValue.netBookValueDate = fixedAssetNetBookValue.netBookValueDate
-          ? dayjs(fixedAssetNetBookValue.netBookValueDate)
-          : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestFixedAssetNetBookValue[]>): HttpResponse<IFixedAssetNetBookValue[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

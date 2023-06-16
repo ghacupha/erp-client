@@ -14,6 +14,5 @@ import { DepreciationMethodRoutingModule } from './route/depreciation-method-rou
     DepreciationMethodUpdateComponent,
     DepreciationMethodDeleteDialogComponent,
   ],
-  entryComponents: [DepreciationMethodDeleteDialogComponent],
 })
 export class DepreciationMethodModule {}

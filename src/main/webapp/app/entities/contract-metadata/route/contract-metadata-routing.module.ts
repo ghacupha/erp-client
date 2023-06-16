@@ -6,13 +6,14 @@ import { ContractMetadataComponent } from '../list/contract-metadata.component';
 import { ContractMetadataDetailComponent } from '../detail/contract-metadata-detail.component';
 import { ContractMetadataUpdateComponent } from '../update/contract-metadata-update.component';
 import { ContractMetadataRoutingResolveService } from './contract-metadata-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const contractMetadataRoute: Routes = [
   {
     path: '',
     component: ContractMetadataComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

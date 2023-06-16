@@ -7,47 +7,23 @@ import { ISystemModule } from 'app/entities/system-module/system-module.model';
 import { IAlgorithm } from 'app/entities/algorithm/algorithm.model';
 
 export interface IReportDesign {
-  id?: number;
-  catalogueNumber?: string;
-  designation?: string;
+  id: number;
+  catalogueNumber?: string | null;
+  designation?: string | null;
   description?: string | null;
-  notesContentType?: string | null;
   notes?: string | null;
-  reportFileContentType?: string | null;
+  notesContentType?: string | null;
   reportFile?: string | null;
+  reportFileContentType?: string | null;
   reportFileChecksum?: string | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
-  securityClearance?: ISecurityClearance;
-  reportDesigner?: IApplicationUser;
-  organization?: IDealer;
-  department?: IDealer;
-  placeholders?: IPlaceholder[] | null;
-  systemModule?: ISystemModule;
-  fileCheckSumAlgorithm?: IAlgorithm;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
+  securityClearance?: Pick<ISecurityClearance, 'id' | 'clearanceLevel'> | null;
+  reportDesigner?: Pick<IApplicationUser, 'id' | 'applicationIdentity'> | null;
+  organization?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  department?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  systemModule?: Pick<ISystemModule, 'id' | 'moduleName'> | null;
+  fileCheckSumAlgorithm?: Pick<IAlgorithm, 'id' | 'name'> | null;
 }
 
-export class ReportDesign implements IReportDesign {
-  constructor(
-    public id?: number,
-    public catalogueNumber?: string,
-    public designation?: string,
-    public description?: string | null,
-    public notesContentType?: string | null,
-    public notes?: string | null,
-    public reportFileContentType?: string | null,
-    public reportFile?: string | null,
-    public reportFileChecksum?: string | null,
-    public parameters?: IUniversallyUniqueMapping[] | null,
-    public securityClearance?: ISecurityClearance,
-    public reportDesigner?: IApplicationUser,
-    public organization?: IDealer,
-    public department?: IDealer,
-    public placeholders?: IPlaceholder[] | null,
-    public systemModule?: ISystemModule,
-    public fileCheckSumAlgorithm?: IAlgorithm
-  ) {}
-}
-
-export function getReportDesignIdentifier(reportDesign: IReportDesign): number | undefined {
-  return reportDesign.id;
-}
+export type NewReportDesign = Omit<IReportDesign, 'id'> & { id: null };

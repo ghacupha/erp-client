@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220701133235",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "designation",
@@ -11,63 +13,61 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ApplicationUser",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "organization",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "department",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "securityClearance",
-      "otherEntityName": "securityClearance",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "clearanceLevel"
-    },
-    {
-      "relationshipName": "systemIdentity",
-      "otherEntityName": "user",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "login",
-      "ownerSide": true,
-      "id": false,
-      "otherEntityRelationshipName": "applicationUser"
-    },
-    {
-      "relationshipName": "userProperties",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "mappedValue",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "applicationUser"
-    },
-    {
-      "relationshipName": "dealerIdentity",
-      "otherEntityName": "dealer",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "dealerName",
-      "ownerSide": true,
+      "otherEntityName": "dealer",
+      "relationshipName": "organization",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "department",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
       "id": false,
-      "otherEntityRelationshipName": "applicationUser"
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "systemIdentity",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "userProperties",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "id": false,
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "applicationUser",
+      "ownerSide": true,
+      "relationshipName": "dealerIdentity",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ApplicationUser",
-  "changelogDate": "20220701133235",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

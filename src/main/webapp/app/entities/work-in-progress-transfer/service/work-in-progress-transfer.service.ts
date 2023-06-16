@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IWorkInProgressTransfer, getWorkInProgressTransferIdentifier } from '../work-in-progress-transfer.model';
+import { IWorkInProgressTransfer, NewWorkInProgressTransfer } from '../work-in-progress-transfer.model';
+
+export type PartialUpdateWorkInProgressTransfer = Partial<IWorkInProgressTransfer> & Pick<IWorkInProgressTransfer, 'id'>;
 
 export type EntityResponseType = HttpResponse<IWorkInProgressTransfer>;
 export type EntityArrayResponseType = HttpResponse<IWorkInProgressTransfer[]>;
@@ -18,21 +20,21 @@ export class WorkInProgressTransferService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
+  create(workInProgressTransfer: NewWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.post<IWorkInProgressTransfer>(this.resourceUrl, workInProgressTransfer, { observe: 'response' });
   }
 
   update(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.put<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
+      `${this.resourceUrl}/${this.getWorkInProgressTransferIdentifier(workInProgressTransfer)}`,
       workInProgressTransfer,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
+  partialUpdate(workInProgressTransfer: PartialUpdateWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.patch<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
+      `${this.resourceUrl}/${this.getWorkInProgressTransferIdentifier(workInProgressTransfer)}`,
       workInProgressTransfer,
       { observe: 'response' }
     );
@@ -56,21 +58,26 @@ export class WorkInProgressTransferService {
     return this.http.get<IWorkInProgressTransfer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addWorkInProgressTransferToCollectionIfMissing(
-    workInProgressTransferCollection: IWorkInProgressTransfer[],
-    ...workInProgressTransfersToCheck: (IWorkInProgressTransfer | null | undefined)[]
-  ): IWorkInProgressTransfer[] {
-    const workInProgressTransfers: IWorkInProgressTransfer[] = workInProgressTransfersToCheck.filter(isPresent);
+  getWorkInProgressTransferIdentifier(workInProgressTransfer: Pick<IWorkInProgressTransfer, 'id'>): number {
+    return workInProgressTransfer.id;
+  }
+
+  compareWorkInProgressTransfer(o1: Pick<IWorkInProgressTransfer, 'id'> | null, o2: Pick<IWorkInProgressTransfer, 'id'> | null): boolean {
+    return o1 && o2 ? this.getWorkInProgressTransferIdentifier(o1) === this.getWorkInProgressTransferIdentifier(o2) : o1 === o2;
+  }
+
+  addWorkInProgressTransferToCollectionIfMissing<Type extends Pick<IWorkInProgressTransfer, 'id'>>(
+    workInProgressTransferCollection: Type[],
+    ...workInProgressTransfersToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const workInProgressTransfers: Type[] = workInProgressTransfersToCheck.filter(isPresent);
     if (workInProgressTransfers.length > 0) {
       const workInProgressTransferCollectionIdentifiers = workInProgressTransferCollection.map(
-        workInProgressTransferItem => getWorkInProgressTransferIdentifier(workInProgressTransferItem)!
+        workInProgressTransferItem => this.getWorkInProgressTransferIdentifier(workInProgressTransferItem)!
       );
       const workInProgressTransfersToAdd = workInProgressTransfers.filter(workInProgressTransferItem => {
-        const workInProgressTransferIdentifier = getWorkInProgressTransferIdentifier(workInProgressTransferItem);
-        if (
-          workInProgressTransferIdentifier == null ||
-          workInProgressTransferCollectionIdentifiers.includes(workInProgressTransferIdentifier)
-        ) {
+        const workInProgressTransferIdentifier = this.getWorkInProgressTransferIdentifier(workInProgressTransferItem);
+        if (workInProgressTransferCollectionIdentifiers.includes(workInProgressTransferIdentifier)) {
           return false;
         }
         workInProgressTransferCollectionIdentifiers.push(workInProgressTransferIdentifier);

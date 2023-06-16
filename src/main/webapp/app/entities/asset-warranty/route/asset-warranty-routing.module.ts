@@ -6,13 +6,14 @@ import { AssetWarrantyComponent } from '../list/asset-warranty.component';
 import { AssetWarrantyDetailComponent } from '../detail/asset-warranty-detail.component';
 import { AssetWarrantyUpdateComponent } from '../update/asset-warranty-update.component';
 import { AssetWarrantyRoutingResolveService } from './asset-warranty-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const assetWarrantyRoute: Routes = [
   {
     path: '',
     component: AssetWarrantyComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

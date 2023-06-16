@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { OutletStatusFormService } from './outlet-status-form.service';
 import { OutletStatusService } from '../service/outlet-status.service';
-import { IOutletStatus, OutletStatus } from '../outlet-status.model';
+import { IOutletStatus } from '../outlet-status.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -18,20 +18,30 @@ describe('OutletStatus Management Update Component', () => {
   let comp: OutletStatusUpdateComponent;
   let fixture: ComponentFixture<OutletStatusUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let outletStatusFormService: OutletStatusFormService;
   let outletStatusService: OutletStatusService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [OutletStatusUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(OutletStatusUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(OutletStatusUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    outletStatusFormService = TestBed.inject(OutletStatusFormService);
     outletStatusService = TestBed.inject(OutletStatusService);
     placeholderService = TestBed.inject(PlaceholderService);
 
@@ -54,28 +64,32 @@ describe('OutletStatus Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const outletStatus: IOutletStatus = { id: 456 };
-      const placeholders: IPlaceholder = { id: 90519 };
-      outletStatus.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 90519 };
+      outletStatus.placeholders = [placeholder];
 
       activatedRoute.data = of({ outletStatus });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(outletStatus));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.outletStatus).toEqual(outletStatus);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<OutletStatus>>();
+      const saveSubject = new Subject<HttpResponse<IOutletStatus>>();
       const outletStatus = { id: 123 };
+      jest.spyOn(outletStatusFormService, 'getOutletStatus').mockReturnValue(outletStatus);
       jest.spyOn(outletStatusService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ outletStatus });
@@ -88,18 +102,20 @@ describe('OutletStatus Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(outletStatusFormService.getOutletStatus).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(outletStatusService.update).toHaveBeenCalledWith(outletStatus);
+      expect(outletStatusService.update).toHaveBeenCalledWith(expect.objectContaining(outletStatus));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<OutletStatus>>();
-      const outletStatus = new OutletStatus();
+      const saveSubject = new Subject<HttpResponse<IOutletStatus>>();
+      const outletStatus = { id: 123 };
+      jest.spyOn(outletStatusFormService, 'getOutletStatus').mockReturnValue({ id: null });
       jest.spyOn(outletStatusService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ outletStatus });
+      activatedRoute.data = of({ outletStatus: null });
       comp.ngOnInit();
 
       // WHEN
@@ -109,14 +125,15 @@ describe('OutletStatus Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(outletStatusService.create).toHaveBeenCalledWith(outletStatus);
+      expect(outletStatusFormService.getOutletStatus).toHaveBeenCalled();
+      expect(outletStatusService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<OutletStatus>>();
+      const saveSubject = new Subject<HttpResponse<IOutletStatus>>();
       const outletStatus = { id: 123 };
       jest.spyOn(outletStatusService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -129,46 +146,20 @@ describe('OutletStatus Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(outletStatusService.update).toHaveBeenCalledWith(outletStatus);
+      expect(outletStatusService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

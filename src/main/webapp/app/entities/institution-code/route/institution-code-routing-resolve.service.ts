@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IInstitutionCode, InstitutionCode } from '../institution-code.model';
+import { IInstitutionCode } from '../institution-code.model';
 import { InstitutionCodeService } from '../service/institution-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class InstitutionCodeRoutingResolveService implements Resolve<IInstitutionCode> {
+export class InstitutionCodeRoutingResolveService implements Resolve<IInstitutionCode | null> {
   constructor(protected service: InstitutionCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IInstitutionCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IInstitutionCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((institutionCode: HttpResponse<InstitutionCode>) => {
+        mergeMap((institutionCode: HttpResponse<IInstitutionCode>) => {
           if (institutionCode.body) {
             return of(institutionCode.body);
           } else {
@@ -25,6 +25,6 @@ export class InstitutionCodeRoutingResolveService implements Resolve<IInstitutio
         })
       );
     }
-    return of(new InstitutionCode());
+    return of(null);
   }
 }

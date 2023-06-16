@@ -3,29 +3,14 @@ import { FileMediumTypes } from 'app/entities/enumerations/file-medium-types.mod
 import { FileModelType } from 'app/entities/enumerations/file-model-type.model';
 
 export interface IFileType {
-  id?: number;
-  fileTypeName?: string;
-  fileMediumType?: FileMediumTypes;
+  id: number;
+  fileTypeName?: string | null;
+  fileMediumType?: FileMediumTypes | null;
   description?: string | null;
-  fileTemplateContentType?: string | null;
   fileTemplate?: string | null;
-  fileType?: FileModelType;
-  placeholders?: IPlaceholder[] | null;
+  fileTemplateContentType?: string | null;
+  fileType?: FileModelType | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class FileType implements IFileType {
-  constructor(
-    public id?: number,
-    public fileTypeName?: string,
-    public fileMediumType?: FileMediumTypes,
-    public description?: string | null,
-    public fileTemplateContentType?: string | null,
-    public fileTemplate?: string | null,
-    public fileType?: FileModelType,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getFileTypeIdentifier(fileType: IFileType): number | undefined {
-  return fileType.id;
-}
+export type NewFileType = Omit<IFileType, 'id'> & { id: null };

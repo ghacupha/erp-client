@@ -6,13 +6,14 @@ import { InstitutionCodeComponent } from '../list/institution-code.component';
 import { InstitutionCodeDetailComponent } from '../detail/institution-code-detail.component';
 import { InstitutionCodeUpdateComponent } from '../update/institution-code-update.component';
 import { InstitutionCodeRoutingResolveService } from './institution-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const institutionCodeRoute: Routes = [
   {
     path: '',
     component: InstitutionCodeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

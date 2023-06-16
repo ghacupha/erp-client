@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { ICreditNote, CreditNote } from '../credit-note.model';
+import { ICreditNote } from '../credit-note.model';
 import { CreditNoteService } from '../service/credit-note.service';
 
 import { CreditNoteRoutingResolveService } from './credit-note-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('CreditNote routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: CreditNoteRoutingResolveService;
   let service: CreditNoteService;
-  let resultCreditNote: ICreditNote | undefined;
+  let resultCreditNote: ICreditNote | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(CreditNoteRoutingResolveService);
     service = TestBed.inject(CreditNoteService);
     resultCreditNote = undefined;
@@ -46,7 +55,7 @@ describe('CreditNote routing resolve service', () => {
       expect(resultCreditNote).toEqual({ id: 123 });
     });
 
-    it('should return new ICreditNote if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('CreditNote routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultCreditNote).toEqual(new CreditNote());
+      expect(resultCreditNote).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as CreditNote })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<ICreditNote>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

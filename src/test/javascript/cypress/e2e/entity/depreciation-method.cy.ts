@@ -1,0 +1,188 @@
+import {
+  entityTableSelector,
+  entityDetailsButtonSelector,
+  entityDetailsBackButtonSelector,
+  entityCreateButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityCreateCancelButtonSelector,
+  entityEditButtonSelector,
+  entityDeleteButtonSelector,
+  entityConfirmDeleteButtonSelector,
+} from '../../support/entity';
+
+describe('DepreciationMethod e2e test', () => {
+  const depreciationMethodPageUrl = '/depreciation-method';
+  const depreciationMethodPageUrlPattern = new RegExp('/depreciation-method(\\?.*)?$');
+  const username = Cypress.env('E2E_USERNAME') ?? 'user';
+  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const depreciationMethodSample = { depreciationMethodName: 'Accountability matrix', depreciationType: 'DECLINING_BALANCE' };
+
+  let depreciationMethod;
+
+  beforeEach(() => {
+    cy.login(username, password);
+  });
+
+  beforeEach(() => {
+    cy.intercept('GET', '/api/depreciation-methods+(?*|)').as('entitiesRequest');
+    cy.intercept('POST', '/api/depreciation-methods').as('postEntityRequest');
+    cy.intercept('DELETE', '/api/depreciation-methods/*').as('deleteEntityRequest');
+  });
+
+  afterEach(() => {
+    if (depreciationMethod) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/depreciation-methods/${depreciationMethod.id}`,
+      }).then(() => {
+        depreciationMethod = undefined;
+      });
+    }
+  });
+
+  it('DepreciationMethods menu should load DepreciationMethods page', () => {
+    cy.visit('/');
+    cy.clickOnEntityMenuItem('depreciation-method');
+    cy.wait('@entitiesRequest').then(({ response }) => {
+      if (response.body.length === 0) {
+        cy.get(entityTableSelector).should('not.exist');
+      } else {
+        cy.get(entityTableSelector).should('exist');
+      }
+    });
+    cy.getEntityHeading('DepreciationMethod').should('exist');
+    cy.url().should('match', depreciationMethodPageUrlPattern);
+  });
+
+  describe('DepreciationMethod page', () => {
+    describe('create button click', () => {
+      beforeEach(() => {
+        cy.visit(depreciationMethodPageUrl);
+        cy.wait('@entitiesRequest');
+      });
+
+      it('should load create DepreciationMethod page', () => {
+        cy.get(entityCreateButtonSelector).click();
+        cy.url().should('match', new RegExp('/depreciation-method/new$'));
+        cy.getEntityCreateUpdateHeading('DepreciationMethod');
+        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.get(entityCreateCancelButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', depreciationMethodPageUrlPattern);
+      });
+    });
+
+    describe('with existing value', () => {
+      beforeEach(() => {
+        cy.authenticatedRequest({
+          method: 'POST',
+          url: '/api/depreciation-methods',
+          body: depreciationMethodSample,
+        }).then(({ body }) => {
+          depreciationMethod = body;
+
+          cy.intercept(
+            {
+              method: 'GET',
+              url: '/api/depreciation-methods+(?*|)',
+              times: 1,
+            },
+            {
+              statusCode: 200,
+              headers: {
+                link: '<http://localhost/api/depreciation-methods?page=0&size=20>; rel="last",<http://localhost/api/depreciation-methods?page=0&size=20>; rel="first"',
+              },
+              body: [depreciationMethod],
+            }
+          ).as('entitiesRequestInternal');
+        });
+
+        cy.visit(depreciationMethodPageUrl);
+
+        cy.wait('@entitiesRequestInternal');
+      });
+
+      it('detail button click should load details DepreciationMethod page', () => {
+        cy.get(entityDetailsButtonSelector).first().click();
+        cy.getEntityDetailsHeading('depreciationMethod');
+        cy.get(entityDetailsBackButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', depreciationMethodPageUrlPattern);
+      });
+
+      it('edit button click should load edit DepreciationMethod page and go back', () => {
+        cy.get(entityEditButtonSelector).first().click();
+        cy.getEntityCreateUpdateHeading('DepreciationMethod');
+        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.get(entityCreateCancelButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', depreciationMethodPageUrlPattern);
+      });
+
+      it.skip('edit button click should load edit DepreciationMethod page and save', () => {
+        cy.get(entityEditButtonSelector).first().click();
+        cy.getEntityCreateUpdateHeading('DepreciationMethod');
+        cy.get(entityCreateSaveButtonSelector).click();
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', depreciationMethodPageUrlPattern);
+      });
+
+      it('last delete button click should delete instance of DepreciationMethod', () => {
+        cy.get(entityDeleteButtonSelector).last().click();
+        cy.getEntityDeleteDialogHeading('depreciationMethod').should('exist');
+        cy.get(entityConfirmDeleteButtonSelector).click();
+        cy.wait('@deleteEntityRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(204);
+        });
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          expect(response.statusCode).to.equal(200);
+        });
+        cy.url().should('match', depreciationMethodPageUrlPattern);
+
+        depreciationMethod = undefined;
+      });
+    });
+  });
+
+  describe('new DepreciationMethod page', () => {
+    beforeEach(() => {
+      cy.visit(`${depreciationMethodPageUrl}`);
+      cy.get(entityCreateButtonSelector).click();
+      cy.getEntityCreateUpdateHeading('DepreciationMethod');
+    });
+
+    it('should create an instance of DepreciationMethod', () => {
+      cy.get(`[data-cy="depreciationMethodName"]`).type('Towels Future invoice').should('have.value', 'Towels Future invoice');
+
+      cy.get(`[data-cy="description"]`)
+        .type('Handcrafted Buckinghamshire program')
+        .should('have.value', 'Handcrafted Buckinghamshire program');
+
+      cy.get(`[data-cy="depreciationType"]`).select('STRAIGHT_LINE');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
+      cy.get(entityCreateSaveButtonSelector).click();
+
+      cy.wait('@postEntityRequest').then(({ response }) => {
+        expect(response.statusCode).to.equal(201);
+        depreciationMethod = response.body;
+      });
+      cy.wait('@entitiesRequest').then(({ response }) => {
+        expect(response.statusCode).to.equal(200);
+      });
+      cy.url().should('match', depreciationMethodPageUrlPattern);
+    });
+  });
+});

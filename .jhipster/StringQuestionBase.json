@@ -1,4 +1,5 @@
 {
+  "changelogDate": "20221101101632",
   "fields": [
     {
       "fieldName": "value",
@@ -26,8 +27,8 @@
     {
       "fieldName": "controlType",
       "fieldType": "ControlTypes",
-      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA"
     },
     {
       "fieldName": "placeholder",
@@ -38,26 +39,25 @@
       "fieldType": "Boolean"
     }
   ],
+  "name": "StringQuestionBase",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "stringQuestionBase",
       "ownerSide": true,
-      "otherEntityRelationshipName": "stringQuestionBase"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholderItem",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "stringQuestionBase",
       "ownerSide": true,
-      "otherEntityRelationshipName": "stringQuestionBase"
+      "relationshipName": "placeholderItem",
+      "relationshipType": "many-to-many"
     }
-  ],
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "StringQuestionBase",
-  "changelogDate": "20221101101632"
+  ]
 }

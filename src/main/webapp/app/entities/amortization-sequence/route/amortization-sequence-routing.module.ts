@@ -6,13 +6,14 @@ import { AmortizationSequenceComponent } from '../list/amortization-sequence.com
 import { AmortizationSequenceDetailComponent } from '../detail/amortization-sequence-detail.component';
 import { AmortizationSequenceUpdateComponent } from '../update/amortization-sequence-update.component';
 import { AmortizationSequenceRoutingResolveService } from './amortization-sequence-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const amortizationSequenceRoute: Routes = [
   {
     path: '',
     component: AmortizationSequenceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

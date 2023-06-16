@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220701141203",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "moduleName",
@@ -6,13 +8,11 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
-  "relationships": [],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
   "name": "SystemModule",
-  "changelogDate": "20220701141203",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
 }

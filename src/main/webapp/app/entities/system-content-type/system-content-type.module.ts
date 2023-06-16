@@ -14,6 +14,5 @@ import { SystemContentTypeRoutingModule } from './route/system-content-type-rout
     SystemContentTypeUpdateComponent,
     SystemContentTypeDeleteDialogComponent,
   ],
-  entryComponents: [SystemContentTypeDeleteDialogComponent],
 })
 export class SystemContentTypeModule {}

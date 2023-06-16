@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IMfbBranchCode, MfbBranchCode } from '../mfb-branch-code.model';
+import { IMfbBranchCode } from '../mfb-branch-code.model';
 import { MfbBranchCodeService } from '../service/mfb-branch-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class MfbBranchCodeRoutingResolveService implements Resolve<IMfbBranchCode> {
+export class MfbBranchCodeRoutingResolveService implements Resolve<IMfbBranchCode | null> {
   constructor(protected service: MfbBranchCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IMfbBranchCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IMfbBranchCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((mfbBranchCode: HttpResponse<MfbBranchCode>) => {
+        mergeMap((mfbBranchCode: HttpResponse<IMfbBranchCode>) => {
           if (mfbBranchCode.body) {
             return of(mfbBranchCode.body);
           } else {
@@ -25,6 +25,6 @@ export class MfbBranchCodeRoutingResolveService implements Resolve<IMfbBranchCod
         })
       );
     }
-    return of(new MfbBranchCode());
+    return of(null);
   }
 }

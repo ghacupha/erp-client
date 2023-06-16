@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IPaymentCalculation } from '../payment-calculation.model';
 import { PaymentCalculationService } from '../service/payment-calculation.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './payment-calculation-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class PaymentCalculationDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.paymentCalculationService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

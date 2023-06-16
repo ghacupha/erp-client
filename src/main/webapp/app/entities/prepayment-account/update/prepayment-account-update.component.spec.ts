@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { PrepaymentAccountFormService } from './prepayment-account-form.service';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
-import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
+import { IPrepaymentAccount } from '../prepayment-account.model';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
 import { ISettlement } from 'app/entities/settlement/settlement.model';
@@ -34,6 +34,7 @@ describe('PrepaymentAccount Management Update Component', () => {
   let comp: PrepaymentAccountUpdateComponent;
   let fixture: ComponentFixture<PrepaymentAccountUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let prepaymentAccountFormService: PrepaymentAccountFormService;
   let prepaymentAccountService: PrepaymentAccountService;
   let settlementCurrencyService: SettlementCurrencyService;
   let settlementService: SettlementService;
@@ -47,15 +48,24 @@ describe('PrepaymentAccount Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [PrepaymentAccountUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(PrepaymentAccountUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(PrepaymentAccountUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    prepaymentAccountFormService = TestBed.inject(PrepaymentAccountFormService);
     prepaymentAccountService = TestBed.inject(PrepaymentAccountService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     settlementService = TestBed.inject(SettlementService);
@@ -88,7 +98,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -108,7 +118,10 @@ describe('PrepaymentAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(settlementService.query).toHaveBeenCalled();
-      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(settlementCollection, ...additionalSettlements);
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
       expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -129,7 +142,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(serviceOutletService.query).toHaveBeenCalled();
       expect(serviceOutletService.addServiceOutletToCollectionIfMissing).toHaveBeenCalledWith(
         serviceOutletCollection,
-        ...additionalServiceOutlets
+        ...additionalServiceOutlets.map(expect.objectContaining)
       );
       expect(comp.serviceOutletsSharedCollection).toEqual(expectedCollection);
     });
@@ -149,7 +162,10 @@ describe('PrepaymentAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -172,7 +188,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(transactionAccountService.query).toHaveBeenCalled();
       expect(transactionAccountService.addTransactionAccountToCollectionIfMissing).toHaveBeenCalledWith(
         transactionAccountCollection,
-        ...additionalTransactionAccounts
+        ...additionalTransactionAccounts.map(expect.objectContaining)
       );
       expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
     });
@@ -192,7 +208,10 @@ describe('PrepaymentAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -218,7 +237,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -240,7 +259,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(prepaymentMappingService.query).toHaveBeenCalled();
       expect(prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing).toHaveBeenCalledWith(
         prepaymentMappingCollection,
-        ...additionalPrepaymentMappings
+        ...additionalPrepaymentMappings.map(expect.objectContaining)
       );
       expect(comp.prepaymentMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -262,7 +281,7 @@ describe('PrepaymentAccount Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -281,37 +300,38 @@ describe('PrepaymentAccount Management Update Component', () => {
       prepaymentAccount.debitAccount = debitAccount;
       const transferAccount: ITransactionAccount = { id: 8579 };
       prepaymentAccount.transferAccount = transferAccount;
-      const placeholders: IPlaceholder = { id: 55956 };
-      prepaymentAccount.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 55956 };
+      prepaymentAccount.placeholders = [placeholder];
       const generalParameters: IUniversallyUniqueMapping = { id: 53339 };
       prepaymentAccount.generalParameters = [generalParameters];
       const prepaymentParameters: IPrepaymentMapping = { id: 91756 };
       prepaymentAccount.prepaymentParameters = [prepaymentParameters];
-      const businessDocuments: IBusinessDocument = { id: 22127 };
-      prepaymentAccount.businessDocuments = [businessDocuments];
+      const businessDocument: IBusinessDocument = { id: 22127 };
+      prepaymentAccount.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ prepaymentAccount });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(prepaymentAccount));
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.settlementsSharedCollection).toContain(prepaymentTransaction);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
       expect(comp.dealersSharedCollection).toContain(dealer);
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(transferAccount);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(generalParameters);
       expect(comp.prepaymentMappingsSharedCollection).toContain(prepaymentParameters);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.prepaymentAccount).toEqual(prepaymentAccount);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PrepaymentAccount>>();
+      const saveSubject = new Subject<HttpResponse<IPrepaymentAccount>>();
       const prepaymentAccount = { id: 123 };
+      jest.spyOn(prepaymentAccountFormService, 'getPrepaymentAccount').mockReturnValue(prepaymentAccount);
       jest.spyOn(prepaymentAccountService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ prepaymentAccount });
@@ -324,18 +344,20 @@ describe('PrepaymentAccount Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(prepaymentAccountFormService.getPrepaymentAccount).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(prepaymentAccountService.update).toHaveBeenCalledWith(prepaymentAccount);
+      expect(prepaymentAccountService.update).toHaveBeenCalledWith(expect.objectContaining(prepaymentAccount));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PrepaymentAccount>>();
-      const prepaymentAccount = new PrepaymentAccount();
+      const saveSubject = new Subject<HttpResponse<IPrepaymentAccount>>();
+      const prepaymentAccount = { id: 123 };
+      jest.spyOn(prepaymentAccountFormService, 'getPrepaymentAccount').mockReturnValue({ id: null });
       jest.spyOn(prepaymentAccountService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ prepaymentAccount });
+      activatedRoute.data = of({ prepaymentAccount: null });
       comp.ngOnInit();
 
       // WHEN
@@ -345,14 +367,15 @@ describe('PrepaymentAccount Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(prepaymentAccountService.create).toHaveBeenCalledWith(prepaymentAccount);
+      expect(prepaymentAccountFormService.getPrepaymentAccount).toHaveBeenCalled();
+      expect(prepaymentAccountService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PrepaymentAccount>>();
+      const saveSubject = new Subject<HttpResponse<IPrepaymentAccount>>();
       const prepaymentAccount = { id: 123 };
       jest.spyOn(prepaymentAccountService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -365,188 +388,100 @@ describe('PrepaymentAccount Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(prepaymentAccountService.update).toHaveBeenCalledWith(prepaymentAccount);
+      expect(prepaymentAccountService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementById', () => {
-      it('Should return tracked Settlement primary key', () => {
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackServiceOutletById', () => {
-      it('Should return tracked ServiceOutlet primary key', () => {
+    describe('compareServiceOutlet', () => {
+      it('Should forward to serviceOutletService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackServiceOutletById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(serviceOutletService, 'compareServiceOutlet');
+        comp.compareServiceOutlet(entity, entity2);
+        expect(serviceOutletService.compareServiceOutlet).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackTransactionAccountById', () => {
-      it('Should return tracked TransactionAccount primary key', () => {
+    describe('compareTransactionAccount', () => {
+      it('Should forward to transactionAccountService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackTransactionAccountById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(transactionAccountService, 'compareTransactionAccount');
+        comp.compareTransactionAccount(entity, entity2);
+        expect(transactionAccountService.compareTransactionAccount).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPrepaymentMappingById', () => {
-      it('Should return tracked PrepaymentMapping primary key', () => {
+    describe('comparePrepaymentMapping', () => {
+      it('Should forward to prepaymentMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPrepaymentMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(prepaymentMappingService, 'comparePrepaymentMapping');
+        comp.comparePrepaymentMapping(entity, entity2);
+        expect(prepaymentMappingService.comparePrepaymentMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPrepaymentMapping', () => {
-      it('Should return option if no PrepaymentMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPrepaymentMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PrepaymentMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPrepaymentMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PrepaymentMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPrepaymentMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

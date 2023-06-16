@@ -9,6 +9,5 @@ import { TaxRuleRoutingModule } from './route/tax-rule-routing.module';
 @NgModule({
   imports: [SharedModule, TaxRuleRoutingModule],
   declarations: [TaxRuleComponent, TaxRuleDetailComponent, TaxRuleUpdateComponent, TaxRuleDeleteDialogComponent],
-  entryComponents: [TaxRuleDeleteDialogComponent],
 })
 export class ErpServiceTaxRuleModule {}

@@ -14,6 +14,5 @@ import { StringQuestionBaseRoutingModule } from './route/string-question-base-ro
     StringQuestionBaseUpdateComponent,
     StringQuestionBaseDeleteDialogComponent,
   ],
-  entryComponents: [StringQuestionBaseDeleteDialogComponent],
 })
 export class StringQuestionBaseModule {}

@@ -14,6 +14,5 @@ import { SettlementRequisitionRoutingModule } from './route/settlement-requisiti
     SettlementRequisitionUpdateComponent,
     SettlementRequisitionDeleteDialogComponent,
   ],
-  entryComponents: [SettlementRequisitionDeleteDialogComponent],
 })
 export class SettlementRequisitionModule {}

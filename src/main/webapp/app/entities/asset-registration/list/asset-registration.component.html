@@ -3,9 +3,9 @@
     <span>Asset Registrations</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,45 +24,104 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Asset Registration</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="assetRegistrations?.length === 0">
-    <span>No assetRegistrations found</span>
+    <span>No Asset Registrations found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="assetRegistrations && assetRegistrations.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="assetRegistrations && assetRegistrations.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetTag"><span>Asset Tag</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetDetails"><span>Asset Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetCost"><span>Asset Cost</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="assetNumber">
+            <div class="d-flex">
+              <span>Asset Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="assetTag">
+            <div class="d-flex">
+              <span>Asset Tag</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="assetDetails">
+            <div class="d-flex">
+              <span>Asset Details</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="assetCost">
+            <div class="d-flex">
+              <span>Asset Cost</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="comments">
+            <div class="d-flex">
+              <span>Comments</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="modelNumber">
+            <div class="d-flex">
+              <span>Model Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="serialNumber">
+            <div class="d-flex">
+              <span>Serial Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="mainServiceOutlet.outletCode">
+            <div class="d-flex">
+              <span>Main Service Outlet</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="assetCategory.assetCategoryName">
+            <div class="d-flex">
+              <span>Asset Category</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dealer.dealerName">
+            <div class="d-flex">
+              <span>Dealer</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Settlement Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col"></th>
         </tr>
@@ -78,7 +137,7 @@
           <td>{{ assetRegistration.assetCost }}</td>
           <td>
             <a *ngIf="assetRegistration.comments" (click)="openFile(assetRegistration.comments, assetRegistration.commentsContentType)"
-              >open</a
+              >Open</a
             >
             <span *ngIf="assetRegistration.comments"
               >{{ assetRegistration.commentsContentType }}, {{ byteSize(assetRegistration.comments) }}</span
@@ -88,31 +147,31 @@
           <td>{{ assetRegistration.serialNumber }}</td>
           <td>
             <div *ngIf="assetRegistration.mainServiceOutlet">
-              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
-                assetRegistration.mainServiceOutlet?.outletCode
+              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet.id, 'view']">{{
+                assetRegistration.mainServiceOutlet.outletCode
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="assetRegistration.assetCategory">
-              <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
-                assetRegistration.assetCategory?.assetCategoryName
+              <a [routerLink]="['/asset-category', assetRegistration.assetCategory.id, 'view']">{{
+                assetRegistration.assetCategory.assetCategoryName
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="assetRegistration.dealer">
-              <a [routerLink]="['/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
+              <a [routerLink]="['/dealer', assetRegistration.dealer.id, 'view']">{{ assetRegistration.dealer.dealerName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="assetRegistration.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
-                assetRegistration.settlementCurrency?.iso4217CurrencyCode
+              <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency.id, 'view']">{{
+                assetRegistration.settlementCurrency.iso4217CurrencyCode
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -146,19 +205,19 @@
   </div>
 
   <div *ngIf="assetRegistrations && assetRegistrations.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

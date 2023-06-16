@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="processStatus">
       <h2 data-cy="processStatusDetailsHeading"><span>Process Status</span></h2>
@@ -25,14 +25,14 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of processStatus.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of processStatus.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

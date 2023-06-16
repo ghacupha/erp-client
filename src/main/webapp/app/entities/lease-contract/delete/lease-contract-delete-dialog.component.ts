@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ILeaseContract } from '../lease-contract.model';
 import { LeaseContractService } from '../service/lease-contract.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './lease-contract-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class LeaseContractDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.leaseContractService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

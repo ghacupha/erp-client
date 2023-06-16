@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IReportTemplate, getReportTemplateIdentifier } from '../report-template.model';
+import { IReportTemplate, NewReportTemplate } from '../report-template.model';
+
+export type PartialUpdateReportTemplate = Partial<IReportTemplate> & Pick<IReportTemplate, 'id'>;
 
 export type EntityResponseType = HttpResponse<IReportTemplate>;
 export type EntityArrayResponseType = HttpResponse<IReportTemplate[]>;
@@ -18,22 +20,20 @@ export class ReportTemplateService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(reportTemplate: IReportTemplate): Observable<EntityResponseType> {
+  create(reportTemplate: NewReportTemplate): Observable<EntityResponseType> {
     return this.http.post<IReportTemplate>(this.resourceUrl, reportTemplate, { observe: 'response' });
   }
 
   update(reportTemplate: IReportTemplate): Observable<EntityResponseType> {
-    return this.http.put<IReportTemplate>(`${this.resourceUrl}/${getReportTemplateIdentifier(reportTemplate) as number}`, reportTemplate, {
+    return this.http.put<IReportTemplate>(`${this.resourceUrl}/${this.getReportTemplateIdentifier(reportTemplate)}`, reportTemplate, {
       observe: 'response',
     });
   }
 
-  partialUpdate(reportTemplate: IReportTemplate): Observable<EntityResponseType> {
-    return this.http.patch<IReportTemplate>(
-      `${this.resourceUrl}/${getReportTemplateIdentifier(reportTemplate) as number}`,
-      reportTemplate,
-      { observe: 'response' }
-    );
+  partialUpdate(reportTemplate: PartialUpdateReportTemplate): Observable<EntityResponseType> {
+    return this.http.patch<IReportTemplate>(`${this.resourceUrl}/${this.getReportTemplateIdentifier(reportTemplate)}`, reportTemplate, {
+      observe: 'response',
+    });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -54,18 +54,26 @@ export class ReportTemplateService {
     return this.http.get<IReportTemplate[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addReportTemplateToCollectionIfMissing(
-    reportTemplateCollection: IReportTemplate[],
-    ...reportTemplatesToCheck: (IReportTemplate | null | undefined)[]
-  ): IReportTemplate[] {
-    const reportTemplates: IReportTemplate[] = reportTemplatesToCheck.filter(isPresent);
+  getReportTemplateIdentifier(reportTemplate: Pick<IReportTemplate, 'id'>): number {
+    return reportTemplate.id;
+  }
+
+  compareReportTemplate(o1: Pick<IReportTemplate, 'id'> | null, o2: Pick<IReportTemplate, 'id'> | null): boolean {
+    return o1 && o2 ? this.getReportTemplateIdentifier(o1) === this.getReportTemplateIdentifier(o2) : o1 === o2;
+  }
+
+  addReportTemplateToCollectionIfMissing<Type extends Pick<IReportTemplate, 'id'>>(
+    reportTemplateCollection: Type[],
+    ...reportTemplatesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const reportTemplates: Type[] = reportTemplatesToCheck.filter(isPresent);
     if (reportTemplates.length > 0) {
       const reportTemplateCollectionIdentifiers = reportTemplateCollection.map(
-        reportTemplateItem => getReportTemplateIdentifier(reportTemplateItem)!
+        reportTemplateItem => this.getReportTemplateIdentifier(reportTemplateItem)!
       );
       const reportTemplatesToAdd = reportTemplates.filter(reportTemplateItem => {
-        const reportTemplateIdentifier = getReportTemplateIdentifier(reportTemplateItem);
-        if (reportTemplateIdentifier == null || reportTemplateCollectionIdentifiers.includes(reportTemplateIdentifier)) {
+        const reportTemplateIdentifier = this.getReportTemplateIdentifier(reportTemplateItem);
+        if (reportTemplateCollectionIdentifiers.includes(reportTemplateIdentifier)) {
           return false;
         }
         reportTemplateCollectionIdentifiers.push(reportTemplateIdentifier);

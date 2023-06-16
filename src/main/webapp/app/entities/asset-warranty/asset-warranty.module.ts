@@ -9,6 +9,5 @@ import { AssetWarrantyRoutingModule } from './route/asset-warranty-routing.modul
 @NgModule({
   imports: [SharedModule, AssetWarrantyRoutingModule],
   declarations: [AssetWarrantyComponent, AssetWarrantyDetailComponent, AssetWarrantyUpdateComponent, AssetWarrantyDeleteDialogComponent],
-  entryComponents: [AssetWarrantyDeleteDialogComponent],
 })
 export class AssetWarrantyModule {}

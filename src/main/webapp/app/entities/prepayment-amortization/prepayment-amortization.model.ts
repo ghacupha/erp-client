@@ -1,39 +1,20 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPrepaymentAmortization {
-  id?: number;
+  id: number;
   description?: string | null;
   prepaymentPeriod?: dayjs.Dayjs | null;
   prepaymentAmount?: number | null;
   inactive?: boolean | null;
-  prepaymentAccount?: IPrepaymentAccount | null;
-  settlementCurrency?: ISettlementCurrency | null;
-  debitAccount?: ITransactionAccount | null;
-  creditAccount?: ITransactionAccount | null;
-  placeholders?: IPlaceholder[] | null;
+  prepaymentAccount?: Pick<IPrepaymentAccount, 'id' | 'catalogueNumber'> | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  debitAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  creditAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PrepaymentAmortization implements IPrepaymentAmortization {
-  constructor(
-    public id?: number,
-    public description?: string | null,
-    public prepaymentPeriod?: dayjs.Dayjs | null,
-    public prepaymentAmount?: number | null,
-    public inactive?: boolean | null,
-    public prepaymentAccount?: IPrepaymentAccount | null,
-    public settlementCurrency?: ISettlementCurrency | null,
-    public debitAccount?: ITransactionAccount | null,
-    public creditAccount?: ITransactionAccount | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {
-    this.inactive = this.inactive ?? false;
-  }
-}
-
-export function getPrepaymentAmortizationIdentifier(prepaymentAmortization: IPrepaymentAmortization): number | undefined {
-  return prepaymentAmortization.id;
-}
+export type NewPrepaymentAmortization = Omit<IPrepaymentAmortization, 'id'> & { id: null };

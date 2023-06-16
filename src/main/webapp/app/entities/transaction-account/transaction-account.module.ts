@@ -14,6 +14,5 @@ import { TransactionAccountRoutingModule } from './route/transaction-account-rou
     TransactionAccountUpdateComponent,
     TransactionAccountDeleteDialogComponent,
   ],
-  entryComponents: [TransactionAccountDeleteDialogComponent],
 })
 export class TransactionAccountModule {}

@@ -6,7 +6,7 @@ import {
   /* BusinessDocumentDeleteDialog, */
   BusinessDocumentUpdatePage,
 } from './business-document.page-object';
-import * as path from 'path';
+import path from 'path';
 
 const expect = chai.expect;
 

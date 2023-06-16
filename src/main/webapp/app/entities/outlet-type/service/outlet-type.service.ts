@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IOutletType, getOutletTypeIdentifier } from '../outlet-type.model';
+import { IOutletType, NewOutletType } from '../outlet-type.model';
+
+export type PartialUpdateOutletType = Partial<IOutletType> & Pick<IOutletType, 'id'>;
 
 export type EntityResponseType = HttpResponse<IOutletType>;
 export type EntityArrayResponseType = HttpResponse<IOutletType[]>;
@@ -18,18 +20,18 @@ export class OutletTypeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(outletType: IOutletType): Observable<EntityResponseType> {
+  create(outletType: NewOutletType): Observable<EntityResponseType> {
     return this.http.post<IOutletType>(this.resourceUrl, outletType, { observe: 'response' });
   }
 
   update(outletType: IOutletType): Observable<EntityResponseType> {
-    return this.http.put<IOutletType>(`${this.resourceUrl}/${getOutletTypeIdentifier(outletType) as number}`, outletType, {
+    return this.http.put<IOutletType>(`${this.resourceUrl}/${this.getOutletTypeIdentifier(outletType)}`, outletType, {
       observe: 'response',
     });
   }
 
-  partialUpdate(outletType: IOutletType): Observable<EntityResponseType> {
-    return this.http.patch<IOutletType>(`${this.resourceUrl}/${getOutletTypeIdentifier(outletType) as number}`, outletType, {
+  partialUpdate(outletType: PartialUpdateOutletType): Observable<EntityResponseType> {
+    return this.http.patch<IOutletType>(`${this.resourceUrl}/${this.getOutletTypeIdentifier(outletType)}`, outletType, {
       observe: 'response',
     });
   }
@@ -52,16 +54,24 @@ export class OutletTypeService {
     return this.http.get<IOutletType[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addOutletTypeToCollectionIfMissing(
-    outletTypeCollection: IOutletType[],
-    ...outletTypesToCheck: (IOutletType | null | undefined)[]
-  ): IOutletType[] {
-    const outletTypes: IOutletType[] = outletTypesToCheck.filter(isPresent);
+  getOutletTypeIdentifier(outletType: Pick<IOutletType, 'id'>): number {
+    return outletType.id;
+  }
+
+  compareOutletType(o1: Pick<IOutletType, 'id'> | null, o2: Pick<IOutletType, 'id'> | null): boolean {
+    return o1 && o2 ? this.getOutletTypeIdentifier(o1) === this.getOutletTypeIdentifier(o2) : o1 === o2;
+  }
+
+  addOutletTypeToCollectionIfMissing<Type extends Pick<IOutletType, 'id'>>(
+    outletTypeCollection: Type[],
+    ...outletTypesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const outletTypes: Type[] = outletTypesToCheck.filter(isPresent);
     if (outletTypes.length > 0) {
-      const outletTypeCollectionIdentifiers = outletTypeCollection.map(outletTypeItem => getOutletTypeIdentifier(outletTypeItem)!);
+      const outletTypeCollectionIdentifiers = outletTypeCollection.map(outletTypeItem => this.getOutletTypeIdentifier(outletTypeItem)!);
       const outletTypesToAdd = outletTypes.filter(outletTypeItem => {
-        const outletTypeIdentifier = getOutletTypeIdentifier(outletTypeItem);
-        if (outletTypeIdentifier == null || outletTypeCollectionIdentifiers.includes(outletTypeIdentifier)) {
+        const outletTypeIdentifier = this.getOutletTypeIdentifier(outletTypeItem);
+        if (outletTypeCollectionIdentifiers.includes(outletTypeIdentifier)) {
           return false;
         }
         outletTypeCollectionIdentifiers.push(outletTypeIdentifier);

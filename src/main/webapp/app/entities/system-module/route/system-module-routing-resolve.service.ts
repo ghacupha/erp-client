@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISystemModule, SystemModule } from '../system-module.model';
+import { ISystemModule } from '../system-module.model';
 import { SystemModuleService } from '../service/system-module.service';
 
 @Injectable({ providedIn: 'root' })
-export class SystemModuleRoutingResolveService implements Resolve<ISystemModule> {
+export class SystemModuleRoutingResolveService implements Resolve<ISystemModule | null> {
   constructor(protected service: SystemModuleService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISystemModule> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISystemModule | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((systemModule: HttpResponse<SystemModule>) => {
+        mergeMap((systemModule: HttpResponse<ISystemModule>) => {
           if (systemModule.body) {
             return of(systemModule.body);
           } else {
@@ -25,6 +25,6 @@ export class SystemModuleRoutingResolveService implements Resolve<ISystemModule>
         })
       );
     }
-    return of(new SystemModule());
+    return of(null);
   }
 }

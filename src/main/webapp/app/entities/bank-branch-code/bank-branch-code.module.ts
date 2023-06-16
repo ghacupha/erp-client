@@ -14,6 +14,5 @@ import { BankBranchCodeRoutingModule } from './route/bank-branch-code-routing.mo
     BankBranchCodeUpdateComponent,
     BankBranchCodeDeleteDialogComponent,
   ],
-  entryComponents: [BankBranchCodeDeleteDialogComponent],
 })
 export class BankBranchCodeModule {}

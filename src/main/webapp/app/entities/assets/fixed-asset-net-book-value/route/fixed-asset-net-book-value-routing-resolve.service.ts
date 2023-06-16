@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IFixedAssetNetBookValue, FixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
+import { IFixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
 
 @Injectable({ providedIn: 'root' })
-export class FixedAssetNetBookValueRoutingResolveService implements Resolve<IFixedAssetNetBookValue> {
+export class FixedAssetNetBookValueRoutingResolveService implements Resolve<IFixedAssetNetBookValue | null> {
   constructor(protected service: FixedAssetNetBookValueService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IFixedAssetNetBookValue> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IFixedAssetNetBookValue | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((fixedAssetNetBookValue: HttpResponse<FixedAssetNetBookValue>) => {
+        mergeMap((fixedAssetNetBookValue: HttpResponse<IFixedAssetNetBookValue>) => {
           if (fixedAssetNetBookValue.body) {
             return of(fixedAssetNetBookValue.body);
           } else {
@@ -25,6 +25,6 @@ export class FixedAssetNetBookValueRoutingResolveService implements Resolve<IFix
         })
       );
     }
-    return of(new FixedAssetNetBookValue());
+    return of(null);
   }
 }

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ICountyCode, CountyCode } from '../county-code.model';
+import { ICountyCode } from '../county-code.model';
 import { CountyCodeService } from '../service/county-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class CountyCodeRoutingResolveService implements Resolve<ICountyCode> {
+export class CountyCodeRoutingResolveService implements Resolve<ICountyCode | null> {
   constructor(protected service: CountyCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ICountyCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ICountyCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((countyCode: HttpResponse<CountyCode>) => {
+        mergeMap((countyCode: HttpResponse<ICountyCode>) => {
           if (countyCode.body) {
             return of(countyCode.body);
           } else {
@@ -25,6 +25,6 @@ export class CountyCodeRoutingResolveService implements Resolve<ICountyCode> {
         })
       );
     }
-    return of(new CountyCode());
+    return of(null);
   }
 }

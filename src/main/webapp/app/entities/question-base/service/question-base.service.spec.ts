@@ -1,15 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import { ControlTypes } from 'app/entities/enumerations/control-types.model';
-import { IQuestionBase, QuestionBase } from '../question-base.model';
+import { IQuestionBase } from '../question-base.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../question-base.test-samples';
 
 import { QuestionBaseService } from './question-base.service';
+
+const requireRestSample: IQuestionBase = {
+  ...sampleWithRequiredData,
+};
 
 describe('QuestionBase Service', () => {
   let service: QuestionBaseService;
   let httpMock: HttpTestingController;
-  let elemDefault: IQuestionBase;
   let expectedResult: IQuestionBase | IQuestionBase[] | boolean | null;
 
   beforeEach(() => {
@@ -19,44 +22,27 @@ describe('QuestionBase Service', () => {
     expectedResult = null;
     service = TestBed.inject(QuestionBaseService);
     httpMock = TestBed.inject(HttpTestingController);
-
-    elemDefault = {
-      id: 0,
-      context: 'AAAAAAA',
-      serial: 'AAAAAAA',
-      questionBaseValue: 'AAAAAAA',
-      questionBaseKey: 'AAAAAAA',
-      questionBaseLabel: 'AAAAAAA',
-      required: false,
-      order: 0,
-      controlType: ControlTypes.TEXTBOX,
-      placeholder: 'AAAAAAA',
-      iterable: false,
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a QuestionBase', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const questionBase = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign({}, returnedFromService);
-
-      service.create(new QuestionBase()).subscribe(resp => (expectedResult = resp.body));
+      service.create(questionBase).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -64,26 +50,11 @@ describe('QuestionBase Service', () => {
     });
 
     it('should update a QuestionBase', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          context: 'BBBBBB',
-          serial: 'BBBBBB',
-          questionBaseValue: 'BBBBBB',
-          questionBaseKey: 'BBBBBB',
-          questionBaseLabel: 'BBBBBB',
-          required: true,
-          order: 1,
-          controlType: 'BBBBBB',
-          placeholder: 'BBBBBB',
-          iterable: true,
-        },
-        elemDefault
-      );
+      const questionBase = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign({}, returnedFromService);
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(questionBase).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -91,19 +62,9 @@ describe('QuestionBase Service', () => {
     });
 
     it('should partial update a QuestionBase', () => {
-      const patchObject = Object.assign(
-        {
-          context: 'BBBBBB',
-          questionBaseValue: 'BBBBBB',
-          questionBaseKey: 'BBBBBB',
-          questionBaseLabel: 'BBBBBB',
-        },
-        new QuestionBase()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign({}, returnedFromService);
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -113,79 +74,66 @@ describe('QuestionBase Service', () => {
     });
 
     it('should return a list of QuestionBase', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          context: 'BBBBBB',
-          serial: 'BBBBBB',
-          questionBaseValue: 'BBBBBB',
-          questionBaseKey: 'BBBBBB',
-          questionBaseLabel: 'BBBBBB',
-          required: true,
-          order: 1,
-          controlType: 'BBBBBB',
-          placeholder: 'BBBBBB',
-          iterable: true,
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a QuestionBase', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addQuestionBaseToCollectionIfMissing', () => {
       it('should add a QuestionBase to an empty array', () => {
-        const questionBase: IQuestionBase = { id: 123 };
+        const questionBase: IQuestionBase = sampleWithRequiredData;
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], questionBase);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should not add a QuestionBase to an array that contains it', () => {
-        const questionBase: IQuestionBase = { id: 123 };
+        const questionBase: IQuestionBase = sampleWithRequiredData;
         const questionBaseCollection: IQuestionBase[] = [
           {
             ...questionBase,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, questionBase);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a QuestionBase to an array that doesn't contain it", () => {
-        const questionBase: IQuestionBase = { id: 123 };
-        const questionBaseCollection: IQuestionBase[] = [{ id: 456 }];
+        const questionBase: IQuestionBase = sampleWithRequiredData;
+        const questionBaseCollection: IQuestionBase[] = [sampleWithPartialData];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, questionBase);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should add only unique QuestionBase to an array', () => {
-        const questionBaseArray: IQuestionBase[] = [{ id: 123 }, { id: 456 }, { id: 86481 }];
-        const questionBaseCollection: IQuestionBase[] = [{ id: 123 }];
+        const questionBaseArray: IQuestionBase[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const questionBaseCollection: IQuestionBase[] = [sampleWithRequiredData];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, ...questionBaseArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const questionBase: IQuestionBase = { id: 123 };
-        const questionBase2: IQuestionBase = { id: 456 };
+        const questionBase: IQuestionBase = sampleWithRequiredData;
+        const questionBase2: IQuestionBase = sampleWithPartialData;
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], questionBase, questionBase2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(questionBase);
@@ -193,16 +141,60 @@ describe('QuestionBase Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const questionBase: IQuestionBase = { id: 123 };
+        const questionBase: IQuestionBase = sampleWithRequiredData;
         expectedResult = service.addQuestionBaseToCollectionIfMissing([], null, questionBase, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(questionBase);
       });
 
       it('should return initial array if no QuestionBase is added', () => {
-        const questionBaseCollection: IQuestionBase[] = [{ id: 123 }];
+        const questionBaseCollection: IQuestionBase[] = [sampleWithRequiredData];
         expectedResult = service.addQuestionBaseToCollectionIfMissing(questionBaseCollection, undefined, null);
         expect(expectedResult).toEqual(questionBaseCollection);
+      });
+    });
+
+    describe('compareQuestionBase', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareQuestionBase(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareQuestionBase(entity1, entity2);
+        const compareResult2 = service.compareQuestionBase(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareQuestionBase(entity1, entity2);
+        const compareResult2 = service.compareQuestionBase(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareQuestionBase(entity1, entity2);
+        const compareResult2 = service.compareQuestionBase(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

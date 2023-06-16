@@ -14,6 +14,5 @@ import { PdfReportRequisitionRoutingModule } from './route/pdf-report-requisitio
     PdfReportRequisitionUpdateComponent,
     PdfReportRequisitionDeleteDialogComponent,
   ],
-  entryComponents: [PdfReportRequisitionDeleteDialogComponent],
 })
 export class PdfReportRequisitionModule {}

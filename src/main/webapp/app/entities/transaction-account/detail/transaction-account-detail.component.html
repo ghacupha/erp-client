@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="transactionAccount">
       <h2 data-cy="transactionAccountDetailsHeading"><span>Transaction Account</span></h2>
@@ -25,22 +25,22 @@
         <dt><span>Notes</span></dt>
         <dd>
           <div *ngIf="transactionAccount.notes">
-            <a (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">open</a>
+            <a (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">Open</a>
             {{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}
           </div>
         </dd>
         <dt><span>Parent Account</span></dt>
         <dd>
           <div *ngIf="transactionAccount.parentAccount">
-            <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
-              transactionAccount.parentAccount?.accountNumber
+            <a [routerLink]="['/transaction-account', transactionAccount.parentAccount.id, 'view']">{{
+              transactionAccount.parentAccount.accountNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of transactionAccount.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

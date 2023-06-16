@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ITaxRule, TaxRule } from '../tax-rule.model';
+import { TaxRuleFormService, TaxRuleFormGroup } from './tax-rule-form.service';
+import { ITaxRule } from '../tax-rule.model';
 import { TaxRuleService } from '../service/tax-rule.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -16,34 +16,27 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class TaxRuleUpdateComponent implements OnInit {
   isSaving = false;
+  taxRule: ITaxRule | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    telcoExciseDuty: [],
-    valueAddedTax: [],
-    withholdingVAT: [],
-    withholdingTaxConsultancy: [],
-    withholdingTaxRent: [],
-    cateringLevy: [],
-    serviceCharge: [],
-    withholdingTaxImportedService: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    placeholders: [],
-  });
+  editForm: TaxRuleFormGroup = this.taxRuleFormService.createTaxRuleFormGroup();
 
   constructor(
     protected taxRuleService: TaxRuleService,
+    protected taxRuleFormService: TaxRuleFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ taxRule }) => {
-      this.updateForm(taxRule);
+      this.taxRule = taxRule;
+      if (taxRule) {
+        this.updateForm(taxRule);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -55,34 +48,19 @@ export class TaxRuleUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const taxRule = this.createFromForm();
-    if (taxRule.id !== undefined) {
+    const taxRule = this.taxRuleFormService.getTaxRule(this.editForm);
+    if (taxRule.id !== null) {
       this.subscribeToSaveResponse(this.taxRuleService.update(taxRule));
     } else {
       this.subscribeToSaveResponse(this.taxRuleService.create(taxRule));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITaxRule>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -98,22 +76,10 @@ export class TaxRuleUpdateComponent implements OnInit {
   }
 
   protected updateForm(taxRule: ITaxRule): void {
-    this.editForm.patchValue({
-      id: taxRule.id,
-      telcoExciseDuty: taxRule.telcoExciseDuty,
-      valueAddedTax: taxRule.valueAddedTax,
-      withholdingVAT: taxRule.withholdingVAT,
-      withholdingTaxConsultancy: taxRule.withholdingTaxConsultancy,
-      withholdingTaxRent: taxRule.withholdingTaxRent,
-      cateringLevy: taxRule.cateringLevy,
-      serviceCharge: taxRule.serviceCharge,
-      withholdingTaxImportedService: taxRule.withholdingTaxImportedService,
-      fileUploadToken: taxRule.fileUploadToken,
-      compilationToken: taxRule.compilationToken,
-      placeholders: taxRule.placeholders,
-    });
+    this.taxRule = taxRule;
+    this.taxRuleFormService.resetForm(this.editForm, taxRule);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(taxRule.placeholders ?? [])
     );
@@ -125,27 +91,9 @@ export class TaxRuleUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.taxRule?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): ITaxRule {
-    return {
-      ...new TaxRule(),
-      id: this.editForm.get(['id'])!.value,
-      telcoExciseDuty: this.editForm.get(['telcoExciseDuty'])!.value,
-      valueAddedTax: this.editForm.get(['valueAddedTax'])!.value,
-      withholdingVAT: this.editForm.get(['withholdingVAT'])!.value,
-      withholdingTaxConsultancy: this.editForm.get(['withholdingTaxConsultancy'])!.value,
-      withholdingTaxRent: this.editForm.get(['withholdingTaxRent'])!.value,
-      cateringLevy: this.editForm.get(['cateringLevy'])!.value,
-      serviceCharge: this.editForm.get(['serviceCharge'])!.value,
-      withholdingTaxImportedService: this.editForm.get(['withholdingTaxImportedService'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -6,13 +6,14 @@ import { CustomerIDDocumentTypeComponent } from '../list/customer-id-document-ty
 import { CustomerIDDocumentTypeDetailComponent } from '../detail/customer-id-document-type-detail.component';
 import { CustomerIDDocumentTypeUpdateComponent } from '../update/customer-id-document-type-update.component';
 import { CustomerIDDocumentTypeRoutingResolveService } from './customer-id-document-type-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const customerIDDocumentTypeRoute: Routes = [
   {
     path: '',
     component: CustomerIDDocumentTypeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

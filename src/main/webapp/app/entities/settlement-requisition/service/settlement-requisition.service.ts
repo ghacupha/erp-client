@@ -2,13 +2,25 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ISettlementRequisition, getSettlementRequisitionIdentifier } from '../settlement-requisition.model';
+import { ISettlementRequisition, NewSettlementRequisition } from '../settlement-requisition.model';
+
+export type PartialUpdateSettlementRequisition = Partial<ISettlementRequisition> & Pick<ISettlementRequisition, 'id'>;
+
+type RestOf<T extends ISettlementRequisition | NewSettlementRequisition> = Omit<T, 'timeOfRequisition'> & {
+  timeOfRequisition?: string | null;
+};
+
+export type RestSettlementRequisition = RestOf<ISettlementRequisition>;
+
+export type NewRestSettlementRequisition = RestOf<NewSettlementRequisition>;
+
+export type PartialUpdateRestSettlementRequisition = RestOf<PartialUpdateSettlementRequisition>;
 
 export type EntityResponseType = HttpResponse<ISettlementRequisition>;
 export type EntityArrayResponseType = HttpResponse<ISettlementRequisition[]>;
@@ -20,42 +32,42 @@ export class SettlementRequisitionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(settlementRequisition: ISettlementRequisition): Observable<EntityResponseType> {
+  create(settlementRequisition: NewSettlementRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(settlementRequisition);
     return this.http
-      .post<ISettlementRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestSettlementRequisition>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(settlementRequisition: ISettlementRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(settlementRequisition);
     return this.http
-      .put<ISettlementRequisition>(`${this.resourceUrl}/${getSettlementRequisitionIdentifier(settlementRequisition) as number}`, copy, {
+      .put<RestSettlementRequisition>(`${this.resourceUrl}/${this.getSettlementRequisitionIdentifier(settlementRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(settlementRequisition: ISettlementRequisition): Observable<EntityResponseType> {
+  partialUpdate(settlementRequisition: PartialUpdateSettlementRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(settlementRequisition);
     return this.http
-      .patch<ISettlementRequisition>(`${this.resourceUrl}/${getSettlementRequisitionIdentifier(settlementRequisition) as number}`, copy, {
+      .patch<RestSettlementRequisition>(`${this.resourceUrl}/${this.getSettlementRequisitionIdentifier(settlementRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<ISettlementRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestSettlementRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<ISettlementRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestSettlementRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -65,25 +77,30 @@ export class SettlementRequisitionService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<ISettlementRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestSettlementRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addSettlementRequisitionToCollectionIfMissing(
-    settlementRequisitionCollection: ISettlementRequisition[],
-    ...settlementRequisitionsToCheck: (ISettlementRequisition | null | undefined)[]
-  ): ISettlementRequisition[] {
-    const settlementRequisitions: ISettlementRequisition[] = settlementRequisitionsToCheck.filter(isPresent);
+  getSettlementRequisitionIdentifier(settlementRequisition: Pick<ISettlementRequisition, 'id'>): number {
+    return settlementRequisition.id;
+  }
+
+  compareSettlementRequisition(o1: Pick<ISettlementRequisition, 'id'> | null, o2: Pick<ISettlementRequisition, 'id'> | null): boolean {
+    return o1 && o2 ? this.getSettlementRequisitionIdentifier(o1) === this.getSettlementRequisitionIdentifier(o2) : o1 === o2;
+  }
+
+  addSettlementRequisitionToCollectionIfMissing<Type extends Pick<ISettlementRequisition, 'id'>>(
+    settlementRequisitionCollection: Type[],
+    ...settlementRequisitionsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const settlementRequisitions: Type[] = settlementRequisitionsToCheck.filter(isPresent);
     if (settlementRequisitions.length > 0) {
       const settlementRequisitionCollectionIdentifiers = settlementRequisitionCollection.map(
-        settlementRequisitionItem => getSettlementRequisitionIdentifier(settlementRequisitionItem)!
+        settlementRequisitionItem => this.getSettlementRequisitionIdentifier(settlementRequisitionItem)!
       );
       const settlementRequisitionsToAdd = settlementRequisitions.filter(settlementRequisitionItem => {
-        const settlementRequisitionIdentifier = getSettlementRequisitionIdentifier(settlementRequisitionItem);
-        if (
-          settlementRequisitionIdentifier == null ||
-          settlementRequisitionCollectionIdentifiers.includes(settlementRequisitionIdentifier)
-        ) {
+        const settlementRequisitionIdentifier = this.getSettlementRequisitionIdentifier(settlementRequisitionItem);
+        if (settlementRequisitionCollectionIdentifiers.includes(settlementRequisitionIdentifier)) {
           return false;
         }
         settlementRequisitionCollectionIdentifiers.push(settlementRequisitionIdentifier);
@@ -94,27 +111,31 @@ export class SettlementRequisitionService {
     return settlementRequisitionCollection;
   }
 
-  protected convertDateFromClient(settlementRequisition: ISettlementRequisition): ISettlementRequisition {
-    return Object.assign({}, settlementRequisition, {
-      timeOfRequisition: settlementRequisition.timeOfRequisition?.isValid() ? settlementRequisition.timeOfRequisition.toJSON() : undefined,
+  protected convertDateFromClient<T extends ISettlementRequisition | NewSettlementRequisition | PartialUpdateSettlementRequisition>(
+    settlementRequisition: T
+  ): RestOf<T> {
+    return {
+      ...settlementRequisition,
+      timeOfRequisition: settlementRequisition.timeOfRequisition?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restSettlementRequisition: RestSettlementRequisition): ISettlementRequisition {
+    return {
+      ...restSettlementRequisition,
+      timeOfRequisition: restSettlementRequisition.timeOfRequisition ? dayjs(restSettlementRequisition.timeOfRequisition) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestSettlementRequisition>): HttpResponse<ISettlementRequisition> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.timeOfRequisition = res.body.timeOfRequisition ? dayjs(res.body.timeOfRequisition) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((settlementRequisition: ISettlementRequisition) => {
-        settlementRequisition.timeOfRequisition = settlementRequisition.timeOfRequisition
-          ? dayjs(settlementRequisition.timeOfRequisition)
-          : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestSettlementRequisition[]>): HttpResponse<ISettlementRequisition[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISignedPayment, SignedPayment } from '../signed-payment.model';
+import { ISignedPayment } from '../signed-payment.model';
 import { SignedPaymentService } from '../service/signed-payment.service';
 
 @Injectable({ providedIn: 'root' })
-export class SignedPaymentRoutingResolveService implements Resolve<ISignedPayment> {
+export class SignedPaymentRoutingResolveService implements Resolve<ISignedPayment | null> {
   constructor(protected service: SignedPaymentService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISignedPayment> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISignedPayment | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((signedPayment: HttpResponse<SignedPayment>) => {
+        mergeMap((signedPayment: HttpResponse<ISignedPayment>) => {
           if (signedPayment.body) {
             return of(signedPayment.body);
           } else {
@@ -25,6 +25,6 @@ export class SignedPaymentRoutingResolveService implements Resolve<ISignedPaymen
         })
       );
     }
-    return of(new SignedPayment());
+    return of(null);
   }
 }

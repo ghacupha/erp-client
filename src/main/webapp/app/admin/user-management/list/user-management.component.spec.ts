@@ -1,10 +1,10 @@
-jest.mock('@angular/router');
 jest.mock('app/core/auth/account.service');
 
 import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { UserManagementService } from '../service/user-management.service';
@@ -29,17 +29,15 @@ describe('User Management Component', () => {
     })
   );
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        declarations: [UserManagementComponent],
-        providers: [Router, { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
-      })
-        .overrideTemplate(UserManagementComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      declarations: [UserManagementComponent],
+      providers: [{ provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
     })
-  );
+      .overrideTemplate(UserManagementComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagementComponent);

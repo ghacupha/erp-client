@@ -6,13 +6,14 @@ import { PrepaymentAccountComponent } from '../list/prepayment-account.component
 import { PrepaymentAccountDetailComponent } from '../detail/prepayment-account-detail.component';
 import { PrepaymentAccountUpdateComponent } from '../update/prepayment-account-update.component';
 import { PrepaymentAccountRoutingResolveService } from './prepayment-account-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const prepaymentAccountRoute: Routes = [
   {
     path: '',
     component: PrepaymentAccountComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IContractMetadata, ContractMetadata } from '../contract-metadata.model';
+import { IContractMetadata } from '../contract-metadata.model';
 import { ContractMetadataService } from '../service/contract-metadata.service';
 
 @Injectable({ providedIn: 'root' })
-export class ContractMetadataRoutingResolveService implements Resolve<IContractMetadata> {
+export class ContractMetadataRoutingResolveService implements Resolve<IContractMetadata | null> {
   constructor(protected service: ContractMetadataService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IContractMetadata> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IContractMetadata | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((contractMetadata: HttpResponse<ContractMetadata>) => {
+        mergeMap((contractMetadata: HttpResponse<IContractMetadata>) => {
           if (contractMetadata.body) {
             return of(contractMetadata.body);
           } else {
@@ -25,6 +25,6 @@ export class ContractMetadataRoutingResolveService implements Resolve<IContractM
         })
       );
     }
-    return of(new ContractMetadata());
+    return of(null);
   }
 }

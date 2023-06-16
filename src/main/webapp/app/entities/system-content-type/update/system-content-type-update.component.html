@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-system-content-type-heading" data-cy="SystemContentTypeCreateUpdateHeading">Create or edit a System Content Type</h2>
@@ -6,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contentTypeName">Content Type Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contentTypeName">Content Type Name</label>
           <input
             type="text"
             class="form-control"
@@ -31,8 +31,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contentTypeHeader">Content Type Header</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contentTypeHeader">Content Type Header</label>
           <input
             type="text"
             class="form-control"
@@ -53,13 +53,13 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_comments">Comments</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_comments">Comments</label>
           <textarea class="form-control" name="comments" id="field_comments" data-cy="comments" formControlName="comments"></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_availability">Availability</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_availability">Availability</label>
           <select class="form-control" name="availability" formControlName="availability" id="field_availability" data-cy="availability">
             <option [ngValue]="null"></option>
             <option
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholders</label>
           <select
             class="form-control"
@@ -85,25 +85,28 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_sysMaps">Sys Maps</label>
-          <select class="form-control" id="field_sysMaps" data-cy="sysMaps" multiple name="sysMaps" formControlName="sysMaps">
+          <select
+            class="form-control"
+            id="field_sysMaps"
+            data-cy="sysMaps"
+            multiple
+            name="sysMaps"
+            formControlName="sysMaps"
+            [compareWith]="compareUniversallyUniqueMapping"
+          >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('sysMaps')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>

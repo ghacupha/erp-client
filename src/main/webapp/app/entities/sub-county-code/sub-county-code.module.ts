@@ -9,6 +9,5 @@ import { SubCountyCodeRoutingModule } from './route/sub-county-code-routing.modu
 @NgModule({
   imports: [SharedModule, SubCountyCodeRoutingModule],
   declarations: [SubCountyCodeComponent, SubCountyCodeDetailComponent, SubCountyCodeUpdateComponent, SubCountyCodeDeleteDialogComponent],
-  entryComponents: [SubCountyCodeDeleteDialogComponent],
 })
 export class SubCountyCodeModule {}

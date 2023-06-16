@@ -14,6 +14,5 @@ import { UniversallyUniqueMappingRoutingModule } from './route/universally-uniqu
     UniversallyUniqueMappingUpdateComponent,
     UniversallyUniqueMappingDeleteDialogComponent,
   ],
-  entryComponents: [UniversallyUniqueMappingDeleteDialogComponent],
 })
 export class UniversallyUniqueMappingModule {}

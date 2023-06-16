@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220629134905",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "reportName",
@@ -36,88 +38,86 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ExcelReportExport",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "excelReportExport",
       "ownerSide": true,
-      "otherEntityRelationshipName": "excelReportExport"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "excelReportExport",
       "ownerSide": true,
-      "otherEntityRelationshipName": "excelReportExport"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "reportStatus",
-      "otherEntityName": "reportStatus",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "id",
-      "ownerSide": true,
       "id": false,
-      "otherEntityRelationshipName": "excelReportExport"
+      "otherEntityField": "id",
+      "otherEntityName": "reportStatus",
+      "otherEntityRelationshipName": "excelReportExport",
+      "ownerSide": true,
+      "relationshipName": "reportStatus",
+      "relationshipType": "one-to-one"
     },
     {
-      "relationshipName": "securityClearance",
+      "otherEntityField": "clearanceLevel",
       "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "clearanceLevel"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "reportCreator",
+      "otherEntityField": "applicationIdentity",
       "otherEntityName": "applicationUser",
+      "relationshipName": "reportCreator",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "applicationIdentity"
+      "relationshipValidateRules": ["required"]
     },
     {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
       "relationshipName": "organization",
-      "otherEntityName": "dealer",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     },
     {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
       "relationshipName": "department",
-      "otherEntityName": "dealer",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "systemModule",
+      "otherEntityField": "moduleName",
       "otherEntityName": "systemModule",
+      "relationshipName": "systemModule",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "moduleName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "reportDesign",
+      "otherEntityField": "designation",
       "otherEntityName": "reportDesign",
+      "relationshipName": "reportDesign",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "designation"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "fileCheckSumAlgorithm",
+      "otherEntityField": "name",
       "otherEntityName": "algorithm",
+      "relationshipName": "fileCheckSumAlgorithm",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "name"
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ExcelReportExport",
-  "changelogDate": "20220629134905",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

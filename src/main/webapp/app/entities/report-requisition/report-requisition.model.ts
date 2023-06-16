@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { IReportTemplate } from 'app/entities/report-template/report-template.model';
@@ -6,43 +6,21 @@ import { IReportContentType } from 'app/entities/report-content-type/report-cont
 import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
 
 export interface IReportRequisition {
-  id?: number;
-  reportName?: string;
-  reportRequestTime?: dayjs.Dayjs;
-  reportPassword?: string;
+  id: number;
+  reportName?: string | null;
+  reportRequestTime?: dayjs.Dayjs | null;
+  reportPassword?: string | null;
   reportStatus?: ReportStatusTypes | null;
-  reportId?: string;
-  reportFileAttachmentContentType?: string | null;
+  reportId?: string | null;
   reportFileAttachment?: string | null;
+  reportFileAttachmentContentType?: string | null;
   reportFileCheckSum?: string | null;
-  reportNotesContentType?: string | null;
   reportNotes?: string | null;
-  placeholders?: IPlaceholder[] | null;
-  parameters?: IUniversallyUniqueMapping[] | null;
-  reportTemplate?: IReportTemplate;
-  reportContentType?: IReportContentType;
+  reportNotesContentType?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  parameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
+  reportTemplate?: Pick<IReportTemplate, 'id' | 'catalogueNumber'> | null;
+  reportContentType?: Pick<IReportContentType, 'id' | 'reportTypeName'> | null;
 }
 
-export class ReportRequisition implements IReportRequisition {
-  constructor(
-    public id?: number,
-    public reportName?: string,
-    public reportRequestTime?: dayjs.Dayjs,
-    public reportPassword?: string,
-    public reportStatus?: ReportStatusTypes | null,
-    public reportId?: string,
-    public reportFileAttachmentContentType?: string | null,
-    public reportFileAttachment?: string | null,
-    public reportFileCheckSum?: string | null,
-    public reportNotesContentType?: string | null,
-    public reportNotes?: string | null,
-    public placeholders?: IPlaceholder[] | null,
-    public parameters?: IUniversallyUniqueMapping[] | null,
-    public reportTemplate?: IReportTemplate,
-    public reportContentType?: IReportContentType
-  ) {}
-}
-
-export function getReportRequisitionIdentifier(reportRequisition: IReportRequisition): number | undefined {
-  return reportRequisition.id;
-}
+export type NewReportRequisition = Omit<IReportRequisition, 'id'> & { id: null };

@@ -6,13 +6,14 @@ import { ReportDesignComponent } from '../list/report-design.component';
 import { ReportDesignDetailComponent } from '../detail/report-design-detail.component';
 import { ReportDesignUpdateComponent } from '../update/report-design-update.component';
 import { ReportDesignRoutingResolveService } from './report-design-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const reportDesignRoute: Routes = [
   {
     path: '',
     component: ReportDesignComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IFileType, getFileTypeIdentifier } from '../file-type.model';
+import { IFileType, NewFileType } from '../file-type.model';
+
+export type PartialUpdateFileType = Partial<IFileType> & Pick<IFileType, 'id'>;
 
 export type EntityResponseType = HttpResponse<IFileType>;
 export type EntityArrayResponseType = HttpResponse<IFileType[]>;
@@ -18,18 +20,16 @@ export class FileTypeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(fileType: IFileType): Observable<EntityResponseType> {
+  create(fileType: NewFileType): Observable<EntityResponseType> {
     return this.http.post<IFileType>(this.resourceUrl, fileType, { observe: 'response' });
   }
 
   update(fileType: IFileType): Observable<EntityResponseType> {
-    return this.http.put<IFileType>(`${this.resourceUrl}/${getFileTypeIdentifier(fileType) as number}`, fileType, { observe: 'response' });
+    return this.http.put<IFileType>(`${this.resourceUrl}/${this.getFileTypeIdentifier(fileType)}`, fileType, { observe: 'response' });
   }
 
-  partialUpdate(fileType: IFileType): Observable<EntityResponseType> {
-    return this.http.patch<IFileType>(`${this.resourceUrl}/${getFileTypeIdentifier(fileType) as number}`, fileType, {
-      observe: 'response',
-    });
+  partialUpdate(fileType: PartialUpdateFileType): Observable<EntityResponseType> {
+    return this.http.patch<IFileType>(`${this.resourceUrl}/${this.getFileTypeIdentifier(fileType)}`, fileType, { observe: 'response' });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -50,13 +50,24 @@ export class FileTypeService {
     return this.http.get<IFileType[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addFileTypeToCollectionIfMissing(fileTypeCollection: IFileType[], ...fileTypesToCheck: (IFileType | null | undefined)[]): IFileType[] {
-    const fileTypes: IFileType[] = fileTypesToCheck.filter(isPresent);
+  getFileTypeIdentifier(fileType: Pick<IFileType, 'id'>): number {
+    return fileType.id;
+  }
+
+  compareFileType(o1: Pick<IFileType, 'id'> | null, o2: Pick<IFileType, 'id'> | null): boolean {
+    return o1 && o2 ? this.getFileTypeIdentifier(o1) === this.getFileTypeIdentifier(o2) : o1 === o2;
+  }
+
+  addFileTypeToCollectionIfMissing<Type extends Pick<IFileType, 'id'>>(
+    fileTypeCollection: Type[],
+    ...fileTypesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const fileTypes: Type[] = fileTypesToCheck.filter(isPresent);
     if (fileTypes.length > 0) {
-      const fileTypeCollectionIdentifiers = fileTypeCollection.map(fileTypeItem => getFileTypeIdentifier(fileTypeItem)!);
+      const fileTypeCollectionIdentifiers = fileTypeCollection.map(fileTypeItem => this.getFileTypeIdentifier(fileTypeItem)!);
       const fileTypesToAdd = fileTypes.filter(fileTypeItem => {
-        const fileTypeIdentifier = getFileTypeIdentifier(fileTypeItem);
-        if (fileTypeIdentifier == null || fileTypeCollectionIdentifiers.includes(fileTypeIdentifier)) {
+        const fileTypeIdentifier = this.getFileTypeIdentifier(fileTypeItem);
+        if (fileTypeCollectionIdentifiers.includes(fileTypeIdentifier)) {
           return false;
         }
         fileTypeCollectionIdentifiers.push(fileTypeIdentifier);

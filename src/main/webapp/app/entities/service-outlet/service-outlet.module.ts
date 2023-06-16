@@ -9,6 +9,5 @@ import { ServiceOutletRoutingModule } from './route/service-outlet-routing.modul
 @NgModule({
   imports: [SharedModule, ServiceOutletRoutingModule],
   declarations: [ServiceOutletComponent, ServiceOutletDetailComponent, ServiceOutletUpdateComponent, ServiceOutletDeleteDialogComponent],
-  entryComponents: [ServiceOutletDeleteDialogComponent],
 })
 export class ServiceOutletModule {}

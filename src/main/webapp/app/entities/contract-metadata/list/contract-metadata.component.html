@@ -3,9 +3,9 @@
     <span>Contract Metadata</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,58 +24,117 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Contract Metadata</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="contractMetadata?.length === 0">
-    <span>No contractMetadata found</span>
+    <span>No Contract Metadata found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="contractMetadata && contractMetadata.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="contractMetadata && contractMetadata.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span>Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="typeOfContract">
-            <span>Type Of Contract</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Type Of Contract</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="contractStatus">
-            <span>Contract Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Contract Status</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="terminationDate"><span>Termination Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="startDate">
+            <div class="d-flex">
+              <span>Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="terminationDate">
+            <div class="d-flex">
+              <span>Termination Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="commentsAndAttachment">
-            <span>Comments And Attachment</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Comments And Attachment</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="contractTitle"><span>Contract Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="contractTitle">
+            <div class="d-flex">
+              <span>Contract Title</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="contractIdentifier">
-            <span>Contract Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Contract Identifier</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="contractIdentifierShort">
-            <span>Contract Identifier Short</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Contract Identifier Short</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="department.dealerName"><span>Department</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="contractPartner.dealerName"><span>Contract Partner</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="department.dealerName">
+            <div class="d-flex">
+              <span>Department</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="contractPartner.dealerName">
+            <div class="d-flex">
+              <span>Contract Partner</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="responsiblePerson.applicationIdentity">
-            <span>Responsible Person</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Responsible Person</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="securityClearance.clearanceLevel"><span>Security Clearance</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="securityClearance.clearanceLevel">
+            <div class="d-flex">
+              <span>Security Clearance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -95,31 +154,31 @@
           <td>{{ contractMetadata.contractIdentifierShort }}</td>
           <td>
             <div *ngIf="contractMetadata.department">
-              <a [routerLink]="['/dealer', contractMetadata.department?.id, 'view']">{{ contractMetadata.department?.dealerName }}</a>
+              <a [routerLink]="['/dealer', contractMetadata.department.id, 'view']">{{ contractMetadata.department.dealerName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="contractMetadata.contractPartner">
-              <a [routerLink]="['/dealer', contractMetadata.contractPartner?.id, 'view']">{{
-                contractMetadata.contractPartner?.dealerName
+              <a [routerLink]="['/dealer', contractMetadata.contractPartner.id, 'view']">{{
+                contractMetadata.contractPartner.dealerName
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="contractMetadata.responsiblePerson">
-              <a [routerLink]="['/application-user', contractMetadata.responsiblePerson?.id, 'view']">{{
-                contractMetadata.responsiblePerson?.applicationIdentity
+              <a [routerLink]="['/application-user', contractMetadata.responsiblePerson.id, 'view']">{{
+                contractMetadata.responsiblePerson.applicationIdentity
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="contractMetadata.securityClearance">
-              <a [routerLink]="['/security-clearance', contractMetadata.securityClearance?.id, 'view']">{{
-                contractMetadata.securityClearance?.clearanceLevel
+              <a [routerLink]="['/security-clearance', contractMetadata.securityClearance.id, 'view']">{{
+                contractMetadata.securityClearance.clearanceLevel
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -153,19 +212,19 @@
   </div>
 
   <div *ngIf="contractMetadata && contractMetadata.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

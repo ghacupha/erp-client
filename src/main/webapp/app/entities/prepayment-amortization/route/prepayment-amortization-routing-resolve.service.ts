@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-amortization.model';
+import { IPrepaymentAmortization } from '../prepayment-amortization.model';
 import { PrepaymentAmortizationService } from '../service/prepayment-amortization.service';
 
 @Injectable({ providedIn: 'root' })
-export class PrepaymentAmortizationRoutingResolveService implements Resolve<IPrepaymentAmortization> {
+export class PrepaymentAmortizationRoutingResolveService implements Resolve<IPrepaymentAmortization | null> {
   constructor(protected service: PrepaymentAmortizationService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentAmortization> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentAmortization | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((prepaymentAmortization: HttpResponse<PrepaymentAmortization>) => {
+        mergeMap((prepaymentAmortization: HttpResponse<IPrepaymentAmortization>) => {
           if (prepaymentAmortization.body) {
             return of(prepaymentAmortization.body);
           } else {
@@ -25,6 +25,6 @@ export class PrepaymentAmortizationRoutingResolveService implements Resolve<IPre
         })
       );
     }
-    return of(new PrepaymentAmortization());
+    return of(null);
   }
 }

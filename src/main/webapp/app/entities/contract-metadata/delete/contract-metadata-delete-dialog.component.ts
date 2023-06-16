@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IContractMetadata } from '../contract-metadata.model';
 import { ContractMetadataService } from '../service/contract-metadata.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './contract-metadata-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class ContractMetadataDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.contractMetadataService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

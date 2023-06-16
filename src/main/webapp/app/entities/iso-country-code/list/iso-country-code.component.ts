@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IIsoCountryCode } from '../iso-country-code.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { IsoCountryCodeService } from '../service/iso-country-code.service';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
+import { EntityArrayResponseType, IsoCountryCodeService } from '../service/iso-country-code.service';
 import { IsoCountryCodeDeleteDialogComponent } from '../delete/iso-country-code-delete-dialog.component';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 
@@ -15,124 +17,126 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
   templateUrl: './iso-country-code.component.html',
 })
 export class IsoCountryCodeComponent implements OnInit {
-  isoCountryCodes: IIsoCountryCode[];
+  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['countryCode', 'countryDescription'];
+
+  isoCountryCodes?: IIsoCountryCode[];
   isLoading = false;
-  itemsPerPage: number;
-  links: { [key: string]: number };
-  page: number;
-  predicate: string;
-  ascending: boolean;
-  currentSearch: string;
+
+  predicate = 'id';
+  ascending = true;
+  currentSearch = '';
+
+  itemsPerPage = ITEMS_PER_PAGE;
+  links: { [key: string]: number } = {
+    last: 0,
+  };
+  page = 1;
 
   constructor(
     protected isoCountryCodeService: IsoCountryCodeService,
-    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute,
+    public router: Router,
     protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
-  ) {
-    this.isoCountryCodes = [];
-    this.itemsPerPage = ITEMS_PER_PAGE;
-    this.page = 0;
-    this.links = {
-      last: 0,
-    };
-    this.predicate = 'id';
-    this.ascending = true;
-    this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-  }
-
-  loadAll(): void {
-    this.isLoading = true;
-    if (this.currentSearch) {
-      this.isoCountryCodeService
-        .search({
-          query: this.currentSearch,
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.sort(),
-        })
-        .subscribe(
-          (res: HttpResponse<IIsoCountryCode[]>) => {
-            this.isLoading = false;
-            this.paginateIsoCountryCodes(res.body, res.headers);
-          },
-          () => {
-            this.isLoading = false;
-          }
-        );
-      return;
-    }
-
-    this.isoCountryCodeService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe(
-        (res: HttpResponse<IIsoCountryCode[]>) => {
-          this.isLoading = false;
-          this.paginateIsoCountryCodes(res.body, res.headers);
-        },
-        () => {
-          this.isLoading = false;
-        }
-      );
-  }
+    protected modalService: NgbModal
+  ) {}
 
   reset(): void {
-    this.page = 0;
+    this.page = 1;
     this.isoCountryCodes = [];
-    this.loadAll();
+    this.load();
   }
 
   loadPage(page: number): void {
     this.page = page;
-    this.loadAll();
+    this.load();
   }
 
+  trackId = (_index: number, item: IIsoCountryCode): number => this.isoCountryCodeService.getIsoCountryCodeIdentifier(item);
+
   search(query: string): void {
-    this.isoCountryCodes = [];
-    this.links = {
-      last: 0,
-    };
-    this.page = 0;
-    if (query && ['countryCode', 'countryDescription'].includes(this.predicate)) {
+    if (query && IsoCountryCodeComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
+    this.page = 1;
     this.currentSearch = query;
-    this.loadAll();
+    this.navigateToWithComponentValues();
   }
 
   ngOnInit(): void {
-    this.loadAll();
-  }
-
-  trackId(index: number, item: IIsoCountryCode): number {
-    return item.id!;
+    this.load();
   }
 
   delete(isoCountryCode: IIsoCountryCode): void {
     const modalRef = this.modalService.open(IsoCountryCodeDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.isoCountryCode = isoCountryCode;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.reset();
-      }
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        switchMap(() => this.loadFromBackendWithRouteInformations())
+      )
+      .subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+  }
+
+  load(): void {
+    this.loadFromBackendWithRouteInformations().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
     });
   }
 
-  protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-    if (this.predicate !== 'id') {
-      result.push('id');
-    }
-    return result;
+  navigateToWithComponentValues(): void {
+    this.handleNavigation(this.page, this.predicate, this.ascending, this.currentSearch);
   }
 
-  protected paginateIsoCountryCodes(data: IIsoCountryCode[] | null, headers: HttpHeaders): void {
+  navigateToPage(page = this.page): void {
+    this.handleNavigation(page, this.predicate, this.ascending, this.currentSearch);
+  }
+
+  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
+    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending, this.currentSearch))
+    );
+  }
+
+  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
+    this.predicate = sort[0];
+    this.ascending = sort[1] === ASC;
+    if (params.has('search') && params.get('search') !== '') {
+      this.currentSearch = params.get('search') as string;
+      if (IsoCountryCodeComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+        this.predicate = '';
+      }
+    }
+  }
+
+  protected onResponseSuccess(response: EntityArrayResponseType): void {
+    this.fillComponentAttributesFromResponseHeader(response.headers);
+    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+    this.isoCountryCodes = dataFromBody;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: IIsoCountryCode[] | null): IIsoCountryCode[] {
+    const isoCountryCodesNew = this.isoCountryCodes ?? [];
+    if (data) {
+      for (const d of data) {
+        if (isoCountryCodesNew.map(op => op.id).indexOf(d.id) === -1) {
+          isoCountryCodesNew.push(d);
+        }
+      }
+    }
+    return isoCountryCodesNew;
+  }
+
+  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
     const linkHeader = headers.get('link');
     if (linkHeader) {
       this.links = this.parseLinks.parse(linkHeader);
@@ -141,10 +145,50 @@ export class IsoCountryCodeComponent implements OnInit {
         last: 0,
       };
     }
-    if (data) {
-      for (const d of data) {
-        this.isoCountryCodes.push(d);
-      }
+  }
+
+  protected queryBackend(
+    page?: number,
+    predicate?: string,
+    ascending?: boolean,
+    currentSearch?: string
+  ): Observable<EntityArrayResponseType> {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? 1;
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      eagerload: true,
+      query: currentSearch,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+    if (this.currentSearch && this.currentSearch !== '') {
+      return this.isoCountryCodeService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
+    } else {
+      return this.isoCountryCodeService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    }
+  }
+
+  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean, currentSearch?: string): void {
+    const queryParamsObj = {
+      search: currentSearch,
+      page,
+      size: this.itemsPerPage,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+
+    this.router.navigate(['./'], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParamsObj,
+    });
+  }
+
+  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
+    const ascendingQueryParam = ascending ? ASC : DESC;
+    if (predicate === '') {
+      return [];
+    } else {
+      return [predicate + ',' + ascendingQueryParam];
     }
   }
 }

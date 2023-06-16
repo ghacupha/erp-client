@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IWorkProjectRegister, WorkProjectRegister } from '../work-project-register.model';
+import { WorkProjectRegisterFormService, WorkProjectRegisterFormGroup } from './work-project-register-form.service';
+import { IWorkProjectRegister } from '../work-project-register.model';
 import { WorkProjectRegisterService } from '../service/work-project-register.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -25,42 +25,43 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class WorkProjectRegisterUpdateComponent implements OnInit {
   isSaving = false;
+  workProjectRegister: IWorkProjectRegister | null = null;
 
   dealersSharedCollection: IDealer[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    catalogueNumber: [null, [Validators.required]],
-    description: [null, [Validators.required]],
-    details: [],
-    detailsContentType: [],
-    totalProjectCost: [],
-    additionalNotes: [],
-    additionalNotesContentType: [],
-    dealers: [null, Validators.required],
-    settlementCurrency: [],
-    placeholders: [],
-    businessDocuments: [],
-  });
+  editForm: WorkProjectRegisterFormGroup = this.workProjectRegisterFormService.createWorkProjectRegisterFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected workProjectRegisterService: WorkProjectRegisterService,
+    protected workProjectRegisterFormService: WorkProjectRegisterFormService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workProjectRegister }) => {
-      this.updateForm(workProjectRegister);
+      this.workProjectRegister = workProjectRegister;
+      if (workProjectRegister) {
+        this.updateForm(workProjectRegister);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -87,68 +88,19 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const workProjectRegister = this.createFromForm();
-    if (workProjectRegister.id !== undefined) {
+    const workProjectRegister = this.workProjectRegisterFormService.getWorkProjectRegister(this.editForm);
+    if (workProjectRegister.id !== null) {
       this.subscribeToSaveResponse(this.workProjectRegisterService.update(workProjectRegister));
     } else {
       this.subscribeToSaveResponse(this.workProjectRegisterService.create(workProjectRegister));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkProjectRegister>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -164,34 +116,23 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
   }
 
   protected updateForm(workProjectRegister: IWorkProjectRegister): void {
-    this.editForm.patchValue({
-      id: workProjectRegister.id,
-      catalogueNumber: workProjectRegister.catalogueNumber,
-      description: workProjectRegister.description,
-      details: workProjectRegister.details,
-      detailsContentType: workProjectRegister.detailsContentType,
-      totalProjectCost: workProjectRegister.totalProjectCost,
-      additionalNotes: workProjectRegister.additionalNotes,
-      additionalNotesContentType: workProjectRegister.additionalNotesContentType,
-      dealers: workProjectRegister.dealers,
-      settlementCurrency: workProjectRegister.settlementCurrency,
-      placeholders: workProjectRegister.placeholders,
-      businessDocuments: workProjectRegister.businessDocuments,
-    });
+    this.workProjectRegister = workProjectRegister;
+    this.workProjectRegisterFormService.resetForm(this.editForm, workProjectRegister);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       ...(workProjectRegister.dealers ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      workProjectRegister.settlementCurrency
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        workProjectRegister.settlementCurrency
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(workProjectRegister.placeholders ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(workProjectRegister.businessDocuments ?? [])
     );
@@ -203,7 +144,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(dealers, ...(this.editForm.get('dealers')!.value ?? []))
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, ...(this.workProjectRegister?.dealers ?? []))
         )
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
@@ -213,9 +154,9 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.workProjectRegister?.settlementCurrency
           )
         )
       )
@@ -226,7 +167,10 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.workProjectRegister?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -236,30 +180,12 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.workProjectRegister?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IWorkProjectRegister {
-    return {
-      ...new WorkProjectRegister(),
-      id: this.editForm.get(['id'])!.value,
-      catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      detailsContentType: this.editForm.get(['detailsContentType'])!.value,
-      details: this.editForm.get(['details'])!.value,
-      totalProjectCost: this.editForm.get(['totalProjectCost'])!.value,
-      additionalNotesContentType: this.editForm.get(['additionalNotesContentType'])!.value,
-      additionalNotes: this.editForm.get(['additionalNotes'])!.value,
-      dealers: this.editForm.get(['dealers'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAssetWarranty, getAssetWarrantyIdentifier } from '../asset-warranty.model';
+import { IAssetWarranty, NewAssetWarranty } from '../asset-warranty.model';
+
+export type PartialUpdateAssetWarranty = Partial<IAssetWarranty> & Pick<IAssetWarranty, 'id'>;
+
+type RestOf<T extends IAssetWarranty | NewAssetWarranty> = Omit<T, 'expiryDate'> & {
+  expiryDate?: string | null;
+};
+
+export type RestAssetWarranty = RestOf<IAssetWarranty>;
+
+export type NewRestAssetWarranty = RestOf<NewAssetWarranty>;
+
+export type PartialUpdateRestAssetWarranty = RestOf<PartialUpdateAssetWarranty>;
 
 export type EntityResponseType = HttpResponse<IAssetWarranty>;
 export type EntityArrayResponseType = HttpResponse<IAssetWarranty[]>;
@@ -21,38 +33,38 @@ export class AssetWarrantyService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(assetWarranty: IAssetWarranty): Observable<EntityResponseType> {
+  create(assetWarranty: NewAssetWarranty): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assetWarranty);
     return this.http
-      .post<IAssetWarranty>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestAssetWarranty>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(assetWarranty: IAssetWarranty): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assetWarranty);
     return this.http
-      .put<IAssetWarranty>(`${this.resourceUrl}/${getAssetWarrantyIdentifier(assetWarranty) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestAssetWarranty>(`${this.resourceUrl}/${this.getAssetWarrantyIdentifier(assetWarranty)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(assetWarranty: IAssetWarranty): Observable<EntityResponseType> {
+  partialUpdate(assetWarranty: PartialUpdateAssetWarranty): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assetWarranty);
     return this.http
-      .patch<IAssetWarranty>(`${this.resourceUrl}/${getAssetWarrantyIdentifier(assetWarranty) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestAssetWarranty>(`${this.resourceUrl}/${this.getAssetWarrantyIdentifier(assetWarranty)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IAssetWarranty>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestAssetWarranty>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAssetWarranty[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestAssetWarranty[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -62,22 +74,30 @@ export class AssetWarrantyService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAssetWarranty[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestAssetWarranty[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addAssetWarrantyToCollectionIfMissing(
-    assetWarrantyCollection: IAssetWarranty[],
-    ...assetWarrantiesToCheck: (IAssetWarranty | null | undefined)[]
-  ): IAssetWarranty[] {
-    const assetWarranties: IAssetWarranty[] = assetWarrantiesToCheck.filter(isPresent);
+  getAssetWarrantyIdentifier(assetWarranty: Pick<IAssetWarranty, 'id'>): number {
+    return assetWarranty.id;
+  }
+
+  compareAssetWarranty(o1: Pick<IAssetWarranty, 'id'> | null, o2: Pick<IAssetWarranty, 'id'> | null): boolean {
+    return o1 && o2 ? this.getAssetWarrantyIdentifier(o1) === this.getAssetWarrantyIdentifier(o2) : o1 === o2;
+  }
+
+  addAssetWarrantyToCollectionIfMissing<Type extends Pick<IAssetWarranty, 'id'>>(
+    assetWarrantyCollection: Type[],
+    ...assetWarrantiesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const assetWarranties: Type[] = assetWarrantiesToCheck.filter(isPresent);
     if (assetWarranties.length > 0) {
       const assetWarrantyCollectionIdentifiers = assetWarrantyCollection.map(
-        assetWarrantyItem => getAssetWarrantyIdentifier(assetWarrantyItem)!
+        assetWarrantyItem => this.getAssetWarrantyIdentifier(assetWarrantyItem)!
       );
       const assetWarrantiesToAdd = assetWarranties.filter(assetWarrantyItem => {
-        const assetWarrantyIdentifier = getAssetWarrantyIdentifier(assetWarrantyItem);
-        if (assetWarrantyIdentifier == null || assetWarrantyCollectionIdentifiers.includes(assetWarrantyIdentifier)) {
+        const assetWarrantyIdentifier = this.getAssetWarrantyIdentifier(assetWarrantyItem);
+        if (assetWarrantyCollectionIdentifiers.includes(assetWarrantyIdentifier)) {
           return false;
         }
         assetWarrantyCollectionIdentifiers.push(assetWarrantyIdentifier);
@@ -88,25 +108,29 @@ export class AssetWarrantyService {
     return assetWarrantyCollection;
   }
 
-  protected convertDateFromClient(assetWarranty: IAssetWarranty): IAssetWarranty {
-    return Object.assign({}, assetWarranty, {
-      expiryDate: assetWarranty.expiryDate?.isValid() ? assetWarranty.expiryDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IAssetWarranty | NewAssetWarranty | PartialUpdateAssetWarranty>(assetWarranty: T): RestOf<T> {
+    return {
+      ...assetWarranty,
+      expiryDate: assetWarranty.expiryDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restAssetWarranty: RestAssetWarranty): IAssetWarranty {
+    return {
+      ...restAssetWarranty,
+      expiryDate: restAssetWarranty.expiryDate ? dayjs(restAssetWarranty.expiryDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestAssetWarranty>): HttpResponse<IAssetWarranty> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.expiryDate = res.body.expiryDate ? dayjs(res.body.expiryDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((assetWarranty: IAssetWarranty) => {
-        assetWarranty.expiryDate = assetWarranty.expiryDate ? dayjs(assetWarranty.expiryDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestAssetWarranty[]>): HttpResponse<IAssetWarranty[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

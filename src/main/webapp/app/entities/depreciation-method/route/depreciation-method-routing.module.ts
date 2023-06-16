@@ -6,13 +6,14 @@ import { DepreciationMethodComponent } from '../list/depreciation-method.compone
 import { DepreciationMethodDetailComponent } from '../detail/depreciation-method-detail.component';
 import { DepreciationMethodUpdateComponent } from '../update/depreciation-method-update.component';
 import { DepreciationMethodRoutingResolveService } from './depreciation-method-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const depreciationMethodRoute: Routes = [
   {
     path: '',
     component: DepreciationMethodComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

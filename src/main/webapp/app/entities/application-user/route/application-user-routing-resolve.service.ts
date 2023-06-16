@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IApplicationUser, ApplicationUser } from '../application-user.model';
+import { IApplicationUser } from '../application-user.model';
 import { ApplicationUserService } from '../service/application-user.service';
 
 @Injectable({ providedIn: 'root' })
-export class ApplicationUserRoutingResolveService implements Resolve<IApplicationUser> {
+export class ApplicationUserRoutingResolveService implements Resolve<IApplicationUser | null> {
   constructor(protected service: ApplicationUserService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IApplicationUser> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IApplicationUser | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((applicationUser: HttpResponse<ApplicationUser>) => {
+        mergeMap((applicationUser: HttpResponse<IApplicationUser>) => {
           if (applicationUser.body) {
             return of(applicationUser.body);
           } else {
@@ -25,6 +25,6 @@ export class ApplicationUserRoutingResolveService implements Resolve<IApplicatio
         })
       );
     }
-    return of(new ApplicationUser());
+    return of(null);
   }
 }

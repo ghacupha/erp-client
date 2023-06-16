@@ -6,11 +6,15 @@ import { BankBranchCodeComponent } from '../list/bank-branch-code.component';
 import { BankBranchCodeDetailComponent } from '../detail/bank-branch-code-detail.component';
 import { BankBranchCodeUpdateComponent } from '../update/bank-branch-code-update.component';
 import { BankBranchCodeRoutingResolveService } from './bank-branch-code-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const bankBranchCodeRoute: Routes = [
   {
     path: '',
     component: BankBranchCodeComponent,
+    data: {
+      defaultSort: 'id,' + ASC,
+    },
     canActivate: [UserRouteAccessService],
   },
   {

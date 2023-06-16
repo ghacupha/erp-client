@@ -14,6 +14,5 @@ import { AmortizationSequenceRoutingModule } from './route/amortization-sequence
     AmortizationSequenceUpdateComponent,
     AmortizationSequenceDeleteDialogComponent,
   ],
-  entryComponents: [AmortizationSequenceDeleteDialogComponent],
 })
 export class AmortizationSequenceModule {}

@@ -6,13 +6,14 @@ import { TaxRuleComponent } from '../list/tax-rule.component';
 import { TaxRuleDetailComponent } from '../detail/tax-rule-detail.component';
 import { TaxRuleUpdateComponent } from '../update/tax-rule-update.component';
 import { TaxRuleRoutingResolveService } from './tax-rule-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const taxRuleRoute: Routes = [
   {
     path: '',
     component: TaxRuleComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

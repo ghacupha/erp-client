@@ -1,31 +1,15 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface ISettlementCurrency {
-  id?: number;
-  iso4217CurrencyCode?: string;
-  currencyName?: string;
-  country?: string;
+  id: number;
+  iso4217CurrencyCode?: string | null;
+  currencyName?: string | null;
+  country?: string | null;
   numericCode?: string | null;
   minorUnit?: string | null;
   fileUploadToken?: string | null;
   compilationToken?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class SettlementCurrency implements ISettlementCurrency {
-  constructor(
-    public id?: number,
-    public iso4217CurrencyCode?: string,
-    public currencyName?: string,
-    public country?: string,
-    public numericCode?: string | null,
-    public minorUnit?: string | null,
-    public fileUploadToken?: string | null,
-    public compilationToken?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getSettlementCurrencyIdentifier(settlementCurrency: ISettlementCurrency): number | undefined {
-  return settlementCurrency.id;
-}
+export type NewSettlementCurrency = Omit<ISettlementCurrency, 'id'> & { id: null };

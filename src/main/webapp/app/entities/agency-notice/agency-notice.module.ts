@@ -9,6 +9,5 @@ import { AgencyNoticeRoutingModule } from './route/agency-notice-routing.module'
 @NgModule({
   imports: [SharedModule, AgencyNoticeRoutingModule],
   declarations: [AgencyNoticeComponent, AgencyNoticeDetailComponent, AgencyNoticeUpdateComponent, AgencyNoticeDeleteDialogComponent],
-  entryComponents: [AgencyNoticeDeleteDialogComponent],
 })
 export class AgencyNoticeModule {}

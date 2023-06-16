@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IWorkProjectRegister, getWorkProjectRegisterIdentifier } from '../work-project-register.model';
+import { IWorkProjectRegister, NewWorkProjectRegister } from '../work-project-register.model';
+
+export type PartialUpdateWorkProjectRegister = Partial<IWorkProjectRegister> & Pick<IWorkProjectRegister, 'id'>;
 
 export type EntityResponseType = HttpResponse<IWorkProjectRegister>;
 export type EntityArrayResponseType = HttpResponse<IWorkProjectRegister[]>;
@@ -18,21 +20,21 @@ export class WorkProjectRegisterService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(workProjectRegister: IWorkProjectRegister): Observable<EntityResponseType> {
+  create(workProjectRegister: NewWorkProjectRegister): Observable<EntityResponseType> {
     return this.http.post<IWorkProjectRegister>(this.resourceUrl, workProjectRegister, { observe: 'response' });
   }
 
   update(workProjectRegister: IWorkProjectRegister): Observable<EntityResponseType> {
     return this.http.put<IWorkProjectRegister>(
-      `${this.resourceUrl}/${getWorkProjectRegisterIdentifier(workProjectRegister) as number}`,
+      `${this.resourceUrl}/${this.getWorkProjectRegisterIdentifier(workProjectRegister)}`,
       workProjectRegister,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(workProjectRegister: IWorkProjectRegister): Observable<EntityResponseType> {
+  partialUpdate(workProjectRegister: PartialUpdateWorkProjectRegister): Observable<EntityResponseType> {
     return this.http.patch<IWorkProjectRegister>(
-      `${this.resourceUrl}/${getWorkProjectRegisterIdentifier(workProjectRegister) as number}`,
+      `${this.resourceUrl}/${this.getWorkProjectRegisterIdentifier(workProjectRegister)}`,
       workProjectRegister,
       { observe: 'response' }
     );
@@ -56,18 +58,26 @@ export class WorkProjectRegisterService {
     return this.http.get<IWorkProjectRegister[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addWorkProjectRegisterToCollectionIfMissing(
-    workProjectRegisterCollection: IWorkProjectRegister[],
-    ...workProjectRegistersToCheck: (IWorkProjectRegister | null | undefined)[]
-  ): IWorkProjectRegister[] {
-    const workProjectRegisters: IWorkProjectRegister[] = workProjectRegistersToCheck.filter(isPresent);
+  getWorkProjectRegisterIdentifier(workProjectRegister: Pick<IWorkProjectRegister, 'id'>): number {
+    return workProjectRegister.id;
+  }
+
+  compareWorkProjectRegister(o1: Pick<IWorkProjectRegister, 'id'> | null, o2: Pick<IWorkProjectRegister, 'id'> | null): boolean {
+    return o1 && o2 ? this.getWorkProjectRegisterIdentifier(o1) === this.getWorkProjectRegisterIdentifier(o2) : o1 === o2;
+  }
+
+  addWorkProjectRegisterToCollectionIfMissing<Type extends Pick<IWorkProjectRegister, 'id'>>(
+    workProjectRegisterCollection: Type[],
+    ...workProjectRegistersToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const workProjectRegisters: Type[] = workProjectRegistersToCheck.filter(isPresent);
     if (workProjectRegisters.length > 0) {
       const workProjectRegisterCollectionIdentifiers = workProjectRegisterCollection.map(
-        workProjectRegisterItem => getWorkProjectRegisterIdentifier(workProjectRegisterItem)!
+        workProjectRegisterItem => this.getWorkProjectRegisterIdentifier(workProjectRegisterItem)!
       );
       const workProjectRegistersToAdd = workProjectRegisters.filter(workProjectRegisterItem => {
-        const workProjectRegisterIdentifier = getWorkProjectRegisterIdentifier(workProjectRegisterItem);
-        if (workProjectRegisterIdentifier == null || workProjectRegisterCollectionIdentifiers.includes(workProjectRegisterIdentifier)) {
+        const workProjectRegisterIdentifier = this.getWorkProjectRegisterIdentifier(workProjectRegisterItem);
+        if (workProjectRegisterCollectionIdentifiers.includes(workProjectRegisterIdentifier)) {
           return false;
         }
         workProjectRegisterCollectionIdentifiers.push(workProjectRegisterIdentifier);

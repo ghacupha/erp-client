@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="businessDocument">
       <h2 data-cy="businessDocumentDetailsHeading"><span>Business Document</span></h2>
@@ -37,7 +37,7 @@
         <dt><span>Document File</span></dt>
         <dd>
           <div *ngIf="businessDocument.documentFile">
-            <a (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">open</a>
+            <a (click)="openFile(businessDocument.documentFile, businessDocument.documentFileContentType)">Open</a>
             {{ businessDocument.documentFileContentType }}, {{ byteSize(businessDocument.documentFile) }}
           </div>
         </dd>
@@ -52,54 +52,54 @@
         <dt><span>Created By</span></dt>
         <dd>
           <div *ngIf="businessDocument.createdBy">
-            <a [routerLink]="['/application-user', businessDocument.createdBy?.id, 'view']">{{
-              businessDocument.createdBy?.applicationIdentity
+            <a [routerLink]="['/application-user', businessDocument.createdBy.id, 'view']">{{
+              businessDocument.createdBy.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Last Modified By</span></dt>
         <dd>
           <div *ngIf="businessDocument.lastModifiedBy">
-            <a [routerLink]="['/application-user', businessDocument.lastModifiedBy?.id, 'view']">{{
-              businessDocument.lastModifiedBy?.applicationIdentity
+            <a [routerLink]="['/application-user', businessDocument.lastModifiedBy.id, 'view']">{{
+              businessDocument.lastModifiedBy.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Originating Department</span></dt>
         <dd>
           <div *ngIf="businessDocument.originatingDepartment">
-            <a [routerLink]="['/dealer', businessDocument.originatingDepartment?.id, 'view']">{{
-              businessDocument.originatingDepartment?.dealerName
+            <a [routerLink]="['/dealer', businessDocument.originatingDepartment.id, 'view']">{{
+              businessDocument.originatingDepartment.dealerName
             }}</a>
           </div>
         </dd>
         <dt><span>Application Mappings</span></dt>
         <dd>
           <span *ngFor="let applicationMappings of businessDocument.applicationMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', applicationMappings?.id, 'view']">{{ applicationMappings.universalKey }}</a
+            <a [routerLink]="['/universally-unique-mapping', applicationMappings.id, 'view']">{{ applicationMappings.universalKey }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of businessDocument.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>File Checksum Algorithm</span></dt>
         <dd>
           <div *ngIf="businessDocument.fileChecksumAlgorithm">
-            <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm?.id, 'view']">{{
-              businessDocument.fileChecksumAlgorithm?.name
+            <a [routerLink]="['/algorithm', businessDocument.fileChecksumAlgorithm.id, 'view']">{{
+              businessDocument.fileChecksumAlgorithm.name
             }}</a>
           </div>
         </dd>
         <dt><span>Security Clearance</span></dt>
         <dd>
           <div *ngIf="businessDocument.securityClearance">
-            <a [routerLink]="['/security-clearance', businessDocument.securityClearance?.id, 'view']">{{
-              businessDocument.securityClearance?.clearanceLevel
+            <a [routerLink]="['/security-clearance', businessDocument.securityClearance.id, 'view']">{{
+              businessDocument.securityClearance.clearanceLevel
             }}</a>
           </div>
         </dd>

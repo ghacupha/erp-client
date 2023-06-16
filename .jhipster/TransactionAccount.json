@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220501080955",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "accountNumber",
@@ -16,28 +18,26 @@
       "fieldTypeBlobContent": "any"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "TransactionAccount",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "parentAccount",
+      "otherEntityField": "accountNumber",
       "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipName": "parentAccount",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "transactionAccount",
       "ownerSide": true,
-      "otherEntityRelationshipName": "transactionAccount"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "TransactionAccount",
-  "changelogDate": "20220501080955",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

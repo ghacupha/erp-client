@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
+import { PrepaymentAccountFormService, PrepaymentAccountFormGroup } from './prepayment-account-form.service';
+import { IPrepaymentAccount } from '../prepayment-account.model';
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -35,6 +35,7 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class PrepaymentAccountUpdateComponent implements OnInit {
   isSaving = false;
+  prepaymentAccount: IPrepaymentAccount | null = null;
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   settlementsSharedCollection: ISettlement[] = [];
@@ -46,29 +47,13 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    catalogueNumber: [null, [Validators.required]],
-    particulars: [null, [Validators.required]],
-    notes: [],
-    prepaymentAmount: [],
-    prepaymentGuid: [],
-    settlementCurrency: [],
-    prepaymentTransaction: [],
-    serviceOutlet: [],
-    dealer: [],
-    debitAccount: [],
-    transferAccount: [],
-    placeholders: [],
-    generalParameters: [],
-    prepaymentParameters: [],
-    businessDocuments: [],
-  });
+  editForm: PrepaymentAccountFormGroup = this.prepaymentAccountFormService.createPrepaymentAccountFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected prepaymentAccountService: PrepaymentAccountService,
+    protected prepaymentAccountFormService: PrepaymentAccountFormService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected settlementService: SettlementService,
     protected serviceOutletService: ServiceOutletService,
@@ -78,13 +63,39 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected prepaymentMappingService: PrepaymentMappingService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareSettlement = (o1: ISettlement | null, o2: ISettlement | null): boolean => this.settlementService.compareSettlement(o1, o2);
+
+  compareServiceOutlet = (o1: IServiceOutlet | null, o2: IServiceOutlet | null): boolean =>
+    this.serviceOutletService.compareServiceOutlet(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareTransactionAccount = (o1: ITransactionAccount | null, o2: ITransactionAccount | null): boolean =>
+    this.transactionAccountService.compareTransactionAccount(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  comparePrepaymentMapping = (o1: IPrepaymentMapping | null, o2: IPrepaymentMapping | null): boolean =>
+    this.prepaymentMappingService.comparePrepaymentMapping(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentAccount }) => {
-      this.updateForm(prepaymentAccount);
+      this.prepaymentAccount = prepaymentAccount;
+      if (prepaymentAccount) {
+        this.updateForm(prepaymentAccount);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -111,102 +122,19 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const prepaymentAccount = this.createFromForm();
-    if (prepaymentAccount.id !== undefined) {
+    const prepaymentAccount = this.prepaymentAccountFormService.getPrepaymentAccount(this.editForm);
+    if (prepaymentAccount.id !== null) {
       this.subscribeToSaveResponse(this.prepaymentAccountService.update(prepaymentAccount));
     } else {
       this.subscribeToSaveResponse(this.prepaymentAccountService.create(prepaymentAccount));
     }
   }
 
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackSettlementById(index: number, item: ISettlement): number {
-    return item.id!;
-  }
-
-  trackServiceOutletById(index: number, item: IServiceOutlet): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackPrepaymentMappingById(index: number, item: IPrepaymentMapping): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPrepaymentMapping(option: IPrepaymentMapping, selectedVals?: IPrepaymentMapping[]): IPrepaymentMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentAccount>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -222,59 +150,46 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   }
 
   protected updateForm(prepaymentAccount: IPrepaymentAccount): void {
-    this.editForm.patchValue({
-      id: prepaymentAccount.id,
-      catalogueNumber: prepaymentAccount.catalogueNumber,
-      particulars: prepaymentAccount.particulars,
-      notes: prepaymentAccount.notes,
-      prepaymentAmount: prepaymentAccount.prepaymentAmount,
-      prepaymentGuid: prepaymentAccount.prepaymentGuid,
-      settlementCurrency: prepaymentAccount.settlementCurrency,
-      prepaymentTransaction: prepaymentAccount.prepaymentTransaction,
-      serviceOutlet: prepaymentAccount.serviceOutlet,
-      dealer: prepaymentAccount.dealer,
-      debitAccount: prepaymentAccount.debitAccount,
-      transferAccount: prepaymentAccount.transferAccount,
-      placeholders: prepaymentAccount.placeholders,
-      generalParameters: prepaymentAccount.generalParameters,
-      prepaymentParameters: prepaymentAccount.prepaymentParameters,
-      businessDocuments: prepaymentAccount.businessDocuments,
-    });
+    this.prepaymentAccount = prepaymentAccount;
+    this.prepaymentAccountFormService.resetForm(this.editForm, prepaymentAccount);
 
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      prepaymentAccount.settlementCurrency
-    );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        prepaymentAccount.settlementCurrency
+      );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
       this.settlementsSharedCollection,
       prepaymentAccount.prepaymentTransaction
     );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
       this.serviceOutletsSharedCollection,
       prepaymentAccount.serviceOutlet
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       prepaymentAccount.dealer
     );
-    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-      this.transactionAccountsSharedCollection,
-      prepaymentAccount.debitAccount,
-      prepaymentAccount.transferAccount
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.transactionAccountsSharedCollection =
+      this.transactionAccountService.addTransactionAccountToCollectionIfMissing<ITransactionAccount>(
+        this.transactionAccountsSharedCollection,
+        prepaymentAccount.debitAccount,
+        prepaymentAccount.transferAccount
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(prepaymentAccount.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(prepaymentAccount.generalParameters ?? [])
-    );
-    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(prepaymentAccount.generalParameters ?? [])
+      );
+    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing<IPrepaymentMapping>(
       this.prepaymentMappingsSharedCollection,
       ...(prepaymentAccount.prepaymentParameters ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(prepaymentAccount.businessDocuments ?? [])
     );
@@ -286,9 +201,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.prepaymentAccount?.settlementCurrency
           )
         )
       )
@@ -299,7 +214,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, this.editForm.get('prepaymentTransaction')!.value)
+          this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(settlements, this.prepaymentAccount?.prepaymentTransaction)
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -309,7 +224,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
+            serviceOutlets,
+            this.prepaymentAccount?.serviceOutlet
+          )
         )
       )
       .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
@@ -317,7 +235,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+      .pipe(
+        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.prepaymentAccount?.dealer))
+      )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.transactionAccountService
@@ -325,10 +245,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
       .pipe(
         map((transactionAccounts: ITransactionAccount[]) =>
-          this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountService.addTransactionAccountToCollectionIfMissing<ITransactionAccount>(
             transactionAccounts,
-            this.editForm.get('debitAccount')!.value,
-            this.editForm.get('transferAccount')!.value
+            this.prepaymentAccount?.debitAccount,
+            this.prepaymentAccount?.transferAccount
           )
         )
       )
@@ -339,7 +259,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.prepaymentAccount?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -349,9 +272,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('generalParameters')!.value ?? [])
+            ...(this.prepaymentAccount?.generalParameters ?? [])
           )
         )
       )
@@ -365,9 +288,9 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPrepaymentMapping[]>) => res.body ?? []))
       .pipe(
         map((prepaymentMappings: IPrepaymentMapping[]) =>
-          this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+          this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing<IPrepaymentMapping>(
             prepaymentMappings,
-            ...(this.editForm.get('prepaymentParameters')!.value ?? [])
+            ...(this.prepaymentAccount?.prepaymentParameters ?? [])
           )
         )
       )
@@ -378,34 +301,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.prepaymentAccount?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IPrepaymentAccount {
-    return {
-      ...new PrepaymentAccount(),
-      id: this.editForm.get(['id'])!.value,
-      catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
-      particulars: this.editForm.get(['particulars'])!.value,
-      notes: this.editForm.get(['notes'])!.value,
-      prepaymentAmount: this.editForm.get(['prepaymentAmount'])!.value,
-      prepaymentGuid: this.editForm.get(['prepaymentGuid'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      prepaymentTransaction: this.editForm.get(['prepaymentTransaction'])!.value,
-      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
-      debitAccount: this.editForm.get(['debitAccount'])!.value,
-      transferAccount: this.editForm.get(['transferAccount'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      generalParameters: this.editForm.get(['generalParameters'])!.value,
-      prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

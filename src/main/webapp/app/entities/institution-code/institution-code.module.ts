@@ -14,6 +14,5 @@ import { InstitutionCodeRoutingModule } from './route/institution-code-routing.m
     InstitutionCodeUpdateComponent,
     InstitutionCodeDeleteDialogComponent,
   ],
-  entryComponents: [InstitutionCodeDeleteDialogComponent],
 })
 export class InstitutionCodeModule {}

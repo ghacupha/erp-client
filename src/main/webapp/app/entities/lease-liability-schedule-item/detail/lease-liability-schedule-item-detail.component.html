@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="leaseLiabilityScheduleItem">
       <h2 data-cy="leaseLiabilityScheduleItemDetailsHeading"><span>Lease Liability Schedule Item</span></h2>
@@ -65,30 +65,30 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of leaseLiabilityScheduleItem.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Lease Contract</span></dt>
         <dd>
           <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
-            <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
-              leaseLiabilityScheduleItem.leaseContract?.bookingId
+            <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseContract.bookingId
             }}</a>
           </div>
         </dd>
         <dt><span>Lease Model Metadata</span></dt>
         <dd>
           <div *ngIf="leaseLiabilityScheduleItem.leaseModelMetadata">
-            <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata?.id, 'view']">{{
-              leaseLiabilityScheduleItem.leaseModelMetadata?.modelTitle
+            <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseModelMetadata.modelTitle
             }}</a>
           </div>
         </dd>
         <dt><span>Universally Unique Mapping</span></dt>
         <dd>
           <span *ngFor="let universallyUniqueMapping of leaseLiabilityScheduleItem.universallyUniqueMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping.id, 'view']">{{
               universallyUniqueMapping.universalKey
             }}</a
             >{{ last ? '' : ', ' }}

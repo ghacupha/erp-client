@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPayment, getPaymentIdentifier } from '../payment.model';
+import { IPayment, NewPayment } from '../payment.model';
+
+export type PartialUpdatePayment = Partial<IPayment> & Pick<IPayment, 'id'>;
+
+type RestOf<T extends IPayment | NewPayment> = Omit<T, 'paymentDate'> & {
+  paymentDate?: string | null;
+};
+
+export type RestPayment = RestOf<IPayment>;
+
+export type NewRestPayment = RestOf<NewPayment>;
+
+export type PartialUpdateRestPayment = RestOf<PartialUpdatePayment>;
 
 export type EntityResponseType = HttpResponse<IPayment>;
 export type EntityArrayResponseType = HttpResponse<IPayment[]>;
@@ -21,38 +33,38 @@ export class PaymentService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(payment: IPayment): Observable<EntityResponseType> {
+  create(payment: NewPayment): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(payment);
     return this.http
-      .post<IPayment>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestPayment>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(payment: IPayment): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(payment);
     return this.http
-      .put<IPayment>(`${this.resourceUrl}/${getPaymentIdentifier(payment) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestPayment>(`${this.resourceUrl}/${this.getPaymentIdentifier(payment)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(payment: IPayment): Observable<EntityResponseType> {
+  partialUpdate(payment: PartialUpdatePayment): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(payment);
     return this.http
-      .patch<IPayment>(`${this.resourceUrl}/${getPaymentIdentifier(payment) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestPayment>(`${this.resourceUrl}/${this.getPaymentIdentifier(payment)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IPayment>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestPayment>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPayment[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPayment[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -62,17 +74,28 @@ export class PaymentService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPayment[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPayment[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addPaymentToCollectionIfMissing(paymentCollection: IPayment[], ...paymentsToCheck: (IPayment | null | undefined)[]): IPayment[] {
-    const payments: IPayment[] = paymentsToCheck.filter(isPresent);
+  getPaymentIdentifier(payment: Pick<IPayment, 'id'>): number {
+    return payment.id;
+  }
+
+  comparePayment(o1: Pick<IPayment, 'id'> | null, o2: Pick<IPayment, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPaymentIdentifier(o1) === this.getPaymentIdentifier(o2) : o1 === o2;
+  }
+
+  addPaymentToCollectionIfMissing<Type extends Pick<IPayment, 'id'>>(
+    paymentCollection: Type[],
+    ...paymentsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const payments: Type[] = paymentsToCheck.filter(isPresent);
     if (payments.length > 0) {
-      const paymentCollectionIdentifiers = paymentCollection.map(paymentItem => getPaymentIdentifier(paymentItem)!);
+      const paymentCollectionIdentifiers = paymentCollection.map(paymentItem => this.getPaymentIdentifier(paymentItem)!);
       const paymentsToAdd = payments.filter(paymentItem => {
-        const paymentIdentifier = getPaymentIdentifier(paymentItem);
-        if (paymentIdentifier == null || paymentCollectionIdentifiers.includes(paymentIdentifier)) {
+        const paymentIdentifier = this.getPaymentIdentifier(paymentItem);
+        if (paymentCollectionIdentifiers.includes(paymentIdentifier)) {
           return false;
         }
         paymentCollectionIdentifiers.push(paymentIdentifier);
@@ -83,25 +106,29 @@ export class PaymentService {
     return paymentCollection;
   }
 
-  protected convertDateFromClient(payment: IPayment): IPayment {
-    return Object.assign({}, payment, {
-      paymentDate: payment.paymentDate?.isValid() ? payment.paymentDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IPayment | NewPayment | PartialUpdatePayment>(payment: T): RestOf<T> {
+    return {
+      ...payment,
+      paymentDate: payment.paymentDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restPayment: RestPayment): IPayment {
+    return {
+      ...restPayment,
+      paymentDate: restPayment.paymentDate ? dayjs(restPayment.paymentDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestPayment>): HttpResponse<IPayment> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.paymentDate = res.body.paymentDate ? dayjs(res.body.paymentDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((payment: IPayment) => {
-        payment.paymentDate = payment.paymentDate ? dayjs(payment.paymentDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestPayment[]>): HttpResponse<IPayment[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IOutletStatus, OutletStatus } from '../outlet-status.model';
+import { OutletStatusFormService, OutletStatusFormGroup } from './outlet-status-form.service';
+import { IOutletStatus } from '../outlet-status.model';
 import { OutletStatusService } from '../service/outlet-status.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -17,28 +17,28 @@ import { BranchStatusType } from 'app/entities/enumerations/branch-status-type.m
 })
 export class OutletStatusUpdateComponent implements OnInit {
   isSaving = false;
+  outletStatus: IOutletStatus | null = null;
   branchStatusTypeValues = Object.keys(BranchStatusType);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    branchStatusTypeCode: [null, [Validators.required]],
-    branchStatusType: [null, [Validators.required]],
-    branchStatusTypeDescription: [],
-    placeholders: [],
-  });
+  editForm: OutletStatusFormGroup = this.outletStatusFormService.createOutletStatusFormGroup();
 
   constructor(
     protected outletStatusService: OutletStatusService,
+    protected outletStatusFormService: OutletStatusFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ outletStatus }) => {
-      this.updateForm(outletStatus);
+      this.outletStatus = outletStatus;
+      if (outletStatus) {
+        this.updateForm(outletStatus);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -50,34 +50,19 @@ export class OutletStatusUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const outletStatus = this.createFromForm();
-    if (outletStatus.id !== undefined) {
+    const outletStatus = this.outletStatusFormService.getOutletStatus(this.editForm);
+    if (outletStatus.id !== null) {
       this.subscribeToSaveResponse(this.outletStatusService.update(outletStatus));
     } else {
       this.subscribeToSaveResponse(this.outletStatusService.create(outletStatus));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IOutletStatus>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -93,15 +78,10 @@ export class OutletStatusUpdateComponent implements OnInit {
   }
 
   protected updateForm(outletStatus: IOutletStatus): void {
-    this.editForm.patchValue({
-      id: outletStatus.id,
-      branchStatusTypeCode: outletStatus.branchStatusTypeCode,
-      branchStatusType: outletStatus.branchStatusType,
-      branchStatusTypeDescription: outletStatus.branchStatusTypeDescription,
-      placeholders: outletStatus.placeholders,
-    });
+    this.outletStatus = outletStatus;
+    this.outletStatusFormService.resetForm(this.editForm, outletStatus);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(outletStatus.placeholders ?? [])
     );
@@ -113,20 +93,12 @@ export class OutletStatusUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.outletStatus?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IOutletStatus {
-    return {
-      ...new OutletStatus(),
-      id: this.editForm.get(['id'])!.value,
-      branchStatusTypeCode: this.editForm.get(['branchStatusTypeCode'])!.value,
-      branchStatusType: this.editForm.get(['branchStatusType'])!.value,
-      branchStatusTypeDescription: this.editForm.get(['branchStatusTypeDescription'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

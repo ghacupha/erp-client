@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="assetCategory">
       <h2 data-cy="assetCategoryDetailsHeading"><span>Asset Category</span></h2>
@@ -33,15 +33,15 @@
         <dt><span>Depreciation Method</span></dt>
         <dd>
           <div *ngIf="assetCategory.depreciationMethod">
-            <a [routerLink]="['/depreciation-method', assetCategory.depreciationMethod?.id, 'view']">{{
-              assetCategory.depreciationMethod?.depreciationMethodName
+            <a [routerLink]="['/depreciation-method', assetCategory.depreciationMethod.id, 'view']">{{
+              assetCategory.depreciationMethod.depreciationMethodName
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of assetCategory.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISystemContentType, SystemContentType } from '../system-content-type.model';
+import { SystemContentTypeFormService, SystemContentTypeFormGroup } from './system-content-type-form.service';
+import { ISystemContentType } from '../system-content-type.model';
 import { SystemContentTypeService } from '../service/system-content-type.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -22,34 +22,35 @@ import { SystemContentTypeAvailability } from 'app/entities/enumerations/system-
 })
 export class SystemContentTypeUpdateComponent implements OnInit {
   isSaving = false;
+  systemContentType: ISystemContentType | null = null;
   systemContentTypeAvailabilityValues = Object.keys(SystemContentTypeAvailability);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    contentTypeName: [null, [Validators.required]],
-    contentTypeHeader: [null, [Validators.required]],
-    comments: [],
-    availability: [null, [Validators.required]],
-    placeholders: [],
-    sysMaps: [],
-  });
+  editForm: SystemContentTypeFormGroup = this.systemContentTypeFormService.createSystemContentTypeFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected systemContentTypeService: SystemContentTypeService,
+    protected systemContentTypeFormService: SystemContentTypeFormService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ systemContentType }) => {
-      this.updateForm(systemContentType);
+      this.systemContentType = systemContentType;
+      if (systemContentType) {
+        this.updateForm(systemContentType);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -76,52 +77,19 @@ export class SystemContentTypeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const systemContentType = this.createFromForm();
-    if (systemContentType.id !== undefined) {
+    const systemContentType = this.systemContentTypeFormService.getSystemContentType(this.editForm);
+    if (systemContentType.id !== null) {
       this.subscribeToSaveResponse(this.systemContentTypeService.update(systemContentType));
     } else {
       this.subscribeToSaveResponse(this.systemContentTypeService.create(systemContentType));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISystemContentType>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -137,24 +105,18 @@ export class SystemContentTypeUpdateComponent implements OnInit {
   }
 
   protected updateForm(systemContentType: ISystemContentType): void {
-    this.editForm.patchValue({
-      id: systemContentType.id,
-      contentTypeName: systemContentType.contentTypeName,
-      contentTypeHeader: systemContentType.contentTypeHeader,
-      comments: systemContentType.comments,
-      availability: systemContentType.availability,
-      placeholders: systemContentType.placeholders,
-      sysMaps: systemContentType.sysMaps,
-    });
+    this.systemContentType = systemContentType;
+    this.systemContentTypeFormService.resetForm(this.editForm, systemContentType);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(systemContentType.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(systemContentType.sysMaps ?? [])
-    );
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(systemContentType.sysMaps ?? [])
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -163,7 +125,10 @@ export class SystemContentTypeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.systemContentType?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -173,9 +138,9 @@ export class SystemContentTypeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('sysMaps')!.value ?? [])
+            ...(this.systemContentType?.sysMaps ?? [])
           )
         )
       )
@@ -183,18 +148,5 @@ export class SystemContentTypeUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-  }
-
-  protected createFromForm(): ISystemContentType {
-    return {
-      ...new SystemContentType(),
-      id: this.editForm.get(['id'])!.value,
-      contentTypeName: this.editForm.get(['contentTypeName'])!.value,
-      contentTypeHeader: this.editForm.get(['contentTypeHeader'])!.value,
-      comments: this.editForm.get(['comments'])!.value,
-      availability: this.editForm.get(['availability'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      sysMaps: this.editForm.get(['sysMaps'])!.value,
-    };
   }
 }

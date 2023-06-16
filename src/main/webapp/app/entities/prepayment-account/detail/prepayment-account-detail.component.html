@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="prepaymentAccount">
       <h2 data-cy="prepaymentAccountDetailsHeading"><span>Prepayment Account</span></h2>
@@ -37,74 +37,74 @@
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{
-              prepaymentAccount.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency.id, 'view']">{{
+              prepaymentAccount.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Prepayment Transaction</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.prepaymentTransaction">
-            <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction?.id, 'view']">{{
-              prepaymentAccount.prepaymentTransaction?.paymentNumber
+            <a [routerLink]="['/settlement', prepaymentAccount.prepaymentTransaction.id, 'view']">{{
+              prepaymentAccount.prepaymentTransaction.paymentNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Service Outlet</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.serviceOutlet">
-            <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet?.id, 'view']">{{
-              prepaymentAccount.serviceOutlet?.outletCode
+            <a [routerLink]="['/service-outlet', prepaymentAccount.serviceOutlet.id, 'view']">{{
+              prepaymentAccount.serviceOutlet.outletCode
             }}</a>
           </div>
         </dd>
         <dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.dealer">
-            <a [routerLink]="['/dealer', prepaymentAccount.dealer?.id, 'view']">{{ prepaymentAccount.dealer?.dealerName }}</a>
+            <a [routerLink]="['/dealer', prepaymentAccount.dealer.id, 'view']">{{ prepaymentAccount.dealer.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Debit Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.debitAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount?.id, 'view']">{{
-              prepaymentAccount.debitAccount?.accountName
+            <a [routerLink]="['/transaction-account', prepaymentAccount.debitAccount.id, 'view']">{{
+              prepaymentAccount.debitAccount.accountName
             }}</a>
           </div>
         </dd>
         <dt><span>Transfer Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAccount.transferAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount?.id, 'view']">{{
-              prepaymentAccount.transferAccount?.accountName
+            <a [routerLink]="['/transaction-account', prepaymentAccount.transferAccount.id, 'view']">{{
+              prepaymentAccount.transferAccount.accountName
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>General Parameters</span></dt>
         <dd>
           <span *ngFor="let generalParameters of prepaymentAccount.generalParameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', generalParameters?.id, 'view']">{{ generalParameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', generalParameters.id, 'view']">{{ generalParameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Prepayment Parameters</span></dt>
         <dd>
           <span *ngFor="let prepaymentParameters of prepaymentAccount.prepaymentParameters; let last = last">
-            <a [routerLink]="['/prepayment-mapping', prepaymentParameters?.id, 'view']">{{ prepaymentParameters.parameterKey }}</a
+            <a [routerLink]="['/prepayment-mapping', prepaymentParameters.id, 'view']">{{ prepaymentParameters.parameterKey }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of prepaymentAccount.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

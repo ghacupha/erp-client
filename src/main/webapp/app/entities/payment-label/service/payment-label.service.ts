@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPaymentLabel, getPaymentLabelIdentifier } from '../payment-label.model';
+import { IPaymentLabel, NewPaymentLabel } from '../payment-label.model';
+
+export type PartialUpdatePaymentLabel = Partial<IPaymentLabel> & Pick<IPaymentLabel, 'id'>;
 
 export type EntityResponseType = HttpResponse<IPaymentLabel>;
 export type EntityArrayResponseType = HttpResponse<IPaymentLabel[]>;
@@ -18,18 +20,18 @@ export class PaymentLabelService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(paymentLabel: IPaymentLabel): Observable<EntityResponseType> {
+  create(paymentLabel: NewPaymentLabel): Observable<EntityResponseType> {
     return this.http.post<IPaymentLabel>(this.resourceUrl, paymentLabel, { observe: 'response' });
   }
 
   update(paymentLabel: IPaymentLabel): Observable<EntityResponseType> {
-    return this.http.put<IPaymentLabel>(`${this.resourceUrl}/${getPaymentLabelIdentifier(paymentLabel) as number}`, paymentLabel, {
+    return this.http.put<IPaymentLabel>(`${this.resourceUrl}/${this.getPaymentLabelIdentifier(paymentLabel)}`, paymentLabel, {
       observe: 'response',
     });
   }
 
-  partialUpdate(paymentLabel: IPaymentLabel): Observable<EntityResponseType> {
-    return this.http.patch<IPaymentLabel>(`${this.resourceUrl}/${getPaymentLabelIdentifier(paymentLabel) as number}`, paymentLabel, {
+  partialUpdate(paymentLabel: PartialUpdatePaymentLabel): Observable<EntityResponseType> {
+    return this.http.patch<IPaymentLabel>(`${this.resourceUrl}/${this.getPaymentLabelIdentifier(paymentLabel)}`, paymentLabel, {
       observe: 'response',
     });
   }
@@ -52,18 +54,26 @@ export class PaymentLabelService {
     return this.http.get<IPaymentLabel[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addPaymentLabelToCollectionIfMissing(
-    paymentLabelCollection: IPaymentLabel[],
-    ...paymentLabelsToCheck: (IPaymentLabel | null | undefined)[]
-  ): IPaymentLabel[] {
-    const paymentLabels: IPaymentLabel[] = paymentLabelsToCheck.filter(isPresent);
+  getPaymentLabelIdentifier(paymentLabel: Pick<IPaymentLabel, 'id'>): number {
+    return paymentLabel.id;
+  }
+
+  comparePaymentLabel(o1: Pick<IPaymentLabel, 'id'> | null, o2: Pick<IPaymentLabel, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPaymentLabelIdentifier(o1) === this.getPaymentLabelIdentifier(o2) : o1 === o2;
+  }
+
+  addPaymentLabelToCollectionIfMissing<Type extends Pick<IPaymentLabel, 'id'>>(
+    paymentLabelCollection: Type[],
+    ...paymentLabelsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const paymentLabels: Type[] = paymentLabelsToCheck.filter(isPresent);
     if (paymentLabels.length > 0) {
       const paymentLabelCollectionIdentifiers = paymentLabelCollection.map(
-        paymentLabelItem => getPaymentLabelIdentifier(paymentLabelItem)!
+        paymentLabelItem => this.getPaymentLabelIdentifier(paymentLabelItem)!
       );
       const paymentLabelsToAdd = paymentLabels.filter(paymentLabelItem => {
-        const paymentLabelIdentifier = getPaymentLabelIdentifier(paymentLabelItem);
-        if (paymentLabelIdentifier == null || paymentLabelCollectionIdentifiers.includes(paymentLabelIdentifier)) {
+        const paymentLabelIdentifier = this.getPaymentLabelIdentifier(paymentLabelItem);
+        if (paymentLabelCollectionIdentifiers.includes(paymentLabelIdentifier)) {
           return false;
         }
         paymentLabelCollectionIdentifiers.push(paymentLabelIdentifier);

@@ -9,6 +9,5 @@ import { MfbBranchCodeRoutingModule } from './route/mfb-branch-code-routing.modu
 @NgModule({
   imports: [SharedModule, MfbBranchCodeRoutingModule],
   declarations: [MfbBranchCodeComponent, MfbBranchCodeDetailComponent, MfbBranchCodeUpdateComponent, MfbBranchCodeDeleteDialogComponent],
-  entryComponents: [MfbBranchCodeDeleteDialogComponent],
 })
 export class MfbBranchCodeModule {}

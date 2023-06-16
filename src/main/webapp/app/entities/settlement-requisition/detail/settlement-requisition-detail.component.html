@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="settlementRequisition">
       <h2 data-cy="settlementRequisitionDetailsHeading"><span>Settlement Requisition</span></h2>
@@ -41,87 +41,87 @@
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="settlementRequisition.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', settlementRequisition.settlementCurrency?.id, 'view']">{{
-              settlementRequisition.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', settlementRequisition.settlementCurrency.id, 'view']">{{
+              settlementRequisition.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Current Owner</span></dt>
         <dd>
           <div *ngIf="settlementRequisition.currentOwner">
-            <a [routerLink]="['/application-user', settlementRequisition.currentOwner?.id, 'view']">{{
-              settlementRequisition.currentOwner?.applicationIdentity
+            <a [routerLink]="['/application-user', settlementRequisition.currentOwner.id, 'view']">{{
+              settlementRequisition.currentOwner.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Native Owner</span></dt>
         <dd>
           <div *ngIf="settlementRequisition.nativeOwner">
-            <a [routerLink]="['/application-user', settlementRequisition.nativeOwner?.id, 'view']">{{
-              settlementRequisition.nativeOwner?.applicationIdentity
+            <a [routerLink]="['/application-user', settlementRequisition.nativeOwner.id, 'view']">{{
+              settlementRequisition.nativeOwner.applicationIdentity
             }}</a>
           </div>
         </dd>
         <dt><span>Native Department</span></dt>
         <dd>
           <div *ngIf="settlementRequisition.nativeDepartment">
-            <a [routerLink]="['/dealer', settlementRequisition.nativeDepartment?.id, 'view']">{{
-              settlementRequisition.nativeDepartment?.dealerName
+            <a [routerLink]="['/dealer', settlementRequisition.nativeDepartment.id, 'view']">{{
+              settlementRequisition.nativeDepartment.dealerName
             }}</a>
           </div>
         </dd>
         <dt><span>Biller</span></dt>
         <dd>
           <div *ngIf="settlementRequisition.biller">
-            <a [routerLink]="['/dealer', settlementRequisition.biller?.id, 'view']">{{ settlementRequisition.biller?.dealerName }}</a>
+            <a [routerLink]="['/dealer', settlementRequisition.biller.id, 'view']">{{ settlementRequisition.biller.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Payment Invoice</span></dt>
         <dd>
           <span *ngFor="let paymentInvoice of settlementRequisition.paymentInvoices; let last = last">
-            <a [routerLink]="['/payment-invoice', paymentInvoice?.id, 'view']">{{ paymentInvoice.invoiceNumber }}</a
+            <a [routerLink]="['/payment-invoice', paymentInvoice.id, 'view']">{{ paymentInvoice.invoiceNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Delivery Note</span></dt>
         <dd>
           <span *ngFor="let deliveryNote of settlementRequisition.deliveryNotes; let last = last">
-            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            <a [routerLink]="['/delivery-note', deliveryNote.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Job Sheet</span></dt>
         <dd>
           <span *ngFor="let jobSheet of settlementRequisition.jobSheets; let last = last">
-            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            <a [routerLink]="['/job-sheet', jobSheet.id, 'view']">{{ jobSheet.serialNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Signatures</span></dt>
         <dd>
           <span *ngFor="let signatures of settlementRequisition.signatures; let last = last">
-            <a [routerLink]="['/dealer', signatures?.id, 'view']">{{ signatures.dealerName }}</a
+            <a [routerLink]="['/dealer', signatures.id, 'view']">{{ signatures.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of settlementRequisition.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Application Mapping</span></dt>
         <dd>
           <span *ngFor="let applicationMapping of settlementRequisition.applicationMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', applicationMapping?.id, 'view']">{{ applicationMapping.universalKey }}</a
+            <a [routerLink]="['/universally-unique-mapping', applicationMapping.id, 'view']">{{ applicationMapping.universalKey }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of settlementRequisition.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

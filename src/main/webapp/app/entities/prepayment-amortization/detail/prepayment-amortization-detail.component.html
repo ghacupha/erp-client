@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="prepaymentAmortization">
       <h2 data-cy="prepaymentAmortizationDetailsHeading"><span>Prepayment Amortization</span></h2>
@@ -33,39 +33,39 @@
         <dt><span>Prepayment Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAmortization.prepaymentAccount">
-            <a [routerLink]="['/prepayment-account', prepaymentAmortization.prepaymentAccount?.id, 'view']">{{
-              prepaymentAmortization.prepaymentAccount?.catalogueNumber
+            <a [routerLink]="['/prepayment-account', prepaymentAmortization.prepaymentAccount.id, 'view']">{{
+              prepaymentAmortization.prepaymentAccount.catalogueNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="prepaymentAmortization.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', prepaymentAmortization.settlementCurrency?.id, 'view']">{{
-              prepaymentAmortization.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', prepaymentAmortization.settlementCurrency.id, 'view']">{{
+              prepaymentAmortization.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Debit Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAmortization.debitAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAmortization.debitAccount?.id, 'view']">{{
-              prepaymentAmortization.debitAccount?.accountNumber
+            <a [routerLink]="['/transaction-account', prepaymentAmortization.debitAccount.id, 'view']">{{
+              prepaymentAmortization.debitAccount.accountNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Credit Account</span></dt>
         <dd>
           <div *ngIf="prepaymentAmortization.creditAccount">
-            <a [routerLink]="['/transaction-account', prepaymentAmortization.creditAccount?.id, 'view']">{{
-              prepaymentAmortization.creditAccount?.accountNumber
+            <a [routerLink]="['/transaction-account', prepaymentAmortization.creditAccount.id, 'view']">{{
+              prepaymentAmortization.creditAccount.accountNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of prepaymentAmortization.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220616111329",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "reportName",
@@ -42,44 +44,42 @@
       "fieldTypeBlobContent": "any"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportRequisition",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholders",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportRequisition",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportRequisition"
+      "relationshipName": "placeholders",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "reportRequisition",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportRequisition"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "reportTemplate",
+      "otherEntityField": "catalogueNumber",
       "otherEntityName": "reportTemplate",
+      "relationshipName": "reportTemplate",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "catalogueNumber"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "reportContentType",
+      "otherEntityField": "reportTypeName",
       "otherEntityName": "reportContentType",
+      "relationshipName": "reportContentType",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "reportTypeName"
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ReportRequisition",
-  "changelogDate": "20220616111329",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

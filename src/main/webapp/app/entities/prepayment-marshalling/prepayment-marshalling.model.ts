@@ -1,29 +1,14 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IPrepaymentMarshalling {
-  id?: number;
-  inactive?: boolean;
+  id: number;
+  inactive?: boolean | null;
   amortizationCommencementDate?: dayjs.Dayjs | null;
   amortizationPeriods?: number | null;
-  prepaymentAccount?: IPrepaymentAccount;
-  placeholders?: IPlaceholder[] | null;
+  prepaymentAccount?: Pick<IPrepaymentAccount, 'id' | 'catalogueNumber'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class PrepaymentMarshalling implements IPrepaymentMarshalling {
-  constructor(
-    public id?: number,
-    public inactive?: boolean,
-    public amortizationCommencementDate?: dayjs.Dayjs | null,
-    public amortizationPeriods?: number | null,
-    public prepaymentAccount?: IPrepaymentAccount,
-    public placeholders?: IPlaceholder[] | null
-  ) {
-    this.inactive = this.inactive ?? false;
-  }
-}
-
-export function getPrepaymentMarshallingIdentifier(prepaymentMarshalling: IPrepaymentMarshalling): number | undefined {
-  return prepaymentMarshalling.id;
-}
+export type NewPrepaymentMarshalling = Omit<IPrepaymentMarshalling, 'id'> & { id: null };

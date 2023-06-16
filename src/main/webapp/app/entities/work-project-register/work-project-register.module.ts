@@ -14,6 +14,5 @@ import { WorkProjectRegisterRoutingModule } from './route/work-project-register-
     WorkProjectRegisterUpdateComponent,
     WorkProjectRegisterDeleteDialogComponent,
   ],
-  entryComponents: [WorkProjectRegisterDeleteDialogComponent],
 })
 export class WorkProjectRegisterModule {}

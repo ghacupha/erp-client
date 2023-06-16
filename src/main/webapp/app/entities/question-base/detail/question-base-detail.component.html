@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="questionBase">
       <h2 data-cy="questionBaseDetailsHeading"><span>Question Base</span></h2>
@@ -57,14 +57,14 @@
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of questionBase.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.universalKey }}</a
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.universalKey }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder Item</span></dt>
         <dd>
           <span *ngFor="let placeholderItem of questionBase.placeholderItems; let last = last">
-            <a [routerLink]="['/placeholder', placeholderItem?.id, 'view']">{{ placeholderItem.description }}</a
+            <a [routerLink]="['/placeholder', placeholderItem.id, 'view']">{{ placeholderItem.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

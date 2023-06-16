@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISettlementCurrency, SettlementCurrency } from '../settlement-currency.model';
+import { ISettlementCurrency } from '../settlement-currency.model';
 import { SettlementCurrencyService } from '../service/settlement-currency.service';
 
 @Injectable({ providedIn: 'root' })
-export class SettlementCurrencyRoutingResolveService implements Resolve<ISettlementCurrency> {
+export class SettlementCurrencyRoutingResolveService implements Resolve<ISettlementCurrency | null> {
   constructor(protected service: SettlementCurrencyService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISettlementCurrency> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISettlementCurrency | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((settlementCurrency: HttpResponse<SettlementCurrency>) => {
+        mergeMap((settlementCurrency: HttpResponse<ISettlementCurrency>) => {
           if (settlementCurrency.body) {
             return of(settlementCurrency.body);
           } else {
@@ -25,6 +25,6 @@ export class SettlementCurrencyRoutingResolveService implements Resolve<ISettlem
         })
       );
     }
-    return of(new SettlementCurrency());
+    return of(null);
   }
 }

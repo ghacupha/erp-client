@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220802080530",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "prepaymentAccountGuid",
@@ -54,52 +56,50 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AmortizationSequence",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "prepaymentAccount",
+      "otherEntityField": "catalogueNumber",
       "otherEntityName": "prepaymentAccount",
+      "relationshipName": "prepaymentAccount",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "catalogueNumber"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "amortizationRecurrence",
+      "otherEntityField": "particulars",
       "otherEntityName": "amortizationRecurrence",
+      "relationshipName": "amortizationRecurrence",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "particulars"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "amortizationSequence",
       "ownerSide": true,
-      "otherEntityRelationshipName": "amortizationSequence"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "prepaymentMapping",
-      "otherEntityName": "prepaymentMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "parameter",
+      "otherEntityName": "prepaymentMapping",
+      "otherEntityRelationshipName": "amortizationSequence",
       "ownerSide": true,
-      "otherEntityRelationshipName": "amortizationSequence"
+      "relationshipName": "prepaymentMapping",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "applicationParameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "amortizationSequence",
       "ownerSide": true,
-      "otherEntityRelationshipName": "amortizationSequence"
+      "relationshipName": "applicationParameters",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "AmortizationSequence",
-  "changelogDate": "20220802080530",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

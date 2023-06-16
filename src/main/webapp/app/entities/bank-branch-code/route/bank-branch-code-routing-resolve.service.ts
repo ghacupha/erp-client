@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IBankBranchCode, BankBranchCode } from '../bank-branch-code.model';
+import { IBankBranchCode } from '../bank-branch-code.model';
 import { BankBranchCodeService } from '../service/bank-branch-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class BankBranchCodeRoutingResolveService implements Resolve<IBankBranchCode> {
+export class BankBranchCodeRoutingResolveService implements Resolve<IBankBranchCode | null> {
   constructor(protected service: BankBranchCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IBankBranchCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IBankBranchCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((bankBranchCode: HttpResponse<BankBranchCode>) => {
+        mergeMap((bankBranchCode: HttpResponse<IBankBranchCode>) => {
           if (bankBranchCode.body) {
             return of(bankBranchCode.body);
           } else {
@@ -25,6 +25,6 @@ export class BankBranchCodeRoutingResolveService implements Resolve<IBankBranchC
         })
       );
     }
-    return of(new BankBranchCode());
+    return of(null);
   }
 }

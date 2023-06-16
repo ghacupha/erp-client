@@ -14,6 +14,5 @@ import { WorkInProgressTransferRoutingModule } from './route/work-in-progress-tr
     WorkInProgressTransferUpdateComponent,
     WorkInProgressTransferDeleteDialogComponent,
   ],
-  entryComponents: [WorkInProgressTransferDeleteDialogComponent],
 })
 export class WorkInProgressTransferModule {}

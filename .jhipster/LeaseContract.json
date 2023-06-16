@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20230109133953",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "bookingId",
@@ -30,46 +32,44 @@
       "fieldValidateRules": ["required"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LeaseContract",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "leaseContract",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseContract"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "systemMappings",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "leaseContract",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseContract"
+      "relationshipName": "systemMappings",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "leaseContract",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseContract"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "contractMetadata",
-      "otherEntityName": "contractMetadata",
-      "relationshipType": "many-to-many",
       "otherEntityField": "contractTitle",
+      "otherEntityName": "contractMetadata",
+      "otherEntityRelationshipName": "leaseContract",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseContract"
+      "relationshipName": "contractMetadata",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "LeaseContract",
-  "changelogDate": "20230109133953",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

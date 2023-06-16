@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20230505142910",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "assetTag",
@@ -21,45 +23,43 @@
       "fieldType": "LocalDate"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AssetWarranty",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "assetWarranty",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetWarranty"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "universallyUniqueMapping",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "assetWarranty",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetWarranty"
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "dealer",
+      "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
+      "relationshipName": "dealer",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "warrantyAttachment",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "assetWarranty",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetWarranty"
+      "relationshipName": "warrantyAttachment",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "AssetWarranty",
-  "changelogDate": "20230505142910",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

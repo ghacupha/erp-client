@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IPrepaymentMapping, PrepaymentMapping } from '../prepayment-mapping.model';
+import { IPrepaymentMapping } from '../prepayment-mapping.model';
 import { PrepaymentMappingService } from '../service/prepayment-mapping.service';
 
 @Injectable({ providedIn: 'root' })
-export class PrepaymentMappingRoutingResolveService implements Resolve<IPrepaymentMapping> {
+export class PrepaymentMappingRoutingResolveService implements Resolve<IPrepaymentMapping | null> {
   constructor(protected service: PrepaymentMappingService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentMapping> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentMapping | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((prepaymentMapping: HttpResponse<PrepaymentMapping>) => {
+        mergeMap((prepaymentMapping: HttpResponse<IPrepaymentMapping>) => {
           if (prepaymentMapping.body) {
             return of(prepaymentMapping.body);
           } else {
@@ -25,6 +25,6 @@ export class PrepaymentMappingRoutingResolveService implements Resolve<IPrepayme
         })
       );
     }
-    return of(new PrepaymentMapping());
+    return of(null);
   }
 }

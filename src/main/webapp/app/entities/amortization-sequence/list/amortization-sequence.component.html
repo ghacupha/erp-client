@@ -3,9 +3,9 @@
     <span>Amortization Sequences</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,51 +24,116 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Amortization Sequence</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="amortizationSequences?.length === 0">
-    <span>No amortizationSequences found</span>
+    <span>No Amortization Sequences found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="amortizationSequences && amortizationSequences.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="amortizationSequences && amortizationSequences.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="prepaymentAccountGuid">
-            <span>Prepayment Account Guid</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Prepayment Account Guid</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="recurrenceGuid">
-            <span>Recurrence Guid</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Recurrence Guid</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="currentAmortizationDate"><span>Current Amortization Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="previousAmortizationDate"><span>Previous Amortization Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="nextAmortizationDate"><span>Next Amortization Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="isCommencementSequence"><span>Is Commencement Sequence</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="isTerminalSequence"><span>Is Terminal Sequence</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="amortizationAmount"><span>Amortization Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="sequenceGuid"><span>Sequence Guid</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber"><span>Prepayment Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sequenceNumber">
+            <div class="d-flex">
+              <span>Sequence Number</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="particulars">
+            <div class="d-flex">
+              <span>Particulars</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="currentAmortizationDate">
+            <div class="d-flex">
+              <span>Current Amortization Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="previousAmortizationDate">
+            <div class="d-flex">
+              <span>Previous Amortization Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nextAmortizationDate">
+            <div class="d-flex">
+              <span>Next Amortization Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isCommencementSequence">
+            <div class="d-flex">
+              <span>Is Commencement Sequence</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isTerminalSequence">
+            <div class="d-flex">
+              <span>Is Terminal Sequence</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="amortizationAmount">
+            <div class="d-flex">
+              <span>Amortization Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sequenceGuid">
+            <div class="d-flex">
+              <span>Sequence Guid</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber">
+            <div class="d-flex">
+              <span>Prepayment Account</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="amortizationRecurrence.particulars">
-            <span>Amortization Recurrence</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Amortization Recurrence</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col"></th>
         </tr>
@@ -91,19 +156,19 @@
           <td>{{ amortizationSequence.sequenceGuid }}</td>
           <td>
             <div *ngIf="amortizationSequence.prepaymentAccount">
-              <a [routerLink]="['/prepayment-account', amortizationSequence.prepaymentAccount?.id, 'view']">{{
-                amortizationSequence.prepaymentAccount?.catalogueNumber
+              <a [routerLink]="['/prepayment-account', amortizationSequence.prepaymentAccount.id, 'view']">{{
+                amortizationSequence.prepaymentAccount.catalogueNumber
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="amortizationSequence.amortizationRecurrence">
-              <a [routerLink]="['/amortization-recurrence', amortizationSequence.amortizationRecurrence?.id, 'view']">{{
-                amortizationSequence.amortizationRecurrence?.particulars
+              <a [routerLink]="['/amortization-recurrence', amortizationSequence.amortizationRecurrence.id, 'view']">{{
+                amortizationSequence.amortizationRecurrence.particulars
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -137,19 +202,19 @@
   </div>
 
   <div *ngIf="amortizationSequences && amortizationSequences.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

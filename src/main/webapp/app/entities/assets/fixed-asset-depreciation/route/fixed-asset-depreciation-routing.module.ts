@@ -6,13 +6,14 @@ import { FixedAssetDepreciationComponent } from '../list/fixed-asset-depreciatio
 import { FixedAssetDepreciationDetailComponent } from '../detail/fixed-asset-depreciation-detail.component';
 import { FixedAssetDepreciationUpdateComponent } from '../update/fixed-asset-depreciation-update.component';
 import { FixedAssetDepreciationRoutingResolveService } from './fixed-asset-depreciation-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const fixedAssetDepreciationRoute: Routes = [
   {
     path: '',
     component: FixedAssetDepreciationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

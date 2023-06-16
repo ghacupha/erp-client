@@ -1,27 +1,13 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface ITransactionAccount {
-  id?: number;
-  accountNumber?: string;
-  accountName?: string;
-  notesContentType?: string | null;
+  id: number;
+  accountNumber?: string | null;
+  accountName?: string | null;
   notes?: string | null;
-  parentAccount?: ITransactionAccount | null;
-  placeholders?: IPlaceholder[] | null;
+  notesContentType?: string | null;
+  parentAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class TransactionAccount implements ITransactionAccount {
-  constructor(
-    public id?: number,
-    public accountNumber?: string,
-    public accountName?: string,
-    public notesContentType?: string | null,
-    public notes?: string | null,
-    public parentAccount?: ITransactionAccount | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getTransactionAccountIdentifier(transactionAccount: ITransactionAccount): number | undefined {
-  return transactionAccount.id;
-}
+export type NewTransactionAccount = Omit<ITransactionAccount, 'id'> & { id: null };

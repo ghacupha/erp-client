@@ -14,6 +14,5 @@ import { AmortizationRecurrenceRoutingModule } from './route/amortization-recurr
     AmortizationRecurrenceUpdateComponent,
     AmortizationRecurrenceDeleteDialogComponent,
   ],
-  entryComponents: [AmortizationRecurrenceDeleteDialogComponent],
 })
 export class AmortizationRecurrenceModule {}

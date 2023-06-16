@@ -1,12 +1,6 @@
 export interface ISystemModule {
-  id?: number;
-  moduleName?: string;
+  id: number;
+  moduleName?: string | null;
 }
 
-export class SystemModule implements ISystemModule {
-  constructor(public id?: number, public moduleName?: string) {}
-}
-
-export function getSystemModuleIdentifier(systemModule: ISystemModule): number | undefined {
-  return systemModule.id;
-}
+export type NewSystemModule = Omit<ISystemModule, 'id'> & { id: null };

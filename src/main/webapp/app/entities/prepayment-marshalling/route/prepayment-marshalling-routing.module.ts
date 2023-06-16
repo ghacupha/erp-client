@@ -6,13 +6,14 @@ import { PrepaymentMarshallingComponent } from '../list/prepayment-marshalling.c
 import { PrepaymentMarshallingDetailComponent } from '../detail/prepayment-marshalling-detail.component';
 import { PrepaymentMarshallingUpdateComponent } from '../update/prepayment-marshalling-update.component';
 import { PrepaymentMarshallingRoutingResolveService } from './prepayment-marshalling-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const prepaymentMarshallingRoute: Routes = [
   {
     path: '',
     component: PrepaymentMarshallingComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

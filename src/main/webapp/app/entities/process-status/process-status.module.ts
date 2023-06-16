@@ -9,6 +9,5 @@ import { ProcessStatusRoutingModule } from './route/process-status-routing.modul
 @NgModule({
   imports: [SharedModule, ProcessStatusRoutingModule],
   declarations: [ProcessStatusComponent, ProcessStatusDetailComponent, ProcessStatusUpdateComponent, ProcessStatusDeleteDialogComponent],
-  entryComponents: [ProcessStatusDeleteDialogComponent],
 })
 export class ProcessStatusModule {}

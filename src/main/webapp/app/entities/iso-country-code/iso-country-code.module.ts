@@ -14,6 +14,5 @@ import { IsoCountryCodeRoutingModule } from './route/iso-country-code-routing.mo
     IsoCountryCodeUpdateComponent,
     IsoCountryCodeDeleteDialogComponent,
   ],
-  entryComponents: [IsoCountryCodeDeleteDialogComponent],
 })
 export class IsoCountryCodeModule {}

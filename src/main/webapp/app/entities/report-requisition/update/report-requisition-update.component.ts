@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
-import { IReportRequisition, ReportRequisition } from '../report-requisition.model';
+import { ReportRequisitionFormService, ReportRequisitionFormGroup } from './report-requisition-form.service';
+import { IReportRequisition } from '../report-requisition.model';
 import { ReportRequisitionService } from '../service/report-requisition.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -29,6 +26,7 @@ import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types
 })
 export class ReportRequisitionUpdateComponent implements OnInit {
   isSaving = false;
+  reportRequisition: IReportRequisition | null = null;
   reportStatusTypesValues = Object.keys(ReportStatusTypes);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -36,44 +34,37 @@ export class ReportRequisitionUpdateComponent implements OnInit {
   reportTemplatesSharedCollection: IReportTemplate[] = [];
   reportContentTypesSharedCollection: IReportContentType[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    reportName: [null, [Validators.required]],
-    reportRequestTime: [null, [Validators.required]],
-    reportPassword: [null, [Validators.required, Validators.minLength(6)]],
-    reportStatus: [],
-    reportId: [null, [Validators.required]],
-    reportFileAttachment: [],
-    reportFileAttachmentContentType: [],
-    reportFileCheckSum: [],
-    reportNotes: [],
-    reportNotesContentType: [],
-    placeholders: [],
-    parameters: [],
-    reportTemplate: [null, Validators.required],
-    reportContentType: [null, Validators.required],
-  });
+  editForm: ReportRequisitionFormGroup = this.reportRequisitionFormService.createReportRequisitionFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected reportRequisitionService: ReportRequisitionService,
+    protected reportRequisitionFormService: ReportRequisitionFormService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected reportTemplateService: ReportTemplateService,
     protected reportContentTypeService: ReportContentTypeService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  compareReportTemplate = (o1: IReportTemplate | null, o2: IReportTemplate | null): boolean =>
+    this.reportTemplateService.compareReportTemplate(o1, o2);
+
+  compareReportContentType = (o1: IReportContentType | null, o2: IReportContentType | null): boolean =>
+    this.reportContentTypeService.compareReportContentType(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportRequisition }) => {
-      if (reportRequisition.id === undefined) {
-        const today = dayjs().startOf('day');
-        reportRequisition.reportRequestTime = today;
+      this.reportRequisition = reportRequisition;
+      if (reportRequisition) {
+        this.updateForm(reportRequisition);
       }
-
-      this.updateForm(reportRequisition);
 
       this.loadRelationshipsOptions();
     });
@@ -100,60 +91,19 @@ export class ReportRequisitionUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const reportRequisition = this.createFromForm();
-    if (reportRequisition.id !== undefined) {
+    const reportRequisition = this.reportRequisitionFormService.getReportRequisition(this.editForm);
+    if (reportRequisition.id !== null) {
       this.subscribeToSaveResponse(this.reportRequisitionService.update(reportRequisition));
     } else {
       this.subscribeToSaveResponse(this.reportRequisitionService.create(reportRequisition));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackReportTemplateById(index: number, item: IReportTemplate): number {
-    return item.id!;
-  }
-
-  trackReportContentTypeById(index: number, item: IReportContentType): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IReportRequisition>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -169,37 +119,23 @@ export class ReportRequisitionUpdateComponent implements OnInit {
   }
 
   protected updateForm(reportRequisition: IReportRequisition): void {
-    this.editForm.patchValue({
-      id: reportRequisition.id,
-      reportName: reportRequisition.reportName,
-      reportRequestTime: reportRequisition.reportRequestTime ? reportRequisition.reportRequestTime.format(DATE_TIME_FORMAT) : null,
-      reportPassword: reportRequisition.reportPassword,
-      reportStatus: reportRequisition.reportStatus,
-      reportId: reportRequisition.reportId,
-      reportFileAttachment: reportRequisition.reportFileAttachment,
-      reportFileAttachmentContentType: reportRequisition.reportFileAttachmentContentType,
-      reportFileCheckSum: reportRequisition.reportFileCheckSum,
-      reportNotes: reportRequisition.reportNotes,
-      reportNotesContentType: reportRequisition.reportNotesContentType,
-      placeholders: reportRequisition.placeholders,
-      parameters: reportRequisition.parameters,
-      reportTemplate: reportRequisition.reportTemplate,
-      reportContentType: reportRequisition.reportContentType,
-    });
+    this.reportRequisition = reportRequisition;
+    this.reportRequisitionFormService.resetForm(this.editForm, reportRequisition);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(reportRequisition.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(reportRequisition.parameters ?? [])
-    );
-    this.reportTemplatesSharedCollection = this.reportTemplateService.addReportTemplateToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(reportRequisition.parameters ?? [])
+      );
+    this.reportTemplatesSharedCollection = this.reportTemplateService.addReportTemplateToCollectionIfMissing<IReportTemplate>(
       this.reportTemplatesSharedCollection,
       reportRequisition.reportTemplate
     );
-    this.reportContentTypesSharedCollection = this.reportContentTypeService.addReportContentTypeToCollectionIfMissing(
+    this.reportContentTypesSharedCollection = this.reportContentTypeService.addReportContentTypeToCollectionIfMissing<IReportContentType>(
       this.reportContentTypesSharedCollection,
       reportRequisition.reportContentType
     );
@@ -211,7 +147,10 @@ export class ReportRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.reportRequisition?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -221,9 +160,9 @@ export class ReportRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('parameters')!.value ?? [])
+            ...(this.reportRequisition?.parameters ?? [])
           )
         )
       )
@@ -237,7 +176,10 @@ export class ReportRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IReportTemplate[]>) => res.body ?? []))
       .pipe(
         map((reportTemplates: IReportTemplate[]) =>
-          this.reportTemplateService.addReportTemplateToCollectionIfMissing(reportTemplates, this.editForm.get('reportTemplate')!.value)
+          this.reportTemplateService.addReportTemplateToCollectionIfMissing<IReportTemplate>(
+            reportTemplates,
+            this.reportRequisition?.reportTemplate
+          )
         )
       )
       .subscribe((reportTemplates: IReportTemplate[]) => (this.reportTemplatesSharedCollection = reportTemplates));
@@ -247,35 +189,12 @@ export class ReportRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IReportContentType[]>) => res.body ?? []))
       .pipe(
         map((reportContentTypes: IReportContentType[]) =>
-          this.reportContentTypeService.addReportContentTypeToCollectionIfMissing(
+          this.reportContentTypeService.addReportContentTypeToCollectionIfMissing<IReportContentType>(
             reportContentTypes,
-            this.editForm.get('reportContentType')!.value
+            this.reportRequisition?.reportContentType
           )
         )
       )
       .subscribe((reportContentTypes: IReportContentType[]) => (this.reportContentTypesSharedCollection = reportContentTypes));
-  }
-
-  protected createFromForm(): IReportRequisition {
-    return {
-      ...new ReportRequisition(),
-      id: this.editForm.get(['id'])!.value,
-      reportName: this.editForm.get(['reportName'])!.value,
-      reportRequestTime: this.editForm.get(['reportRequestTime'])!.value
-        ? dayjs(this.editForm.get(['reportRequestTime'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      reportPassword: this.editForm.get(['reportPassword'])!.value,
-      reportStatus: this.editForm.get(['reportStatus'])!.value,
-      reportId: this.editForm.get(['reportId'])!.value,
-      reportFileAttachmentContentType: this.editForm.get(['reportFileAttachmentContentType'])!.value,
-      reportFileAttachment: this.editForm.get(['reportFileAttachment'])!.value,
-      reportFileCheckSum: this.editForm.get(['reportFileCheckSum'])!.value,
-      reportNotesContentType: this.editForm.get(['reportNotesContentType'])!.value,
-      reportNotes: this.editForm.get(['reportNotes'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      parameters: this.editForm.get(['parameters'])!.value,
-      reportTemplate: this.editForm.get(['reportTemplate'])!.value,
-      reportContentType: this.editForm.get(['reportContentType'])!.value,
-    };
   }
 }

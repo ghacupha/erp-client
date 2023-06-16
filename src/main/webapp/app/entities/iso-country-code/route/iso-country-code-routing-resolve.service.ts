@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IIsoCountryCode, IsoCountryCode } from '../iso-country-code.model';
+import { IIsoCountryCode } from '../iso-country-code.model';
 import { IsoCountryCodeService } from '../service/iso-country-code.service';
 
 @Injectable({ providedIn: 'root' })
-export class IsoCountryCodeRoutingResolveService implements Resolve<IIsoCountryCode> {
+export class IsoCountryCodeRoutingResolveService implements Resolve<IIsoCountryCode | null> {
   constructor(protected service: IsoCountryCodeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IIsoCountryCode> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IIsoCountryCode | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((isoCountryCode: HttpResponse<IsoCountryCode>) => {
+        mergeMap((isoCountryCode: HttpResponse<IIsoCountryCode>) => {
           if (isoCountryCode.body) {
             return of(isoCountryCode.body);
           } else {
@@ -25,6 +25,6 @@ export class IsoCountryCodeRoutingResolveService implements Resolve<IIsoCountryC
         })
       );
     }
-    return of(new IsoCountryCode());
+    return of(null);
   }
 }

@@ -1,27 +1,13 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IBankBranchCode {
-  id?: number;
+  id: number;
   bankCode?: string | null;
-  bankName?: string;
+  bankName?: string | null;
   branchCode?: string | null;
   branchName?: string | null;
   notes?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class BankBranchCode implements IBankBranchCode {
-  constructor(
-    public id?: number,
-    public bankCode?: string | null,
-    public bankName?: string,
-    public branchCode?: string | null,
-    public branchName?: string | null,
-    public notes?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getBankBranchCodeIdentifier(bankBranchCode: IBankBranchCode): number | undefined {
-  return bankBranchCode.id;
-}
+export type NewBankBranchCode = Omit<IBankBranchCode, 'id'> & { id: null };

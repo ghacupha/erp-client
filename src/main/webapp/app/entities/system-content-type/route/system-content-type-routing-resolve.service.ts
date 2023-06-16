@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ISystemContentType, SystemContentType } from '../system-content-type.model';
+import { ISystemContentType } from '../system-content-type.model';
 import { SystemContentTypeService } from '../service/system-content-type.service';
 
 @Injectable({ providedIn: 'root' })
-export class SystemContentTypeRoutingResolveService implements Resolve<ISystemContentType> {
+export class SystemContentTypeRoutingResolveService implements Resolve<ISystemContentType | null> {
   constructor(protected service: SystemContentTypeService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ISystemContentType> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ISystemContentType | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((systemContentType: HttpResponse<SystemContentType>) => {
+        mergeMap((systemContentType: HttpResponse<ISystemContentType>) => {
           if (systemContentType.body) {
             return of(systemContentType.body);
           } else {
@@ -25,6 +25,6 @@ export class SystemContentTypeRoutingResolveService implements Resolve<ISystemCo
         })
       );
     }
-    return of(new SystemContentType());
+    return of(null);
   }
 }

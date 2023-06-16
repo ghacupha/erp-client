@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICustomerIDDocumentType } from '../customer-id-document-type.model';
 import { CustomerIDDocumentTypeService } from '../service/customer-id-document-type.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './customer-id-document-type-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class CustomerIDDocumentTypeDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.customerIDDocumentTypeService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

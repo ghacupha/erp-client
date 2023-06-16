@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IBusinessDocument, BusinessDocument } from '../business-document.model';
+import { IBusinessDocument } from '../business-document.model';
 import { BusinessDocumentService } from '../service/business-document.service';
 
 @Injectable({ providedIn: 'root' })
-export class BusinessDocumentRoutingResolveService implements Resolve<IBusinessDocument> {
+export class BusinessDocumentRoutingResolveService implements Resolve<IBusinessDocument | null> {
   constructor(protected service: BusinessDocumentService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IBusinessDocument> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IBusinessDocument | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((businessDocument: HttpResponse<BusinessDocument>) => {
+        mergeMap((businessDocument: HttpResponse<IBusinessDocument>) => {
           if (businessDocument.body) {
             return of(businessDocument.body);
           } else {
@@ -25,6 +25,6 @@ export class BusinessDocumentRoutingResolveService implements Resolve<IBusinessD
         })
       );
     }
-    return of(new BusinessDocument());
+    return of(null);
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-amortization.model';
+import { PrepaymentAmortizationFormService, PrepaymentAmortizationFormGroup } from './prepayment-amortization-form.service';
+import { IPrepaymentAmortization } from '../prepayment-amortization.model';
 import { PrepaymentAmortizationService } from '../service/prepayment-amortization.service';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
@@ -22,38 +22,42 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class PrepaymentAmortizationUpdateComponent implements OnInit {
   isSaving = false;
+  prepaymentAmortization: IPrepaymentAmortization | null = null;
 
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [],
-    prepaymentPeriod: [],
-    prepaymentAmount: [],
-    inactive: [],
-    prepaymentAccount: [],
-    settlementCurrency: [],
-    debitAccount: [],
-    creditAccount: [],
-    placeholders: [],
-  });
+  editForm: PrepaymentAmortizationFormGroup = this.prepaymentAmortizationFormService.createPrepaymentAmortizationFormGroup();
 
   constructor(
     protected prepaymentAmortizationService: PrepaymentAmortizationService,
+    protected prepaymentAmortizationFormService: PrepaymentAmortizationFormService,
     protected prepaymentAccountService: PrepaymentAccountService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePrepaymentAccount = (o1: IPrepaymentAccount | null, o2: IPrepaymentAccount | null): boolean =>
+    this.prepaymentAccountService.comparePrepaymentAccount(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareTransactionAccount = (o1: ITransactionAccount | null, o2: ITransactionAccount | null): boolean =>
+    this.transactionAccountService.compareTransactionAccount(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentAmortization }) => {
-      this.updateForm(prepaymentAmortization);
+      this.prepaymentAmortization = prepaymentAmortization;
+      if (prepaymentAmortization) {
+        this.updateForm(prepaymentAmortization);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -65,46 +69,19 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const prepaymentAmortization = this.createFromForm();
-    if (prepaymentAmortization.id !== undefined) {
+    const prepaymentAmortization = this.prepaymentAmortizationFormService.getPrepaymentAmortization(this.editForm);
+    if (prepaymentAmortization.id !== null) {
       this.subscribeToSaveResponse(this.prepaymentAmortizationService.update(prepaymentAmortization));
     } else {
       this.subscribeToSaveResponse(this.prepaymentAmortizationService.create(prepaymentAmortization));
     }
   }
 
-  trackPrepaymentAccountById(index: number, item: IPrepaymentAccount): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentAmortization>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -120,33 +97,25 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
   }
 
   protected updateForm(prepaymentAmortization: IPrepaymentAmortization): void {
-    this.editForm.patchValue({
-      id: prepaymentAmortization.id,
-      description: prepaymentAmortization.description,
-      prepaymentPeriod: prepaymentAmortization.prepaymentPeriod,
-      prepaymentAmount: prepaymentAmortization.prepaymentAmount,
-      inactive: prepaymentAmortization.inactive,
-      prepaymentAccount: prepaymentAmortization.prepaymentAccount,
-      settlementCurrency: prepaymentAmortization.settlementCurrency,
-      debitAccount: prepaymentAmortization.debitAccount,
-      creditAccount: prepaymentAmortization.creditAccount,
-      placeholders: prepaymentAmortization.placeholders,
-    });
+    this.prepaymentAmortization = prepaymentAmortization;
+    this.prepaymentAmortizationFormService.resetForm(this.editForm, prepaymentAmortization);
 
-    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
+    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing<IPrepaymentAccount>(
       this.prepaymentAccountsSharedCollection,
       prepaymentAmortization.prepaymentAccount
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      prepaymentAmortization.settlementCurrency
-    );
-    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-      this.transactionAccountsSharedCollection,
-      prepaymentAmortization.debitAccount,
-      prepaymentAmortization.creditAccount
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        prepaymentAmortization.settlementCurrency
+      );
+    this.transactionAccountsSharedCollection =
+      this.transactionAccountService.addTransactionAccountToCollectionIfMissing<ITransactionAccount>(
+        this.transactionAccountsSharedCollection,
+        prepaymentAmortization.debitAccount,
+        prepaymentAmortization.creditAccount
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(prepaymentAmortization.placeholders ?? [])
     );
@@ -158,9 +127,9 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPrepaymentAccount[]>) => res.body ?? []))
       .pipe(
         map((prepaymentAccounts: IPrepaymentAccount[]) =>
-          this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
+          this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing<IPrepaymentAccount>(
             prepaymentAccounts,
-            this.editForm.get('prepaymentAccount')!.value
+            this.prepaymentAmortization?.prepaymentAccount
           )
         )
       )
@@ -171,9 +140,9 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.prepaymentAmortization?.settlementCurrency
           )
         )
       )
@@ -184,10 +153,10 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
       .pipe(
         map((transactionAccounts: ITransactionAccount[]) =>
-          this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+          this.transactionAccountService.addTransactionAccountToCollectionIfMissing<ITransactionAccount>(
             transactionAccounts,
-            this.editForm.get('debitAccount')!.value,
-            this.editForm.get('creditAccount')!.value
+            this.prepaymentAmortization?.debitAccount,
+            this.prepaymentAmortization?.creditAccount
           )
         )
       )
@@ -198,25 +167,12 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.prepaymentAmortization?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IPrepaymentAmortization {
-    return {
-      ...new PrepaymentAmortization(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      prepaymentPeriod: this.editForm.get(['prepaymentPeriod'])!.value,
-      prepaymentAmount: this.editForm.get(['prepaymentAmount'])!.value,
-      inactive: this.editForm.get(['inactive'])!.value,
-      prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      debitAccount: this.editForm.get(['debitAccount'])!.value,
-      creditAccount: this.editForm.get(['creditAccount'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

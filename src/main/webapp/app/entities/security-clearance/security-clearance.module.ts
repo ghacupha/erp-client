@@ -14,6 +14,5 @@ import { SecurityClearanceRoutingModule } from './route/security-clearance-routi
     SecurityClearanceUpdateComponent,
     SecurityClearanceDeleteDialogComponent,
   ],
-  entryComponents: [SecurityClearanceDeleteDialogComponent],
 })
 export class SecurityClearanceModule {}

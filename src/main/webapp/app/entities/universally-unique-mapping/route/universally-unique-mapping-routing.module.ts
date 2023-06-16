@@ -6,13 +6,14 @@ import { UniversallyUniqueMappingComponent } from '../list/universally-unique-ma
 import { UniversallyUniqueMappingDetailComponent } from '../detail/universally-unique-mapping-detail.component';
 import { UniversallyUniqueMappingUpdateComponent } from '../update/universally-unique-mapping-update.component';
 import { UniversallyUniqueMappingRoutingResolveService } from './universally-unique-mapping-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const universallyUniqueMappingRoute: Routes = [
   {
     path: '',
     component: UniversallyUniqueMappingComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

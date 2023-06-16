@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IFixedAssetAcquisition } from '../fixed-asset-acquisition.model';
 import { FixedAssetAcquisitionService } from '../service/fixed-asset-acquisition.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './fixed-asset-acquisition-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class FixedAssetAcquisitionDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.fixedAssetAcquisitionService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

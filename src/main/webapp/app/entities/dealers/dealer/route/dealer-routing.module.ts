@@ -6,13 +6,14 @@ import { DealerComponent } from '../list/dealer.component';
 import { DealerDetailComponent } from '../detail/dealer-detail.component';
 import { DealerUpdateComponent } from '../update/dealer-update.component';
 import { DealerRoutingResolveService } from './dealer-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const dealerRoute: Routes = [
   {
     path: '',
     component: DealerComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

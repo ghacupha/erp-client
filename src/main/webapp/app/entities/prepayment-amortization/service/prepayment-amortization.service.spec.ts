@@ -1,18 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-amortization.model';
+import { IPrepaymentAmortization } from '../prepayment-amortization.model';
+import {
+  sampleWithRequiredData,
+  sampleWithNewData,
+  sampleWithPartialData,
+  sampleWithFullData,
+} from '../prepayment-amortization.test-samples';
 
-import { PrepaymentAmortizationService } from './prepayment-amortization.service';
+import { PrepaymentAmortizationService, RestPrepaymentAmortization } from './prepayment-amortization.service';
+
+const requireRestSample: RestPrepaymentAmortization = {
+  ...sampleWithRequiredData,
+  prepaymentPeriod: sampleWithRequiredData.prepaymentPeriod?.format(DATE_FORMAT),
+};
 
 describe('PrepaymentAmortization Service', () => {
   let service: PrepaymentAmortizationService;
   let httpMock: HttpTestingController;
-  let elemDefault: IPrepaymentAmortization;
   let expectedResult: IPrepaymentAmortization | IPrepaymentAmortization[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,50 +29,27 @@ describe('PrepaymentAmortization Service', () => {
     expectedResult = null;
     service = TestBed.inject(PrepaymentAmortizationService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      description: 'AAAAAAA',
-      prepaymentPeriod: currentDate,
-      prepaymentAmount: 0,
-      inactive: false,
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          prepaymentPeriod: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a PrepaymentAmortization', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          prepaymentPeriod: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const prepaymentAmortization = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          prepaymentPeriod: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new PrepaymentAmortization()).subscribe(resp => (expectedResult = resp.body));
+      service.create(prepaymentAmortization).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -72,25 +57,11 @@ describe('PrepaymentAmortization Service', () => {
     });
 
     it('should update a PrepaymentAmortization', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          description: 'BBBBBB',
-          prepaymentPeriod: currentDate.format(DATE_FORMAT),
-          prepaymentAmount: 1,
-          inactive: true,
-        },
-        elemDefault
-      );
+      const prepaymentAmortization = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          prepaymentPeriod: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(prepaymentAmortization).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -98,22 +69,9 @@ describe('PrepaymentAmortization Service', () => {
     });
 
     it('should partial update a PrepaymentAmortization', () => {
-      const patchObject = Object.assign(
-        {
-          description: 'BBBBBB',
-          inactive: true,
-        },
-        new PrepaymentAmortization()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          prepaymentPeriod: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -123,71 +81,59 @@ describe('PrepaymentAmortization Service', () => {
     });
 
     it('should return a list of PrepaymentAmortization', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          description: 'BBBBBB',
-          prepaymentPeriod: currentDate.format(DATE_FORMAT),
-          prepaymentAmount: 1,
-          inactive: true,
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          prepaymentPeriod: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a PrepaymentAmortization', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addPrepaymentAmortizationToCollectionIfMissing', () => {
       it('should add a PrepaymentAmortization to an empty array', () => {
-        const prepaymentAmortization: IPrepaymentAmortization = { id: 123 };
+        const prepaymentAmortization: IPrepaymentAmortization = sampleWithRequiredData;
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing([], prepaymentAmortization);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(prepaymentAmortization);
       });
 
       it('should not add a PrepaymentAmortization to an array that contains it', () => {
-        const prepaymentAmortization: IPrepaymentAmortization = { id: 123 };
+        const prepaymentAmortization: IPrepaymentAmortization = sampleWithRequiredData;
         const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [
           {
             ...prepaymentAmortization,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing(prepaymentAmortizationCollection, prepaymentAmortization);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a PrepaymentAmortization to an array that doesn't contain it", () => {
-        const prepaymentAmortization: IPrepaymentAmortization = { id: 123 };
-        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [{ id: 456 }];
+        const prepaymentAmortization: IPrepaymentAmortization = sampleWithRequiredData;
+        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [sampleWithPartialData];
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing(prepaymentAmortizationCollection, prepaymentAmortization);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(prepaymentAmortization);
       });
 
       it('should add only unique PrepaymentAmortization to an array', () => {
-        const prepaymentAmortizationArray: IPrepaymentAmortization[] = [{ id: 123 }, { id: 456 }, { id: 78042 }];
-        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [{ id: 123 }];
+        const prepaymentAmortizationArray: IPrepaymentAmortization[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [sampleWithRequiredData];
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing(
           prepaymentAmortizationCollection,
           ...prepaymentAmortizationArray
@@ -196,8 +142,8 @@ describe('PrepaymentAmortization Service', () => {
       });
 
       it('should accept varargs', () => {
-        const prepaymentAmortization: IPrepaymentAmortization = { id: 123 };
-        const prepaymentAmortization2: IPrepaymentAmortization = { id: 456 };
+        const prepaymentAmortization: IPrepaymentAmortization = sampleWithRequiredData;
+        const prepaymentAmortization2: IPrepaymentAmortization = sampleWithPartialData;
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing([], prepaymentAmortization, prepaymentAmortization2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(prepaymentAmortization);
@@ -205,16 +151,60 @@ describe('PrepaymentAmortization Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const prepaymentAmortization: IPrepaymentAmortization = { id: 123 };
+        const prepaymentAmortization: IPrepaymentAmortization = sampleWithRequiredData;
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing([], null, prepaymentAmortization, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(prepaymentAmortization);
       });
 
       it('should return initial array if no PrepaymentAmortization is added', () => {
-        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [{ id: 123 }];
+        const prepaymentAmortizationCollection: IPrepaymentAmortization[] = [sampleWithRequiredData];
         expectedResult = service.addPrepaymentAmortizationToCollectionIfMissing(prepaymentAmortizationCollection, undefined, null);
         expect(expectedResult).toEqual(prepaymentAmortizationCollection);
+      });
+    });
+
+    describe('comparePrepaymentAmortization', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.comparePrepaymentAmortization(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.comparePrepaymentAmortization(entity1, entity2);
+        const compareResult2 = service.comparePrepaymentAmortization(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.comparePrepaymentAmortization(entity1, entity2);
+        const compareResult2 = service.comparePrepaymentAmortization(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.comparePrepaymentAmortization(entity1, entity2);
+        const compareResult2 = service.comparePrepaymentAmortization(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

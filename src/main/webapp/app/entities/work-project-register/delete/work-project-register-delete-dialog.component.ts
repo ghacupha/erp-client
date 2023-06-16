@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IWorkProjectRegister } from '../work-project-register.model';
 import { WorkProjectRegisterService } from '../service/work-project-register.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './work-project-register-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class WorkProjectRegisterDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.workProjectRegisterService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

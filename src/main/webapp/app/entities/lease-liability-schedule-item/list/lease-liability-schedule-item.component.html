@@ -3,9 +3,9 @@
     <span>Lease Liability Schedule Items</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,47 +24,123 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Lease Liability Schedule Item</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="leaseLiabilityScheduleItems?.length === 0">
-    <span>No leaseLiabilityScheduleItems found</span>
+    <span>No Lease Liability Schedule Items found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="leaseLiabilityScheduleItems && leaseLiabilityScheduleItems.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="leaseLiabilityScheduleItems && leaseLiabilityScheduleItems.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodIncluded"><span>Period Included</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodStartDate"><span>Period Start Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodEndDate"><span>Period End Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="openingBalance"><span>Opening Balance</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="cashPayment"><span>Cash Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="principalPayment"><span>Principal Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestPayment"><span>Interest Payment</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outstandingBalance"><span>Outstanding Balance</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestPayableOpening"><span>Interest Payable Opening</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestExpenseAccrued"><span>Interest Expense Accrued</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestPayableBalance"><span>Interest Payable Balance</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="leaseModelMetadata.modelTitle"><span>Lease Model Metadata</span> <fa-icon icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="sequenceNumber">
+            <div class="d-flex">
+              <span>Sequence Number</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="periodIncluded">
+            <div class="d-flex">
+              <span>Period Included</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="periodStartDate">
+            <div class="d-flex">
+              <span>Period Start Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="periodEndDate">
+            <div class="d-flex">
+              <span>Period End Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="openingBalance">
+            <div class="d-flex">
+              <span>Opening Balance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="cashPayment">
+            <div class="d-flex">
+              <span>Cash Payment</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="principalPayment">
+            <div class="d-flex">
+              <span>Principal Payment</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="interestPayment">
+            <div class="d-flex">
+              <span>Interest Payment</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outstandingBalance">
+            <div class="d-flex">
+              <span>Outstanding Balance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="interestPayableOpening">
+            <div class="d-flex">
+              <span>Interest Payable Opening</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="interestExpenseAccrued">
+            <div class="d-flex">
+              <span>Interest Expense Accrued</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="interestPayableBalance">
+            <div class="d-flex">
+              <span>Interest Payable Balance</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="leaseContract.bookingId">
+            <div class="d-flex">
+              <span>Lease Contract</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="leaseModelMetadata.modelTitle">
+            <div class="d-flex">
+              <span>Lease Model Metadata</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -89,19 +165,19 @@
           <td>{{ leaseLiabilityScheduleItem.interestPayableBalance }}</td>
           <td>
             <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
-              <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
-                leaseLiabilityScheduleItem.leaseContract?.bookingId
+              <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract.id, 'view']">{{
+                leaseLiabilityScheduleItem.leaseContract.bookingId
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="leaseLiabilityScheduleItem.leaseModelMetadata">
-              <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata?.id, 'view']">{{
-                leaseLiabilityScheduleItem.leaseModelMetadata?.modelTitle
+              <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata.id, 'view']">{{
+                leaseLiabilityScheduleItem.leaseModelMetadata.modelTitle
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -135,19 +211,19 @@
   </div>
 
   <div *ngIf="leaseLiabilityScheduleItems && leaseLiabilityScheduleItems.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

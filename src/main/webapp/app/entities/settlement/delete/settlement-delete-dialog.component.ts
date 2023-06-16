@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ISettlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './settlement-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class SettlementDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.settlementService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

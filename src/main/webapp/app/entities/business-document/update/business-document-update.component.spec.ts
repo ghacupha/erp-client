@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { BusinessDocumentFormService } from './business-document-form.service';
 import { BusinessDocumentService } from '../service/business-document.service';
-import { IBusinessDocument, BusinessDocument } from '../business-document.model';
+import { IBusinessDocument } from '../business-document.model';
 import { IApplicationUser } from 'app/entities/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/application-user/service/application-user.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
@@ -28,6 +28,7 @@ describe('BusinessDocument Management Update Component', () => {
   let comp: BusinessDocumentUpdateComponent;
   let fixture: ComponentFixture<BusinessDocumentUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let businessDocumentFormService: BusinessDocumentFormService;
   let businessDocumentService: BusinessDocumentService;
   let applicationUserService: ApplicationUserService;
   let dealerService: DealerService;
@@ -38,15 +39,24 @@ describe('BusinessDocument Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [BusinessDocumentUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(BusinessDocumentUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(BusinessDocumentUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    businessDocumentFormService = TestBed.inject(BusinessDocumentFormService);
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     applicationUserService = TestBed.inject(ApplicationUserService);
     dealerService = TestBed.inject(DealerService);
@@ -78,7 +88,7 @@ describe('BusinessDocument Management Update Component', () => {
       expect(applicationUserService.query).toHaveBeenCalled();
       expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
         applicationUserCollection,
-        ...additionalApplicationUsers
+        ...additionalApplicationUsers.map(expect.objectContaining)
       );
       expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
     });
@@ -98,7 +108,10 @@ describe('BusinessDocument Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -124,7 +137,7 @@ describe('BusinessDocument Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -144,7 +157,10 @@ describe('BusinessDocument Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -163,7 +179,10 @@ describe('BusinessDocument Management Update Component', () => {
       comp.ngOnInit();
 
       expect(algorithmService.query).toHaveBeenCalled();
-      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(
+        algorithmCollection,
+        ...additionalAlgorithms.map(expect.objectContaining)
+      );
       expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -184,7 +203,7 @@ describe('BusinessDocument Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -199,8 +218,8 @@ describe('BusinessDocument Management Update Component', () => {
       businessDocument.originatingDepartment = originatingDepartment;
       const applicationMappings: IUniversallyUniqueMapping = { id: 93664 };
       businessDocument.applicationMappings = [applicationMappings];
-      const placeholders: IPlaceholder = { id: 51999 };
-      businessDocument.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 51999 };
+      businessDocument.placeholders = [placeholder];
       const fileChecksumAlgorithm: IAlgorithm = { id: 65209 };
       businessDocument.fileChecksumAlgorithm = fileChecksumAlgorithm;
       const securityClearance: ISecurityClearance = { id: 95179 };
@@ -209,22 +228,23 @@ describe('BusinessDocument Management Update Component', () => {
       activatedRoute.data = of({ businessDocument });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(businessDocument));
       expect(comp.applicationUsersSharedCollection).toContain(createdBy);
       expect(comp.applicationUsersSharedCollection).toContain(lastModifiedBy);
       expect(comp.dealersSharedCollection).toContain(originatingDepartment);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMappings);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.algorithmsSharedCollection).toContain(fileChecksumAlgorithm);
       expect(comp.securityClearancesSharedCollection).toContain(securityClearance);
+      expect(comp.businessDocument).toEqual(businessDocument);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<BusinessDocument>>();
+      const saveSubject = new Subject<HttpResponse<IBusinessDocument>>();
       const businessDocument = { id: 123 };
+      jest.spyOn(businessDocumentFormService, 'getBusinessDocument').mockReturnValue(businessDocument);
       jest.spyOn(businessDocumentService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ businessDocument });
@@ -237,18 +257,20 @@ describe('BusinessDocument Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(businessDocumentFormService.getBusinessDocument).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(businessDocumentService.update).toHaveBeenCalledWith(businessDocument);
+      expect(businessDocumentService.update).toHaveBeenCalledWith(expect.objectContaining(businessDocument));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<BusinessDocument>>();
-      const businessDocument = new BusinessDocument();
+      const saveSubject = new Subject<HttpResponse<IBusinessDocument>>();
+      const businessDocument = { id: 123 };
+      jest.spyOn(businessDocumentFormService, 'getBusinessDocument').mockReturnValue({ id: null });
       jest.spyOn(businessDocumentService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ businessDocument });
+      activatedRoute.data = of({ businessDocument: null });
       comp.ngOnInit();
 
       // WHEN
@@ -258,14 +280,15 @@ describe('BusinessDocument Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(businessDocumentService.create).toHaveBeenCalledWith(businessDocument);
+      expect(businessDocumentFormService.getBusinessDocument).toHaveBeenCalled();
+      expect(businessDocumentService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<BusinessDocument>>();
+      const saveSubject = new Subject<HttpResponse<IBusinessDocument>>();
       const businessDocument = { id: 123 };
       jest.spyOn(businessDocumentService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -278,112 +301,70 @@ describe('BusinessDocument Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(businessDocumentService.update).toHaveBeenCalledWith(businessDocument);
+      expect(businessDocumentService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackApplicationUserById', () => {
-      it('Should return tracked ApplicationUser primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareApplicationUser', () => {
+      it('Should forward to applicationUserService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackApplicationUserById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(applicationUserService, 'compareApplicationUser');
+        comp.compareApplicationUser(entity, entity2);
+        expect(applicationUserService.compareApplicationUser).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAlgorithmById', () => {
-      it('Should return tracked Algorithm primary key', () => {
+    describe('compareAlgorithm', () => {
+      it('Should forward to algorithmService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAlgorithmById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(algorithmService, 'compareAlgorithm');
+        comp.compareAlgorithm(entity, entity2);
+        expect(algorithmService.compareAlgorithm).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

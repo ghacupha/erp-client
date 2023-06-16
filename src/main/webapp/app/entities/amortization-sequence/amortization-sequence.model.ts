@@ -1,4 +1,4 @@
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { IAmortizationRecurrence } from 'app/entities/amortization-recurrence/amortization-recurrence.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -6,50 +6,23 @@ import { IPrepaymentMapping } from 'app/entities/prepayment-mapping/prepayment-m
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAmortizationSequence {
-  id?: number;
-  prepaymentAccountGuid?: string;
-  recurrenceGuid?: string;
-  sequenceNumber?: number;
+  id: number;
+  prepaymentAccountGuid?: string | null;
+  recurrenceGuid?: string | null;
+  sequenceNumber?: number | null;
   particulars?: string | null;
-  currentAmortizationDate?: dayjs.Dayjs;
+  currentAmortizationDate?: dayjs.Dayjs | null;
   previousAmortizationDate?: dayjs.Dayjs | null;
   nextAmortizationDate?: dayjs.Dayjs | null;
-  isCommencementSequence?: boolean;
-  isTerminalSequence?: boolean;
-  amortizationAmount?: number;
-  sequenceGuid?: string;
-  prepaymentAccount?: IPrepaymentAccount;
-  amortizationRecurrence?: IAmortizationRecurrence;
-  placeholders?: IPlaceholder[] | null;
-  prepaymentMappings?: IPrepaymentMapping[] | null;
-  applicationParameters?: IUniversallyUniqueMapping[] | null;
+  isCommencementSequence?: boolean | null;
+  isTerminalSequence?: boolean | null;
+  amortizationAmount?: number | null;
+  sequenceGuid?: string | null;
+  prepaymentAccount?: Pick<IPrepaymentAccount, 'id' | 'catalogueNumber'> | null;
+  amortizationRecurrence?: Pick<IAmortizationRecurrence, 'id' | 'particulars'> | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  prepaymentMappings?: Pick<IPrepaymentMapping, 'id' | 'parameter'>[] | null;
+  applicationParameters?: Pick<IUniversallyUniqueMapping, 'id' | 'mappedValue'>[] | null;
 }
 
-export class AmortizationSequence implements IAmortizationSequence {
-  constructor(
-    public id?: number,
-    public prepaymentAccountGuid?: string,
-    public recurrenceGuid?: string,
-    public sequenceNumber?: number,
-    public particulars?: string | null,
-    public currentAmortizationDate?: dayjs.Dayjs,
-    public previousAmortizationDate?: dayjs.Dayjs | null,
-    public nextAmortizationDate?: dayjs.Dayjs | null,
-    public isCommencementSequence?: boolean,
-    public isTerminalSequence?: boolean,
-    public amortizationAmount?: number,
-    public sequenceGuid?: string,
-    public prepaymentAccount?: IPrepaymentAccount,
-    public amortizationRecurrence?: IAmortizationRecurrence,
-    public placeholders?: IPlaceholder[] | null,
-    public prepaymentMappings?: IPrepaymentMapping[] | null,
-    public applicationParameters?: IUniversallyUniqueMapping[] | null
-  ) {
-    this.isCommencementSequence = this.isCommencementSequence ?? false;
-    this.isTerminalSequence = this.isTerminalSequence ?? false;
-  }
-}
-
-export function getAmortizationSequenceIdentifier(amortizationSequence: IAmortizationSequence): number | undefined {
-  return amortizationSequence.id;
-}
+export type NewAmortizationSequence = Omit<IAmortizationSequence, 'id'> & { id: null };

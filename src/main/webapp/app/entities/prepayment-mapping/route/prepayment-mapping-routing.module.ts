@@ -6,13 +6,14 @@ import { PrepaymentMappingComponent } from '../list/prepayment-mapping.component
 import { PrepaymentMappingDetailComponent } from '../detail/prepayment-mapping-detail.component';
 import { PrepaymentMappingUpdateComponent } from '../update/prepayment-mapping-update.component';
 import { PrepaymentMappingRoutingResolveService } from './prepayment-mapping-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const prepaymentMappingRoute: Routes = [
   {
     path: '',
     component: PrepaymentMappingComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

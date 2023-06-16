@@ -6,13 +6,14 @@ import { PlaceholderComponent } from '../list/placeholder.component';
 import { PlaceholderDetailComponent } from '../detail/placeholder-detail.component';
 import { PlaceholderUpdateComponent } from '../update/placeholder-update.component';
 import { PlaceholderRoutingResolveService } from './placeholder-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const placeholderRoute: Routes = [
   {
     path: '',
     component: PlaceholderComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

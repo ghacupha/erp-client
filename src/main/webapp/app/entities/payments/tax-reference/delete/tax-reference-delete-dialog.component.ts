@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITaxReference } from '../tax-reference.model';
 import { TaxReferenceService } from '../service/tax-reference.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './tax-reference-delete-dialog.component.html',
@@ -18,7 +19,7 @@ export class TaxReferenceDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.taxReferenceService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

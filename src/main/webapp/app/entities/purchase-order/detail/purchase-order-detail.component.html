@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="purchaseOrder">
       <h2 data-cy="purchaseOrderDetailsHeading"><span>Purchase Order</span></h2>
@@ -49,35 +49,35 @@
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="purchaseOrder.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', purchaseOrder.settlementCurrency?.id, 'view']">{{
-              purchaseOrder.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', purchaseOrder.settlementCurrency.id, 'view']">{{
+              purchaseOrder.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of purchaseOrder.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of purchaseOrder.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/dealer', signatories.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Vendor</span></dt>
         <dd>
           <div *ngIf="purchaseOrder.vendor">
-            <a [routerLink]="['/dealer', purchaseOrder.vendor?.id, 'view']">{{ purchaseOrder.vendor?.dealerName }}</a>
+            <a [routerLink]="['/dealer', purchaseOrder.vendor.id, 'view']">{{ purchaseOrder.vendor.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of purchaseOrder.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

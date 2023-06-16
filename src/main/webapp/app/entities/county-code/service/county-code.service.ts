@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ICountyCode, getCountyCodeIdentifier } from '../county-code.model';
+import { ICountyCode, NewCountyCode } from '../county-code.model';
+
+export type PartialUpdateCountyCode = Partial<ICountyCode> & Pick<ICountyCode, 'id'>;
 
 export type EntityResponseType = HttpResponse<ICountyCode>;
 export type EntityArrayResponseType = HttpResponse<ICountyCode[]>;
@@ -18,18 +20,18 @@ export class CountyCodeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(countyCode: ICountyCode): Observable<EntityResponseType> {
+  create(countyCode: NewCountyCode): Observable<EntityResponseType> {
     return this.http.post<ICountyCode>(this.resourceUrl, countyCode, { observe: 'response' });
   }
 
   update(countyCode: ICountyCode): Observable<EntityResponseType> {
-    return this.http.put<ICountyCode>(`${this.resourceUrl}/${getCountyCodeIdentifier(countyCode) as number}`, countyCode, {
+    return this.http.put<ICountyCode>(`${this.resourceUrl}/${this.getCountyCodeIdentifier(countyCode)}`, countyCode, {
       observe: 'response',
     });
   }
 
-  partialUpdate(countyCode: ICountyCode): Observable<EntityResponseType> {
-    return this.http.patch<ICountyCode>(`${this.resourceUrl}/${getCountyCodeIdentifier(countyCode) as number}`, countyCode, {
+  partialUpdate(countyCode: PartialUpdateCountyCode): Observable<EntityResponseType> {
+    return this.http.patch<ICountyCode>(`${this.resourceUrl}/${this.getCountyCodeIdentifier(countyCode)}`, countyCode, {
       observe: 'response',
     });
   }
@@ -52,16 +54,24 @@ export class CountyCodeService {
     return this.http.get<ICountyCode[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addCountyCodeToCollectionIfMissing(
-    countyCodeCollection: ICountyCode[],
-    ...countyCodesToCheck: (ICountyCode | null | undefined)[]
-  ): ICountyCode[] {
-    const countyCodes: ICountyCode[] = countyCodesToCheck.filter(isPresent);
+  getCountyCodeIdentifier(countyCode: Pick<ICountyCode, 'id'>): number {
+    return countyCode.id;
+  }
+
+  compareCountyCode(o1: Pick<ICountyCode, 'id'> | null, o2: Pick<ICountyCode, 'id'> | null): boolean {
+    return o1 && o2 ? this.getCountyCodeIdentifier(o1) === this.getCountyCodeIdentifier(o2) : o1 === o2;
+  }
+
+  addCountyCodeToCollectionIfMissing<Type extends Pick<ICountyCode, 'id'>>(
+    countyCodeCollection: Type[],
+    ...countyCodesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const countyCodes: Type[] = countyCodesToCheck.filter(isPresent);
     if (countyCodes.length > 0) {
-      const countyCodeCollectionIdentifiers = countyCodeCollection.map(countyCodeItem => getCountyCodeIdentifier(countyCodeItem)!);
+      const countyCodeCollectionIdentifiers = countyCodeCollection.map(countyCodeItem => this.getCountyCodeIdentifier(countyCodeItem)!);
       const countyCodesToAdd = countyCodes.filter(countyCodeItem => {
-        const countyCodeIdentifier = getCountyCodeIdentifier(countyCodeItem);
-        if (countyCodeIdentifier == null || countyCodeCollectionIdentifiers.includes(countyCodeIdentifier)) {
+        const countyCodeIdentifier = this.getCountyCodeIdentifier(countyCodeItem);
+        if (countyCodeCollectionIdentifiers.includes(countyCodeIdentifier)) {
           return false;
         }
         countyCodeCollectionIdentifiers.push(countyCodeIdentifier);

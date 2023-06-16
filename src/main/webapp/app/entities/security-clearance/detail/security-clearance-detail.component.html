@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="securityClearance">
       <h2 data-cy="securityClearanceDetailsHeading"><span>Security Clearance</span></h2>
@@ -21,14 +21,14 @@
         <dt><span>Granted Clearances</span></dt>
         <dd>
           <span *ngFor="let grantedClearances of securityClearance.grantedClearances; let last = last">
-            <a [routerLink]="['/security-clearance', grantedClearances?.id, 'view']">{{ grantedClearances.clearanceLevel }}</a
+            <a [routerLink]="['/security-clearance', grantedClearances.id, 'view']">{{ grantedClearances.clearanceLevel }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of securityClearance.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

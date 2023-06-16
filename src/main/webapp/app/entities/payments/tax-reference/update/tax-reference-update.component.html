@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-tax-reference-heading" data-cy="TaxReferenceCreateUpdateHeading">Create or edit a Tax Reference</h2>
@@ -6,19 +6,19 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxName">Tax Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_taxName">Tax Name</label>
           <input type="text" class="form-control" name="taxName" id="field_taxName" data-cy="taxName" formControlName="taxName" />
           <div *ngIf="editForm.get('taxName')!.invalid && (editForm.get('taxName')!.dirty || editForm.get('taxName')!.touched)"></div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxDescription">Tax Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_taxDescription">Tax Description</label>
           <input
             type="text"
             class="form-control"
@@ -29,8 +29,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxPercentage">Tax Percentage</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_taxPercentage">Tax Percentage</label>
           <input
             type="number"
             class="form-control"
@@ -51,8 +51,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxReferenceType">Tax Reference Type</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_taxReferenceType">Tax Reference Type</label>
           <select
             class="form-control"
             name="taxReferenceType"
@@ -75,8 +75,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -87,8 +87,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -99,7 +99,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -108,11 +108,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

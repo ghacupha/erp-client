@@ -1,19 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { ReportStatusTypes } from 'app/entities/enumerations/report-status-types.model';
-import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
+import { IXlsxReportRequisition } from '../xlsx-report-requisition.model';
+import {
+  sampleWithRequiredData,
+  sampleWithNewData,
+  sampleWithPartialData,
+  sampleWithFullData,
+} from '../xlsx-report-requisition.test-samples';
 
-import { XlsxReportRequisitionService } from './xlsx-report-requisition.service';
+import { XlsxReportRequisitionService, RestXlsxReportRequisition } from './xlsx-report-requisition.service';
+
+const requireRestSample: RestXlsxReportRequisition = {
+  ...sampleWithRequiredData,
+  reportDate: sampleWithRequiredData.reportDate?.format(DATE_FORMAT),
+};
 
 describe('XlsxReportRequisition Service', () => {
   let service: XlsxReportRequisitionService;
   let httpMock: HttpTestingController;
-  let elemDefault: IXlsxReportRequisition;
   let expectedResult: IXlsxReportRequisition | IXlsxReportRequisition[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,52 +29,27 @@ describe('XlsxReportRequisition Service', () => {
     expectedResult = null;
     service = TestBed.inject(XlsxReportRequisitionService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      reportName: 'AAAAAAA',
-      reportDate: currentDate,
-      userPassword: 'AAAAAAA',
-      reportFileChecksum: 'AAAAAAA',
-      reportStatus: ReportStatusTypes.GENERATING,
-      reportId: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          reportDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a XlsxReportRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          reportDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const xlsxReportRequisition = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          reportDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new XlsxReportRequisition()).subscribe(resp => (expectedResult = resp.body));
+      service.create(xlsxReportRequisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -75,27 +57,11 @@ describe('XlsxReportRequisition Service', () => {
     });
 
     it('should update a XlsxReportRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          reportName: 'BBBBBB',
-          reportDate: currentDate.format(DATE_FORMAT),
-          userPassword: 'BBBBBB',
-          reportFileChecksum: 'BBBBBB',
-          reportStatus: 'BBBBBB',
-          reportId: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const xlsxReportRequisition = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          reportDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(xlsxReportRequisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -103,22 +69,9 @@ describe('XlsxReportRequisition Service', () => {
     });
 
     it('should partial update a XlsxReportRequisition', () => {
-      const patchObject = Object.assign(
-        {
-          reportDate: currentDate.format(DATE_FORMAT),
-          reportId: 'BBBBBB',
-        },
-        new XlsxReportRequisition()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          reportDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -128,73 +81,59 @@ describe('XlsxReportRequisition Service', () => {
     });
 
     it('should return a list of XlsxReportRequisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          reportName: 'BBBBBB',
-          reportDate: currentDate.format(DATE_FORMAT),
-          userPassword: 'BBBBBB',
-          reportFileChecksum: 'BBBBBB',
-          reportStatus: 'BBBBBB',
-          reportId: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          reportDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a XlsxReportRequisition', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addXlsxReportRequisitionToCollectionIfMissing', () => {
       it('should add a XlsxReportRequisition to an empty array', () => {
-        const xlsxReportRequisition: IXlsxReportRequisition = { id: 123 };
+        const xlsxReportRequisition: IXlsxReportRequisition = sampleWithRequiredData;
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing([], xlsxReportRequisition);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(xlsxReportRequisition);
       });
 
       it('should not add a XlsxReportRequisition to an array that contains it', () => {
-        const xlsxReportRequisition: IXlsxReportRequisition = { id: 123 };
+        const xlsxReportRequisition: IXlsxReportRequisition = sampleWithRequiredData;
         const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [
           {
             ...xlsxReportRequisition,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing(xlsxReportRequisitionCollection, xlsxReportRequisition);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a XlsxReportRequisition to an array that doesn't contain it", () => {
-        const xlsxReportRequisition: IXlsxReportRequisition = { id: 123 };
-        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [{ id: 456 }];
+        const xlsxReportRequisition: IXlsxReportRequisition = sampleWithRequiredData;
+        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [sampleWithPartialData];
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing(xlsxReportRequisitionCollection, xlsxReportRequisition);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(xlsxReportRequisition);
       });
 
       it('should add only unique XlsxReportRequisition to an array', () => {
-        const xlsxReportRequisitionArray: IXlsxReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 66603 }];
-        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [{ id: 123 }];
+        const xlsxReportRequisitionArray: IXlsxReportRequisition[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [sampleWithRequiredData];
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing(
           xlsxReportRequisitionCollection,
           ...xlsxReportRequisitionArray
@@ -203,8 +142,8 @@ describe('XlsxReportRequisition Service', () => {
       });
 
       it('should accept varargs', () => {
-        const xlsxReportRequisition: IXlsxReportRequisition = { id: 123 };
-        const xlsxReportRequisition2: IXlsxReportRequisition = { id: 456 };
+        const xlsxReportRequisition: IXlsxReportRequisition = sampleWithRequiredData;
+        const xlsxReportRequisition2: IXlsxReportRequisition = sampleWithPartialData;
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing([], xlsxReportRequisition, xlsxReportRequisition2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(xlsxReportRequisition);
@@ -212,16 +151,60 @@ describe('XlsxReportRequisition Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const xlsxReportRequisition: IXlsxReportRequisition = { id: 123 };
+        const xlsxReportRequisition: IXlsxReportRequisition = sampleWithRequiredData;
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing([], null, xlsxReportRequisition, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(xlsxReportRequisition);
       });
 
       it('should return initial array if no XlsxReportRequisition is added', () => {
-        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [{ id: 123 }];
+        const xlsxReportRequisitionCollection: IXlsxReportRequisition[] = [sampleWithRequiredData];
         expectedResult = service.addXlsxReportRequisitionToCollectionIfMissing(xlsxReportRequisitionCollection, undefined, null);
         expect(expectedResult).toEqual(xlsxReportRequisitionCollection);
+      });
+    });
+
+    describe('compareXlsxReportRequisition', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareXlsxReportRequisition(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareXlsxReportRequisition(entity1, entity2);
+        const compareResult2 = service.compareXlsxReportRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareXlsxReportRequisition(entity1, entity2);
+        const compareResult2 = service.compareXlsxReportRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareXlsxReportRequisition(entity1, entity2);
+        const compareResult2 = service.compareXlsxReportRequisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

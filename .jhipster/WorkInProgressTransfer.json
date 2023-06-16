@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220418094424",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "description",
@@ -9,38 +11,36 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "WorkInProgressTransfer",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "workInProgressRegistration",
-      "otherEntityName": "workInProgressRegistration",
-      "relationshipType": "many-to-many",
       "otherEntityField": "id",
+      "otherEntityName": "workInProgressRegistration",
+      "otherEntityRelationshipName": "workInProgressTransfer",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workInProgressTransfer"
+      "relationshipName": "workInProgressRegistration",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "workInProgressTransfer",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workInProgressTransfer"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "workInProgressTransfer",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workInProgressTransfer"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "WorkInProgressTransfer",
-  "changelogDate": "20220418094424",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

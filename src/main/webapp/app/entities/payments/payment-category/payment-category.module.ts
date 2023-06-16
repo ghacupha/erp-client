@@ -14,6 +14,5 @@ import { PaymentCategoryRoutingModule } from './route/payment-category-routing.m
     PaymentCategoryUpdateComponent,
     PaymentCategoryDeleteDialogComponent,
   ],
-  entryComponents: [PaymentCategoryDeleteDialogComponent],
 })
 export class ErpServicePaymentCategoryModule {}

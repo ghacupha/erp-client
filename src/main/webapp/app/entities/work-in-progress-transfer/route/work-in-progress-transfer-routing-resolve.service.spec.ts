@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
+import { IWorkInProgressTransfer } from '../work-in-progress-transfer.model';
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
 
 import { WorkInProgressTransferRoutingResolveService } from './work-in-progress-transfer-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('WorkInProgressTransfer routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: WorkInProgressTransferRoutingResolveService;
   let service: WorkInProgressTransferService;
-  let resultWorkInProgressTransfer: IWorkInProgressTransfer | undefined;
+  let resultWorkInProgressTransfer: IWorkInProgressTransfer | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(WorkInProgressTransferRoutingResolveService);
     service = TestBed.inject(WorkInProgressTransferService);
     resultWorkInProgressTransfer = undefined;
@@ -46,7 +55,7 @@ describe('WorkInProgressTransfer routing resolve service', () => {
       expect(resultWorkInProgressTransfer).toEqual({ id: 123 });
     });
 
-    it('should return new IWorkInProgressTransfer if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('WorkInProgressTransfer routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultWorkInProgressTransfer).toEqual(new WorkInProgressTransfer());
+      expect(resultWorkInProgressTransfer).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as WorkInProgressTransfer })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IWorkInProgressTransfer>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

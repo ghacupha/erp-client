@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAssetAccessory, AssetAccessory } from '../asset-accessory.model';
+import { AssetAccessoryFormService, AssetAccessoryFormGroup } from './asset-accessory-form.service';
+import { IAssetAccessory } from '../asset-accessory.model';
 import { AssetAccessoryService } from '../service/asset-accessory.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -41,6 +41,7 @@ import { UniversallyUniqueMappingService } from 'app/entities/universally-unique
 })
 export class AssetAccessoryUpdateComponent implements OnInit {
   isSaving = false;
+  assetAccessory: IAssetAccessory | null = null;
 
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -55,33 +56,13 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    assetTag: [],
-    assetDetails: [],
-    comments: [],
-    commentsContentType: [],
-    modelNumber: [],
-    serialNumber: [],
-    assetWarranties: [],
-    placeholders: [],
-    paymentInvoices: [],
-    serviceOutlet: [null, Validators.required],
-    settlements: [null, Validators.required],
-    assetCategory: [null, Validators.required],
-    purchaseOrders: [],
-    deliveryNotes: [],
-    jobSheets: [],
-    dealer: [null, Validators.required],
-    designatedUsers: [],
-    businessDocuments: [],
-    universallyUniqueMappings: [],
-  });
+  editForm: AssetAccessoryFormGroup = this.assetAccessoryFormService.createAssetAccessoryFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected assetAccessoryService: AssetAccessoryService,
+    protected assetAccessoryFormService: AssetAccessoryFormService,
     protected assetWarrantyService: AssetWarrantyService,
     protected placeholderService: PlaceholderService,
     protected paymentInvoiceService: PaymentInvoiceService,
@@ -94,13 +75,47 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareAssetWarranty = (o1: IAssetWarranty | null, o2: IAssetWarranty | null): boolean =>
+    this.assetWarrantyService.compareAssetWarranty(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePaymentInvoice = (o1: IPaymentInvoice | null, o2: IPaymentInvoice | null): boolean =>
+    this.paymentInvoiceService.comparePaymentInvoice(o1, o2);
+
+  compareServiceOutlet = (o1: IServiceOutlet | null, o2: IServiceOutlet | null): boolean =>
+    this.serviceOutletService.compareServiceOutlet(o1, o2);
+
+  compareSettlement = (o1: ISettlement | null, o2: ISettlement | null): boolean => this.settlementService.compareSettlement(o1, o2);
+
+  compareAssetCategory = (o1: IAssetCategory | null, o2: IAssetCategory | null): boolean =>
+    this.assetCategoryService.compareAssetCategory(o1, o2);
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  compareDeliveryNote = (o1: IDeliveryNote | null, o2: IDeliveryNote | null): boolean =>
+    this.deliveryNoteService.compareDeliveryNote(o1, o2);
+
+  compareJobSheet = (o1: IJobSheet | null, o2: IJobSheet | null): boolean => this.jobSheetService.compareJobSheet(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetAccessory }) => {
-      this.updateForm(assetAccessory);
+      this.assetAccessory = assetAccessory;
+      if (assetAccessory) {
+        this.updateForm(assetAccessory);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -127,180 +142,19 @@ export class AssetAccessoryUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const assetAccessory = this.createFromForm();
-    if (assetAccessory.id !== undefined) {
+    const assetAccessory = this.assetAccessoryFormService.getAssetAccessory(this.editForm);
+    if (assetAccessory.id !== null) {
       this.subscribeToSaveResponse(this.assetAccessoryService.update(assetAccessory));
     } else {
       this.subscribeToSaveResponse(this.assetAccessoryService.create(assetAccessory));
     }
   }
 
-  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackServiceOutletById(index: number, item: IServiceOutlet): number {
-    return item.id!;
-  }
-
-  trackSettlementById(index: number, item: ISettlement): number {
-    return item.id!;
-  }
-
-  trackAssetCategoryById(index: number, item: IAssetCategory): number {
-    return item.id!;
-  }
-
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetById(index: number, item: IJobSheet): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssetAccessory>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -316,78 +170,59 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   }
 
   protected updateForm(assetAccessory: IAssetAccessory): void {
-    this.editForm.patchValue({
-      id: assetAccessory.id,
-      assetTag: assetAccessory.assetTag,
-      assetDetails: assetAccessory.assetDetails,
-      comments: assetAccessory.comments,
-      commentsContentType: assetAccessory.commentsContentType,
-      modelNumber: assetAccessory.modelNumber,
-      serialNumber: assetAccessory.serialNumber,
-      assetWarranties: assetAccessory.assetWarranties,
-      placeholders: assetAccessory.placeholders,
-      paymentInvoices: assetAccessory.paymentInvoices,
-      serviceOutlet: assetAccessory.serviceOutlet,
-      settlements: assetAccessory.settlements,
-      assetCategory: assetAccessory.assetCategory,
-      purchaseOrders: assetAccessory.purchaseOrders,
-      deliveryNotes: assetAccessory.deliveryNotes,
-      jobSheets: assetAccessory.jobSheets,
-      dealer: assetAccessory.dealer,
-      designatedUsers: assetAccessory.designatedUsers,
-      businessDocuments: assetAccessory.businessDocuments,
-      universallyUniqueMappings: assetAccessory.universallyUniqueMappings,
-    });
+    this.assetAccessory = assetAccessory;
+    this.assetAccessoryFormService.resetForm(this.editForm, assetAccessory);
 
-    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing<IAssetWarranty>(
       this.assetWarrantiesSharedCollection,
       ...(assetAccessory.assetWarranties ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(assetAccessory.placeholders ?? [])
     );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
       this.paymentInvoicesSharedCollection,
       ...(assetAccessory.paymentInvoices ?? [])
     );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
       this.serviceOutletsSharedCollection,
       assetAccessory.serviceOutlet
     );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
       this.settlementsSharedCollection,
       ...(assetAccessory.settlements ?? [])
     );
-    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing<IAssetCategory>(
       this.assetCategoriesSharedCollection,
       assetAccessory.assetCategory
     );
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       ...(assetAccessory.purchaseOrders ?? [])
     );
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
       this.deliveryNotesSharedCollection,
       ...(assetAccessory.deliveryNotes ?? [])
     );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(
       this.jobSheetsSharedCollection,
       ...(assetAccessory.jobSheets ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       assetAccessory.dealer,
       ...(assetAccessory.designatedUsers ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(assetAccessory.businessDocuments ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(assetAccessory.universallyUniqueMappings ?? [])
-    );
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(assetAccessory.universallyUniqueMappings ?? [])
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -396,9 +231,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
       .pipe(
         map((assetWarranties: IAssetWarranty[]) =>
-          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing<IAssetWarranty>(
             assetWarranties,
-            ...(this.editForm.get('assetWarranties')!.value ?? [])
+            ...(this.assetAccessory?.assetWarranties ?? [])
           )
         )
       )
@@ -409,7 +244,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.assetAccessory?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -419,9 +257,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
       .pipe(
         map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
             paymentInvoices,
-            ...(this.editForm.get('paymentInvoices')!.value ?? [])
+            ...(this.assetAccessory?.paymentInvoices ?? [])
           )
         )
       )
@@ -432,7 +270,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
+            serviceOutlets,
+            this.assetAccessory?.serviceOutlet
+          )
         )
       )
       .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
@@ -442,7 +283,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+          this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(settlements, ...(this.assetAccessory?.settlements ?? []))
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -452,7 +293,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAssetCategory[]>) => res.body ?? []))
       .pipe(
         map((assetCategories: IAssetCategory[]) =>
-          this.assetCategoryService.addAssetCategoryToCollectionIfMissing(assetCategories, this.editForm.get('assetCategory')!.value)
+          this.assetCategoryService.addAssetCategoryToCollectionIfMissing<IAssetCategory>(
+            assetCategories,
+            this.assetAccessory?.assetCategory
+          )
         )
       )
       .subscribe((assetCategories: IAssetCategory[]) => (this.assetCategoriesSharedCollection = assetCategories));
@@ -462,9 +306,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
+            ...(this.assetAccessory?.purchaseOrders ?? [])
           )
         )
       )
@@ -475,7 +319,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
       .pipe(
         map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
+            deliveryNotes,
+            ...(this.assetAccessory?.deliveryNotes ?? [])
+          )
         )
       )
       .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
@@ -485,7 +332,7 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
       .pipe(
         map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+          this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(jobSheets, ...(this.assetAccessory?.jobSheets ?? []))
         )
       )
       .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
@@ -495,10 +342,10 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('dealer')!.value,
-            ...(this.editForm.get('designatedUsers')!.value ?? [])
+            this.assetAccessory?.dealer,
+            ...(this.assetAccessory?.designatedUsers ?? [])
           )
         )
       )
@@ -509,9 +356,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.assetAccessory?.businessDocuments ?? [])
           )
         )
       )
@@ -522,9 +369,9 @@ export class AssetAccessoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
+            ...(this.assetAccessory?.universallyUniqueMappings ?? [])
           )
         )
       )
@@ -532,31 +379,5 @@ export class AssetAccessoryUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-  }
-
-  protected createFromForm(): IAssetAccessory {
-    return {
-      ...new AssetAccessory(),
-      id: this.editForm.get(['id'])!.value,
-      assetTag: this.editForm.get(['assetTag'])!.value,
-      assetDetails: this.editForm.get(['assetDetails'])!.value,
-      commentsContentType: this.editForm.get(['commentsContentType'])!.value,
-      comments: this.editForm.get(['comments'])!.value,
-      modelNumber: this.editForm.get(['modelNumber'])!.value,
-      serialNumber: this.editForm.get(['serialNumber'])!.value,
-      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
-      assetCategory: this.editForm.get(['assetCategory'])!.value,
-      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
-      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
-      jobSheets: this.editForm.get(['jobSheets'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
-      designatedUsers: this.editForm.get(['designatedUsers'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
-    };
   }
 }

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="dealer">
       <h2 data-cy="dealerDetailsHeading"><span>Dealer</span></h2>
@@ -85,20 +85,20 @@
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of dealer.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Dealer Group</span></dt>
         <dd>
           <div *ngIf="dealer.dealerGroup">
-            <a [routerLink]="['/dealer', dealer.dealerGroup?.id, 'view']">{{ dealer.dealerGroup?.dealerName }}</a>
+            <a [routerLink]="['/dealer', dealer.dealerGroup.id, 'view']">{{ dealer.dealerGroup.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of dealer.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.id }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.id }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { AmortizationSequenceFormService } from './amortization-sequence-form.service';
 import { AmortizationSequenceService } from '../service/amortization-sequence.service';
-import { IAmortizationSequence, AmortizationSequence } from '../amortization-sequence.model';
+import { IAmortizationSequence } from '../amortization-sequence.model';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
 import { IAmortizationRecurrence } from 'app/entities/amortization-recurrence/amortization-recurrence.model';
@@ -26,6 +26,7 @@ describe('AmortizationSequence Management Update Component', () => {
   let comp: AmortizationSequenceUpdateComponent;
   let fixture: ComponentFixture<AmortizationSequenceUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let amortizationSequenceFormService: AmortizationSequenceFormService;
   let amortizationSequenceService: AmortizationSequenceService;
   let prepaymentAccountService: PrepaymentAccountService;
   let amortizationRecurrenceService: AmortizationRecurrenceService;
@@ -35,15 +36,24 @@ describe('AmortizationSequence Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [AmortizationSequenceUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(AmortizationSequenceUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(AmortizationSequenceUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    amortizationSequenceFormService = TestBed.inject(AmortizationSequenceFormService);
     amortizationSequenceService = TestBed.inject(AmortizationSequenceService);
     prepaymentAccountService = TestBed.inject(PrepaymentAccountService);
     amortizationRecurrenceService = TestBed.inject(AmortizationRecurrenceService);
@@ -72,7 +82,7 @@ describe('AmortizationSequence Management Update Component', () => {
       expect(prepaymentAccountService.query).toHaveBeenCalled();
       expect(prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing).toHaveBeenCalledWith(
         prepaymentAccountCollection,
-        ...additionalPrepaymentAccounts
+        ...additionalPrepaymentAccounts.map(expect.objectContaining)
       );
       expect(comp.prepaymentAccountsSharedCollection).toEqual(expectedCollection);
     });
@@ -94,7 +104,7 @@ describe('AmortizationSequence Management Update Component', () => {
       expect(amortizationRecurrenceService.query).toHaveBeenCalled();
       expect(amortizationRecurrenceService.addAmortizationRecurrenceToCollectionIfMissing).toHaveBeenCalledWith(
         amortizationRecurrenceCollection,
-        ...additionalAmortizationRecurrences
+        ...additionalAmortizationRecurrences.map(expect.objectContaining)
       );
       expect(comp.amortizationRecurrencesSharedCollection).toEqual(expectedCollection);
     });
@@ -114,7 +124,10 @@ describe('AmortizationSequence Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -135,7 +148,7 @@ describe('AmortizationSequence Management Update Component', () => {
       expect(prepaymentMappingService.query).toHaveBeenCalled();
       expect(prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing).toHaveBeenCalledWith(
         prepaymentMappingCollection,
-        ...additionalPrepaymentMappings
+        ...additionalPrepaymentMappings.map(expect.objectContaining)
       );
       expect(comp.prepaymentMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -162,7 +175,7 @@ describe('AmortizationSequence Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -173,30 +186,31 @@ describe('AmortizationSequence Management Update Component', () => {
       amortizationSequence.prepaymentAccount = prepaymentAccount;
       const amortizationRecurrence: IAmortizationRecurrence = { id: 5922 };
       amortizationSequence.amortizationRecurrence = amortizationRecurrence;
-      const placeholders: IPlaceholder = { id: 33594 };
-      amortizationSequence.placeholders = [placeholders];
-      const prepaymentMappings: IPrepaymentMapping = { id: 71269 };
-      amortizationSequence.prepaymentMappings = [prepaymentMappings];
+      const placeholder: IPlaceholder = { id: 33594 };
+      amortizationSequence.placeholders = [placeholder];
+      const prepaymentMapping: IPrepaymentMapping = { id: 71269 };
+      amortizationSequence.prepaymentMappings = [prepaymentMapping];
       const applicationParameters: IUniversallyUniqueMapping = { id: 50876 };
       amortizationSequence.applicationParameters = [applicationParameters];
 
       activatedRoute.data = of({ amortizationSequence });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(amortizationSequence));
       expect(comp.prepaymentAccountsSharedCollection).toContain(prepaymentAccount);
       expect(comp.amortizationRecurrencesSharedCollection).toContain(amortizationRecurrence);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.prepaymentMappingsSharedCollection).toContain(prepaymentMappings);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.prepaymentMappingsSharedCollection).toContain(prepaymentMapping);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationParameters);
+      expect(comp.amortizationSequence).toEqual(amortizationSequence);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AmortizationSequence>>();
+      const saveSubject = new Subject<HttpResponse<IAmortizationSequence>>();
       const amortizationSequence = { id: 123 };
+      jest.spyOn(amortizationSequenceFormService, 'getAmortizationSequence').mockReturnValue(amortizationSequence);
       jest.spyOn(amortizationSequenceService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ amortizationSequence });
@@ -209,18 +223,20 @@ describe('AmortizationSequence Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(amortizationSequenceFormService.getAmortizationSequence).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(amortizationSequenceService.update).toHaveBeenCalledWith(amortizationSequence);
+      expect(amortizationSequenceService.update).toHaveBeenCalledWith(expect.objectContaining(amortizationSequence));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AmortizationSequence>>();
-      const amortizationSequence = new AmortizationSequence();
+      const saveSubject = new Subject<HttpResponse<IAmortizationSequence>>();
+      const amortizationSequence = { id: 123 };
+      jest.spyOn(amortizationSequenceFormService, 'getAmortizationSequence').mockReturnValue({ id: null });
       jest.spyOn(amortizationSequenceService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ amortizationSequence });
+      activatedRoute.data = of({ amortizationSequence: null });
       comp.ngOnInit();
 
       // WHEN
@@ -230,14 +246,15 @@ describe('AmortizationSequence Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(amortizationSequenceService.create).toHaveBeenCalledWith(amortizationSequence);
+      expect(amortizationSequenceFormService.getAmortizationSequence).toHaveBeenCalled();
+      expect(amortizationSequenceService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AmortizationSequence>>();
+      const saveSubject = new Subject<HttpResponse<IAmortizationSequence>>();
       const amortizationSequence = { id: 123 };
       jest.spyOn(amortizationSequenceService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -250,130 +267,60 @@ describe('AmortizationSequence Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(amortizationSequenceService.update).toHaveBeenCalledWith(amortizationSequence);
+      expect(amortizationSequenceService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPrepaymentAccountById', () => {
-      it('Should return tracked PrepaymentAccount primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePrepaymentAccount', () => {
+      it('Should forward to prepaymentAccountService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPrepaymentAccountById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(prepaymentAccountService, 'comparePrepaymentAccount');
+        comp.comparePrepaymentAccount(entity, entity2);
+        expect(prepaymentAccountService.comparePrepaymentAccount).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAmortizationRecurrenceById', () => {
-      it('Should return tracked AmortizationRecurrence primary key', () => {
+    describe('compareAmortizationRecurrence', () => {
+      it('Should forward to amortizationRecurrenceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAmortizationRecurrenceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(amortizationRecurrenceService, 'compareAmortizationRecurrence');
+        comp.compareAmortizationRecurrence(entity, entity2);
+        expect(amortizationRecurrenceService.compareAmortizationRecurrence).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPrepaymentMappingById', () => {
-      it('Should return tracked PrepaymentMapping primary key', () => {
+    describe('comparePrepaymentMapping', () => {
+      it('Should forward to prepaymentMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPrepaymentMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(prepaymentMappingService, 'comparePrepaymentMapping');
+        comp.comparePrepaymentMapping(entity, entity2);
+        expect(prepaymentMappingService.comparePrepaymentMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPrepaymentMapping', () => {
-      it('Should return option if no PrepaymentMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPrepaymentMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PrepaymentMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPrepaymentMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PrepaymentMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPrepaymentMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

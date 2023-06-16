@@ -9,6 +9,5 @@ import { TaxReferenceRoutingModule } from './route/tax-reference-routing.module'
 @NgModule({
   imports: [SharedModule, TaxReferenceRoutingModule],
   declarations: [TaxReferenceComponent, TaxReferenceDetailComponent, TaxReferenceUpdateComponent, TaxReferenceDeleteDialogComponent],
-  entryComponents: [TaxReferenceDeleteDialogComponent],
 })
 export class ErpServiceTaxReferenceModule {}

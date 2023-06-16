@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
-import { IUniversallyUniqueMapping, UniversallyUniqueMapping } from '../universally-unique-mapping.model';
+import { UniversallyUniqueMappingFormService, UniversallyUniqueMappingFormGroup } from './universally-unique-mapping-form.service';
+import { IUniversallyUniqueMapping } from '../universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from '../service/universally-unique-mapping.service';
 
 @Component({
@@ -14,22 +14,22 @@ import { UniversallyUniqueMappingService } from '../service/universally-unique-m
 })
 export class UniversallyUniqueMappingUpdateComponent implements OnInit {
   isSaving = false;
+  universallyUniqueMapping: IUniversallyUniqueMapping | null = null;
 
-  editForm = this.fb.group({
-    id: [],
-    universalKey: [null, [Validators.required]],
-    mappedValue: [],
-  });
+  editForm: UniversallyUniqueMappingFormGroup = this.universallyUniqueMappingFormService.createUniversallyUniqueMappingFormGroup();
 
   constructor(
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected universallyUniqueMappingFormService: UniversallyUniqueMappingFormService,
+    protected activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ universallyUniqueMapping }) => {
-      this.updateForm(universallyUniqueMapping);
+      this.universallyUniqueMapping = universallyUniqueMapping;
+      if (universallyUniqueMapping) {
+        this.updateForm(universallyUniqueMapping);
+      }
     });
   }
 
@@ -39,8 +39,8 @@ export class UniversallyUniqueMappingUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const universallyUniqueMapping = this.createFromForm();
-    if (universallyUniqueMapping.id !== undefined) {
+    const universallyUniqueMapping = this.universallyUniqueMappingFormService.getUniversallyUniqueMapping(this.editForm);
+    if (universallyUniqueMapping.id !== null) {
       this.subscribeToSaveResponse(this.universallyUniqueMappingService.update(universallyUniqueMapping));
     } else {
       this.subscribeToSaveResponse(this.universallyUniqueMappingService.create(universallyUniqueMapping));
@@ -48,10 +48,10 @@ export class UniversallyUniqueMappingUpdateComponent implements OnInit {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUniversallyUniqueMapping>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -67,19 +67,7 @@ export class UniversallyUniqueMappingUpdateComponent implements OnInit {
   }
 
   protected updateForm(universallyUniqueMapping: IUniversallyUniqueMapping): void {
-    this.editForm.patchValue({
-      id: universallyUniqueMapping.id,
-      universalKey: universallyUniqueMapping.universalKey,
-      mappedValue: universallyUniqueMapping.mappedValue,
-    });
-  }
-
-  protected createFromForm(): IUniversallyUniqueMapping {
-    return {
-      ...new UniversallyUniqueMapping(),
-      id: this.editForm.get(['id'])!.value,
-      universalKey: this.editForm.get(['universalKey'])!.value,
-      mappedValue: this.editForm.get(['mappedValue'])!.value,
-    };
+    this.universallyUniqueMapping = universallyUniqueMapping;
+    this.universallyUniqueMappingFormService.resetForm(this.editForm, universallyUniqueMapping);
   }
 }

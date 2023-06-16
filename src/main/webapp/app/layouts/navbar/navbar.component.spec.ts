@@ -1,9 +1,8 @@
-jest.mock('@angular/router');
 jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
@@ -31,17 +30,15 @@ describe('Navbar Component', () => {
     imageUrl: '',
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-        declarations: [NavbarComponent],
-        providers: [Router, LoginService],
-      })
-        .overrideTemplate(NavbarComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), NgxWebstorageModule.forRoot()],
+      declarations: [NavbarComponent],
+      providers: [LoginService],
     })
-  );
+      .overrideTemplate(NavbarComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(NavbarComponent);

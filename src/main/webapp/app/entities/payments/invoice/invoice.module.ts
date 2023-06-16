@@ -9,6 +9,5 @@ import { InvoiceRoutingModule } from './route/invoice-routing.module';
 @NgModule({
   imports: [SharedModule, InvoiceRoutingModule],
   declarations: [InvoiceComponent, InvoiceDetailComponent, InvoiceUpdateComponent, InvoiceDeleteDialogComponent],
-  entryComponents: [InvoiceDeleteDialogComponent],
 })
 export class ErpServiceInvoiceModule {}

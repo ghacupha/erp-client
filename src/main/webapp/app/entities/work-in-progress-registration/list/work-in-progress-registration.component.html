@@ -3,9 +3,9 @@
     <span>Work In Progress Registrations</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -24,48 +24,86 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Work In Progress Registration</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="workInProgressRegistrations?.length === 0">
-    <span>No workInProgressRegistrations found</span>
+    <span>No Work In Progress Registrations found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="sequenceNumber">
-            <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sequenceNumber">
+            <div class="d-flex">
+              <span>Sequence Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="particulars">
+            <div class="d-flex">
+              <span>Particulars</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="instalmentAmount">
+            <div class="d-flex">
+              <span>Instalment Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="comments">
+            <div class="d-flex">
+              <span>Comments</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dealer.dealerName">
+            <div class="d-flex">
+              <span>Dealer</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="workInProgressGroup.sequenceNumber">
-            <span>Work In Progress Group</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Work In Progress Group</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Settlement Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="workProjectRegister.catalogueNumber">
-            <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Work Project Register</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col"></th>
         </tr>
@@ -84,7 +122,7 @@
             <a
               *ngIf="workInProgressRegistration.comments"
               (click)="openFile(workInProgressRegistration.comments, workInProgressRegistration.commentsContentType)"
-              >open</a
+              >Open</a
             >
             <span *ngIf="workInProgressRegistration.comments"
               >{{ workInProgressRegistration.commentsContentType }}, {{ byteSize(workInProgressRegistration.comments) }}</span
@@ -92,33 +130,33 @@
           </td>
           <td>
             <div *ngIf="workInProgressRegistration.dealer">
-              <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
-                workInProgressRegistration.dealer?.dealerName
+              <a [routerLink]="['/dealer', workInProgressRegistration.dealer.id, 'view']">{{
+                workInProgressRegistration.dealer.dealerName
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="workInProgressRegistration.workInProgressGroup">
-              <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
-                workInProgressRegistration.workInProgressGroup?.sequenceNumber
+              <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup.id, 'view']">{{
+                workInProgressRegistration.workInProgressGroup.sequenceNumber
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="workInProgressRegistration.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
-                workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
+              <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency.id, 'view']">{{
+                workInProgressRegistration.settlementCurrency.iso4217CurrencyCode
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="workInProgressRegistration.workProjectRegister">
-              <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
-                workInProgressRegistration.workProjectRegister?.catalogueNumber
+              <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister.id, 'view']">{{
+                workInProgressRegistration.workProjectRegister.catalogueNumber
               }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -152,19 +190,19 @@
   </div>
 
   <div *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

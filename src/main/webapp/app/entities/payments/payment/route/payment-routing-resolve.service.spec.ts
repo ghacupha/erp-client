@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IPayment, Payment } from '../payment.model';
+import { IPayment } from '../payment.model';
 import { PaymentService } from '../service/payment.service';
 
 import { PaymentRoutingResolveService } from './payment-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('Payment routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: PaymentRoutingResolveService;
   let service: PaymentService;
-  let resultPayment: IPayment | undefined;
+  let resultPayment: IPayment | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(PaymentRoutingResolveService);
     service = TestBed.inject(PaymentService);
     resultPayment = undefined;
@@ -46,7 +55,7 @@ describe('Payment routing resolve service', () => {
       expect(resultPayment).toEqual({ id: 123 });
     });
 
-    it('should return new IPayment if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('Payment routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultPayment).toEqual(new Payment());
+      expect(resultPayment).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as Payment })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IPayment>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

@@ -6,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPrepaymentMapping, getPrepaymentMappingIdentifier } from '../prepayment-mapping.model';
+import { IPrepaymentMapping, NewPrepaymentMapping } from '../prepayment-mapping.model';
+
+export type PartialUpdatePrepaymentMapping = Partial<IPrepaymentMapping> & Pick<IPrepaymentMapping, 'id'>;
 
 export type EntityResponseType = HttpResponse<IPrepaymentMapping>;
 export type EntityArrayResponseType = HttpResponse<IPrepaymentMapping[]>;
@@ -18,21 +20,21 @@ export class PrepaymentMappingService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(prepaymentMapping: IPrepaymentMapping): Observable<EntityResponseType> {
+  create(prepaymentMapping: NewPrepaymentMapping): Observable<EntityResponseType> {
     return this.http.post<IPrepaymentMapping>(this.resourceUrl, prepaymentMapping, { observe: 'response' });
   }
 
   update(prepaymentMapping: IPrepaymentMapping): Observable<EntityResponseType> {
     return this.http.put<IPrepaymentMapping>(
-      `${this.resourceUrl}/${getPrepaymentMappingIdentifier(prepaymentMapping) as number}`,
+      `${this.resourceUrl}/${this.getPrepaymentMappingIdentifier(prepaymentMapping)}`,
       prepaymentMapping,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(prepaymentMapping: IPrepaymentMapping): Observable<EntityResponseType> {
+  partialUpdate(prepaymentMapping: PartialUpdatePrepaymentMapping): Observable<EntityResponseType> {
     return this.http.patch<IPrepaymentMapping>(
-      `${this.resourceUrl}/${getPrepaymentMappingIdentifier(prepaymentMapping) as number}`,
+      `${this.resourceUrl}/${this.getPrepaymentMappingIdentifier(prepaymentMapping)}`,
       prepaymentMapping,
       { observe: 'response' }
     );
@@ -56,18 +58,26 @@ export class PrepaymentMappingService {
     return this.http.get<IPrepaymentMapping[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addPrepaymentMappingToCollectionIfMissing(
-    prepaymentMappingCollection: IPrepaymentMapping[],
-    ...prepaymentMappingsToCheck: (IPrepaymentMapping | null | undefined)[]
-  ): IPrepaymentMapping[] {
-    const prepaymentMappings: IPrepaymentMapping[] = prepaymentMappingsToCheck.filter(isPresent);
+  getPrepaymentMappingIdentifier(prepaymentMapping: Pick<IPrepaymentMapping, 'id'>): number {
+    return prepaymentMapping.id;
+  }
+
+  comparePrepaymentMapping(o1: Pick<IPrepaymentMapping, 'id'> | null, o2: Pick<IPrepaymentMapping, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPrepaymentMappingIdentifier(o1) === this.getPrepaymentMappingIdentifier(o2) : o1 === o2;
+  }
+
+  addPrepaymentMappingToCollectionIfMissing<Type extends Pick<IPrepaymentMapping, 'id'>>(
+    prepaymentMappingCollection: Type[],
+    ...prepaymentMappingsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const prepaymentMappings: Type[] = prepaymentMappingsToCheck.filter(isPresent);
     if (prepaymentMappings.length > 0) {
       const prepaymentMappingCollectionIdentifiers = prepaymentMappingCollection.map(
-        prepaymentMappingItem => getPrepaymentMappingIdentifier(prepaymentMappingItem)!
+        prepaymentMappingItem => this.getPrepaymentMappingIdentifier(prepaymentMappingItem)!
       );
       const prepaymentMappingsToAdd = prepaymentMappings.filter(prepaymentMappingItem => {
-        const prepaymentMappingIdentifier = getPrepaymentMappingIdentifier(prepaymentMappingItem);
-        if (prepaymentMappingIdentifier == null || prepaymentMappingCollectionIdentifiers.includes(prepaymentMappingIdentifier)) {
+        const prepaymentMappingIdentifier = this.getPrepaymentMappingIdentifier(prepaymentMappingItem);
+        if (prepaymentMappingCollectionIdentifiers.includes(prepaymentMappingIdentifier)) {
           return false;
         }
         prepaymentMappingCollectionIdentifiers.push(prepaymentMappingIdentifier);

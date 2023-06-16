@@ -1,27 +1,13 @@
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 
 export interface IInstitutionCode {
-  id?: number;
-  institutionCode?: string;
-  institutionName?: string;
+  id: number;
+  institutionCode?: string | null;
+  institutionName?: string | null;
   shortName?: string | null;
   category?: string | null;
   institutionCategory?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class InstitutionCode implements IInstitutionCode {
-  constructor(
-    public id?: number,
-    public institutionCode?: string,
-    public institutionName?: string,
-    public shortName?: string | null,
-    public category?: string | null,
-    public institutionCategory?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getInstitutionCodeIdentifier(institutionCode: IInstitutionCode): number | undefined {
-  return institutionCode.id;
-}
+export type NewInstitutionCode = Omit<IInstitutionCode, 'id'> & { id: null };

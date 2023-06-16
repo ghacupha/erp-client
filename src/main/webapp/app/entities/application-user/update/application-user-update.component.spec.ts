@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { ApplicationUserFormService } from './application-user-form.service';
 import { ApplicationUserService } from '../service/application-user.service';
-import { IApplicationUser, ApplicationUser } from '../application-user.model';
+import { IApplicationUser } from '../application-user.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
@@ -25,6 +25,7 @@ describe('ApplicationUser Management Update Component', () => {
   let comp: ApplicationUserUpdateComponent;
   let fixture: ComponentFixture<ApplicationUserUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let applicationUserFormService: ApplicationUserFormService;
   let applicationUserService: ApplicationUserService;
   let dealerService: DealerService;
   let securityClearanceService: SecurityClearanceService;
@@ -33,15 +34,24 @@ describe('ApplicationUser Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [ApplicationUserUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(ApplicationUserUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(ApplicationUserUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    applicationUserFormService = TestBed.inject(ApplicationUserFormService);
     applicationUserService = TestBed.inject(ApplicationUserService);
     dealerService = TestBed.inject(DealerService);
     securityClearanceService = TestBed.inject(SecurityClearanceService);
@@ -58,10 +68,12 @@ describe('ApplicationUser Management Update Component', () => {
       applicationUser.organization = organization;
       const department: IDealer = { id: 35885 };
       applicationUser.department = department;
+      const dealerIdentity: IDealer = { id: 31654 };
+      applicationUser.dealerIdentity = dealerIdentity;
 
-      const dealerCollection: IDealer[] = [{ id: 31654 }];
+      const dealerCollection: IDealer[] = [{ id: 63512 }];
       jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerCollection })));
-      const additionalDealers = [organization, department];
+      const additionalDealers = [organization, department, dealerIdentity];
       const expectedCollection: IDealer[] = [...additionalDealers, ...dealerCollection];
       jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -69,26 +81,11 @@ describe('ApplicationUser Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
-    });
-
-    it('Should call dealerIdentity query and add missing value', () => {
-      const applicationUser: IApplicationUser = { id: 456 };
-      const dealerIdentity: IDealer = { id: 63512 };
-      applicationUser.dealerIdentity = dealerIdentity;
-
-      const dealerIdentityCollection: IDealer[] = [{ id: 88934 }];
-      jest.spyOn(dealerService, 'query').mockReturnValue(of(new HttpResponse({ body: dealerIdentityCollection })));
-      const expectedCollection: IDealer[] = [dealerIdentity, ...dealerIdentityCollection];
-      jest.spyOn(dealerService, 'addDealerToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ applicationUser });
-      comp.ngOnInit();
-
-      expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerIdentityCollection, dealerIdentity);
-      expect(comp.dealerIdentitiesCollection).toEqual(expectedCollection);
     });
 
     it('Should call SecurityClearance query and add missing value', () => {
@@ -108,7 +105,7 @@ describe('ApplicationUser Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -128,7 +125,10 @@ describe('ApplicationUser Management Update Component', () => {
       comp.ngOnInit();
 
       expect(userService.query).toHaveBeenCalled();
-      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(userCollection, ...additionalUsers);
+      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
+        userCollection,
+        ...additionalUsers.map(expect.objectContaining)
+      );
       expect(comp.usersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -154,18 +154,18 @@ describe('ApplicationUser Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const applicationUser: IApplicationUser = { id: 456 };
-      const organization: IDealer = { id: 84852 };
+      const organization: IDealer = { id: 88934 };
       applicationUser.organization = organization;
-      const department: IDealer = { id: 94839 };
+      const department: IDealer = { id: 84852 };
       applicationUser.department = department;
-      const dealerIdentity: IDealer = { id: 4059 };
+      const dealerIdentity: IDealer = { id: 94839 };
       applicationUser.dealerIdentity = dealerIdentity;
       const securityClearance: ISecurityClearance = { id: 20873 };
       applicationUser.securityClearance = securityClearance;
@@ -177,21 +177,22 @@ describe('ApplicationUser Management Update Component', () => {
       activatedRoute.data = of({ applicationUser });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(applicationUser));
       expect(comp.dealersSharedCollection).toContain(organization);
       expect(comp.dealersSharedCollection).toContain(department);
-      expect(comp.dealerIdentitiesCollection).toContain(dealerIdentity);
+      expect(comp.dealersSharedCollection).toContain(dealerIdentity);
       expect(comp.securityClearancesSharedCollection).toContain(securityClearance);
       expect(comp.usersSharedCollection).toContain(systemIdentity);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(userProperties);
+      expect(comp.applicationUser).toEqual(applicationUser);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ApplicationUser>>();
+      const saveSubject = new Subject<HttpResponse<IApplicationUser>>();
       const applicationUser = { id: 123 };
+      jest.spyOn(applicationUserFormService, 'getApplicationUser').mockReturnValue(applicationUser);
       jest.spyOn(applicationUserService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ applicationUser });
@@ -204,18 +205,20 @@ describe('ApplicationUser Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(applicationUserFormService.getApplicationUser).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(applicationUserService.update).toHaveBeenCalledWith(applicationUser);
+      expect(applicationUserService.update).toHaveBeenCalledWith(expect.objectContaining(applicationUser));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ApplicationUser>>();
-      const applicationUser = new ApplicationUser();
+      const saveSubject = new Subject<HttpResponse<IApplicationUser>>();
+      const applicationUser = { id: 123 };
+      jest.spyOn(applicationUserFormService, 'getApplicationUser').mockReturnValue({ id: null });
       jest.spyOn(applicationUserService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ applicationUser });
+      activatedRoute.data = of({ applicationUser: null });
       comp.ngOnInit();
 
       // WHEN
@@ -225,14 +228,15 @@ describe('ApplicationUser Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(applicationUserService.create).toHaveBeenCalledWith(applicationUser);
+      expect(applicationUserFormService.getApplicationUser).toHaveBeenCalled();
+      expect(applicationUserService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ApplicationUser>>();
+      const saveSubject = new Subject<HttpResponse<IApplicationUser>>();
       const applicationUser = { id: 123 };
       jest.spyOn(applicationUserService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -245,70 +249,50 @@ describe('ApplicationUser Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(applicationUserService.update).toHaveBeenCalledWith(applicationUser);
+      expect(applicationUserService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUserById', () => {
-      it('Should return tracked User primary key', () => {
+    describe('compareUser', () => {
+      it('Should forward to userService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUserById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(userService, 'compareUser');
+        comp.compareUser(entity, entity2);
+        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

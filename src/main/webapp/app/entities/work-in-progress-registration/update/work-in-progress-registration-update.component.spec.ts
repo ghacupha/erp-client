@@ -1,14 +1,14 @@
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { WorkInProgressRegistrationFormService } from './work-in-progress-registration-form.service';
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
-import { IWorkInProgressRegistration, WorkInProgressRegistration } from '../work-in-progress-registration.model';
+import { IWorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
@@ -42,6 +42,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
   let comp: WorkInProgressRegistrationUpdateComponent;
   let fixture: ComponentFixture<WorkInProgressRegistrationUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let workInProgressRegistrationFormService: WorkInProgressRegistrationFormService;
   let workInProgressRegistrationService: WorkInProgressRegistrationService;
   let placeholderService: PlaceholderService;
   let paymentInvoiceService: PaymentInvoiceService;
@@ -59,15 +60,24 @@ describe('WorkInProgressRegistration Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [WorkInProgressRegistrationUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(WorkInProgressRegistrationUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(WorkInProgressRegistrationUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    workInProgressRegistrationFormService = TestBed.inject(WorkInProgressRegistrationFormService);
     workInProgressRegistrationService = TestBed.inject(WorkInProgressRegistrationService);
     placeholderService = TestBed.inject(PlaceholderService);
     paymentInvoiceService = TestBed.inject(PaymentInvoiceService);
@@ -102,7 +112,10 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -123,7 +136,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(paymentInvoiceService.query).toHaveBeenCalled();
       expect(paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing).toHaveBeenCalledWith(
         paymentInvoiceCollection,
-        ...additionalPaymentInvoices
+        ...additionalPaymentInvoices.map(expect.objectContaining)
       );
       expect(comp.paymentInvoicesSharedCollection).toEqual(expectedCollection);
     });
@@ -145,7 +158,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(serviceOutletService.query).toHaveBeenCalled();
       expect(serviceOutletService.addServiceOutletToCollectionIfMissing).toHaveBeenCalledWith(
         serviceOutletCollection,
-        ...additionalServiceOutlets
+        ...additionalServiceOutlets.map(expect.objectContaining)
       );
       expect(comp.serviceOutletsSharedCollection).toEqual(expectedCollection);
     });
@@ -165,7 +178,10 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       comp.ngOnInit();
 
       expect(settlementService.query).toHaveBeenCalled();
-      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(settlementCollection, ...additionalSettlements);
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
       expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -186,7 +202,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(purchaseOrderService.query).toHaveBeenCalled();
       expect(purchaseOrderService.addPurchaseOrderToCollectionIfMissing).toHaveBeenCalledWith(
         purchaseOrderCollection,
-        ...additionalPurchaseOrders
+        ...additionalPurchaseOrders.map(expect.objectContaining)
       );
       expect(comp.purchaseOrdersSharedCollection).toEqual(expectedCollection);
     });
@@ -208,7 +224,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(deliveryNoteService.query).toHaveBeenCalled();
       expect(deliveryNoteService.addDeliveryNoteToCollectionIfMissing).toHaveBeenCalledWith(
         deliveryNoteCollection,
-        ...additionalDeliveryNotes
+        ...additionalDeliveryNotes.map(expect.objectContaining)
       );
       expect(comp.deliveryNotesSharedCollection).toEqual(expectedCollection);
     });
@@ -228,7 +244,10 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       comp.ngOnInit();
 
       expect(jobSheetService.query).toHaveBeenCalled();
-      expect(jobSheetService.addJobSheetToCollectionIfMissing).toHaveBeenCalledWith(jobSheetCollection, ...additionalJobSheets);
+      expect(jobSheetService.addJobSheetToCollectionIfMissing).toHaveBeenCalledWith(
+        jobSheetCollection,
+        ...additionalJobSheets.map(expect.objectContaining)
+      );
       expect(comp.jobSheetsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -247,7 +266,10 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -275,7 +297,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(workInProgressRegistrationService.query).toHaveBeenCalled();
       expect(workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing).toHaveBeenCalledWith(
         workInProgressRegistrationCollection,
-        ...additionalWorkInProgressRegistrations
+        ...additionalWorkInProgressRegistrations.map(expect.objectContaining)
       );
       expect(comp.workInProgressRegistrationsSharedCollection).toEqual(expectedCollection);
     });
@@ -297,7 +319,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -319,7 +341,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(workProjectRegisterService.query).toHaveBeenCalled();
       expect(workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing).toHaveBeenCalledWith(
         workProjectRegisterCollection,
-        ...additionalWorkProjectRegisters
+        ...additionalWorkProjectRegisters.map(expect.objectContaining)
       );
       expect(comp.workProjectRegistersSharedCollection).toEqual(expectedCollection);
     });
@@ -341,7 +363,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -363,7 +385,7 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(assetAccessoryService.query).toHaveBeenCalled();
       expect(assetAccessoryService.addAssetAccessoryToCollectionIfMissing).toHaveBeenCalledWith(
         assetAccessoryCollection,
-        ...additionalAssetAccessories
+        ...additionalAssetAccessories.map(expect.objectContaining)
       );
       expect(comp.assetAccessoriesSharedCollection).toEqual(expectedCollection);
     });
@@ -385,27 +407,27 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(assetWarrantyService.query).toHaveBeenCalled();
       expect(assetWarrantyService.addAssetWarrantyToCollectionIfMissing).toHaveBeenCalledWith(
         assetWarrantyCollection,
-        ...additionalAssetWarranties
+        ...additionalAssetWarranties.map(expect.objectContaining)
       );
       expect(comp.assetWarrantiesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
-      const placeholders: IPlaceholder = { id: 54597 };
-      workInProgressRegistration.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 54597 };
+      workInProgressRegistration.placeholders = [placeholder];
       const paymentInvoices: IPaymentInvoice = { id: 54139 };
       workInProgressRegistration.paymentInvoices = [paymentInvoices];
-      const serviceOutlets: IServiceOutlet = { id: 42315 };
-      workInProgressRegistration.serviceOutlets = [serviceOutlets];
-      const settlements: ISettlement = { id: 47612 };
-      workInProgressRegistration.settlements = [settlements];
-      const purchaseOrders: IPurchaseOrder = { id: 75479 };
-      workInProgressRegistration.purchaseOrders = [purchaseOrders];
-      const deliveryNotes: IDeliveryNote = { id: 99737 };
-      workInProgressRegistration.deliveryNotes = [deliveryNotes];
-      const jobSheets: IJobSheet = { id: 65563 };
-      workInProgressRegistration.jobSheets = [jobSheets];
+      const serviceOutlet: IServiceOutlet = { id: 42315 };
+      workInProgressRegistration.serviceOutlets = [serviceOutlet];
+      const settlement: ISettlement = { id: 47612 };
+      workInProgressRegistration.settlements = [settlement];
+      const purchaseOrder: IPurchaseOrder = { id: 75479 };
+      workInProgressRegistration.purchaseOrders = [purchaseOrder];
+      const deliveryNote: IDeliveryNote = { id: 99737 };
+      workInProgressRegistration.deliveryNotes = [deliveryNote];
+      const jobSheet: IJobSheet = { id: 65563 };
+      workInProgressRegistration.jobSheets = [jobSheet];
       const dealer: IDealer = { id: 30945 };
       workInProgressRegistration.dealer = dealer;
       const workInProgressGroup: IWorkInProgressRegistration = { id: 39161 };
@@ -414,39 +436,40 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       workInProgressRegistration.settlementCurrency = settlementCurrency;
       const workProjectRegister: IWorkProjectRegister = { id: 74342 };
       workInProgressRegistration.workProjectRegister = workProjectRegister;
-      const businessDocuments: IBusinessDocument = { id: 65752 };
-      workInProgressRegistration.businessDocuments = [businessDocuments];
-      const assetAccessories: IAssetAccessory = { id: 17611 };
-      workInProgressRegistration.assetAccessories = [assetAccessories];
-      const assetWarranties: IAssetWarranty = { id: 48566 };
-      workInProgressRegistration.assetWarranties = [assetWarranties];
+      const businessDocument: IBusinessDocument = { id: 65752 };
+      workInProgressRegistration.businessDocuments = [businessDocument];
+      const assetAccessory: IAssetAccessory = { id: 17611 };
+      workInProgressRegistration.assetAccessories = [assetAccessory];
+      const assetWarranty: IAssetWarranty = { id: 48566 };
+      workInProgressRegistration.assetWarranties = [assetWarranty];
 
       activatedRoute.data = of({ workInProgressRegistration });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(workInProgressRegistration));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
-      expect(comp.settlementsSharedCollection).toContain(settlements);
-      expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
-      expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);
-      expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
+      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
+      expect(comp.settlementsSharedCollection).toContain(settlement);
+      expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrder);
+      expect(comp.deliveryNotesSharedCollection).toContain(deliveryNote);
+      expect(comp.jobSheetsSharedCollection).toContain(jobSheet);
       expect(comp.dealersSharedCollection).toContain(dealer);
       expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressGroup);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.workProjectRegistersSharedCollection).toContain(workProjectRegister);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
-      expect(comp.assetAccessoriesSharedCollection).toContain(assetAccessories);
-      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.assetAccessoriesSharedCollection).toContain(assetAccessory);
+      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranty);
+      expect(comp.workInProgressRegistration).toEqual(workInProgressRegistration);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressRegistration>>();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressRegistration>>();
       const workInProgressRegistration = { id: 123 };
+      jest.spyOn(workInProgressRegistrationFormService, 'getWorkInProgressRegistration').mockReturnValue(workInProgressRegistration);
       jest.spyOn(workInProgressRegistrationService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ workInProgressRegistration });
@@ -459,18 +482,20 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(workInProgressRegistrationFormService.getWorkInProgressRegistration).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(workInProgressRegistrationService.update).toHaveBeenCalledWith(workInProgressRegistration);
+      expect(workInProgressRegistrationService.update).toHaveBeenCalledWith(expect.objectContaining(workInProgressRegistration));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressRegistration>>();
-      const workInProgressRegistration = new WorkInProgressRegistration();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressRegistration>>();
+      const workInProgressRegistration = { id: 123 };
+      jest.spyOn(workInProgressRegistrationFormService, 'getWorkInProgressRegistration').mockReturnValue({ id: null });
       jest.spyOn(workInProgressRegistrationService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ workInProgressRegistration });
+      activatedRoute.data = of({ workInProgressRegistration: null });
       comp.ngOnInit();
 
       // WHEN
@@ -480,14 +505,15 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(workInProgressRegistrationService.create).toHaveBeenCalledWith(workInProgressRegistration);
+      expect(workInProgressRegistrationFormService.getWorkInProgressRegistration).toHaveBeenCalled();
+      expect(workInProgressRegistrationService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressRegistration>>();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressRegistration>>();
       const workInProgressRegistration = { id: 123 };
       jest.spyOn(workInProgressRegistrationService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -500,384 +526,150 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(workInProgressRegistrationService.update).toHaveBeenCalledWith(workInProgressRegistration);
+      expect(workInProgressRegistrationService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPaymentInvoiceById', () => {
-      it('Should return tracked PaymentInvoice primary key', () => {
+    describe('comparePaymentInvoice', () => {
+      it('Should forward to paymentInvoiceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentInvoiceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentInvoiceService, 'comparePaymentInvoice');
+        comp.comparePaymentInvoice(entity, entity2);
+        expect(paymentInvoiceService.comparePaymentInvoice).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackServiceOutletById', () => {
-      it('Should return tracked ServiceOutlet primary key', () => {
+    describe('compareServiceOutlet', () => {
+      it('Should forward to serviceOutletService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackServiceOutletById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(serviceOutletService, 'compareServiceOutlet');
+        comp.compareServiceOutlet(entity, entity2);
+        expect(serviceOutletService.compareServiceOutlet).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementById', () => {
-      it('Should return tracked Settlement primary key', () => {
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPurchaseOrderById', () => {
-      it('Should return tracked PurchaseOrder primary key', () => {
+    describe('comparePurchaseOrder', () => {
+      it('Should forward to purchaseOrderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPurchaseOrderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(purchaseOrderService, 'comparePurchaseOrder');
+        comp.comparePurchaseOrder(entity, entity2);
+        expect(purchaseOrderService.comparePurchaseOrder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDeliveryNoteById', () => {
-      it('Should return tracked DeliveryNote primary key', () => {
+    describe('compareDeliveryNote', () => {
+      it('Should forward to deliveryNoteService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDeliveryNoteById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(deliveryNoteService, 'compareDeliveryNote');
+        comp.compareDeliveryNote(entity, entity2);
+        expect(deliveryNoteService.compareDeliveryNote).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackJobSheetById', () => {
-      it('Should return tracked JobSheet primary key', () => {
+    describe('compareJobSheet', () => {
+      it('Should forward to jobSheetService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackJobSheetById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(jobSheetService, 'compareJobSheet');
+        comp.compareJobSheet(entity, entity2);
+        expect(jobSheetService.compareJobSheet).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackWorkInProgressRegistrationById', () => {
-      it('Should return tracked WorkInProgressRegistration primary key', () => {
+    describe('compareWorkInProgressRegistration', () => {
+      it('Should forward to workInProgressRegistrationService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackWorkInProgressRegistrationById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(workInProgressRegistrationService, 'compareWorkInProgressRegistration');
+        comp.compareWorkInProgressRegistration(entity, entity2);
+        expect(workInProgressRegistrationService.compareWorkInProgressRegistration).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackWorkProjectRegisterById', () => {
-      it('Should return tracked WorkProjectRegister primary key', () => {
+    describe('compareWorkProjectRegister', () => {
+      it('Should forward to workProjectRegisterService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackWorkProjectRegisterById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(workProjectRegisterService, 'compareWorkProjectRegister');
+        comp.compareWorkProjectRegister(entity, entity2);
+        expect(workProjectRegisterService.compareWorkProjectRegister).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAssetAccessoryById', () => {
-      it('Should return tracked AssetAccessory primary key', () => {
+    describe('compareAssetAccessory', () => {
+      it('Should forward to assetAccessoryService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAssetAccessoryById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(assetAccessoryService, 'compareAssetAccessory');
+        comp.compareAssetAccessory(entity, entity2);
+        expect(assetAccessoryService.compareAssetAccessory).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAssetWarrantyById', () => {
-      it('Should return tracked AssetWarranty primary key', () => {
+    describe('compareAssetWarranty', () => {
+      it('Should forward to assetWarrantyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAssetWarrantyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPaymentInvoice', () => {
-      it('Should return option if no PaymentInvoice is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentInvoice(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentInvoice for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentInvoice is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedServiceOutlet', () => {
-      it('Should return option if no ServiceOutlet is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedServiceOutlet(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected ServiceOutlet for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this ServiceOutlet is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedServiceOutlet(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedSettlement', () => {
-      it('Should return option if no Settlement is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedSettlement(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Settlement for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedSettlement(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Settlement is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedSettlement(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPurchaseOrder', () => {
-      it('Should return option if no PurchaseOrder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPurchaseOrder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PurchaseOrder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PurchaseOrder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedDeliveryNote', () => {
-      it('Should return option if no DeliveryNote is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDeliveryNote(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected DeliveryNote for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDeliveryNote(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this DeliveryNote is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDeliveryNote(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedJobSheet', () => {
-      it('Should return option if no JobSheet is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedJobSheet(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected JobSheet for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedJobSheet(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this JobSheet is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedJobSheet(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedAssetAccessory', () => {
-      it('Should return option if no AssetAccessory is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedAssetAccessory(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected AssetAccessory for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedAssetAccessory(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this AssetAccessory is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedAssetAccessory(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedAssetWarranty', () => {
-      it('Should return option if no AssetWarranty is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedAssetWarranty(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected AssetWarranty for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedAssetWarranty(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this AssetWarranty is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedAssetWarranty(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(assetWarrantyService, 'compareAssetWarranty');
+        comp.compareAssetWarranty(entity, entity2);
+        expect(assetWarrantyService.compareAssetWarranty).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

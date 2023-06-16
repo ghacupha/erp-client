@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IFixedAssetNetBookValue, FixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
+import { FixedAssetNetBookValueFormService, FixedAssetNetBookValueFormGroup } from './fixed-asset-net-book-value-form.service';
+import { IFixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -17,35 +17,28 @@ import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regim
 })
 export class FixedAssetNetBookValueUpdateComponent implements OnInit {
   isSaving = false;
+  fixedAssetNetBookValue: IFixedAssetNetBookValue | null = null;
   depreciationRegimeValues = Object.keys(DepreciationRegime);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    assetNumber: [],
-    serviceOutletCode: [],
-    assetTag: [],
-    assetDescription: [],
-    netBookValueDate: [],
-    assetCategory: [],
-    netBookValue: [],
-    depreciationRegime: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    placeholders: [],
-  });
+  editForm: FixedAssetNetBookValueFormGroup = this.fixedAssetNetBookValueFormService.createFixedAssetNetBookValueFormGroup();
 
   constructor(
     protected fixedAssetNetBookValueService: FixedAssetNetBookValueService,
+    protected fixedAssetNetBookValueFormService: FixedAssetNetBookValueFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ fixedAssetNetBookValue }) => {
-      this.updateForm(fixedAssetNetBookValue);
+      this.fixedAssetNetBookValue = fixedAssetNetBookValue;
+      if (fixedAssetNetBookValue) {
+        this.updateForm(fixedAssetNetBookValue);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -57,34 +50,19 @@ export class FixedAssetNetBookValueUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const fixedAssetNetBookValue = this.createFromForm();
-    if (fixedAssetNetBookValue.id !== undefined) {
+    const fixedAssetNetBookValue = this.fixedAssetNetBookValueFormService.getFixedAssetNetBookValue(this.editForm);
+    if (fixedAssetNetBookValue.id !== null) {
       this.subscribeToSaveResponse(this.fixedAssetNetBookValueService.update(fixedAssetNetBookValue));
     } else {
       this.subscribeToSaveResponse(this.fixedAssetNetBookValueService.create(fixedAssetNetBookValue));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IFixedAssetNetBookValue>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -100,22 +78,10 @@ export class FixedAssetNetBookValueUpdateComponent implements OnInit {
   }
 
   protected updateForm(fixedAssetNetBookValue: IFixedAssetNetBookValue): void {
-    this.editForm.patchValue({
-      id: fixedAssetNetBookValue.id,
-      assetNumber: fixedAssetNetBookValue.assetNumber,
-      serviceOutletCode: fixedAssetNetBookValue.serviceOutletCode,
-      assetTag: fixedAssetNetBookValue.assetTag,
-      assetDescription: fixedAssetNetBookValue.assetDescription,
-      netBookValueDate: fixedAssetNetBookValue.netBookValueDate,
-      assetCategory: fixedAssetNetBookValue.assetCategory,
-      netBookValue: fixedAssetNetBookValue.netBookValue,
-      depreciationRegime: fixedAssetNetBookValue.depreciationRegime,
-      fileUploadToken: fixedAssetNetBookValue.fileUploadToken,
-      compilationToken: fixedAssetNetBookValue.compilationToken,
-      placeholders: fixedAssetNetBookValue.placeholders,
-    });
+    this.fixedAssetNetBookValue = fixedAssetNetBookValue;
+    this.fixedAssetNetBookValueFormService.resetForm(this.editForm, fixedAssetNetBookValue);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(fixedAssetNetBookValue.placeholders ?? [])
     );
@@ -127,27 +93,12 @@ export class FixedAssetNetBookValueUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.fixedAssetNetBookValue?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IFixedAssetNetBookValue {
-    return {
-      ...new FixedAssetNetBookValue(),
-      id: this.editForm.get(['id'])!.value,
-      assetNumber: this.editForm.get(['assetNumber'])!.value,
-      serviceOutletCode: this.editForm.get(['serviceOutletCode'])!.value,
-      assetTag: this.editForm.get(['assetTag'])!.value,
-      assetDescription: this.editForm.get(['assetDescription'])!.value,
-      netBookValueDate: this.editForm.get(['netBookValueDate'])!.value,
-      assetCategory: this.editForm.get(['assetCategory'])!.value,
-      netBookValue: this.editForm.get(['netBookValue'])!.value,
-      depreciationRegime: this.editForm.get(['depreciationRegime'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -13,53 +13,26 @@ import { IAssetAccessory } from 'app/entities/asset-accessory/asset-accessory.mo
 import { IAssetWarranty } from 'app/entities/asset-warranty/asset-warranty.model';
 
 export interface IWorkInProgressRegistration {
-  id?: number;
-  sequenceNumber?: string;
+  id: number;
+  sequenceNumber?: string | null;
   particulars?: string | null;
   instalmentAmount?: number | null;
-  commentsContentType?: string | null;
   comments?: string | null;
-  placeholders?: IPlaceholder[] | null;
-  paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[] | null;
-  settlements?: ISettlement[] | null;
-  purchaseOrders?: IPurchaseOrder[] | null;
-  deliveryNotes?: IDeliveryNote[] | null;
-  jobSheets?: IJobSheet[] | null;
-  dealer?: IDealer | null;
-  workInProgressGroup?: IWorkInProgressRegistration | null;
-  settlementCurrency?: ISettlementCurrency | null;
-  workProjectRegister?: IWorkProjectRegister | null;
-  businessDocuments?: IBusinessDocument[] | null;
-  assetAccessories?: IAssetAccessory[] | null;
-  assetWarranties?: IAssetWarranty[] | null;
+  commentsContentType?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  paymentInvoices?: Pick<IPaymentInvoice, 'id' | 'invoiceNumber'>[] | null;
+  serviceOutlets?: Pick<IServiceOutlet, 'id' | 'outletCode'>[] | null;
+  settlements?: Pick<ISettlement, 'id' | 'paymentNumber'>[] | null;
+  purchaseOrders?: Pick<IPurchaseOrder, 'id' | 'purchaseOrderNumber'>[] | null;
+  deliveryNotes?: Pick<IDeliveryNote, 'id' | 'deliveryNoteNumber'>[] | null;
+  jobSheets?: Pick<IJobSheet, 'id' | 'serialNumber'>[] | null;
+  dealer?: Pick<IDealer, 'id' | 'dealerName'> | null;
+  workInProgressGroup?: Pick<IWorkInProgressRegistration, 'id' | 'sequenceNumber'> | null;
+  settlementCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  workProjectRegister?: Pick<IWorkProjectRegister, 'id' | 'catalogueNumber'> | null;
+  businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
+  assetAccessories?: Pick<IAssetAccessory, 'id' | 'assetDetails'>[] | null;
+  assetWarranties?: Pick<IAssetWarranty, 'id' | 'description'>[] | null;
 }
 
-export class WorkInProgressRegistration implements IWorkInProgressRegistration {
-  constructor(
-    public id?: number,
-    public sequenceNumber?: string,
-    public particulars?: string | null,
-    public instalmentAmount?: number | null,
-    public commentsContentType?: string | null,
-    public comments?: string | null,
-    public placeholders?: IPlaceholder[] | null,
-    public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[] | null,
-    public settlements?: ISettlement[] | null,
-    public purchaseOrders?: IPurchaseOrder[] | null,
-    public deliveryNotes?: IDeliveryNote[] | null,
-    public jobSheets?: IJobSheet[] | null,
-    public dealer?: IDealer | null,
-    public workInProgressGroup?: IWorkInProgressRegistration | null,
-    public settlementCurrency?: ISettlementCurrency | null,
-    public workProjectRegister?: IWorkProjectRegister | null,
-    public businessDocuments?: IBusinessDocument[] | null,
-    public assetAccessories?: IAssetAccessory[] | null,
-    public assetWarranties?: IAssetWarranty[] | null
-  ) {}
-}
-
-export function getWorkInProgressRegistrationIdentifier(workInProgressRegistration: IWorkInProgressRegistration): number | undefined {
-  return workInProgressRegistration.id;
-}
+export type NewWorkInProgressRegistration = Omit<IWorkInProgressRegistration, 'id'> & { id: null };

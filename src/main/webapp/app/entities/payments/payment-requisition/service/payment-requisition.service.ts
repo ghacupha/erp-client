@@ -2,14 +2,26 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPaymentRequisition, getPaymentRequisitionIdentifier } from '../payment-requisition.model';
+import { IPaymentRequisition, NewPaymentRequisition } from '../payment-requisition.model';
+
+export type PartialUpdatePaymentRequisition = Partial<IPaymentRequisition> & Pick<IPaymentRequisition, 'id'>;
+
+type RestOf<T extends IPaymentRequisition | NewPaymentRequisition> = Omit<T, 'receptionDate'> & {
+  receptionDate?: string | null;
+};
+
+export type RestPaymentRequisition = RestOf<IPaymentRequisition>;
+
+export type NewRestPaymentRequisition = RestOf<NewPaymentRequisition>;
+
+export type PartialUpdateRestPaymentRequisition = RestOf<PartialUpdatePaymentRequisition>;
 
 export type EntityResponseType = HttpResponse<IPaymentRequisition>;
 export type EntityArrayResponseType = HttpResponse<IPaymentRequisition[]>;
@@ -21,42 +33,42 @@ export class PaymentRequisitionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(paymentRequisition: IPaymentRequisition): Observable<EntityResponseType> {
+  create(paymentRequisition: NewPaymentRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(paymentRequisition);
     return this.http
-      .post<IPaymentRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestPaymentRequisition>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(paymentRequisition: IPaymentRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(paymentRequisition);
     return this.http
-      .put<IPaymentRequisition>(`${this.resourceUrl}/${getPaymentRequisitionIdentifier(paymentRequisition) as number}`, copy, {
+      .put<RestPaymentRequisition>(`${this.resourceUrl}/${this.getPaymentRequisitionIdentifier(paymentRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(paymentRequisition: IPaymentRequisition): Observable<EntityResponseType> {
+  partialUpdate(paymentRequisition: PartialUpdatePaymentRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(paymentRequisition);
     return this.http
-      .patch<IPaymentRequisition>(`${this.resourceUrl}/${getPaymentRequisitionIdentifier(paymentRequisition) as number}`, copy, {
+      .patch<RestPaymentRequisition>(`${this.resourceUrl}/${this.getPaymentRequisitionIdentifier(paymentRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IPaymentRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestPaymentRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPaymentRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPaymentRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -66,22 +78,30 @@ export class PaymentRequisitionService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPaymentRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPaymentRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addPaymentRequisitionToCollectionIfMissing(
-    paymentRequisitionCollection: IPaymentRequisition[],
-    ...paymentRequisitionsToCheck: (IPaymentRequisition | null | undefined)[]
-  ): IPaymentRequisition[] {
-    const paymentRequisitions: IPaymentRequisition[] = paymentRequisitionsToCheck.filter(isPresent);
+  getPaymentRequisitionIdentifier(paymentRequisition: Pick<IPaymentRequisition, 'id'>): number {
+    return paymentRequisition.id;
+  }
+
+  comparePaymentRequisition(o1: Pick<IPaymentRequisition, 'id'> | null, o2: Pick<IPaymentRequisition, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPaymentRequisitionIdentifier(o1) === this.getPaymentRequisitionIdentifier(o2) : o1 === o2;
+  }
+
+  addPaymentRequisitionToCollectionIfMissing<Type extends Pick<IPaymentRequisition, 'id'>>(
+    paymentRequisitionCollection: Type[],
+    ...paymentRequisitionsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const paymentRequisitions: Type[] = paymentRequisitionsToCheck.filter(isPresent);
     if (paymentRequisitions.length > 0) {
       const paymentRequisitionCollectionIdentifiers = paymentRequisitionCollection.map(
-        paymentRequisitionItem => getPaymentRequisitionIdentifier(paymentRequisitionItem)!
+        paymentRequisitionItem => this.getPaymentRequisitionIdentifier(paymentRequisitionItem)!
       );
       const paymentRequisitionsToAdd = paymentRequisitions.filter(paymentRequisitionItem => {
-        const paymentRequisitionIdentifier = getPaymentRequisitionIdentifier(paymentRequisitionItem);
-        if (paymentRequisitionIdentifier == null || paymentRequisitionCollectionIdentifiers.includes(paymentRequisitionIdentifier)) {
+        const paymentRequisitionIdentifier = this.getPaymentRequisitionIdentifier(paymentRequisitionItem);
+        if (paymentRequisitionCollectionIdentifiers.includes(paymentRequisitionIdentifier)) {
           return false;
         }
         paymentRequisitionCollectionIdentifiers.push(paymentRequisitionIdentifier);
@@ -92,25 +112,31 @@ export class PaymentRequisitionService {
     return paymentRequisitionCollection;
   }
 
-  protected convertDateFromClient(paymentRequisition: IPaymentRequisition): IPaymentRequisition {
-    return Object.assign({}, paymentRequisition, {
-      receptionDate: paymentRequisition.receptionDate?.isValid() ? paymentRequisition.receptionDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IPaymentRequisition | NewPaymentRequisition | PartialUpdatePaymentRequisition>(
+    paymentRequisition: T
+  ): RestOf<T> {
+    return {
+      ...paymentRequisition,
+      receptionDate: paymentRequisition.receptionDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restPaymentRequisition: RestPaymentRequisition): IPaymentRequisition {
+    return {
+      ...restPaymentRequisition,
+      receptionDate: restPaymentRequisition.receptionDate ? dayjs(restPaymentRequisition.receptionDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestPaymentRequisition>): HttpResponse<IPaymentRequisition> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.receptionDate = res.body.receptionDate ? dayjs(res.body.receptionDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((paymentRequisition: IPaymentRequisition) => {
-        paymentRequisition.receptionDate = paymentRequisition.receptionDate ? dayjs(paymentRequisition.receptionDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestPaymentRequisition[]>): HttpResponse<IPaymentRequisition[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

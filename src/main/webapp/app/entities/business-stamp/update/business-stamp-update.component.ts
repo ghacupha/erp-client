@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
+import { BusinessStampFormService, BusinessStampFormGroup } from './business-stamp-form.service';
+import { IBusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -21,33 +21,33 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class BusinessStampUpdateComponent implements OnInit {
   isSaving = false;
+  businessStamp: IBusinessStamp | null = null;
 
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    stampDate: [],
-    purpose: [],
-    details: [],
-    remarks: [],
-    stampHolder: [null, Validators.required],
-    placeholders: [],
-  });
+  editForm: BusinessStampFormGroup = this.businessStampFormService.createBusinessStampFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected businessStampService: BusinessStampService,
+    protected businessStampFormService: BusinessStampFormService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessStamp }) => {
-      this.updateForm(businessStamp);
+      this.businessStamp = businessStamp;
+      if (businessStamp) {
+        this.updateForm(businessStamp);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -74,38 +74,19 @@ export class BusinessStampUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const businessStamp = this.createFromForm();
-    if (businessStamp.id !== undefined) {
+    const businessStamp = this.businessStampFormService.getBusinessStamp(this.editForm);
+    if (businessStamp.id !== null) {
       this.subscribeToSaveResponse(this.businessStampService.update(businessStamp));
     } else {
       this.subscribeToSaveResponse(this.businessStampService.create(businessStamp));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBusinessStamp>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -121,21 +102,14 @@ export class BusinessStampUpdateComponent implements OnInit {
   }
 
   protected updateForm(businessStamp: IBusinessStamp): void {
-    this.editForm.patchValue({
-      id: businessStamp.id,
-      stampDate: businessStamp.stampDate,
-      purpose: businessStamp.purpose,
-      details: businessStamp.details,
-      remarks: businessStamp.remarks,
-      stampHolder: businessStamp.stampHolder,
-      placeholders: businessStamp.placeholders,
-    });
+    this.businessStamp = businessStamp;
+    this.businessStampFormService.resetForm(this.editForm, businessStamp);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       businessStamp.stampHolder
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(businessStamp.placeholders ?? [])
     );
@@ -146,7 +120,7 @@ export class BusinessStampUpdateComponent implements OnInit {
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
-        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('stampHolder')!.value))
+        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.businessStamp?.stampHolder))
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
@@ -155,22 +129,12 @@ export class BusinessStampUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.businessStamp?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IBusinessStamp {
-    return {
-      ...new BusinessStamp(),
-      id: this.editForm.get(['id'])!.value,
-      stampDate: this.editForm.get(['stampDate'])!.value,
-      purpose: this.editForm.get(['purpose'])!.value,
-      details: this.editForm.get(['details'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      stampHolder: this.editForm.get(['stampHolder'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

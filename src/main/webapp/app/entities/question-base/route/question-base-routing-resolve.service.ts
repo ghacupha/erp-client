@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IQuestionBase, QuestionBase } from '../question-base.model';
+import { IQuestionBase } from '../question-base.model';
 import { QuestionBaseService } from '../service/question-base.service';
 
 @Injectable({ providedIn: 'root' })
-export class QuestionBaseRoutingResolveService implements Resolve<IQuestionBase> {
+export class QuestionBaseRoutingResolveService implements Resolve<IQuestionBase | null> {
   constructor(protected service: QuestionBaseService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IQuestionBase> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IQuestionBase | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((questionBase: HttpResponse<QuestionBase>) => {
+        mergeMap((questionBase: HttpResponse<IQuestionBase>) => {
           if (questionBase.body) {
             return of(questionBase.body);
           } else {
@@ -25,6 +25,6 @@ export class QuestionBaseRoutingResolveService implements Resolve<IQuestionBase>
         })
       );
     }
-    return of(new QuestionBase());
+    return of(null);
   }
 }

@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IReportDesign, ReportDesign } from '../report-design.model';
+import { IReportDesign } from '../report-design.model';
 import { ReportDesignService } from '../service/report-design.service';
 
 @Injectable({ providedIn: 'root' })
-export class ReportDesignRoutingResolveService implements Resolve<IReportDesign> {
+export class ReportDesignRoutingResolveService implements Resolve<IReportDesign | null> {
   constructor(protected service: ReportDesignService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IReportDesign> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IReportDesign | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((reportDesign: HttpResponse<ReportDesign>) => {
+        mergeMap((reportDesign: HttpResponse<IReportDesign>) => {
           if (reportDesign.body) {
             return of(reportDesign.body);
           } else {
@@ -25,6 +25,6 @@ export class ReportDesignRoutingResolveService implements Resolve<IReportDesign>
         })
       );
     }
-    return of(new ReportDesign());
+    return of(null);
   }
 }

@@ -6,13 +6,14 @@ import { PrepaymentAmortizationComponent } from '../list/prepayment-amortization
 import { PrepaymentAmortizationDetailComponent } from '../detail/prepayment-amortization-detail.component';
 import { PrepaymentAmortizationUpdateComponent } from '../update/prepayment-amortization-update.component';
 import { PrepaymentAmortizationRoutingResolveService } from './prepayment-amortization-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const prepaymentAmortizationRoute: Routes = [
   {
     path: '',
     component: PrepaymentAmortizationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

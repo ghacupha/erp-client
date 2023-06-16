@@ -14,6 +14,5 @@ import { XlsxReportRequisitionRoutingModule } from './route/xlsx-report-requisit
     XlsxReportRequisitionUpdateComponent,
     XlsxReportRequisitionDeleteDialogComponent,
   ],
-  entryComponents: [XlsxReportRequisitionDeleteDialogComponent],
 })
 export class XlsxReportRequisitionModule {}

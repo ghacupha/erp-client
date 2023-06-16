@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { ILeaseModelMetadata, LeaseModelMetadata } from '../lease-model-metadata.model';
+import { ILeaseModelMetadata } from '../lease-model-metadata.model';
 import { LeaseModelMetadataService } from '../service/lease-model-metadata.service';
 
 @Injectable({ providedIn: 'root' })
-export class LeaseModelMetadataRoutingResolveService implements Resolve<ILeaseModelMetadata> {
+export class LeaseModelMetadataRoutingResolveService implements Resolve<ILeaseModelMetadata | null> {
   constructor(protected service: LeaseModelMetadataService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseModelMetadata> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<ILeaseModelMetadata | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((leaseModelMetadata: HttpResponse<LeaseModelMetadata>) => {
+        mergeMap((leaseModelMetadata: HttpResponse<ILeaseModelMetadata>) => {
           if (leaseModelMetadata.body) {
             return of(leaseModelMetadata.body);
           } else {
@@ -25,6 +25,6 @@ export class LeaseModelMetadataRoutingResolveService implements Resolve<ILeaseMo
         })
       );
     }
-    return of(new LeaseModelMetadata());
+    return of(null);
   }
 }

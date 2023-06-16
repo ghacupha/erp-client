@@ -4,18 +4,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IAmortizationSequence, AmortizationSequence } from '../amortization-sequence.model';
+import { IAmortizationSequence } from '../amortization-sequence.model';
 import { AmortizationSequenceService } from '../service/amortization-sequence.service';
 
 @Injectable({ providedIn: 'root' })
-export class AmortizationSequenceRoutingResolveService implements Resolve<IAmortizationSequence> {
+export class AmortizationSequenceRoutingResolveService implements Resolve<IAmortizationSequence | null> {
   constructor(protected service: AmortizationSequenceService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IAmortizationSequence> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IAmortizationSequence | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((amortizationSequence: HttpResponse<AmortizationSequence>) => {
+        mergeMap((amortizationSequence: HttpResponse<IAmortizationSequence>) => {
           if (amortizationSequence.body) {
             return of(amortizationSequence.body);
           } else {
@@ -25,6 +25,6 @@ export class AmortizationSequenceRoutingResolveService implements Resolve<IAmort
         })
       );
     }
-    return of(new AmortizationSequence());
+    return of(null);
   }
 }

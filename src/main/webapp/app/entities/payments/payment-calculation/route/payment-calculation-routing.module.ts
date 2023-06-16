@@ -6,13 +6,14 @@ import { PaymentCalculationComponent } from '../list/payment-calculation.compone
 import { PaymentCalculationDetailComponent } from '../detail/payment-calculation-detail.component';
 import { PaymentCalculationUpdateComponent } from '../update/payment-calculation-update.component';
 import { PaymentCalculationRoutingResolveService } from './payment-calculation-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const paymentCalculationRoute: Routes = [
   {
     path: '',
     component: PaymentCalculationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

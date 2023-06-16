@@ -1,12 +1,11 @@
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IDepreciationMethod, DepreciationMethod } from '../depreciation-method.model';
+import { IDepreciationMethod } from '../depreciation-method.model';
 import { DepreciationMethodService } from '../service/depreciation-method.service';
 
 import { DepreciationMethodRoutingResolveService } from './depreciation-method-routing-resolve.service';
@@ -16,15 +15,25 @@ describe('DepreciationMethod routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: DepreciationMethodRoutingResolveService;
   let service: DepreciationMethodService;
-  let resultDepreciationMethod: IDepreciationMethod | undefined;
+  let resultDepreciationMethod: IDepreciationMethod | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(DepreciationMethodRoutingResolveService);
     service = TestBed.inject(DepreciationMethodService);
     resultDepreciationMethod = undefined;
@@ -46,7 +55,7 @@ describe('DepreciationMethod routing resolve service', () => {
       expect(resultDepreciationMethod).toEqual({ id: 123 });
     });
 
-    it('should return new IDepreciationMethod if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -58,12 +67,12 @@ describe('DepreciationMethod routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultDepreciationMethod).toEqual(new DepreciationMethod());
+      expect(resultDepreciationMethod).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as DepreciationMethod })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IDepreciationMethod>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN
