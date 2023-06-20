@@ -1,30 +1,11 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div>
   <h2 id="page-heading" data-cy="TaxReferenceHeading">
     <span>Tax References</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -43,46 +24,74 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Tax Reference</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="taxReferences?.length === 0">
-    <span>No taxReferences found</span>
+    <span>No Tax References found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="taxReferences && taxReferences.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="taxReferences && taxReferences.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxName"><span>Tax Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="taxDescription">
-            <span>Tax Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="taxPercentage"><span>Tax Percentage</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="taxName">
+            <div class="d-flex">
+              <span>Tax Name</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="taxDescription">
+            <div class="d-flex">
+              <span>Tax Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="taxPercentage">
+            <div class="d-flex">
+              <span>Tax Percentage</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="taxReferenceType">
-            <span>Tax Reference Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Tax Reference Type</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="fileUploadToken">
-            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>File Upload Token</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="compilationToken">
-            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Compilation Token</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col"></th>
         </tr>
@@ -98,7 +107,7 @@
           <td>{{ taxReference.taxReferenceType }}</td>
           <td>{{ taxReference.fileUploadToken }}</td>
           <td>{{ taxReference.compilationToken }}</td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -132,19 +141,19 @@
   </div>
 
   <div *ngIf="taxReferences && taxReferences.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

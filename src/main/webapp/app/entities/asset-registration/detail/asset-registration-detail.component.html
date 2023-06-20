@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="assetRegistration">
       <h2 data-cy="assetRegistrationDetailsHeading"><span>Asset Registration</span></h2>
@@ -52,7 +33,7 @@
         <dt><span>Comments</span></dt>
         <dd>
           <div *ngIf="assetRegistration.comments">
-            <a (click)="openFile(assetRegistration.comments, assetRegistration.commentsContentType)">open</a>
+            <a (click)="openFile(assetRegistration.comments, assetRegistration.commentsContentType)">Open</a>
             {{ assetRegistration.commentsContentType }}, {{ byteSize(assetRegistration.comments) }}
           </div>
         </dd>
@@ -67,100 +48,100 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of assetRegistration.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Invoices</span></dt>
         <dd>
           <span *ngFor="let paymentInvoices of assetRegistration.paymentInvoices; let last = last">
-            <a [routerLink]="['/payment-invoice', paymentInvoices?.id, 'view']">{{ paymentInvoices.invoiceNumber }}</a
+            <a [routerLink]="['/payment-invoice', paymentInvoices.id, 'view']">{{ paymentInvoices.invoiceNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Main Service Outlet</span></dt>
         <dd>
           <div *ngIf="assetRegistration.mainServiceOutlet">
-            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
-              assetRegistration.mainServiceOutlet?.outletCode
+            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet.id, 'view']">{{
+              assetRegistration.mainServiceOutlet.outletCode
             }}</a>
           </div>
         </dd>
         <dt><span>Settlement</span></dt>
         <dd>
           <span *ngFor="let settlement of assetRegistration.settlements; let last = last">
-            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
+            <a [routerLink]="['/settlement', settlement.id, 'view']">{{ settlement.paymentNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Asset Category</span></dt>
         <dd>
           <div *ngIf="assetRegistration.assetCategory">
-            <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
-              assetRegistration.assetCategory?.assetCategoryName
+            <a [routerLink]="['/asset-category', assetRegistration.assetCategory.id, 'view']">{{
+              assetRegistration.assetCategory.assetCategoryName
             }}</a>
           </div>
         </dd>
         <dt><span>Purchase Order</span></dt>
         <dd>
           <span *ngFor="let purchaseOrder of assetRegistration.purchaseOrders; let last = last">
-            <a [routerLink]="['/purchase-order', purchaseOrder?.id, 'view']">{{ purchaseOrder.purchaseOrderNumber }}</a
+            <a [routerLink]="['/purchase-order', purchaseOrder.id, 'view']">{{ purchaseOrder.purchaseOrderNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Delivery Note</span></dt>
         <dd>
           <span *ngFor="let deliveryNote of assetRegistration.deliveryNotes; let last = last">
-            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
+            <a [routerLink]="['/delivery-note', deliveryNote.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Job Sheet</span></dt>
         <dd>
           <span *ngFor="let jobSheet of assetRegistration.jobSheets; let last = last">
-            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
+            <a [routerLink]="['/job-sheet', jobSheet.id, 'view']">{{ jobSheet.serialNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Dealer</span></dt>
         <dd>
           <div *ngIf="assetRegistration.dealer">
-            <a [routerLink]="['/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
+            <a [routerLink]="['/dealer', assetRegistration.dealer.id, 'view']">{{ assetRegistration.dealer.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Designated Users</span></dt>
         <dd>
           <span *ngFor="let designatedUsers of assetRegistration.designatedUsers; let last = last">
-            <a [routerLink]="['/dealer', designatedUsers?.id, 'view']">{{ designatedUsers.dealerName }}</a
+            <a [routerLink]="['/dealer', designatedUsers.id, 'view']">{{ designatedUsers.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Settlement Currency</span></dt>
         <dd>
           <div *ngIf="assetRegistration.settlementCurrency">
-            <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
-              assetRegistration.settlementCurrency?.iso4217CurrencyCode
+            <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency.id, 'view']">{{
+              assetRegistration.settlementCurrency.iso4217CurrencyCode
             }}</a>
           </div>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of assetRegistration.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Asset Warranty</span></dt>
         <dd>
           <span *ngFor="let assetWarranty of assetRegistration.assetWarranties; let last = last">
-            <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
+            <a [routerLink]="['/asset-warranty', assetWarranty.id, 'view']">{{ assetWarranty.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Universally Unique Mapping</span></dt>
         <dd>
           <span *ngFor="let universallyUniqueMapping of assetRegistration.universallyUniqueMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping?.id, 'view']">{{
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping.id, 'view']">{{
               universallyUniqueMapping.universalKey
             }}</a
             >{{ last ? '' : ', ' }}
@@ -169,14 +150,14 @@
         <dt><span>Asset Accessory</span></dt>
         <dd>
           <span *ngFor="let assetAccessory of assetRegistration.assetAccessories; let last = last">
-            <a [routerLink]="['/asset-accessory', assetAccessory?.id, 'view']">{{ assetAccessory.assetDetails }}</a
+            <a [routerLink]="['/asset-accessory', assetAccessory.id, 'view']">{{ assetAccessory.assetDetails }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Service Outlet</span></dt>
         <dd>
           <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
-            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
+            <a [routerLink]="['/service-outlet', serviceOutlet.id, 'view']">{{ serviceOutlet.outletCode }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

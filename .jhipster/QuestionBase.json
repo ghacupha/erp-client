@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220928095647",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "context",
@@ -36,8 +38,8 @@
     {
       "fieldName": "controlType",
       "fieldType": "ControlTypes",
-      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "TEXTBOX,DATETIME_LOCAL,DATE,PASSWORD,NUMBER,SEARCH,EMAIL,MONTH,WEEK,TEL,TEXTAREA"
     },
     {
       "fieldName": "placeholder",
@@ -48,30 +50,28 @@
       "fieldType": "Boolean"
     }
   ],
-  "relationships": [
-    {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "universalKey",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "questionBase"
-    },
-    {
-      "relationshipName": "placeholderItem",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "description",
-      "ownerSide": true,
-      "otherEntityRelationshipName": "questionBase"
-    }
-  ],
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "QuestionBase",
-  "changelogDate": "20220928095647",
   "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "dto": "mapstruct",
+  "name": "QuestionBase",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "questionBase",
+      "ownerSide": true,
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "questionBase",
+      "ownerSide": true,
+      "relationshipName": "placeholderItem",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

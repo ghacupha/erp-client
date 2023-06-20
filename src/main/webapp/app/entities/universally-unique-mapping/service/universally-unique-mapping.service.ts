@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IUniversallyUniqueMapping, getUniversallyUniqueMappingIdentifier } from '../universally-unique-mapping.model';
+import { IUniversallyUniqueMapping, NewUniversallyUniqueMapping } from '../universally-unique-mapping.model';
+
+export type PartialUpdateUniversallyUniqueMapping = Partial<IUniversallyUniqueMapping> & Pick<IUniversallyUniqueMapping, 'id'>;
 
 export type EntityResponseType = HttpResponse<IUniversallyUniqueMapping>;
 export type EntityArrayResponseType = HttpResponse<IUniversallyUniqueMapping[]>;
@@ -36,21 +20,21 @@ export class UniversallyUniqueMappingService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(universallyUniqueMapping: IUniversallyUniqueMapping): Observable<EntityResponseType> {
+  create(universallyUniqueMapping: NewUniversallyUniqueMapping): Observable<EntityResponseType> {
     return this.http.post<IUniversallyUniqueMapping>(this.resourceUrl, universallyUniqueMapping, { observe: 'response' });
   }
 
   update(universallyUniqueMapping: IUniversallyUniqueMapping): Observable<EntityResponseType> {
     return this.http.put<IUniversallyUniqueMapping>(
-      `${this.resourceUrl}/${getUniversallyUniqueMappingIdentifier(universallyUniqueMapping) as number}`,
+      `${this.resourceUrl}/${this.getUniversallyUniqueMappingIdentifier(universallyUniqueMapping)}`,
       universallyUniqueMapping,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(universallyUniqueMapping: IUniversallyUniqueMapping): Observable<EntityResponseType> {
+  partialUpdate(universallyUniqueMapping: PartialUpdateUniversallyUniqueMapping): Observable<EntityResponseType> {
     return this.http.patch<IUniversallyUniqueMapping>(
-      `${this.resourceUrl}/${getUniversallyUniqueMappingIdentifier(universallyUniqueMapping) as number}`,
+      `${this.resourceUrl}/${this.getUniversallyUniqueMappingIdentifier(universallyUniqueMapping)}`,
       universallyUniqueMapping,
       { observe: 'response' }
     );
@@ -74,21 +58,29 @@ export class UniversallyUniqueMappingService {
     return this.http.get<IUniversallyUniqueMapping[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addUniversallyUniqueMappingToCollectionIfMissing(
-    universallyUniqueMappingCollection: IUniversallyUniqueMapping[],
-    ...universallyUniqueMappingsToCheck: (IUniversallyUniqueMapping | null | undefined)[]
-  ): IUniversallyUniqueMapping[] {
-    const universallyUniqueMappings: IUniversallyUniqueMapping[] = universallyUniqueMappingsToCheck.filter(isPresent);
+  getUniversallyUniqueMappingIdentifier(universallyUniqueMapping: Pick<IUniversallyUniqueMapping, 'id'>): number {
+    return universallyUniqueMapping.id;
+  }
+
+  compareUniversallyUniqueMapping(
+    o1: Pick<IUniversallyUniqueMapping, 'id'> | null,
+    o2: Pick<IUniversallyUniqueMapping, 'id'> | null
+  ): boolean {
+    return o1 && o2 ? this.getUniversallyUniqueMappingIdentifier(o1) === this.getUniversallyUniqueMappingIdentifier(o2) : o1 === o2;
+  }
+
+  addUniversallyUniqueMappingToCollectionIfMissing<Type extends Pick<IUniversallyUniqueMapping, 'id'>>(
+    universallyUniqueMappingCollection: Type[],
+    ...universallyUniqueMappingsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const universallyUniqueMappings: Type[] = universallyUniqueMappingsToCheck.filter(isPresent);
     if (universallyUniqueMappings.length > 0) {
       const universallyUniqueMappingCollectionIdentifiers = universallyUniqueMappingCollection.map(
-        universallyUniqueMappingItem => getUniversallyUniqueMappingIdentifier(universallyUniqueMappingItem)!
+        universallyUniqueMappingItem => this.getUniversallyUniqueMappingIdentifier(universallyUniqueMappingItem)!
       );
       const universallyUniqueMappingsToAdd = universallyUniqueMappings.filter(universallyUniqueMappingItem => {
-        const universallyUniqueMappingIdentifier = getUniversallyUniqueMappingIdentifier(universallyUniqueMappingItem);
-        if (
-          universallyUniqueMappingIdentifier == null ||
-          universallyUniqueMappingCollectionIdentifiers.includes(universallyUniqueMappingIdentifier)
-        ) {
+        const universallyUniqueMappingIdentifier = this.getUniversallyUniqueMappingIdentifier(universallyUniqueMappingItem);
+        if (universallyUniqueMappingCollectionIdentifiers.includes(universallyUniqueMappingIdentifier)) {
           return false;
         }
         universallyUniqueMappingCollectionIdentifiers.push(universallyUniqueMappingIdentifier);

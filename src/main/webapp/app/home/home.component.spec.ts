@@ -21,6 +21,7 @@ jest.mock('@angular/router');
 // TODO Undefined error failing to load scss files
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -44,17 +45,16 @@ describe('Home Component', () => {
     imageUrl: null,
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [HomeComponent],
-        providers: [AccountService, Router],
-      })
-        .overrideTemplate(HomeComponent, '')
-        .overrideComponent(HomeComponent, { set: { styleUrls: []}})
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule.withRoutes([])],
+      declarations: [HomeComponent],
+      providers: [AccountService],
     })
-  );
+      .overrideTemplate(HomeComponent, '')
+        .overrideComponent(HomeComponent, { set: { styleUrls: []}})
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HomeComponent);
@@ -62,7 +62,9 @@ describe('Home Component', () => {
     mockAccountService = TestBed.inject(AccountService);
     mockAccountService.identity = jest.fn(() => of(null));
     mockAccountService.getAuthenticationState = jest.fn(() => of(null));
+
     mockRouter = TestBed.inject(Router);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
   });
 
   describe('ngOnInit', () => {

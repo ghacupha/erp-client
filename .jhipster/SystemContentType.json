@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220616121830",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "contentTypeName",
@@ -18,34 +20,32 @@
     {
       "fieldName": "availability",
       "fieldType": "SystemContentTypeAvailability",
-      "fieldValues": "SUPPORTED,NOT_SUPPORTED",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SUPPORTED,NOT_SUPPORTED"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "SystemContentType",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholders",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "systemContentType",
       "ownerSide": true,
-      "otherEntityRelationshipName": "systemContentType"
+      "relationshipName": "placeholders",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "sysMaps",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "systemContentType",
       "ownerSide": true,
-      "otherEntityRelationshipName": "systemContentType"
+      "relationshipName": "sysMaps",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "SystemContentType",
-  "changelogDate": "20220616121830",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IWorkInProgressTransfer, getWorkInProgressTransferIdentifier } from '../work-in-progress-transfer.model';
+import { IWorkInProgressTransfer, NewWorkInProgressTransfer } from '../work-in-progress-transfer.model';
+
+export type PartialUpdateWorkInProgressTransfer = Partial<IWorkInProgressTransfer> & Pick<IWorkInProgressTransfer, 'id'>;
 
 export type EntityResponseType = HttpResponse<IWorkInProgressTransfer>;
 export type EntityArrayResponseType = HttpResponse<IWorkInProgressTransfer[]>;
@@ -36,21 +20,21 @@ export class WorkInProgressTransferService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
+  create(workInProgressTransfer: NewWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.post<IWorkInProgressTransfer>(this.resourceUrl, workInProgressTransfer, { observe: 'response' });
   }
 
   update(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.put<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
+      `${this.resourceUrl}/${this.getWorkInProgressTransferIdentifier(workInProgressTransfer)}`,
       workInProgressTransfer,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
+  partialUpdate(workInProgressTransfer: PartialUpdateWorkInProgressTransfer): Observable<EntityResponseType> {
     return this.http.patch<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
+      `${this.resourceUrl}/${this.getWorkInProgressTransferIdentifier(workInProgressTransfer)}`,
       workInProgressTransfer,
       { observe: 'response' }
     );
@@ -74,21 +58,26 @@ export class WorkInProgressTransferService {
     return this.http.get<IWorkInProgressTransfer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addWorkInProgressTransferToCollectionIfMissing(
-    workInProgressTransferCollection: IWorkInProgressTransfer[],
-    ...workInProgressTransfersToCheck: (IWorkInProgressTransfer | null | undefined)[]
-  ): IWorkInProgressTransfer[] {
-    const workInProgressTransfers: IWorkInProgressTransfer[] = workInProgressTransfersToCheck.filter(isPresent);
+  getWorkInProgressTransferIdentifier(workInProgressTransfer: Pick<IWorkInProgressTransfer, 'id'>): number {
+    return workInProgressTransfer.id;
+  }
+
+  compareWorkInProgressTransfer(o1: Pick<IWorkInProgressTransfer, 'id'> | null, o2: Pick<IWorkInProgressTransfer, 'id'> | null): boolean {
+    return o1 && o2 ? this.getWorkInProgressTransferIdentifier(o1) === this.getWorkInProgressTransferIdentifier(o2) : o1 === o2;
+  }
+
+  addWorkInProgressTransferToCollectionIfMissing<Type extends Pick<IWorkInProgressTransfer, 'id'>>(
+    workInProgressTransferCollection: Type[],
+    ...workInProgressTransfersToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const workInProgressTransfers: Type[] = workInProgressTransfersToCheck.filter(isPresent);
     if (workInProgressTransfers.length > 0) {
       const workInProgressTransferCollectionIdentifiers = workInProgressTransferCollection.map(
-        workInProgressTransferItem => getWorkInProgressTransferIdentifier(workInProgressTransferItem)!
+        workInProgressTransferItem => this.getWorkInProgressTransferIdentifier(workInProgressTransferItem)!
       );
       const workInProgressTransfersToAdd = workInProgressTransfers.filter(workInProgressTransferItem => {
-        const workInProgressTransferIdentifier = getWorkInProgressTransferIdentifier(workInProgressTransferItem);
-        if (
-          workInProgressTransferIdentifier == null ||
-          workInProgressTransferCollectionIdentifiers.includes(workInProgressTransferIdentifier)
-        ) {
+        const workInProgressTransferIdentifier = this.getWorkInProgressTransferIdentifier(workInProgressTransferItem);
+        if (workInProgressTransferCollectionIdentifiers.includes(workInProgressTransferIdentifier)) {
           return false;
         }
         workInProgressTransferCollectionIdentifiers.push(workInProgressTransferIdentifier);

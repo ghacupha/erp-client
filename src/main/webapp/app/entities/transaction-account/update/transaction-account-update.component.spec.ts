@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { TransactionAccountFormService } from './transaction-account-form.service';
 import { TransactionAccountService } from '../service/transaction-account.service';
-import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
+import { ITransactionAccount } from '../transaction-account.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
@@ -36,20 +18,30 @@ describe('TransactionAccount Management Update Component', () => {
   let comp: TransactionAccountUpdateComponent;
   let fixture: ComponentFixture<TransactionAccountUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let transactionAccountFormService: TransactionAccountFormService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [TransactionAccountUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(TransactionAccountUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(TransactionAccountUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    transactionAccountFormService = TestBed.inject(TransactionAccountFormService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
 
@@ -74,7 +66,7 @@ describe('TransactionAccount Management Update Component', () => {
       expect(transactionAccountService.query).toHaveBeenCalled();
       expect(transactionAccountService.addTransactionAccountToCollectionIfMissing).toHaveBeenCalledWith(
         transactionAccountCollection,
-        ...additionalTransactionAccounts
+        ...additionalTransactionAccounts.map(expect.objectContaining)
       );
       expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
     });
@@ -94,7 +86,10 @@ describe('TransactionAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -102,23 +97,24 @@ describe('TransactionAccount Management Update Component', () => {
       const transactionAccount: ITransactionAccount = { id: 456 };
       const parentAccount: ITransactionAccount = { id: 32695 };
       transactionAccount.parentAccount = parentAccount;
-      const placeholders: IPlaceholder = { id: 58708 };
-      transactionAccount.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 58708 };
+      transactionAccount.placeholders = [placeholder];
 
       activatedRoute.data = of({ transactionAccount });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(transactionAccount));
       expect(comp.transactionAccountsSharedCollection).toContain(parentAccount);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.transactionAccount).toEqual(transactionAccount);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<TransactionAccount>>();
+      const saveSubject = new Subject<HttpResponse<ITransactionAccount>>();
       const transactionAccount = { id: 123 };
+      jest.spyOn(transactionAccountFormService, 'getTransactionAccount').mockReturnValue(transactionAccount);
       jest.spyOn(transactionAccountService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ transactionAccount });
@@ -131,18 +127,20 @@ describe('TransactionAccount Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(transactionAccountFormService.getTransactionAccount).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(transactionAccountService.update).toHaveBeenCalledWith(transactionAccount);
+      expect(transactionAccountService.update).toHaveBeenCalledWith(expect.objectContaining(transactionAccount));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<TransactionAccount>>();
-      const transactionAccount = new TransactionAccount();
+      const saveSubject = new Subject<HttpResponse<ITransactionAccount>>();
+      const transactionAccount = { id: 123 };
+      jest.spyOn(transactionAccountFormService, 'getTransactionAccount').mockReturnValue({ id: null });
       jest.spyOn(transactionAccountService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ transactionAccount });
+      activatedRoute.data = of({ transactionAccount: null });
       comp.ngOnInit();
 
       // WHEN
@@ -152,14 +150,15 @@ describe('TransactionAccount Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(transactionAccountService.create).toHaveBeenCalledWith(transactionAccount);
+      expect(transactionAccountFormService.getTransactionAccount).toHaveBeenCalled();
+      expect(transactionAccountService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<TransactionAccount>>();
+      const saveSubject = new Subject<HttpResponse<ITransactionAccount>>();
       const transactionAccount = { id: 123 };
       jest.spyOn(transactionAccountService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -172,54 +171,30 @@ describe('TransactionAccount Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(transactionAccountService.update).toHaveBeenCalledWith(transactionAccount);
+      expect(transactionAccountService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackTransactionAccountById', () => {
-      it('Should return tracked TransactionAccount primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareTransactionAccount', () => {
+      it('Should forward to transactionAccountService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackTransactionAccountById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(transactionAccountService, 'compareTransactionAccount');
+        comp.compareTransactionAccount(entity, entity2);
+        expect(transactionAccountService.compareTransactionAccount).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

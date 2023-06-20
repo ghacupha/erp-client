@@ -43,17 +43,15 @@ describe('SettingsComponent', () => {
     imageUrl: '',
   };
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
-        declarations: [SettingsComponent],
-        providers: [FormBuilder, AccountService],
-      })
-        .overrideTemplate(SettingsComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      declarations: [SettingsComponent],
+      providers: [FormBuilder, AccountService],
     })
-  );
+      .overrideTemplate(SettingsComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SettingsComponent);
@@ -80,7 +78,7 @@ describe('SettingsComponent', () => {
     expect(mockAccountService.identity).toHaveBeenCalled();
     expect(mockAccountService.save).toHaveBeenCalledWith(account);
     expect(mockAccountService.authenticate).toHaveBeenCalledWith(account);
-    expect(comp.settingsForm.value).toEqual(settingsFormValues);
+    expect(comp.settingsForm.value).toMatchObject(expect.objectContaining(settingsFormValues));
   });
 
   it('should notify of success upon successful save', () => {

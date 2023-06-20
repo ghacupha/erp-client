@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220608075128",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "universalKey",
@@ -11,13 +13,11 @@
       "fieldValidateRules": []
     }
   ],
-  "relationships": [],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
+  "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
   "name": "UniversallyUniqueMapping",
-  "changelogDate": "20220608075128",
-  "incrementalChangelog": false
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
 }

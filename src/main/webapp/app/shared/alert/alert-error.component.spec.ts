@@ -30,16 +30,14 @@ describe('Alert Error Component', () => {
   let eventManager: EventManager;
   let alertService: AlertService;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [AlertErrorComponent],
-        providers: [EventManager, AlertService],
-      })
-        .overrideTemplate(AlertErrorComponent, '')
-        .compileComponents();
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AlertErrorComponent],
+      providers: [EventManager, AlertService],
     })
-  );
+      .overrideTemplate(AlertErrorComponent, '')
+      .compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AlertErrorComponent);

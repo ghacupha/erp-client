@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220701140751",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "catalogueNumber",
@@ -31,73 +33,71 @@
       "fieldValidateRules": ["unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportDesign",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": [],
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "reportDesign",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportDesign"
-    },
-    {
-      "relationshipName": "securityClearance",
-      "otherEntityName": "securityClearance",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "clearanceLevel"
-    },
-    {
-      "relationshipName": "reportDesigner",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "applicationIdentity"
-    },
-    {
-      "relationshipName": "organization",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "department",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
-    },
-    {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
+      "relationshipName": "parameters",
       "relationshipType": "many-to-many",
+      "relationshipValidateRules": []
+    },
+    {
+      "otherEntityField": "clearanceLevel",
+      "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
+      "relationshipName": "reportDesigner",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "organization",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "department",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportDesign",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportDesign"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "systemModule",
+      "otherEntityField": "moduleName",
       "otherEntityName": "systemModule",
+      "relationshipName": "systemModule",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "moduleName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "fileCheckSumAlgorithm",
+      "otherEntityField": "name",
       "otherEntityName": "algorithm",
+      "relationshipName": "fileCheckSumAlgorithm",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "name"
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ReportDesign",
-  "changelogDate": "20220701140751",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

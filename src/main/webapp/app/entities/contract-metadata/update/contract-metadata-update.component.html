@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-contract-metadata-heading" data-cy="ContractMetadataCreateUpdateHeading">Create or edit a Contract Metadata</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -42,8 +23,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_typeOfContract">Type Of Contract</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_typeOfContract">Type Of Contract</label>
           <select
             class="form-control"
             name="typeOfContract"
@@ -63,8 +44,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contractStatus">Contract Status</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contractStatus">Contract Status</label>
           <select
             class="form-control"
             name="contractStatus"
@@ -84,8 +65,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_startDate">Start Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_startDate">Start Date</label>
           <div class="input-group">
             <input
               id="field_startDate"
@@ -97,19 +78,15 @@
               #startDateDp="ngbDatepicker"
               formControlName="startDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
           </div>
           <div *ngIf="editForm.get('startDate')!.invalid && (editForm.get('startDate')!.dirty || editForm.get('startDate')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('startDate')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_terminationDate">Termination Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_terminationDate">Termination Date</label>
           <div class="input-group">
             <input
               id="field_terminationDate"
@@ -121,11 +98,9 @@
               #terminationDateDp="ngbDatepicker"
               formControlName="terminationDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="terminationDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="terminationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
           <div
             *ngIf="
@@ -137,8 +112,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_commentsAndAttachment">Comments And Attachment</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_commentsAndAttachment">Comments And Attachment</label>
           <textarea
             class="form-control"
             name="commentsAndAttachment"
@@ -148,8 +123,8 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contractTitle">Contract Title</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contractTitle">Contract Title</label>
           <input
             type="text"
             class="form-control"
@@ -167,8 +142,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contractIdentifier">Contract Identifier</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contractIdentifier">Contract Identifier</label>
           <input
             type="text"
             class="form-control"
@@ -189,8 +164,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contractIdentifierShort">Contract Identifier Short</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contractIdentifierShort">Contract Identifier Short</label>
           <input
             type="text"
             class="form-control"
@@ -214,7 +189,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_relatedContracts">Related Contracts</label>
           <select
             class="form-control"
@@ -223,109 +198,96 @@
             multiple
             name="relatedContracts"
             formControlName="relatedContracts"
+            [compareWith]="compareContractMetadata"
           >
-            <option
-              [ngValue]="getSelectedContractMetadata(contractMetadataOption, editForm.get('relatedContracts')!.value)"
-              *ngFor="let contractMetadataOption of contractMetadataSharedCollection; trackBy: trackContractMetadataById"
-            >
+            <option [ngValue]="contractMetadataOption" *ngFor="let contractMetadataOption of contractMetadataSharedCollection">
               {{ contractMetadataOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
-          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
+        <div class="row mb-3">
+          <label class="form-label" for="field_department">Department</label>
+          <select
+            class="form-control"
+            id="field_department"
+            data-cy="department"
+            name="department"
+            formControlName="department"
+            [compareWith]="compareDealer"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_contractPartner">Contract Partner</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_contractPartner">Contract Partner</label>
           <select
             class="form-control"
             id="field_contractPartner"
             data-cy="contractPartner"
             name="contractPartner"
             formControlName="contractPartner"
+            [compareWith]="compareDealer"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('contractPartner')!.value?.id ? editForm.get('contractPartner')!.value : dealerOption
-              "
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_responsiblePerson">Responsible Person</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_responsiblePerson">Responsible Person</label>
           <select
             class="form-control"
             id="field_responsiblePerson"
             data-cy="responsiblePerson"
             name="responsiblePerson"
             formControlName="responsiblePerson"
+            [compareWith]="compareApplicationUser"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('responsiblePerson')!.value?.id
-                  ? editForm.get('responsiblePerson')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
+            <option [ngValue]="applicationUserOption" *ngFor="let applicationUserOption of applicationUsersSharedCollection">
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_signatories">Signatory</label>
-          <select class="form-control" id="field_signatories" data-cy="signatory" multiple name="signatories" formControlName="signatories">
-            <option
-              [ngValue]="getSelectedApplicationUser(applicationUserOption, editForm.get('signatories')!.value)"
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
+          <select
+            class="form-control"
+            id="field_signatories"
+            data-cy="signatory"
+            multiple
+            name="signatories"
+            formControlName="signatories"
+            [compareWith]="compareApplicationUser"
+          >
+            <option [ngValue]="applicationUserOption" *ngFor="let applicationUserOption of applicationUsersSharedCollection">
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_securityClearance">Security Clearance</label>
           <select
             class="form-control"
             id="field_securityClearance"
             data-cy="securityClearance"
             name="securityClearance"
             formControlName="securityClearance"
+            [compareWith]="compareSecurityClearance"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
+            <option [ngValue]="securityClearanceOption" *ngFor="let securityClearanceOption of securityClearancesSharedCollection">
               {{ securityClearanceOption.clearanceLevel }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -334,17 +296,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_contractDocumentFiles">Contract Document File</label>
           <select
             class="form-control"
@@ -353,17 +313,15 @@
             multiple
             name="contractDocumentFiles"
             formControlName="contractDocumentFiles"
+            [compareWith]="compareBusinessDocument"
           >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('contractDocumentFiles')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_contractMappings">Contract Mappings</label>
           <select
             class="form-control"
@@ -372,13 +330,11 @@
             multiple
             name="contractMappings"
             formControlName="contractMappings"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('contractMappings')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.universalKey }}
             </option>

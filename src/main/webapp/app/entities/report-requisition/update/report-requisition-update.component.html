@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-report-requisition-heading" data-cy="ReportRequisitionCreateUpdateHeading">Create or edit a Report Requisition</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportName">Report Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportName">Report Name</label>
           <input
             type="text"
             class="form-control"
@@ -45,8 +26,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportRequestTime">Report Request Time</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportRequestTime">Report Request Time</label>
           <div class="d-flex">
             <input
               id="field_reportRequestTime"
@@ -67,14 +48,14 @@
             <small class="form-text text-danger" *ngIf="editForm.get('reportRequestTime')?.errors?.required">
               This field is required.
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('reportRequestTime')?.errors?.ZonedDateTimelocal">
+            <small class="form-text text-danger" [hidden]="!editForm.get('reportRequestTime')?.errors?.datetimelocal">
               This field should be a date and time.
             </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportPassword">Report Password</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportPassword">Report Password</label>
           <input
             type="text"
             class="form-control"
@@ -95,41 +76,39 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportStatus">Report Status</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportStatus">Report Status</label>
           <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
             <option [ngValue]="null"></option>
             <option *ngFor="let reportStatusTypes of reportStatusTypesValues" [value]="reportStatusTypes">reportStatusTypes</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportId">Report Id</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportId">Report Id</label>
           <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
           <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportFileAttachment">Report File Attachment</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportFileAttachment">Report File Attachment</label>
           <div>
             <div *ngIf="editForm.get('reportFileAttachment')!.value" class="form-text text-danger clearfix">
               <a
-                class="pull-left"
-                (click)="openFile(editForm.get('reportFileAttachment')!.value, editForm.get('reportFileAttachmentContentType')!.value)"
-                >open</a
+                class="pull-start"
+                (click)="openFile(editForm.get('reportFileAttachment')!.value!, editForm.get('reportFileAttachmentContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
+              <span class="pull-start"
                 >{{ editForm.get('reportFileAttachmentContentType')!.value }},
-                {{ byteSize(editForm.get('reportFileAttachment')!.value) }}</span
+                {{ byteSize(editForm.get('reportFileAttachment')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="
-                  editForm.patchValue({ reportFileAttachment: null }); editForm.patchValue({ reportFileAttachmentContentType: null })
-                "
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ reportFileAttachment: undefined, reportFileAttachmentContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -158,8 +137,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportFileCheckSum">Report File Check Sum</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportFileCheckSum">Report File Check Sum</label>
           <textarea
             class="form-control"
             name="reportFileCheckSum"
@@ -169,20 +148,20 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportNotes">Report Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportNotes">Report Notes</label>
           <div>
             <div *ngIf="editForm.get('reportNotes')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('reportNotes')!.value, editForm.get('reportNotesContentType')!.value)"
-                >open</a
+              <a class="pull-start" (click)="openFile(editForm.get('reportNotes')!.value!, editForm.get('reportNotesContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('reportNotesContentType')!.value }}, {{ byteSize(editForm.get('reportNotes')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('reportNotesContentType')!.value }}, {{ byteSize(editForm.get('reportNotes')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ reportNotes: null }); editForm.patchValue({ reportNotesContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ reportNotes: undefined, reportNotesContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -206,7 +185,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholders</label>
           <select
             class="form-control"
@@ -215,49 +194,46 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_parameters">Parameters</label>
-          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+          <select
+            class="form-control"
+            id="field_parameters"
+            data-cy="parameters"
+            multiple
+            name="parameters"
+            formControlName="parameters"
+            [compareWith]="compareUniversallyUniqueMapping"
+          >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportTemplate">Report Template</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportTemplate">Report Template</label>
           <select
             class="form-control"
             id="field_reportTemplate"
             data-cy="reportTemplate"
             name="reportTemplate"
             formControlName="reportTemplate"
+            [compareWith]="compareReportTemplate"
           >
             <option *ngIf="!editForm.get('reportTemplate')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                reportTemplateOption.id === editForm.get('reportTemplate')!.value?.id
-                  ? editForm.get('reportTemplate')!.value
-                  : reportTemplateOption
-              "
-              *ngFor="let reportTemplateOption of reportTemplatesSharedCollection; trackBy: trackReportTemplateById"
-            >
+            <option [ngValue]="reportTemplateOption" *ngFor="let reportTemplateOption of reportTemplatesSharedCollection">
               {{ reportTemplateOption.catalogueNumber }}
             </option>
           </select>
@@ -271,24 +247,18 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['reportTemplate'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportContentType">Report Content Type</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportContentType">Report Content Type</label>
           <select
             class="form-control"
             id="field_reportContentType"
             data-cy="reportContentType"
             name="reportContentType"
             formControlName="reportContentType"
+            [compareWith]="compareReportContentType"
           >
             <option *ngIf="!editForm.get('reportContentType')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                reportContentTypeOption.id === editForm.get('reportContentType')!.value?.id
-                  ? editForm.get('reportContentType')!.value
-                  : reportContentTypeOption
-              "
-              *ngFor="let reportContentTypeOption of reportContentTypesSharedCollection; trackBy: trackReportContentTypeById"
-            >
+            <option [ngValue]="reportContentTypeOption" *ngFor="let reportContentTypeOption of reportContentTypesSharedCollection">
               {{ reportContentTypeOption.reportTypeName }}
             </option>
           </select>

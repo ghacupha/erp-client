@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
+import { AgencyNoticeFormService, AgencyNoticeFormGroup } from './agency-notice-form.service';
+import { IAgencyNotice } from '../agency-notice.model';
 import { AgencyNoticeService } from '../service/agency-notice.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -44,6 +26,7 @@ import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.m
 })
 export class AgencyNoticeUpdateComponent implements OnInit {
   isSaving = false;
+  agencyNotice: IAgencyNotice | null = null;
   agencyStatusTypeValues = Object.keys(AgencyStatusType);
 
   dealersSharedCollection: IDealer[] = [];
@@ -51,36 +34,36 @@ export class AgencyNoticeUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    referenceNumber: [null, [Validators.required]],
-    referenceDate: [],
-    assessmentAmount: [null, [Validators.required]],
-    agencyStatus: [null, [Validators.required]],
-    assessmentNotice: [],
-    assessmentNoticeContentType: [],
-    correspondents: [],
-    settlementCurrency: [],
-    assessor: [],
-    placeholders: [],
-    businessDocuments: [],
-  });
+  editForm: AgencyNoticeFormGroup = this.agencyNoticeFormService.createAgencyNoticeFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected agencyNoticeService: AgencyNoticeService,
+    protected agencyNoticeFormService: AgencyNoticeFormService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ agencyNotice }) => {
-      this.updateForm(agencyNotice);
+      this.agencyNotice = agencyNotice;
+      if (agencyNotice) {
+        this.updateForm(agencyNotice);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -107,68 +90,19 @@ export class AgencyNoticeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const agencyNotice = this.createFromForm();
-    if (agencyNotice.id !== undefined) {
+    const agencyNotice = this.agencyNoticeFormService.getAgencyNotice(this.editForm);
+    if (agencyNotice.id !== null) {
       this.subscribeToSaveResponse(this.agencyNoticeService.update(agencyNotice));
     } else {
       this.subscribeToSaveResponse(this.agencyNoticeService.create(agencyNotice));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAgencyNotice>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -184,35 +118,24 @@ export class AgencyNoticeUpdateComponent implements OnInit {
   }
 
   protected updateForm(agencyNotice: IAgencyNotice): void {
-    this.editForm.patchValue({
-      id: agencyNotice.id,
-      referenceNumber: agencyNotice.referenceNumber,
-      referenceDate: agencyNotice.referenceDate,
-      assessmentAmount: agencyNotice.assessmentAmount,
-      agencyStatus: agencyNotice.agencyStatus,
-      assessmentNotice: agencyNotice.assessmentNotice,
-      assessmentNoticeContentType: agencyNotice.assessmentNoticeContentType,
-      correspondents: agencyNotice.correspondents,
-      settlementCurrency: agencyNotice.settlementCurrency,
-      assessor: agencyNotice.assessor,
-      placeholders: agencyNotice.placeholders,
-      businessDocuments: agencyNotice.businessDocuments,
-    });
+    this.agencyNotice = agencyNotice;
+    this.agencyNoticeFormService.resetForm(this.editForm, agencyNotice);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       ...(agencyNotice.correspondents ?? []),
       agencyNotice.assessor
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      agencyNotice.settlementCurrency
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        agencyNotice.settlementCurrency
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(agencyNotice.placeholders ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(agencyNotice.businessDocuments ?? [])
     );
@@ -224,10 +147,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            ...(this.editForm.get('correspondents')!.value ?? []),
-            this.editForm.get('assessor')!.value
+            ...(this.agencyNotice?.correspondents ?? []),
+            this.agencyNotice?.assessor
           )
         )
       )
@@ -238,9 +161,9 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.agencyNotice?.settlementCurrency
           )
         )
       )
@@ -251,7 +174,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.agencyNotice?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -261,30 +187,12 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.agencyNotice?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IAgencyNotice {
-    return {
-      ...new AgencyNotice(),
-      id: this.editForm.get(['id'])!.value,
-      referenceNumber: this.editForm.get(['referenceNumber'])!.value,
-      referenceDate: this.editForm.get(['referenceDate'])!.value,
-      assessmentAmount: this.editForm.get(['assessmentAmount'])!.value,
-      agencyStatus: this.editForm.get(['agencyStatus'])!.value,
-      assessmentNoticeContentType: this.editForm.get(['assessmentNoticeContentType'])!.value,
-      assessmentNotice: this.editForm.get(['assessmentNotice'])!.value,
-      correspondents: this.editForm.get(['correspondents'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      assessor: this.editForm.get(['assessor'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

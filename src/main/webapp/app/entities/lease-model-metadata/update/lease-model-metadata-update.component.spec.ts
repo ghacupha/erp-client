@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { LeaseModelMetadataFormService } from './lease-model-metadata-form.service';
 import { LeaseModelMetadataService } from '../service/lease-model-metadata.service';
-import { ILeaseModelMetadata, LeaseModelMetadata } from '../lease-model-metadata.model';
+import { ILeaseModelMetadata } from '../lease-model-metadata.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
@@ -48,6 +30,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
   let comp: LeaseModelMetadataUpdateComponent;
   let fixture: ComponentFixture<LeaseModelMetadataUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let leaseModelMetadataFormService: LeaseModelMetadataFormService;
   let leaseModelMetadataService: LeaseModelMetadataService;
   let placeholderService: PlaceholderService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
@@ -59,15 +42,24 @@ describe('LeaseModelMetadata Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [LeaseModelMetadataUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(LeaseModelMetadataUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(LeaseModelMetadataUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    leaseModelMetadataFormService = TestBed.inject(LeaseModelMetadataFormService);
     leaseModelMetadataService = TestBed.inject(LeaseModelMetadataService);
     placeholderService = TestBed.inject(PlaceholderService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
@@ -96,7 +88,10 @@ describe('LeaseModelMetadata Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -122,7 +117,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -144,27 +139,31 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(leaseContractService.query).toHaveBeenCalled();
       expect(leaseContractService.addLeaseContractToCollectionIfMissing).toHaveBeenCalledWith(
         leaseContractCollection,
-        ...additionalLeaseContracts
+        ...additionalLeaseContracts.map(expect.objectContaining)
       );
       expect(comp.leaseContractsSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call predecessor query and add missing value', () => {
+    it('Should call LeaseModelMetadata query and add missing value', () => {
       const leaseModelMetadata: ILeaseModelMetadata = { id: 456 };
       const predecessor: ILeaseModelMetadata = { id: 8236 };
       leaseModelMetadata.predecessor = predecessor;
 
-      const predecessorCollection: ILeaseModelMetadata[] = [{ id: 96347 }];
-      jest.spyOn(leaseModelMetadataService, 'query').mockReturnValue(of(new HttpResponse({ body: predecessorCollection })));
-      const expectedCollection: ILeaseModelMetadata[] = [predecessor, ...predecessorCollection];
+      const leaseModelMetadataCollection: ILeaseModelMetadata[] = [{ id: 96347 }];
+      jest.spyOn(leaseModelMetadataService, 'query').mockReturnValue(of(new HttpResponse({ body: leaseModelMetadataCollection })));
+      const additionalLeaseModelMetadata = [predecessor];
+      const expectedCollection: ILeaseModelMetadata[] = [...additionalLeaseModelMetadata, ...leaseModelMetadataCollection];
       jest.spyOn(leaseModelMetadataService, 'addLeaseModelMetadataToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ leaseModelMetadata });
       comp.ngOnInit();
 
       expect(leaseModelMetadataService.query).toHaveBeenCalled();
-      expect(leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing).toHaveBeenCalledWith(predecessorCollection, predecessor);
-      expect(comp.predecessorsCollection).toEqual(expectedCollection);
+      expect(leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing).toHaveBeenCalledWith(
+        leaseModelMetadataCollection,
+        ...additionalLeaseModelMetadata.map(expect.objectContaining)
+      );
+      expect(comp.leaseModelMetadataSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call SettlementCurrency query and add missing value', () => {
@@ -186,7 +185,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -208,7 +207,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -230,7 +229,7 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -269,17 +268,17 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(transactionAccountService.query).toHaveBeenCalled();
       expect(transactionAccountService.addTransactionAccountToCollectionIfMissing).toHaveBeenCalledWith(
         transactionAccountCollection,
-        ...additionalTransactionAccounts
+        ...additionalTransactionAccounts.map(expect.objectContaining)
       );
       expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const leaseModelMetadata: ILeaseModelMetadata = { id: 456 };
-      const placeholders: IPlaceholder = { id: 62706 };
-      leaseModelMetadata.placeholders = [placeholders];
-      const leaseMappings: IUniversallyUniqueMapping = { id: 52084 };
-      leaseModelMetadata.leaseMappings = [leaseMappings];
+      const placeholder: IPlaceholder = { id: 62706 };
+      leaseModelMetadata.placeholders = [placeholder];
+      const leaseMapping: IUniversallyUniqueMapping = { id: 52084 };
+      leaseModelMetadata.leaseMappings = [leaseMapping];
       const leaseContract: ILeaseContract = { id: 44132 };
       leaseModelMetadata.leaseContract = leaseContract;
       const predecessor: ILeaseModelMetadata = { id: 75245 };
@@ -308,11 +307,10 @@ describe('LeaseModelMetadata Management Update Component', () => {
       activatedRoute.data = of({ leaseModelMetadata });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(leaseModelMetadata));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.universallyUniqueMappingsSharedCollection).toContain(leaseMappings);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(leaseMapping);
       expect(comp.leaseContractsSharedCollection).toContain(leaseContract);
-      expect(comp.predecessorsCollection).toContain(predecessor);
+      expect(comp.leaseModelMetadataSharedCollection).toContain(predecessor);
       expect(comp.settlementCurrenciesSharedCollection).toContain(liabilityCurrency);
       expect(comp.settlementCurrenciesSharedCollection).toContain(rouAssetCurrency);
       expect(comp.businessDocumentsSharedCollection).toContain(modelAttachments);
@@ -323,14 +321,16 @@ describe('LeaseModelMetadata Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(rouAssetAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(rouDepreciationAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(accruedDepreciationAccount);
+      expect(comp.leaseModelMetadata).toEqual(leaseModelMetadata);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseModelMetadata>>();
+      const saveSubject = new Subject<HttpResponse<ILeaseModelMetadata>>();
       const leaseModelMetadata = { id: 123 };
+      jest.spyOn(leaseModelMetadataFormService, 'getLeaseModelMetadata').mockReturnValue(leaseModelMetadata);
       jest.spyOn(leaseModelMetadataService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ leaseModelMetadata });
@@ -343,18 +343,20 @@ describe('LeaseModelMetadata Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(leaseModelMetadataFormService.getLeaseModelMetadata).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(leaseModelMetadataService.update).toHaveBeenCalledWith(leaseModelMetadata);
+      expect(leaseModelMetadataService.update).toHaveBeenCalledWith(expect.objectContaining(leaseModelMetadata));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseModelMetadata>>();
-      const leaseModelMetadata = new LeaseModelMetadata();
+      const saveSubject = new Subject<HttpResponse<ILeaseModelMetadata>>();
+      const leaseModelMetadata = { id: 123 };
+      jest.spyOn(leaseModelMetadataFormService, 'getLeaseModelMetadata').mockReturnValue({ id: null });
       jest.spyOn(leaseModelMetadataService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ leaseModelMetadata });
+      activatedRoute.data = of({ leaseModelMetadata: null });
       comp.ngOnInit();
 
       // WHEN
@@ -364,14 +366,15 @@ describe('LeaseModelMetadata Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(leaseModelMetadataService.create).toHaveBeenCalledWith(leaseModelMetadata);
+      expect(leaseModelMetadataFormService.getLeaseModelMetadata).toHaveBeenCalled();
+      expect(leaseModelMetadataService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseModelMetadata>>();
+      const saveSubject = new Subject<HttpResponse<ILeaseModelMetadata>>();
       const leaseModelMetadata = { id: 123 };
       jest.spyOn(leaseModelMetadataService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -384,128 +387,90 @@ describe('LeaseModelMetadata Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(leaseModelMetadataService.update).toHaveBeenCalledWith(leaseModelMetadata);
+      expect(leaseModelMetadataService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackLeaseContractById', () => {
-      it('Should return tracked LeaseContract primary key', () => {
+    describe('compareLeaseContract', () => {
+      it('Should forward to leaseContractService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackLeaseContractById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(leaseContractService, 'compareLeaseContract');
+        comp.compareLeaseContract(entity, entity2);
+        expect(leaseContractService.compareLeaseContract).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackLeaseModelMetadataById', () => {
-      it('Should return tracked LeaseModelMetadata primary key', () => {
+    describe('compareLeaseModelMetadata', () => {
+      it('Should forward to leaseModelMetadataService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackLeaseModelMetadataById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(leaseModelMetadataService, 'compareLeaseModelMetadata');
+        comp.compareLeaseModelMetadata(entity, entity2);
+        expect(leaseModelMetadataService.compareLeaseModelMetadata).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackTransactionAccountById', () => {
-      it('Should return tracked TransactionAccount primary key', () => {
+    describe('compareTransactionAccount', () => {
+      it('Should forward to transactionAccountService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackTransactionAccountById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(transactionAccountService, 'compareTransactionAccount');
+        comp.compareTransactionAccount(entity, entity2);
+        expect(transactionAccountService.compareTransactionAccount).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

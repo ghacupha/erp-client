@@ -29,7 +29,6 @@ function setupProxy({ tls }) {
         '/auth',
         '/health',
       ],
-      // target: `http${tls ? 's' : ''}://localhost:8980`,
       target: process.env.SERVER_API_URL_URL,
       secure: false,
       changeOrigin: tls,

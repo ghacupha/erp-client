@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-dealer-heading" data-cy="DealerCreateUpdateHeading">Create or edit a Dealer</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealerName">Dealer Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_dealerName">Dealer Name</label>
           <input
             type="text"
             class="form-control"
@@ -45,13 +26,13 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_taxNumber">Tax Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_taxNumber">Tax Number</label>
           <input type="text" class="form-control" name="taxNumber" id="field_taxNumber" data-cy="taxNumber" formControlName="taxNumber" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_identificationDocumentNumber">Identification Document Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_identificationDocumentNumber">Identification Document Number</label>
           <input
             type="text"
             class="form-control"
@@ -62,8 +43,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_organizationName">Organization Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_organizationName">Organization Name</label>
           <input
             type="text"
             class="form-control"
@@ -74,8 +55,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_department">Department</label>
           <input
             type="text"
             class="form-control"
@@ -86,13 +67,13 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_position">Position</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_position">Position</label>
           <input type="text" class="form-control" name="position" id="field_position" data-cy="position" formControlName="position" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_postalAddress">Postal Address</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_postalAddress">Postal Address</label>
           <input
             type="text"
             class="form-control"
@@ -103,8 +84,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_physicalAddress">Physical Address</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_physicalAddress">Physical Address</label>
           <input
             type="text"
             class="form-control"
@@ -115,8 +96,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountName">Account Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_accountName">Account Name</label>
           <input
             type="text"
             class="form-control"
@@ -127,8 +108,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountNumber">Account Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_accountNumber">Account Number</label>
           <input
             type="text"
             class="form-control"
@@ -139,8 +120,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_bankersName">Bankers Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_bankersName">Bankers Name</label>
           <input
             type="text"
             class="form-control"
@@ -151,8 +132,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_bankersBranch">Bankers Branch</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_bankersBranch">Bankers Branch</label>
           <input
             type="text"
             class="form-control"
@@ -163,8 +144,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_bankersSwiftCode">Bankers Swift Code</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_bankersSwiftCode">Bankers Swift Code</label>
           <input
             type="text"
             class="form-control"
@@ -175,8 +156,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -187,8 +168,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -199,13 +180,13 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_remarks">Remarks</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_otherNames">Other Names</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_otherNames">Other Names</label>
           <input
             type="text"
             class="form-control"
@@ -216,7 +197,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentLabels">Payment Label</label>
           <select
             class="form-control"
@@ -225,30 +206,30 @@
             multiple
             name="paymentLabels"
             formControlName="paymentLabels"
+            [compareWith]="comparePaymentLabel"
           >
-            <option
-              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
-              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
-            >
+            <option [ngValue]="paymentLabelOption" *ngFor="let paymentLabelOption of paymentLabelsSharedCollection">
               {{ paymentLabelOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealerGroup">Dealer Group</label>
-          <select class="form-control" id="field_dealerGroup" data-cy="dealerGroup" name="dealerGroup" formControlName="dealerGroup">
+        <div class="row mb-3">
+          <label class="form-label" for="field_dealerGroup">Dealer Group</label>
+          <select
+            class="form-control"
+            id="field_dealerGroup"
+            data-cy="dealerGroup"
+            name="dealerGroup"
+            formControlName="dealerGroup"
+            [compareWith]="compareDealer"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealerGroup')!.value?.id ? editForm.get('dealerGroup')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -257,11 +238,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.id }}
             </option>
           </select>

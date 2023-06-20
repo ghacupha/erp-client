@@ -1,30 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
+import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IBankBranchCode } from '../bank-branch-code.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
-import { BankBranchCodeService } from '../service/bank-branch-code.service';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
+import { EntityArrayResponseType, BankBranchCodeService } from '../service/bank-branch-code.service';
 import { BankBranchCodeDeleteDialogComponent } from '../delete/bank-branch-code-delete-dialog.component';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 
@@ -33,124 +17,126 @@ import { ParseLinks } from 'app/core/util/parse-links.service';
   templateUrl: './bank-branch-code.component.html',
 })
 export class BankBranchCodeComponent implements OnInit {
-  bankBranchCodes: IBankBranchCode[];
+  private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = ['bankCode', 'bankName', 'branchCode', 'branchName', 'notes'];
+
+  bankBranchCodes?: IBankBranchCode[];
   isLoading = false;
-  itemsPerPage: number;
-  links: { [key: string]: number };
-  page: number;
-  predicate: string;
-  ascending: boolean;
-  currentSearch: string;
+
+  predicate = 'id';
+  ascending = true;
+  currentSearch = '';
+
+  itemsPerPage = ITEMS_PER_PAGE;
+  links: { [key: string]: number } = {
+    last: 0,
+  };
+  page = 1;
 
   constructor(
     protected bankBranchCodeService: BankBranchCodeService,
-    protected modalService: NgbModal,
+    protected activatedRoute: ActivatedRoute,
+    public router: Router,
     protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
-  ) {
-    this.bankBranchCodes = [];
-    this.itemsPerPage = ITEMS_PER_PAGE;
-    this.page = 0;
-    this.links = {
-      last: 0,
-    };
-    this.predicate = 'id';
-    this.ascending = true;
-    this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-  }
-
-  loadAll(): void {
-    this.isLoading = true;
-    if (this.currentSearch) {
-      this.bankBranchCodeService
-        .search({
-          query: this.currentSearch,
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.sort(),
-        })
-        .subscribe(
-          (res: HttpResponse<IBankBranchCode[]>) => {
-            this.isLoading = false;
-            this.paginateBankBranchCodes(res.body, res.headers);
-          },
-          () => {
-            this.isLoading = false;
-          }
-        );
-      return;
-    }
-
-    this.bankBranchCodeService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
-      .subscribe(
-        (res: HttpResponse<IBankBranchCode[]>) => {
-          this.isLoading = false;
-          this.paginateBankBranchCodes(res.body, res.headers);
-        },
-        () => {
-          this.isLoading = false;
-        }
-      );
-  }
+    protected modalService: NgbModal
+  ) {}
 
   reset(): void {
-    this.page = 0;
+    this.page = 1;
     this.bankBranchCodes = [];
-    this.loadAll();
+    this.load();
   }
 
   loadPage(page: number): void {
     this.page = page;
-    this.loadAll();
+    this.load();
   }
 
+  trackId = (_index: number, item: IBankBranchCode): number => this.bankBranchCodeService.getBankBranchCodeIdentifier(item);
+
   search(query: string): void {
-    this.bankBranchCodes = [];
-    this.links = {
-      last: 0,
-    };
-    this.page = 0;
-    if (query && ['bankCode', 'bankName', 'branchCode', 'branchName', 'notes'].includes(this.predicate)) {
+    if (query && BankBranchCodeComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
+    this.page = 1;
     this.currentSearch = query;
-    this.loadAll();
+    this.navigateToWithComponentValues();
   }
 
   ngOnInit(): void {
-    this.loadAll();
-  }
-
-  trackId(index: number, item: IBankBranchCode): number {
-    return item.id!;
+    this.load();
   }
 
   delete(bankBranchCode: IBankBranchCode): void {
     const modalRef = this.modalService.open(BankBranchCodeDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.bankBranchCode = bankBranchCode;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.reset();
-      }
+    modalRef.closed
+      .pipe(
+        filter(reason => reason === ITEM_DELETED_EVENT),
+        switchMap(() => this.loadFromBackendWithRouteInformations())
+      )
+      .subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        },
+      });
+  }
+
+  load(): void {
+    this.loadFromBackendWithRouteInformations().subscribe({
+      next: (res: EntityArrayResponseType) => {
+        this.onResponseSuccess(res);
+      },
     });
   }
 
-  protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-    if (this.predicate !== 'id') {
-      result.push('id');
-    }
-    return result;
+  navigateToWithComponentValues(): void {
+    this.handleNavigation(this.page, this.predicate, this.ascending, this.currentSearch);
   }
 
-  protected paginateBankBranchCodes(data: IBankBranchCode[] | null, headers: HttpHeaders): void {
+  navigateToPage(page = this.page): void {
+    this.handleNavigation(page, this.predicate, this.ascending, this.currentSearch);
+  }
+
+  protected loadFromBackendWithRouteInformations(): Observable<EntityArrayResponseType> {
+    return combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+      switchMap(() => this.queryBackend(this.page, this.predicate, this.ascending, this.currentSearch))
+    );
+  }
+
+  protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+    const sort = (params.get(SORT) ?? data[DEFAULT_SORT_DATA]).split(',');
+    this.predicate = sort[0];
+    this.ascending = sort[1] === ASC;
+    if (params.has('search') && params.get('search') !== '') {
+      this.currentSearch = params.get('search') as string;
+      if (BankBranchCodeComponent.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(this.predicate)) {
+        this.predicate = '';
+      }
+    }
+  }
+
+  protected onResponseSuccess(response: EntityArrayResponseType): void {
+    this.fillComponentAttributesFromResponseHeader(response.headers);
+    const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+    this.bankBranchCodes = dataFromBody;
+  }
+
+  protected fillComponentAttributesFromResponseBody(data: IBankBranchCode[] | null): IBankBranchCode[] {
+    const bankBranchCodesNew = this.bankBranchCodes ?? [];
+    if (data) {
+      for (const d of data) {
+        if (bankBranchCodesNew.map(op => op.id).indexOf(d.id) === -1) {
+          bankBranchCodesNew.push(d);
+        }
+      }
+    }
+    return bankBranchCodesNew;
+  }
+
+  protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
     const linkHeader = headers.get('link');
     if (linkHeader) {
       this.links = this.parseLinks.parse(linkHeader);
@@ -159,10 +145,50 @@ export class BankBranchCodeComponent implements OnInit {
         last: 0,
       };
     }
-    if (data) {
-      for (const d of data) {
-        this.bankBranchCodes.push(d);
-      }
+  }
+
+  protected queryBackend(
+    page?: number,
+    predicate?: string,
+    ascending?: boolean,
+    currentSearch?: string
+  ): Observable<EntityArrayResponseType> {
+    this.isLoading = true;
+    const pageToLoad: number = page ?? 1;
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage,
+      eagerload: true,
+      query: currentSearch,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+    if (this.currentSearch && this.currentSearch !== '') {
+      return this.bankBranchCodeService.search(queryObject).pipe(tap(() => (this.isLoading = false)));
+    } else {
+      return this.bankBranchCodeService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    }
+  }
+
+  protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean, currentSearch?: string): void {
+    const queryParamsObj = {
+      search: currentSearch,
+      page,
+      size: this.itemsPerPage,
+      sort: this.getSortQueryParam(predicate, ascending),
+    };
+
+    this.router.navigate(['./'], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParamsObj,
+    });
+  }
+
+  protected getSortQueryParam(predicate = this.predicate, ascending = this.ascending): string[] {
+    const ascendingQueryParam = ascending ? ASC : DESC;
+    if (predicate === '') {
+      return [];
+    } else {
+      return [predicate + ',' + ascendingQueryParam];
     }
   }
 }

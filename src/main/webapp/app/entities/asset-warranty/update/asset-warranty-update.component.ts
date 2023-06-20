@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAssetWarranty, AssetWarranty } from '../asset-warranty.model';
+import { AssetWarrantyFormService, AssetWarrantyFormGroup } from './asset-warranty-form.service';
+import { IAssetWarranty } from '../asset-warranty.model';
 import { AssetWarrantyService } from '../service/asset-warranty.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -40,38 +22,41 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class AssetWarrantyUpdateComponent implements OnInit {
   isSaving = false;
+  assetWarranty: IAssetWarranty | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   dealersSharedCollection: IDealer[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    assetTag: [],
-    description: [],
-    modelNumber: [],
-    serialNumber: [],
-    expiryDate: [],
-    placeholders: [],
-    universallyUniqueMappings: [],
-    dealer: [null, Validators.required],
-    warrantyAttachments: [],
-  });
+  editForm: AssetWarrantyFormGroup = this.assetWarrantyFormService.createAssetWarrantyFormGroup();
 
   constructor(
     protected assetWarrantyService: AssetWarrantyService,
+    protected assetWarrantyFormService: AssetWarrantyFormService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected dealerService: DealerService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetWarranty }) => {
-      this.updateForm(assetWarranty);
+      this.assetWarranty = assetWarranty;
+      if (assetWarranty) {
+        this.updateForm(assetWarranty);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -83,71 +68,19 @@ export class AssetWarrantyUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const assetWarranty = this.createFromForm();
-    if (assetWarranty.id !== undefined) {
+    const assetWarranty = this.assetWarrantyFormService.getAssetWarranty(this.editForm);
+    if (assetWarranty.id !== null) {
       this.subscribeToSaveResponse(this.assetWarrantyService.update(assetWarranty));
     } else {
       this.subscribeToSaveResponse(this.assetWarrantyService.create(assetWarranty));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAssetWarranty>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -163,29 +96,23 @@ export class AssetWarrantyUpdateComponent implements OnInit {
   }
 
   protected updateForm(assetWarranty: IAssetWarranty): void {
-    this.editForm.patchValue({
-      id: assetWarranty.id,
-      assetTag: assetWarranty.assetTag,
-      description: assetWarranty.description,
-      modelNumber: assetWarranty.modelNumber,
-      serialNumber: assetWarranty.serialNumber,
-      expiryDate: assetWarranty.expiryDate,
-      placeholders: assetWarranty.placeholders,
-      universallyUniqueMappings: assetWarranty.universallyUniqueMappings,
-      dealer: assetWarranty.dealer,
-      warrantyAttachments: assetWarranty.warrantyAttachments,
-    });
+    this.assetWarranty = assetWarranty;
+    this.assetWarrantyFormService.resetForm(this.editForm, assetWarranty);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(assetWarranty.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(assetWarranty.universallyUniqueMappings ?? [])
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(assetWarranty.universallyUniqueMappings ?? [])
+      );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
+      this.dealersSharedCollection,
+      assetWarranty.dealer
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, assetWarranty.dealer);
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(assetWarranty.warrantyAttachments ?? [])
     );
@@ -197,7 +124,10 @@ export class AssetWarrantyUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.assetWarranty?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -207,9 +137,9 @@ export class AssetWarrantyUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
+            ...(this.assetWarranty?.universallyUniqueMappings ?? [])
           )
         )
       )
@@ -221,7 +151,7 @@ export class AssetWarrantyUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.assetWarranty?.dealer)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.businessDocumentService
@@ -229,28 +159,12 @@ export class AssetWarrantyUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('warrantyAttachments')!.value ?? [])
+            ...(this.assetWarranty?.warrantyAttachments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IAssetWarranty {
-    return {
-      ...new AssetWarranty(),
-      id: this.editForm.get(['id'])!.value,
-      assetTag: this.editForm.get(['assetTag'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      modelNumber: this.editForm.get(['modelNumber'])!.value,
-      serialNumber: this.editForm.get(['serialNumber'])!.value,
-      expiryDate: this.editForm.get(['expiryDate'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
-      warrantyAttachments: this.editForm.get(['warrantyAttachments'])!.value,
-    };
   }
 }

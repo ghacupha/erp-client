@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-institution-code-heading" data-cy="InstitutionCodeCreateUpdateHeading">Create or edit a Institution Code</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_institutionCode">Institution Code</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_institutionCode">Institution Code</label>
           <input
             type="text"
             class="form-control"
@@ -50,8 +31,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_institutionName">Institution Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_institutionName">Institution Name</label>
           <input
             type="text"
             class="form-control"
@@ -70,18 +51,18 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_shortName">Short Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_shortName">Short Name</label>
           <input type="text" class="form-control" name="shortName" id="field_shortName" data-cy="shortName" formControlName="shortName" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_category">Category</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_category">Category</label>
           <input type="text" class="form-control" name="category" id="field_category" data-cy="category" formControlName="category" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_institutionCategory">Institution Category</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_institutionCategory">Institution Category</label>
           <input
             type="text"
             class="form-control"
@@ -92,7 +73,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -101,11 +82,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

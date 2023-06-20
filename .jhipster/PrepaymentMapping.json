@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220726145438",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "parameterKey",
@@ -16,22 +18,20 @@
       "fieldValidateRules": ["required"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentMapping",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentMapping",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentMapping"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PrepaymentMapping",
-  "changelogDate": "20220726145438",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

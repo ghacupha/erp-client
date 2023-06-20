@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="jobSheet">
       <h2 data-cy="jobSheetDetailsHeading"><span>Job Sheet</span></h2>
@@ -52,47 +33,47 @@
         <dt><span>Biller</span></dt>
         <dd>
           <div *ngIf="jobSheet.biller">
-            <a [routerLink]="['/dealer', jobSheet.biller?.id, 'view']">{{ jobSheet.biller?.dealerName }}</a>
+            <a [routerLink]="['/dealer', jobSheet.biller.id, 'view']">{{ jobSheet.biller.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of jobSheet.signatories; let last = last">
-            <a [routerLink]="['/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/dealer', signatories.id, 'view']">{{ signatories.dealerName }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contact Person</span></dt>
         <dd>
           <div *ngIf="jobSheet.contactPerson">
-            <a [routerLink]="['/dealer', jobSheet.contactPerson?.id, 'view']">{{ jobSheet.contactPerson?.dealerName }}</a>
+            <a [routerLink]="['/dealer', jobSheet.contactPerson.id, 'view']">{{ jobSheet.contactPerson.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Business Stamps</span></dt>
         <dd>
           <span *ngFor="let businessStamps of jobSheet.businessStamps; let last = last">
-            <a [routerLink]="['/business-stamp', businessStamps?.id, 'view']">{{ businessStamps.details }}</a
+            <a [routerLink]="['/business-stamp', businessStamps.id, 'view']">{{ businessStamps.details }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of jobSheet.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of jobSheet.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of jobSheet.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220517074515",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "catalogueNumber",
@@ -26,22 +28,20 @@
       "fieldTypeBlobContent": "any"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportTemplate",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportTemplate",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportTemplate"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ReportTemplate",
-  "changelogDate": "20220517074515",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

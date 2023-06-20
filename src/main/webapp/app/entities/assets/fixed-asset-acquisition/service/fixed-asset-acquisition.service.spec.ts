@@ -1,36 +1,26 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IFixedAssetAcquisition, FixedAssetAcquisition } from '../fixed-asset-acquisition.model';
+import { IFixedAssetAcquisition } from '../fixed-asset-acquisition.model';
+import {
+  sampleWithRequiredData,
+  sampleWithNewData,
+  sampleWithPartialData,
+  sampleWithFullData,
+} from '../fixed-asset-acquisition.test-samples';
 
-import { FixedAssetAcquisitionService } from './fixed-asset-acquisition.service';
+import { FixedAssetAcquisitionService, RestFixedAssetAcquisition } from './fixed-asset-acquisition.service';
+
+const requireRestSample: RestFixedAssetAcquisition = {
+  ...sampleWithRequiredData,
+  purchaseDate: sampleWithRequiredData.purchaseDate?.format(DATE_FORMAT),
+};
 
 describe('FixedAssetAcquisition Service', () => {
   let service: FixedAssetAcquisitionService;
   let httpMock: HttpTestingController;
-  let elemDefault: IFixedAssetAcquisition;
   let expectedResult: IFixedAssetAcquisition | IFixedAssetAcquisition[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,54 +29,27 @@ describe('FixedAssetAcquisition Service', () => {
     expectedResult = null;
     service = TestBed.inject(FixedAssetAcquisitionService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      assetNumber: 0,
-      serviceOutletCode: 'AAAAAAA',
-      assetTag: 'AAAAAAA',
-      assetDescription: 'AAAAAAA',
-      purchaseDate: currentDate,
-      assetCategory: 'AAAAAAA',
-      purchasePrice: 0,
-      fileUploadToken: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          purchaseDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a FixedAssetAcquisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          purchaseDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const fixedAssetAcquisition = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          purchaseDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new FixedAssetAcquisition()).subscribe(resp => (expectedResult = resp.body));
+      service.create(fixedAssetAcquisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -94,29 +57,11 @@ describe('FixedAssetAcquisition Service', () => {
     });
 
     it('should update a FixedAssetAcquisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          assetNumber: 1,
-          serviceOutletCode: 'BBBBBB',
-          assetTag: 'BBBBBB',
-          assetDescription: 'BBBBBB',
-          purchaseDate: currentDate.format(DATE_FORMAT),
-          assetCategory: 'BBBBBB',
-          purchasePrice: 1,
-          fileUploadToken: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const fixedAssetAcquisition = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          purchaseDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(fixedAssetAcquisition).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -124,25 +69,9 @@ describe('FixedAssetAcquisition Service', () => {
     });
 
     it('should partial update a FixedAssetAcquisition', () => {
-      const patchObject = Object.assign(
-        {
-          assetNumber: 1,
-          assetTag: 'BBBBBB',
-          assetDescription: 'BBBBBB',
-          purchasePrice: 1,
-          fileUploadToken: 'BBBBBB',
-        },
-        new FixedAssetAcquisition()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          purchaseDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -152,75 +81,59 @@ describe('FixedAssetAcquisition Service', () => {
     });
 
     it('should return a list of FixedAssetAcquisition', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          assetNumber: 1,
-          serviceOutletCode: 'BBBBBB',
-          assetTag: 'BBBBBB',
-          assetDescription: 'BBBBBB',
-          purchaseDate: currentDate.format(DATE_FORMAT),
-          assetCategory: 'BBBBBB',
-          purchasePrice: 1,
-          fileUploadToken: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          purchaseDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a FixedAssetAcquisition', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addFixedAssetAcquisitionToCollectionIfMissing', () => {
       it('should add a FixedAssetAcquisition to an empty array', () => {
-        const fixedAssetAcquisition: IFixedAssetAcquisition = { id: 123 };
+        const fixedAssetAcquisition: IFixedAssetAcquisition = sampleWithRequiredData;
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing([], fixedAssetAcquisition);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(fixedAssetAcquisition);
       });
 
       it('should not add a FixedAssetAcquisition to an array that contains it', () => {
-        const fixedAssetAcquisition: IFixedAssetAcquisition = { id: 123 };
+        const fixedAssetAcquisition: IFixedAssetAcquisition = sampleWithRequiredData;
         const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [
           {
             ...fixedAssetAcquisition,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing(fixedAssetAcquisitionCollection, fixedAssetAcquisition);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a FixedAssetAcquisition to an array that doesn't contain it", () => {
-        const fixedAssetAcquisition: IFixedAssetAcquisition = { id: 123 };
-        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [{ id: 456 }];
+        const fixedAssetAcquisition: IFixedAssetAcquisition = sampleWithRequiredData;
+        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [sampleWithPartialData];
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing(fixedAssetAcquisitionCollection, fixedAssetAcquisition);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(fixedAssetAcquisition);
       });
 
       it('should add only unique FixedAssetAcquisition to an array', () => {
-        const fixedAssetAcquisitionArray: IFixedAssetAcquisition[] = [{ id: 123 }, { id: 456 }, { id: 74355 }];
-        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [{ id: 123 }];
+        const fixedAssetAcquisitionArray: IFixedAssetAcquisition[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [sampleWithRequiredData];
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing(
           fixedAssetAcquisitionCollection,
           ...fixedAssetAcquisitionArray
@@ -229,8 +142,8 @@ describe('FixedAssetAcquisition Service', () => {
       });
 
       it('should accept varargs', () => {
-        const fixedAssetAcquisition: IFixedAssetAcquisition = { id: 123 };
-        const fixedAssetAcquisition2: IFixedAssetAcquisition = { id: 456 };
+        const fixedAssetAcquisition: IFixedAssetAcquisition = sampleWithRequiredData;
+        const fixedAssetAcquisition2: IFixedAssetAcquisition = sampleWithPartialData;
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing([], fixedAssetAcquisition, fixedAssetAcquisition2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(fixedAssetAcquisition);
@@ -238,16 +151,60 @@ describe('FixedAssetAcquisition Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const fixedAssetAcquisition: IFixedAssetAcquisition = { id: 123 };
+        const fixedAssetAcquisition: IFixedAssetAcquisition = sampleWithRequiredData;
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing([], null, fixedAssetAcquisition, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(fixedAssetAcquisition);
       });
 
       it('should return initial array if no FixedAssetAcquisition is added', () => {
-        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [{ id: 123 }];
+        const fixedAssetAcquisitionCollection: IFixedAssetAcquisition[] = [sampleWithRequiredData];
         expectedResult = service.addFixedAssetAcquisitionToCollectionIfMissing(fixedAssetAcquisitionCollection, undefined, null);
         expect(expectedResult).toEqual(fixedAssetAcquisitionCollection);
+      });
+    });
+
+    describe('compareFixedAssetAcquisition', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareFixedAssetAcquisition(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareFixedAssetAcquisition(entity1, entity2);
+        const compareResult2 = service.compareFixedAssetAcquisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareFixedAssetAcquisition(entity1, entity2);
+        const compareResult2 = service.compareFixedAssetAcquisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareFixedAssetAcquisition(entity1, entity2);
+        const compareResult2 = service.compareFixedAssetAcquisition(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

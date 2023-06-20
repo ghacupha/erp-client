@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ICustomerIDDocumentType, getCustomerIDDocumentTypeIdentifier } from '../customer-id-document-type.model';
+import { ICustomerIDDocumentType, NewCustomerIDDocumentType } from '../customer-id-document-type.model';
+
+export type PartialUpdateCustomerIDDocumentType = Partial<ICustomerIDDocumentType> & Pick<ICustomerIDDocumentType, 'id'>;
 
 export type EntityResponseType = HttpResponse<ICustomerIDDocumentType>;
 export type EntityArrayResponseType = HttpResponse<ICustomerIDDocumentType[]>;
@@ -36,21 +20,21 @@ export class CustomerIDDocumentTypeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(customerIDDocumentType: ICustomerIDDocumentType): Observable<EntityResponseType> {
+  create(customerIDDocumentType: NewCustomerIDDocumentType): Observable<EntityResponseType> {
     return this.http.post<ICustomerIDDocumentType>(this.resourceUrl, customerIDDocumentType, { observe: 'response' });
   }
 
   update(customerIDDocumentType: ICustomerIDDocumentType): Observable<EntityResponseType> {
     return this.http.put<ICustomerIDDocumentType>(
-      `${this.resourceUrl}/${getCustomerIDDocumentTypeIdentifier(customerIDDocumentType) as number}`,
+      `${this.resourceUrl}/${this.getCustomerIDDocumentTypeIdentifier(customerIDDocumentType)}`,
       customerIDDocumentType,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(customerIDDocumentType: ICustomerIDDocumentType): Observable<EntityResponseType> {
+  partialUpdate(customerIDDocumentType: PartialUpdateCustomerIDDocumentType): Observable<EntityResponseType> {
     return this.http.patch<ICustomerIDDocumentType>(
-      `${this.resourceUrl}/${getCustomerIDDocumentTypeIdentifier(customerIDDocumentType) as number}`,
+      `${this.resourceUrl}/${this.getCustomerIDDocumentTypeIdentifier(customerIDDocumentType)}`,
       customerIDDocumentType,
       { observe: 'response' }
     );
@@ -74,21 +58,26 @@ export class CustomerIDDocumentTypeService {
     return this.http.get<ICustomerIDDocumentType[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addCustomerIDDocumentTypeToCollectionIfMissing(
-    customerIDDocumentTypeCollection: ICustomerIDDocumentType[],
-    ...customerIDDocumentTypesToCheck: (ICustomerIDDocumentType | null | undefined)[]
-  ): ICustomerIDDocumentType[] {
-    const customerIDDocumentTypes: ICustomerIDDocumentType[] = customerIDDocumentTypesToCheck.filter(isPresent);
+  getCustomerIDDocumentTypeIdentifier(customerIDDocumentType: Pick<ICustomerIDDocumentType, 'id'>): number {
+    return customerIDDocumentType.id;
+  }
+
+  compareCustomerIDDocumentType(o1: Pick<ICustomerIDDocumentType, 'id'> | null, o2: Pick<ICustomerIDDocumentType, 'id'> | null): boolean {
+    return o1 && o2 ? this.getCustomerIDDocumentTypeIdentifier(o1) === this.getCustomerIDDocumentTypeIdentifier(o2) : o1 === o2;
+  }
+
+  addCustomerIDDocumentTypeToCollectionIfMissing<Type extends Pick<ICustomerIDDocumentType, 'id'>>(
+    customerIDDocumentTypeCollection: Type[],
+    ...customerIDDocumentTypesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const customerIDDocumentTypes: Type[] = customerIDDocumentTypesToCheck.filter(isPresent);
     if (customerIDDocumentTypes.length > 0) {
       const customerIDDocumentTypeCollectionIdentifiers = customerIDDocumentTypeCollection.map(
-        customerIDDocumentTypeItem => getCustomerIDDocumentTypeIdentifier(customerIDDocumentTypeItem)!
+        customerIDDocumentTypeItem => this.getCustomerIDDocumentTypeIdentifier(customerIDDocumentTypeItem)!
       );
       const customerIDDocumentTypesToAdd = customerIDDocumentTypes.filter(customerIDDocumentTypeItem => {
-        const customerIDDocumentTypeIdentifier = getCustomerIDDocumentTypeIdentifier(customerIDDocumentTypeItem);
-        if (
-          customerIDDocumentTypeIdentifier == null ||
-          customerIDDocumentTypeCollectionIdentifiers.includes(customerIDDocumentTypeIdentifier)
-        ) {
+        const customerIDDocumentTypeIdentifier = this.getCustomerIDDocumentTypeIdentifier(customerIDDocumentTypeItem);
+        if (customerIDDocumentTypeCollectionIdentifiers.includes(customerIDDocumentTypeIdentifier)) {
           return false;
         }
         customerIDDocumentTypeCollectionIdentifiers.push(customerIDDocumentTypeIdentifier);

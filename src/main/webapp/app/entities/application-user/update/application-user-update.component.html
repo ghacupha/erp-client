@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-application-user-heading" data-cy="ApplicationUserCreateUpdateHeading">Create or edit a Application User</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_designation">Designation</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_designation">Designation</label>
           <input
             type="text"
             class="form-control"
@@ -45,8 +26,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_applicationIdentity">Application Identity</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_applicationIdentity">Application Identity</label>
           <input
             type="text"
             class="form-control"
@@ -67,16 +48,18 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_organization">Organization</label>
-          <select class="form-control" id="field_organization" data-cy="organization" name="organization" formControlName="organization">
+        <div class="row mb-3">
+          <label class="form-label" for="field_organization">Organization</label>
+          <select
+            class="form-control"
+            id="field_organization"
+            data-cy="organization"
+            name="organization"
+            formControlName="organization"
+            [compareWith]="compareDealer"
+          >
             <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('organization')!.value?.id ? editForm.get('organization')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
         <div
@@ -87,16 +70,18 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_department">Department</label>
-          <select class="form-control" id="field_department" data-cy="department" name="department" formControlName="department">
+        <div class="row mb-3">
+          <label class="form-label" for="field_department">Department</label>
+          <select
+            class="form-control"
+            id="field_department"
+            data-cy="department"
+            name="department"
+            formControlName="department"
+            [compareWith]="compareDealer"
+          >
             <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('department')!.value?.id ? editForm.get('department')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
         <div
@@ -105,24 +90,18 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_securityClearance">Security Clearance</label>
           <select
             class="form-control"
             id="field_securityClearance"
             data-cy="securityClearance"
             name="securityClearance"
             formControlName="securityClearance"
+            [compareWith]="compareSecurityClearance"
           >
             <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
+            <option [ngValue]="securityClearanceOption" *ngFor="let securityClearanceOption of securityClearancesSharedCollection">
               {{ securityClearanceOption.clearanceLevel }}
             </option>
           </select>
@@ -138,22 +117,18 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_systemIdentity">System Identity</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_systemIdentity">System Identity</label>
           <select
             class="form-control"
             id="field_systemIdentity"
             data-cy="systemIdentity"
             name="systemIdentity"
             formControlName="systemIdentity"
+            [compareWith]="compareUser"
           >
             <option *ngIf="!editForm.get('systemIdentity')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="userOption.id === editForm.get('systemIdentity')!.value?.id ? editForm.get('systemIdentity')!.value : userOption"
-              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
-            >
-              {{ userOption.login }}
-            </option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
           </select>
         </div>
         <div
@@ -165,7 +140,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['systemIdentity'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_userProperties">User Properties</label>
           <select
             class="form-control"
@@ -174,37 +149,29 @@
             multiple
             name="userProperties"
             formControlName="userProperties"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('userProperties')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealerIdentity">Dealer Identity</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_dealerIdentity">Dealer Identity</label>
           <select
             class="form-control"
             id="field_dealerIdentity"
             data-cy="dealerIdentity"
             name="dealerIdentity"
             formControlName="dealerIdentity"
+            [compareWith]="compareDealer"
           >
-            <option *ngIf="editForm.get(['dealerIdentity'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                dealerOption.id === editForm.get('dealerIdentity')!.value?.id ? editForm.get('dealerIdentity')!.value : dealerOption
-              "
-              *ngFor="let dealerOption of dealerIdentitiesCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option *ngIf="!editForm.get('dealerIdentity')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
         <div

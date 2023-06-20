@@ -73,12 +73,12 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "businessDocument",
       "ownerSide": true,
-      "otherEntityRelationshipName": "businessDocument"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

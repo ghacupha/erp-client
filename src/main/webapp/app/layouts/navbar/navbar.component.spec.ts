@@ -21,7 +21,7 @@ jest.mock('app/login/login.service');
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 
@@ -52,9 +52,9 @@ describe('Navbar Component', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
+        imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), NgxWebstorageModule.forRoot()],
         declarations: [NavbarComponent],
-        providers: [Router, LoginService],
+        providers: [LoginService],
       })
         .overrideTemplate(NavbarComponent, '')
         .overrideComponent(NavbarComponent, { set: { styleUrls: []}})

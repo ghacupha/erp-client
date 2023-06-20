@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="leaseContract">
       <h2 data-cy="leaseContractDetailsHeading"><span>Lease Contract</span></h2>
@@ -60,28 +41,28 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of leaseContract.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>System Mappings</span></dt>
         <dd>
           <span *ngFor="let systemMappings of leaseContract.systemMappings; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', systemMappings?.id, 'view']">{{ systemMappings.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', systemMappings.id, 'view']">{{ systemMappings.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of leaseContract.businessDocuments; let last = last">
-            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Contract Metadata</span></dt>
         <dd>
           <span *ngFor="let contractMetadata of leaseContract.contractMetadata; let last = last">
-            <a [routerLink]="['/contract-metadata', contractMetadata?.id, 'view']">{{ contractMetadata.contractTitle }}</a
+            <a [routerLink]="['/contract-metadata', contractMetadata.id, 'view']">{{ contractMetadata.contractTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

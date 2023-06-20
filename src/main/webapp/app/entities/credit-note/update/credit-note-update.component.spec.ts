@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { CreditNoteFormService } from './credit-note-form.service';
 import { CreditNoteService } from '../service/credit-note.service';
-import { ICreditNote, CreditNote } from '../credit-note.model';
+import { ICreditNote } from '../credit-note.model';
 import { IPurchaseOrder } from 'app/entities/purchase-order/purchase-order.model';
 import { PurchaseOrderService } from 'app/entities/purchase-order/service/purchase-order.service';
 import { IPaymentInvoice } from 'app/entities/payment-invoice/payment-invoice.model';
@@ -44,6 +26,7 @@ describe('CreditNote Management Update Component', () => {
   let comp: CreditNoteUpdateComponent;
   let fixture: ComponentFixture<CreditNoteUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let creditNoteFormService: CreditNoteFormService;
   let creditNoteService: CreditNoteService;
   let purchaseOrderService: PurchaseOrderService;
   let paymentInvoiceService: PaymentInvoiceService;
@@ -53,15 +36,24 @@ describe('CreditNote Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [CreditNoteUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(CreditNoteUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(CreditNoteUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    creditNoteFormService = TestBed.inject(CreditNoteFormService);
     creditNoteService = TestBed.inject(CreditNoteService);
     purchaseOrderService = TestBed.inject(PurchaseOrderService);
     paymentInvoiceService = TestBed.inject(PaymentInvoiceService);
@@ -90,7 +82,7 @@ describe('CreditNote Management Update Component', () => {
       expect(purchaseOrderService.query).toHaveBeenCalled();
       expect(purchaseOrderService.addPurchaseOrderToCollectionIfMissing).toHaveBeenCalledWith(
         purchaseOrderCollection,
-        ...additionalPurchaseOrders
+        ...additionalPurchaseOrders.map(expect.objectContaining)
       );
       expect(comp.purchaseOrdersSharedCollection).toEqual(expectedCollection);
     });
@@ -112,7 +104,7 @@ describe('CreditNote Management Update Component', () => {
       expect(paymentInvoiceService.query).toHaveBeenCalled();
       expect(paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing).toHaveBeenCalledWith(
         paymentInvoiceCollection,
-        ...additionalPaymentInvoices
+        ...additionalPaymentInvoices.map(expect.objectContaining)
       );
       expect(comp.paymentInvoicesSharedCollection).toEqual(expectedCollection);
     });
@@ -134,7 +126,7 @@ describe('CreditNote Management Update Component', () => {
       expect(paymentLabelService.query).toHaveBeenCalled();
       expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
         paymentLabelCollection,
-        ...additionalPaymentLabels
+        ...additionalPaymentLabels.map(expect.objectContaining)
       );
       expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
     });
@@ -154,7 +146,10 @@ describe('CreditNote Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -175,7 +170,7 @@ describe('CreditNote Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -186,30 +181,31 @@ describe('CreditNote Management Update Component', () => {
       creditNote.purchaseOrders = [purchaseOrders];
       const invoices: IPaymentInvoice = { id: 50581 };
       creditNote.invoices = [invoices];
-      const paymentLabels: IPaymentLabel = { id: 54736 };
-      creditNote.paymentLabels = [paymentLabels];
-      const placeholders: IPlaceholder = { id: 15251 };
-      creditNote.placeholders = [placeholders];
+      const paymentLabel: IPaymentLabel = { id: 54736 };
+      creditNote.paymentLabels = [paymentLabel];
+      const placeholder: IPlaceholder = { id: 15251 };
+      creditNote.placeholders = [placeholder];
       const settlementCurrency: ISettlementCurrency = { id: 27178 };
       creditNote.settlementCurrency = settlementCurrency;
 
       activatedRoute.data = of({ creditNote });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(creditNote));
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
       expect(comp.paymentInvoicesSharedCollection).toContain(invoices);
-      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabel);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
+      expect(comp.creditNote).toEqual(creditNote);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<CreditNote>>();
+      const saveSubject = new Subject<HttpResponse<ICreditNote>>();
       const creditNote = { id: 123 };
+      jest.spyOn(creditNoteFormService, 'getCreditNote').mockReturnValue(creditNote);
       jest.spyOn(creditNoteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ creditNote });
@@ -222,18 +218,20 @@ describe('CreditNote Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(creditNoteFormService.getCreditNote).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(creditNoteService.update).toHaveBeenCalledWith(creditNote);
+      expect(creditNoteService.update).toHaveBeenCalledWith(expect.objectContaining(creditNote));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<CreditNote>>();
-      const creditNote = new CreditNote();
+      const saveSubject = new Subject<HttpResponse<ICreditNote>>();
+      const creditNote = { id: 123 };
+      jest.spyOn(creditNoteFormService, 'getCreditNote').mockReturnValue({ id: null });
       jest.spyOn(creditNoteService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ creditNote });
+      activatedRoute.data = of({ creditNote: null });
       comp.ngOnInit();
 
       // WHEN
@@ -243,14 +241,15 @@ describe('CreditNote Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(creditNoteService.create).toHaveBeenCalledWith(creditNote);
+      expect(creditNoteFormService.getCreditNote).toHaveBeenCalled();
+      expect(creditNoteService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<CreditNote>>();
+      const saveSubject = new Subject<HttpResponse<ICreditNote>>();
       const creditNote = { id: 123 };
       jest.spyOn(creditNoteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -263,156 +262,60 @@ describe('CreditNote Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(creditNoteService.update).toHaveBeenCalledWith(creditNote);
+      expect(creditNoteService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPurchaseOrderById', () => {
-      it('Should return tracked PurchaseOrder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePurchaseOrder', () => {
+      it('Should forward to purchaseOrderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPurchaseOrderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(purchaseOrderService, 'comparePurchaseOrder');
+        comp.comparePurchaseOrder(entity, entity2);
+        expect(purchaseOrderService.comparePurchaseOrder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPaymentInvoiceById', () => {
-      it('Should return tracked PaymentInvoice primary key', () => {
+    describe('comparePaymentInvoice', () => {
+      it('Should forward to paymentInvoiceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentInvoiceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentInvoiceService, 'comparePaymentInvoice');
+        comp.comparePaymentInvoice(entity, entity2);
+        expect(paymentInvoiceService.comparePaymentInvoice).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPaymentLabelById', () => {
-      it('Should return tracked PaymentLabel primary key', () => {
+    describe('comparePaymentLabel', () => {
+      it('Should forward to paymentLabelService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentLabelById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentLabelService, 'comparePaymentLabel');
+        comp.comparePaymentLabel(entity, entity2);
+        expect(paymentLabelService.comparePaymentLabel).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPurchaseOrder', () => {
-      it('Should return option if no PurchaseOrder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPurchaseOrder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PurchaseOrder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PurchaseOrder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPaymentInvoice', () => {
-      it('Should return option if no PaymentInvoice is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentInvoice(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentInvoice for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentInvoice is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentInvoice(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPaymentLabel', () => {
-      it('Should return option if no PaymentLabel is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentLabel(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentLabel for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentLabel is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

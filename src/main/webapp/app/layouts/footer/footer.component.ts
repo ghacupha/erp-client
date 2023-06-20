@@ -18,11 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { VERSION as AngularVersion } from '@angular/core';
-// import { VERSION } from '../../app.constants';
-// import { environment } from '../../../environment';
-import { versionInfo } from '../../../version-info';
 import { ApplicationStatusService } from './application-status.service';
-// import { VERSION as EnvVersion } from 'environments/version';
 
 @Component({
   selector: 'jhi-footer',
@@ -30,15 +26,8 @@ import { ApplicationStatusService } from './application-status.service';
 })
 export class FooterComponent implements OnInit {
   version = AngularVersion.full;
-  // clientVersion = environment.appVersion;
-
-  clientHash = versionInfo.hash.substring(0,8);
-
-  serverHash = versionInfo.hash.substring(0,8);
-
+  serverHash = '';
   clientVersion = '1.4.0';
-
-  serverVersion = versionInfo.tag;
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }
@@ -46,7 +35,7 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
-        this.serverVersion = appStatus.body.version ?? '1.2.8';
+        this.serverVersion = '1.2.8';
         this.serverHash = appStatus.body.build ?? 'dev-build';
       }
     });

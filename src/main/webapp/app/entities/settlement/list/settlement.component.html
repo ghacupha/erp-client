@@ -1,30 +1,11 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
 <div>
   <h2 id="page-heading" data-cy="SettlementHeading">
     <span>Settlements</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -43,54 +24,117 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Settlement</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
 
   <div class="alert alert-warning" id="no-result" *ngIf="settlements?.length === 0">
-    <span>No settlements found</span>
+    <span>No Settlements found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="settlements && settlements.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="settlements && settlements.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentNumber"><span>Payment Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentDate"><span>Payment Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="paymentAmount"><span>Payment Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="paymentNumber">
+            <div class="d-flex">
+              <span>Payment Number</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="paymentDate">
+            <div class="d-flex">
+              <span>Payment Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="paymentAmount">
+            <div class="d-flex">
+              <span>Payment Amount</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span>Description</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="notes">
+            <div class="d-flex">
+              <span>Notes</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="calculationFile">
-            <span>Calculation File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Calculation File</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="fileUploadToken">
-            <span>File Upload Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>File Upload Token</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="compilationToken">
-            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Compilation Token</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="remarks">
+            <div class="d-flex">
+              <span>Remarks</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
-            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Settlement Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="paymentCategory.categoryName"><span>Payment Category</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="groupSettlement.id"><span>Group Settlement</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="biller.dealerName"><span>Biller</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="paymentCategory.categoryName">
+            <div class="d-flex">
+              <span>Payment Category</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="groupSettlement.id">
+            <div class="d-flex">
+              <span>Group Settlement</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="biller.dealerName">
+            <div class="d-flex">
+              <span>Biller</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -106,7 +150,7 @@
           <td>{{ settlement.notes }}</td>
           <td>
             <a *ngIf="settlement.calculationFile" (click)="openFile(settlement.calculationFile, settlement.calculationFileContentType)"
-              >open</a
+              >Open</a
             >
             <span *ngIf="settlement.calculationFile"
               >{{ settlement.calculationFileContentType }}, {{ byteSize(settlement.calculationFile) }}</span
@@ -117,29 +161,29 @@
           <td>{{ settlement.remarks }}</td>
           <td>
             <div *ngIf="settlement.settlementCurrency">
-              <a [routerLink]="['/settlement-currency', settlement.settlementCurrency?.id, 'view']">{{
-                settlement.settlementCurrency?.iso4217CurrencyCode
+              <a [routerLink]="['/settlement-currency', settlement.settlementCurrency.id, 'view']">{{
+                settlement.settlementCurrency.iso4217CurrencyCode
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="settlement.paymentCategory">
-              <a [routerLink]="['/payment-category', settlement.paymentCategory?.id, 'view']">{{
-                settlement.paymentCategory?.categoryName
+              <a [routerLink]="['/payment-category', settlement.paymentCategory.id, 'view']">{{
+                settlement.paymentCategory.categoryName
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="settlement.groupSettlement">
-              <a [routerLink]="['/settlement', settlement.groupSettlement?.id, 'view']">{{ settlement.groupSettlement?.id }}</a>
+              <a [routerLink]="['/settlement', settlement.groupSettlement.id, 'view']">{{ settlement.groupSettlement.id }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="settlement.biller">
-              <a [routerLink]="['/dealer', settlement.biller?.id, 'view']">{{ settlement.biller?.dealerName }}</a>
+              <a [routerLink]="['/dealer', settlement.biller.id, 'view']">{{ settlement.biller.dealerName }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"
@@ -173,19 +217,19 @@
   </div>
 
   <div *ngIf="settlements && settlements.length > 0">
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
     </div>
 
-    <div class="row justify-content-center">
+    <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
+        [page]="page"
         [pageSize]="itemsPerPage"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
+        (pageChange)="navigateToPage($event)"
       ></ngb-pagination>
     </div>
   </div>

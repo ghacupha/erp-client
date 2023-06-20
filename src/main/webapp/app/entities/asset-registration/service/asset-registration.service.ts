@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAssetRegistration, getAssetRegistrationIdentifier } from '../asset-registration.model';
+import { IAssetRegistration, NewAssetRegistration } from '../asset-registration.model';
+
+export type PartialUpdateAssetRegistration = Partial<IAssetRegistration> & Pick<IAssetRegistration, 'id'>;
 
 export type EntityResponseType = HttpResponse<IAssetRegistration>;
 export type EntityArrayResponseType = HttpResponse<IAssetRegistration[]>;
@@ -36,21 +20,21 @@ export class AssetRegistrationService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
+  create(assetRegistration: NewAssetRegistration): Observable<EntityResponseType> {
     return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' });
   }
 
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
     return this.http.put<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
+      `${this.resourceUrl}/${this.getAssetRegistrationIdentifier(assetRegistration)}`,
       assetRegistration,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
+  partialUpdate(assetRegistration: PartialUpdateAssetRegistration): Observable<EntityResponseType> {
     return this.http.patch<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
+      `${this.resourceUrl}/${this.getAssetRegistrationIdentifier(assetRegistration)}`,
       assetRegistration,
       { observe: 'response' }
     );
@@ -74,18 +58,26 @@ export class AssetRegistrationService {
     return this.http.get<IAssetRegistration[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addAssetRegistrationToCollectionIfMissing(
-    assetRegistrationCollection: IAssetRegistration[],
-    ...assetRegistrationsToCheck: (IAssetRegistration | null | undefined)[]
-  ): IAssetRegistration[] {
-    const assetRegistrations: IAssetRegistration[] = assetRegistrationsToCheck.filter(isPresent);
+  getAssetRegistrationIdentifier(assetRegistration: Pick<IAssetRegistration, 'id'>): number {
+    return assetRegistration.id;
+  }
+
+  compareAssetRegistration(o1: Pick<IAssetRegistration, 'id'> | null, o2: Pick<IAssetRegistration, 'id'> | null): boolean {
+    return o1 && o2 ? this.getAssetRegistrationIdentifier(o1) === this.getAssetRegistrationIdentifier(o2) : o1 === o2;
+  }
+
+  addAssetRegistrationToCollectionIfMissing<Type extends Pick<IAssetRegistration, 'id'>>(
+    assetRegistrationCollection: Type[],
+    ...assetRegistrationsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const assetRegistrations: Type[] = assetRegistrationsToCheck.filter(isPresent);
     if (assetRegistrations.length > 0) {
       const assetRegistrationCollectionIdentifiers = assetRegistrationCollection.map(
-        assetRegistrationItem => getAssetRegistrationIdentifier(assetRegistrationItem)!
+        assetRegistrationItem => this.getAssetRegistrationIdentifier(assetRegistrationItem)!
       );
       const assetRegistrationsToAdd = assetRegistrations.filter(assetRegistrationItem => {
-        const assetRegistrationIdentifier = getAssetRegistrationIdentifier(assetRegistrationItem);
-        if (assetRegistrationIdentifier == null || assetRegistrationCollectionIdentifiers.includes(assetRegistrationIdentifier)) {
+        const assetRegistrationIdentifier = this.getAssetRegistrationIdentifier(assetRegistrationItem);
+        if (assetRegistrationCollectionIdentifiers.includes(assetRegistrationIdentifier)) {
           return false;
         }
         assetRegistrationCollectionIdentifiers.push(assetRegistrationIdentifier);

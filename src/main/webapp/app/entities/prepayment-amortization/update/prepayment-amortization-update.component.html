@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-prepayment-amortization-heading" data-cy="PrepaymentAmortizationCreateUpdateHeading">
@@ -27,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -44,8 +25,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentPeriod">Prepayment Period</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_prepaymentPeriod">Prepayment Period</label>
           <div class="input-group">
             <input
               id="field_prepaymentPeriod"
@@ -57,16 +38,14 @@
               #prepaymentPeriodDp="ngbDatepicker"
               formControlName="prepaymentPeriod"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="prepaymentPeriodDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="prepaymentPeriodDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAmount">Prepayment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_prepaymentAmount">Prepayment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -77,98 +56,80 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_inactive">Inactive</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_inactive">Inactive</label>
           <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_prepaymentAccount">Prepayment Account</label>
           <select
             class="form-control"
             id="field_prepaymentAccount"
             data-cy="prepaymentAccount"
             name="prepaymentAccount"
             formControlName="prepaymentAccount"
+            [compareWith]="comparePrepaymentAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
-                  ? editForm.get('prepaymentAccount')!.value
-                  : prepaymentAccountOption
-              "
-              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
-            >
+            <option [ngValue]="prepaymentAccountOption" *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection">
               {{ prepaymentAccountOption.catalogueNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
             id="field_settlementCurrency"
             data-cy="settlementCurrency"
             name="settlementCurrency"
             formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_debitAccount">Debit Account</label>
-          <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
+        <div class="row mb-3">
+          <label class="form-label" for="field_debitAccount">Debit Account</label>
+          <select
+            class="form-control"
+            id="field_debitAccount"
+            data-cy="debitAccount"
+            name="debitAccount"
+            formControlName="debitAccount"
+            [compareWith]="compareTransactionAccount"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('debitAccount')!.value?.id
-                  ? editForm.get('debitAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_creditAccount">Credit Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_creditAccount">Credit Account</label>
           <select
             class="form-control"
             id="field_creditAccount"
             data-cy="creditAccount"
             name="creditAccount"
             formControlName="creditAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('creditAccount')!.value?.id
-                  ? editForm.get('creditAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -177,11 +138,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

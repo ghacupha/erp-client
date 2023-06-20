@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISubCountyCode, SubCountyCode } from '../sub-county-code.model';
+import { SubCountyCodeFormService, SubCountyCodeFormGroup } from './sub-county-code-form.service';
+import { ISubCountyCode } from '../sub-county-code.model';
 import { SubCountyCodeService } from '../service/sub-county-code.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -34,28 +16,27 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class SubCountyCodeUpdateComponent implements OnInit {
   isSaving = false;
+  subCountyCode: ISubCountyCode | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    countyCode: [],
-    countyName: [],
-    subCountyCode: [],
-    subCountyName: [],
-    placeholders: [],
-  });
+  editForm: SubCountyCodeFormGroup = this.subCountyCodeFormService.createSubCountyCodeFormGroup();
 
   constructor(
     protected subCountyCodeService: SubCountyCodeService,
+    protected subCountyCodeFormService: SubCountyCodeFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ subCountyCode }) => {
-      this.updateForm(subCountyCode);
+      this.subCountyCode = subCountyCode;
+      if (subCountyCode) {
+        this.updateForm(subCountyCode);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -67,34 +48,19 @@ export class SubCountyCodeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const subCountyCode = this.createFromForm();
-    if (subCountyCode.id !== undefined) {
+    const subCountyCode = this.subCountyCodeFormService.getSubCountyCode(this.editForm);
+    if (subCountyCode.id !== null) {
       this.subscribeToSaveResponse(this.subCountyCodeService.update(subCountyCode));
     } else {
       this.subscribeToSaveResponse(this.subCountyCodeService.create(subCountyCode));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISubCountyCode>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -110,16 +76,10 @@ export class SubCountyCodeUpdateComponent implements OnInit {
   }
 
   protected updateForm(subCountyCode: ISubCountyCode): void {
-    this.editForm.patchValue({
-      id: subCountyCode.id,
-      countyCode: subCountyCode.countyCode,
-      countyName: subCountyCode.countyName,
-      subCountyCode: subCountyCode.subCountyCode,
-      subCountyName: subCountyCode.subCountyName,
-      placeholders: subCountyCode.placeholders,
-    });
+    this.subCountyCode = subCountyCode;
+    this.subCountyCodeFormService.resetForm(this.editForm, subCountyCode);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(subCountyCode.placeholders ?? [])
     );
@@ -131,21 +91,12 @@ export class SubCountyCodeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.subCountyCode?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): ISubCountyCode {
-    return {
-      ...new SubCountyCode(),
-      id: this.editForm.get(['id'])!.value,
-      countyCode: this.editForm.get(['countyCode'])!.value,
-      countyName: this.editForm.get(['countyName'])!.value,
-      subCountyCode: this.editForm.get(['subCountyCode'])!.value,
-      subCountyName: this.editForm.get(['subCountyName'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

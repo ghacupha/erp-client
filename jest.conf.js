@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { pathsToModuleNameMapper } = require('ts-jest');
 // const esModules = ['ngx-bootstrap', '@ng-select/ng-select', 'zone.js', 'jsdom'].join('|');
 const esModules = ['@ng-select/ng-select', 'zone.js', 'jsdom'].join('|');
 
@@ -25,6 +25,8 @@ const {
 const environment = require('./webpack/environment');
 
 module.exports = {
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$|dayjs/esm)'],
+  resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver.js',
   globals: {
     ...environment,
   },
@@ -34,8 +36,11 @@ module.exports = {
   cacheDirectory: '<rootDir>/target/jest-cache',
   coverageDirectory: '<rootDir>/target/test-results/',
   moduleNameMapper: pathsToModuleNameMapper(paths, { prefix: `<rootDir>/${baseUrl}/` }),
-  reporters: ['default', ['jest-junit', { outputDirectory: '<rootDir>/target/test-results/', outputName: 'TESTS-results-jest.xml' }]],
-  testResultsProcessor: 'jest-sonar-reporter',
+  reporters: [
+    'default',
+    ['jest-junit', { outputDirectory: '<rootDir>/target/test-results/', outputName: 'TESTS-results-jest.xml' }],
+    ['jest-sonar', { outputDirectory: './target/test-results/jest', outputName: 'TESTS-results-sonar.xml' }],
+  ],
   testMatch: ['<rootDir>/src/main/webapp/app/**/@(*.)@(spec.ts)'],
   testURL: 'http://localhost/',
   // transform: {

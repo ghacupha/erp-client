@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20230328143440",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "sequenceNumber",
@@ -49,43 +51,41 @@
       "fieldType": "BigDecimal"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LeaseLiabilityScheduleItem",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "leaseContract",
+      "otherEntityField": "bookingId",
       "otherEntityName": "leaseContract",
+      "relationshipName": "leaseContract",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "leaseModelMetadata",
+      "otherEntityField": "modelTitle",
       "otherEntityName": "leaseModelMetadata",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "modelTitle"
+      "relationshipName": "leaseModelMetadata",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "universallyUniqueMapping",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "LeaseLiabilityScheduleItem",
-  "changelogDate": "20230328143440",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

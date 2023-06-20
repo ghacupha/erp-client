@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IBankBranchCode, getBankBranchCodeIdentifier } from '../bank-branch-code.model';
+import { IBankBranchCode, NewBankBranchCode } from '../bank-branch-code.model';
+
+export type PartialUpdateBankBranchCode = Partial<IBankBranchCode> & Pick<IBankBranchCode, 'id'>;
 
 export type EntityResponseType = HttpResponse<IBankBranchCode>;
 export type EntityArrayResponseType = HttpResponse<IBankBranchCode[]>;
@@ -36,22 +20,20 @@ export class BankBranchCodeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(bankBranchCode: IBankBranchCode): Observable<EntityResponseType> {
+  create(bankBranchCode: NewBankBranchCode): Observable<EntityResponseType> {
     return this.http.post<IBankBranchCode>(this.resourceUrl, bankBranchCode, { observe: 'response' });
   }
 
   update(bankBranchCode: IBankBranchCode): Observable<EntityResponseType> {
-    return this.http.put<IBankBranchCode>(`${this.resourceUrl}/${getBankBranchCodeIdentifier(bankBranchCode) as number}`, bankBranchCode, {
+    return this.http.put<IBankBranchCode>(`${this.resourceUrl}/${this.getBankBranchCodeIdentifier(bankBranchCode)}`, bankBranchCode, {
       observe: 'response',
     });
   }
 
-  partialUpdate(bankBranchCode: IBankBranchCode): Observable<EntityResponseType> {
-    return this.http.patch<IBankBranchCode>(
-      `${this.resourceUrl}/${getBankBranchCodeIdentifier(bankBranchCode) as number}`,
-      bankBranchCode,
-      { observe: 'response' }
-    );
+  partialUpdate(bankBranchCode: PartialUpdateBankBranchCode): Observable<EntityResponseType> {
+    return this.http.patch<IBankBranchCode>(`${this.resourceUrl}/${this.getBankBranchCodeIdentifier(bankBranchCode)}`, bankBranchCode, {
+      observe: 'response',
+    });
   }
 
   find(id: number): Observable<EntityResponseType> {
@@ -72,18 +54,26 @@ export class BankBranchCodeService {
     return this.http.get<IBankBranchCode[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addBankBranchCodeToCollectionIfMissing(
-    bankBranchCodeCollection: IBankBranchCode[],
-    ...bankBranchCodesToCheck: (IBankBranchCode | null | undefined)[]
-  ): IBankBranchCode[] {
-    const bankBranchCodes: IBankBranchCode[] = bankBranchCodesToCheck.filter(isPresent);
+  getBankBranchCodeIdentifier(bankBranchCode: Pick<IBankBranchCode, 'id'>): number {
+    return bankBranchCode.id;
+  }
+
+  compareBankBranchCode(o1: Pick<IBankBranchCode, 'id'> | null, o2: Pick<IBankBranchCode, 'id'> | null): boolean {
+    return o1 && o2 ? this.getBankBranchCodeIdentifier(o1) === this.getBankBranchCodeIdentifier(o2) : o1 === o2;
+  }
+
+  addBankBranchCodeToCollectionIfMissing<Type extends Pick<IBankBranchCode, 'id'>>(
+    bankBranchCodeCollection: Type[],
+    ...bankBranchCodesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const bankBranchCodes: Type[] = bankBranchCodesToCheck.filter(isPresent);
     if (bankBranchCodes.length > 0) {
       const bankBranchCodeCollectionIdentifiers = bankBranchCodeCollection.map(
-        bankBranchCodeItem => getBankBranchCodeIdentifier(bankBranchCodeItem)!
+        bankBranchCodeItem => this.getBankBranchCodeIdentifier(bankBranchCodeItem)!
       );
       const bankBranchCodesToAdd = bankBranchCodes.filter(bankBranchCodeItem => {
-        const bankBranchCodeIdentifier = getBankBranchCodeIdentifier(bankBranchCodeItem);
-        if (bankBranchCodeIdentifier == null || bankBranchCodeCollectionIdentifiers.includes(bankBranchCodeIdentifier)) {
+        const bankBranchCodeIdentifier = this.getBankBranchCodeIdentifier(bankBranchCodeItem);
+        if (bankBranchCodeCollectionIdentifiers.includes(bankBranchCodeIdentifier)) {
           return false;
         }
         bankBranchCodeCollectionIdentifiers.push(bankBranchCodeIdentifier);

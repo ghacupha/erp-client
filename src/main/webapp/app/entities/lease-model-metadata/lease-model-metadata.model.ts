@@ -1,22 +1,4 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { ILeaseContract } from 'app/entities/lease-contract/lease-contract.model';
@@ -26,71 +8,35 @@ import { ISecurityClearance } from 'app/entities/security-clearance/security-cle
 import { ITransactionAccount } from 'app/entities/transaction-account/transaction-account.model';
 
 export interface ILeaseModelMetadata {
-  id?: number;
-  modelTitle?: string;
-  modelVersion?: number;
+  id: number;
+  modelTitle?: string | null;
+  modelVersion?: number | null;
   description?: string | null;
-  modelNotesContentType?: string | null;
   modelNotes?: string | null;
-  annualDiscountingRate?: number;
-  commencementDate?: dayjs.Dayjs;
-  terminalDate?: dayjs.Dayjs;
+  modelNotesContentType?: string | null;
+  annualDiscountingRate?: number | null;
+  commencementDate?: dayjs.Dayjs | null;
+  terminalDate?: dayjs.Dayjs | null;
   totalReportingPeriods?: number | null;
   reportingPeriodsPerYear?: number | null;
   settlementPeriodsPerYear?: number | null;
   initialLiabilityAmount?: number | null;
   initialROUAmount?: number | null;
   totalDepreciationPeriods?: number | null;
-  placeholders?: IPlaceholder[] | null;
-  leaseMappings?: IUniversallyUniqueMapping[] | null;
-  leaseContract?: ILeaseContract;
-  predecessor?: ILeaseModelMetadata | null;
-  liabilityCurrency?: ISettlementCurrency;
-  rouAssetCurrency?: ISettlementCurrency;
-  modelAttachments?: IBusinessDocument | null;
-  securityClearance?: ISecurityClearance | null;
-  leaseLiabilityAccount?: ITransactionAccount | null;
-  interestPayableAccount?: ITransactionAccount | null;
-  interestExpenseAccount?: ITransactionAccount | null;
-  rouAssetAccount?: ITransactionAccount | null;
-  rouDepreciationAccount?: ITransactionAccount | null;
-  accruedDepreciationAccount?: ITransactionAccount | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  leaseMappings?: Pick<IUniversallyUniqueMapping, 'id' | 'universalKey'>[] | null;
+  leaseContract?: Pick<ILeaseContract, 'id' | 'bookingId'> | null;
+  predecessor?: Pick<ILeaseModelMetadata, 'id' | 'modelTitle'> | null;
+  liabilityCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  rouAssetCurrency?: Pick<ISettlementCurrency, 'id' | 'iso4217CurrencyCode'> | null;
+  modelAttachments?: Pick<IBusinessDocument, 'id' | 'documentTitle'> | null;
+  securityClearance?: Pick<ISecurityClearance, 'id' | 'clearanceLevel'> | null;
+  leaseLiabilityAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  interestPayableAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  interestExpenseAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  rouAssetAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  rouDepreciationAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
+  accruedDepreciationAccount?: Pick<ITransactionAccount, 'id' | 'accountNumber'> | null;
 }
 
-export class LeaseModelMetadata implements ILeaseModelMetadata {
-  constructor(
-    public id?: number,
-    public modelTitle?: string,
-    public modelVersion?: number,
-    public description?: string | null,
-    public modelNotesContentType?: string | null,
-    public modelNotes?: string | null,
-    public annualDiscountingRate?: number,
-    public commencementDate?: dayjs.Dayjs,
-    public terminalDate?: dayjs.Dayjs,
-    public totalReportingPeriods?: number | null,
-    public reportingPeriodsPerYear?: number | null,
-    public settlementPeriodsPerYear?: number | null,
-    public initialLiabilityAmount?: number | null,
-    public initialROUAmount?: number | null,
-    public totalDepreciationPeriods?: number | null,
-    public placeholders?: IPlaceholder[] | null,
-    public leaseMappings?: IUniversallyUniqueMapping[] | null,
-    public leaseContract?: ILeaseContract,
-    public predecessor?: ILeaseModelMetadata | null,
-    public liabilityCurrency?: ISettlementCurrency,
-    public rouAssetCurrency?: ISettlementCurrency,
-    public modelAttachments?: IBusinessDocument | null,
-    public securityClearance?: ISecurityClearance | null,
-    public leaseLiabilityAccount?: ITransactionAccount | null,
-    public interestPayableAccount?: ITransactionAccount | null,
-    public interestExpenseAccount?: ITransactionAccount | null,
-    public rouAssetAccount?: ITransactionAccount | null,
-    public rouDepreciationAccount?: ITransactionAccount | null,
-    public accruedDepreciationAccount?: ITransactionAccount | null
-  ) {}
-}
-
-export function getLeaseModelMetadataIdentifier(leaseModelMetadata: ILeaseModelMetadata): number | undefined {
-  return leaseModelMetadata.id;
-}
+export type NewLeaseModelMetadata = Omit<ILeaseModelMetadata, 'id'> & { id: null };

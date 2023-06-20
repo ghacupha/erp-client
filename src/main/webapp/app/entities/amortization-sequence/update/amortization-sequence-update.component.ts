@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAmortizationSequence, AmortizationSequence } from '../amortization-sequence.model';
+import { AmortizationSequenceFormService, AmortizationSequenceFormGroup } from './amortization-sequence-form.service';
+import { IAmortizationSequence } from '../amortization-sequence.model';
 import { AmortizationSequenceService } from '../service/amortization-sequence.service';
 import { IPrepaymentAccount } from 'app/entities/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayment-account/service/prepayment-account.service';
@@ -42,6 +24,7 @@ import { UniversallyUniqueMappingService } from 'app/entities/universally-unique
 })
 export class AmortizationSequenceUpdateComponent implements OnInit {
   isSaving = false;
+  amortizationSequence: IAmortizationSequence | null = null;
 
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   amortizationRecurrencesSharedCollection: IAmortizationRecurrence[] = [];
@@ -49,40 +32,39 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    prepaymentAccountGuid: [null, [Validators.required]],
-    recurrenceGuid: [null, [Validators.required]],
-    sequenceNumber: [null, [Validators.required]],
-    particulars: [],
-    currentAmortizationDate: [null, [Validators.required]],
-    previousAmortizationDate: [],
-    nextAmortizationDate: [],
-    isCommencementSequence: [null, [Validators.required]],
-    isTerminalSequence: [null, [Validators.required]],
-    amortizationAmount: [null, [Validators.required, Validators.min(0)]],
-    sequenceGuid: [null, [Validators.required]],
-    prepaymentAccount: [null, Validators.required],
-    amortizationRecurrence: [null, Validators.required],
-    placeholders: [],
-    prepaymentMappings: [],
-    applicationParameters: [],
-  });
+  editForm: AmortizationSequenceFormGroup = this.amortizationSequenceFormService.createAmortizationSequenceFormGroup();
 
   constructor(
     protected amortizationSequenceService: AmortizationSequenceService,
+    protected amortizationSequenceFormService: AmortizationSequenceFormService,
     protected prepaymentAccountService: PrepaymentAccountService,
     protected amortizationRecurrenceService: AmortizationRecurrenceService,
     protected placeholderService: PlaceholderService,
     protected prepaymentMappingService: PrepaymentMappingService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePrepaymentAccount = (o1: IPrepaymentAccount | null, o2: IPrepaymentAccount | null): boolean =>
+    this.prepaymentAccountService.comparePrepaymentAccount(o1, o2);
+
+  compareAmortizationRecurrence = (o1: IAmortizationRecurrence | null, o2: IAmortizationRecurrence | null): boolean =>
+    this.amortizationRecurrenceService.compareAmortizationRecurrence(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePrepaymentMapping = (o1: IPrepaymentMapping | null, o2: IPrepaymentMapping | null): boolean =>
+    this.prepaymentMappingService.comparePrepaymentMapping(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ amortizationSequence }) => {
-      this.updateForm(amortizationSequence);
+      this.amortizationSequence = amortizationSequence;
+      if (amortizationSequence) {
+        this.updateForm(amortizationSequence);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -94,75 +76,19 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const amortizationSequence = this.createFromForm();
-    if (amortizationSequence.id !== undefined) {
+    const amortizationSequence = this.amortizationSequenceFormService.getAmortizationSequence(this.editForm);
+    if (amortizationSequence.id !== null) {
       this.subscribeToSaveResponse(this.amortizationSequenceService.update(amortizationSequence));
     } else {
       this.subscribeToSaveResponse(this.amortizationSequenceService.create(amortizationSequence));
     }
   }
 
-  trackPrepaymentAccountById(index: number, item: IPrepaymentAccount): number {
-    return item.id!;
-  }
-
-  trackAmortizationRecurrenceById(index: number, item: IAmortizationRecurrence): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPrepaymentMappingById(index: number, item: IPrepaymentMapping): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPrepaymentMapping(option: IPrepaymentMapping, selectedVals?: IPrepaymentMapping[]): IPrepaymentMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAmortizationSequence>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -178,46 +104,31 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
   }
 
   protected updateForm(amortizationSequence: IAmortizationSequence): void {
-    this.editForm.patchValue({
-      id: amortizationSequence.id,
-      prepaymentAccountGuid: amortizationSequence.prepaymentAccountGuid,
-      recurrenceGuid: amortizationSequence.recurrenceGuid,
-      sequenceNumber: amortizationSequence.sequenceNumber,
-      particulars: amortizationSequence.particulars,
-      currentAmortizationDate: amortizationSequence.currentAmortizationDate,
-      previousAmortizationDate: amortizationSequence.previousAmortizationDate,
-      nextAmortizationDate: amortizationSequence.nextAmortizationDate,
-      isCommencementSequence: amortizationSequence.isCommencementSequence,
-      isTerminalSequence: amortizationSequence.isTerminalSequence,
-      amortizationAmount: amortizationSequence.amortizationAmount,
-      sequenceGuid: amortizationSequence.sequenceGuid,
-      prepaymentAccount: amortizationSequence.prepaymentAccount,
-      amortizationRecurrence: amortizationSequence.amortizationRecurrence,
-      placeholders: amortizationSequence.placeholders,
-      prepaymentMappings: amortizationSequence.prepaymentMappings,
-      applicationParameters: amortizationSequence.applicationParameters,
-    });
+    this.amortizationSequence = amortizationSequence;
+    this.amortizationSequenceFormService.resetForm(this.editForm, amortizationSequence);
 
-    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
+    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing<IPrepaymentAccount>(
       this.prepaymentAccountsSharedCollection,
       amortizationSequence.prepaymentAccount
     );
-    this.amortizationRecurrencesSharedCollection = this.amortizationRecurrenceService.addAmortizationRecurrenceToCollectionIfMissing(
-      this.amortizationRecurrencesSharedCollection,
-      amortizationSequence.amortizationRecurrence
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.amortizationRecurrencesSharedCollection =
+      this.amortizationRecurrenceService.addAmortizationRecurrenceToCollectionIfMissing<IAmortizationRecurrence>(
+        this.amortizationRecurrencesSharedCollection,
+        amortizationSequence.amortizationRecurrence
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(amortizationSequence.placeholders ?? [])
     );
-    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing<IPrepaymentMapping>(
       this.prepaymentMappingsSharedCollection,
       ...(amortizationSequence.prepaymentMappings ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(amortizationSequence.applicationParameters ?? [])
-    );
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(amortizationSequence.applicationParameters ?? [])
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -226,9 +137,9 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPrepaymentAccount[]>) => res.body ?? []))
       .pipe(
         map((prepaymentAccounts: IPrepaymentAccount[]) =>
-          this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
+          this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing<IPrepaymentAccount>(
             prepaymentAccounts,
-            this.editForm.get('prepaymentAccount')!.value
+            this.amortizationSequence?.prepaymentAccount
           )
         )
       )
@@ -239,9 +150,9 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAmortizationRecurrence[]>) => res.body ?? []))
       .pipe(
         map((amortizationRecurrences: IAmortizationRecurrence[]) =>
-          this.amortizationRecurrenceService.addAmortizationRecurrenceToCollectionIfMissing(
+          this.amortizationRecurrenceService.addAmortizationRecurrenceToCollectionIfMissing<IAmortizationRecurrence>(
             amortizationRecurrences,
-            this.editForm.get('amortizationRecurrence')!.value
+            this.amortizationSequence?.amortizationRecurrence
           )
         )
       )
@@ -254,7 +165,10 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.amortizationSequence?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -264,9 +178,9 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPrepaymentMapping[]>) => res.body ?? []))
       .pipe(
         map((prepaymentMappings: IPrepaymentMapping[]) =>
-          this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+          this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing<IPrepaymentMapping>(
             prepaymentMappings,
-            ...(this.editForm.get('prepaymentMappings')!.value ?? [])
+            ...(this.amortizationSequence?.prepaymentMappings ?? [])
           )
         )
       )
@@ -277,9 +191,9 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('applicationParameters')!.value ?? [])
+            ...(this.amortizationSequence?.applicationParameters ?? [])
           )
         )
       )
@@ -287,28 +201,5 @@ export class AmortizationSequenceUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-  }
-
-  protected createFromForm(): IAmortizationSequence {
-    return {
-      ...new AmortizationSequence(),
-      id: this.editForm.get(['id'])!.value,
-      prepaymentAccountGuid: this.editForm.get(['prepaymentAccountGuid'])!.value,
-      recurrenceGuid: this.editForm.get(['recurrenceGuid'])!.value,
-      sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
-      particulars: this.editForm.get(['particulars'])!.value,
-      currentAmortizationDate: this.editForm.get(['currentAmortizationDate'])!.value,
-      previousAmortizationDate: this.editForm.get(['previousAmortizationDate'])!.value,
-      nextAmortizationDate: this.editForm.get(['nextAmortizationDate'])!.value,
-      isCommencementSequence: this.editForm.get(['isCommencementSequence'])!.value,
-      isTerminalSequence: this.editForm.get(['isTerminalSequence'])!.value,
-      amortizationAmount: this.editForm.get(['amortizationAmount'])!.value,
-      sequenceGuid: this.editForm.get(['sequenceGuid'])!.value,
-      prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
-      amortizationRecurrence: this.editForm.get(['amortizationRecurrence'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      prepaymentMappings: this.editForm.get(['prepaymentMappings'])!.value,
-      applicationParameters: this.editForm.get(['applicationParameters'])!.value,
-    };
   }
 }

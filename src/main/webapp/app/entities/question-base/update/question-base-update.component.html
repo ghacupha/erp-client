@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-question-base-heading" data-cy="QuestionBaseCreateUpdateHeading">Create or edit a Question Base</h2>
@@ -25,29 +6,29 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_context">Context</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_context">Context</label>
           <input type="text" class="form-control" name="context" id="field_context" data-cy="context" formControlName="context" />
           <div *ngIf="editForm.get('context')!.invalid && (editForm.get('context')!.dirty || editForm.get('context')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('context')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_serial">Serial</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_serial">Serial</label>
           <input type="text" class="form-control" name="serial" id="field_serial" data-cy="serial" formControlName="serial" />
           <div *ngIf="editForm.get('serial')!.invalid && (editForm.get('serial')!.dirty || editForm.get('serial')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('serial')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_questionBaseValue">Question Base Value</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_questionBaseValue">Question Base Value</label>
           <input
             type="text"
             class="form-control"
@@ -58,8 +39,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_questionBaseKey">Question Base Key</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_questionBaseKey">Question Base Key</label>
           <input
             type="text"
             class="form-control"
@@ -78,8 +59,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_questionBaseLabel">Question Base Label</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_questionBaseLabel">Question Base Label</label>
           <input
             type="text"
             class="form-control"
@@ -100,13 +81,13 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_required">Required</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_required">Required</label>
           <input type="checkbox" class="form-check" name="required" id="field_required" data-cy="required" formControlName="required" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_order">Order</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_order">Order</label>
           <input type="number" class="form-control" name="order" id="field_order" data-cy="order" formControlName="order" />
           <div *ngIf="editForm.get('order')!.invalid && (editForm.get('order')!.dirty || editForm.get('order')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('order')?.errors?.required"> This field is required. </small>
@@ -114,8 +95,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_controlType">Control Type</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_controlType">Control Type</label>
           <select class="form-control" name="controlType" formControlName="controlType" id="field_controlType" data-cy="controlType">
             <option [ngValue]="null"></option>
             <option *ngFor="let controlTypes of controlTypesValues" [value]="controlTypes">controlTypes</option>
@@ -125,8 +106,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_placeholder">Placeholder</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_placeholder">Placeholder</label>
           <input
             type="text"
             class="form-control"
@@ -137,27 +118,32 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_iterable">Iterable</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_iterable">Iterable</label>
           <input type="checkbox" class="form-check" name="iterable" id="field_iterable" data-cy="iterable" formControlName="iterable" />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_parameters">Parameters</label>
-          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+          <select
+            class="form-control"
+            id="field_parameters"
+            data-cy="parameters"
+            multiple
+            name="parameters"
+            formControlName="parameters"
+            [compareWith]="compareUniversallyUniqueMapping"
+          >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholderItems">Placeholder Item</label>
           <select
             class="form-control"
@@ -166,11 +152,9 @@
             multiple
             name="placeholderItems"
             formControlName="placeholderItems"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholderItems')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

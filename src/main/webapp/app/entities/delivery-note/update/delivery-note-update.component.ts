@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
+import { DeliveryNoteFormService, DeliveryNoteFormGroup } from './delivery-note-form.service';
+import { IDeliveryNote } from '../delivery-note.model';
 import { DeliveryNoteService } from '../service/delivery-note.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -45,6 +27,7 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class DeliveryNoteUpdateComponent implements OnInit {
   isSaving = false;
+  deliveryNote: IDeliveryNote | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   dealersSharedCollection: IDealer[] = [];
@@ -52,40 +35,40 @@ export class DeliveryNoteUpdateComponent implements OnInit {
   purchaseOrdersSharedCollection: IPurchaseOrder[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    deliveryNoteNumber: [null, [Validators.required]],
-    documentDate: [null, [Validators.required]],
-    description: [],
-    serialNumber: [],
-    quantity: [],
-    remarks: [],
-    placeholders: [],
-    receivedBy: [null, Validators.required],
-    deliveryStamps: [],
-    purchaseOrder: [],
-    supplier: [null, Validators.required],
-    signatories: [],
-    otherPurchaseOrders: [],
-    businessDocuments: [],
-  });
+  editForm: DeliveryNoteFormGroup = this.deliveryNoteFormService.createDeliveryNoteFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected deliveryNoteService: DeliveryNoteService,
+    protected deliveryNoteFormService: DeliveryNoteFormService,
     protected placeholderService: PlaceholderService,
     protected dealerService: DealerService,
     protected businessStampService: BusinessStampService,
     protected purchaseOrderService: PurchaseOrderService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareBusinessStamp = (o1: IBusinessStamp | null, o2: IBusinessStamp | null): boolean =>
+    this.businessStampService.compareBusinessStamp(o1, o2);
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ deliveryNote }) => {
-      this.updateForm(deliveryNote);
+      this.deliveryNote = deliveryNote;
+      if (deliveryNote) {
+        this.updateForm(deliveryNote);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -112,94 +95,19 @@ export class DeliveryNoteUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const deliveryNote = this.createFromForm();
-    if (deliveryNote.id !== undefined) {
+    const deliveryNote = this.deliveryNoteFormService.getDeliveryNote(this.editForm);
+    if (deliveryNote.id !== null) {
       this.subscribeToSaveResponse(this.deliveryNoteService.update(deliveryNote));
     } else {
       this.subscribeToSaveResponse(this.deliveryNoteService.create(deliveryNote));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackBusinessStampById(index: number, item: IBusinessStamp): number {
-    return item.id!;
-  }
-
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessStamp(option: IBusinessStamp, selectedVals?: IBusinessStamp[]): IBusinessStamp {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDeliveryNote>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -215,44 +123,29 @@ export class DeliveryNoteUpdateComponent implements OnInit {
   }
 
   protected updateForm(deliveryNote: IDeliveryNote): void {
-    this.editForm.patchValue({
-      id: deliveryNote.id,
-      deliveryNoteNumber: deliveryNote.deliveryNoteNumber,
-      documentDate: deliveryNote.documentDate,
-      description: deliveryNote.description,
-      serialNumber: deliveryNote.serialNumber,
-      quantity: deliveryNote.quantity,
-      remarks: deliveryNote.remarks,
-      placeholders: deliveryNote.placeholders,
-      receivedBy: deliveryNote.receivedBy,
-      deliveryStamps: deliveryNote.deliveryStamps,
-      purchaseOrder: deliveryNote.purchaseOrder,
-      supplier: deliveryNote.supplier,
-      signatories: deliveryNote.signatories,
-      otherPurchaseOrders: deliveryNote.otherPurchaseOrders,
-      businessDocuments: deliveryNote.businessDocuments,
-    });
+    this.deliveryNote = deliveryNote;
+    this.deliveryNoteFormService.resetForm(this.editForm, deliveryNote);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(deliveryNote.placeholders ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       deliveryNote.receivedBy,
       deliveryNote.supplier,
       ...(deliveryNote.signatories ?? [])
     );
-    this.businessStampsSharedCollection = this.businessStampService.addBusinessStampToCollectionIfMissing(
+    this.businessStampsSharedCollection = this.businessStampService.addBusinessStampToCollectionIfMissing<IBusinessStamp>(
       this.businessStampsSharedCollection,
       ...(deliveryNote.deliveryStamps ?? [])
     );
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       deliveryNote.purchaseOrder,
       ...(deliveryNote.otherPurchaseOrders ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(deliveryNote.businessDocuments ?? [])
     );
@@ -264,7 +157,10 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.deliveryNote?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -274,11 +170,11 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('receivedBy')!.value,
-            this.editForm.get('supplier')!.value,
-            ...(this.editForm.get('signatories')!.value ?? [])
+            this.deliveryNote?.receivedBy,
+            this.deliveryNote?.supplier,
+            ...(this.deliveryNote?.signatories ?? [])
           )
         )
       )
@@ -289,9 +185,9 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessStamp[]>) => res.body ?? []))
       .pipe(
         map((businessStamps: IBusinessStamp[]) =>
-          this.businessStampService.addBusinessStampToCollectionIfMissing(
+          this.businessStampService.addBusinessStampToCollectionIfMissing<IBusinessStamp>(
             businessStamps,
-            ...(this.editForm.get('deliveryStamps')!.value ?? [])
+            ...(this.deliveryNote?.deliveryStamps ?? [])
           )
         )
       )
@@ -302,10 +198,10 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            this.editForm.get('purchaseOrder')!.value,
-            ...(this.editForm.get('otherPurchaseOrders')!.value ?? [])
+            this.deliveryNote?.purchaseOrder,
+            ...(this.deliveryNote?.otherPurchaseOrders ?? [])
           )
         )
       )
@@ -316,33 +212,12 @@ export class DeliveryNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.deliveryNote?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IDeliveryNote {
-    return {
-      ...new DeliveryNote(),
-      id: this.editForm.get(['id'])!.value,
-      deliveryNoteNumber: this.editForm.get(['deliveryNoteNumber'])!.value,
-      documentDate: this.editForm.get(['documentDate'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      serialNumber: this.editForm.get(['serialNumber'])!.value,
-      quantity: this.editForm.get(['quantity'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      receivedBy: this.editForm.get(['receivedBy'])!.value,
-      deliveryStamps: this.editForm.get(['deliveryStamps'])!.value,
-      purchaseOrder: this.editForm.get(['purchaseOrder'])!.value,
-      supplier: this.editForm.get(['supplier'])!.value,
-      signatories: this.editForm.get(['signatories'])!.value,
-      otherPurchaseOrders: this.editForm.get(['otherPurchaseOrders'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

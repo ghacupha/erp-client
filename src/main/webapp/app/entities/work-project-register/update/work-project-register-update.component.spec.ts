@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { WorkProjectRegisterFormService } from './work-project-register-form.service';
 import { WorkProjectRegisterService } from '../service/work-project-register.service';
-import { IWorkProjectRegister, WorkProjectRegister } from '../work-project-register.model';
+import { IWorkProjectRegister } from '../work-project-register.model';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
 import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
@@ -42,6 +24,7 @@ describe('WorkProjectRegister Management Update Component', () => {
   let comp: WorkProjectRegisterUpdateComponent;
   let fixture: ComponentFixture<WorkProjectRegisterUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let workProjectRegisterFormService: WorkProjectRegisterFormService;
   let workProjectRegisterService: WorkProjectRegisterService;
   let dealerService: DealerService;
   let settlementCurrencyService: SettlementCurrencyService;
@@ -50,15 +33,24 @@ describe('WorkProjectRegister Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [WorkProjectRegisterUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(WorkProjectRegisterUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(WorkProjectRegisterUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    workProjectRegisterFormService = TestBed.inject(WorkProjectRegisterFormService);
     workProjectRegisterService = TestBed.inject(WorkProjectRegisterService);
     dealerService = TestBed.inject(DealerService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
@@ -84,7 +76,10 @@ describe('WorkProjectRegister Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -105,7 +100,7 @@ describe('WorkProjectRegister Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -125,7 +120,10 @@ describe('WorkProjectRegister Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -146,7 +144,7 @@ describe('WorkProjectRegister Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
@@ -157,27 +155,28 @@ describe('WorkProjectRegister Management Update Component', () => {
       workProjectRegister.dealers = [dealers];
       const settlementCurrency: ISettlementCurrency = { id: 91030 };
       workProjectRegister.settlementCurrency = settlementCurrency;
-      const placeholders: IPlaceholder = { id: 97619 };
-      workProjectRegister.placeholders = [placeholders];
-      const businessDocuments: IBusinessDocument = { id: 39744 };
-      workProjectRegister.businessDocuments = [businessDocuments];
+      const placeholder: IPlaceholder = { id: 97619 };
+      workProjectRegister.placeholders = [placeholder];
+      const businessDocument: IBusinessDocument = { id: 39744 };
+      workProjectRegister.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ workProjectRegister });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(workProjectRegister));
       expect(comp.dealersSharedCollection).toContain(dealers);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.workProjectRegister).toEqual(workProjectRegister);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkProjectRegister>>();
+      const saveSubject = new Subject<HttpResponse<IWorkProjectRegister>>();
       const workProjectRegister = { id: 123 };
+      jest.spyOn(workProjectRegisterFormService, 'getWorkProjectRegister').mockReturnValue(workProjectRegister);
       jest.spyOn(workProjectRegisterService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ workProjectRegister });
@@ -190,18 +189,20 @@ describe('WorkProjectRegister Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(workProjectRegisterFormService.getWorkProjectRegister).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(workProjectRegisterService.update).toHaveBeenCalledWith(workProjectRegister);
+      expect(workProjectRegisterService.update).toHaveBeenCalledWith(expect.objectContaining(workProjectRegister));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkProjectRegister>>();
-      const workProjectRegister = new WorkProjectRegister();
+      const saveSubject = new Subject<HttpResponse<IWorkProjectRegister>>();
+      const workProjectRegister = { id: 123 };
+      jest.spyOn(workProjectRegisterFormService, 'getWorkProjectRegister').mockReturnValue({ id: null });
       jest.spyOn(workProjectRegisterService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ workProjectRegister });
+      activatedRoute.data = of({ workProjectRegister: null });
       comp.ngOnInit();
 
       // WHEN
@@ -211,14 +212,15 @@ describe('WorkProjectRegister Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(workProjectRegisterService.create).toHaveBeenCalledWith(workProjectRegister);
+      expect(workProjectRegisterFormService.getWorkProjectRegister).toHaveBeenCalled();
+      expect(workProjectRegisterService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkProjectRegister>>();
+      const saveSubject = new Subject<HttpResponse<IWorkProjectRegister>>();
       const workProjectRegister = { id: 123 };
       jest.spyOn(workProjectRegisterService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -231,122 +233,50 @@ describe('WorkProjectRegister Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(workProjectRegisterService.update).toHaveBeenCalledWith(workProjectRegister);
+      expect(workProjectRegisterService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220629145545",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "reportName",
@@ -11,28 +13,26 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportStatus",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportStatus",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportStatus"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "processStatus",
+      "otherEntityField": "statusCode",
       "otherEntityName": "processStatus",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "statusCode"
+      "relationshipName": "processStatus",
+      "relationshipType": "many-to-one"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ReportStatus",
-  "changelogDate": "20220629145545",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

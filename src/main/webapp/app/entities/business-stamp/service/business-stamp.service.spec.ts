@@ -1,36 +1,21 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
+import { IBusinessStamp } from '../business-stamp.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../business-stamp.test-samples';
 
-import { BusinessStampService } from './business-stamp.service';
+import { BusinessStampService, RestBusinessStamp } from './business-stamp.service';
+
+const requireRestSample: RestBusinessStamp = {
+  ...sampleWithRequiredData,
+  stampDate: sampleWithRequiredData.stampDate?.format(DATE_FORMAT),
+};
 
 describe('BusinessStamp Service', () => {
   let service: BusinessStampService;
   let httpMock: HttpTestingController;
-  let elemDefault: IBusinessStamp;
   let expectedResult: IBusinessStamp | IBusinessStamp[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,50 +24,27 @@ describe('BusinessStamp Service', () => {
     expectedResult = null;
     service = TestBed.inject(BusinessStampService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      stampDate: currentDate,
-      purpose: 'AAAAAAA',
-      details: 'AAAAAAA',
-      remarks: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          stampDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a BusinessStamp', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          stampDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const businessStamp = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          stampDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new BusinessStamp()).subscribe(resp => (expectedResult = resp.body));
+      service.create(businessStamp).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -90,25 +52,11 @@ describe('BusinessStamp Service', () => {
     });
 
     it('should update a BusinessStamp', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          stampDate: currentDate.format(DATE_FORMAT),
-          purpose: 'BBBBBB',
-          details: 'BBBBBB',
-          remarks: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const businessStamp = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          stampDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(businessStamp).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -116,21 +64,9 @@ describe('BusinessStamp Service', () => {
     });
 
     it('should partial update a BusinessStamp', () => {
-      const patchObject = Object.assign(
-        {
-          details: 'BBBBBB',
-        },
-        new BusinessStamp()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          stampDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -140,78 +76,66 @@ describe('BusinessStamp Service', () => {
     });
 
     it('should return a list of BusinessStamp', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          stampDate: currentDate.format(DATE_FORMAT),
-          purpose: 'BBBBBB',
-          details: 'BBBBBB',
-          remarks: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          stampDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a BusinessStamp', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addBusinessStampToCollectionIfMissing', () => {
       it('should add a BusinessStamp to an empty array', () => {
-        const businessStamp: IBusinessStamp = { id: 123 };
+        const businessStamp: IBusinessStamp = sampleWithRequiredData;
         expectedResult = service.addBusinessStampToCollectionIfMissing([], businessStamp);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(businessStamp);
       });
 
       it('should not add a BusinessStamp to an array that contains it', () => {
-        const businessStamp: IBusinessStamp = { id: 123 };
+        const businessStamp: IBusinessStamp = sampleWithRequiredData;
         const businessStampCollection: IBusinessStamp[] = [
           {
             ...businessStamp,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addBusinessStampToCollectionIfMissing(businessStampCollection, businessStamp);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a BusinessStamp to an array that doesn't contain it", () => {
-        const businessStamp: IBusinessStamp = { id: 123 };
-        const businessStampCollection: IBusinessStamp[] = [{ id: 456 }];
+        const businessStamp: IBusinessStamp = sampleWithRequiredData;
+        const businessStampCollection: IBusinessStamp[] = [sampleWithPartialData];
         expectedResult = service.addBusinessStampToCollectionIfMissing(businessStampCollection, businessStamp);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(businessStamp);
       });
 
       it('should add only unique BusinessStamp to an array', () => {
-        const businessStampArray: IBusinessStamp[] = [{ id: 123 }, { id: 456 }, { id: 22896 }];
-        const businessStampCollection: IBusinessStamp[] = [{ id: 123 }];
+        const businessStampArray: IBusinessStamp[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const businessStampCollection: IBusinessStamp[] = [sampleWithRequiredData];
         expectedResult = service.addBusinessStampToCollectionIfMissing(businessStampCollection, ...businessStampArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const businessStamp: IBusinessStamp = { id: 123 };
-        const businessStamp2: IBusinessStamp = { id: 456 };
+        const businessStamp: IBusinessStamp = sampleWithRequiredData;
+        const businessStamp2: IBusinessStamp = sampleWithPartialData;
         expectedResult = service.addBusinessStampToCollectionIfMissing([], businessStamp, businessStamp2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(businessStamp);
@@ -219,16 +143,60 @@ describe('BusinessStamp Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const businessStamp: IBusinessStamp = { id: 123 };
+        const businessStamp: IBusinessStamp = sampleWithRequiredData;
         expectedResult = service.addBusinessStampToCollectionIfMissing([], null, businessStamp, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(businessStamp);
       });
 
       it('should return initial array if no BusinessStamp is added', () => {
-        const businessStampCollection: IBusinessStamp[] = [{ id: 123 }];
+        const businessStampCollection: IBusinessStamp[] = [sampleWithRequiredData];
         expectedResult = service.addBusinessStampToCollectionIfMissing(businessStampCollection, undefined, null);
         expect(expectedResult).toEqual(businessStampCollection);
+      });
+    });
+
+    describe('compareBusinessStamp', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareBusinessStamp(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareBusinessStamp(entity1, entity2);
+        const compareResult2 = service.compareBusinessStamp(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareBusinessStamp(entity1, entity2);
+        const compareResult2 = service.compareBusinessStamp(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareBusinessStamp(entity1, entity2);
+        const compareResult2 = service.compareBusinessStamp(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

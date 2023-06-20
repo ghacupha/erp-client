@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { AlgorithmFormService } from './algorithm-form.service';
 import { AlgorithmService } from '../service/algorithm.service';
-import { IAlgorithm, Algorithm } from '../algorithm.model';
+import { IAlgorithm } from '../algorithm.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
@@ -38,21 +20,31 @@ describe('Algorithm Management Update Component', () => {
   let comp: AlgorithmUpdateComponent;
   let fixture: ComponentFixture<AlgorithmUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let algorithmFormService: AlgorithmFormService;
   let algorithmService: AlgorithmService;
   let placeholderService: PlaceholderService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [AlgorithmUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(AlgorithmUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(AlgorithmUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    algorithmFormService = TestBed.inject(AlgorithmFormService);
     algorithmService = TestBed.inject(AlgorithmService);
     placeholderService = TestBed.inject(PlaceholderService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
@@ -76,7 +68,10 @@ describe('Algorithm Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -102,32 +97,33 @@ describe('Algorithm Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const algorithm: IAlgorithm = { id: 456 };
-      const placeholders: IPlaceholder = { id: 16169 };
-      algorithm.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 16169 };
+      algorithm.placeholders = [placeholder];
       const parameters: IUniversallyUniqueMapping = { id: 5921 };
       algorithm.parameters = [parameters];
 
       activatedRoute.data = of({ algorithm });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(algorithm));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(parameters);
+      expect(comp.algorithm).toEqual(algorithm);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Algorithm>>();
+      const saveSubject = new Subject<HttpResponse<IAlgorithm>>();
       const algorithm = { id: 123 };
+      jest.spyOn(algorithmFormService, 'getAlgorithm').mockReturnValue(algorithm);
       jest.spyOn(algorithmService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ algorithm });
@@ -140,18 +136,20 @@ describe('Algorithm Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(algorithmFormService.getAlgorithm).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(algorithmService.update).toHaveBeenCalledWith(algorithm);
+      expect(algorithmService.update).toHaveBeenCalledWith(expect.objectContaining(algorithm));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Algorithm>>();
-      const algorithm = new Algorithm();
+      const saveSubject = new Subject<HttpResponse<IAlgorithm>>();
+      const algorithm = { id: 123 };
+      jest.spyOn(algorithmFormService, 'getAlgorithm').mockReturnValue({ id: null });
       jest.spyOn(algorithmService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ algorithm });
+      activatedRoute.data = of({ algorithm: null });
       comp.ngOnInit();
 
       // WHEN
@@ -161,14 +159,15 @@ describe('Algorithm Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(algorithmService.create).toHaveBeenCalledWith(algorithm);
+      expect(algorithmFormService.getAlgorithm).toHaveBeenCalled();
+      expect(algorithmService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Algorithm>>();
+      const saveSubject = new Subject<HttpResponse<IAlgorithm>>();
       const algorithm = { id: 123 };
       jest.spyOn(algorithmService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -181,80 +180,30 @@ describe('Algorithm Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(algorithmService.update).toHaveBeenCalledWith(algorithm);
+      expect(algorithmService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

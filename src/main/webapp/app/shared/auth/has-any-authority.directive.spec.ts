@@ -40,14 +40,12 @@ describe('HasAnyAuthorityDirective tests', () => {
   let mockAccountService: AccountService;
   const authenticationState = new Subject<Account | null>();
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [HasAnyAuthorityDirective, TestHasAnyAuthorityDirectiveComponent],
-        providers: [AccountService],
-      });
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [HasAnyAuthorityDirective, TestHasAnyAuthorityDirectiveComponent],
+      providers: [AccountService],
+    });
+  }));
 
   beforeEach(() => {
     mockAccountService = TestBed.inject(AccountService);
@@ -99,7 +97,7 @@ describe('HasAnyAuthorityDirective tests', () => {
       mockAccountService.hasAnyAuthority = jest.fn(() => false);
 
       // WHEN
-      authenticationState.next();
+      authenticationState.next(null);
       fixture.detectChanges();
 
       // THEN
@@ -109,7 +107,7 @@ describe('HasAnyAuthorityDirective tests', () => {
       mockAccountService.hasAnyAuthority = jest.fn(() => true);
 
       // WHEN
-      authenticationState.next();
+      authenticationState.next(null);
       fixture.detectChanges();
 
       // THEN
@@ -133,7 +131,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
       // WHEN
       jest.clearAllMocks();
-      authenticationState.next();
+      authenticationState.next(null);
 
       // THEN
       expect(mockAccountService.hasAnyAuthority).toHaveBeenCalled();
@@ -141,7 +139,7 @@ describe('HasAnyAuthorityDirective tests', () => {
       // WHEN
       jest.clearAllMocks();
       hasAnyAuthorityDirective.ngOnDestroy();
-      authenticationState.next();
+      authenticationState.next(null);
 
       // THEN
       expect(mockAccountService.hasAnyAuthority).not.toHaveBeenCalled();

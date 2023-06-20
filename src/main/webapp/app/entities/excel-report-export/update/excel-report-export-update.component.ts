@@ -1,32 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
-import { IExcelReportExport, ExcelReportExport } from '../excel-report-export.model';
+import { ExcelReportExportFormService, ExcelReportExportFormGroup } from './excel-report-export-form.service';
+import { IExcelReportExport } from '../excel-report-export.model';
 import { ExcelReportExportService } from '../service/excel-report-export.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -56,10 +35,11 @@ import { AlgorithmService } from 'app/entities/algorithm/service/algorithm.servi
 })
 export class ExcelReportExportUpdateComponent implements OnInit {
   isSaving = false;
+  excelReportExport: IExcelReportExport | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
-  reportStatusesCollection: IReportStatus[] = [];
+  reportStatusesSharedCollection: IReportStatus[] = [];
   securityClearancesSharedCollection: ISecurityClearance[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
   dealersSharedCollection: IDealer[] = [];
@@ -67,33 +47,13 @@ export class ExcelReportExportUpdateComponent implements OnInit {
   reportDesignsSharedCollection: IReportDesign[] = [];
   algorithmsSharedCollection: IAlgorithm[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    reportName: [null, [Validators.required]],
-    reportPassword: [null, [Validators.required]],
-    reportNotes: [],
-    reportNotesContentType: [],
-    fileCheckSum: [],
-    reportFile: [],
-    reportFileContentType: [],
-    reportTimeStamp: [null, [Validators.required]],
-    reportId: [null, [Validators.required]],
-    placeholders: [],
-    parameters: [],
-    reportStatus: [],
-    securityClearance: [null, Validators.required],
-    reportCreator: [null, Validators.required],
-    organization: [null, Validators.required],
-    department: [null, Validators.required],
-    systemModule: [null, Validators.required],
-    reportDesign: [null, Validators.required],
-    fileCheckSumAlgorithm: [null, Validators.required],
-  });
+  editForm: ExcelReportExportFormGroup = this.excelReportExportFormService.createExcelReportExportFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected excelReportExportService: ExcelReportExportService,
+    protected excelReportExportFormService: ExcelReportExportFormService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected reportStatusService: ReportStatusService,
@@ -103,18 +63,39 @@ export class ExcelReportExportUpdateComponent implements OnInit {
     protected systemModuleService: SystemModuleService,
     protected reportDesignService: ReportDesignService,
     protected algorithmService: AlgorithmService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  compareReportStatus = (o1: IReportStatus | null, o2: IReportStatus | null): boolean =>
+    this.reportStatusService.compareReportStatus(o1, o2);
+
+  compareSecurityClearance = (o1: ISecurityClearance | null, o2: ISecurityClearance | null): boolean =>
+    this.securityClearanceService.compareSecurityClearance(o1, o2);
+
+  compareApplicationUser = (o1: IApplicationUser | null, o2: IApplicationUser | null): boolean =>
+    this.applicationUserService.compareApplicationUser(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareSystemModule = (o1: ISystemModule | null, o2: ISystemModule | null): boolean =>
+    this.systemModuleService.compareSystemModule(o1, o2);
+
+  compareReportDesign = (o1: IReportDesign | null, o2: IReportDesign | null): boolean =>
+    this.reportDesignService.compareReportDesign(o1, o2);
+
+  compareAlgorithm = (o1: IAlgorithm | null, o2: IAlgorithm | null): boolean => this.algorithmService.compareAlgorithm(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ excelReportExport }) => {
-      if (excelReportExport.id === undefined) {
-        const today = dayjs().startOf('day');
-        excelReportExport.reportTimeStamp = today;
+      this.excelReportExport = excelReportExport;
+      if (excelReportExport) {
+        this.updateForm(excelReportExport);
       }
-
-      this.updateForm(excelReportExport);
 
       this.loadRelationshipsOptions();
     });
@@ -141,80 +122,19 @@ export class ExcelReportExportUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const excelReportExport = this.createFromForm();
-    if (excelReportExport.id !== undefined) {
+    const excelReportExport = this.excelReportExportFormService.getExcelReportExport(this.editForm);
+    if (excelReportExport.id !== null) {
       this.subscribeToSaveResponse(this.excelReportExportService.update(excelReportExport));
     } else {
       this.subscribeToSaveResponse(this.excelReportExportService.create(excelReportExport));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackReportStatusById(index: number, item: IReportStatus): number {
-    return item.id!;
-  }
-
-  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
-    return item.id!;
-  }
-
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackSystemModuleById(index: number, item: ISystemModule): number {
-    return item.id!;
-  }
-
-  trackReportDesignById(index: number, item: IReportDesign): number {
-    return item.id!;
-  }
-
-  trackAlgorithmById(index: number, item: IAlgorithm): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IExcelReportExport>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -230,63 +150,44 @@ export class ExcelReportExportUpdateComponent implements OnInit {
   }
 
   protected updateForm(excelReportExport: IExcelReportExport): void {
-    this.editForm.patchValue({
-      id: excelReportExport.id,
-      reportName: excelReportExport.reportName,
-      reportPassword: excelReportExport.reportPassword,
-      reportNotes: excelReportExport.reportNotes,
-      reportNotesContentType: excelReportExport.reportNotesContentType,
-      fileCheckSum: excelReportExport.fileCheckSum,
-      reportFile: excelReportExport.reportFile,
-      reportFileContentType: excelReportExport.reportFileContentType,
-      reportTimeStamp: excelReportExport.reportTimeStamp ? excelReportExport.reportTimeStamp.format(DATE_TIME_FORMAT) : null,
-      reportId: excelReportExport.reportId,
-      placeholders: excelReportExport.placeholders,
-      parameters: excelReportExport.parameters,
-      reportStatus: excelReportExport.reportStatus,
-      securityClearance: excelReportExport.securityClearance,
-      reportCreator: excelReportExport.reportCreator,
-      organization: excelReportExport.organization,
-      department: excelReportExport.department,
-      systemModule: excelReportExport.systemModule,
-      reportDesign: excelReportExport.reportDesign,
-      fileCheckSumAlgorithm: excelReportExport.fileCheckSumAlgorithm,
-    });
+    this.excelReportExport = excelReportExport;
+    this.excelReportExportFormService.resetForm(this.editForm, excelReportExport);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(excelReportExport.placeholders ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(excelReportExport.parameters ?? [])
-    );
-    this.reportStatusesCollection = this.reportStatusService.addReportStatusToCollectionIfMissing(
-      this.reportStatusesCollection,
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(excelReportExport.parameters ?? [])
+      );
+    this.reportStatusesSharedCollection = this.reportStatusService.addReportStatusToCollectionIfMissing<IReportStatus>(
+      this.reportStatusesSharedCollection,
       excelReportExport.reportStatus
     );
-    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
       this.securityClearancesSharedCollection,
       excelReportExport.securityClearance
     );
-    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
       this.applicationUsersSharedCollection,
       excelReportExport.reportCreator
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       excelReportExport.organization,
       excelReportExport.department
     );
-    this.systemModulesSharedCollection = this.systemModuleService.addSystemModuleToCollectionIfMissing(
+    this.systemModulesSharedCollection = this.systemModuleService.addSystemModuleToCollectionIfMissing<ISystemModule>(
       this.systemModulesSharedCollection,
       excelReportExport.systemModule
     );
-    this.reportDesignsSharedCollection = this.reportDesignService.addReportDesignToCollectionIfMissing(
+    this.reportDesignsSharedCollection = this.reportDesignService.addReportDesignToCollectionIfMissing<IReportDesign>(
       this.reportDesignsSharedCollection,
       excelReportExport.reportDesign
     );
-    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
+    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(
       this.algorithmsSharedCollection,
       excelReportExport.fileCheckSumAlgorithm
     );
@@ -298,7 +199,10 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.excelReportExport?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -308,9 +212,9 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('parameters')!.value ?? [])
+            ...(this.excelReportExport?.parameters ?? [])
           )
         )
       )
@@ -320,23 +224,23 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       );
 
     this.reportStatusService
-      .query({ 'excelReportExportId.specified': 'false' })
+      .query()
       .pipe(map((res: HttpResponse<IReportStatus[]>) => res.body ?? []))
       .pipe(
         map((reportStatuses: IReportStatus[]) =>
-          this.reportStatusService.addReportStatusToCollectionIfMissing(reportStatuses, this.editForm.get('reportStatus')!.value)
+          this.reportStatusService.addReportStatusToCollectionIfMissing<IReportStatus>(reportStatuses, this.excelReportExport?.reportStatus)
         )
       )
-      .subscribe((reportStatuses: IReportStatus[]) => (this.reportStatusesCollection = reportStatuses));
+      .subscribe((reportStatuses: IReportStatus[]) => (this.reportStatusesSharedCollection = reportStatuses));
 
     this.securityClearanceService
       .query()
       .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
       .pipe(
         map((securityClearances: ISecurityClearance[]) =>
-          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
             securityClearances,
-            this.editForm.get('securityClearance')!.value
+            this.excelReportExport?.securityClearance
           )
         )
       )
@@ -347,7 +251,10 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
       .pipe(
         map((applicationUsers: IApplicationUser[]) =>
-          this.applicationUserService.addApplicationUserToCollectionIfMissing(applicationUsers, this.editForm.get('reportCreator')!.value)
+          this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
+            applicationUsers,
+            this.excelReportExport?.reportCreator
+          )
         )
       )
       .subscribe((applicationUsers: IApplicationUser[]) => (this.applicationUsersSharedCollection = applicationUsers));
@@ -357,10 +264,10 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('organization')!.value,
-            this.editForm.get('department')!.value
+            this.excelReportExport?.organization,
+            this.excelReportExport?.department
           )
         )
       )
@@ -371,7 +278,7 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISystemModule[]>) => res.body ?? []))
       .pipe(
         map((systemModules: ISystemModule[]) =>
-          this.systemModuleService.addSystemModuleToCollectionIfMissing(systemModules, this.editForm.get('systemModule')!.value)
+          this.systemModuleService.addSystemModuleToCollectionIfMissing<ISystemModule>(systemModules, this.excelReportExport?.systemModule)
         )
       )
       .subscribe((systemModules: ISystemModule[]) => (this.systemModulesSharedCollection = systemModules));
@@ -381,7 +288,7 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IReportDesign[]>) => res.body ?? []))
       .pipe(
         map((reportDesigns: IReportDesign[]) =>
-          this.reportDesignService.addReportDesignToCollectionIfMissing(reportDesigns, this.editForm.get('reportDesign')!.value)
+          this.reportDesignService.addReportDesignToCollectionIfMissing<IReportDesign>(reportDesigns, this.excelReportExport?.reportDesign)
         )
       )
       .subscribe((reportDesigns: IReportDesign[]) => (this.reportDesignsSharedCollection = reportDesigns));
@@ -391,37 +298,9 @@ export class ExcelReportExportUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAlgorithm[]>) => res.body ?? []))
       .pipe(
         map((algorithms: IAlgorithm[]) =>
-          this.algorithmService.addAlgorithmToCollectionIfMissing(algorithms, this.editForm.get('fileCheckSumAlgorithm')!.value)
+          this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(algorithms, this.excelReportExport?.fileCheckSumAlgorithm)
         )
       )
       .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
-  }
-
-  protected createFromForm(): IExcelReportExport {
-    return {
-      ...new ExcelReportExport(),
-      id: this.editForm.get(['id'])!.value,
-      reportName: this.editForm.get(['reportName'])!.value,
-      reportPassword: this.editForm.get(['reportPassword'])!.value,
-      reportNotesContentType: this.editForm.get(['reportNotesContentType'])!.value,
-      reportNotes: this.editForm.get(['reportNotes'])!.value,
-      fileCheckSum: this.editForm.get(['fileCheckSum'])!.value,
-      reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
-      reportFile: this.editForm.get(['reportFile'])!.value,
-      reportTimeStamp: this.editForm.get(['reportTimeStamp'])!.value
-        ? dayjs(this.editForm.get(['reportTimeStamp'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      reportId: this.editForm.get(['reportId'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      parameters: this.editForm.get(['parameters'])!.value,
-      reportStatus: this.editForm.get(['reportStatus'])!.value,
-      securityClearance: this.editForm.get(['securityClearance'])!.value,
-      reportCreator: this.editForm.get(['reportCreator'])!.value,
-      organization: this.editForm.get(['organization'])!.value,
-      department: this.editForm.get(['department'])!.value,
-      systemModule: this.editForm.get(['systemModule'])!.value,
-      reportDesign: this.editForm.get(['reportDesign'])!.value,
-      fileCheckSumAlgorithm: this.editForm.get(['fileCheckSumAlgorithm'])!.value,
-    };
   }
 }

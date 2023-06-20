@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-amortization-sequence-heading" data-cy="AmortizationSequenceCreateUpdateHeading">
@@ -27,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccountGuid">Prepayment Account Guid</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_prepaymentAccountGuid">Prepayment Account Guid</label>
           <input
             type="text"
             class="form-control"
@@ -54,8 +35,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_recurrenceGuid">Recurrence Guid</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_recurrenceGuid">Recurrence Guid</label>
           <input
             type="text"
             class="form-control"
@@ -73,8 +54,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_sequenceNumber">Sequence Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_sequenceNumber">Sequence Number</label>
           <input
             type="number"
             class="form-control"
@@ -95,8 +76,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_particulars">Particulars</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_particulars">Particulars</label>
           <input
             type="text"
             class="form-control"
@@ -107,8 +88,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_currentAmortizationDate">Current Amortization Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_currentAmortizationDate">Current Amortization Date</label>
           <div class="input-group">
             <input
               id="field_currentAmortizationDate"
@@ -120,11 +101,9 @@
               #currentAmortizationDateDp="ngbDatepicker"
               formControlName="currentAmortizationDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="currentAmortizationDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="currentAmortizationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
           <div
             *ngIf="
@@ -138,8 +117,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_previousAmortizationDate">Previous Amortization Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_previousAmortizationDate">Previous Amortization Date</label>
           <div class="input-group">
             <input
               id="field_previousAmortizationDate"
@@ -151,16 +130,14 @@
               #previousAmortizationDateDp="ngbDatepicker"
               formControlName="previousAmortizationDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="previousAmortizationDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="previousAmortizationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_nextAmortizationDate">Next Amortization Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_nextAmortizationDate">Next Amortization Date</label>
           <div class="input-group">
             <input
               id="field_nextAmortizationDate"
@@ -172,16 +149,14 @@
               #nextAmortizationDateDp="ngbDatepicker"
               formControlName="nextAmortizationDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="nextAmortizationDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="nextAmortizationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_isCommencementSequence">Is Commencement Sequence</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_isCommencementSequence">Is Commencement Sequence</label>
           <input
             type="checkbox"
             class="form-check"
@@ -202,8 +177,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_isTerminalSequence">Is Terminal Sequence</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_isTerminalSequence">Is Terminal Sequence</label>
           <input
             type="checkbox"
             class="form-check"
@@ -224,8 +199,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_amortizationAmount">Amortization Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_amortizationAmount">Amortization Amount</label>
           <input
             type="number"
             class="form-control"
@@ -252,8 +227,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_sequenceGuid">Sequence Guid</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_sequenceGuid">Sequence Guid</label>
           <input
             type="text"
             class="form-control"
@@ -269,24 +244,18 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_prepaymentAccount">Prepayment Account</label>
           <select
             class="form-control"
             id="field_prepaymentAccount"
             data-cy="prepaymentAccount"
             name="prepaymentAccount"
             formControlName="prepaymentAccount"
+            [compareWith]="comparePrepaymentAccount"
           >
             <option *ngIf="!editForm.get('prepaymentAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
-                  ? editForm.get('prepaymentAccount')!.value
-                  : prepaymentAccountOption
-              "
-              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
-            >
+            <option [ngValue]="prepaymentAccountOption" *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection">
               {{ prepaymentAccountOption.catalogueNumber }}
             </option>
           </select>
@@ -302,23 +271,20 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_amortizationRecurrence">Amortization Recurrence</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_amortizationRecurrence">Amortization Recurrence</label>
           <select
             class="form-control"
             id="field_amortizationRecurrence"
             data-cy="amortizationRecurrence"
             name="amortizationRecurrence"
             formControlName="amortizationRecurrence"
+            [compareWith]="compareAmortizationRecurrence"
           >
             <option *ngIf="!editForm.get('amortizationRecurrence')!.value" [ngValue]="null" selected></option>
             <option
-              [ngValue]="
-                amortizationRecurrenceOption.id === editForm.get('amortizationRecurrence')!.value?.id
-                  ? editForm.get('amortizationRecurrence')!.value
-                  : amortizationRecurrenceOption
-              "
-              *ngFor="let amortizationRecurrenceOption of amortizationRecurrencesSharedCollection; trackBy: trackAmortizationRecurrenceById"
+              [ngValue]="amortizationRecurrenceOption"
+              *ngFor="let amortizationRecurrenceOption of amortizationRecurrencesSharedCollection"
             >
               {{ amortizationRecurrenceOption.particulars }}
             </option>
@@ -335,7 +301,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -344,17 +310,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_prepaymentMappings">Prepayment Mapping</label>
           <select
             class="form-control"
@@ -363,17 +327,15 @@
             multiple
             name="prepaymentMappings"
             formControlName="prepaymentMappings"
+            [compareWith]="comparePrepaymentMapping"
           >
-            <option
-              [ngValue]="getSelectedPrepaymentMapping(prepaymentMappingOption, editForm.get('prepaymentMappings')!.value)"
-              *ngFor="let prepaymentMappingOption of prepaymentMappingsSharedCollection; trackBy: trackPrepaymentMappingById"
-            >
+            <option [ngValue]="prepaymentMappingOption" *ngFor="let prepaymentMappingOption of prepaymentMappingsSharedCollection">
               {{ prepaymentMappingOption.parameter }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_applicationParameters">Application Parameters</label>
           <select
             class="form-control"
@@ -382,13 +344,11 @@
             multiple
             name="applicationParameters"
             formControlName="applicationParameters"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationParameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>

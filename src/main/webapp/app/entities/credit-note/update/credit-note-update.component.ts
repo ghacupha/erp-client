@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ICreditNote, CreditNote } from '../credit-note.model';
+import { CreditNoteFormService, CreditNoteFormGroup } from './credit-note-form.service';
+import { ICreditNote } from '../credit-note.model';
 import { CreditNoteService } from '../service/credit-note.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -45,6 +27,7 @@ import { SettlementCurrencyService } from 'app/entities/settlement-currency/serv
 })
 export class CreditNoteUpdateComponent implements OnInit {
   isSaving = false;
+  creditNote: ICreditNote | null = null;
 
   purchaseOrdersSharedCollection: IPurchaseOrder[] = [];
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
@@ -52,35 +35,41 @@ export class CreditNoteUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    creditNumber: [null, [Validators.required]],
-    creditNoteDate: [null, [Validators.required]],
-    creditAmount: [null, [Validators.required]],
-    remarks: [],
-    purchaseOrders: [],
-    invoices: [],
-    paymentLabels: [],
-    placeholders: [],
-    settlementCurrency: [],
-  });
+  editForm: CreditNoteFormGroup = this.creditNoteFormService.createCreditNoteFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected creditNoteService: CreditNoteService,
+    protected creditNoteFormService: CreditNoteFormService,
     protected purchaseOrderService: PurchaseOrderService,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected paymentLabelService: PaymentLabelService,
     protected placeholderService: PlaceholderService,
     protected settlementCurrencyService: SettlementCurrencyService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  comparePaymentInvoice = (o1: IPaymentInvoice | null, o2: IPaymentInvoice | null): boolean =>
+    this.paymentInvoiceService.comparePaymentInvoice(o1, o2);
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ creditNote }) => {
-      this.updateForm(creditNote);
+      this.creditNote = creditNote;
+      if (creditNote) {
+        this.updateForm(creditNote);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -107,83 +96,19 @@ export class CreditNoteUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const creditNote = this.createFromForm();
-    if (creditNote.id !== undefined) {
+    const creditNote = this.creditNoteFormService.getCreditNote(this.editForm);
+    if (creditNote.id !== null) {
       this.subscribeToSaveResponse(this.creditNoteService.update(creditNote));
     } else {
       this.subscribeToSaveResponse(this.creditNoteService.create(creditNote));
     }
   }
 
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICreditNote>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -199,39 +124,30 @@ export class CreditNoteUpdateComponent implements OnInit {
   }
 
   protected updateForm(creditNote: ICreditNote): void {
-    this.editForm.patchValue({
-      id: creditNote.id,
-      creditNumber: creditNote.creditNumber,
-      creditNoteDate: creditNote.creditNoteDate,
-      creditAmount: creditNote.creditAmount,
-      remarks: creditNote.remarks,
-      purchaseOrders: creditNote.purchaseOrders,
-      invoices: creditNote.invoices,
-      paymentLabels: creditNote.paymentLabels,
-      placeholders: creditNote.placeholders,
-      settlementCurrency: creditNote.settlementCurrency,
-    });
+    this.creditNote = creditNote;
+    this.creditNoteFormService.resetForm(this.editForm, creditNote);
 
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       ...(creditNote.purchaseOrders ?? [])
     );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
       this.paymentInvoicesSharedCollection,
       ...(creditNote.invoices ?? [])
     );
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(creditNote.paymentLabels ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(creditNote.placeholders ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      creditNote.settlementCurrency
-    );
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        creditNote.settlementCurrency
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -240,9 +156,9 @@ export class CreditNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
+            ...(this.creditNote?.purchaseOrders ?? [])
           )
         )
       )
@@ -253,9 +169,9 @@ export class CreditNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
       .pipe(
         map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
             paymentInvoices,
-            ...(this.editForm.get('invoices')!.value ?? [])
+            ...(this.creditNote?.invoices ?? [])
           )
         )
       )
@@ -266,7 +182,10 @@ export class CreditNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.creditNote?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -276,7 +195,7 @@ export class CreditNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.creditNote?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -286,28 +205,12 @@ export class CreditNoteUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.creditNote?.settlementCurrency
           )
         )
       )
       .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
-  }
-
-  protected createFromForm(): ICreditNote {
-    return {
-      ...new CreditNote(),
-      id: this.editForm.get(['id'])!.value,
-      creditNumber: this.editForm.get(['creditNumber'])!.value,
-      creditNoteDate: this.editForm.get(['creditNoteDate'])!.value,
-      creditAmount: this.editForm.get(['creditAmount'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
-      invoices: this.editForm.get(['invoices'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-    };
   }
 }

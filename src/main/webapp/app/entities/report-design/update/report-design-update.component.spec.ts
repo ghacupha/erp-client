@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { ReportDesignFormService } from './report-design-form.service';
 import { ReportDesignService } from '../service/report-design.service';
-import { IReportDesign, ReportDesign } from '../report-design.model';
+import { IReportDesign } from '../report-design.model';
 import { IUniversallyUniqueMapping } from 'app/entities/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/universally-unique-mapping/service/universally-unique-mapping.service';
 import { ISecurityClearance } from 'app/entities/security-clearance/security-clearance.model';
@@ -48,6 +30,7 @@ describe('ReportDesign Management Update Component', () => {
   let comp: ReportDesignUpdateComponent;
   let fixture: ComponentFixture<ReportDesignUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let reportDesignFormService: ReportDesignFormService;
   let reportDesignService: ReportDesignService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let securityClearanceService: SecurityClearanceService;
@@ -59,15 +42,24 @@ describe('ReportDesign Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportDesignUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(ReportDesignUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(ReportDesignUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    reportDesignFormService = TestBed.inject(ReportDesignFormService);
     reportDesignService = TestBed.inject(ReportDesignService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     securityClearanceService = TestBed.inject(SecurityClearanceService);
@@ -103,7 +95,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
@@ -125,7 +117,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(securityClearanceService.query).toHaveBeenCalled();
       expect(securityClearanceService.addSecurityClearanceToCollectionIfMissing).toHaveBeenCalledWith(
         securityClearanceCollection,
-        ...additionalSecurityClearances
+        ...additionalSecurityClearances.map(expect.objectContaining)
       );
       expect(comp.securityClearancesSharedCollection).toEqual(expectedCollection);
     });
@@ -147,7 +139,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(applicationUserService.query).toHaveBeenCalled();
       expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
         applicationUserCollection,
-        ...additionalApplicationUsers
+        ...additionalApplicationUsers.map(expect.objectContaining)
       );
       expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
     });
@@ -169,7 +161,10 @@ describe('ReportDesign Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -188,7 +183,10 @@ describe('ReportDesign Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -209,7 +207,7 @@ describe('ReportDesign Management Update Component', () => {
       expect(systemModuleService.query).toHaveBeenCalled();
       expect(systemModuleService.addSystemModuleToCollectionIfMissing).toHaveBeenCalledWith(
         systemModuleCollection,
-        ...additionalSystemModules
+        ...additionalSystemModules.map(expect.objectContaining)
       );
       expect(comp.systemModulesSharedCollection).toEqual(expectedCollection);
     });
@@ -229,7 +227,10 @@ describe('ReportDesign Management Update Component', () => {
       comp.ngOnInit();
 
       expect(algorithmService.query).toHaveBeenCalled();
-      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(algorithmCollection, ...additionalAlgorithms);
+      expect(algorithmService.addAlgorithmToCollectionIfMissing).toHaveBeenCalledWith(
+        algorithmCollection,
+        ...additionalAlgorithms.map(expect.objectContaining)
+      );
       expect(comp.algorithmsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -245,8 +246,8 @@ describe('ReportDesign Management Update Component', () => {
       reportDesign.organization = organization;
       const department: IDealer = { id: 88590 };
       reportDesign.department = department;
-      const placeholders: IPlaceholder = { id: 27572 };
-      reportDesign.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 27572 };
+      reportDesign.placeholders = [placeholder];
       const systemModule: ISystemModule = { id: 97044 };
       reportDesign.systemModule = systemModule;
       const fileCheckSumAlgorithm: IAlgorithm = { id: 96305 };
@@ -255,23 +256,24 @@ describe('ReportDesign Management Update Component', () => {
       activatedRoute.data = of({ reportDesign });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(reportDesign));
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(parameters);
       expect(comp.securityClearancesSharedCollection).toContain(securityClearance);
       expect(comp.applicationUsersSharedCollection).toContain(reportDesigner);
       expect(comp.dealersSharedCollection).toContain(organization);
       expect(comp.dealersSharedCollection).toContain(department);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.systemModulesSharedCollection).toContain(systemModule);
       expect(comp.algorithmsSharedCollection).toContain(fileCheckSumAlgorithm);
+      expect(comp.reportDesign).toEqual(reportDesign);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportDesign>>();
+      const saveSubject = new Subject<HttpResponse<IReportDesign>>();
       const reportDesign = { id: 123 };
+      jest.spyOn(reportDesignFormService, 'getReportDesign').mockReturnValue(reportDesign);
       jest.spyOn(reportDesignService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ reportDesign });
@@ -284,18 +286,20 @@ describe('ReportDesign Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(reportDesignFormService.getReportDesign).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(reportDesignService.update).toHaveBeenCalledWith(reportDesign);
+      expect(reportDesignService.update).toHaveBeenCalledWith(expect.objectContaining(reportDesign));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportDesign>>();
-      const reportDesign = new ReportDesign();
+      const saveSubject = new Subject<HttpResponse<IReportDesign>>();
+      const reportDesign = { id: 123 };
+      jest.spyOn(reportDesignFormService, 'getReportDesign').mockReturnValue({ id: null });
       jest.spyOn(reportDesignService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ reportDesign });
+      activatedRoute.data = of({ reportDesign: null });
       comp.ngOnInit();
 
       // WHEN
@@ -305,14 +309,15 @@ describe('ReportDesign Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(reportDesignService.create).toHaveBeenCalledWith(reportDesign);
+      expect(reportDesignFormService.getReportDesign).toHaveBeenCalled();
+      expect(reportDesignService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportDesign>>();
+      const saveSubject = new Subject<HttpResponse<IReportDesign>>();
       const reportDesign = { id: 123 };
       jest.spyOn(reportDesignService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -325,120 +330,80 @@ describe('ReportDesign Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(reportDesignService.update).toHaveBeenCalledWith(reportDesign);
+      expect(reportDesignService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSecurityClearanceById', () => {
-      it('Should return tracked SecurityClearance primary key', () => {
+    describe('compareSecurityClearance', () => {
+      it('Should forward to securityClearanceService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSecurityClearanceById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(securityClearanceService, 'compareSecurityClearance');
+        comp.compareSecurityClearance(entity, entity2);
+        expect(securityClearanceService.compareSecurityClearance).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackApplicationUserById', () => {
-      it('Should return tracked ApplicationUser primary key', () => {
+    describe('compareApplicationUser', () => {
+      it('Should forward to applicationUserService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackApplicationUserById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(applicationUserService, 'compareApplicationUser');
+        comp.compareApplicationUser(entity, entity2);
+        expect(applicationUserService.compareApplicationUser).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSystemModuleById', () => {
-      it('Should return tracked SystemModule primary key', () => {
+    describe('compareSystemModule', () => {
+      it('Should forward to systemModuleService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSystemModuleById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(systemModuleService, 'compareSystemModule');
+        comp.compareSystemModule(entity, entity2);
+        expect(systemModuleService.compareSystemModule).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackAlgorithmById', () => {
-      it('Should return tracked Algorithm primary key', () => {
+    describe('compareAlgorithm', () => {
+      it('Should forward to algorithmService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackAlgorithmById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(algorithmService, 'compareAlgorithm');
+        comp.compareAlgorithm(entity, entity2);
+        expect(algorithmService.compareAlgorithm).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

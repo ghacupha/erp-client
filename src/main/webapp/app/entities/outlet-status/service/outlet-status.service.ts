@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IOutletStatus, getOutletStatusIdentifier } from '../outlet-status.model';
+import { IOutletStatus, NewOutletStatus } from '../outlet-status.model';
+
+export type PartialUpdateOutletStatus = Partial<IOutletStatus> & Pick<IOutletStatus, 'id'>;
 
 export type EntityResponseType = HttpResponse<IOutletStatus>;
 export type EntityArrayResponseType = HttpResponse<IOutletStatus[]>;
@@ -36,18 +20,18 @@ export class OutletStatusService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(outletStatus: IOutletStatus): Observable<EntityResponseType> {
+  create(outletStatus: NewOutletStatus): Observable<EntityResponseType> {
     return this.http.post<IOutletStatus>(this.resourceUrl, outletStatus, { observe: 'response' });
   }
 
   update(outletStatus: IOutletStatus): Observable<EntityResponseType> {
-    return this.http.put<IOutletStatus>(`${this.resourceUrl}/${getOutletStatusIdentifier(outletStatus) as number}`, outletStatus, {
+    return this.http.put<IOutletStatus>(`${this.resourceUrl}/${this.getOutletStatusIdentifier(outletStatus)}`, outletStatus, {
       observe: 'response',
     });
   }
 
-  partialUpdate(outletStatus: IOutletStatus): Observable<EntityResponseType> {
-    return this.http.patch<IOutletStatus>(`${this.resourceUrl}/${getOutletStatusIdentifier(outletStatus) as number}`, outletStatus, {
+  partialUpdate(outletStatus: PartialUpdateOutletStatus): Observable<EntityResponseType> {
+    return this.http.patch<IOutletStatus>(`${this.resourceUrl}/${this.getOutletStatusIdentifier(outletStatus)}`, outletStatus, {
       observe: 'response',
     });
   }
@@ -70,18 +54,26 @@ export class OutletStatusService {
     return this.http.get<IOutletStatus[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addOutletStatusToCollectionIfMissing(
-    outletStatusCollection: IOutletStatus[],
-    ...outletStatusesToCheck: (IOutletStatus | null | undefined)[]
-  ): IOutletStatus[] {
-    const outletStatuses: IOutletStatus[] = outletStatusesToCheck.filter(isPresent);
+  getOutletStatusIdentifier(outletStatus: Pick<IOutletStatus, 'id'>): number {
+    return outletStatus.id;
+  }
+
+  compareOutletStatus(o1: Pick<IOutletStatus, 'id'> | null, o2: Pick<IOutletStatus, 'id'> | null): boolean {
+    return o1 && o2 ? this.getOutletStatusIdentifier(o1) === this.getOutletStatusIdentifier(o2) : o1 === o2;
+  }
+
+  addOutletStatusToCollectionIfMissing<Type extends Pick<IOutletStatus, 'id'>>(
+    outletStatusCollection: Type[],
+    ...outletStatusesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const outletStatuses: Type[] = outletStatusesToCheck.filter(isPresent);
     if (outletStatuses.length > 0) {
       const outletStatusCollectionIdentifiers = outletStatusCollection.map(
-        outletStatusItem => getOutletStatusIdentifier(outletStatusItem)!
+        outletStatusItem => this.getOutletStatusIdentifier(outletStatusItem)!
       );
       const outletStatusesToAdd = outletStatuses.filter(outletStatusItem => {
-        const outletStatusIdentifier = getOutletStatusIdentifier(outletStatusItem);
-        if (outletStatusIdentifier == null || outletStatusCollectionIdentifiers.includes(outletStatusIdentifier)) {
+        const outletStatusIdentifier = this.getOutletStatusIdentifier(outletStatusItem);
+        if (outletStatusCollectionIdentifiers.includes(outletStatusIdentifier)) {
           return false;
         }
         outletStatusCollectionIdentifiers.push(outletStatusIdentifier);

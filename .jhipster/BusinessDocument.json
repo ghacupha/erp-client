@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20221019140655",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "documentTitle",
@@ -39,64 +41,62 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "BusinessDocument",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
       "relationshipName": "createdBy",
-      "otherEntityName": "applicationUser",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "applicationIdentity"
+      "relationshipValidateRules": ["required"]
     },
     {
+      "otherEntityField": "applicationIdentity",
+      "otherEntityName": "applicationUser",
       "relationshipName": "lastModifiedBy",
-      "otherEntityName": "applicationUser",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "applicationIdentity"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "originatingDepartment",
+      "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
+      "relationshipName": "originatingDepartment",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "dealerName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "applicationMappings",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "businessDocument",
       "ownerSide": true,
-      "otherEntityRelationshipName": "businessDocument"
+      "relationshipName": "applicationMappings",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "businessDocument",
       "ownerSide": true,
-      "otherEntityRelationshipName": "businessDocument"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "fileChecksumAlgorithm",
+      "otherEntityField": "name",
       "otherEntityName": "algorithm",
+      "relationshipName": "fileChecksumAlgorithm",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "name"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "securityClearance",
+      "otherEntityField": "clearanceLevel",
       "otherEntityName": "securityClearance",
+      "relationshipName": "securityClearance",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "clearanceLevel"
+      "relationshipValidateRules": ["required"]
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "BusinessDocument",
-  "changelogDate": "20221019140655",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

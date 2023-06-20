@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="reportRequisition">
       <h2 data-cy="reportRequisitionDetailsHeading"><span>Report Requisition</span></h2>
@@ -56,7 +37,7 @@
         <dt><span>Report File Attachment</span></dt>
         <dd>
           <div *ngIf="reportRequisition.reportFileAttachment">
-            <a (click)="openFile(reportRequisition.reportFileAttachment, reportRequisition.reportFileAttachmentContentType)">open</a>
+            <a (click)="openFile(reportRequisition.reportFileAttachment, reportRequisition.reportFileAttachmentContentType)">Open</a>
             {{ reportRequisition.reportFileAttachmentContentType }}, {{ byteSize(reportRequisition.reportFileAttachment) }}
           </div>
         </dd>
@@ -67,37 +48,37 @@
         <dt><span>Report Notes</span></dt>
         <dd>
           <div *ngIf="reportRequisition.reportNotes">
-            <a (click)="openFile(reportRequisition.reportNotes, reportRequisition.reportNotesContentType)">open</a>
+            <a (click)="openFile(reportRequisition.reportNotes, reportRequisition.reportNotesContentType)">Open</a>
             {{ reportRequisition.reportNotesContentType }}, {{ byteSize(reportRequisition.reportNotes) }}
           </div>
         </dd>
         <dt><span>Placeholders</span></dt>
         <dd>
           <span *ngFor="let placeholders of reportRequisition.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholders?.id, 'view']">{{ placeholders.description }}</a
+            <a [routerLink]="['/placeholder', placeholders.id, 'view']">{{ placeholders.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Parameters</span></dt>
         <dd>
           <span *ngFor="let parameters of reportRequisition.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Report Template</span></dt>
         <dd>
           <div *ngIf="reportRequisition.reportTemplate">
-            <a [routerLink]="['/report-template', reportRequisition.reportTemplate?.id, 'view']">{{
-              reportRequisition.reportTemplate?.catalogueNumber
+            <a [routerLink]="['/report-template', reportRequisition.reportTemplate.id, 'view']">{{
+              reportRequisition.reportTemplate.catalogueNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Report Content Type</span></dt>
         <dd>
           <div *ngIf="reportRequisition.reportContentType">
-            <a [routerLink]="['/report-content-type', reportRequisition.reportContentType?.id, 'view']">{{
-              reportRequisition.reportContentType?.reportTypeName
+            <a [routerLink]="['/report-content-type', reportRequisition.reportContentType.id, 'view']">{{
+              reportRequisition.reportContentType.reportTypeName
             }}</a>
           </div>
         </dd>

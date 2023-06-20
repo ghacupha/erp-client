@@ -1,33 +1,28 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IAmortizationRecurrence, getAmortizationRecurrenceIdentifier } from '../amortization-recurrence.model';
+import { IAmortizationRecurrence, NewAmortizationRecurrence } from '../amortization-recurrence.model';
+
+export type PartialUpdateAmortizationRecurrence = Partial<IAmortizationRecurrence> & Pick<IAmortizationRecurrence, 'id'>;
+
+type RestOf<T extends IAmortizationRecurrence | NewAmortizationRecurrence> = Omit<T, 'firstAmortizationDate' | 'timeOfInstallation'> & {
+  firstAmortizationDate?: string | null;
+  timeOfInstallation?: string | null;
+};
+
+export type RestAmortizationRecurrence = RestOf<IAmortizationRecurrence>;
+
+export type NewRestAmortizationRecurrence = RestOf<NewAmortizationRecurrence>;
+
+export type PartialUpdateRestAmortizationRecurrence = RestOf<PartialUpdateAmortizationRecurrence>;
 
 export type EntityResponseType = HttpResponse<IAmortizationRecurrence>;
 export type EntityArrayResponseType = HttpResponse<IAmortizationRecurrence[]>;
@@ -39,44 +34,42 @@ export class AmortizationRecurrenceService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(amortizationRecurrence: IAmortizationRecurrence): Observable<EntityResponseType> {
+  create(amortizationRecurrence: NewAmortizationRecurrence): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(amortizationRecurrence);
     return this.http
-      .post<IAmortizationRecurrence>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestAmortizationRecurrence>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(amortizationRecurrence: IAmortizationRecurrence): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(amortizationRecurrence);
     return this.http
-      .put<IAmortizationRecurrence>(`${this.resourceUrl}/${getAmortizationRecurrenceIdentifier(amortizationRecurrence) as number}`, copy, {
+      .put<RestAmortizationRecurrence>(`${this.resourceUrl}/${this.getAmortizationRecurrenceIdentifier(amortizationRecurrence)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(amortizationRecurrence: IAmortizationRecurrence): Observable<EntityResponseType> {
+  partialUpdate(amortizationRecurrence: PartialUpdateAmortizationRecurrence): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(amortizationRecurrence);
     return this.http
-      .patch<IAmortizationRecurrence>(
-        `${this.resourceUrl}/${getAmortizationRecurrenceIdentifier(amortizationRecurrence) as number}`,
-        copy,
-        { observe: 'response' }
-      )
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestAmortizationRecurrence>(`${this.resourceUrl}/${this.getAmortizationRecurrenceIdentifier(amortizationRecurrence)}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IAmortizationRecurrence>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestAmortizationRecurrence>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAmortizationRecurrence[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestAmortizationRecurrence[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -86,25 +79,30 @@ export class AmortizationRecurrenceService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IAmortizationRecurrence[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestAmortizationRecurrence[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addAmortizationRecurrenceToCollectionIfMissing(
-    amortizationRecurrenceCollection: IAmortizationRecurrence[],
-    ...amortizationRecurrencesToCheck: (IAmortizationRecurrence | null | undefined)[]
-  ): IAmortizationRecurrence[] {
-    const amortizationRecurrences: IAmortizationRecurrence[] = amortizationRecurrencesToCheck.filter(isPresent);
+  getAmortizationRecurrenceIdentifier(amortizationRecurrence: Pick<IAmortizationRecurrence, 'id'>): number {
+    return amortizationRecurrence.id;
+  }
+
+  compareAmortizationRecurrence(o1: Pick<IAmortizationRecurrence, 'id'> | null, o2: Pick<IAmortizationRecurrence, 'id'> | null): boolean {
+    return o1 && o2 ? this.getAmortizationRecurrenceIdentifier(o1) === this.getAmortizationRecurrenceIdentifier(o2) : o1 === o2;
+  }
+
+  addAmortizationRecurrenceToCollectionIfMissing<Type extends Pick<IAmortizationRecurrence, 'id'>>(
+    amortizationRecurrenceCollection: Type[],
+    ...amortizationRecurrencesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const amortizationRecurrences: Type[] = amortizationRecurrencesToCheck.filter(isPresent);
     if (amortizationRecurrences.length > 0) {
       const amortizationRecurrenceCollectionIdentifiers = amortizationRecurrenceCollection.map(
-        amortizationRecurrenceItem => getAmortizationRecurrenceIdentifier(amortizationRecurrenceItem)!
+        amortizationRecurrenceItem => this.getAmortizationRecurrenceIdentifier(amortizationRecurrenceItem)!
       );
       const amortizationRecurrencesToAdd = amortizationRecurrences.filter(amortizationRecurrenceItem => {
-        const amortizationRecurrenceIdentifier = getAmortizationRecurrenceIdentifier(amortizationRecurrenceItem);
-        if (
-          amortizationRecurrenceIdentifier == null ||
-          amortizationRecurrenceCollectionIdentifiers.includes(amortizationRecurrenceIdentifier)
-        ) {
+        const amortizationRecurrenceIdentifier = this.getAmortizationRecurrenceIdentifier(amortizationRecurrenceItem);
+        if (amortizationRecurrenceCollectionIdentifiers.includes(amortizationRecurrenceIdentifier)) {
           return false;
         }
         amortizationRecurrenceCollectionIdentifiers.push(amortizationRecurrenceIdentifier);
@@ -115,36 +113,35 @@ export class AmortizationRecurrenceService {
     return amortizationRecurrenceCollection;
   }
 
-  protected convertDateFromClient(amortizationRecurrence: IAmortizationRecurrence): IAmortizationRecurrence {
-    return Object.assign({}, amortizationRecurrence, {
-      firstAmortizationDate: amortizationRecurrence.firstAmortizationDate?.isValid()
-        ? amortizationRecurrence.firstAmortizationDate.format(DATE_FORMAT)
+  protected convertDateFromClient<T extends IAmortizationRecurrence | NewAmortizationRecurrence | PartialUpdateAmortizationRecurrence>(
+    amortizationRecurrence: T
+  ): RestOf<T> {
+    return {
+      ...amortizationRecurrence,
+      firstAmortizationDate: amortizationRecurrence.firstAmortizationDate?.format(DATE_FORMAT) ?? null,
+      timeOfInstallation: amortizationRecurrence.timeOfInstallation?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restAmortizationRecurrence: RestAmortizationRecurrence): IAmortizationRecurrence {
+    return {
+      ...restAmortizationRecurrence,
+      firstAmortizationDate: restAmortizationRecurrence.firstAmortizationDate
+        ? dayjs(restAmortizationRecurrence.firstAmortizationDate)
         : undefined,
-      timeOfInstallation: amortizationRecurrence.timeOfInstallation?.isValid()
-        ? amortizationRecurrence.timeOfInstallation.toJSON()
-        : undefined,
+      timeOfInstallation: restAmortizationRecurrence.timeOfInstallation ? dayjs(restAmortizationRecurrence.timeOfInstallation) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestAmortizationRecurrence>): HttpResponse<IAmortizationRecurrence> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.firstAmortizationDate = res.body.firstAmortizationDate ? dayjs(res.body.firstAmortizationDate) : undefined;
-      res.body.timeOfInstallation = res.body.timeOfInstallation ? dayjs(res.body.timeOfInstallation) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((amortizationRecurrence: IAmortizationRecurrence) => {
-        amortizationRecurrence.firstAmortizationDate = amortizationRecurrence.firstAmortizationDate
-          ? dayjs(amortizationRecurrence.firstAmortizationDate)
-          : undefined;
-        amortizationRecurrence.timeOfInstallation = amortizationRecurrence.timeOfInstallation
-          ? dayjs(amortizationRecurrence.timeOfInstallation)
-          : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestAmortizationRecurrence[]>): HttpResponse<IAmortizationRecurrence[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

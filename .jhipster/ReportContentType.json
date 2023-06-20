@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220616124314",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "reportTypeName",
@@ -11,29 +13,27 @@
       "fieldValidateRules": ["required"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "ReportContentType",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "systemContentType",
+      "otherEntityField": "contentTypeName",
       "otherEntityName": "systemContentType",
+      "relationshipName": "systemContentType",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "contentTypeName"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "reportContentType",
       "ownerSide": true,
-      "otherEntityRelationshipName": "reportContentType"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "ReportContentType",
-  "changelogDate": "20220616124314",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

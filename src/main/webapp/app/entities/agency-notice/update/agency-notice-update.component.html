@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-agency-notice-heading" data-cy="AgencyNoticeCreateUpdateHeading">Create or edit a Agency Notice</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_referenceNumber">Reference Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_referenceNumber">Reference Number</label>
           <input
             type="text"
             class="form-control"
@@ -50,8 +31,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_referenceDate">Reference Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_referenceDate">Reference Date</label>
           <div class="input-group">
             <input
               id="field_referenceDate"
@@ -63,16 +44,14 @@
               #referenceDateDp="ngbDatepicker"
               formControlName="referenceDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="referenceDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="referenceDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_assessmentAmount">Assessment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_assessmentAmount">Assessment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -96,8 +75,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_agencyStatus">Agency Status</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_agencyStatus">Agency Status</label>
           <select class="form-control" name="agencyStatus" formControlName="agencyStatus" id="field_agencyStatus" data-cy="agencyStatus">
             <option [ngValue]="null"></option>
             <option *ngFor="let agencyStatusType of agencyStatusTypeValues" [value]="agencyStatusType">agencyStatusType</option>
@@ -109,22 +88,22 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_assessmentNotice">Assessment Notice</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_assessmentNotice">Assessment Notice</label>
           <div>
             <div *ngIf="editForm.get('assessmentNotice')!.value" class="form-text text-danger clearfix">
               <a
-                class="pull-left"
-                (click)="openFile(editForm.get('assessmentNotice')!.value, editForm.get('assessmentNoticeContentType')!.value)"
-                >open</a
+                class="pull-start"
+                (click)="openFile(editForm.get('assessmentNotice')!.value!, editForm.get('assessmentNoticeContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('assessmentNoticeContentType')!.value }}, {{ byteSize(editForm.get('assessmentNotice')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('assessmentNoticeContentType')!.value }}, {{ byteSize(editForm.get('assessmentNotice')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ assessmentNotice: null }); editForm.patchValue({ assessmentNoticeContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ assessmentNotice: undefined, assessmentNoticeContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -153,7 +132,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_correspondents">Correspondents</label>
           <select
             class="form-control"
@@ -162,53 +141,45 @@
             multiple
             name="correspondents"
             formControlName="correspondents"
+            [compareWith]="compareDealer"
           >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('correspondents')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
             id="field_settlementCurrency"
             data-cy="settlementCurrency"
             name="settlementCurrency"
             formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_assessor">Assessor</label>
-          <select class="form-control" id="field_assessor" data-cy="assessor" name="assessor" formControlName="assessor">
+        <div class="row mb-3">
+          <label class="form-label" for="field_assessor">Assessor</label>
+          <select
+            class="form-control"
+            id="field_assessor"
+            data-cy="assessor"
+            name="assessor"
+            formControlName="assessor"
+            [compareWith]="compareDealer"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('assessor')!.value?.id ? editForm.get('assessor')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -217,17 +188,15 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_businessDocuments">Business Document</label>
           <select
             class="form-control"
@@ -236,11 +205,9 @@
             multiple
             name="businessDocuments"
             formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
           >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>

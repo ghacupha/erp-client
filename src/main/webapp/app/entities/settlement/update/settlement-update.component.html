@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading">Create or edit a Settlement</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentNumber">Payment Number</label>
           <input
             type="text"
             class="form-control"
@@ -42,8 +23,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentDate">Payment Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentDate">Payment Date</label>
           <div class="input-group">
             <input
               id="field_paymentDate"
@@ -55,16 +36,14 @@
               #paymentDateDp="ngbDatepicker"
               formControlName="paymentDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -75,8 +54,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -87,27 +66,27 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_notes">Notes</label>
           <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_calculationFile">Calculation File</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_calculationFile">Calculation File</label>
           <div>
             <div *ngIf="editForm.get('calculationFile')!.value" class="form-text text-danger clearfix">
               <a
-                class="pull-left"
-                (click)="openFile(editForm.get('calculationFile')!.value, editForm.get('calculationFileContentType')!.value)"
-                >open</a
+                class="pull-start"
+                (click)="openFile(editForm.get('calculationFile')!.value!, editForm.get('calculationFileContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ calculationFile: null }); editForm.patchValue({ calculationFileContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ calculationFile: undefined, calculationFileContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -136,8 +115,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -148,8 +127,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -160,12 +139,12 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_remarks">Remarks</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -174,34 +153,26 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
             id="field_settlementCurrency"
             data-cy="settlementCurrency"
             name="settlementCurrency"
             formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
           >
             <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
@@ -217,7 +188,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentLabels">Payment Label</label>
           <select
             class="form-control"
@@ -226,34 +197,26 @@
             multiple
             name="paymentLabels"
             formControlName="paymentLabels"
+            [compareWith]="comparePaymentLabel"
           >
-            <option
-              [ngValue]="getSelectedPaymentLabel(paymentLabelOption, editForm.get('paymentLabels')!.value)"
-              *ngFor="let paymentLabelOption of paymentLabelsSharedCollection; trackBy: trackPaymentLabelById"
-            >
+            <option [ngValue]="paymentLabelOption" *ngFor="let paymentLabelOption of paymentLabelsSharedCollection">
               {{ paymentLabelOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentCategory">Payment Category</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentCategory">Payment Category</label>
           <select
             class="form-control"
             id="field_paymentCategory"
             data-cy="paymentCategory"
             name="paymentCategory"
             formControlName="paymentCategory"
+            [compareWith]="comparePaymentCategory"
           >
             <option *ngIf="!editForm.get('paymentCategory')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                paymentCategoryOption.id === editForm.get('paymentCategory')!.value?.id
-                  ? editForm.get('paymentCategory')!.value
-                  : paymentCategoryOption
-              "
-              *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection; trackBy: trackPaymentCategoryById"
-            >
+            <option [ngValue]="paymentCategoryOption" *ngFor="let paymentCategoryOption of paymentCategoriesSharedCollection">
               {{ paymentCategoryOption.categoryName }}
             </option>
           </select>
@@ -267,46 +230,42 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['paymentCategory'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_groupSettlement">Group Settlement</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_groupSettlement">Group Settlement</label>
           <select
             class="form-control"
             id="field_groupSettlement"
             data-cy="groupSettlement"
             name="groupSettlement"
             formControlName="groupSettlement"
+            [compareWith]="compareSettlement"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementOption.id === editForm.get('groupSettlement')!.value?.id
-                  ? editForm.get('groupSettlement')!.value
-                  : settlementOption
-              "
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
+            <option [ngValue]="settlementOption" *ngFor="let settlementOption of settlementsSharedCollection">
               {{ settlementOption.id }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_biller">Biller</label>
-          <select class="form-control" id="field_biller" data-cy="biller" name="biller" formControlName="biller">
+        <div class="row mb-3">
+          <label class="form-label" for="field_biller">Biller</label>
+          <select
+            class="form-control"
+            id="field_biller"
+            data-cy="biller"
+            name="biller"
+            formControlName="biller"
+            [compareWith]="compareDealer"
+          >
             <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('biller')!.value?.id ? editForm.get('biller')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
         <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_paymentInvoices">Payment Invoice</label>
           <select
             class="form-control"
@@ -315,17 +274,15 @@
             multiple
             name="paymentInvoices"
             formControlName="paymentInvoices"
+            [compareWith]="comparePaymentInvoice"
           >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
+            <option [ngValue]="paymentInvoiceOption" *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection">
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_signatories">Signatories</label>
           <select
             class="form-control"
@@ -334,17 +291,13 @@
             multiple
             name="signatories"
             formControlName="signatories"
+            [compareWith]="compareDealer"
           >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('signatories')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_businessDocuments">Business Document</label>
           <select
             class="form-control"
@@ -353,11 +306,9 @@
             multiple
             name="businessDocuments"
             formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
           >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>

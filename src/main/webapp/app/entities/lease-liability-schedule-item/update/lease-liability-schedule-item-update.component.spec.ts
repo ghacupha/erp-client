@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { LeaseLiabilityScheduleItemFormService } from './lease-liability-schedule-item-form.service';
 import { LeaseLiabilityScheduleItemService } from '../service/lease-liability-schedule-item.service';
-import { ILeaseLiabilityScheduleItem, LeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
+import { ILeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { ILeaseContract } from 'app/entities/lease-contract/lease-contract.model';
@@ -42,6 +24,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
   let comp: LeaseLiabilityScheduleItemUpdateComponent;
   let fixture: ComponentFixture<LeaseLiabilityScheduleItemUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let leaseLiabilityScheduleItemFormService: LeaseLiabilityScheduleItemFormService;
   let leaseLiabilityScheduleItemService: LeaseLiabilityScheduleItemService;
   let placeholderService: PlaceholderService;
   let leaseContractService: LeaseContractService;
@@ -50,15 +33,24 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [LeaseLiabilityScheduleItemUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(LeaseLiabilityScheduleItemUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(LeaseLiabilityScheduleItemUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    leaseLiabilityScheduleItemFormService = TestBed.inject(LeaseLiabilityScheduleItemFormService);
     leaseLiabilityScheduleItemService = TestBed.inject(LeaseLiabilityScheduleItemService);
     placeholderService = TestBed.inject(PlaceholderService);
     leaseContractService = TestBed.inject(LeaseContractService);
@@ -84,7 +76,10 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -105,7 +100,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(leaseContractService.query).toHaveBeenCalled();
       expect(leaseContractService.addLeaseContractToCollectionIfMissing).toHaveBeenCalledWith(
         leaseContractCollection,
-        ...additionalLeaseContracts
+        ...additionalLeaseContracts.map(expect.objectContaining)
       );
       expect(comp.leaseContractsSharedCollection).toEqual(expectedCollection);
     });
@@ -127,7 +122,7 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(leaseModelMetadataService.query).toHaveBeenCalled();
       expect(leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing).toHaveBeenCalledWith(
         leaseModelMetadataCollection,
-        ...additionalLeaseModelMetadata
+        ...additionalLeaseModelMetadata.map(expect.objectContaining)
       );
       expect(comp.leaseModelMetadataSharedCollection).toEqual(expectedCollection);
     });
@@ -154,38 +149,39 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(universallyUniqueMappingService.query).toHaveBeenCalled();
       expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
         universallyUniqueMappingCollection,
-        ...additionalUniversallyUniqueMappings
+        ...additionalUniversallyUniqueMappings.map(expect.objectContaining)
       );
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
-      const placeholders: IPlaceholder = { id: 79718 };
-      leaseLiabilityScheduleItem.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 79718 };
+      leaseLiabilityScheduleItem.placeholders = [placeholder];
       const leaseContract: ILeaseContract = { id: 75340 };
       leaseLiabilityScheduleItem.leaseContract = leaseContract;
       const leaseModelMetadata: ILeaseModelMetadata = { id: 85040 };
       leaseLiabilityScheduleItem.leaseModelMetadata = leaseModelMetadata;
-      const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 69682 };
-      leaseLiabilityScheduleItem.universallyUniqueMappings = [universallyUniqueMappings];
+      const universallyUniqueMapping: IUniversallyUniqueMapping = { id: 69682 };
+      leaseLiabilityScheduleItem.universallyUniqueMappings = [universallyUniqueMapping];
 
       activatedRoute.data = of({ leaseLiabilityScheduleItem });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(leaseLiabilityScheduleItem));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.leaseContractsSharedCollection).toContain(leaseContract);
       expect(comp.leaseModelMetadataSharedCollection).toContain(leaseModelMetadata);
-      expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMapping);
+      expect(comp.leaseLiabilityScheduleItem).toEqual(leaseLiabilityScheduleItem);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseLiabilityScheduleItem>>();
+      const saveSubject = new Subject<HttpResponse<ILeaseLiabilityScheduleItem>>();
       const leaseLiabilityScheduleItem = { id: 123 };
+      jest.spyOn(leaseLiabilityScheduleItemFormService, 'getLeaseLiabilityScheduleItem').mockReturnValue(leaseLiabilityScheduleItem);
       jest.spyOn(leaseLiabilityScheduleItemService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ leaseLiabilityScheduleItem });
@@ -198,18 +194,20 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(leaseLiabilityScheduleItemFormService.getLeaseLiabilityScheduleItem).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(leaseLiabilityScheduleItemService.update).toHaveBeenCalledWith(leaseLiabilityScheduleItem);
+      expect(leaseLiabilityScheduleItemService.update).toHaveBeenCalledWith(expect.objectContaining(leaseLiabilityScheduleItem));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseLiabilityScheduleItem>>();
-      const leaseLiabilityScheduleItem = new LeaseLiabilityScheduleItem();
+      const saveSubject = new Subject<HttpResponse<ILeaseLiabilityScheduleItem>>();
+      const leaseLiabilityScheduleItem = { id: 123 };
+      jest.spyOn(leaseLiabilityScheduleItemFormService, 'getLeaseLiabilityScheduleItem').mockReturnValue({ id: null });
       jest.spyOn(leaseLiabilityScheduleItemService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ leaseLiabilityScheduleItem });
+      activatedRoute.data = of({ leaseLiabilityScheduleItem: null });
       comp.ngOnInit();
 
       // WHEN
@@ -219,14 +217,15 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(leaseLiabilityScheduleItemService.create).toHaveBeenCalledWith(leaseLiabilityScheduleItem);
+      expect(leaseLiabilityScheduleItemFormService.getLeaseLiabilityScheduleItem).toHaveBeenCalled();
+      expect(leaseLiabilityScheduleItemService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<LeaseLiabilityScheduleItem>>();
+      const saveSubject = new Subject<HttpResponse<ILeaseLiabilityScheduleItem>>();
       const leaseLiabilityScheduleItem = { id: 123 };
       jest.spyOn(leaseLiabilityScheduleItemService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -239,96 +238,50 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(leaseLiabilityScheduleItemService.update).toHaveBeenCalledWith(leaseLiabilityScheduleItem);
+      expect(leaseLiabilityScheduleItemService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackLeaseContractById', () => {
-      it('Should return tracked LeaseContract primary key', () => {
+    describe('compareLeaseContract', () => {
+      it('Should forward to leaseContractService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackLeaseContractById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(leaseContractService, 'compareLeaseContract');
+        comp.compareLeaseContract(entity, entity2);
+        expect(leaseContractService.compareLeaseContract).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackLeaseModelMetadataById', () => {
-      it('Should return tracked LeaseModelMetadata primary key', () => {
+    describe('compareLeaseModelMetadata', () => {
+      it('Should forward to leaseModelMetadataService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackLeaseModelMetadataById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(leaseModelMetadataService, 'compareLeaseModelMetadata');
+        comp.compareLeaseModelMetadata(entity, entity2);
+        expect(leaseModelMetadataService.compareLeaseModelMetadata).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackUniversallyUniqueMappingById', () => {
-      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+    describe('compareUniversallyUniqueMapping', () => {
+      it('Should forward to universallyUniqueMappingService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedUniversallyUniqueMapping', () => {
-      it('Should return option if no UniversallyUniqueMapping is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected UniversallyUniqueMapping for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this UniversallyUniqueMapping is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedUniversallyUniqueMapping(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(universallyUniqueMappingService, 'compareUniversallyUniqueMapping');
+        comp.compareUniversallyUniqueMapping(entity, entity2);
+        expect(universallyUniqueMappingService.compareUniversallyUniqueMapping).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

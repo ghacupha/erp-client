@@ -1,36 +1,21 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { ISettlement, Settlement } from '../settlement.model';
+import { ISettlement } from '../settlement.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../settlement.test-samples';
 
-import { SettlementService } from './settlement.service';
+import { SettlementService, RestSettlement } from './settlement.service';
+
+const requireRestSample: RestSettlement = {
+  ...sampleWithRequiredData,
+  paymentDate: sampleWithRequiredData.paymentDate?.format(DATE_FORMAT),
+};
 
 describe('Settlement Service', () => {
   let service: SettlementService;
   let httpMock: HttpTestingController;
-  let elemDefault: ISettlement;
   let expectedResult: ISettlement | ISettlement[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,56 +24,27 @@ describe('Settlement Service', () => {
     expectedResult = null;
     service = TestBed.inject(SettlementService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      paymentNumber: 'AAAAAAA',
-      paymentDate: currentDate,
-      paymentAmount: 0,
-      description: 'AAAAAAA',
-      notes: 'AAAAAAA',
-      calculationFileContentType: 'image/png',
-      calculationFile: 'AAAAAAA',
-      fileUploadToken: 'AAAAAAA',
-      compilationToken: 'AAAAAAA',
-      remarks: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          paymentDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a Settlement', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          paymentDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const settlement = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          paymentDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new Settlement()).subscribe(resp => (expectedResult = resp.body));
+      service.create(settlement).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -96,30 +52,11 @@ describe('Settlement Service', () => {
     });
 
     it('should update a Settlement', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          paymentNumber: 'BBBBBB',
-          paymentDate: currentDate.format(DATE_FORMAT),
-          paymentAmount: 1,
-          description: 'BBBBBB',
-          notes: 'BBBBBB',
-          calculationFile: 'BBBBBB',
-          fileUploadToken: 'BBBBBB',
-          compilationToken: 'BBBBBB',
-          remarks: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const settlement = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          paymentDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(settlement).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -127,28 +64,9 @@ describe('Settlement Service', () => {
     });
 
     it('should partial update a Settlement', () => {
-      const patchObject = Object.assign(
-        {
-          paymentNumber: 'BBBBBB',
-          paymentDate: currentDate.format(DATE_FORMAT),
-          paymentAmount: 1,
-          notes: 'BBBBBB',
-          calculationFile: 'BBBBBB',
-          fileUploadToken: 'BBBBBB',
-          compilationToken: 'BBBBBB',
-          remarks: 'BBBBBB',
-        },
-        new Settlement()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          paymentDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -158,83 +76,66 @@ describe('Settlement Service', () => {
     });
 
     it('should return a list of Settlement', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          paymentNumber: 'BBBBBB',
-          paymentDate: currentDate.format(DATE_FORMAT),
-          paymentAmount: 1,
-          description: 'BBBBBB',
-          notes: 'BBBBBB',
-          calculationFile: 'BBBBBB',
-          fileUploadToken: 'BBBBBB',
-          compilationToken: 'BBBBBB',
-          remarks: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          paymentDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a Settlement', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addSettlementToCollectionIfMissing', () => {
       it('should add a Settlement to an empty array', () => {
-        const settlement: ISettlement = { id: 123 };
+        const settlement: ISettlement = sampleWithRequiredData;
         expectedResult = service.addSettlementToCollectionIfMissing([], settlement);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(settlement);
       });
 
       it('should not add a Settlement to an array that contains it', () => {
-        const settlement: ISettlement = { id: 123 };
+        const settlement: ISettlement = sampleWithRequiredData;
         const settlementCollection: ISettlement[] = [
           {
             ...settlement,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addSettlementToCollectionIfMissing(settlementCollection, settlement);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a Settlement to an array that doesn't contain it", () => {
-        const settlement: ISettlement = { id: 123 };
-        const settlementCollection: ISettlement[] = [{ id: 456 }];
+        const settlement: ISettlement = sampleWithRequiredData;
+        const settlementCollection: ISettlement[] = [sampleWithPartialData];
         expectedResult = service.addSettlementToCollectionIfMissing(settlementCollection, settlement);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(settlement);
       });
 
       it('should add only unique Settlement to an array', () => {
-        const settlementArray: ISettlement[] = [{ id: 123 }, { id: 456 }, { id: 86997 }];
-        const settlementCollection: ISettlement[] = [{ id: 123 }];
+        const settlementArray: ISettlement[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const settlementCollection: ISettlement[] = [sampleWithRequiredData];
         expectedResult = service.addSettlementToCollectionIfMissing(settlementCollection, ...settlementArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const settlement: ISettlement = { id: 123 };
-        const settlement2: ISettlement = { id: 456 };
+        const settlement: ISettlement = sampleWithRequiredData;
+        const settlement2: ISettlement = sampleWithPartialData;
         expectedResult = service.addSettlementToCollectionIfMissing([], settlement, settlement2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(settlement);
@@ -242,16 +143,60 @@ describe('Settlement Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const settlement: ISettlement = { id: 123 };
+        const settlement: ISettlement = sampleWithRequiredData;
         expectedResult = service.addSettlementToCollectionIfMissing([], null, settlement, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(settlement);
       });
 
       it('should return initial array if no Settlement is added', () => {
-        const settlementCollection: ISettlement[] = [{ id: 123 }];
+        const settlementCollection: ISettlement[] = [sampleWithRequiredData];
         expectedResult = service.addSettlementToCollectionIfMissing(settlementCollection, undefined, null);
         expect(expectedResult).toEqual(settlementCollection);
+      });
+    });
+
+    describe('compareSettlement', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareSettlement(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareSettlement(entity1, entity2);
+        const compareResult2 = service.compareSettlement(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareSettlement(entity1, entity2);
+        const compareResult2 = service.compareSettlement(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareSettlement(entity1, entity2);
+        const compareResult2 = service.compareSettlement(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

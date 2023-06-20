@@ -16,11 +16,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-jest.mock('@angular/router');
 jest.mock('app/core/auth/state-storage.service');
 jest.mock('app/core/tracker/tracker.service');
 
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { NgxWebstorageModule } from 'ngx-webstorage';
@@ -56,8 +56,8 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, NgxWebstorageModule.forRoot()],
-      providers: [TrackerService, StateStorageService, Router],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([]), NgxWebstorageModule.forRoot()],
+      providers: [TrackerService, StateStorageService],
     });
 
     service = TestBed.inject(AccountService);
@@ -65,6 +65,8 @@ describe('Account Service', () => {
     httpMock = TestBed.inject(HttpTestingController);
     mockStorageService = TestBed.inject(StateStorageService);
     mockRouter = TestBed.inject(Router);
+    jest.spyOn(mockRouter, 'navigateByUrl').mockImplementation(() => Promise.resolve(true));
+
     mockTrackerService = TestBed.inject(TrackerService);
   });
 

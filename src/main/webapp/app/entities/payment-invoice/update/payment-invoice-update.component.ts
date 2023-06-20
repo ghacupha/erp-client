@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
+import { PaymentInvoiceFormService, PaymentInvoiceFormGroup } from './payment-invoice-form.service';
+import { IPaymentInvoice } from '../payment-invoice.model';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -51,6 +33,7 @@ import { BusinessDocumentService } from 'app/entities/business-document/service/
 })
 export class PaymentInvoiceUpdateComponent implements OnInit {
   isSaving = false;
+  paymentInvoice: IPaymentInvoice | null = null;
 
   purchaseOrdersSharedCollection: IPurchaseOrder[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -61,28 +44,13 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   jobSheetsSharedCollection: IJobSheet[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    invoiceNumber: [null, [Validators.required]],
-    invoiceDate: [],
-    invoiceAmount: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    remarks: [],
-    purchaseOrders: [],
-    placeholders: [],
-    paymentLabels: [],
-    settlementCurrency: [null, Validators.required],
-    biller: [null, Validators.required],
-    deliveryNotes: [],
-    jobSheets: [],
-    businessDocuments: [],
-  });
+  editForm: PaymentInvoiceFormGroup = this.paymentInvoiceFormService.createPaymentInvoiceFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected paymentInvoiceService: PaymentInvoiceService,
+    protected paymentInvoiceFormService: PaymentInvoiceFormService,
     protected purchaseOrderService: PurchaseOrderService,
     protected placeholderService: PlaceholderService,
     protected paymentLabelService: PaymentLabelService,
@@ -91,13 +59,36 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
     protected businessDocumentService: BusinessDocumentService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareDeliveryNote = (o1: IDeliveryNote | null, o2: IDeliveryNote | null): boolean =>
+    this.deliveryNoteService.compareDeliveryNote(o1, o2);
+
+  compareJobSheet = (o1: IJobSheet | null, o2: IJobSheet | null): boolean => this.jobSheetService.compareJobSheet(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentInvoice }) => {
-      this.updateForm(paymentInvoice);
+      this.paymentInvoice = paymentInvoice;
+      if (paymentInvoice) {
+        this.updateForm(paymentInvoice);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -124,117 +115,19 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const paymentInvoice = this.createFromForm();
-    if (paymentInvoice.id !== undefined) {
+    const paymentInvoice = this.paymentInvoiceFormService.getPaymentInvoice(this.editForm);
+    if (paymentInvoice.id !== null) {
       this.subscribeToSaveResponse(this.paymentInvoiceService.update(paymentInvoice));
     } else {
       this.subscribeToSaveResponse(this.paymentInvoiceService.create(paymentInvoice));
     }
   }
 
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetById(index: number, item: IJobSheet): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentInvoice>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -250,50 +143,39 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   protected updateForm(paymentInvoice: IPaymentInvoice): void {
-    this.editForm.patchValue({
-      id: paymentInvoice.id,
-      invoiceNumber: paymentInvoice.invoiceNumber,
-      invoiceDate: paymentInvoice.invoiceDate,
-      invoiceAmount: paymentInvoice.invoiceAmount,
-      fileUploadToken: paymentInvoice.fileUploadToken,
-      compilationToken: paymentInvoice.compilationToken,
-      remarks: paymentInvoice.remarks,
-      purchaseOrders: paymentInvoice.purchaseOrders,
-      placeholders: paymentInvoice.placeholders,
-      paymentLabels: paymentInvoice.paymentLabels,
-      settlementCurrency: paymentInvoice.settlementCurrency,
-      biller: paymentInvoice.biller,
-      deliveryNotes: paymentInvoice.deliveryNotes,
-      jobSheets: paymentInvoice.jobSheets,
-      businessDocuments: paymentInvoice.businessDocuments,
-    });
+    this.paymentInvoice = paymentInvoice;
+    this.paymentInvoiceFormService.resetForm(this.editForm, paymentInvoice);
 
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       ...(paymentInvoice.purchaseOrders ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(paymentInvoice.placeholders ?? [])
     );
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(paymentInvoice.paymentLabels ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      paymentInvoice.settlementCurrency
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        paymentInvoice.settlementCurrency
+      );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
+      this.dealersSharedCollection,
+      paymentInvoice.biller
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
       this.deliveryNotesSharedCollection,
       ...(paymentInvoice.deliveryNotes ?? [])
     );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(
       this.jobSheetsSharedCollection,
       ...(paymentInvoice.jobSheets ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(paymentInvoice.businessDocuments ?? [])
     );
@@ -305,9 +187,9 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
+            ...(this.paymentInvoice?.purchaseOrders ?? [])
           )
         )
       )
@@ -318,7 +200,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.paymentInvoice?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -328,7 +213,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.paymentInvoice?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -338,9 +226,9 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.paymentInvoice?.settlementCurrency
           )
         )
       )
@@ -349,7 +237,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('biller')!.value)))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.paymentInvoice?.biller)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.deliveryNoteService
@@ -357,7 +245,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
       .pipe(
         map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
+            deliveryNotes,
+            ...(this.paymentInvoice?.deliveryNotes ?? [])
+          )
         )
       )
       .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
@@ -367,7 +258,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
       .pipe(
         map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+          this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(jobSheets, ...(this.paymentInvoice?.jobSheets ?? []))
         )
       )
       .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
@@ -377,33 +268,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.paymentInvoice?.businessDocuments ?? [])
           )
         )
       )
       .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-  }
-
-  protected createFromForm(): IPaymentInvoice {
-    return {
-      ...new PaymentInvoice(),
-      id: this.editForm.get(['id'])!.value,
-      invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
-      invoiceDate: this.editForm.get(['invoiceDate'])!.value,
-      invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      biller: this.editForm.get(['biller'])!.value,
-      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
-      jobSheets: this.editForm.get(['jobSheets'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
   }
 }

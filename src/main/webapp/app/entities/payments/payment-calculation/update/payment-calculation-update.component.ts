@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentCalculation, PaymentCalculation } from '../payment-calculation.model';
+import { PaymentCalculationFormService, PaymentCalculationFormGroup } from './payment-calculation-form.service';
+import { IPaymentCalculation } from '../payment-calculation.model';
 import { PaymentCalculationService } from '../service/payment-calculation.service';
 import { IPaymentLabel } from 'app/entities/payment-label/payment-label.model';
 import { PaymentLabelService } from 'app/entities/payment-label/service/payment-label.service';
@@ -38,36 +20,37 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class PaymentCalculationUpdateComponent implements OnInit {
   isSaving = false;
+  paymentCalculation: IPaymentCalculation | null = null;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   paymentCategoriesSharedCollection: IPaymentCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    paymentExpense: [],
-    withholdingVAT: [],
-    withholdingTax: [],
-    paymentAmount: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    paymentLabels: [],
-    paymentCategory: [],
-    placeholders: [],
-  });
+  editForm: PaymentCalculationFormGroup = this.paymentCalculationFormService.createPaymentCalculationFormGroup();
 
   constructor(
     protected paymentCalculationService: PaymentCalculationService,
+    protected paymentCalculationFormService: PaymentCalculationFormService,
     protected paymentLabelService: PaymentLabelService,
     protected paymentCategoryService: PaymentCategoryService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePaymentCategory = (o1: IPaymentCategory | null, o2: IPaymentCategory | null): boolean =>
+    this.paymentCategoryService.comparePaymentCategory(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentCalculation }) => {
-      this.updateForm(paymentCalculation);
+      this.paymentCalculation = paymentCalculation;
+      if (paymentCalculation) {
+        this.updateForm(paymentCalculation);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -79,53 +62,19 @@ export class PaymentCalculationUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const paymentCalculation = this.createFromForm();
-    if (paymentCalculation.id !== undefined) {
+    const paymentCalculation = this.paymentCalculationFormService.getPaymentCalculation(this.editForm);
+    if (paymentCalculation.id !== null) {
       this.subscribeToSaveResponse(this.paymentCalculationService.update(paymentCalculation));
     } else {
       this.subscribeToSaveResponse(this.paymentCalculationService.create(paymentCalculation));
     }
   }
 
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPaymentCategoryById(index: number, item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentCalculation>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -141,28 +90,18 @@ export class PaymentCalculationUpdateComponent implements OnInit {
   }
 
   protected updateForm(paymentCalculation: IPaymentCalculation): void {
-    this.editForm.patchValue({
-      id: paymentCalculation.id,
-      paymentExpense: paymentCalculation.paymentExpense,
-      withholdingVAT: paymentCalculation.withholdingVAT,
-      withholdingTax: paymentCalculation.withholdingTax,
-      paymentAmount: paymentCalculation.paymentAmount,
-      fileUploadToken: paymentCalculation.fileUploadToken,
-      compilationToken: paymentCalculation.compilationToken,
-      paymentLabels: paymentCalculation.paymentLabels,
-      paymentCategory: paymentCalculation.paymentCategory,
-      placeholders: paymentCalculation.placeholders,
-    });
+    this.paymentCalculation = paymentCalculation;
+    this.paymentCalculationFormService.resetForm(this.editForm, paymentCalculation);
 
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(paymentCalculation.paymentLabels ?? [])
     );
-    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
       this.paymentCategoriesSharedCollection,
       paymentCalculation.paymentCategory
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(paymentCalculation.placeholders ?? [])
     );
@@ -174,7 +113,10 @@ export class PaymentCalculationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.paymentCalculation?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -184,9 +126,9 @@ export class PaymentCalculationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
       .pipe(
         map((paymentCategories: IPaymentCategory[]) =>
-          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
             paymentCategories,
-            this.editForm.get('paymentCategory')!.value
+            this.paymentCalculation?.paymentCategory
           )
         )
       )
@@ -197,25 +139,12 @@ export class PaymentCalculationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.paymentCalculation?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IPaymentCalculation {
-    return {
-      ...new PaymentCalculation(),
-      id: this.editForm.get(['id'])!.value,
-      paymentExpense: this.editForm.get(['paymentExpense'])!.value,
-      withholdingVAT: this.editForm.get(['withholdingVAT'])!.value,
-      withholdingTax: this.editForm.get(['withholdingTax'])!.value,
-      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

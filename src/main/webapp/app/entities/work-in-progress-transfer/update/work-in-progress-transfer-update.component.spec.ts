@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { WorkInProgressTransferFormService } from './work-in-progress-transfer-form.service';
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
-import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
+import { IWorkInProgressTransfer } from '../work-in-progress-transfer.model';
 import { IWorkInProgressRegistration } from 'app/entities/work-in-progress-registration/work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from 'app/entities/work-in-progress-registration/service/work-in-progress-registration.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
@@ -40,6 +22,7 @@ describe('WorkInProgressTransfer Management Update Component', () => {
   let comp: WorkInProgressTransferUpdateComponent;
   let fixture: ComponentFixture<WorkInProgressTransferUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let workInProgressTransferFormService: WorkInProgressTransferFormService;
   let workInProgressTransferService: WorkInProgressTransferService;
   let workInProgressRegistrationService: WorkInProgressRegistrationService;
   let placeholderService: PlaceholderService;
@@ -47,15 +30,24 @@ describe('WorkInProgressTransfer Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [WorkInProgressTransferUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(WorkInProgressTransferUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(WorkInProgressTransferUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    workInProgressTransferFormService = TestBed.inject(WorkInProgressTransferFormService);
     workInProgressTransferService = TestBed.inject(WorkInProgressTransferService);
     workInProgressRegistrationService = TestBed.inject(WorkInProgressRegistrationService);
     placeholderService = TestBed.inject(PlaceholderService);
@@ -89,7 +81,7 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       expect(workInProgressRegistrationService.query).toHaveBeenCalled();
       expect(workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing).toHaveBeenCalledWith(
         workInProgressRegistrationCollection,
-        ...additionalWorkInProgressRegistrations
+        ...additionalWorkInProgressRegistrations.map(expect.objectContaining)
       );
       expect(comp.workInProgressRegistrationsSharedCollection).toEqual(expectedCollection);
     });
@@ -109,7 +101,10 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -130,35 +125,36 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const workInProgressTransfer: IWorkInProgressTransfer = { id: 456 };
-      const workInProgressRegistrations: IWorkInProgressRegistration = { id: 88361 };
-      workInProgressTransfer.workInProgressRegistrations = [workInProgressRegistrations];
-      const placeholders: IPlaceholder = { id: 49392 };
-      workInProgressTransfer.placeholders = [placeholders];
-      const businessDocuments: IBusinessDocument = { id: 93819 };
-      workInProgressTransfer.businessDocuments = [businessDocuments];
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 88361 };
+      workInProgressTransfer.workInProgressRegistrations = [workInProgressRegistration];
+      const placeholder: IPlaceholder = { id: 49392 };
+      workInProgressTransfer.placeholders = [placeholder];
+      const businessDocument: IBusinessDocument = { id: 93819 };
+      workInProgressTransfer.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ workInProgressTransfer });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(workInProgressTransfer));
-      expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressRegistrations);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressRegistration);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.workInProgressTransfer).toEqual(workInProgressTransfer);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressTransfer>>();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressTransfer>>();
       const workInProgressTransfer = { id: 123 };
+      jest.spyOn(workInProgressTransferFormService, 'getWorkInProgressTransfer').mockReturnValue(workInProgressTransfer);
       jest.spyOn(workInProgressTransferService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ workInProgressTransfer });
@@ -171,18 +167,20 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(workInProgressTransferFormService.getWorkInProgressTransfer).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(workInProgressTransferService.update).toHaveBeenCalledWith(workInProgressTransfer);
+      expect(workInProgressTransferService.update).toHaveBeenCalledWith(expect.objectContaining(workInProgressTransfer));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressTransfer>>();
-      const workInProgressTransfer = new WorkInProgressTransfer();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressTransfer>>();
+      const workInProgressTransfer = { id: 123 };
+      jest.spyOn(workInProgressTransferFormService, 'getWorkInProgressTransfer').mockReturnValue({ id: null });
       jest.spyOn(workInProgressTransferService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ workInProgressTransfer });
+      activatedRoute.data = of({ workInProgressTransfer: null });
       comp.ngOnInit();
 
       // WHEN
@@ -192,14 +190,15 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(workInProgressTransferService.create).toHaveBeenCalledWith(workInProgressTransfer);
+      expect(workInProgressTransferFormService.getWorkInProgressTransfer).toHaveBeenCalled();
+      expect(workInProgressTransferService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<WorkInProgressTransfer>>();
+      const saveSubject = new Subject<HttpResponse<IWorkInProgressTransfer>>();
       const workInProgressTransfer = { id: 123 };
       jest.spyOn(workInProgressTransferService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -212,114 +211,40 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(workInProgressTransferService.update).toHaveBeenCalledWith(workInProgressTransfer);
+      expect(workInProgressTransferService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackWorkInProgressRegistrationById', () => {
-      it('Should return tracked WorkInProgressRegistration primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareWorkInProgressRegistration', () => {
+      it('Should forward to workInProgressRegistrationService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackWorkInProgressRegistrationById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(workInProgressRegistrationService, 'compareWorkInProgressRegistration');
+        comp.compareWorkInProgressRegistration(entity, entity2);
+        expect(workInProgressRegistrationService.compareWorkInProgressRegistration).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedWorkInProgressRegistration', () => {
-      it('Should return option if no WorkInProgressRegistration is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedWorkInProgressRegistration(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected WorkInProgressRegistration for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedWorkInProgressRegistration(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this WorkInProgressRegistration is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedWorkInProgressRegistration(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

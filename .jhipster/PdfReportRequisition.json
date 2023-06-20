@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220520053032",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "reportName",
@@ -34,37 +36,35 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PdfReportRequisition",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "reportTemplate",
+      "otherEntityField": "catalogueNumber",
       "otherEntityName": "reportTemplate",
+      "relationshipName": "reportTemplate",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "catalogueNumber"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "pdfReportRequisition",
       "ownerSide": true,
-      "otherEntityRelationshipName": "pdfReportRequisition"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "pdfReportRequisition",
       "ownerSide": true,
-      "otherEntityRelationshipName": "pdfReportRequisition"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PdfReportRequisition",
-  "changelogDate": "20220520053032",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

@@ -1,33 +1,27 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPrepaymentMarshalling, getPrepaymentMarshallingIdentifier } from '../prepayment-marshalling.model';
+import { IPrepaymentMarshalling, NewPrepaymentMarshalling } from '../prepayment-marshalling.model';
+
+export type PartialUpdatePrepaymentMarshalling = Partial<IPrepaymentMarshalling> & Pick<IPrepaymentMarshalling, 'id'>;
+
+type RestOf<T extends IPrepaymentMarshalling | NewPrepaymentMarshalling> = Omit<T, 'amortizationCommencementDate'> & {
+  amortizationCommencementDate?: string | null;
+};
+
+export type RestPrepaymentMarshalling = RestOf<IPrepaymentMarshalling>;
+
+export type NewRestPrepaymentMarshalling = RestOf<NewPrepaymentMarshalling>;
+
+export type PartialUpdateRestPrepaymentMarshalling = RestOf<PartialUpdatePrepaymentMarshalling>;
 
 export type EntityResponseType = HttpResponse<IPrepaymentMarshalling>;
 export type EntityArrayResponseType = HttpResponse<IPrepaymentMarshalling[]>;
@@ -39,42 +33,42 @@ export class PrepaymentMarshallingService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(prepaymentMarshalling: IPrepaymentMarshalling): Observable<EntityResponseType> {
+  create(prepaymentMarshalling: NewPrepaymentMarshalling): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(prepaymentMarshalling);
     return this.http
-      .post<IPrepaymentMarshalling>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestPrepaymentMarshalling>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(prepaymentMarshalling: IPrepaymentMarshalling): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(prepaymentMarshalling);
     return this.http
-      .put<IPrepaymentMarshalling>(`${this.resourceUrl}/${getPrepaymentMarshallingIdentifier(prepaymentMarshalling) as number}`, copy, {
+      .put<RestPrepaymentMarshalling>(`${this.resourceUrl}/${this.getPrepaymentMarshallingIdentifier(prepaymentMarshalling)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(prepaymentMarshalling: IPrepaymentMarshalling): Observable<EntityResponseType> {
+  partialUpdate(prepaymentMarshalling: PartialUpdatePrepaymentMarshalling): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(prepaymentMarshalling);
     return this.http
-      .patch<IPrepaymentMarshalling>(`${this.resourceUrl}/${getPrepaymentMarshallingIdentifier(prepaymentMarshalling) as number}`, copy, {
+      .patch<RestPrepaymentMarshalling>(`${this.resourceUrl}/${this.getPrepaymentMarshallingIdentifier(prepaymentMarshalling)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IPrepaymentMarshalling>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestPrepaymentMarshalling>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPrepaymentMarshalling[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPrepaymentMarshalling[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -84,25 +78,30 @@ export class PrepaymentMarshallingService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IPrepaymentMarshalling[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestPrepaymentMarshalling[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addPrepaymentMarshallingToCollectionIfMissing(
-    prepaymentMarshallingCollection: IPrepaymentMarshalling[],
-    ...prepaymentMarshallingsToCheck: (IPrepaymentMarshalling | null | undefined)[]
-  ): IPrepaymentMarshalling[] {
-    const prepaymentMarshallings: IPrepaymentMarshalling[] = prepaymentMarshallingsToCheck.filter(isPresent);
+  getPrepaymentMarshallingIdentifier(prepaymentMarshalling: Pick<IPrepaymentMarshalling, 'id'>): number {
+    return prepaymentMarshalling.id;
+  }
+
+  comparePrepaymentMarshalling(o1: Pick<IPrepaymentMarshalling, 'id'> | null, o2: Pick<IPrepaymentMarshalling, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPrepaymentMarshallingIdentifier(o1) === this.getPrepaymentMarshallingIdentifier(o2) : o1 === o2;
+  }
+
+  addPrepaymentMarshallingToCollectionIfMissing<Type extends Pick<IPrepaymentMarshalling, 'id'>>(
+    prepaymentMarshallingCollection: Type[],
+    ...prepaymentMarshallingsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const prepaymentMarshallings: Type[] = prepaymentMarshallingsToCheck.filter(isPresent);
     if (prepaymentMarshallings.length > 0) {
       const prepaymentMarshallingCollectionIdentifiers = prepaymentMarshallingCollection.map(
-        prepaymentMarshallingItem => getPrepaymentMarshallingIdentifier(prepaymentMarshallingItem)!
+        prepaymentMarshallingItem => this.getPrepaymentMarshallingIdentifier(prepaymentMarshallingItem)!
       );
       const prepaymentMarshallingsToAdd = prepaymentMarshallings.filter(prepaymentMarshallingItem => {
-        const prepaymentMarshallingIdentifier = getPrepaymentMarshallingIdentifier(prepaymentMarshallingItem);
-        if (
-          prepaymentMarshallingIdentifier == null ||
-          prepaymentMarshallingCollectionIdentifiers.includes(prepaymentMarshallingIdentifier)
-        ) {
+        const prepaymentMarshallingIdentifier = this.getPrepaymentMarshallingIdentifier(prepaymentMarshallingItem);
+        if (prepaymentMarshallingCollectionIdentifiers.includes(prepaymentMarshallingIdentifier)) {
           return false;
         }
         prepaymentMarshallingCollectionIdentifiers.push(prepaymentMarshallingIdentifier);
@@ -113,31 +112,33 @@ export class PrepaymentMarshallingService {
     return prepaymentMarshallingCollection;
   }
 
-  protected convertDateFromClient(prepaymentMarshalling: IPrepaymentMarshalling): IPrepaymentMarshalling {
-    return Object.assign({}, prepaymentMarshalling, {
-      amortizationCommencementDate: prepaymentMarshalling.amortizationCommencementDate?.isValid()
-        ? prepaymentMarshalling.amortizationCommencementDate.format(DATE_FORMAT)
+  protected convertDateFromClient<T extends IPrepaymentMarshalling | NewPrepaymentMarshalling | PartialUpdatePrepaymentMarshalling>(
+    prepaymentMarshalling: T
+  ): RestOf<T> {
+    return {
+      ...prepaymentMarshalling,
+      amortizationCommencementDate: prepaymentMarshalling.amortizationCommencementDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restPrepaymentMarshalling: RestPrepaymentMarshalling): IPrepaymentMarshalling {
+    return {
+      ...restPrepaymentMarshalling,
+      amortizationCommencementDate: restPrepaymentMarshalling.amortizationCommencementDate
+        ? dayjs(restPrepaymentMarshalling.amortizationCommencementDate)
         : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestPrepaymentMarshalling>): HttpResponse<IPrepaymentMarshalling> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.amortizationCommencementDate = res.body.amortizationCommencementDate
-        ? dayjs(res.body.amortizationCommencementDate)
-        : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((prepaymentMarshalling: IPrepaymentMarshalling) => {
-        prepaymentMarshalling.amortizationCommencementDate = prepaymentMarshalling.amortizationCommencementDate
-          ? dayjs(prepaymentMarshalling.amortizationCommencementDate)
-          : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestPrepaymentMarshalling[]>): HttpResponse<IPrepaymentMarshalling[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

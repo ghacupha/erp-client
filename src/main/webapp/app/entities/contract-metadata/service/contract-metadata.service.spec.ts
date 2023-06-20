@@ -1,38 +1,22 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { ContractType } from 'app/entities/enumerations/contract-type.model';
-import { ContractStatus } from 'app/entities/enumerations/contract-status.model';
-import { IContractMetadata, ContractMetadata } from '../contract-metadata.model';
+import { IContractMetadata } from '../contract-metadata.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../contract-metadata.test-samples';
 
-import { ContractMetadataService } from './contract-metadata.service';
+import { ContractMetadataService, RestContractMetadata } from './contract-metadata.service';
+
+const requireRestSample: RestContractMetadata = {
+  ...sampleWithRequiredData,
+  startDate: sampleWithRequiredData.startDate?.format(DATE_FORMAT),
+  terminationDate: sampleWithRequiredData.terminationDate?.format(DATE_FORMAT),
+};
 
 describe('ContractMetadata Service', () => {
   let service: ContractMetadataService;
   let httpMock: HttpTestingController;
-  let elemDefault: IContractMetadata;
   let expectedResult: IContractMetadata | IContractMetadata[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -41,58 +25,27 @@ describe('ContractMetadata Service', () => {
     expectedResult = null;
     service = TestBed.inject(ContractMetadataService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      description: 'AAAAAAA',
-      typeOfContract: ContractType.SUPPLIER,
-      contractStatus: ContractStatus.ACTIVE,
-      startDate: currentDate,
-      terminationDate: currentDate,
-      commentsAndAttachment: 'AAAAAAA',
-      contractTitle: 'AAAAAAA',
-      contractIdentifier: 'AAAAAAA',
-      contractIdentifierShort: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          startDate: currentDate.format(DATE_FORMAT),
-          terminationDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a ContractMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          startDate: currentDate.format(DATE_FORMAT),
-          terminationDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const contractMetadata = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          startDate: currentDate,
-          terminationDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new ContractMetadata()).subscribe(resp => (expectedResult = resp.body));
+      service.create(contractMetadata).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -100,31 +53,11 @@ describe('ContractMetadata Service', () => {
     });
 
     it('should update a ContractMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          description: 'BBBBBB',
-          typeOfContract: 'BBBBBB',
-          contractStatus: 'BBBBBB',
-          startDate: currentDate.format(DATE_FORMAT),
-          terminationDate: currentDate.format(DATE_FORMAT),
-          commentsAndAttachment: 'BBBBBB',
-          contractTitle: 'BBBBBB',
-          contractIdentifier: 'BBBBBB',
-          contractIdentifierShort: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const contractMetadata = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          startDate: currentDate,
-          terminationDate: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(contractMetadata).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -132,26 +65,9 @@ describe('ContractMetadata Service', () => {
     });
 
     it('should partial update a ContractMetadata', () => {
-      const patchObject = Object.assign(
-        {
-          contractStatus: 'BBBBBB',
-          startDate: currentDate.format(DATE_FORMAT),
-          commentsAndAttachment: 'BBBBBB',
-          contractTitle: 'BBBBBB',
-          contractIdentifierShort: 'BBBBBB',
-        },
-        new ContractMetadata()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          startDate: currentDate,
-          terminationDate: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -161,84 +77,66 @@ describe('ContractMetadata Service', () => {
     });
 
     it('should return a list of ContractMetadata', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          description: 'BBBBBB',
-          typeOfContract: 'BBBBBB',
-          contractStatus: 'BBBBBB',
-          startDate: currentDate.format(DATE_FORMAT),
-          terminationDate: currentDate.format(DATE_FORMAT),
-          commentsAndAttachment: 'BBBBBB',
-          contractTitle: 'BBBBBB',
-          contractIdentifier: 'BBBBBB',
-          contractIdentifierShort: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          startDate: currentDate,
-          terminationDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a ContractMetadata', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addContractMetadataToCollectionIfMissing', () => {
       it('should add a ContractMetadata to an empty array', () => {
-        const contractMetadata: IContractMetadata = { id: 123 };
+        const contractMetadata: IContractMetadata = sampleWithRequiredData;
         expectedResult = service.addContractMetadataToCollectionIfMissing([], contractMetadata);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(contractMetadata);
       });
 
       it('should not add a ContractMetadata to an array that contains it', () => {
-        const contractMetadata: IContractMetadata = { id: 123 };
+        const contractMetadata: IContractMetadata = sampleWithRequiredData;
         const contractMetadataCollection: IContractMetadata[] = [
           {
             ...contractMetadata,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addContractMetadataToCollectionIfMissing(contractMetadataCollection, contractMetadata);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a ContractMetadata to an array that doesn't contain it", () => {
-        const contractMetadata: IContractMetadata = { id: 123 };
-        const contractMetadataCollection: IContractMetadata[] = [{ id: 456 }];
+        const contractMetadata: IContractMetadata = sampleWithRequiredData;
+        const contractMetadataCollection: IContractMetadata[] = [sampleWithPartialData];
         expectedResult = service.addContractMetadataToCollectionIfMissing(contractMetadataCollection, contractMetadata);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(contractMetadata);
       });
 
       it('should add only unique ContractMetadata to an array', () => {
-        const contractMetadataArray: IContractMetadata[] = [{ id: 123 }, { id: 456 }, { id: 42677 }];
-        const contractMetadataCollection: IContractMetadata[] = [{ id: 123 }];
+        const contractMetadataArray: IContractMetadata[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const contractMetadataCollection: IContractMetadata[] = [sampleWithRequiredData];
         expectedResult = service.addContractMetadataToCollectionIfMissing(contractMetadataCollection, ...contractMetadataArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const contractMetadata: IContractMetadata = { id: 123 };
-        const contractMetadata2: IContractMetadata = { id: 456 };
+        const contractMetadata: IContractMetadata = sampleWithRequiredData;
+        const contractMetadata2: IContractMetadata = sampleWithPartialData;
         expectedResult = service.addContractMetadataToCollectionIfMissing([], contractMetadata, contractMetadata2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(contractMetadata);
@@ -246,16 +144,60 @@ describe('ContractMetadata Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const contractMetadata: IContractMetadata = { id: 123 };
+        const contractMetadata: IContractMetadata = sampleWithRequiredData;
         expectedResult = service.addContractMetadataToCollectionIfMissing([], null, contractMetadata, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(contractMetadata);
       });
 
       it('should return initial array if no ContractMetadata is added', () => {
-        const contractMetadataCollection: IContractMetadata[] = [{ id: 123 }];
+        const contractMetadataCollection: IContractMetadata[] = [sampleWithRequiredData];
         expectedResult = service.addContractMetadataToCollectionIfMissing(contractMetadataCollection, undefined, null);
         expect(expectedResult).toEqual(contractMetadataCollection);
+      });
+    });
+
+    describe('compareContractMetadata', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareContractMetadata(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareContractMetadata(entity1, entity2);
+        const compareResult2 = service.compareContractMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareContractMetadata(entity1, entity2);
+        const compareResult2 = service.compareContractMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareContractMetadata(entity1, entity2);
+        const compareResult2 = service.compareContractMetadata(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

@@ -1,32 +1,14 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { DeliveryNoteFormService } from './delivery-note-form.service';
 import { DeliveryNoteService } from '../service/delivery-note.service';
-import { IDeliveryNote, DeliveryNote } from '../delivery-note.model';
+import { IDeliveryNote } from '../delivery-note.model';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
@@ -44,6 +26,7 @@ describe('DeliveryNote Management Update Component', () => {
   let comp: DeliveryNoteUpdateComponent;
   let fixture: ComponentFixture<DeliveryNoteUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let deliveryNoteFormService: DeliveryNoteFormService;
   let deliveryNoteService: DeliveryNoteService;
   let placeholderService: PlaceholderService;
   let dealerService: DealerService;
@@ -53,15 +36,24 @@ describe('DeliveryNote Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [DeliveryNoteUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(DeliveryNoteUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(DeliveryNoteUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    deliveryNoteFormService = TestBed.inject(DeliveryNoteFormService);
     deliveryNoteService = TestBed.inject(DeliveryNoteService);
     placeholderService = TestBed.inject(PlaceholderService);
     dealerService = TestBed.inject(DealerService);
@@ -88,7 +80,10 @@ describe('DeliveryNote Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -111,7 +106,10 @@ describe('DeliveryNote Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -132,7 +130,7 @@ describe('DeliveryNote Management Update Component', () => {
       expect(businessStampService.query).toHaveBeenCalled();
       expect(businessStampService.addBusinessStampToCollectionIfMissing).toHaveBeenCalledWith(
         businessStampCollection,
-        ...additionalBusinessStamps
+        ...additionalBusinessStamps.map(expect.objectContaining)
       );
       expect(comp.businessStampsSharedCollection).toEqual(expectedCollection);
     });
@@ -156,7 +154,7 @@ describe('DeliveryNote Management Update Component', () => {
       expect(purchaseOrderService.query).toHaveBeenCalled();
       expect(purchaseOrderService.addPurchaseOrderToCollectionIfMissing).toHaveBeenCalledWith(
         purchaseOrderCollection,
-        ...additionalPurchaseOrders
+        ...additionalPurchaseOrders.map(expect.objectContaining)
       );
       expect(comp.purchaseOrdersSharedCollection).toEqual(expectedCollection);
     });
@@ -178,15 +176,15 @@ describe('DeliveryNote Management Update Component', () => {
       expect(businessDocumentService.query).toHaveBeenCalled();
       expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
         businessDocumentCollection,
-        ...additionalBusinessDocuments
+        ...additionalBusinessDocuments.map(expect.objectContaining)
       );
       expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const deliveryNote: IDeliveryNote = { id: 456 };
-      const placeholders: IPlaceholder = { id: 62945 };
-      deliveryNote.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 62945 };
+      deliveryNote.placeholders = [placeholder];
       const receivedBy: IDealer = { id: 16865 };
       deliveryNote.receivedBy = receivedBy;
       const supplier: IDealer = { id: 80242 };
@@ -199,29 +197,30 @@ describe('DeliveryNote Management Update Component', () => {
       deliveryNote.purchaseOrder = purchaseOrder;
       const otherPurchaseOrders: IPurchaseOrder = { id: 64784 };
       deliveryNote.otherPurchaseOrders = [otherPurchaseOrders];
-      const businessDocuments: IBusinessDocument = { id: 59570 };
-      deliveryNote.businessDocuments = [businessDocuments];
+      const businessDocument: IBusinessDocument = { id: 59570 };
+      deliveryNote.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ deliveryNote });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(deliveryNote));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.dealersSharedCollection).toContain(receivedBy);
       expect(comp.dealersSharedCollection).toContain(supplier);
       expect(comp.dealersSharedCollection).toContain(signatories);
       expect(comp.businessStampsSharedCollection).toContain(deliveryStamps);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrder);
       expect(comp.purchaseOrdersSharedCollection).toContain(otherPurchaseOrders);
-      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.deliveryNote).toEqual(deliveryNote);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<DeliveryNote>>();
+      const saveSubject = new Subject<HttpResponse<IDeliveryNote>>();
       const deliveryNote = { id: 123 };
+      jest.spyOn(deliveryNoteFormService, 'getDeliveryNote').mockReturnValue(deliveryNote);
       jest.spyOn(deliveryNoteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ deliveryNote });
@@ -234,18 +233,20 @@ describe('DeliveryNote Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(deliveryNoteFormService.getDeliveryNote).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(deliveryNoteService.update).toHaveBeenCalledWith(deliveryNote);
+      expect(deliveryNoteService.update).toHaveBeenCalledWith(expect.objectContaining(deliveryNote));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<DeliveryNote>>();
-      const deliveryNote = new DeliveryNote();
+      const saveSubject = new Subject<HttpResponse<IDeliveryNote>>();
+      const deliveryNote = { id: 123 };
+      jest.spyOn(deliveryNoteFormService, 'getDeliveryNote').mockReturnValue({ id: null });
       jest.spyOn(deliveryNoteService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ deliveryNote });
+      activatedRoute.data = of({ deliveryNote: null });
       comp.ngOnInit();
 
       // WHEN
@@ -255,14 +256,15 @@ describe('DeliveryNote Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(deliveryNoteService.create).toHaveBeenCalledWith(deliveryNote);
+      expect(deliveryNoteFormService.getDeliveryNote).toHaveBeenCalled();
+      expect(deliveryNoteService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<DeliveryNote>>();
+      const saveSubject = new Subject<HttpResponse<IDeliveryNote>>();
       const deliveryNote = { id: 123 };
       jest.spyOn(deliveryNoteService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -275,182 +277,60 @@ describe('DeliveryNote Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(deliveryNoteService.update).toHaveBeenCalledWith(deliveryNote);
+      expect(deliveryNoteService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessStampById', () => {
-      it('Should return tracked BusinessStamp primary key', () => {
+    describe('compareBusinessStamp', () => {
+      it('Should forward to businessStampService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessStampById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessStampService, 'compareBusinessStamp');
+        comp.compareBusinessStamp(entity, entity2);
+        expect(businessStampService.compareBusinessStamp).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPurchaseOrderById', () => {
-      it('Should return tracked PurchaseOrder primary key', () => {
+    describe('comparePurchaseOrder', () => {
+      it('Should forward to purchaseOrderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPurchaseOrderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(purchaseOrderService, 'comparePurchaseOrder');
+        comp.comparePurchaseOrder(entity, entity2);
+        expect(purchaseOrderService.comparePurchaseOrder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessDocumentById', () => {
-      it('Should return tracked BusinessDocument primary key', () => {
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessDocumentById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessStamp', () => {
-      it('Should return option if no BusinessStamp is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessStamp(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessStamp for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessStamp(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessStamp is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessStamp(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPurchaseOrder', () => {
-      it('Should return option if no PurchaseOrder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPurchaseOrder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PurchaseOrder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PurchaseOrder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPurchaseOrder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedBusinessDocument', () => {
-      it('Should return option if no BusinessDocument is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessDocument(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessDocument for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessDocument is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessDocument(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

@@ -107,12 +107,12 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "settlement",
       "ownerSide": true,
-      "otherEntityRelationshipName": "settlement"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

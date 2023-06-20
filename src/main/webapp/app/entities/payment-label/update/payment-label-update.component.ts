@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentLabel, PaymentLabel } from '../payment-label.model';
+import { PaymentLabelFormService, PaymentLabelFormGroup } from './payment-label-form.service';
+import { IPaymentLabel } from '../payment-label.model';
 import { PaymentLabelService } from '../service/payment-label.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -37,33 +19,33 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class PaymentLabelUpdateComponent implements OnInit {
   isSaving = false;
+  paymentLabel: IPaymentLabel | null = null;
 
   paymentLabelsSharedCollection: IPaymentLabel[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [null, [Validators.required]],
-    comments: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    remarks: [],
-    containingPaymentLabel: [],
-    placeholders: [],
-  });
+  editForm: PaymentLabelFormGroup = this.paymentLabelFormService.createPaymentLabelFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected paymentLabelService: PaymentLabelService,
+    protected paymentLabelFormService: PaymentLabelFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentLabel }) => {
-      this.updateForm(paymentLabel);
+      this.paymentLabel = paymentLabel;
+      if (paymentLabel) {
+        this.updateForm(paymentLabel);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -90,38 +72,19 @@ export class PaymentLabelUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const paymentLabel = this.createFromForm();
-    if (paymentLabel.id !== undefined) {
+    const paymentLabel = this.paymentLabelFormService.getPaymentLabel(this.editForm);
+    if (paymentLabel.id !== null) {
       this.subscribeToSaveResponse(this.paymentLabelService.update(paymentLabel));
     } else {
       this.subscribeToSaveResponse(this.paymentLabelService.create(paymentLabel));
     }
   }
 
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentLabel>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -137,22 +100,14 @@ export class PaymentLabelUpdateComponent implements OnInit {
   }
 
   protected updateForm(paymentLabel: IPaymentLabel): void {
-    this.editForm.patchValue({
-      id: paymentLabel.id,
-      description: paymentLabel.description,
-      comments: paymentLabel.comments,
-      fileUploadToken: paymentLabel.fileUploadToken,
-      compilationToken: paymentLabel.compilationToken,
-      remarks: paymentLabel.remarks,
-      containingPaymentLabel: paymentLabel.containingPaymentLabel,
-      placeholders: paymentLabel.placeholders,
-    });
+    this.paymentLabel = paymentLabel;
+    this.paymentLabelFormService.resetForm(this.editForm, paymentLabel);
 
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       paymentLabel.containingPaymentLabel
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(paymentLabel.placeholders ?? [])
     );
@@ -164,7 +119,10 @@ export class PaymentLabelUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, this.editForm.get('containingPaymentLabel')!.value)
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            this.paymentLabel?.containingPaymentLabel
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -174,23 +132,12 @@ export class PaymentLabelUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.paymentLabel?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IPaymentLabel {
-    return {
-      ...new PaymentLabel(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      comments: this.editForm.get(['comments'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      containingPaymentLabel: this.editForm.get(['containingPaymentLabel'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

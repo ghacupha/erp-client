@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ITaxReference, getTaxReferenceIdentifier } from '../tax-reference.model';
+import { ITaxReference, NewTaxReference } from '../tax-reference.model';
+
+export type PartialUpdateTaxReference = Partial<ITaxReference> & Pick<ITaxReference, 'id'>;
 
 export type EntityResponseType = HttpResponse<ITaxReference>;
 export type EntityArrayResponseType = HttpResponse<ITaxReference[]>;
@@ -36,18 +20,18 @@ export class TaxReferenceService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(taxReference: ITaxReference): Observable<EntityResponseType> {
+  create(taxReference: NewTaxReference): Observable<EntityResponseType> {
     return this.http.post<ITaxReference>(this.resourceUrl, taxReference, { observe: 'response' });
   }
 
   update(taxReference: ITaxReference): Observable<EntityResponseType> {
-    return this.http.put<ITaxReference>(`${this.resourceUrl}/${getTaxReferenceIdentifier(taxReference) as number}`, taxReference, {
+    return this.http.put<ITaxReference>(`${this.resourceUrl}/${this.getTaxReferenceIdentifier(taxReference)}`, taxReference, {
       observe: 'response',
     });
   }
 
-  partialUpdate(taxReference: ITaxReference): Observable<EntityResponseType> {
-    return this.http.patch<ITaxReference>(`${this.resourceUrl}/${getTaxReferenceIdentifier(taxReference) as number}`, taxReference, {
+  partialUpdate(taxReference: PartialUpdateTaxReference): Observable<EntityResponseType> {
+    return this.http.patch<ITaxReference>(`${this.resourceUrl}/${this.getTaxReferenceIdentifier(taxReference)}`, taxReference, {
       observe: 'response',
     });
   }
@@ -70,18 +54,26 @@ export class TaxReferenceService {
     return this.http.get<ITaxReference[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addTaxReferenceToCollectionIfMissing(
-    taxReferenceCollection: ITaxReference[],
-    ...taxReferencesToCheck: (ITaxReference | null | undefined)[]
-  ): ITaxReference[] {
-    const taxReferences: ITaxReference[] = taxReferencesToCheck.filter(isPresent);
+  getTaxReferenceIdentifier(taxReference: Pick<ITaxReference, 'id'>): number {
+    return taxReference.id;
+  }
+
+  compareTaxReference(o1: Pick<ITaxReference, 'id'> | null, o2: Pick<ITaxReference, 'id'> | null): boolean {
+    return o1 && o2 ? this.getTaxReferenceIdentifier(o1) === this.getTaxReferenceIdentifier(o2) : o1 === o2;
+  }
+
+  addTaxReferenceToCollectionIfMissing<Type extends Pick<ITaxReference, 'id'>>(
+    taxReferenceCollection: Type[],
+    ...taxReferencesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const taxReferences: Type[] = taxReferencesToCheck.filter(isPresent);
     if (taxReferences.length > 0) {
       const taxReferenceCollectionIdentifiers = taxReferenceCollection.map(
-        taxReferenceItem => getTaxReferenceIdentifier(taxReferenceItem)!
+        taxReferenceItem => this.getTaxReferenceIdentifier(taxReferenceItem)!
       );
       const taxReferencesToAdd = taxReferences.filter(taxReferenceItem => {
-        const taxReferenceIdentifier = getTaxReferenceIdentifier(taxReferenceItem);
-        if (taxReferenceIdentifier == null || taxReferenceCollectionIdentifiers.includes(taxReferenceIdentifier)) {
+        const taxReferenceIdentifier = this.getTaxReferenceIdentifier(taxReferenceItem);
+        if (taxReferenceCollectionIdentifiers.includes(taxReferenceIdentifier)) {
           return false;
         }
         taxReferenceCollectionIdentifiers.push(taxReferenceIdentifier);

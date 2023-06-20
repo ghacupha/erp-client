@@ -1,32 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
-import { ISettlementRequisition, SettlementRequisition } from '../settlement-requisition.model';
+import { SettlementRequisitionFormService, SettlementRequisitionFormGroup } from './settlement-requisition-form.service';
+import { ISettlementRequisition } from '../settlement-requisition.model';
 import { SettlementRequisitionService } from '../service/settlement-requisition.service';
 import { ISettlementCurrency } from 'app/entities/settlement-currency/settlement-currency.model';
 import { SettlementCurrencyService } from 'app/entities/settlement-currency/service/settlement-currency.service';
@@ -54,6 +33,7 @@ import { PaymentStatus } from 'app/entities/enumerations/payment-status.model';
 })
 export class SettlementRequisitionUpdateComponent implements OnInit {
   isSaving = false;
+  settlementRequisition: ISettlementRequisition | null = null;
   paymentStatusValues = Object.keys(PaymentStatus);
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
@@ -66,30 +46,11 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    description: [],
-    serialNumber: [null, [Validators.required]],
-    timeOfRequisition: [null, [Validators.required]],
-    requisitionNumber: [null, [Validators.required]],
-    paymentAmount: [null, [Validators.required]],
-    paymentStatus: [null, [Validators.required]],
-    settlementCurrency: [null, Validators.required],
-    currentOwner: [null, Validators.required],
-    nativeOwner: [null, Validators.required],
-    nativeDepartment: [null, Validators.required],
-    biller: [null, Validators.required],
-    paymentInvoices: [],
-    deliveryNotes: [],
-    jobSheets: [],
-    signatures: [],
-    businessDocuments: [],
-    applicationMappings: [],
-    placeholders: [],
-  });
+  editForm: SettlementRequisitionFormGroup = this.settlementRequisitionFormService.createSettlementRequisitionFormGroup();
 
   constructor(
     protected settlementRequisitionService: SettlementRequisitionService,
+    protected settlementRequisitionFormService: SettlementRequisitionFormService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected applicationUserService: ApplicationUserService,
     protected dealerService: DealerService,
@@ -99,18 +60,39 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareApplicationUser = (o1: IApplicationUser | null, o2: IApplicationUser | null): boolean =>
+    this.applicationUserService.compareApplicationUser(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePaymentInvoice = (o1: IPaymentInvoice | null, o2: IPaymentInvoice | null): boolean =>
+    this.paymentInvoiceService.comparePaymentInvoice(o1, o2);
+
+  compareDeliveryNote = (o1: IDeliveryNote | null, o2: IDeliveryNote | null): boolean =>
+    this.deliveryNoteService.compareDeliveryNote(o1, o2);
+
+  compareJobSheet = (o1: IJobSheet | null, o2: IJobSheet | null): boolean => this.jobSheetService.compareJobSheet(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlementRequisition }) => {
-      if (settlementRequisition.id === undefined) {
-        const today = dayjs().startOf('day');
-        settlementRequisition.timeOfRequisition = today;
+      this.settlementRequisition = settlementRequisition;
+      if (settlementRequisition) {
+        this.updateForm(settlementRequisition);
       }
-
-      this.updateForm(settlementRequisition);
 
       this.loadRelationshipsOptions();
     });
@@ -122,135 +104,19 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const settlementRequisition = this.createFromForm();
-    if (settlementRequisition.id !== undefined) {
+    const settlementRequisition = this.settlementRequisitionFormService.getSettlementRequisition(this.editForm);
+    if (settlementRequisition.id !== null) {
       this.subscribeToSaveResponse(this.settlementRequisitionService.update(settlementRequisition));
     } else {
       this.subscribeToSaveResponse(this.settlementRequisitionService.create(settlementRequisition));
     }
   }
 
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetById(index: number, item: IJobSheet): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlementRequisition>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -266,64 +132,47 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   }
 
   protected updateForm(settlementRequisition: ISettlementRequisition): void {
-    this.editForm.patchValue({
-      id: settlementRequisition.id,
-      description: settlementRequisition.description,
-      serialNumber: settlementRequisition.serialNumber,
-      timeOfRequisition: settlementRequisition.timeOfRequisition ? settlementRequisition.timeOfRequisition.format(DATE_TIME_FORMAT) : null,
-      requisitionNumber: settlementRequisition.requisitionNumber,
-      paymentAmount: settlementRequisition.paymentAmount,
-      paymentStatus: settlementRequisition.paymentStatus,
-      settlementCurrency: settlementRequisition.settlementCurrency,
-      currentOwner: settlementRequisition.currentOwner,
-      nativeOwner: settlementRequisition.nativeOwner,
-      nativeDepartment: settlementRequisition.nativeDepartment,
-      biller: settlementRequisition.biller,
-      paymentInvoices: settlementRequisition.paymentInvoices,
-      deliveryNotes: settlementRequisition.deliveryNotes,
-      jobSheets: settlementRequisition.jobSheets,
-      signatures: settlementRequisition.signatures,
-      businessDocuments: settlementRequisition.businessDocuments,
-      applicationMappings: settlementRequisition.applicationMappings,
-      placeholders: settlementRequisition.placeholders,
-    });
+    this.settlementRequisition = settlementRequisition;
+    this.settlementRequisitionFormService.resetForm(this.editForm, settlementRequisition);
 
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      settlementRequisition.settlementCurrency
-    );
-    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        settlementRequisition.settlementCurrency
+      );
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
       this.applicationUsersSharedCollection,
       settlementRequisition.currentOwner,
       settlementRequisition.nativeOwner
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       settlementRequisition.nativeDepartment,
       settlementRequisition.biller,
       ...(settlementRequisition.signatures ?? [])
     );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
       this.paymentInvoicesSharedCollection,
       ...(settlementRequisition.paymentInvoices ?? [])
     );
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
       this.deliveryNotesSharedCollection,
       ...(settlementRequisition.deliveryNotes ?? [])
     );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(
       this.jobSheetsSharedCollection,
       ...(settlementRequisition.jobSheets ?? [])
     );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(settlementRequisition.businessDocuments ?? [])
     );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(settlementRequisition.applicationMappings ?? [])
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(settlementRequisition.applicationMappings ?? [])
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(settlementRequisition.placeholders ?? [])
     );
@@ -335,9 +184,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.settlementRequisition?.settlementCurrency
           )
         )
       )
@@ -348,10 +197,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
       .pipe(
         map((applicationUsers: IApplicationUser[]) =>
-          this.applicationUserService.addApplicationUserToCollectionIfMissing(
+          this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
             applicationUsers,
-            this.editForm.get('currentOwner')!.value,
-            this.editForm.get('nativeOwner')!.value
+            this.settlementRequisition?.currentOwner,
+            this.settlementRequisition?.nativeOwner
           )
         )
       )
@@ -362,11 +211,11 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('nativeDepartment')!.value,
-            this.editForm.get('biller')!.value,
-            ...(this.editForm.get('signatures')!.value ?? [])
+            this.settlementRequisition?.nativeDepartment,
+            this.settlementRequisition?.biller,
+            ...(this.settlementRequisition?.signatures ?? [])
           )
         )
       )
@@ -377,9 +226,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
       .pipe(
         map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
             paymentInvoices,
-            ...(this.editForm.get('paymentInvoices')!.value ?? [])
+            ...(this.settlementRequisition?.paymentInvoices ?? [])
           )
         )
       )
@@ -390,7 +239,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
       .pipe(
         map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
+            deliveryNotes,
+            ...(this.settlementRequisition?.deliveryNotes ?? [])
+          )
         )
       )
       .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
@@ -400,7 +252,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
       .pipe(
         map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+          this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(jobSheets, ...(this.settlementRequisition?.jobSheets ?? []))
         )
       )
       .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
@@ -410,9 +262,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.settlementRequisition?.businessDocuments ?? [])
           )
         )
       )
@@ -423,9 +275,9 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('applicationMappings')!.value ?? [])
+            ...(this.settlementRequisition?.applicationMappings ?? [])
           )
         )
       )
@@ -439,36 +291,12 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.settlementRequisition?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): ISettlementRequisition {
-    return {
-      ...new SettlementRequisition(),
-      id: this.editForm.get(['id'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      serialNumber: this.editForm.get(['serialNumber'])!.value,
-      timeOfRequisition: this.editForm.get(['timeOfRequisition'])!.value
-        ? dayjs(this.editForm.get(['timeOfRequisition'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      requisitionNumber: this.editForm.get(['requisitionNumber'])!.value,
-      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      paymentStatus: this.editForm.get(['paymentStatus'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      currentOwner: this.editForm.get(['currentOwner'])!.value,
-      nativeOwner: this.editForm.get(['nativeOwner'])!.value,
-      nativeDepartment: this.editForm.get(['nativeDepartment'])!.value,
-      biller: this.editForm.get(['biller'])!.value,
-      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
-      jobSheets: this.editForm.get(['jobSheets'])!.value,
-      signatures: this.editForm.get(['signatures'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-      applicationMappings: this.editForm.get(['applicationMappings'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

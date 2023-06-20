@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-transaction-account-heading" data-cy="TransactionAccountCreateUpdateHeading">Create or edit a Transaction Account</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountNumber">Account Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_accountNumber">Account Number</label>
           <input
             type="text"
             class="form-control"
@@ -49,8 +30,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountName">Account Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_accountName">Account Name</label>
           <input
             type="text"
             class="form-control"
@@ -64,16 +45,17 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_notes">Notes</label>
           <div>
             <div *ngIf="editForm.get('notes')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('notes')!.value, editForm.get('notesContentType')!.value)">open</a><br />
-              <span class="pull-left">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value) }}</span>
+              <a class="pull-start" (click)="openFile(editForm.get('notes')!.value!, editForm.get('notesContentType')!.value!)">Open</a
+              ><br />
+              <span class="pull-start">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value!) }}</span>
               <button
                 type="button"
-                (click)="editForm.patchValue({ notes: null }); editForm.patchValue({ notesContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ notes: undefined, notesContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -90,30 +72,24 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_parentAccount">Parent Account</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_parentAccount">Parent Account</label>
           <select
             class="form-control"
             id="field_parentAccount"
             data-cy="parentAccount"
             name="parentAccount"
             formControlName="parentAccount"
+            [compareWith]="compareTransactionAccount"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('parentAccount')!.value?.id
-                  ? editForm.get('parentAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
+            <option [ngValue]="transactionAccountOption" *ngFor="let transactionAccountOption of transactionAccountsSharedCollection">
               {{ transactionAccountOption.accountNumber }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -122,11 +98,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

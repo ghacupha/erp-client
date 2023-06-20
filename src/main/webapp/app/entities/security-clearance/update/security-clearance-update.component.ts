@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { ISecurityClearance, SecurityClearance } from '../security-clearance.model';
+import { SecurityClearanceFormService, SecurityClearanceFormGroup } from './security-clearance-form.service';
+import { ISecurityClearance } from '../security-clearance.model';
 import { SecurityClearanceService } from '../service/security-clearance.service';
 import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
@@ -34,27 +16,31 @@ import { PlaceholderService } from 'app/entities/erpService/placeholder/service/
 })
 export class SecurityClearanceUpdateComponent implements OnInit {
   isSaving = false;
+  securityClearance: ISecurityClearance | null = null;
 
   securityClearancesSharedCollection: ISecurityClearance[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    clearanceLevel: [null, [Validators.required]],
-    grantedClearances: [],
-    placeholders: [],
-  });
+  editForm: SecurityClearanceFormGroup = this.securityClearanceFormService.createSecurityClearanceFormGroup();
 
   constructor(
     protected securityClearanceService: SecurityClearanceService,
+    protected securityClearanceFormService: SecurityClearanceFormService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareSecurityClearance = (o1: ISecurityClearance | null, o2: ISecurityClearance | null): boolean =>
+    this.securityClearanceService.compareSecurityClearance(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ securityClearance }) => {
-      this.updateForm(securityClearance);
+      this.securityClearance = securityClearance;
+      if (securityClearance) {
+        this.updateForm(securityClearance);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -66,49 +52,19 @@ export class SecurityClearanceUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const securityClearance = this.createFromForm();
-    if (securityClearance.id !== undefined) {
+    const securityClearance = this.securityClearanceFormService.getSecurityClearance(this.editForm);
+    if (securityClearance.id !== null) {
       this.subscribeToSaveResponse(this.securityClearanceService.update(securityClearance));
     } else {
       this.subscribeToSaveResponse(this.securityClearanceService.create(securityClearance));
     }
   }
 
-  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedSecurityClearance(option: ISecurityClearance, selectedVals?: ISecurityClearance[]): ISecurityClearance {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISecurityClearance>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -124,18 +80,14 @@ export class SecurityClearanceUpdateComponent implements OnInit {
   }
 
   protected updateForm(securityClearance: ISecurityClearance): void {
-    this.editForm.patchValue({
-      id: securityClearance.id,
-      clearanceLevel: securityClearance.clearanceLevel,
-      grantedClearances: securityClearance.grantedClearances,
-      placeholders: securityClearance.placeholders,
-    });
+    this.securityClearance = securityClearance;
+    this.securityClearanceFormService.resetForm(this.editForm, securityClearance);
 
-    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
       this.securityClearancesSharedCollection,
       ...(securityClearance.grantedClearances ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(securityClearance.placeholders ?? [])
     );
@@ -147,9 +99,9 @@ export class SecurityClearanceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
       .pipe(
         map((securityClearances: ISecurityClearance[]) =>
-          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
             securityClearances,
-            ...(this.editForm.get('grantedClearances')!.value ?? [])
+            ...(this.securityClearance?.grantedClearances ?? [])
           )
         )
       )
@@ -160,19 +112,12 @@ export class SecurityClearanceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.securityClearance?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): ISecurityClearance {
-    return {
-      ...new SecurityClearance(),
-      id: this.editForm.get(['id'])!.value,
-      clearanceLevel: this.editForm.get(['clearanceLevel'])!.value,
-      grantedClearances: this.editForm.get(['grantedClearances'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IPaymentCalculation, getPaymentCalculationIdentifier } from '../payment-calculation.model';
+import { IPaymentCalculation, NewPaymentCalculation } from '../payment-calculation.model';
+
+export type PartialUpdatePaymentCalculation = Partial<IPaymentCalculation> & Pick<IPaymentCalculation, 'id'>;
 
 export type EntityResponseType = HttpResponse<IPaymentCalculation>;
 export type EntityArrayResponseType = HttpResponse<IPaymentCalculation[]>;
@@ -36,21 +20,21 @@ export class PaymentCalculationService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(paymentCalculation: IPaymentCalculation): Observable<EntityResponseType> {
+  create(paymentCalculation: NewPaymentCalculation): Observable<EntityResponseType> {
     return this.http.post<IPaymentCalculation>(this.resourceUrl, paymentCalculation, { observe: 'response' });
   }
 
   update(paymentCalculation: IPaymentCalculation): Observable<EntityResponseType> {
     return this.http.put<IPaymentCalculation>(
-      `${this.resourceUrl}/${getPaymentCalculationIdentifier(paymentCalculation) as number}`,
+      `${this.resourceUrl}/${this.getPaymentCalculationIdentifier(paymentCalculation)}`,
       paymentCalculation,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(paymentCalculation: IPaymentCalculation): Observable<EntityResponseType> {
+  partialUpdate(paymentCalculation: PartialUpdatePaymentCalculation): Observable<EntityResponseType> {
     return this.http.patch<IPaymentCalculation>(
-      `${this.resourceUrl}/${getPaymentCalculationIdentifier(paymentCalculation) as number}`,
+      `${this.resourceUrl}/${this.getPaymentCalculationIdentifier(paymentCalculation)}`,
       paymentCalculation,
       { observe: 'response' }
     );
@@ -74,18 +58,26 @@ export class PaymentCalculationService {
     return this.http.get<IPaymentCalculation[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addPaymentCalculationToCollectionIfMissing(
-    paymentCalculationCollection: IPaymentCalculation[],
-    ...paymentCalculationsToCheck: (IPaymentCalculation | null | undefined)[]
-  ): IPaymentCalculation[] {
-    const paymentCalculations: IPaymentCalculation[] = paymentCalculationsToCheck.filter(isPresent);
+  getPaymentCalculationIdentifier(paymentCalculation: Pick<IPaymentCalculation, 'id'>): number {
+    return paymentCalculation.id;
+  }
+
+  comparePaymentCalculation(o1: Pick<IPaymentCalculation, 'id'> | null, o2: Pick<IPaymentCalculation, 'id'> | null): boolean {
+    return o1 && o2 ? this.getPaymentCalculationIdentifier(o1) === this.getPaymentCalculationIdentifier(o2) : o1 === o2;
+  }
+
+  addPaymentCalculationToCollectionIfMissing<Type extends Pick<IPaymentCalculation, 'id'>>(
+    paymentCalculationCollection: Type[],
+    ...paymentCalculationsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const paymentCalculations: Type[] = paymentCalculationsToCheck.filter(isPresent);
     if (paymentCalculations.length > 0) {
       const paymentCalculationCollectionIdentifiers = paymentCalculationCollection.map(
-        paymentCalculationItem => getPaymentCalculationIdentifier(paymentCalculationItem)!
+        paymentCalculationItem => this.getPaymentCalculationIdentifier(paymentCalculationItem)!
       );
       const paymentCalculationsToAdd = paymentCalculations.filter(paymentCalculationItem => {
-        const paymentCalculationIdentifier = getPaymentCalculationIdentifier(paymentCalculationItem);
-        if (paymentCalculationIdentifier == null || paymentCalculationCollectionIdentifiers.includes(paymentCalculationIdentifier)) {
+        const paymentCalculationIdentifier = this.getPaymentCalculationIdentifier(paymentCalculationItem);
+        if (paymentCalculationCollectionIdentifiers.includes(paymentCalculationIdentifier)) {
           return false;
         }
         paymentCalculationCollectionIdentifiers.push(paymentCalculationIdentifier);

@@ -1,4 +1,6 @@
 {
+  "changelogDate": "20220701123133",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "name",
@@ -6,30 +8,28 @@
       "fieldValidateRules": ["required", "unique"]
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "Algorithm",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "algorithm",
       "ownerSide": true,
-      "otherEntityRelationshipName": "algorithm"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "parameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "algorithm",
       "ownerSide": true,
-      "otherEntityRelationshipName": "algorithm"
+      "relationshipName": "parameters",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "Algorithm",
-  "changelogDate": "20220701123133",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

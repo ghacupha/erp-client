@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-tax-rule-heading" data-cy="TaxRuleCreateUpdateHeading">Create or edit a Tax Rule</h2>
@@ -25,13 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_telcoExciseDuty">Telco Excise Duty</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_telcoExciseDuty">Telco Excise Duty</label>
           <input
             type="number"
             class="form-control"
@@ -42,8 +23,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_valueAddedTax">Value Added Tax</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_valueAddedTax">Value Added Tax</label>
           <input
             type="number"
             class="form-control"
@@ -54,8 +35,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingVAT">Withholding VAT</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingVAT">Withholding VAT</label>
           <input
             type="number"
             class="form-control"
@@ -66,8 +47,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingTaxConsultancy">Withholding Tax Consultancy</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingTaxConsultancy">Withholding Tax Consultancy</label>
           <input
             type="number"
             class="form-control"
@@ -78,8 +59,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingTaxRent">Withholding Tax Rent</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingTaxRent">Withholding Tax Rent</label>
           <input
             type="number"
             class="form-control"
@@ -90,8 +71,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_cateringLevy">Catering Levy</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_cateringLevy">Catering Levy</label>
           <input
             type="number"
             class="form-control"
@@ -102,8 +83,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_serviceCharge">Service Charge</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_serviceCharge">Service Charge</label>
           <input
             type="number"
             class="form-control"
@@ -114,8 +95,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_withholdingTaxImportedService">Withholding Tax Imported Service</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_withholdingTaxImportedService">Withholding Tax Imported Service</label>
           <input
             type="number"
             class="form-control"
@@ -126,8 +107,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -138,8 +119,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -150,7 +131,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -159,11 +140,9 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

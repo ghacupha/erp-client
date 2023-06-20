@@ -1,29 +1,11 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IWorkInProgressRegistration, WorkInProgressRegistration } from '../work-in-progress-registration.model';
+import { WorkInProgressRegistrationFormService, WorkInProgressRegistrationFormGroup } from './work-in-progress-registration-form.service';
+import { IWorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -61,6 +43,7 @@ import { AssetWarrantyService } from 'app/entities/asset-warranty/service/asset-
 })
 export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   isSaving = false;
+  workInProgressRegistration: IWorkInProgressRegistration | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
@@ -77,33 +60,13 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   assetAccessoriesSharedCollection: IAssetAccessory[] = [];
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    sequenceNumber: [null, [Validators.required]],
-    particulars: [],
-    instalmentAmount: [],
-    comments: [],
-    commentsContentType: [],
-    placeholders: [],
-    paymentInvoices: [],
-    serviceOutlets: [],
-    settlements: [],
-    purchaseOrders: [],
-    deliveryNotes: [],
-    jobSheets: [],
-    dealer: [],
-    workInProgressGroup: [],
-    settlementCurrency: [],
-    workProjectRegister: [],
-    businessDocuments: [],
-    assetAccessories: [],
-    assetWarranties: [],
-  });
+  editForm: WorkInProgressRegistrationFormGroup = this.workInProgressRegistrationFormService.createWorkInProgressRegistrationFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected workInProgressRegistrationService: WorkInProgressRegistrationService,
+    protected workInProgressRegistrationFormService: WorkInProgressRegistrationFormService,
     protected placeholderService: PlaceholderService,
     protected paymentInvoiceService: PaymentInvoiceService,
     protected serviceOutletService: ServiceOutletService,
@@ -117,13 +80,53 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected assetAccessoryService: AssetAccessoryService,
     protected assetWarrantyService: AssetWarrantyService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePaymentInvoice = (o1: IPaymentInvoice | null, o2: IPaymentInvoice | null): boolean =>
+    this.paymentInvoiceService.comparePaymentInvoice(o1, o2);
+
+  compareServiceOutlet = (o1: IServiceOutlet | null, o2: IServiceOutlet | null): boolean =>
+    this.serviceOutletService.compareServiceOutlet(o1, o2);
+
+  compareSettlement = (o1: ISettlement | null, o2: ISettlement | null): boolean => this.settlementService.compareSettlement(o1, o2);
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  compareDeliveryNote = (o1: IDeliveryNote | null, o2: IDeliveryNote | null): boolean =>
+    this.deliveryNoteService.compareDeliveryNote(o1, o2);
+
+  compareJobSheet = (o1: IJobSheet | null, o2: IJobSheet | null): boolean => this.jobSheetService.compareJobSheet(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareWorkInProgressRegistration = (o1: IWorkInProgressRegistration | null, o2: IWorkInProgressRegistration | null): boolean =>
+    this.workInProgressRegistrationService.compareWorkInProgressRegistration(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareWorkProjectRegister = (o1: IWorkProjectRegister | null, o2: IWorkProjectRegister | null): boolean =>
+    this.workProjectRegisterService.compareWorkProjectRegister(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
+
+  compareAssetAccessory = (o1: IAssetAccessory | null, o2: IAssetAccessory | null): boolean =>
+    this.assetAccessoryService.compareAssetAccessory(o1, o2);
+
+  compareAssetWarranty = (o1: IAssetWarranty | null, o2: IAssetWarranty | null): boolean =>
+    this.assetWarrantyService.compareAssetWarranty(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressRegistration }) => {
-      this.updateForm(workInProgressRegistration);
+      this.workInProgressRegistration = workInProgressRegistration;
+      if (workInProgressRegistration) {
+        this.updateForm(workInProgressRegistration);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -150,185 +153,19 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const workInProgressRegistration = this.createFromForm();
-    if (workInProgressRegistration.id !== undefined) {
+    const workInProgressRegistration = this.workInProgressRegistrationFormService.getWorkInProgressRegistration(this.editForm);
+    if (workInProgressRegistration.id !== null) {
       this.subscribeToSaveResponse(this.workInProgressRegistrationService.update(workInProgressRegistration));
     } else {
       this.subscribeToSaveResponse(this.workInProgressRegistrationService.create(workInProgressRegistration));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceById(index: number, item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackServiceOutletById(index: number, item: IServiceOutlet): number {
-    return item.id!;
-  }
-
-  trackSettlementById(index: number, item: ISettlement): number {
-    return item.id!;
-  }
-
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetById(index: number, item: IJobSheet): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackWorkInProgressRegistrationById(index: number, item: IWorkInProgressRegistration): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackWorkProjectRegisterById(index: number, item: IWorkProjectRegister): number {
-    return item.id!;
-  }
-
-  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
-    return item.id!;
-  }
-
-  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
-    return item.id!;
-  }
-
-  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentInvoice(option: IPaymentInvoice, selectedVals?: IPaymentInvoice[]): IPaymentInvoice {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedServiceOutlet(option: IServiceOutlet, selectedVals?: IServiceOutlet[]): IServiceOutlet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedSettlement(option: ISettlement, selectedVals?: ISettlement[]): ISettlement {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkInProgressRegistration>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -344,83 +181,65 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   }
 
   protected updateForm(workInProgressRegistration: IWorkInProgressRegistration): void {
-    this.editForm.patchValue({
-      id: workInProgressRegistration.id,
-      sequenceNumber: workInProgressRegistration.sequenceNumber,
-      particulars: workInProgressRegistration.particulars,
-      instalmentAmount: workInProgressRegistration.instalmentAmount,
-      comments: workInProgressRegistration.comments,
-      commentsContentType: workInProgressRegistration.commentsContentType,
-      placeholders: workInProgressRegistration.placeholders,
-      paymentInvoices: workInProgressRegistration.paymentInvoices,
-      serviceOutlets: workInProgressRegistration.serviceOutlets,
-      settlements: workInProgressRegistration.settlements,
-      purchaseOrders: workInProgressRegistration.purchaseOrders,
-      deliveryNotes: workInProgressRegistration.deliveryNotes,
-      jobSheets: workInProgressRegistration.jobSheets,
-      dealer: workInProgressRegistration.dealer,
-      workInProgressGroup: workInProgressRegistration.workInProgressGroup,
-      settlementCurrency: workInProgressRegistration.settlementCurrency,
-      workProjectRegister: workInProgressRegistration.workProjectRegister,
-      businessDocuments: workInProgressRegistration.businessDocuments,
-      assetAccessories: workInProgressRegistration.assetAccessories,
-      assetWarranties: workInProgressRegistration.assetWarranties,
-    });
+    this.workInProgressRegistration = workInProgressRegistration;
+    this.workInProgressRegistrationFormService.resetForm(this.editForm, workInProgressRegistration);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(workInProgressRegistration.placeholders ?? [])
     );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
       this.paymentInvoicesSharedCollection,
       ...(workInProgressRegistration.paymentInvoices ?? [])
     );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
       this.serviceOutletsSharedCollection,
       ...(workInProgressRegistration.serviceOutlets ?? [])
     );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
       this.settlementsSharedCollection,
       ...(workInProgressRegistration.settlements ?? [])
     );
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       ...(workInProgressRegistration.purchaseOrders ?? [])
     );
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
       this.deliveryNotesSharedCollection,
       ...(workInProgressRegistration.deliveryNotes ?? [])
     );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(
       this.jobSheetsSharedCollection,
       ...(workInProgressRegistration.jobSheets ?? [])
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       workInProgressRegistration.dealer
     );
     this.workInProgressRegistrationsSharedCollection =
-      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing<IWorkInProgressRegistration>(
         this.workInProgressRegistrationsSharedCollection,
         workInProgressRegistration.workInProgressGroup
       );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      workInProgressRegistration.settlementCurrency
-    );
-    this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
-      this.workProjectRegistersSharedCollection,
-      workInProgressRegistration.workProjectRegister
-    );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        workInProgressRegistration.settlementCurrency
+      );
+    this.workProjectRegistersSharedCollection =
+      this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing<IWorkProjectRegister>(
+        this.workProjectRegistersSharedCollection,
+        workInProgressRegistration.workProjectRegister
+      );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
       this.businessDocumentsSharedCollection,
       ...(workInProgressRegistration.businessDocuments ?? [])
     );
-    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing<IAssetAccessory>(
       this.assetAccessoriesSharedCollection,
       ...(workInProgressRegistration.assetAccessories ?? [])
     );
-    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing<IAssetWarranty>(
       this.assetWarrantiesSharedCollection,
       ...(workInProgressRegistration.assetWarranties ?? [])
     );
@@ -432,7 +251,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.workInProgressRegistration?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -442,9 +264,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
       .pipe(
         map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
             paymentInvoices,
-            ...(this.editForm.get('paymentInvoices')!.value ?? [])
+            ...(this.workInProgressRegistration?.paymentInvoices ?? [])
           )
         )
       )
@@ -455,9 +277,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
       .pipe(
         map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing<IServiceOutlet>(
             serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? [])
+            ...(this.workInProgressRegistration?.serviceOutlets ?? [])
           )
         )
       )
@@ -468,7 +290,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+          this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
+            settlements,
+            ...(this.workInProgressRegistration?.settlements ?? [])
+          )
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -478,9 +303,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
+            ...(this.workInProgressRegistration?.purchaseOrders ?? [])
           )
         )
       )
@@ -491,7 +316,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
       .pipe(
         map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
+            deliveryNotes,
+            ...(this.workInProgressRegistration?.deliveryNotes ?? [])
+          )
         )
       )
       .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
@@ -501,7 +329,7 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
       .pipe(
         map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+          this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(jobSheets, ...(this.workInProgressRegistration?.jobSheets ?? []))
         )
       )
       .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
@@ -509,7 +337,11 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
+      .pipe(
+        map((dealers: IDealer[]) =>
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.workInProgressRegistration?.dealer)
+        )
+      )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.workInProgressRegistrationService
@@ -517,9 +349,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IWorkInProgressRegistration[]>) => res.body ?? []))
       .pipe(
         map((workInProgressRegistrations: IWorkInProgressRegistration[]) =>
-          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing<IWorkInProgressRegistration>(
             workInProgressRegistrations,
-            this.editForm.get('workInProgressGroup')!.value
+            this.workInProgressRegistration?.workInProgressGroup
           )
         )
       )
@@ -533,9 +365,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.workInProgressRegistration?.settlementCurrency
           )
         )
       )
@@ -546,9 +378,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IWorkProjectRegister[]>) => res.body ?? []))
       .pipe(
         map((workProjectRegisters: IWorkProjectRegister[]) =>
-          this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+          this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing<IWorkProjectRegister>(
             workProjectRegisters,
-            this.editForm.get('workProjectRegister')!.value
+            this.workInProgressRegistration?.workProjectRegister
           )
         )
       )
@@ -559,9 +391,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
       .pipe(
         map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
             businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
+            ...(this.workInProgressRegistration?.businessDocuments ?? [])
           )
         )
       )
@@ -572,9 +404,9 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
       .pipe(
         map((assetAccessories: IAssetAccessory[]) =>
-          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing<IAssetAccessory>(
             assetAccessories,
-            ...(this.editForm.get('assetAccessories')!.value ?? [])
+            ...(this.workInProgressRegistration?.assetAccessories ?? [])
           )
         )
       )
@@ -585,38 +417,12 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
       .pipe(
         map((assetWarranties: IAssetWarranty[]) =>
-          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing<IAssetWarranty>(
             assetWarranties,
-            ...(this.editForm.get('assetWarranties')!.value ?? [])
+            ...(this.workInProgressRegistration?.assetWarranties ?? [])
           )
         )
       )
       .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
-  }
-
-  protected createFromForm(): IWorkInProgressRegistration {
-    return {
-      ...new WorkInProgressRegistration(),
-      id: this.editForm.get(['id'])!.value,
-      sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
-      particulars: this.editForm.get(['particulars'])!.value,
-      instalmentAmount: this.editForm.get(['instalmentAmount'])!.value,
-      commentsContentType: this.editForm.get(['commentsContentType'])!.value,
-      comments: this.editForm.get(['comments'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
-      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
-      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
-      jobSheets: this.editForm.get(['jobSheets'])!.value,
-      dealer: this.editForm.get(['dealer'])!.value,
-      workInProgressGroup: this.editForm.get(['workInProgressGroup'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
-      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
-    };
   }
 }

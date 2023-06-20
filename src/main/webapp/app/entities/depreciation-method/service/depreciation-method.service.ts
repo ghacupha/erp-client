@@ -1,21 +1,3 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -24,7 +6,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IDepreciationMethod, getDepreciationMethodIdentifier } from '../depreciation-method.model';
+import { IDepreciationMethod, NewDepreciationMethod } from '../depreciation-method.model';
+
+export type PartialUpdateDepreciationMethod = Partial<IDepreciationMethod> & Pick<IDepreciationMethod, 'id'>;
 
 export type EntityResponseType = HttpResponse<IDepreciationMethod>;
 export type EntityArrayResponseType = HttpResponse<IDepreciationMethod[]>;
@@ -36,21 +20,21 @@ export class DepreciationMethodService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(depreciationMethod: IDepreciationMethod): Observable<EntityResponseType> {
+  create(depreciationMethod: NewDepreciationMethod): Observable<EntityResponseType> {
     return this.http.post<IDepreciationMethod>(this.resourceUrl, depreciationMethod, { observe: 'response' });
   }
 
   update(depreciationMethod: IDepreciationMethod): Observable<EntityResponseType> {
     return this.http.put<IDepreciationMethod>(
-      `${this.resourceUrl}/${getDepreciationMethodIdentifier(depreciationMethod) as number}`,
+      `${this.resourceUrl}/${this.getDepreciationMethodIdentifier(depreciationMethod)}`,
       depreciationMethod,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(depreciationMethod: IDepreciationMethod): Observable<EntityResponseType> {
+  partialUpdate(depreciationMethod: PartialUpdateDepreciationMethod): Observable<EntityResponseType> {
     return this.http.patch<IDepreciationMethod>(
-      `${this.resourceUrl}/${getDepreciationMethodIdentifier(depreciationMethod) as number}`,
+      `${this.resourceUrl}/${this.getDepreciationMethodIdentifier(depreciationMethod)}`,
       depreciationMethod,
       { observe: 'response' }
     );
@@ -74,18 +58,26 @@ export class DepreciationMethodService {
     return this.http.get<IDepreciationMethod[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addDepreciationMethodToCollectionIfMissing(
-    depreciationMethodCollection: IDepreciationMethod[],
-    ...depreciationMethodsToCheck: (IDepreciationMethod | null | undefined)[]
-  ): IDepreciationMethod[] {
-    const depreciationMethods: IDepreciationMethod[] = depreciationMethodsToCheck.filter(isPresent);
+  getDepreciationMethodIdentifier(depreciationMethod: Pick<IDepreciationMethod, 'id'>): number {
+    return depreciationMethod.id;
+  }
+
+  compareDepreciationMethod(o1: Pick<IDepreciationMethod, 'id'> | null, o2: Pick<IDepreciationMethod, 'id'> | null): boolean {
+    return o1 && o2 ? this.getDepreciationMethodIdentifier(o1) === this.getDepreciationMethodIdentifier(o2) : o1 === o2;
+  }
+
+  addDepreciationMethodToCollectionIfMissing<Type extends Pick<IDepreciationMethod, 'id'>>(
+    depreciationMethodCollection: Type[],
+    ...depreciationMethodsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const depreciationMethods: Type[] = depreciationMethodsToCheck.filter(isPresent);
     if (depreciationMethods.length > 0) {
       const depreciationMethodCollectionIdentifiers = depreciationMethodCollection.map(
-        depreciationMethodItem => getDepreciationMethodIdentifier(depreciationMethodItem)!
+        depreciationMethodItem => this.getDepreciationMethodIdentifier(depreciationMethodItem)!
       );
       const depreciationMethodsToAdd = depreciationMethods.filter(depreciationMethodItem => {
-        const depreciationMethodIdentifier = getDepreciationMethodIdentifier(depreciationMethodItem);
-        if (depreciationMethodIdentifier == null || depreciationMethodCollectionIdentifiers.includes(depreciationMethodIdentifier)) {
+        const depreciationMethodIdentifier = this.getDepreciationMethodIdentifier(depreciationMethodItem);
+        if (depreciationMethodCollectionIdentifiers.includes(depreciationMethodIdentifier)) {
           return false;
         }
         depreciationMethodCollectionIdentifiers.push(depreciationMethodIdentifier);
