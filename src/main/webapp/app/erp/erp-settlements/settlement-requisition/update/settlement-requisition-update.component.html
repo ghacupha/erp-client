@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-settlement-requisition-heading" data-cy="SettlementRequisitionCreateUpdateHeading">
@@ -27,13 +8,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -44,8 +25,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_serialNumber">Serial Number</label>
           <input
             type="text"
             class="form-control"
@@ -53,7 +34,6 @@
             id="field_serialNumber"
             data-cy="serialNumber"
             formControlName="serialNumber"
-            [readonly]="true"
           />
           <div
             *ngIf="editForm.get('serialNumber')!.invalid && (editForm.get('serialNumber')!.dirty || editForm.get('serialNumber')!.touched)"
@@ -62,8 +42,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_timeOfRequisition">Time Of Requisition</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_timeOfRequisition">Time Of Requisition</label>
           <div class="d-flex">
             <input
               id="field_timeOfRequisition"
@@ -73,7 +53,6 @@
               name="timeOfRequisition"
               formControlName="timeOfRequisition"
               placeholder="YYYY-MM-DD HH:mm"
-              [readonly]="true"
             />
           </div>
           <div
@@ -85,14 +64,14 @@
             <small class="form-text text-danger" *ngIf="editForm.get('timeOfRequisition')?.errors?.required">
               This field is required.
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfRequisition')?.errors?.ZonedDateTimelocal">
+            <small class="form-text text-danger" [hidden]="!editForm.get('timeOfRequisition')?.errors?.datetimelocal">
               This field should be a date and time.
             </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_requisitionNumber">Requisition Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_requisitionNumber">Requisition Number</label>
           <input
             type="text"
             class="form-control"
@@ -113,8 +92,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -135,8 +114,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentStatus">Payment Status</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentStatus">Payment Status</label>
           <select
             class="form-control"
             name="paymentStatus"
@@ -144,8 +123,8 @@
             id="field_paymentStatus"
             data-cy="paymentStatus"
           >
-            <option [ngValue]="paymentStatusValues[0]"></option>
-            <option *ngFor="let paymentStatus of paymentStatusValues" [value]="paymentStatus">{{ paymentStatus }}</option>
+            <option [ngValue]="null"></option>
+            <option *ngFor="let paymentStatus of paymentStatusValues" [value]="paymentStatus">paymentStatus</option>
           </select>
           <div
             *ngIf="
@@ -156,162 +135,241 @@
           </div>
         </div>
 
-        <jhi-m21-settlement-currency-form-control
-          ngDefaultControl
-          formControlName='settlementCurrency'
-          [inputValue]="editForm.get(['settlementCurrency'])!.value"
-          (valueSelected)='updateCurrencies($event)'
-          inputControlLabel='Currency Code (Required)'
-        >
-          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
-        </jhi-m21-settlement-currency-form-control>
-
-        <jhi-m21-application-user-form-control
-          ngDefaultControl
-          formControlName='currentOwner'
-          [inputValue]="editForm.get(['currentOwner'])!.value"
-          (valueSelected)='updateCurrentOwner($event)'
-          inputControlLabel='Current Owner (Required)'
-        >
-          <option [ngValue]="editForm.get(['currentOwner'])!.value"></option>
-        </jhi-m21-application-user-form-control>
-
-        <jhi-m21-application-user-form-control
-          ngDefaultControl
-          formControlName='nativeOwner'
-          [inputValue]="editForm.get(['nativeOwner'])!.value"
-          (valueSelected)='updateNativeOwner($event)'
-          inputControlLabel='Native Owner (Required)'
-        >
-          <option [ngValue]="editForm.get(['nativeOwner'])!.value"></option>
-        </jhi-m21-application-user-form-control>
-
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='nativeDepartment'
-          [inputValue]="editForm.get('nativeDepartment')!.value"
-          (valueSelected)='updateNativeDepartment($event)'
-          inputControlLabel='Originating Department (Where requisition came from)'
-        >
-          <option [ngValue]="editForm.get('biller')!.value"></option>
-        </jhi-m21-dealer-form-control>
-
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='biller'
-          [inputValue]="editForm.get('biller')!.value"
-          (valueSelected)='updateBiller($event)'
-          inputControlLabel=Biller
-        >
-          <option [ngValue]="editForm.get('biller')!.value"></option>
-        </jhi-m21-dealer-form-control>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_transactionId">Transaction Id</label>
-          <input
-            type="text"
+        <div class="row mb-3">
+          <label class="form-label" for="field_settlementCurrency">Settlement Currency</label>
+          <select
             class="form-control"
-            name="transactionId"
-            id="field_transactionId"
-            data-cy="transactionId"
-            formControlName="transactionId"
-          />
+            id="field_settlementCurrency"
+            data-cy="settlementCurrency"
+            name="settlementCurrency"
+            formControlName="settlementCurrency"
+            [compareWith]="compareSettlementCurrency"
+          >
+            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="settlementCurrencyOption" *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection">
+              {{ settlementCurrencyOption.iso4217CurrencyCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['settlementCurrency'])!.invalid &&
+            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
+            This field is required.
+          </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_transactionDate">Transaction Date</label>
-          <div class="input-group">
-            <input
-              id="field_transactionDate"
-              data-cy="transactionDate"
-              type="text"
-              class="form-control"
-              name="transactionDate"
-              ngbDatepicker
-              #transactionDateDp="ngbDatepicker"
-              formControlName="transactionDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="transactionDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
+        <div class="row mb-3">
+          <label class="form-label" for="field_currentOwner">Current Owner</label>
+          <select
+            class="form-control"
+            id="field_currentOwner"
+            data-cy="currentOwner"
+            name="currentOwner"
+            formControlName="currentOwner"
+            [compareWith]="compareApplicationUser"
+          >
+            <option *ngIf="!editForm.get('currentOwner')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="applicationUserOption" *ngFor="let applicationUserOption of applicationUsersSharedCollection">
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['currentOwner'])!.invalid && (editForm.get(['currentOwner'])!.dirty || editForm.get(['currentOwner'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['currentOwner'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <jhi-m2m-payment-invoice-form-control
-          ngDefaultControl
-          formControlName='invoiceNumber'
-          [inputValues]="editForm.get(['paymentInvoices'])!.value"
-          (valueSelected)='updatePaymentInvoices($event)'
-          inputControlLabel='Invoices (Could be multiple)'
+        <div class="row mb-3">
+          <label class="form-label" for="field_nativeOwner">Native Owner</label>
+          <select
+            class="form-control"
+            id="field_nativeOwner"
+            data-cy="nativeOwner"
+            name="nativeOwner"
+            formControlName="nativeOwner"
+            [compareWith]="compareApplicationUser"
+          >
+            <option *ngIf="!editForm.get('nativeOwner')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="applicationUserOption" *ngFor="let applicationUserOption of applicationUsersSharedCollection">
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['nativeOwner'])!.invalid && (editForm.get(['nativeOwner'])!.dirty || editForm.get(['nativeOwner'])!.touched)"
         >
-        </jhi-m2m-payment-invoice-form-control>
+          <small class="form-text text-danger" *ngIf="editForm.get(['nativeOwner'])?.errors?.required"> This field is required. </small>
+        </div>
 
-        <jhi-m2m-settlement-form-control
-          ngDefaultControl
-          formControlName='settlements'
-          [inputValues]="editForm.get(['settlements'])!.value"
-          (valueSelected)='updateSettlements($event)'
-          inputControlLabel='Settlement(s)'
+        <div class="row mb-3">
+          <label class="form-label" for="field_nativeDepartment">Native Department</label>
+          <select
+            class="form-control"
+            id="field_nativeDepartment"
+            data-cy="nativeDepartment"
+            name="nativeDepartment"
+            formControlName="nativeDepartment"
+            [compareWith]="compareDealer"
+          >
+            <option *ngIf="!editForm.get('nativeDepartment')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['nativeDepartment'])!.invalid &&
+            (editForm.get(['nativeDepartment'])!.dirty || editForm.get(['nativeDepartment'])!.touched)
+          "
         >
-        </jhi-m2m-settlement-form-control>
+          <small class="form-text text-danger" *ngIf="editForm.get(['nativeDepartment'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>
 
-        <jhi-m2m-delivery-note-form-control
-          ngDefaultControl
-          formControlName='deliveryNotes'
-          [inputValues]="editForm.get(['deliveryNotes'])!.value"
-          (selectedValues)='updateDeliveryNotesItems($event)'
-          inputControlLabel='Delivery Notes (If any)'
-        >
-        </jhi-m2m-delivery-note-form-control>
+        <div class="row mb-3">
+          <label class="form-label" for="field_biller">Biller</label>
+          <select
+            class="form-control"
+            id="field_biller"
+            data-cy="biller"
+            name="biller"
+            formControlName="biller"
+            [compareWith]="compareDealer"
+          >
+            <option *ngIf="!editForm.get('biller')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['biller'])!.invalid && (editForm.get(['biller'])!.dirty || editForm.get(['biller'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['biller'])?.errors?.required"> This field is required. </small>
+        </div>
 
-        <jhi-m2m-job-sheet-form-control
-          ngDefaultControl
-          formControlName='jobSheets'
-          [inputValues]="editForm.get(['jobSheets'])!.value"
-          (selectedValues)='updateJobSheetItems($event)'
-          inputControlLabel='Job sheet details (If any)'
-        >
-        </jhi-m2m-job-sheet-form-control>
+        <div class="row mb-3">
+          <label for="field_paymentInvoices">Payment Invoice</label>
+          <select
+            class="form-control"
+            id="field_paymentInvoices"
+            data-cy="paymentInvoice"
+            multiple
+            name="paymentInvoices"
+            formControlName="paymentInvoices"
+            [compareWith]="comparePaymentInvoice"
+          >
+            <option [ngValue]="paymentInvoiceOption" *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection">
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-dealer-form-control
-          ngDefaultControl
-          formControlName='signatures'
-          [inputValues]="editForm.get(['signatures'])!.value"
-          (valueSelected)='updateSignatories($event)'
-          inputControlLabel='Signatories (Multiple)'
-        >
-        </jhi-m2m-dealer-form-control>
+        <div class="row mb-3">
+          <label for="field_deliveryNotes">Delivery Note</label>
+          <select
+            class="form-control"
+            id="field_deliveryNotes"
+            data-cy="deliveryNote"
+            multiple
+            name="deliveryNotes"
+            formControlName="deliveryNotes"
+            [compareWith]="compareDeliveryNote"
+          >
+            <option [ngValue]="deliveryNoteOption" *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection">
+              {{ deliveryNoteOption.deliveryNoteNumber }}
+            </option>
+          </select>
+        </div>
 
-        <jhi-m2m-business-document-form-control
-          ngDefaultControl
-          formControlName='businessDocuments'
-          [inputValues]="editForm.get(['businessDocuments'])!.value"
-          (selectedValues)='updateBusinessDocument($event)'
-          inputControlLabel='Requisition Document'
-        >
-        </jhi-m2m-business-document-form-control>
+        <div class="row mb-3">
+          <label for="field_jobSheets">Job Sheet</label>
+          <select
+            class="form-control"
+            id="field_jobSheets"
+            data-cy="jobSheet"
+            multiple
+            name="jobSheets"
+            formControlName="jobSheets"
+            [compareWith]="compareJobSheet"
+          >
+            <option [ngValue]="jobSheetOption" *ngFor="let jobSheetOption of jobSheetsSharedCollection">
+              {{ jobSheetOption.serialNumber }}
+            </option>
+          </select>
+        </div>
 
-        <!--jhi-m2m-universally-unique-mapping-form-control-->
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='applicationMappings'
-          [inputValues]="editForm.get(['applicationMappings'])!.value"
-          (selectedValues)='updateApplicationMapping($event)'
-          inputControlLabel='Application Mapping(s)'
-        >
-        </jhi-m2m-universally-unique-mapping-form-control>
+        <div class="row mb-3">
+          <label for="field_signatures">Signatures</label>
+          <select
+            class="form-control"
+            id="field_signatures"
+            data-cy="signatures"
+            multiple
+            name="signatures"
+            formControlName="signatures"
+            [compareWith]="compareDealer"
+          >
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
+        <div class="row mb-3">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
+          >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
 
+        <div class="row mb-3">
+          <label for="field_applicationMappings">Application Mapping</label>
+          <select
+            class="form-control"
+            id="field_applicationMappings"
+            data-cy="applicationMapping"
+            multiple
+            name="applicationMappings"
+            formControlName="applicationMappings"
+            [compareWith]="compareUniversallyUniqueMapping"
+          >
+            <option
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
+          >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

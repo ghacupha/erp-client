@@ -130,6 +130,14 @@
       "ownerSide": true,
       "relationshipName": "placeholder",
       "relationshipType": "many-to-many"
+    },
+    {
+      "relationshipName": "settlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "paymentNumber",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "settlementRequisition"
     }
   ],
   "service": "serviceImpl"
