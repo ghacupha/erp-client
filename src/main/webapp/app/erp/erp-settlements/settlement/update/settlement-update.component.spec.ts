@@ -1,53 +1,36 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { SettlementFormService } from './settlement-form.service';
 import { SettlementService } from '../service/settlement.service';
-import { ISettlement, Settlement } from '../settlement.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
-import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
-import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
-import { IPaymentCategory } from 'app/erp/erp-settlements/payments/payment-category/payment-category.model';
-import { PaymentCategoryService } from 'app/erp/erp-settlements/payments/payment-category/service/payment-category.service';
-import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/erp/erp-settlements/payment-invoice/service/payment-invoice.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { ISettlement } from '../settlement.model';
 
 import { SettlementUpdateComponent } from './settlement-update.component';
+import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
+import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
+import { PaymentCategoryService } from '../../payments/payment-category/service/payment-category.service';
+import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
 
 describe('Settlement Management Update Component', () => {
   let comp: SettlementUpdateComponent;
   let fixture: ComponentFixture<SettlementUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let settlementFormService: SettlementFormService;
   let settlementService: SettlementService;
   let placeholderService: PlaceholderService;
   let settlementCurrencyService: SettlementCurrencyService;
@@ -55,18 +38,28 @@ describe('Settlement Management Update Component', () => {
   let paymentCategoryService: PaymentCategoryService;
   let dealerService: DealerService;
   let paymentInvoiceService: PaymentInvoiceService;
+  let businessDocumentService: BusinessDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ErpCommonModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [SettlementUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(SettlementUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(SettlementUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    settlementFormService = TestBed.inject(SettlementFormService);
     settlementService = TestBed.inject(SettlementService);
     placeholderService = TestBed.inject(PlaceholderService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
@@ -74,10 +67,9 @@ describe('Settlement Management Update Component', () => {
     paymentCategoryService = TestBed.inject(PaymentCategoryService);
     dealerService = TestBed.inject(DealerService);
     paymentInvoiceService = TestBed.inject(PaymentInvoiceService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
 
     comp = fixture.componentInstance;
-
-    TestBed.compileComponents();
   });
 
   describe('ngOnInit', () => {
@@ -96,7 +88,10 @@ describe('Settlement Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -117,7 +112,7 @@ describe('Settlement Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -139,7 +134,7 @@ describe('Settlement Management Update Component', () => {
       expect(paymentLabelService.query).toHaveBeenCalled();
       expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
         paymentLabelCollection,
-        ...additionalPaymentLabels
+        ...additionalPaymentLabels.map(expect.objectContaining)
       );
       expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
     });
@@ -161,7 +156,7 @@ describe('Settlement Management Update Component', () => {
       expect(paymentCategoryService.query).toHaveBeenCalled();
       expect(paymentCategoryService.addPaymentCategoryToCollectionIfMissing).toHaveBeenCalledWith(
         paymentCategoryCollection,
-        ...additionalPaymentCategories
+        ...additionalPaymentCategories.map(expect.objectContaining)
       );
       expect(comp.paymentCategoriesSharedCollection).toEqual(expectedCollection);
     });
@@ -181,7 +176,10 @@ describe('Settlement Management Update Component', () => {
       comp.ngOnInit();
 
       expect(settlementService.query).toHaveBeenCalled();
-      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(settlementCollection, ...additionalSettlements);
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
       expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
     });
 
@@ -202,7 +200,10 @@ describe('Settlement Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -223,19 +224,41 @@ describe('Settlement Management Update Component', () => {
       expect(paymentInvoiceService.query).toHaveBeenCalled();
       expect(paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing).toHaveBeenCalledWith(
         paymentInvoiceCollection,
-        ...additionalPaymentInvoices
+        ...additionalPaymentInvoices.map(expect.objectContaining)
       );
       expect(comp.paymentInvoicesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call BusinessDocument query and add missing value', () => {
+      const settlement: ISettlement = { id: 456 };
+      const businessDocuments: IBusinessDocument[] = [{ id: 178 }];
+      settlement.businessDocuments = businessDocuments;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 31818 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [...businessDocuments];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ settlement });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments.map(expect.objectContaining)
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const settlement: ISettlement = { id: 456 };
-      const placeholders: IPlaceholder = { id: 41050 };
-      settlement.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 41050 };
+      settlement.placeholders = [placeholder];
       const settlementCurrency: ISettlementCurrency = { id: 46314 };
       settlement.settlementCurrency = settlementCurrency;
-      const paymentLabels: IPaymentLabel = { id: 89836 };
-      settlement.paymentLabels = [paymentLabels];
+      const paymentLabel: IPaymentLabel = { id: 89836 };
+      settlement.paymentLabels = [paymentLabel];
       const paymentCategory: IPaymentCategory = { id: 41328 };
       settlement.paymentCategory = paymentCategory;
       const groupSettlement: ISettlement = { id: 295 };
@@ -244,29 +267,33 @@ describe('Settlement Management Update Component', () => {
       settlement.biller = biller;
       const signatories: IDealer = { id: 26842 };
       settlement.signatories = [signatories];
-      const paymentInvoices: IPaymentInvoice = { id: 35911 };
-      settlement.paymentInvoices = [paymentInvoices];
+      const paymentInvoice: IPaymentInvoice = { id: 35911 };
+      settlement.paymentInvoices = [paymentInvoice];
+      const businessDocument: IBusinessDocument = { id: 28629 };
+      settlement.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ settlement });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(settlement));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
-      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
+      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabel);
       expect(comp.paymentCategoriesSharedCollection).toContain(paymentCategory);
       expect(comp.settlementsSharedCollection).toContain(groupSettlement);
       expect(comp.dealersSharedCollection).toContain(biller);
       expect(comp.dealersSharedCollection).toContain(signatories);
-      expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
+      expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoice);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.settlement).toEqual(settlement);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Settlement>>();
+      const saveSubject = new Subject<HttpResponse<ISettlement>>();
       const settlement = { id: 123 };
+      jest.spyOn(settlementFormService, 'getSettlement').mockReturnValue(settlement);
       jest.spyOn(settlementService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ settlement });
@@ -279,18 +306,20 @@ describe('Settlement Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(settlementFormService.getSettlement).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      // TODO expect(settlementService.update).toHaveBeenCalledWith(settlement);
+      expect(settlementService.update).toHaveBeenCalledWith(expect.objectContaining(settlement));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Settlement>>();
-      const settlement = new Settlement();
+      const saveSubject = new Subject<HttpResponse<ISettlement>>();
+      const settlement = { id: 123 };
+      jest.spyOn(settlementFormService, 'getSettlement').mockReturnValue({ id: null });
       jest.spyOn(settlementService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ settlement });
+      activatedRoute.data = of({ settlement: null });
       comp.ngOnInit();
 
       // WHEN
@@ -300,14 +329,15 @@ describe('Settlement Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      // TODO expect(settlementService.create).toHaveBeenCalledWith(settlement);
+      expect(settlementFormService.getSettlement).toHaveBeenCalled();
+      expect(settlementService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<Settlement>>();
+      const saveSubject = new Subject<HttpResponse<ISettlement>>();
       const settlement = { id: 123 };
       jest.spyOn(settlementService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -320,173 +350,91 @@ describe('Settlement Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      // TODO expect(settlementService.update).toHaveBeenCalledWith(settlement);
+      expect(settlementService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    // describe('trackPlaceholderById', () => {
-    //   it('Should return tracked Placeholder primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackPlaceholderById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackSettlementCurrencyById', () => {
-    //   it('Should return tracked SettlementCurrency primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackSettlementCurrencyById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackPaymentLabelById', () => {
-    //   it('Should return tracked PaymentLabel primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackPaymentLabelById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackPaymentCategoryById', () => {
-    //   it('Should return tracked PaymentCategory primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackPaymentCategoryById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackSettlementById', () => {
-    //   it('Should return tracked Settlement primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackSettlementById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackDealerById', () => {
-    //   it('Should return tracked Dealer primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackDealerById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-
-    // describe('trackPaymentInvoiceById', () => {
-    //   it('Should return tracked PaymentInvoice primary key', () => {
-    //     const entity = { id: 123 };
-    //     const trackResult = comp.trackPaymentInvoiceById(0, entity);
-    //     expect(trackResult).toEqual(entity.id);
-    //   });
-    // });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      // it('Should return option if no Placeholder is selected', () => {
-      //   const option = { id: 123 };
-      //   const result = comp.getSelectedPlaceholder(option);
-      //   expect(result === option).toEqual(true);
-      // });
-
-      // it('Should return selected Placeholder for according option', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 123 };
-      //   const selected2 = { id: 456 };
-      //   const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-      //   expect(result === selected).toEqual(true);
-      //   expect(result === selected2).toEqual(false);
-      //   expect(result === option).toEqual(false);
-      // });
-
-      // it('Should return option if this Placeholder is not selected', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 456 };
-      //   const result = comp.getSelectedPlaceholder(option, [selected]);
-      //   expect(result === option).toEqual(true);
-      //   expect(result === selected).toEqual(false);
-      // });
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
+      });
     });
 
-    describe('getSelectedPaymentLabel', () => {
-      // it('Should return option if no PaymentLabel is selected', () => {
-      //   const option = { id: 123 };
-      //   const result = comp.getSelectedPaymentLabel(option);
-      //   expect(result === option).toEqual(true);
-      // });
-
-      // it('Should return selected PaymentLabel for according option', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 123 };
-      //   const selected2 = { id: 456 };
-      //   const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
-      //   expect(result === selected).toEqual(true);
-      //   expect(result === selected2).toEqual(false);
-      //   expect(result === option).toEqual(false);
-      // });
-
-      // it('Should return option if this PaymentLabel is not selected', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 456 };
-      //   const result = comp.getSelectedPaymentLabel(option, [selected]);
-      //   expect(result === option).toEqual(true);
-      //   expect(result === selected).toEqual(false);
-      // });
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
+      });
     });
 
-    describe('getSelectedDealer', () => {
-      // it('Should return option if no Dealer is selected', () => {
-      //   const option = { id: 123 };
-      //   const result = comp.getSelectedDealer(option);
-      //   expect(result === option).toEqual(true);
-      // });
-
-      // it('Should return selected Dealer for according option', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 123 };
-      //   const selected2 = { id: 456 };
-      //   const result = comp.getSelectedDealer(option, [selected2, selected]);
-      //   expect(result === selected).toEqual(true);
-      //   expect(result === selected2).toEqual(false);
-      //   expect(result === option).toEqual(false);
-      // });
-
-      // it('Should return option if this Dealer is not selected', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 456 };
-      //   const result = comp.getSelectedDealer(option, [selected]);
-      //   expect(result === option).toEqual(true);
-      //   expect(result === selected).toEqual(false);
-      // });
+    describe('comparePaymentLabel', () => {
+      it('Should forward to paymentLabelService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentLabelService, 'comparePaymentLabel');
+        comp.comparePaymentLabel(entity, entity2);
+        expect(paymentLabelService.comparePaymentLabel).toHaveBeenCalledWith(entity, entity2);
+      });
     });
 
-    describe('getSelectedPaymentInvoice', () => {
-      // it('Should return option if no PaymentInvoice is selected', () => {
-      //   const option = { id: 123 };
-      //   const result = comp.getSelectedPaymentInvoice(option);
-      //   expect(result === option).toEqual(true);
-      // });
+    describe('comparePaymentCategory', () => {
+      it('Should forward to paymentCategoryService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentCategoryService, 'comparePaymentCategory');
+        comp.comparePaymentCategory(entity, entity2);
+        expect(paymentCategoryService.comparePaymentCategory).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
 
-      // it('Should return selected PaymentInvoice for according option', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 123 };
-      //   const selected2 = { id: 456 };
-      //   const result = comp.getSelectedPaymentInvoice(option, [selected2, selected]);
-      //   expect(result === selected).toEqual(true);
-      //   expect(result === selected2).toEqual(false);
-      //   expect(result === option).toEqual(false);
-      // });
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
 
-      // it('Should return option if this PaymentInvoice is not selected', () => {
-      //   const option = { id: 123 };
-      //   const selected = { id: 456 };
-      //   const result = comp.getSelectedPaymentInvoice(option, [selected]);
-      //   expect(result === option).toEqual(true);
-      //   expect(result === selected).toEqual(false);
-      // });
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('comparePaymentInvoice', () => {
+      it('Should forward to paymentInvoiceService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentInvoiceService, 'comparePaymentInvoice');
+        comp.comparePaymentInvoice(entity, entity2);
+        expect(paymentInvoiceService.comparePaymentInvoice).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

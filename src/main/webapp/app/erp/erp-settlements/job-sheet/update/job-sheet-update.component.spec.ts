@@ -1,71 +1,65 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { JobSheetFormService } from './job-sheet-form.service';
 import { JobSheetService } from '../service/job-sheet.service';
-import { IJobSheet, JobSheet } from '../job-sheet.model';
+import { IJobSheet } from '../job-sheet.model';
 
 import { JobSheetUpdateComponent } from './job-sheet-update.component';
-import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
-import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { IBusinessStamp } from '../../business-stamp/business-stamp.model';
+import { BusinessStampService } from '../../business-stamp/service/business-stamp.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 describe('JobSheet Management Update Component', () => {
   let comp: JobSheetUpdateComponent;
   let fixture: ComponentFixture<JobSheetUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let jobSheetFormService: JobSheetFormService;
   let jobSheetService: JobSheetService;
   let dealerService: DealerService;
   let businessStampService: BusinessStampService;
   let placeholderService: PlaceholderService;
   let paymentLabelService: PaymentLabelService;
+  let businessDocumentService: BusinessDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ErpCommonModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [JobSheetUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(JobSheetUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(JobSheetUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    jobSheetFormService = TestBed.inject(JobSheetFormService);
     jobSheetService = TestBed.inject(JobSheetService);
     dealerService = TestBed.inject(DealerService);
     businessStampService = TestBed.inject(BusinessStampService);
     placeholderService = TestBed.inject(PlaceholderService);
     paymentLabelService = TestBed.inject(PaymentLabelService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
 
     comp = fixture.componentInstance;
   });
@@ -90,7 +84,10 @@ describe('JobSheet Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -111,7 +108,7 @@ describe('JobSheet Management Update Component', () => {
       expect(businessStampService.query).toHaveBeenCalled();
       expect(businessStampService.addBusinessStampToCollectionIfMissing).toHaveBeenCalledWith(
         businessStampCollection,
-        ...additionalBusinessStamps
+        ...additionalBusinessStamps.map(expect.objectContaining)
       );
       expect(comp.businessStampsSharedCollection).toEqual(expectedCollection);
     });
@@ -131,7 +128,10 @@ describe('JobSheet Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -152,9 +152,31 @@ describe('JobSheet Management Update Component', () => {
       expect(paymentLabelService.query).toHaveBeenCalled();
       expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
         paymentLabelCollection,
-        ...additionalPaymentLabels
+        ...additionalPaymentLabels.map(expect.objectContaining)
       );
       expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call BusinessDocument query and add missing value', () => {
+      const jobSheet: IJobSheet = { id: 456 };
+      const businessDocuments: IBusinessDocument[] = [{ id: 18576 }];
+      jobSheet.businessDocuments = businessDocuments;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 18709 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [...businessDocuments];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ jobSheet });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments.map(expect.objectContaining)
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
@@ -167,29 +189,33 @@ describe('JobSheet Management Update Component', () => {
       jobSheet.contactPerson = contactPerson;
       const businessStamps: IBusinessStamp = { id: 48412 };
       jobSheet.businessStamps = [businessStamps];
-      const placeholders: IPlaceholder = { id: 93404 };
-      jobSheet.placeholders = [placeholders];
-      const paymentLabels: IPaymentLabel = { id: 11910 };
-      jobSheet.paymentLabels = [paymentLabels];
+      const placeholder: IPlaceholder = { id: 93404 };
+      jobSheet.placeholders = [placeholder];
+      const paymentLabel: IPaymentLabel = { id: 11910 };
+      jobSheet.paymentLabels = [paymentLabel];
+      const businessDocument: IBusinessDocument = { id: 54522 };
+      jobSheet.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ jobSheet });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(jobSheet));
       expect(comp.dealersSharedCollection).toContain(biller);
       expect(comp.dealersSharedCollection).toContain(signatories);
       expect(comp.dealersSharedCollection).toContain(contactPerson);
       expect(comp.businessStampsSharedCollection).toContain(businessStamps);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
-      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabel);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.jobSheet).toEqual(jobSheet);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<JobSheet>>();
+      const saveSubject = new Subject<HttpResponse<IJobSheet>>();
       const jobSheet = { id: 123 };
+      jest.spyOn(jobSheetFormService, 'getJobSheet').mockReturnValue(jobSheet);
       jest.spyOn(jobSheetService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ jobSheet });
@@ -202,18 +228,20 @@ describe('JobSheet Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(jobSheetFormService.getJobSheet).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(jobSheetService.update).toHaveBeenCalledWith(jobSheet);
+      expect(jobSheetService.update).toHaveBeenCalledWith(expect.objectContaining(jobSheet));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<JobSheet>>();
-      const jobSheet = new JobSheet();
+      const saveSubject = new Subject<HttpResponse<IJobSheet>>();
+      const jobSheet = { id: 123 };
+      jest.spyOn(jobSheetFormService, 'getJobSheet').mockReturnValue({ id: null });
       jest.spyOn(jobSheetService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ jobSheet });
+      activatedRoute.data = of({ jobSheet: null });
       comp.ngOnInit();
 
       // WHEN
@@ -223,14 +251,15 @@ describe('JobSheet Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(jobSheetService.create).toHaveBeenCalledWith(jobSheet);
+      expect(jobSheetFormService.getJobSheet).toHaveBeenCalled();
+      expect(jobSheetService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<JobSheet>>();
+      const saveSubject = new Subject<HttpResponse<IJobSheet>>();
       const jobSheet = { id: 123 };
       jest.spyOn(jobSheetService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -243,148 +272,60 @@ describe('JobSheet Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(jobSheetService.update).toHaveBeenCalledWith(jobSheet);
+      expect(jobSheetService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackBusinessStampById', () => {
-      it('Should return tracked BusinessStamp primary key', () => {
+    describe('compareBusinessStamp', () => {
+      it('Should forward to businessStampService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackBusinessStampById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(businessStampService, 'compareBusinessStamp');
+        comp.compareBusinessStamp(entity, entity2);
+        expect(businessStampService.compareBusinessStamp).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPaymentLabelById', () => {
-      it('Should return tracked PaymentLabel primary key', () => {
+    describe('comparePaymentLabel', () => {
+      it('Should forward to paymentLabelService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentLabelById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentLabelService, 'comparePaymentLabel');
+        comp.comparePaymentLabel(entity, entity2);
+        expect(paymentLabelService.comparePaymentLabel).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('getSelectedBusinessStamp', () => {
-      it('Should return option if no BusinessStamp is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedBusinessStamp(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected BusinessStamp for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedBusinessStamp(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this BusinessStamp is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedBusinessStamp(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPaymentLabel', () => {
-      it('Should return option if no PaymentLabel is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentLabel(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentLabel for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentLabel is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

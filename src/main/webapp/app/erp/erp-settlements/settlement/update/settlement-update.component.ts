@@ -1,51 +1,33 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map,} from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
-import { ISettlement, Settlement } from '../settlement.model';
+import { SettlementFormService, SettlementFormGroup } from './settlement-form.service';
+import { ISettlement } from '../settlement.model';
 import { SettlementService } from '../service/settlement.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
-import { IPaymentCategory } from 'app/erp/erp-settlements/payments/payment-category/payment-category.model';
-import { PaymentCategoryService } from 'app/erp/erp-settlements/payments/payment-category/service/payment-category.service';
-import { IPaymentInvoice } from 'app/erp/erp-settlements/payment-invoice/payment-invoice.model';
-import { PaymentInvoiceService } from 'app/erp/erp-settlements/payment-invoice/service/payment-invoice.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
+import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
+import { PaymentCategoryService } from '../../payments/payment-category/service/payment-category.service';
+import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import dayjs from 'dayjs/esm';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import * as dayjs from 'dayjs';
 import { PaymentCalculatorService } from '../service/payment-calculator.service';
-import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
-import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -53,6 +35,7 @@ import { IBusinessDocument } from '../../../erp-pages/business-document/business
 })
 export class SettlementUpdateComponent implements OnInit {
   isSaving = false;
+  settlement: ISettlement | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
@@ -61,57 +44,59 @@ export class SettlementUpdateComponent implements OnInit {
   settlementsSharedCollection: ISettlement[] = [];
   dealersSharedCollection: IDealer[] = [];
   paymentInvoicesSharedCollection: IPaymentInvoice[] = [];
-  businessDocumentCollection: IBusinessDocument[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    paymentNumber: [],
-    paymentDate: [],
-    paymentAmount: [],
-    description: [],
-    notes: [],
-    calculationFile: [],
-    calculationFileContentType: [],
-    remarks: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    placeholders: [],
-    settlementCurrency: [null, Validators.required],
-    paymentLabels: [],
-    paymentCategory: [null, Validators.required],
-    groupSettlement: [],
-    biller: [null, Validators.required],
-    paymentInvoices: [],
-    signatories: [],
-    businessDocuments: [],
-  });
+  editForm: SettlementFormGroup = this.settlementFormService.createSettlementFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected settlementService: SettlementService,
+    protected settlementFormService: SettlementFormService,
     protected placeholderService: PlaceholderService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected paymentLabelService: PaymentLabelService,
     protected paymentCategoryService: PaymentCategoryService,
     protected dealerService: DealerService,
     protected paymentInvoiceService: PaymentInvoiceService,
-    protected activatedRoute: ActivatedRoute,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected paymentCalculatorService: PaymentCalculatorService,
     protected businessDocumentService: BusinessDocumentService,
-    protected fb: FormBuilder
+    protected paymentCalculatorService: PaymentCalculatorService,
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  comparePaymentCategory = (o1: IPaymentCategory | null, o2: IPaymentCategory | null): boolean =>
+    this.paymentCategoryService.comparePaymentCategory(o1, o2);
+
+  compareSettlement = (o1: ISettlement | null, o2: ISettlement | null): boolean => this.settlementService.compareSettlement(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePaymentInvoice = (o1: IPaymentInvoice | null, o2: IPaymentInvoice | null): boolean =>
+    this.paymentInvoiceService.comparePaymentInvoice(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlement }) => {
-      this.updateForm(settlement);
+      this.settlement = settlement;
+      if (settlement) {
+        this.updateForm(settlement);
+      }
 
       this.loadRelationshipsOptions();
     });
 
     this.updateTodaysDate();
-
     this.updatePreferredCurrency();
     this.updatePreferredCategory();
     this.updatePreferredSignatories();
@@ -147,8 +132,8 @@ export class SettlementUpdateComponent implements OnInit {
 
   updatePreferredCategory(): void {
     if (this.editForm.get(['id'])?.value === undefined ) {
-    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentCategoryName")
-      .subscribe((mapped) => {
+      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentCategoryName")
+        .subscribe((mapped) => {
           this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
             .subscribe(({ body: categories }) => {
               if (categories) {
@@ -166,7 +151,7 @@ export class SettlementUpdateComponent implements OnInit {
           this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
             .subscribe(({ body: vals }) => {
               if (vals) {
-                  this.editForm.get(['signatories'])?.setValue(vals)
+                this.editForm.get(['signatories'])?.setValue(vals)
               }
             });
         });
@@ -342,8 +327,8 @@ export class SettlementUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const settlement = this.createFromForm();
-    if (settlement.id !== undefined) {
+    const settlement = this.settlementFormService.getSettlement(this.editForm);
+    if (settlement.id !== null) {
       this.subscribeToSaveResponse(this.settlementService.update(settlement));
     } else {
       this.subscribeToSaveResponse(this.settlementService.create(settlement));
@@ -351,10 +336,10 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlement>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -370,62 +355,42 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   protected updateForm(settlement: ISettlement): void {
-    this.editForm.patchValue({
-      id: settlement.id,
-      paymentNumber: settlement.paymentNumber,
-      paymentDate: settlement.paymentDate,
-      paymentAmount: settlement.paymentAmount,
-      description: settlement.description,
-      notes: settlement.notes,
-      remarks: settlement.remarks,
-      calculationFile: settlement.calculationFile,
-      calculationFileContentType: settlement.calculationFileContentType,
-      fileUploadToken: settlement.fileUploadToken,
-      compilationToken: settlement.compilationToken,
-      placeholders: settlement.placeholders,
-      settlementCurrency: settlement.settlementCurrency,
-      paymentLabels: settlement.paymentLabels,
-      paymentCategory: settlement.paymentCategory,
-      groupSettlement: settlement.groupSettlement,
-      biller: settlement.biller,
-      paymentInvoices: settlement.paymentInvoices,
-      signatories: settlement.signatories,
-      businessDocuments: settlement.businessDocuments,
-    });
+    this.settlement = settlement;
+    this.settlementFormService.resetForm(this.editForm, settlement);
 
-    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-      this.businessDocumentCollection,
-      ...(settlement.businessDocuments ?? [])
-    );
-
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(settlement.placeholders ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      settlement.settlementCurrency
-    );
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        settlement.settlementCurrency
+      );
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(settlement.paymentLabels ?? [])
     );
-    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
       this.paymentCategoriesSharedCollection,
       settlement.paymentCategory
     );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
       this.settlementsSharedCollection,
       settlement.groupSettlement
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       settlement.biller,
       ...(settlement.signatories ?? [])
     );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
       this.paymentInvoicesSharedCollection,
       ...(settlement.paymentInvoices ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+      this.businessDocumentsSharedCollection,
+      ...(settlement.businessDocuments ?? [])
     );
   }
 
@@ -435,7 +400,7 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(placeholders, ...(this.settlement?.placeholders ?? []))
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -445,33 +410,23 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.settlement?.settlementCurrency
           )
         )
       )
       .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
-
-    this.businessDocumentService
-      .query()
-      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
-      .pipe(
-        map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-            businessDocuments,
-            this.editForm.get('businessDocument')!.value
-          )
-        )
-      )
-      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentCollection = businessDocuments));
 
     this.paymentLabelService
       .query()
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.settlement?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -481,9 +436,9 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentCategory[]>) => res.body ?? []))
       .pipe(
         map((paymentCategories: IPaymentCategory[]) =>
-          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+          this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing<IPaymentCategory>(
             paymentCategories,
-            this.editForm.get('paymentCategory')!.value
+            this.settlement?.paymentCategory
           )
         )
       )
@@ -494,7 +449,7 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, this.editForm.get('groupSettlement')!.value)
+          this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(settlements, this.settlement?.groupSettlement)
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -504,10 +459,10 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('biller')!.value,
-            ...(this.editForm.get('signatories')!.value ?? [])
+            this.settlement?.biller,
+            ...(this.settlement?.signatories ?? [])
           )
         )
       )
@@ -518,38 +473,25 @@ export class SettlementUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
       .pipe(
         map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing<IPaymentInvoice>(
             paymentInvoices,
-            ...(this.editForm.get('paymentInvoices')!.value ?? [])
+            ...(this.settlement?.paymentInvoices ?? [])
           )
         )
       )
       .subscribe((paymentInvoices: IPaymentInvoice[]) => (this.paymentInvoicesSharedCollection = paymentInvoices));
-  }
 
-  protected createFromForm(): ISettlement {
-    return {
-      ...new Settlement(),
-      id: this.editForm.get(['id'])!.value,
-      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
-      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      notes: this.editForm.get(['notes'])!.value,
-      remarks: this.editForm.get(['remarks'])!.value,
-      calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
-      calculationFile: this.editForm.get(['calculationFile'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
-      groupSettlement: this.editForm.get(['groupSettlement'])!.value,
-      biller: this.editForm.get(['biller'])!.value,
-      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      signatories: this.editForm.get(['signatories'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+            businessDocuments,
+            ...(this.settlement?.businessDocuments ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 }

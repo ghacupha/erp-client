@@ -1,37 +1,19 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
-import { IBusinessStamp, BusinessStamp } from '../business-stamp.model';
+import { BusinessStampFormService, BusinessStampFormGroup } from './business-stamp-form.service';
+import { IBusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { IDealer } from 'app/entities/dealers/dealer/dealer.model';
+import { DealerService } from 'app/entities/dealers/dealer/service/dealer.service';
+import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-business-stamp-update',
@@ -39,94 +21,64 @@ import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.mo
 })
 export class BusinessStampUpdateComponent implements OnInit {
   isSaving = false;
+  businessStamp: IBusinessStamp | null = null;
 
   dealersSharedCollection: IDealer[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    stampDate: [],
-    purpose: [],
-    details: [],
-    stampHolder: [null, Validators.required],
-    placeholders: [],
-  });
-
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  stampHoldersLoading = false;
-  stampHolderControlInput$ = new Subject<string>();
-  stampHolderLookups$: Observable<IDealer[]> = of([]);
+  editForm: BusinessStampFormGroup = this.businessStampFormService.createBusinessStampFormGroup();
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected businessStampService: BusinessStampService,
+    protected businessStampFormService: BusinessStampFormService,
     protected dealerService: DealerService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
-    protected dealerSuggestionService: DealerSuggestionService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ businessStamp }) => {
-      this.updateForm(businessStamp);
+      this.businessStamp = businessStamp;
+      if (businessStamp) {
+        this.updateForm(businessStamp);
+      }
 
       this.loadRelationshipsOptions();
     });
-
-    this.loadStampHolders();
-    this.loadPlaceholders();
   }
 
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateStampHolder(update: IDealer): void {
+    this.editForm.patchValue({
+      stampHolder: update,
+    });
   }
 
-  loadStampHolders(): void {
-    this.stampHolderLookups$ = concat(
-      of([]), // default items
-      this.stampHolderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.stampHoldersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.stampHoldersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
   }
 
-  trackDealerByFn(item: IDealer): number {
-    return item.id!;
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
   }
 
-  trackPlaceholdersByFn(item: IPaymentLabel): number {
-    return item.id!;
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
+    });
   }
 
   previousState(): void {
@@ -135,38 +87,19 @@ export class BusinessStampUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const businessStamp = this.createFromForm();
-    if (businessStamp.id !== undefined) {
+    const businessStamp = this.businessStampFormService.getBusinessStamp(this.editForm);
+    if (businessStamp.id !== null) {
       this.subscribeToSaveResponse(this.businessStampService.update(businessStamp));
     } else {
       this.subscribeToSaveResponse(this.businessStampService.create(businessStamp));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IBusinessStamp>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -182,20 +115,14 @@ export class BusinessStampUpdateComponent implements OnInit {
   }
 
   protected updateForm(businessStamp: IBusinessStamp): void {
-    this.editForm.patchValue({
-      id: businessStamp.id,
-      stampDate: businessStamp.stampDate,
-      purpose: businessStamp.purpose,
-      details: businessStamp.details,
-      stampHolder: businessStamp.stampHolder,
-      placeholders: businessStamp.placeholders,
-    });
+    this.businessStamp = businessStamp;
+    this.businessStampFormService.resetForm(this.editForm, businessStamp);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       businessStamp.stampHolder
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(businessStamp.placeholders ?? [])
     );
@@ -206,7 +133,7 @@ export class BusinessStampUpdateComponent implements OnInit {
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
-        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('stampHolder')!.value))
+        map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.businessStamp?.stampHolder))
       )
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
@@ -215,21 +142,12 @@ export class BusinessStampUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.businessStamp?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IBusinessStamp {
-    return {
-      ...new BusinessStamp(),
-      id: this.editForm.get(['id'])!.value,
-      stampDate: this.editForm.get(['stampDate'])!.value,
-      purpose: this.editForm.get(['purpose'])!.value,
-      details: this.editForm.get(['details'])!.value,
-      stampHolder: this.editForm.get(['stampHolder'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }

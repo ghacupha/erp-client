@@ -1,60 +1,34 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
-import { IPaymentInvoice, PaymentInvoice } from '../payment-invoice.model';
+import { PaymentInvoiceFormService, PaymentInvoiceFormGroup } from './payment-invoice-form.service';
+import { IPaymentInvoice } from '../payment-invoice.model';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
-import { IPurchaseOrder } from 'app/erp/erp-settlements/purchase-order/purchase-order.model';
-import { PurchaseOrderService } from 'app/erp/erp-settlements/purchase-order/service/purchase-order.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
+import { IJobSheet } from '../../job-sheet/job-sheet.model';
 import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 import { PaymentLabelService } from '../../../erp-pages/payment-label/service/payment-label.service';
-import { ISettlementCurrency } from 'app/erp/erp-settlements/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/erp/erp-settlements/settlement-currency/service/settlement-currency.service';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { IPaymentCategory } from '../../payments/payment-category/payment-category.model';
-import { ISettlement } from '../../settlement/settlement.model';
-import { IPayment } from '../../../erp-pages/payments/payment/payment.model';
-import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
-import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
-import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
-import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
-import { PurchaseOrderSuggestionService } from '../../../erp-common/suggestion/purchase-order-suggestion.service';
-import { DeliveryNotesSuggestionService } from '../../../erp-common/suggestion/delivery-notes-suggestion.service';
-import { JobSheetSuggestionService } from '../../../erp-common/suggestion/job-sheet-suggestion.service';
 import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
-import { IJobSheet } from '../../job-sheet/job-sheet.model';
-import { DeliveryNoteService } from '../../delivery-note/service/delivery-note.service';
+import { PurchaseOrderService } from '../../purchase-order/service/purchase-order.service';
+import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { DeliveryNoteService } from '../../delivery-note/service/delivery-note.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IPurchaseOrder } from '../../purchase-order/purchase-order.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
-import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { ISettlement } from '../../settlement/settlement.model';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -62,6 +36,7 @@ import { BusinessDocumentService } from '../../../erp-pages/business-document/se
 })
 export class PaymentInvoiceUpdateComponent implements OnInit {
   isSaving = false;
+  paymentInvoice: IPaymentInvoice | null = null;
 
   purchaseOrdersSharedCollection: IPurchaseOrder[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -70,104 +45,108 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
-  businessDocumentCollection: IBusinessDocument[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    invoiceNumber: [null, [Validators.required]],
-    invoiceDate: [],
-    invoiceAmount: [],
-    fileUploadToken: [],
-    compilationToken: [],
-    remarks: [],
-    purchaseOrders: [],
-    placeholders: [],
-    paymentLabels: [],
-    settlementCurrency: [null, Validators.required],
-    biller: [null, Validators.required],
-    deliveryNotes: [],
-    jobSheets: [],
-    businessDocuments: [],
-  });
-
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  labelsLoading = false;
-  labelControlInput$ = new Subject<string>();
-  labelLookups$: Observable<IPaymentLabel[]> = of([]);
-
-  purchaseOrdersLoading = false;
-  purchaseOrderControlInput$ = new Subject<string>();
-  purchaseOrderLookups$: Observable<IPurchaseOrder[]> = of([]);
-
-  settlementCurrenciesLoading = false;
-  settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
-
-  billersLoading = false;
-  billersInput$ = new Subject<string>();
-  billerLookups$: Observable<IDealer[]> = of([]);
-
-  deliveryNotesLoading = false;
-  deliveryNotesControlInput$ = new Subject<string>();
-  deliveryNoteLookups$: Observable<IDeliveryNote[]> = of([]);
-
-  jobSheetsLoading = false;
-  jobSheetsControlInput$ = new Subject<string>();
-  jobSheetLookups$: Observable<IJobSheet[]> = of([]);
+  editForm: PaymentInvoiceFormGroup = this.paymentInvoiceFormService.createPaymentInvoiceFormGroup();
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected paymentInvoiceService: PaymentInvoiceService,
+    protected paymentInvoiceFormService: PaymentInvoiceFormService,
     protected purchaseOrderService: PurchaseOrderService,
     protected placeholderService: PlaceholderService,
     protected paymentLabelService: PaymentLabelService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected dealerService: DealerService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
-    protected categorySuggestionService: CategorySuggestionService,
-    protected labelSuggestionService: LabelSuggestionService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
-    protected settlementSuggestionService: SettlementSuggestionService,
-    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
-    protected dealerSuggestionService: DealerSuggestionService,
-    protected purchaseOrderSuggestionService: PurchaseOrderSuggestionService,
-    protected deliveryNotesSuggestionService: DeliveryNotesSuggestionService,
-    protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
-    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected businessDocumentService: BusinessDocumentService,
+    protected activatedRoute: ActivatedRoute,
+    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
   ) {}
+
+  comparePurchaseOrder = (o1: IPurchaseOrder | null, o2: IPurchaseOrder | null): boolean =>
+    this.purchaseOrderService.comparePurchaseOrder(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  comparePaymentLabel = (o1: IPaymentLabel | null, o2: IPaymentLabel | null): boolean =>
+    this.paymentLabelService.comparePaymentLabel(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareDeliveryNote = (o1: IDeliveryNote | null, o2: IDeliveryNote | null): boolean =>
+    this.deliveryNoteService.compareDeliveryNote(o1, o2);
+
+  compareJobSheet = (o1: IJobSheet | null, o2: IJobSheet | null): boolean => this.jobSheetService.compareJobSheet(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentInvoice }) => {
-      this.updateForm(paymentInvoice);
+      this.paymentInvoice = paymentInvoice;
+      if (paymentInvoice) {
+        this.updateForm(paymentInvoice);
+      }
 
       this.loadRelationshipsOptions();
     });
 
-    // fire-up typeahead items
-    this.loadLabels();
-    this.loadPlaceholders();
-    this.loadCurrencies();
-    this.loadBillers();
-    this.loadPurchaseOrders();
-    this.loadDeliveryNotes();
-    this.loadJobSheets();
     this.updatePreferredCurrency();
     this.updatePreferredPaymentLabels();
     this.updateInputsGivenPurchaseOrder();
   }
 
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateBusinessDocument(update: IBusinessDocument[]): void {
+  updateSettlementCurrency(update: ISettlementCurrency): void {
     this.editForm.patchValue({
-      businessDocuments: [...update],
+      settlementCurrency: update
+    });
+  }
+
+  updatePurchaseOrders(update: IPurchaseOrder[]): void {
+    this.editForm.patchValue({
+      purchaseOrders: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updatePaymentLabels(update: IPaymentLabel[]): void {
+    this.editForm.patchValue({
+      paymentLabels: [...update]
+    });
+  }
+
+  updateBiller(update: IDealer): void {
+    this.editForm.patchValue({
+      biller: update
+    });
+  }
+
+  updateDeliveryNotes(update: IDeliveryNote[]): void {
+    this.editForm.patchValue({
+      deliveryNotes: [...update]
+    });
+  }
+
+  updateJobSheets(update: IJobSheet[]): void {
+    this.editForm.patchValue({
+      jobSheets: [...update]
+    });
+  }
+
+  updateBusinessDocuments(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update]
     });
   }
 
@@ -176,7 +155,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       const p_labels: IPaymentLabel[] = [];
       let p_amount: number | null | undefined = 0;
       orders.forEach((ordered: IPurchaseOrder) => {
-          ({ purchaseOrderAmount: p_amount } = ordered);
+        ({ purchaseOrderAmount: p_amount } = ordered);
       });
 
       this.editForm.patchValue({
@@ -192,11 +171,21 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   updatePreferredCurrency(): void {
-    this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredSettlementIso4217CurrencyCode"})
+    this.universallyUniqueMappingService.search({
+      page: 0,
+      size: 0,
+      sort: [],
+      query: "globallyPreferredSettlementIso4217CurrencyCode"
+    })
       .subscribe(({ body }) => {
         if (body!.length > 0) {
           if (body) {
-            this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
+            this.settlementCurrencyService.search(<SearchWithPagination>{
+              page: 0,
+              size: 0,
+              sort: [],
+              query: body[0].mappedValue
+            })
               .subscribe(({ body: currencies }) => {
                 if (currencies) {
                   this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
@@ -225,179 +214,19 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       });
   }
 
-  loadJobSheets(): void {
-    this.jobSheetLookups$ = concat(
-      of([]), // default items
-      this.jobSheetsControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.jobSheetsLoading = true),
-        switchMap(term => this.jobSheetsSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.jobSheetsLoading = false)
-        ))
-      ),
-      of([...this.jobSheetsSharedCollection])
-    );
+    byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
   }
 
-  // Load dynamic DeliveryNotes from input stream
-  loadDeliveryNotes(): void {
-    this.deliveryNoteLookups$ = concat(
-      of([]), // default items
-      this.deliveryNotesControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.deliveryNotesLoading = true),
-        switchMap(term => this.deliveryNotesSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.deliveryNotesLoading = false)
-        ))
-      ),
-      of([...this.deliveryNotesSharedCollection])
-    );
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
   }
 
-  loadPurchaseOrders(): void {
-    this.purchaseOrderLookups$ = concat(
-      of([]), // default items
-      this.purchaseOrderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this. purchaseOrdersLoading = true),
-        switchMap(term => this.purchaseOrderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this. purchaseOrdersLoading = false)
-        ))
-      ),
-      of([...this.purchaseOrdersSharedCollection])
-    );
-  }
-
-
-  loadBillers(): void {
-    this.billerLookups$ = concat(
-      of([]), // default items
-      this.billersInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.billersLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.billersLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
-  }
-
-  loadCurrencies(): void {
-    this.settlementCurrencyLookups$ = concat(
-      of([]), // default items
-      this.settlementCurrencyControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementCurrenciesLoading = true),
-        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementCurrenciesLoading = false)
-        ))
-      ),
-      of([...this.settlementCurrenciesSharedCollection])
-    );
-  }
-
-  loadLabels(): void {
-    this.labelLookups$ = concat(
-      of([]), // default items
-      this.labelControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.labelsLoading = true),
-        switchMap(term => this.labelSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.labelsLoading = false)
-        ))
-      ),
-      of([...this.paymentLabelsSharedCollection])
-    );
-  }
-
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
-  trackBillerByFn(item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPurchaseOrderByFn(item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackCurrencyByFn(item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPaymentByFn(item: IPayment): number {
-    return item.id!;
-  }
-
-  trackPlaceholdersByFn(item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackCategoryByFn(item: IPaymentCategory): number {
-    return item.id!;
-  }
-
-  trackLabelByFn(item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackSettlementByFn(item: ISettlement): number {
-    return item.id!;
-  }
-
-  trackDeliveryNotesByFn(item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetByFn(item: IJobSheet): number {
-    return item.id!;
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
+    });
   }
 
   previousState(): void {
@@ -406,102 +235,19 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const paymentInvoice = this.createFromForm();
-    if (paymentInvoice.id !== undefined) {
+    const paymentInvoice = this.paymentInvoiceFormService.getPaymentInvoice(this.editForm);
+    if (paymentInvoice.id !== null) {
       this.subscribeToSaveResponse(this.paymentInvoiceService.update(paymentInvoice));
     } else {
       this.subscribeToSaveResponse(this.paymentInvoiceService.create(paymentInvoice));
     }
   }
 
-  trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentLabelById(index: number, item: IPaymentLabel): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackDeliveryNoteById(index: number, item: IDeliveryNote): number {
-    return item.id!;
-  }
-
-  trackJobSheetById(index: number, item: IJobSheet): number {
-    return item.id!;
-  }
-
-  getSelectedPurchaseOrder(option: IPurchaseOrder, selectedVals?: IPurchaseOrder[]): IPurchaseOrder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPaymentLabel(option: IPaymentLabel, selectedVals?: IPaymentLabel[]): IPaymentLabel {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedDeliveryNote(option: IDeliveryNote, selectedVals?: IDeliveryNote[]): IDeliveryNote {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedJobSheet(option: IJobSheet, selectedVals?: IJobSheet[]): IJobSheet {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPaymentInvoice>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -517,77 +263,53 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   protected updateForm(paymentInvoice: IPaymentInvoice): void {
-    this.editForm.patchValue({
-      id: paymentInvoice.id,
-      invoiceNumber: paymentInvoice.invoiceNumber,
-      invoiceDate: paymentInvoice.invoiceDate,
-      invoiceAmount: paymentInvoice.invoiceAmount,
-      fileUploadToken: paymentInvoice.fileUploadToken,
-      compilationToken: paymentInvoice.compilationToken,
-      purchaseOrders: paymentInvoice.purchaseOrders,
-      placeholders: paymentInvoice.placeholders,
-      paymentLabels: paymentInvoice.paymentLabels,
-      settlementCurrency: paymentInvoice.settlementCurrency,
-      biller: paymentInvoice.biller,
-      deliveryNotes: paymentInvoice.deliveryNotes,
-      jobSheets: paymentInvoice.jobSheets,
-      businessDocuments: paymentInvoice.businessDocuments,
-    });
+    this.paymentInvoice = paymentInvoice;
+    this.paymentInvoiceFormService.resetForm(this.editForm, paymentInvoice);
 
-    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-      this.businessDocumentCollection,
-      ...(paymentInvoice.businessDocuments ?? [])
-    );
-
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
       this.purchaseOrdersSharedCollection,
       ...(paymentInvoice.purchaseOrders ?? [])
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(paymentInvoice.placeholders ?? [])
     );
-    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
       this.paymentLabelsSharedCollection,
       ...(paymentInvoice.paymentLabels ?? [])
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      paymentInvoice.settlementCurrency
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        paymentInvoice.settlementCurrency
+      );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
+      this.dealersSharedCollection,
+      paymentInvoice.biller
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
       this.deliveryNotesSharedCollection,
       ...(paymentInvoice.deliveryNotes ?? [])
     );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(
       this.jobSheetsSharedCollection,
       ...(paymentInvoice.jobSheets ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+      this.businessDocumentsSharedCollection,
+      ...(paymentInvoice.businessDocuments ?? [])
     );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.businessDocumentService
-      .query()
-      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
-      .pipe(
-        map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-            businessDocuments,
-            this.editForm.get('businessDocument')!.value
-          )
-        )
-      )
-      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentCollection = businessDocuments));
-
     this.purchaseOrderService
       .query()
       .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
       .pipe(
         map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing<IPurchaseOrder>(
             purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
+            ...(this.paymentInvoice?.purchaseOrders ?? [])
           )
         )
       )
@@ -598,7 +320,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.paymentInvoice?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -608,7 +333,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPaymentLabel[]>) => res.body ?? []))
       .pipe(
         map((paymentLabels: IPaymentLabel[]) =>
-          this.paymentLabelService.addPaymentLabelToCollectionIfMissing(paymentLabels, ...(this.editForm.get('paymentLabels')!.value ?? []))
+          this.paymentLabelService.addPaymentLabelToCollectionIfMissing<IPaymentLabel>(
+            paymentLabels,
+            ...(this.paymentInvoice?.paymentLabels ?? [])
+          )
         )
       )
       .subscribe((paymentLabels: IPaymentLabel[]) => (this.paymentLabelsSharedCollection = paymentLabels));
@@ -618,9 +346,9 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.paymentInvoice?.settlementCurrency
           )
         )
       )
@@ -629,7 +357,7 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     this.dealerService
       .query()
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('biller')!.value)))
+      .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing<IDealer>(dealers, this.paymentInvoice?.biller)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
 
     this.deliveryNoteService
@@ -637,7 +365,10 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
       .pipe(
         map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing<IDeliveryNote>(
+            deliveryNotes,
+            ...(this.paymentInvoice?.deliveryNotes ?? [])
+          )
         )
       )
       .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
@@ -647,29 +378,22 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
       .pipe(
         map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+          this.jobSheetService.addJobSheetToCollectionIfMissing<IJobSheet>(jobSheets, ...(this.paymentInvoice?.jobSheets ?? []))
         )
       )
       .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
-  }
 
-  protected createFromForm(): IPaymentInvoice {
-    return {
-      ...new PaymentInvoice(),
-      id: this.editForm.get(['id'])!.value,
-      invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
-      invoiceDate: this.editForm.get(['invoiceDate'])!.value,
-      invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
-      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
-      compilationToken: this.editForm.get(['compilationToken'])!.value,
-      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      biller: this.editForm.get(['biller'])!.value,
-      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
-      jobSheets: this.editForm.get(['jobSheets'])!.value,
-      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
-    };
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+            businessDocuments,
+            ...(this.paymentInvoice?.businessDocuments ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 }

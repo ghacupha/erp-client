@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-delivery-note-heading" data-cy="DeliveryNoteCreateUpdateHeading">Create or edit a Delivery Note</h2>
@@ -25,34 +6,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <!--Supplier field-->
-        <div class="form-group">
-          <label class="form-control-label">Supplier</label>
-          <ng-select
-            [items]="supplierLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackDealerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="suppliersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="supplierInput$"
-            formControlName="supplier"
-          >
-            <option [ngValue]="editForm.get('supplier')!.value"></option>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['supplier'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['supplier'])!.invalid && (editForm.get(['supplier'])!.dirty || editForm.get(['supplier'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['supplier'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_deliveryNoteNumber">Delivery Note Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_deliveryNoteNumber">Delivery Note Number</label>
           <input
             type="text"
             class="form-control"
@@ -73,8 +33,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_documentDate">Document Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_documentDate">Document Date</label>
           <div class="input-group">
             <input
               id="field_documentDate"
@@ -86,11 +46,9 @@
               #documentDateDp="ngbDatepicker"
               formControlName="documentDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="documentDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="documentDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
           <div
             *ngIf="editForm.get('documentDate')!.invalid && (editForm.get('documentDate')!.dirty || editForm.get('documentDate')!.touched)"
@@ -99,28 +57,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label">Received By</label>
-          <ng-select
-            [items]="receivedByLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackDealerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="receivedBysLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="receivedByInput$"
-            formControlName="receivedBy"
-          >
-            <option [ngValue]="editForm.get('receivedBy')!.value"></option>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['receivedBy'])!.value|formatDealerId}}</div>
-        </div>
-        <div *ngIf="editForm.get(['receivedBy'])!.invalid && (editForm.get(['receivedBy'])!.dirty || editForm.get(['receivedBy'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['receivedBy'])?.errors?.required"> This field is required.</small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -131,59 +69,8 @@
           />
         </div>
 
-        <!-- Purchase Order Field-->
-        <div class="form-group">
-          <label class="form-control-label">Purchase Order</label>
-          <ng-select
-            [items]="purchaseOrderLookups$ | async"
-            bindLabel="purchaseOrderNumber"
-            [trackByFn]="trackPurchaseOrderByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="purchaseOrderLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="purchaseOrderControlInput$"
-            formControlName="purchaseOrder"
-          >
-            <option [ngValue]="editForm.get('purchaseOrder')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-purchase-order-option-view [item]='item'></jhi-purchase-order-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get(['purchaseOrder'])!.value | formatPurchaseOrder}}</div>
-        </div>
-        <div *ngIf="editForm.get(['purchaseOrder'])!.invalid && (editForm.get(['purchaseOrder'])!.dirty || editForm.get(['purchaseOrder'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['purchaseOrder'])?.errors?.required"> This field is required.</small>
-        </div>
-
-        <!-- Delivery Stamps-->
-        <div class="form-group">
-          <label class="form-control-label">Delivery Stamps</label>
-          <ng-select
-            [items]="deliveryStampLookups$ | async"
-            bindLabel="details"
-            [trackByFn]="trackDeliveryStampsByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="deliveryStampsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="deliveryStampsControlInput$"
-            formControlName="deliveryStamps"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of deliveryStampLookups$ | async" [value]="option">
-              {{ option.details }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-business-stamp-option-view [item]='item'></jhi-business-stamp-option-view>
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['deliveryStamps'])!.value|json}}</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_serialNumber">Serial Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_serialNumber">Serial Number</label>
           <input
             type="text"
             class="form-control"
@@ -194,63 +81,230 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_quantity">Quantity</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_quantity">Quantity</label>
           <input type="number" class="form-control" name="quantity" id="field_quantity" data-cy="quantity" formControlName="quantity" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_remarks">Remarks</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_remarks">Remarks</label>
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label">Placeholders</label>
-          <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
+       <!-- <div class="row mb-3">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
             formControlName="placeholders"
-            [multiple]='true'
+            [compareWith]="comparePlaceholder"
           >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Signatories</label>
-          <ng-select
-            [items]="signatoryLookups$ | async"
-            bindLabel="dealerName"
-            [trackByFn]="trackDealerByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="signatoriesLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="signatoryControlInput$"
-            formControlName="signatories"
-            [multiple]='true'
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='receivedBy'
+          [inputValue]="editForm.get('receivedBy')!.value"
+          (valueSelected)='updateReceivedBy($event)'
+          inputControlLabel="Received By"
+        >
+          <option [ngValue]="editForm.get('receivedBy')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="row mb-3">
+          <label class="form-label" for="field_receivedBy">Received By</label>
+          <select
+            class="form-control"
+            id="field_receivedBy"
+            data-cy="receivedBy"
+            name="receivedBy"
+            formControlName="receivedBy"
+            [compareWith]="compareDealer"
           >
-            <ng-option *ngFor="let option of signatoryLookups$ | async" [value]="option">
-              {{ option.dealerName }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.dealerName}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['signatories'])!.value|json}}</div>
+            <option *ngIf="!editForm.get('receivedBy')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
         </div>
+        <div
+          *ngIf="editForm.get(['receivedBy'])!.invalid && (editForm.get(['receivedBy'])!.dirty || editForm.get(['receivedBy'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['receivedBy'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <!--<div class="row mb-3">
+          <label for="field_deliveryStamps">Delivery Stamps</label>
+          <select
+            class="form-control"
+            id="field_deliveryStamps"
+            data-cy="deliveryStamps"
+            multiple
+            name="deliveryStamps"
+            formControlName="deliveryStamps"
+            [compareWith]="compareBusinessStamp"
+          >
+            <option [ngValue]="businessStampOption" *ngFor="let businessStampOption of businessStampsSharedCollection">
+              {{ businessStampOption.details }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-business-stamp-form-control
+          ngDefaultControl
+          formControlName='deliveryStamps'
+          [inputValues]="editForm.get(['deliveryStamps'])!.value"
+          (selectedValues)='updateDeliveryStamps($event)'
+          inputControlLabel='Delivery Stamps'
+        >
+        </jhi-m2m-business-stamp-form-control>
+
+        <!--<div class="row mb-3">
+          <label class="form-label" for="field_purchaseOrder">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrder"
+            data-cy="purchaseOrder"
+            name="purchaseOrder"
+            formControlName="purchaseOrder"
+            [compareWith]="comparePurchaseOrder"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="purchaseOrderOption" *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection">
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m21-purchase-order-form-control
+          ngDefaultControl
+          formControlName='purchaseOrder'
+          [inputValue]="editForm.get('purchaseOrder')!.value"
+          (valueSelected)='updatePurchaseOrder($event)'
+          inputControlLabel="Purchase Order"
+        >
+          <option [ngValue]="editForm.get('purchaseOrder')!.value"></option>
+        </jhi-m21-purchase-order-form-control>
+
+        <!--<div class="row mb-3">
+          <label class="form-label" for="field_supplier">Supplier</label>
+          <select
+            class="form-control"
+            id="field_supplier"
+            data-cy="supplier"
+            name="supplier"
+            formControlName="supplier"
+            [compareWith]="compareDealer"
+          >
+            <option *ngIf="!editForm.get('supplier')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
+        <div *ngIf="editForm.get(['supplier'])!.invalid && (editForm.get(['supplier'])!.dirty || editForm.get(['supplier'])!.touched)">
+          <small class="form-text text-danger" *ngIf="editForm.get(['supplier'])?.errors?.required"> This field is required. </small>
+        </div>-->
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='supplier'
+          [inputValue]="editForm.get('supplier')!.value"
+          (valueSelected)='updateSupplier($event)'
+          inputControlLabel="Supplier"
+        >
+          <option [ngValue]="editForm.get('supplier')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="row mb-3">
+          <label for="field_signatories">Signatories</label>
+          <select
+            class="form-control"
+            id="field_signatories"
+            data-cy="signatories"
+            multiple
+            name="signatories"
+            formControlName="signatories"
+            [compareWith]="compareDealer"
+          >
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='signatories'
+          [inputValues]="editForm.get(['signatories'])!.value"
+          (selectedValues)='updateSignatories($event)'
+          inputControlLabel='Signatories'
+        >
+        </jhi-m2m-dealer-form-control>
+
+
+        <!--<div class="row mb-3">
+          <label for="field_otherPurchaseOrders">Other Purchase Orders</label>
+          <select
+            class="form-control"
+            id="field_otherPurchaseOrders"
+            data-cy="otherPurchaseOrders"
+            multiple
+            name="otherPurchaseOrders"
+            formControlName="otherPurchaseOrders"
+            [compareWith]="comparePurchaseOrder"
+          >
+            <option [ngValue]="purchaseOrderOption" *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection">
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-purchase-order-form-control
+          ngDefaultControl
+          formControlName='otherPurchaseOrders'
+          [inputValues]="editForm.get(['otherPurchaseOrders'])!.value"
+          (selectedValues)='updateOtherPurchaseOrders($event)'
+          inputControlLabel='Other Purchase Orders'
+        >
+        </jhi-m2m-purchase-order-form-control>
+
+        <!--<div class="row mb-3">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+            [compareWith]="compareBusinessDocument"
+          >
+            <option [ngValue]="businessDocumentOption" *ngFor="let businessDocumentOption of businessDocumentsSharedCollection">
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+        [inputValues]="editForm.get(['businessDocuments'])!.value"
+        (selectedValues)='updateBusinessDocuments($event)'
+        inputControlLabel='Business Documents'
+        >
+        </jhi-m2m-business-document-form-control>
+
 
       </div>
 

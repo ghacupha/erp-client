@@ -1,23 +1,4 @@
-<!--
-
-    Erp System - Mark IV No 1 (David Series) Client 1.4.0
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
-
--->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading">Create or edit a Settlement</h2>
@@ -25,8 +6,8 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
@@ -40,8 +21,8 @@
           <option [ngValue]="editForm.get('paymentCategory')!.value"></option>
         </jhi-m21-payment-category-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentNumber">Payment Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentNumber">Payment Number</label>
           <input
             type="text"
             class="form-control"
@@ -52,8 +33,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_paymentDate">Payment Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_paymentDate">Payment Date</label>
           <div class="input-group">
             <input
               id="field_paymentDate"
@@ -65,11 +46,9 @@
               #paymentDateDp="ngbDatepicker"
               formControlName="paymentDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
@@ -94,6 +73,8 @@
 
         <div class="form-group">
           <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <div class="row mb-3">
+          <label class="form-label" for="field_paymentAmount">Payment Amount</label>
           <input
             type="number"
             class="form-control"
@@ -104,8 +85,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <input
             type="text"
             class="form-control"
@@ -144,27 +125,27 @@
         >
         </jhi-m2m-business-document-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_notes">Notes</label>
           <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_calculationFile">Calculation File</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_calculationFile">Calculation File</label>
           <div>
             <div *ngIf="editForm.get('calculationFile')!.value" class="form-text text-danger clearfix">
               <a
-                class="pull-left"
-                (click)="openFile(editForm.get('calculationFile')!.value, editForm.get('calculationFileContentType')!.value)"
-                >open</a
+                class="pull-start"
+                (click)="openFile(editForm.get('calculationFile')!.value!, editForm.get('calculationFileContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('calculationFileContentType')!.value }}, {{ byteSize(editForm.get('calculationFile')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ calculationFile: null }); editForm.patchValue({ calculationFileContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ calculationFile: undefined, calculationFileContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -191,11 +172,6 @@
             id="field_calculationFileContentType"
             formControlName="calculationFileContentType"
           />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_remarks">Remarks</label>
-          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
         <jhi-m2m-payment-label-form-control
@@ -225,8 +201,8 @@
         >
         </jhi-m21-settlement-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
@@ -237,8 +213,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
@@ -265,6 +241,7 @@
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
+      </div>
       </div>
     </form>
   </div>

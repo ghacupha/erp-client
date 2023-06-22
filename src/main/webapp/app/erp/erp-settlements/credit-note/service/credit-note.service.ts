@@ -1,33 +1,27 @@
-///
-/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
-///
-/// This program is free software: you can redistribute it and/or modify
-/// it under the terms of the GNU General Public License as published by
-/// the Free Software Foundation, either version 3 of the License, or
-/// (at your option) any later version.
-///
-/// This program is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-/// GNU General Public License for more details.
-///
-/// You should have received a copy of the GNU General Public License
-/// along with this program. If not, see <http://www.gnu.org/licenses/>.
-///
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { ICreditNote, getCreditNoteIdentifier } from '../credit-note.model';
+import { ICreditNote, NewCreditNote } from '../credit-note.model';
+
+export type PartialUpdateCreditNote = Partial<ICreditNote> & Pick<ICreditNote, 'id'>;
+
+type RestOf<T extends ICreditNote | NewCreditNote> = Omit<T, 'creditNoteDate'> & {
+  creditNoteDate?: string | null;
+};
+
+export type RestCreditNote = RestOf<ICreditNote>;
+
+export type NewRestCreditNote = RestOf<NewCreditNote>;
+
+export type PartialUpdateRestCreditNote = RestOf<PartialUpdateCreditNote>;
 
 export type EntityResponseType = HttpResponse<ICreditNote>;
 export type EntityArrayResponseType = HttpResponse<ICreditNote[]>;
@@ -39,38 +33,38 @@ export class CreditNoteService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(creditNote: ICreditNote): Observable<EntityResponseType> {
+  create(creditNote: NewCreditNote): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(creditNote);
     return this.http
-      .post<ICreditNote>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestCreditNote>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(creditNote: ICreditNote): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(creditNote);
     return this.http
-      .put<ICreditNote>(`${this.resourceUrl}/${getCreditNoteIdentifier(creditNote) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestCreditNote>(`${this.resourceUrl}/${this.getCreditNoteIdentifier(creditNote)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(creditNote: ICreditNote): Observable<EntityResponseType> {
+  partialUpdate(creditNote: PartialUpdateCreditNote): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(creditNote);
     return this.http
-      .patch<ICreditNote>(`${this.resourceUrl}/${getCreditNoteIdentifier(creditNote) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestCreditNote>(`${this.resourceUrl}/${this.getCreditNoteIdentifier(creditNote)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<ICreditNote>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestCreditNote>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<ICreditNote[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestCreditNote[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -80,20 +74,28 @@ export class CreditNoteService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<ICreditNote[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestCreditNote[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addCreditNoteToCollectionIfMissing(
-    creditNoteCollection: ICreditNote[],
-    ...creditNotesToCheck: (ICreditNote | null | undefined)[]
-  ): ICreditNote[] {
-    const creditNotes: ICreditNote[] = creditNotesToCheck.filter(isPresent);
+  getCreditNoteIdentifier(creditNote: Pick<ICreditNote, 'id'>): number {
+    return creditNote.id;
+  }
+
+  compareCreditNote(o1: Pick<ICreditNote, 'id'> | null, o2: Pick<ICreditNote, 'id'> | null): boolean {
+    return o1 && o2 ? this.getCreditNoteIdentifier(o1) === this.getCreditNoteIdentifier(o2) : o1 === o2;
+  }
+
+  addCreditNoteToCollectionIfMissing<Type extends Pick<ICreditNote, 'id'>>(
+    creditNoteCollection: Type[],
+    ...creditNotesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const creditNotes: Type[] = creditNotesToCheck.filter(isPresent);
     if (creditNotes.length > 0) {
-      const creditNoteCollectionIdentifiers = creditNoteCollection.map(creditNoteItem => getCreditNoteIdentifier(creditNoteItem)!);
+      const creditNoteCollectionIdentifiers = creditNoteCollection.map(creditNoteItem => this.getCreditNoteIdentifier(creditNoteItem)!);
       const creditNotesToAdd = creditNotes.filter(creditNoteItem => {
-        const creditNoteIdentifier = getCreditNoteIdentifier(creditNoteItem);
-        if (creditNoteIdentifier == null || creditNoteCollectionIdentifiers.includes(creditNoteIdentifier)) {
+        const creditNoteIdentifier = this.getCreditNoteIdentifier(creditNoteItem);
+        if (creditNoteCollectionIdentifiers.includes(creditNoteIdentifier)) {
           return false;
         }
         creditNoteCollectionIdentifiers.push(creditNoteIdentifier);
@@ -104,25 +106,29 @@ export class CreditNoteService {
     return creditNoteCollection;
   }
 
-  protected convertDateFromClient(creditNote: ICreditNote): ICreditNote {
-    return Object.assign({}, creditNote, {
-      creditNoteDate: creditNote.creditNoteDate?.isValid() ? creditNote.creditNoteDate.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends ICreditNote | NewCreditNote | PartialUpdateCreditNote>(creditNote: T): RestOf<T> {
+    return {
+      ...creditNote,
+      creditNoteDate: creditNote.creditNoteDate?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restCreditNote: RestCreditNote): ICreditNote {
+    return {
+      ...restCreditNote,
+      creditNoteDate: restCreditNote.creditNoteDate ? dayjs(restCreditNote.creditNoteDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestCreditNote>): HttpResponse<ICreditNote> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.creditNoteDate = res.body.creditNoteDate ? dayjs(res.body.creditNoteDate) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((creditNote: ICreditNote) => {
-        creditNote.creditNoteDate = creditNote.creditNoteDate ? dayjs(creditNote.creditNoteDate) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestCreditNote[]>): HttpResponse<ICreditNote[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }
