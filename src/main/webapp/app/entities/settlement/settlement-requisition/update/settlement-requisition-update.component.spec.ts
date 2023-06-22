@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
+/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -27,6 +45,8 @@ import { IUniversallyUniqueMapping } from 'app/entities/system/universally-uniqu
 import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
+import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
 
 import { SettlementRequisitionUpdateComponent } from './settlement-requisition-update.component';
 
@@ -45,6 +65,7 @@ describe('SettlementRequisition Management Update Component', () => {
   let businessDocumentService: BusinessDocumentService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
+  let settlementService: SettlementService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -76,6 +97,7 @@ describe('SettlementRequisition Management Update Component', () => {
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
+    settlementService = TestBed.inject(SettlementService);
 
     comp = fixture.componentInstance;
   });
@@ -290,6 +312,28 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Settlement query and add missing value', () => {
+      const settlementRequisition: ISettlementRequisition = { id: 456 };
+      const settlements: ISettlement[] = [{ id: 35776 }];
+      settlementRequisition.settlements = settlements;
+
+      const settlementCollection: ISettlement[] = [{ id: 60099 }];
+      jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
+      const additionalSettlements = [...settlements];
+      const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
+      jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ settlementRequisition });
+      comp.ngOnInit();
+
+      expect(settlementService.query).toHaveBeenCalled();
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
+      expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const settlementRequisition: ISettlementRequisition = { id: 456 };
       const settlementCurrency: ISettlementCurrency = { id: 18727 };
@@ -316,6 +360,8 @@ describe('SettlementRequisition Management Update Component', () => {
       settlementRequisition.applicationMappings = [applicationMapping];
       const placeholder: IPlaceholder = { id: 9021 };
       settlementRequisition.placeholders = [placeholder];
+      const settlement: ISettlement = { id: 89183 };
+      settlementRequisition.settlements = [settlement];
 
       activatedRoute.data = of({ settlementRequisition });
       comp.ngOnInit();
@@ -332,6 +378,7 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMapping);
       expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.settlementsSharedCollection).toContain(settlement);
       expect(comp.settlementRequisition).toEqual(settlementRequisition);
     });
   });
@@ -492,6 +539,16 @@ describe('SettlementRequisition Management Update Component', () => {
         jest.spyOn(placeholderService, 'comparePlaceholder');
         comp.comparePlaceholder(entity, entity2);
         expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

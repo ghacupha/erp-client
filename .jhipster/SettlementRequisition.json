@@ -132,12 +132,12 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "settlement",
-      "otherEntityName": "settlement",
-      "relationshipType": "many-to-many",
       "otherEntityField": "paymentNumber",
+      "otherEntityName": "settlement",
+      "otherEntityRelationshipName": "settlementRequisition",
       "ownerSide": true,
-      "otherEntityRelationshipName": "settlementRequisition"
+      "relationshipName": "settlement",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

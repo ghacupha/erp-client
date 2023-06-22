@@ -1,3 +1,21 @@
+///
+/// Erp System - Mark IV No 1 (David Series) Client 1.4.0
+/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+///
+/// This program is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+///
+/// This program is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+/// GNU General Public License for more details.
+///
+/// You should have received a copy of the GNU General Public License
+/// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///
+
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -38,6 +56,7 @@ type SettlementRequisitionFormDefaults = Pick<
   | 'businessDocuments'
   | 'applicationMappings'
   | 'placeholders'
+  | 'settlements'
 >;
 
 type SettlementRequisitionFormGroupContent = {
@@ -60,6 +79,7 @@ type SettlementRequisitionFormGroupContent = {
   businessDocuments: FormControl<SettlementRequisitionFormRawValue['businessDocuments']>;
   applicationMappings: FormControl<SettlementRequisitionFormRawValue['applicationMappings']>;
   placeholders: FormControl<SettlementRequisitionFormRawValue['placeholders']>;
+  settlements: FormControl<SettlementRequisitionFormRawValue['settlements']>;
 };
 
 export type SettlementRequisitionFormGroup = FormGroup<SettlementRequisitionFormGroupContent>;
@@ -119,6 +139,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: new FormControl(settlementRequisitionRawValue.businessDocuments ?? []),
       applicationMappings: new FormControl(settlementRequisitionRawValue.applicationMappings ?? []),
       placeholders: new FormControl(settlementRequisitionRawValue.placeholders ?? []),
+      settlements: new FormControl(settlementRequisitionRawValue.settlements ?? []),
     });
   }
 
@@ -154,6 +175,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: [],
       applicationMappings: [],
       placeholders: [],
+      settlements: [],
     };
   }
 
@@ -181,6 +203,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: settlementRequisition.businessDocuments ?? [],
       applicationMappings: settlementRequisition.applicationMappings ?? [],
       placeholders: settlementRequisition.placeholders ?? [],
+      settlements: settlementRequisition.settlements ?? [],
     };
   }
 }
