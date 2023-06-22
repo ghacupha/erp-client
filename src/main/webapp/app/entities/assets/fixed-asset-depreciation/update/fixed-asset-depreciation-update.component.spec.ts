@@ -9,8 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { FixedAssetDepreciationFormService } from './fixed-asset-depreciation-form.service';
 import { FixedAssetDepreciationService } from '../service/fixed-asset-depreciation.service';
 import { IFixedAssetDepreciation } from '../fixed-asset-depreciation.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { FixedAssetDepreciationUpdateComponent } from './fixed-asset-depreciation-update.component';
 

@@ -9,8 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { FixedAssetAcquisitionFormService } from './fixed-asset-acquisition-form.service';
 import { FixedAssetAcquisitionService } from '../service/fixed-asset-acquisition.service';
 import { IFixedAssetAcquisition } from '../fixed-asset-acquisition.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { FixedAssetAcquisitionUpdateComponent } from './fixed-asset-acquisition-update.component';
 

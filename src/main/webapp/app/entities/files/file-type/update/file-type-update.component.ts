@@ -10,8 +10,8 @@ import { FileTypeService } from '../service/file-type.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { FileMediumTypes } from 'app/entities/enumerations/file-medium-types.model';
 import { FileModelType } from 'app/entities/enumerations/file-model-type.model';
 

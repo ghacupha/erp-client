@@ -1,4 +1,4 @@
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { FileMediumTypes } from 'app/entities/enumerations/file-medium-types.model';
 import { FileModelType } from 'app/entities/enumerations/file-model-type.model';
 

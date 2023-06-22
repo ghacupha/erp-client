@@ -7,8 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 import { FixedAssetNetBookValueFormService, FixedAssetNetBookValueFormGroup } from './fixed-asset-net-book-value-form.service';
 import { IFixedAssetNetBookValue } from '../fixed-asset-net-book-value.model';
 import { FixedAssetNetBookValueService } from '../service/fixed-asset-net-book-value.service';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regime.model';
 
 @Component({

@@ -1,5 +1,6 @@
 {
   "changelogDate": "20230109133953",
+  "clientRootFolder": "leases",
   "dto": "mapstruct",
   "fields": [
     {

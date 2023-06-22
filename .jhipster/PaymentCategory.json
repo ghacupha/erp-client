@@ -1,6 +1,6 @@
 {
   "changelogDate": "20210723153046",
-  "clientRootFolder": "payments",
+  "clientRootFolder": "settlement",
   "databaseType": "sql",
   "dto": "mapstruct",
   "entityTableName": "payment_category",

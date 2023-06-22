@@ -9,8 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { FileTypeFormService } from './file-type-form.service';
 import { FileTypeService } from '../service/file-type.service';
 import { IFileType } from '../file-type.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { FileTypeUpdateComponent } from './file-type-update.component';
 

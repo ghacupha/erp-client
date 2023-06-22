@@ -1,5 +1,6 @@
 {
   "changelogDate": "20221101101632",
+  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "value",

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs/esm';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 
 export interface IFixedAssetAcquisition {
   id: number;

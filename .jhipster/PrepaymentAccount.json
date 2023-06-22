@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220501104047",
+  "clientRootFolder": "prepayments",
   "dto": "mapstruct",
   "fields": [
     {

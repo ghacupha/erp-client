@@ -1,5 +1,5 @@
 import dayjs from 'dayjs/esm';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { DepreciationRegime } from 'app/entities/enumerations/depreciation-regime.model';
 
 export interface IFixedAssetNetBookValue {

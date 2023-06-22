@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220701123538",
+  "clientRootFolder": "people",
   "dto": "mapstruct",
   "fields": [
     {

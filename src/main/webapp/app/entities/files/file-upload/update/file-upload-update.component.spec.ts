@@ -9,8 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { FileUploadFormService } from './file-upload-form.service';
 import { FileUploadService } from '../service/file-upload.service';
 import { IFileUpload } from '../file-upload.model';
-import { IPlaceholder } from 'app/entities/erpService/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/erpService/placeholder/service/placeholder.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { FileUploadUpdateComponent } from './file-upload-update.component';
 
