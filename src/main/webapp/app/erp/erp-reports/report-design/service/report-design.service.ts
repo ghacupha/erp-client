@@ -24,30 +24,32 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IReportDesign, getReportDesignIdentifier } from '../report-design.model';
+import { IReportDesign, NewReportDesign } from '../report-design.model';
+
+export type PartialUpdateReportDesign = Partial<IReportDesign> & Pick<IReportDesign, 'id'>;
 
 export type EntityResponseType = HttpResponse<IReportDesign>;
 export type EntityArrayResponseType = HttpResponse<IReportDesign[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ReportDesignService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/report-designs');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/report-designs');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/report-designs');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/report-designs');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(reportDesign: IReportDesign): Observable<EntityResponseType> {
+  create(reportDesign: NewReportDesign): Observable<EntityResponseType> {
     return this.http.post<IReportDesign>(this.resourceUrl, reportDesign, { observe: 'response' });
   }
 
   update(reportDesign: IReportDesign): Observable<EntityResponseType> {
-    return this.http.put<IReportDesign>(`${this.resourceUrl}/${getReportDesignIdentifier(reportDesign) as number}`, reportDesign, {
+    return this.http.put<IReportDesign>(`${this.resourceUrl}/${this.getReportDesignIdentifier(reportDesign)}`, reportDesign, {
       observe: 'response',
     });
   }
 
-  partialUpdate(reportDesign: IReportDesign): Observable<EntityResponseType> {
-    return this.http.patch<IReportDesign>(`${this.resourceUrl}/${getReportDesignIdentifier(reportDesign) as number}`, reportDesign, {
+  partialUpdate(reportDesign: PartialUpdateReportDesign): Observable<EntityResponseType> {
+    return this.http.patch<IReportDesign>(`${this.resourceUrl}/${this.getReportDesignIdentifier(reportDesign)}`, reportDesign, {
       observe: 'response',
     });
   }
@@ -70,18 +72,26 @@ export class ReportDesignService {
     return this.http.get<IReportDesign[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addReportDesignToCollectionIfMissing(
-    reportDesignCollection: IReportDesign[],
-    ...reportDesignsToCheck: (IReportDesign | null | undefined)[]
-  ): IReportDesign[] {
-    const reportDesigns: IReportDesign[] = reportDesignsToCheck.filter(isPresent);
+  getReportDesignIdentifier(reportDesign: Pick<IReportDesign, 'id'>): number {
+    return reportDesign.id;
+  }
+
+  compareReportDesign(o1: Pick<IReportDesign, 'id'> | null, o2: Pick<IReportDesign, 'id'> | null): boolean {
+    return o1 && o2 ? this.getReportDesignIdentifier(o1) === this.getReportDesignIdentifier(o2) : o1 === o2;
+  }
+
+  addReportDesignToCollectionIfMissing<Type extends Pick<IReportDesign, 'id'>>(
+    reportDesignCollection: Type[],
+    ...reportDesignsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const reportDesigns: Type[] = reportDesignsToCheck.filter(isPresent);
     if (reportDesigns.length > 0) {
       const reportDesignCollectionIdentifiers = reportDesignCollection.map(
-        reportDesignItem => getReportDesignIdentifier(reportDesignItem)!
+        reportDesignItem => this.getReportDesignIdentifier(reportDesignItem)!
       );
       const reportDesignsToAdd = reportDesigns.filter(reportDesignItem => {
-        const reportDesignIdentifier = getReportDesignIdentifier(reportDesignItem);
-        if (reportDesignIdentifier == null || reportDesignCollectionIdentifiers.includes(reportDesignIdentifier)) {
+        const reportDesignIdentifier = this.getReportDesignIdentifier(reportDesignItem);
+        if (reportDesignCollectionIdentifiers.includes(reportDesignIdentifier)) {
           return false;
         }
         reportDesignCollectionIdentifiers.push(reportDesignIdentifier);

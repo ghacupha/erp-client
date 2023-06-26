@@ -25,12 +25,12 @@ import { XlsxReportRequisitionDeleteDialogComponent } from './delete/xlsx-report
 import { XlsxReportRequisitionRoutingModule } from './route/xlsx-report-requisition-routing.module';
 
 @NgModule({
-    imports: [SharedModule, XlsxReportRequisitionRoutingModule],
-    declarations: [
-        XlsxReportRequisitionComponent,
-        XlsxReportRequisitionDetailComponent,
-        XlsxReportRequisitionUpdateComponent,
-        XlsxReportRequisitionDeleteDialogComponent,
-    ]
+  imports: [SharedModule, XlsxReportRequisitionRoutingModule],
+  declarations: [
+    XlsxReportRequisitionComponent,
+    XlsxReportRequisitionDetailComponent,
+    XlsxReportRequisitionUpdateComponent,
+    XlsxReportRequisitionDeleteDialogComponent,
+  ],
 })
 export class XlsxReportRequisitionModule {}

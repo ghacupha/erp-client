@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-xlsx-report-requisition-heading" data-cy="XlsxReportRequisitionCreateUpdateHeading">
@@ -27,13 +27,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportName">Report Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportName">Report Name</label>
           <input
             type="text"
             class="form-control"
@@ -47,8 +47,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportDate">Report Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportDate">Report Date</label>
           <div class="input-group">
             <input
               id="field_reportDate"
@@ -60,18 +60,14 @@
               #reportDateDp="ngbDatepicker"
               formControlName="reportDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="reportDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="reportDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_userPassword">User Password</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_userPassword">User Password</label>
           <input
-            type="password"
+            type="text"
             class="form-control"
             name="userPassword"
             id="field_userPassword"
@@ -80,52 +76,13 @@
           />
           <div
             *ngIf="editForm.get('userPassword')!.invalid && (editForm.get('userPassword')!.dirty || editForm.get('userPassword')!.touched)"
-          ></div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportStatus">Report Status</label>
-          <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
-            <option [ngValue]="null"></option>
-            <option value="GENERATING">GENERATING</option>
-            <option value="SUCCESSFUL">SUCCESSFUL</option>
-            <option value="FAILED">FAILED</option>
-          </select>
-        </div>
-
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_reportId">Report Id</label>
-          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" [readonly]="true" />
-          <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('userPassword')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportTemplate">Report Template</label>
-          <select
-            class="form-control"
-            id="field_reportTemplate"
-            data-cy="reportTemplate"
-            name="reportTemplate"
-            formControlName="reportTemplate"
-          >
-            <option *ngIf="!editForm.get('reportTemplate')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                reportTemplateOption.id === editForm.get('reportTemplate')!.value?.id
-                  ? editForm.get('reportTemplate')!.value
-                  : reportTemplateOption
-              "
-              *ngFor="let reportTemplateOption of reportTemplatesSharedCollection; trackBy: trackReportTemplateById"
-            >
-              {{ reportTemplateOption.catalogueNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group"  [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_reportFileChecksum">Report File Checksum</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportFileChecksum">Report File Checksum</label>
           <input
             type="text"
             class="form-control"
@@ -133,10 +90,41 @@
             id="field_reportFileChecksum"
             data-cy="reportFileChecksum"
             formControlName="reportFileChecksum"
-            [readonly]="true"
           />
         </div>
 
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportStatus">Report Status</label>
+          <select class="form-control" name="reportStatus" formControlName="reportStatus" id="field_reportStatus" data-cy="reportStatus">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let reportStatusTypes of reportStatusTypesValues" [value]="reportStatusTypes">reportStatusTypes</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportId">Report Id</label>
+          <input type="text" class="form-control" name="reportId" id="field_reportId" data-cy="reportId" formControlName="reportId" />
+          <div *ngIf="editForm.get('reportId')!.invalid && (editForm.get('reportId')!.dirty || editForm.get('reportId')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('reportId')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportTemplate">Report Template</label>
+          <select
+            class="form-control"
+            id="field_reportTemplate"
+            data-cy="reportTemplate"
+            name="reportTemplate"
+            formControlName="reportTemplate"
+            [compareWith]="compareReportTemplate"
+          >
+            <option *ngIf="!editForm.get('reportTemplate')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="reportTemplateOption" *ngFor="let reportTemplateOption of reportTemplatesSharedCollection">
+              {{ reportTemplateOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
         <div
           *ngIf="
             editForm.get(['reportTemplate'])!.invalid &&
@@ -146,22 +134,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['reportTemplate'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_parameters">Parameters</label>
-          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
-            <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
-            >
-              {{ universallyUniqueMappingOption.mappedValue }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -170,12 +143,30 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
+          >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_parameters">Parameters</label>
+          <select
+            class="form-control"
+            id="field_parameters"
+            data-cy="parameters"
+            multiple
+            name="parameters"
+            formControlName="parameters"
+            [compareWith]="compareUniversallyUniqueMapping"
           >
             <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
-              {{ placeholderOption.description }}
+              {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
         </div>

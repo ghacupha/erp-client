@@ -24,7 +24,9 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IReportContentType, getReportContentTypeIdentifier } from '../report-content-type.model';
+import { IReportContentType, NewReportContentType } from '../report-content-type.model';
+
+export type PartialUpdateReportContentType = Partial<IReportContentType> & Pick<IReportContentType, 'id'>;
 
 export type EntityResponseType = HttpResponse<IReportContentType>;
 export type EntityArrayResponseType = HttpResponse<IReportContentType[]>;
@@ -36,21 +38,21 @@ export class ReportContentTypeService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(reportContentType: IReportContentType): Observable<EntityResponseType> {
+  create(reportContentType: NewReportContentType): Observable<EntityResponseType> {
     return this.http.post<IReportContentType>(this.resourceUrl, reportContentType, { observe: 'response' });
   }
 
   update(reportContentType: IReportContentType): Observable<EntityResponseType> {
     return this.http.put<IReportContentType>(
-      `${this.resourceUrl}/${getReportContentTypeIdentifier(reportContentType) as number}`,
+      `${this.resourceUrl}/${this.getReportContentTypeIdentifier(reportContentType)}`,
       reportContentType,
       { observe: 'response' }
     );
   }
 
-  partialUpdate(reportContentType: IReportContentType): Observable<EntityResponseType> {
+  partialUpdate(reportContentType: PartialUpdateReportContentType): Observable<EntityResponseType> {
     return this.http.patch<IReportContentType>(
-      `${this.resourceUrl}/${getReportContentTypeIdentifier(reportContentType) as number}`,
+      `${this.resourceUrl}/${this.getReportContentTypeIdentifier(reportContentType)}`,
       reportContentType,
       { observe: 'response' }
     );
@@ -74,18 +76,26 @@ export class ReportContentTypeService {
     return this.http.get<IReportContentType[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
-  addReportContentTypeToCollectionIfMissing(
-    reportContentTypeCollection: IReportContentType[],
-    ...reportContentTypesToCheck: (IReportContentType | null | undefined)[]
-  ): IReportContentType[] {
-    const reportContentTypes: IReportContentType[] = reportContentTypesToCheck.filter(isPresent);
+  getReportContentTypeIdentifier(reportContentType: Pick<IReportContentType, 'id'>): number {
+    return reportContentType.id;
+  }
+
+  compareReportContentType(o1: Pick<IReportContentType, 'id'> | null, o2: Pick<IReportContentType, 'id'> | null): boolean {
+    return o1 && o2 ? this.getReportContentTypeIdentifier(o1) === this.getReportContentTypeIdentifier(o2) : o1 === o2;
+  }
+
+  addReportContentTypeToCollectionIfMissing<Type extends Pick<IReportContentType, 'id'>>(
+    reportContentTypeCollection: Type[],
+    ...reportContentTypesToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const reportContentTypes: Type[] = reportContentTypesToCheck.filter(isPresent);
     if (reportContentTypes.length > 0) {
       const reportContentTypeCollectionIdentifiers = reportContentTypeCollection.map(
-        reportContentTypeItem => getReportContentTypeIdentifier(reportContentTypeItem)!
+        reportContentTypeItem => this.getReportContentTypeIdentifier(reportContentTypeItem)!
       );
       const reportContentTypesToAdd = reportContentTypes.filter(reportContentTypeItem => {
-        const reportContentTypeIdentifier = getReportContentTypeIdentifier(reportContentTypeItem);
-        if (reportContentTypeIdentifier == null || reportContentTypeCollectionIdentifiers.includes(reportContentTypeIdentifier)) {
+        const reportContentTypeIdentifier = this.getReportContentTypeIdentifier(reportContentTypeItem);
+        if (reportContentTypeCollectionIdentifiers.includes(reportContentTypeIdentifier)) {
           return false;
         }
         reportContentTypeCollectionIdentifiers.push(reportContentTypeIdentifier);

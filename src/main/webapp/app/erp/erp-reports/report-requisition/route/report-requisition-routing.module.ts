@@ -24,13 +24,14 @@ import { ReportRequisitionComponent } from '../list/report-requisition.component
 import { ReportRequisitionDetailComponent } from '../detail/report-requisition-detail.component';
 import { ReportRequisitionUpdateComponent } from '../update/report-requisition-update.component';
 import { ReportRequisitionRoutingResolveService } from './report-requisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const reportRequisitionRoute: Routes = [
   {
     path: '',
     component: ReportRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

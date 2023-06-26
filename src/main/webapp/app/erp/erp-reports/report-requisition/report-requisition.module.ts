@@ -25,12 +25,12 @@ import { ReportRequisitionDeleteDialogComponent } from './delete/report-requisit
 import { ReportRequisitionRoutingModule } from './route/report-requisition-routing.module';
 
 @NgModule({
-    imports: [SharedModule, ReportRequisitionRoutingModule],
-    declarations: [
-        ReportRequisitionComponent,
-        ReportRequisitionDetailComponent,
-        ReportRequisitionUpdateComponent,
-        ReportRequisitionDeleteDialogComponent,
-    ]
+  imports: [SharedModule, ReportRequisitionRoutingModule],
+  declarations: [
+    ReportRequisitionComponent,
+    ReportRequisitionDetailComponent,
+    ReportRequisitionUpdateComponent,
+    ReportRequisitionDeleteDialogComponent,
+  ],
 })
 export class ReportRequisitionModule {}

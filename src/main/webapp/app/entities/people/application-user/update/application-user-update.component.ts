@@ -29,10 +29,10 @@ import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
 import { SecurityClearanceService } from 'app/entities/people/security-clearance/service/security-clearance.service';
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUser } from '../../user/user.model';
+import { UserService } from '../../user/user.service';
 
 @Component({
   selector: 'jhi-application-user-update',

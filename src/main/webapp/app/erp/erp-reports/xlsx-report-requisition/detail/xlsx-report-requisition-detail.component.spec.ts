@@ -21,8 +21,6 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { XlsxReportRequisitionDetailComponent } from './xlsx-report-requisition-detail.component';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { LoggerTestingModule } from 'ngx-logger/testing';
 
 describe('XlsxReportRequisition Management Detail Component', () => {
   let comp: XlsxReportRequisitionDetailComponent;
@@ -30,7 +28,6 @@ describe('XlsxReportRequisition Management Detail Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule, LoggerTestingModule],
       declarations: [XlsxReportRequisitionDetailComponent],
       providers: [
         {

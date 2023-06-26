@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="reportTemplate">
       <h2 data-cy="reportTemplateDetailsHeading"><span>Report Template</span></h2>
@@ -44,28 +44,28 @@
         <dt><span>Notes</span></dt>
         <dd>
           <div *ngIf="reportTemplate.notes">
-            <a (click)="openFile(reportTemplate.notes, reportTemplate.notesContentType)">open</a>
+            <a (click)="openFile(reportTemplate.notes, reportTemplate.notesContentType)">Open</a>
             {{ reportTemplate.notesContentType }}, {{ byteSize(reportTemplate.notes) }}
           </div>
         </dd>
         <dt><span>Report File</span></dt>
         <dd>
           <div *ngIf="reportTemplate.reportFile">
-            <a (click)="openFile(reportTemplate.reportFile, reportTemplate.reportFileContentType)">open</a>
+            <a (click)="openFile(reportTemplate.reportFile, reportTemplate.reportFileContentType)">Open</a>
             {{ reportTemplate.reportFileContentType }}, {{ byteSize(reportTemplate.reportFile) }}
           </div>
         </dd>
         <dt><span>Compile Report File</span></dt>
         <dd>
           <div *ngIf="reportTemplate.compileReportFile">
-            <a (click)="openFile(reportTemplate.compileReportFile, reportTemplate.compileReportFileContentType)">open</a>
+            <a (click)="openFile(reportTemplate.compileReportFile, reportTemplate.compileReportFileContentType)">Open</a>
             {{ reportTemplate.compileReportFileContentType }}, {{ byteSize(reportTemplate.compileReportFile) }}
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of reportTemplate.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

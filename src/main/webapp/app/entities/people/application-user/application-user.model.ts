@@ -18,8 +18,8 @@
 
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
-import { IUser } from 'app/entities/user/user.model';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { IUser } from '../user/user.model';
 
 export interface IApplicationUser {
   id: number;

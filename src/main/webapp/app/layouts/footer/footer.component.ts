@@ -28,6 +28,7 @@ export class FooterComponent implements OnInit {
   version = AngularVersion.full;
   serverHash = '';
   clientVersion = '1.4.0';
+  serverVersion = '';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }

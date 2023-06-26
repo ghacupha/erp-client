@@ -46,14 +46,13 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { ErpStoreModule } from './erp/store/erp-store.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ErpSystemModule } from './erp/erp-system.module';
-import { ErpMaterialModule } from './erp-material.module';
-import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
+// import { ErpSystemModule } from './erp/erp-system.module';
+// import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ErpCommonModule } from './erp/erp-common/erp-common.module';
+// import { ErpCommonModule } from './erp/erp-common/erp-common.module';
 import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler.service';
+import { ErpNavbarModule } from './erp/navbar/erp-navbar.module';
 
 @NgModule({
   imports: [
@@ -61,12 +60,11 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
     BrowserAnimationsModule,
     SharedModule,
     HomeModule,
-    ErpCommonModule,
-    ErpSystemModule,
+    // ErpCommonModule,
+    // ErpSystemModule,
+    // ErpFormsModule,
+    ErpNavbarModule,
     NgSelectModule,
-    ErpStoreModule,
-    ErpMaterialModule,
-    ErpFormsModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // jhipster-needle-angular-add-module JHipster will add new module here
     AppRoutingModule,

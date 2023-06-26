@@ -18,19 +18,21 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { IExcelReportExport, ExcelReportExport } from '../excel-report-export.model';
+import { IExcelReportExport } from '../excel-report-export.model';
+import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../excel-report-export.test-samples';
 
-import { ExcelReportExportService } from './excel-report-export.service';
+import { ExcelReportExportService, RestExcelReportExport } from './excel-report-export.service';
+
+const requireRestSample: RestExcelReportExport = {
+  ...sampleWithRequiredData,
+  reportTimeStamp: sampleWithRequiredData.reportTimeStamp?.toJSON(),
+};
 
 describe('ExcelReportExport Service', () => {
   let service: ExcelReportExportService;
   let httpMock: HttpTestingController;
-  let elemDefault: IExcelReportExport;
   let expectedResult: IExcelReportExport | IExcelReportExport[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,55 +41,27 @@ describe('ExcelReportExport Service', () => {
     expectedResult = null;
     service = TestBed.inject(ExcelReportExportService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
-
-    elemDefault = {
-      id: 0,
-      reportName: 'AAAAAAA',
-      reportPassword: 'AAAAAAA',
-      reportNotesContentType: 'image/png',
-      reportNotes: 'AAAAAAA',
-      fileCheckSum: 'AAAAAAA',
-      reportFileContentType: 'image/png',
-      reportFile: 'AAAAAAA',
-      reportTimeStamp: currentDate,
-      reportId: 'AAAAAAA',
-    };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          reportTimeStamp: currentDate.format(DATE_TIME_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(elemDefault);
+      expect(expectedResult).toMatchObject(expected);
     });
 
     it('should create a ExcelReportExport', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          reportTimeStamp: currentDate.format(DATE_TIME_FORMAT),
-        },
-        elemDefault
-      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const excelReportExport = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          reportTimeStamp: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new ExcelReportExport()).subscribe(resp => (expectedResult = resp.body));
+      service.create(excelReportExport).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'POST' });
       req.flush(returnedFromService);
@@ -95,28 +69,11 @@ describe('ExcelReportExport Service', () => {
     });
 
     it('should update a ExcelReportExport', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          reportName: 'BBBBBB',
-          reportPassword: 'BBBBBB',
-          reportNotes: 'BBBBBB',
-          fileCheckSum: 'BBBBBB',
-          reportFile: 'BBBBBB',
-          reportTimeStamp: currentDate.format(DATE_TIME_FORMAT),
-          reportId: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const excelReportExport = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-      const expected = Object.assign(
-        {
-          reportTimeStamp: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
+      service.update(excelReportExport).subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'PUT' });
       req.flush(returnedFromService);
@@ -124,24 +81,9 @@ describe('ExcelReportExport Service', () => {
     });
 
     it('should partial update a ExcelReportExport', () => {
-      const patchObject = Object.assign(
-        {
-          reportPassword: 'BBBBBB',
-          reportNotes: 'BBBBBB',
-          reportFile: 'BBBBBB',
-          reportId: 'BBBBBB',
-        },
-        new ExcelReportExport()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          reportTimeStamp: currentDate,
-        },
-        returnedFromService
-      );
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -151,81 +93,66 @@ describe('ExcelReportExport Service', () => {
     });
 
     it('should return a list of ExcelReportExport', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          reportName: 'BBBBBB',
-          reportPassword: 'BBBBBB',
-          reportNotes: 'BBBBBB',
-          fileCheckSum: 'BBBBBB',
-          reportFile: 'BBBBBB',
-          reportTimeStamp: currentDate.format(DATE_TIME_FORMAT),
-          reportId: 'BBBBBB',
-        },
-        elemDefault
-      );
+      const returnedFromService = { ...requireRestSample };
 
-      const expected = Object.assign(
-        {
-          reportTimeStamp: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = { ...sampleWithRequiredData };
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
       const req = httpMock.expectOne({ method: 'GET' });
       req.flush([returnedFromService]);
       httpMock.verify();
-      expect(expectedResult).toContainEqual(expected);
+      expect(expectedResult).toMatchObject([expected]);
     });
 
     it('should delete a ExcelReportExport', () => {
+      const expected = true;
+
       service.delete(123).subscribe(resp => (expectedResult = resp.ok));
 
       const req = httpMock.expectOne({ method: 'DELETE' });
       req.flush({ status: 200 });
-      expect(expectedResult);
+      expect(expectedResult).toBe(expected);
     });
 
     describe('addExcelReportExportToCollectionIfMissing', () => {
       it('should add a ExcelReportExport to an empty array', () => {
-        const excelReportExport: IExcelReportExport = { id: 123 };
+        const excelReportExport: IExcelReportExport = sampleWithRequiredData;
         expectedResult = service.addExcelReportExportToCollectionIfMissing([], excelReportExport);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(excelReportExport);
       });
 
       it('should not add a ExcelReportExport to an array that contains it', () => {
-        const excelReportExport: IExcelReportExport = { id: 123 };
+        const excelReportExport: IExcelReportExport = sampleWithRequiredData;
         const excelReportExportCollection: IExcelReportExport[] = [
           {
             ...excelReportExport,
           },
-          { id: 456 },
+          sampleWithPartialData,
         ];
         expectedResult = service.addExcelReportExportToCollectionIfMissing(excelReportExportCollection, excelReportExport);
         expect(expectedResult).toHaveLength(2);
       });
 
       it("should add a ExcelReportExport to an array that doesn't contain it", () => {
-        const excelReportExport: IExcelReportExport = { id: 123 };
-        const excelReportExportCollection: IExcelReportExport[] = [{ id: 456 }];
+        const excelReportExport: IExcelReportExport = sampleWithRequiredData;
+        const excelReportExportCollection: IExcelReportExport[] = [sampleWithPartialData];
         expectedResult = service.addExcelReportExportToCollectionIfMissing(excelReportExportCollection, excelReportExport);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(excelReportExport);
       });
 
       it('should add only unique ExcelReportExport to an array', () => {
-        const excelReportExportArray: IExcelReportExport[] = [{ id: 123 }, { id: 456 }, { id: 67168 }];
-        const excelReportExportCollection: IExcelReportExport[] = [{ id: 123 }];
+        const excelReportExportArray: IExcelReportExport[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
+        const excelReportExportCollection: IExcelReportExport[] = [sampleWithRequiredData];
         expectedResult = service.addExcelReportExportToCollectionIfMissing(excelReportExportCollection, ...excelReportExportArray);
         expect(expectedResult).toHaveLength(3);
       });
 
       it('should accept varargs', () => {
-        const excelReportExport: IExcelReportExport = { id: 123 };
-        const excelReportExport2: IExcelReportExport = { id: 456 };
+        const excelReportExport: IExcelReportExport = sampleWithRequiredData;
+        const excelReportExport2: IExcelReportExport = sampleWithPartialData;
         expectedResult = service.addExcelReportExportToCollectionIfMissing([], excelReportExport, excelReportExport2);
         expect(expectedResult).toHaveLength(2);
         expect(expectedResult).toContain(excelReportExport);
@@ -233,16 +160,60 @@ describe('ExcelReportExport Service', () => {
       });
 
       it('should accept null and undefined values', () => {
-        const excelReportExport: IExcelReportExport = { id: 123 };
+        const excelReportExport: IExcelReportExport = sampleWithRequiredData;
         expectedResult = service.addExcelReportExportToCollectionIfMissing([], null, excelReportExport, undefined);
         expect(expectedResult).toHaveLength(1);
         expect(expectedResult).toContain(excelReportExport);
       });
 
       it('should return initial array if no ExcelReportExport is added', () => {
-        const excelReportExportCollection: IExcelReportExport[] = [{ id: 123 }];
+        const excelReportExportCollection: IExcelReportExport[] = [sampleWithRequiredData];
         expectedResult = service.addExcelReportExportToCollectionIfMissing(excelReportExportCollection, undefined, null);
         expect(expectedResult).toEqual(excelReportExportCollection);
+      });
+    });
+
+    describe('compareExcelReportExport', () => {
+      it('Should return true if both entities are null', () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareExcelReportExport(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it('Should return false if one entity is null', () => {
+        const entity1 = { id: 123 };
+        const entity2 = null;
+
+        const compareResult1 = service.compareExcelReportExport(entity1, entity2);
+        const compareResult2 = service.compareExcelReportExport(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey differs', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 456 };
+
+        const compareResult1 = service.compareExcelReportExport(entity1, entity2);
+        const compareResult2 = service.compareExcelReportExport(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it('Should return false if primaryKey matches', () => {
+        const entity1 = { id: 123 };
+        const entity2 = { id: 123 };
+
+        const compareResult1 = service.compareExcelReportExport(entity1, entity2);
+        const compareResult2 = service.compareExcelReportExport(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
       });
     });
   });

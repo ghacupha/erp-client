@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="xlsxReportRequisition">
       <h2 data-cy="xlsxReportRequisitionDetailsHeading"><span>Xlsx Report Requisition</span></h2>
@@ -45,6 +45,10 @@
         <dd>
           <span>{{ xlsxReportRequisition.userPassword }}</span>
         </dd>
+        <dt><span>Report File Checksum</span></dt>
+        <dd>
+          <span>{{ xlsxReportRequisition.reportFileChecksum }}</span>
+        </dd>
         <dt><span>Report Status</span></dt>
         <dd>
           <span>{{ xlsxReportRequisition.reportStatus }}</span>
@@ -53,36 +57,25 @@
         <dd>
           <span>{{ xlsxReportRequisition.reportId }}</span>
         </dd>
-        <dt><span>Report File</span></dt>
-        <dd>
-          <div *ngIf="xlsxReportRequisition.reportAttachment">
-            <a (click)="openFile(xlsxReportRequisition.reportAttachment, contentType)">open</a>
-            {{ contentType }}, {{ byteSize(xlsxReportRequisition.reportAttachment) }}
-          </div>
-        </dd>
-        <dt><span>Report File Checksum</span></dt>
-        <dd>
-          <span>{{ xlsxReportRequisition.reportFileChecksum }}</span>
-        </dd>
-        <dt><span>Parameters</span></dt>
-        <dd>
-          <span *ngFor="let parameters of xlsxReportRequisition.parameters; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', parameters?.id, 'view']">{{ parameters.mappedValue }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
         <dt><span>Report Template</span></dt>
         <dd>
           <div *ngIf="xlsxReportRequisition.reportTemplate">
-            <a [routerLink]="['/report-template', xlsxReportRequisition.reportTemplate?.id, 'view']">{{
-              xlsxReportRequisition.reportTemplate?.catalogueNumber
+            <a [routerLink]="['/report-template', xlsxReportRequisition.reportTemplate.id, 'view']">{{
+              xlsxReportRequisition.reportTemplate.catalogueNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of xlsxReportRequisition.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Parameters</span></dt>
+        <dd>
+          <span *ngFor="let parameters of xlsxReportRequisition.parameters; let last = last">
+            <a [routerLink]="['/universally-unique-mapping', parameters.id, 'view']">{{ parameters.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

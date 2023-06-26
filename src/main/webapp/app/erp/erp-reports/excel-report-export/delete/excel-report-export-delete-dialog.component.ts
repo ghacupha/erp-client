@@ -21,6 +21,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IExcelReportExport } from '../excel-report-export.model';
 import { ExcelReportExportService } from '../service/excel-report-export.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './excel-report-export-delete-dialog.component.html',
@@ -36,7 +37,7 @@ export class ExcelReportExportDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.excelReportExportService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

@@ -18,16 +18,13 @@
 
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErpMaterialModule } from '../../erp-material.module';
 import { DealerMaintenanceModule } from './dealer-maintenance/dealer-maintenance.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
 
 @NgModule({
  imports: [
    FormsModule,
-   ErpMaterialModule,
    ReactiveFormsModule,
    DealerMaintenanceModule,
    SharedModule,
@@ -51,7 +48,6 @@ import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
   ],
   exports: [
     DealerMaintenanceModule,
-    QuestionnaireModule
   ]
 })
 export class ErpFormsModule {}

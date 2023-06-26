@@ -18,34 +18,30 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IReportDesign, ReportDesign } from '../report-design.model';
+import { ReportDesignFormService, ReportDesignFormGroup } from './report-design-form.service';
+import { IReportDesign } from '../report-design.model';
 import { ReportDesignService } from '../service/report-design.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { sha512 } from 'hash-wasm';
-import { v4 as uuidv4 } from 'uuid';
-import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
-import { ISecurityClearance } from '../../../erp-pages/security-clearance/security-clearance.model';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ISystemModule } from '../../../erp-pages/system-module/system-module.model';
-import { IAlgorithm } from '../../../erp-pages/algorithm/algorithm.model';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
-import { SecurityClearanceService } from '../../../erp-pages/security-clearance/service/security-clearance.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { SystemModuleService } from '../../../erp-pages/system-module/service/system-module.service';
-import { AlgorithmService } from '../../../erp-pages/algorithm/service/algorithm.service';
-import { SearchWithPagination } from '../../../../core/request/request.model';
-import { FileUploadChecksumService } from '../../../erp-common/form-components/services/file-upload-checksum.service';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
+import { SecurityClearanceService } from 'app/entities/people/security-clearance/service/security-clearance.service';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
+import { IDealer } from 'app/entities/people/dealer/dealer.model';
+import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { ISystemModule } from 'app/entities/system/system-module/system-module.model';
+import { SystemModuleService } from 'app/entities/system/system-module/service/system-module.service';
+import { IAlgorithm } from 'app/entities/system/algorithm/algorithm.model';
+import { AlgorithmService } from 'app/entities/system/algorithm/service/algorithm.service';
 
 @Component({
   selector: 'jhi-report-design-update',
@@ -53,8 +49,7 @@ import { FileUploadChecksumService } from '../../../erp-common/form-components/s
 })
 export class ReportDesignUpdateComponent implements OnInit {
   isSaving = false;
-
-  catalogueToken = '';
+  reportDesign: IReportDesign | null = null;
 
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   securityClearancesSharedCollection: ISecurityClearance[] = [];
@@ -64,30 +59,13 @@ export class ReportDesignUpdateComponent implements OnInit {
   systemModulesSharedCollection: ISystemModule[] = [];
   algorithmsSharedCollection: IAlgorithm[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    catalogueNumber: [null, [Validators.required]],
-    designation: [null, [Validators.required]],
-    description: [],
-    notes: [],
-    notesContentType: [],
-    reportFile: [],
-    reportFileContentType: [],
-    reportFileChecksum: [null, []],
-    parameters: [],
-    securityClearance: [null, Validators.required],
-    reportDesigner: [null, Validators.required],
-    organization: [null, Validators.required],
-    department: [null, Validators.required],
-    placeholders: [],
-    systemModule: [null, Validators.required],
-    fileCheckSumAlgorithm: [null, Validators.required],
-  });
+  editForm: ReportDesignFormGroup = this.reportDesignFormService.createReportDesignFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected reportDesignService: ReportDesignService,
+    protected reportDesignFormService: ReportDesignFormService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected securityClearanceService: SecurityClearanceService,
     protected applicationUserService: ApplicationUserService,
@@ -95,157 +73,36 @@ export class ReportDesignUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected systemModuleService: SystemModuleService,
     protected algorithmService: AlgorithmService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
-    protected fileUploadChecksumService: FileUploadChecksumService
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareUniversallyUniqueMapping = (o1: IUniversallyUniqueMapping | null, o2: IUniversallyUniqueMapping | null): boolean =>
+    this.universallyUniqueMappingService.compareUniversallyUniqueMapping(o1, o2);
+
+  compareSecurityClearance = (o1: ISecurityClearance | null, o2: ISecurityClearance | null): boolean =>
+    this.securityClearanceService.compareSecurityClearance(o1, o2);
+
+  compareApplicationUser = (o1: IApplicationUser | null, o2: IApplicationUser | null): boolean =>
+    this.applicationUserService.compareApplicationUser(o1, o2);
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareSystemModule = (o1: ISystemModule | null, o2: ISystemModule | null): boolean =>
+    this.systemModuleService.compareSystemModule(o1, o2);
+
+  compareAlgorithm = (o1: IAlgorithm | null, o2: IAlgorithm | null): boolean => this.algorithmService.compareAlgorithm(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportDesign }) => {
-      this.updateForm(reportDesign);
+      this.reportDesign = reportDesign;
+      if (reportDesign) {
+        this.updateForm(reportDesign);
+      }
 
       this.loadRelationshipsOptions();
     });
-
-    this.updateCatalogueNumber();
-
-    this.updateFileUploadChecksum();
-
-    this.updatePreferredDepartment();
-
-    this.updatePreferredOrganization();
-
-    this.updatePreferredSecurityClearance();
-
-    this.updatePreferredFileChecksumAlgorithm();
-    this.runFileChecksums();
-  }
-
-  updatePreferredFileChecksumAlgorithm(): void {
-    this.universallyUniqueMappingService.findMap("globallyPreferredReportDesignUpdateFileChecksumAlgorithm")
-      .subscribe((mapped) => {
-        this.algorithmService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-          .subscribe(({ body: vals }) => {
-            if (vals) {
-              this.editForm.patchValue({
-                fileCheckSumAlgorithm: vals[0]
-              });
-            }
-          });
-      });
-  }
-
-  runFileChecksums(): void {
-    this.editForm.get(['fileChecksumAlgorithm'])?.valueChanges.subscribe(algo => {
-      this.fileUploadChecksumService.updateFileUploadChecksum(
-        this.editForm,
-        "reportFile",
-        "reportFileChecksum",
-        algo.name ?? "sha512"
-      );
-    });
-  }
-
-  updatePreferredDepartment(): void {
-    // TODO Replace with entity filters
-    this.universallyUniqueMappingService.findMap("globallyPreferredReportDesignDepartmentDealer")
-      .subscribe((mapped) => {
-        this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-          .subscribe(({ body: dealers }) => {
-            if (dealers) {
-              this.editForm.get(['department'])?.setValue(dealers[0]);
-            }
-          });
-      });
-  }
-
-  updatePreferredOrganization(): void {
-      // TODO Replace with entity filters
-      this.universallyUniqueMappingService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignOrganizationDealer"})
-        .subscribe(({ body }) => {
-          if (body!.length > 0) {
-            if (body) {
-              this.dealerService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].mappedValue })
-                .subscribe(({ body: dealers }) => {
-                  if (dealers) {
-                    this.editForm.get(['organization'])?.setValue(dealers[0]);
-                  }
-                });
-            }
-          }
-        });
-  }
-  updatePreferredSecurityClearance(): void {
-      // TODO Replace with entity filters
-      // TODO Add Mapping relationship in the security-clearance entity
-      this.placeholderService.search({ page: 0, size: 0, sort: [], query: "globallyPreferredReportDesignSecurityClearance"})
-        .subscribe(({ body }) => {
-          if (body!.length > 0) {
-            if (body) {
-              this.securityClearanceService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: body[0].token })
-                .subscribe(({ body: clearance }) => {
-                  if (clearance) {
-                    this.editForm.get(['securityClearance'])?.setValue(clearance[0]);
-                  }
-                });
-            }
-          }
-        });
-  }
-
-  updateFileUploadChecksum(): void {
-    this.editForm.get(['reportFile'])?.valueChanges.subscribe((fileAttachment) => {
-      sha512(this.fileDataArray(fileAttachment)).then(sha512Token => {
-        this.editForm.get(['reportFileChecksum'])?.setValue(sha512Token)
-      });
-    });
-  }
-
-  updateCatalogueNumber(): void {
-    this.editForm.patchValue({
-      catalogueNumber: uuidv4()
-    });
-  }
-
-  updatePlaceholders(update: IPlaceholder[]): void {
-    this.editForm.patchValue({
-      placeholders: [...update]
-    });
-  }
-
-  updateParameters(update: IUniversallyUniqueMapping[]): void {
-    this.editForm.patchValue({
-      parameters: [...update]
-    });
-  }
-
-  updateSecurityClearance(update: ISecurityClearance): void {
-    this.editForm.patchValue({
-      securityClearance: update
-    })
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateOrganization(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      organization: dealerUpdate,
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateDepartment(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      department: dealerUpdate,
-    });
-  }
-
-  fileDataArray(b64String: string): Uint8Array {
-    const byteCharacters = atob(b64String);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    return new Uint8Array(byteNumbers);
   }
 
   byteSize(base64String: string): string {
@@ -269,72 +126,19 @@ export class ReportDesignUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const reportDesign = this.createFromForm();
-    if (reportDesign.id !== undefined) {
+    const reportDesign = this.reportDesignFormService.getReportDesign(this.editForm);
+    if (reportDesign.id !== null) {
       this.subscribeToSaveResponse(this.reportDesignService.update(reportDesign));
     } else {
       this.subscribeToSaveResponse(this.reportDesignService.create(reportDesign));
     }
   }
 
-  trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
-    return item.id!;
-  }
-
-  trackSecurityClearanceById(index: number, item: ISecurityClearance): number {
-    return item.id!;
-  }
-
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
-    return item.id!;
-  }
-
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackSystemModuleById(index: number, item: ISystemModule): number {
-    return item.id!;
-  }
-
-  trackAlgorithmById(index: number, item: IAlgorithm): number {
-    return item.id!;
-  }
-
-  getSelectedUniversallyUniqueMapping(
-    option: IUniversallyUniqueMapping,
-    selectedVals?: IUniversallyUniqueMapping[]
-  ): IUniversallyUniqueMapping {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IReportDesign>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -350,52 +154,36 @@ export class ReportDesignUpdateComponent implements OnInit {
   }
 
   protected updateForm(reportDesign: IReportDesign): void {
-    this.editForm.patchValue({
-      id: reportDesign.id,
-      catalogueNumber: reportDesign.catalogueNumber,
-      designation: reportDesign.designation,
-      description: reportDesign.description,
-      notes: reportDesign.notes,
-      notesContentType: reportDesign.notesContentType,
-      reportFile: reportDesign.reportFile,
-      reportFileContentType: reportDesign.reportFileContentType,
-      reportFileChecksum: reportDesign.reportFileChecksum,
-      parameters: reportDesign.parameters,
-      securityClearance: reportDesign.securityClearance,
-      reportDesigner: reportDesign.reportDesigner,
-      organization: reportDesign.organization,
-      department: reportDesign.department,
-      placeholders: reportDesign.placeholders,
-      systemModule: reportDesign.systemModule,
-      fileCheckSumAlgorithm: reportDesign.fileCheckSumAlgorithm,
-    });
+    this.reportDesign = reportDesign;
+    this.reportDesignFormService.resetForm(this.editForm, reportDesign);
 
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(reportDesign.parameters ?? [])
-    );
-    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+    this.universallyUniqueMappingsSharedCollection =
+      this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
+        this.universallyUniqueMappingsSharedCollection,
+        ...(reportDesign.parameters ?? [])
+      );
+    this.securityClearancesSharedCollection = this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
       this.securityClearancesSharedCollection,
       reportDesign.securityClearance
     );
-    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
       this.applicationUsersSharedCollection,
       reportDesign.reportDesigner
     );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       reportDesign.organization,
       reportDesign.department
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(reportDesign.placeholders ?? [])
     );
-    this.systemModulesSharedCollection = this.systemModuleService.addSystemModuleToCollectionIfMissing(
+    this.systemModulesSharedCollection = this.systemModuleService.addSystemModuleToCollectionIfMissing<ISystemModule>(
       this.systemModulesSharedCollection,
       reportDesign.systemModule
     );
-    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing(
+    this.algorithmsSharedCollection = this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(
       this.algorithmsSharedCollection,
       reportDesign.fileCheckSumAlgorithm
     );
@@ -407,9 +195,9 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
       .pipe(
         map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing<IUniversallyUniqueMapping>(
             universallyUniqueMappings,
-            ...(this.editForm.get('parameters')!.value ?? [])
+            ...(this.reportDesign?.parameters ?? [])
           )
         )
       )
@@ -423,9 +211,9 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISecurityClearance[]>) => res.body ?? []))
       .pipe(
         map((securityClearances: ISecurityClearance[]) =>
-          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing(
+          this.securityClearanceService.addSecurityClearanceToCollectionIfMissing<ISecurityClearance>(
             securityClearances,
-            this.editForm.get('securityClearance')!.value
+            this.reportDesign?.securityClearance
           )
         )
       )
@@ -436,7 +224,10 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
       .pipe(
         map((applicationUsers: IApplicationUser[]) =>
-          this.applicationUserService.addApplicationUserToCollectionIfMissing(applicationUsers, this.editForm.get('reportDesigner')!.value)
+          this.applicationUserService.addApplicationUserToCollectionIfMissing<IApplicationUser>(
+            applicationUsers,
+            this.reportDesign?.reportDesigner
+          )
         )
       )
       .subscribe((applicationUsers: IApplicationUser[]) => (this.applicationUsersSharedCollection = applicationUsers));
@@ -446,10 +237,10 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            this.editForm.get('organization')!.value,
-            this.editForm.get('department')!.value
+            this.reportDesign?.organization,
+            this.reportDesign?.department
           )
         )
       )
@@ -460,7 +251,10 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.reportDesign?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -470,7 +264,7 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISystemModule[]>) => res.body ?? []))
       .pipe(
         map((systemModules: ISystemModule[]) =>
-          this.systemModuleService.addSystemModuleToCollectionIfMissing(systemModules, this.editForm.get('systemModule')!.value)
+          this.systemModuleService.addSystemModuleToCollectionIfMissing<ISystemModule>(systemModules, this.reportDesign?.systemModule)
         )
       )
       .subscribe((systemModules: ISystemModule[]) => (this.systemModulesSharedCollection = systemModules));
@@ -480,32 +274,9 @@ export class ReportDesignUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IAlgorithm[]>) => res.body ?? []))
       .pipe(
         map((algorithms: IAlgorithm[]) =>
-          this.algorithmService.addAlgorithmToCollectionIfMissing(algorithms, this.editForm.get('fileCheckSumAlgorithm')!.value)
+          this.algorithmService.addAlgorithmToCollectionIfMissing<IAlgorithm>(algorithms, this.reportDesign?.fileCheckSumAlgorithm)
         )
       )
       .subscribe((algorithms: IAlgorithm[]) => (this.algorithmsSharedCollection = algorithms));
-  }
-
-  protected createFromForm(): IReportDesign {
-    return {
-      ...new ReportDesign(),
-      id: this.editForm.get(['id'])!.value,
-      catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
-      designation: this.editForm.get(['designation'])!.value,
-      description: this.editForm.get(['description'])!.value,
-      notesContentType: this.editForm.get(['notesContentType'])!.value,
-      notes: this.editForm.get(['notes'])!.value,
-      reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
-      reportFile: this.editForm.get(['reportFile'])!.value,
-      reportFileChecksum: this.editForm.get(['reportFileChecksum'])!.value,
-      parameters: this.editForm.get(['parameters'])!.value,
-      securityClearance: this.editForm.get(['securityClearance'])!.value,
-      reportDesigner: this.editForm.get(['reportDesigner'])!.value,
-      organization: this.editForm.get(['organization'])!.value,
-      department: this.editForm.get(['department'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      systemModule: this.editForm.get(['systemModule'])!.value,
-      fileCheckSumAlgorithm: this.editForm.get(['fileCheckSumAlgorithm'])!.value,
-    };
   }
 }

@@ -16,28 +16,29 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { ReportTemplateService } from '../service/report-template.service';
+
 import { ReportTemplateComponent } from './report-template.component';
+import SpyInstance = jest.SpyInstance;
 
 describe('ReportTemplate Management Component', () => {
   let comp: ReportTemplateComponent;
   let fixture: ComponentFixture<ReportTemplateComponent>;
   let service: ReportTemplateService;
+  let routerNavigateSpy: SpyInstance<Promise<boolean>>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [RouterTestingModule.withRoutes([{ path: 'report-template', component: ReportTemplateComponent }]), HttpClientTestingModule],
       declarations: [ReportTemplateComponent],
       providers: [
-        Router,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -49,6 +50,7 @@ describe('ReportTemplate Management Component', () => {
                 page: '1',
                 size: '1',
                 sort: 'id,desc',
+                'filter[someId.in]': 'dc4279ea-cfb9-11ec-9d64-0242ac120002',
               })
             ),
             snapshot: { queryParams: {} },
@@ -62,6 +64,7 @@ describe('ReportTemplate Management Component', () => {
     fixture = TestBed.createComponent(ReportTemplateComponent);
     comp = fixture.componentInstance;
     service = TestBed.inject(ReportTemplateService);
+    routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
 
     const headers = new HttpHeaders();
     jest.spyOn(service, 'query').mockReturnValue(
@@ -83,13 +86,22 @@ describe('ReportTemplate Management Component', () => {
     expect(comp.reportTemplates?.[0]).toEqual(expect.objectContaining({ id: 123 }));
   });
 
+  describe('trackId', () => {
+    it('Should forward to reportTemplateService', () => {
+      const entity = { id: 123 };
+      jest.spyOn(service, 'getReportTemplateIdentifier');
+      const id = comp.trackId(0, entity);
+      expect(service.getReportTemplateIdentifier).toHaveBeenCalledWith(entity);
+      expect(id).toBe(entity.id);
+    });
+  });
+
   it('should load a page', () => {
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToPage(1);
 
     // THEN
-    expect(service.query).toHaveBeenCalled();
-    expect(comp.reportTemplates?.[0]).toEqual(expect.objectContaining({ id: 123 }));
+    expect(routerNavigateSpy).toHaveBeenCalled();
   });
 
   it('should calculate the sort attribute for an id', () => {
@@ -97,20 +109,32 @@ describe('ReportTemplate Management Component', () => {
     comp.ngOnInit();
 
     // THEN
-    expect(service.query).toHaveBeenCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
   });
 
   it('should calculate the sort attribute for a non-id attribute', () => {
-    // INIT
-    comp.ngOnInit();
-
     // GIVEN
     comp.predicate = 'name';
 
     // WHEN
-    comp.loadPage(1);
+    comp.navigateToWithComponentValues();
 
     // THEN
-    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['name,desc', 'id'] }));
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ['name,asc'],
+        }),
+      })
+    );
+  });
+
+  it('should calculate the filter attribute', () => {
+    // WHEN
+    comp.ngOnInit();
+
+    // THEN
+    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
   });
 });

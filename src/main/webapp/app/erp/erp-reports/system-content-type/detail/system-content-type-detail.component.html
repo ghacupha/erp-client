@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="systemContentType">
       <h2 data-cy="systemContentTypeDetailsHeading"><span>System Content Type</span></h2>
@@ -52,14 +52,14 @@
         <dt><span>Placeholders</span></dt>
         <dd>
           <span *ngFor="let placeholders of systemContentType.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholders?.id, 'view']">{{ placeholders.description }}</a
+            <a [routerLink]="['/placeholder', placeholders.id, 'view']">{{ placeholders.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Sys Maps</span></dt>
         <dd>
           <span *ngFor="let sysMaps of systemContentType.sysMaps; let last = last">
-            <a [routerLink]="['/universally-unique-mapping', sysMaps?.id, 'view']">{{ sysMaps.mappedValue }}</a
+            <a [routerLink]="['/universally-unique-mapping', sysMaps.id, 'view']">{{ sysMaps.mappedValue }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

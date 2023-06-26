@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import * as dayjs from 'dayjs/esm';
+import dayjs from 'dayjs/esm';
 import { FormatMediumDatetimePipe } from './format-medium-datetime.pipe';
 
 describe('FormatMediumDatePipe', () => {

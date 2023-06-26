@@ -24,13 +24,14 @@ import { ReportContentTypeComponent } from '../list/report-content-type.componen
 import { ReportContentTypeDetailComponent } from '../detail/report-content-type-detail.component';
 import { ReportContentTypeUpdateComponent } from '../update/report-content-type-update.component';
 import { ReportContentTypeRoutingResolveService } from './report-content-type-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const reportContentTypeRoute: Routes = [
   {
     path: '',
     component: ReportContentTypeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -22,18 +22,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IXlsxReportRequisition, XlsxReportRequisition } from '../xlsx-report-requisition.model';
+import { IXlsxReportRequisition } from '../xlsx-report-requisition.model';
 import { XlsxReportRequisitionService } from '../service/xlsx-report-requisition.service';
 
 @Injectable({ providedIn: 'root' })
-export class XlsxReportRequisitionRoutingResolveService implements Resolve<IXlsxReportRequisition> {
+export class XlsxReportRequisitionRoutingResolveService implements Resolve<IXlsxReportRequisition | null> {
   constructor(protected service: XlsxReportRequisitionService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IXlsxReportRequisition> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IXlsxReportRequisition | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((xlsxReportRequisition: HttpResponse<XlsxReportRequisition>) => {
+        mergeMap((xlsxReportRequisition: HttpResponse<IXlsxReportRequisition>) => {
           if (xlsxReportRequisition.body) {
             return of(xlsxReportRequisition.body);
           } else {
@@ -43,6 +43,6 @@ export class XlsxReportRequisitionRoutingResolveService implements Resolve<IXlsx
         })
       );
     }
-    return of(new XlsxReportRequisition());
+    return of(null);
   }
 }

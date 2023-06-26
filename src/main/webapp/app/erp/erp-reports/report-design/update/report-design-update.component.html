@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-report-design-heading" data-cy="ReportDesignCreateUpdateHeading">Create or edit a Report Design</h2>
@@ -25,13 +25,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_catalogueNumber">Catalogue Number</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_catalogueNumber">Catalogue Number</label>
           <input
             type="text"
             class="form-control"
@@ -39,7 +39,6 @@
             id="field_catalogueNumber"
             data-cy="catalogueNumber"
             formControlName="catalogueNumber"
-            [readonly]="true"
           />
           <div
             *ngIf="
@@ -51,8 +50,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_designation">Designation</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_designation">Designation</label>
           <input
             type="text"
             class="form-control"
@@ -66,8 +65,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_description">Description</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_description">Description</label>
           <textarea
             class="form-control"
             name="description"
@@ -77,16 +76,17 @@
           ></textarea>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_notes">Notes</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_notes">Notes</label>
           <div>
             <div *ngIf="editForm.get('notes')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('notes')!.value, editForm.get('notesContentType')!.value)">open</a><br />
-              <span class="pull-left">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value) }}</span>
+              <a class="pull-start" (click)="openFile(editForm.get('notes')!.value!, editForm.get('notesContentType')!.value!)">Open</a
+              ><br />
+              <span class="pull-start">{{ editForm.get('notesContentType')!.value }}, {{ byteSize(editForm.get('notes')!.value!) }}</span>
               <button
                 type="button"
-                (click)="editForm.patchValue({ notes: null }); editForm.patchValue({ notesContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ notes: undefined, notesContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -103,20 +103,20 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportFile">Report File</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportFile">Report File</label>
           <div>
             <div *ngIf="editForm.get('reportFile')!.value" class="form-text text-danger clearfix">
-              <a class="pull-left" (click)="openFile(editForm.get('reportFile')!.value, editForm.get('reportFileContentType')!.value)"
-                >open</a
+              <a class="pull-start" (click)="openFile(editForm.get('reportFile')!.value!, editForm.get('reportFileContentType')!.value!)"
+                >Open</a
               ><br />
-              <span class="pull-left"
-                >{{ editForm.get('reportFileContentType')!.value }}, {{ byteSize(editForm.get('reportFile')!.value) }}</span
+              <span class="pull-start"
+                >{{ editForm.get('reportFileContentType')!.value }}, {{ byteSize(editForm.get('reportFile')!.value!) }}</span
               >
               <button
                 type="button"
-                (click)="editForm.patchValue({ reportFile: null }); editForm.patchValue({ reportFileContentType: null })"
-                class="btn btn-secondary btn-xs pull-right"
+                (click)="editForm.patchValue({ reportFile: undefined, reportFileContentType: undefined })"
+                class="btn btn-secondary btn-xs pull-end"
               >
                 <fa-icon icon="times"></fa-icon>
               </button>
@@ -140,8 +140,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportFileChecksum">Report File Checksum</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportFileChecksum">Report File Checksum</label>
           <input
             type="text"
             class="form-control"
@@ -149,7 +149,6 @@
             id="field_reportFileChecksum"
             data-cy="reportFileChecksum"
             formControlName="reportFileChecksum"
-            [readonly]="true"
           />
           <div
             *ngIf="
@@ -159,48 +158,38 @@
           ></div>
         </div>
 
-        <!--<div class="form-group">
+        <div class="row mb-3">
           <label for="field_parameters">Parameters</label>
-          <select class="form-control" id="field_parameters" data-cy="parameters" multiple name="parameters" formControlName="parameters">
+          <select
+            class="form-control"
+            id="field_parameters"
+            data-cy="parameters"
+            multiple
+            name="parameters"
+            formControlName="parameters"
+            [compareWith]="compareUniversallyUniqueMapping"
+          >
             <option
-              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('parameters')!.value)"
-              *ngFor="
-                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
-                trackBy: trackUniversallyUniqueMappingById
-              "
+              [ngValue]="universallyUniqueMappingOption"
+              *ngFor="let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection"
             >
               {{ universallyUniqueMappingOption.mappedValue }}
             </option>
           </select>
-        </div>-->
+        </div>
 
-        <jhi-m2m-universally-unique-mapping-form-control
-          ngDefaultControl
-          formControlName='parameters'
-          [inputValues]="editForm.get(['parameters'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Parameters'
-        >
-        </jhi-m2m-universally-unique-mapping-form-control>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_securityClearance">Security Clearance</label>
           <select
             class="form-control"
             id="field_securityClearance"
             data-cy="securityClearance"
             name="securityClearance"
             formControlName="securityClearance"
+            [compareWith]="compareSecurityClearance"
           >
             <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
-                  ? editForm.get('securityClearance')!.value
-                  : securityClearanceOption
-              "
-              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
-            >
+            <option [ngValue]="securityClearanceOption" *ngFor="let securityClearanceOption of securityClearancesSharedCollection">
               {{ securityClearanceOption.clearanceLevel }}
             </option>
           </select>
@@ -214,36 +203,20 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
             This field is required.
           </small>
-        </div>-->
+        </div>
 
-        <jhi-m21-security-clearance-form-control
-          ngDefaultControl
-          formControlName='securityClearance'
-          [inputValue]="editForm.get('securityClearance')!.value"
-          (valueSelected)='updateSecurityClearance($event)'
-          inputControlLabel="Security Clearance"
-        >
-          <option [ngValue]="editForm.get('securityClearance')!.value"></option>
-        </jhi-m21-security-clearance-form-control>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportDesigner">Report Designer</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_reportDesigner">Report Designer</label>
           <select
             class="form-control"
             id="field_reportDesigner"
             data-cy="reportDesigner"
             name="reportDesigner"
             formControlName="reportDesigner"
+            [compareWith]="compareApplicationUser"
           >
             <option *ngIf="!editForm.get('reportDesigner')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('reportDesigner')!.value?.id
-                  ? editForm.get('reportDesigner')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
+            <option [ngValue]="applicationUserOption" *ngFor="let applicationUserOption of applicationUsersSharedCollection">
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
@@ -257,45 +230,77 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['reportDesigner'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='organization'
-          [inputValue]="editForm.get('organization')!.value"
-          (valueSelected)='updateOrganization($event)'
-          inputControlLabel="organization (Required)"
+        <div class="row mb-3">
+          <label class="form-label" for="field_organization">Organization</label>
+          <select
+            class="form-control"
+            id="field_organization"
+            data-cy="organization"
+            name="organization"
+            formControlName="organization"
+            [compareWith]="compareDealer"
+          >
+            <option *ngIf="!editForm.get('organization')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['organization'])!.invalid && (editForm.get(['organization'])!.dirty || editForm.get(['organization'])!.touched)
+          "
         >
-          <option [ngValue]="editForm.get('organization')!.value"></option>
-        </jhi-m21-dealer-form-control>
+          <small class="form-text text-danger" *ngIf="editForm.get(['organization'])?.errors?.required"> This field is required. </small>
+        </div>
 
-        <jhi-m21-dealer-form-control
-          ngDefaultControl
-          formControlName='department'
-          [inputValue]="editForm.get('department')!.value"
-          (valueSelected)='updateDepartment($event)'
-          inputControlLabel="Department (Required)"
+        <div class="row mb-3">
+          <label class="form-label" for="field_department">Department</label>
+          <select
+            class="form-control"
+            id="field_department"
+            data-cy="department"
+            name="department"
+            formControlName="department"
+            [compareWith]="compareDealer"
+          >
+            <option *ngIf="!editForm.get('department')!.value" [ngValue]="null" selected></option>
+            <option [ngValue]="dealerOption" *ngFor="let dealerOption of dealersSharedCollection">{{ dealerOption.dealerName }}</option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['department'])!.invalid && (editForm.get(['department'])!.dirty || editForm.get(['department'])!.touched)"
         >
-          <option [ngValue]="editForm.get('department')!.value"></option>
-        </jhi-m21-dealer-form-control>
+          <small class="form-text text-danger" *ngIf="editForm.get(['department'])?.errors?.required"> This field is required. </small>
+        </div>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
+        <div class="row mb-3">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
+          >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_systemModule">System Module</label>
-          <select class="form-control" id="field_systemModule" data-cy="systemModule" name="systemModule" formControlName="systemModule">
+        <div class="row mb-3">
+          <label class="form-label" for="field_systemModule">System Module</label>
+          <select
+            class="form-control"
+            id="field_systemModule"
+            data-cy="systemModule"
+            name="systemModule"
+            formControlName="systemModule"
+            [compareWith]="compareSystemModule"
+          >
             <option *ngIf="!editForm.get('systemModule')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                systemModuleOption.id === editForm.get('systemModule')!.value?.id ? editForm.get('systemModule')!.value : systemModuleOption
-              "
-              *ngFor="let systemModuleOption of systemModulesSharedCollection; trackBy: trackSystemModuleById"
-            >
+            <option [ngValue]="systemModuleOption" *ngFor="let systemModuleOption of systemModulesSharedCollection">
               {{ systemModuleOption.moduleName }}
             </option>
           </select>
@@ -308,24 +313,18 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['systemModule'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileCheckSumAlgorithm">File Check Sum Algorithm</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileCheckSumAlgorithm">File Check Sum Algorithm</label>
           <select
             class="form-control"
             id="field_fileCheckSumAlgorithm"
             data-cy="fileCheckSumAlgorithm"
             name="fileCheckSumAlgorithm"
             formControlName="fileCheckSumAlgorithm"
+            [compareWith]="compareAlgorithm"
           >
             <option *ngIf="!editForm.get('fileCheckSumAlgorithm')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                algorithmOption.id === editForm.get('fileCheckSumAlgorithm')!.value?.id
-                  ? editForm.get('fileCheckSumAlgorithm')!.value
-                  : algorithmOption
-              "
-              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
-            >
+            <option [ngValue]="algorithmOption" *ngFor="let algorithmOption of algorithmsSharedCollection">
               {{ algorithmOption.name }}
             </option>
           </select>

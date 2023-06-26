@@ -25,12 +25,12 @@ import { SystemContentTypeDeleteDialogComponent } from './delete/system-content-
 import { SystemContentTypeRoutingModule } from './route/system-content-type-routing.module';
 
 @NgModule({
-    imports: [SharedModule, SystemContentTypeRoutingModule],
-    declarations: [
-        SystemContentTypeComponent,
-        SystemContentTypeDetailComponent,
-        SystemContentTypeUpdateComponent,
-        SystemContentTypeDeleteDialogComponent,
-    ]
+  imports: [SharedModule, SystemContentTypeRoutingModule],
+  declarations: [
+    SystemContentTypeComponent,
+    SystemContentTypeDetailComponent,
+    SystemContentTypeUpdateComponent,
+    SystemContentTypeDeleteDialogComponent,
+  ],
 })
 export class SystemContentTypeModule {}

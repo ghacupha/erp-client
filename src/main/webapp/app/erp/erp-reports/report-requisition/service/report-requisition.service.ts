@@ -20,66 +20,72 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IReportRequisition, getReportRequisitionIdentifier } from '../report-requisition.model';
-import { sha512 } from 'hash-wasm';
+import { IReportRequisition, NewReportRequisition } from '../report-requisition.model';
+
+export type PartialUpdateReportRequisition = Partial<IReportRequisition> & Pick<IReportRequisition, 'id'>;
+
+type RestOf<T extends IReportRequisition | NewReportRequisition> = Omit<T, 'reportRequestTime'> & {
+  reportRequestTime?: string | null;
+};
+
+export type RestReportRequisition = RestOf<IReportRequisition>;
+
+export type NewRestReportRequisition = RestOf<NewReportRequisition>;
+
+export type PartialUpdateRestReportRequisition = RestOf<PartialUpdateReportRequisition>;
 
 export type EntityResponseType = HttpResponse<IReportRequisition>;
 export type EntityArrayResponseType = HttpResponse<IReportRequisition[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ReportRequisitionService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/report-requisitions');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/report-requisitions');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/report-requisitions');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/report-requisitions');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(reportRequisition: IReportRequisition): Observable<EntityResponseType> {
+  create(reportRequisition: NewReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(reportRequisition);
     return this.http
-      .post<IReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .post<RestReportRequisition>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(reportRequisition: IReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(reportRequisition);
     return this.http
-      .put<IReportRequisition>(`${this.resourceUrl}/${getReportRequisitionIdentifier(reportRequisition) as number}`, copy, {
+      .put<RestReportRequisition>(`${this.resourceUrl}/${this.getReportRequisitionIdentifier(reportRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(reportRequisition: IReportRequisition): Observable<EntityResponseType> {
+  partialUpdate(reportRequisition: PartialUpdateReportRequisition): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(reportRequisition);
     return this.http
-      .patch<IReportRequisition>(`${this.resourceUrl}/${getReportRequisitionIdentifier(reportRequisition) as number}`, copy, {
+      .patch<RestReportRequisition>(`${this.resourceUrl}/${this.getReportRequisitionIdentifier(reportRequisition)}`, copy, {
         observe: 'response',
       })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
-      .pipe(map((res: EntityResponseType) => this.convertPasswordFromServer(res)));
+      .get<RestReportRequisition>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .get<RestReportRequisition[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -89,23 +95,30 @@ export class ReportRequisitionService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)))
-      .pipe(map((res: EntityArrayResponseType) => this.convertPasswordArrayFromServer(res)));
+      .get<RestReportRequisition[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addReportRequisitionToCollectionIfMissing(
-    reportRequisitionCollection: IReportRequisition[],
-    ...reportRequisitionsToCheck: (IReportRequisition | null | undefined)[]
-  ): IReportRequisition[] {
-    const reportRequisitions: IReportRequisition[] = reportRequisitionsToCheck.filter(isPresent);
+  getReportRequisitionIdentifier(reportRequisition: Pick<IReportRequisition, 'id'>): number {
+    return reportRequisition.id;
+  }
+
+  compareReportRequisition(o1: Pick<IReportRequisition, 'id'> | null, o2: Pick<IReportRequisition, 'id'> | null): boolean {
+    return o1 && o2 ? this.getReportRequisitionIdentifier(o1) === this.getReportRequisitionIdentifier(o2) : o1 === o2;
+  }
+
+  addReportRequisitionToCollectionIfMissing<Type extends Pick<IReportRequisition, 'id'>>(
+    reportRequisitionCollection: Type[],
+    ...reportRequisitionsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const reportRequisitions: Type[] = reportRequisitionsToCheck.filter(isPresent);
     if (reportRequisitions.length > 0) {
       const reportRequisitionCollectionIdentifiers = reportRequisitionCollection.map(
-        reportRequisitionItem => getReportRequisitionIdentifier(reportRequisitionItem)!
+        reportRequisitionItem => this.getReportRequisitionIdentifier(reportRequisitionItem)!
       );
       const reportRequisitionsToAdd = reportRequisitions.filter(reportRequisitionItem => {
-        const reportRequisitionIdentifier = getReportRequisitionIdentifier(reportRequisitionItem);
-        if (reportRequisitionIdentifier == null || reportRequisitionCollectionIdentifiers.includes(reportRequisitionIdentifier)) {
+        const reportRequisitionIdentifier = this.getReportRequisitionIdentifier(reportRequisitionItem);
+        if (reportRequisitionCollectionIdentifiers.includes(reportRequisitionIdentifier)) {
           return false;
         }
         reportRequisitionCollectionIdentifiers.push(reportRequisitionIdentifier);
@@ -116,54 +129,31 @@ export class ReportRequisitionService {
     return reportRequisitionCollection;
   }
 
-  protected convertDateFromClient(reportRequisition: IReportRequisition): IReportRequisition {
-    return Object.assign({}, reportRequisition, {
-      reportRequestTime: reportRequisition.reportRequestTime?.isValid() ? reportRequisition.reportRequestTime.toJSON() : undefined,
+  protected convertDateFromClient<T extends IReportRequisition | NewReportRequisition | PartialUpdateReportRequisition>(
+    reportRequisition: T
+  ): RestOf<T> {
+    return {
+      ...reportRequisition,
+      reportRequestTime: reportRequisition.reportRequestTime?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restReportRequisition: RestReportRequisition): IReportRequisition {
+    return {
+      ...restReportRequisition,
+      reportRequestTime: restReportRequisition.reportRequestTime ? dayjs(restReportRequisition.reportRequestTime) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestReportRequisition>): HttpResponse<IReportRequisition> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.reportRequestTime = res.body.reportRequestTime ? dayjs(res.body.reportRequestTime) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((reportRequisition: IReportRequisition) => {
-        reportRequisition.reportRequestTime = reportRequisition.reportRequestTime ? dayjs(reportRequisition.reportRequestTime) : undefined;
-      });
-    }
-    return res;
-  }
-
-  protected convertPasswordFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      if (res.body.reportPassword) {
-        sha512(res.body.reportPassword).then(token => {
-          res.body!.reportPassword = token.substring(0,15)
-        })
-      }
-      if (res.body.reportPassword) {
-        sha512(res.body.reportPassword).then(token => {
-          res.body!.reportPassword = token.substring(0,15)
-        })
-      }
-    }
-    return res;
-  }
-
-  protected convertPasswordArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((reportRequisition: IReportRequisition) => {
-        if (reportRequisition.reportPassword) {
-          sha512(reportRequisition.reportPassword).then(token => {
-            reportRequisition.reportPassword = token.substring(0,15)
-          })
-        }
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestReportRequisition[]>): HttpResponse<IReportRequisition[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

@@ -24,13 +24,14 @@ import { PdfReportRequisitionComponent } from '../list/pdf-report-requisition.co
 import { PdfReportRequisitionDetailComponent } from '../detail/pdf-report-requisition-detail.component';
 import { PdfReportRequisitionUpdateComponent } from '../update/pdf-report-requisition-update.component';
 import { PdfReportRequisitionRoutingResolveService } from './pdf-report-requisition-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const pdfReportRequisitionRoute: Routes = [
   {
     path: '',
     component: PdfReportRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

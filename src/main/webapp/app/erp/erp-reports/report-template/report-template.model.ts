@@ -19,33 +19,16 @@
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IReportTemplate {
-  id?: number;
-  catalogueNumber?: string;
+  id: number;
+  catalogueNumber?: string | null;
   description?: string | null;
-  notesContentType?: string | null;
   notes?: string | null;
-  reportFileContentType?: string | null;
+  notesContentType?: string | null;
   reportFile?: string | null;
-  compileReportFileContentType?: string | null;
+  reportFileContentType?: string | null;
   compileReportFile?: string | null;
-  placeholders?: IPlaceholder[] | null;
+  compileReportFileContentType?: string | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
 }
 
-export class ReportTemplate implements IReportTemplate {
-  constructor(
-    public id?: number,
-    public catalogueNumber?: string,
-    public description?: string | null,
-    public notesContentType?: string | null,
-    public notes?: string | null,
-    public reportFileContentType?: string | null,
-    public reportFile?: string | null,
-    public compileReportFileContentType?: string | null,
-    public compileReportFile?: string | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
-
-export function getReportTemplateIdentifier(reportTemplate: IReportTemplate): number | undefined {
-  return reportTemplate.id;
-}
+export type NewReportTemplate = Omit<IReportTemplate, 'id'> & { id: null };

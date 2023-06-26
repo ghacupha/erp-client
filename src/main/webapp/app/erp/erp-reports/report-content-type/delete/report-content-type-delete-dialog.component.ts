@@ -21,6 +21,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IReportContentType } from '../report-content-type.model';
 import { ReportContentTypeService } from '../service/report-content-type.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './report-content-type-delete-dialog.component.html',
@@ -36,7 +37,7 @@ export class ReportContentTypeDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.reportContentTypeService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

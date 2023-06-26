@@ -16,15 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-jest.mock('@angular/router');
-
 import { TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { IExcelReportExport, ExcelReportExport } from '../excel-report-export.model';
+import { IExcelReportExport } from '../excel-report-export.model';
 import { ExcelReportExportService } from '../service/excel-report-export.service';
 
 import { ExcelReportExportRoutingResolveService } from './excel-report-export-routing-resolve.service';
@@ -34,15 +33,25 @@ describe('ExcelReportExport routing resolve service', () => {
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let routingResolveService: ExcelReportExportRoutingResolveService;
   let service: ExcelReportExportService;
-  let resultExcelReportExport: IExcelReportExport | undefined;
+  let resultExcelReportExport: IExcelReportExport | null | undefined;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [Router, ActivatedRouteSnapshot],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              paramMap: convertToParamMap({}),
+            },
+          },
+        },
+      ],
     });
     mockRouter = TestBed.inject(Router);
-    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRouteSnapshot);
+    jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
+    mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     routingResolveService = TestBed.inject(ExcelReportExportRoutingResolveService);
     service = TestBed.inject(ExcelReportExportService);
     resultExcelReportExport = undefined;
@@ -64,7 +73,7 @@ describe('ExcelReportExport routing resolve service', () => {
       expect(resultExcelReportExport).toEqual({ id: 123 });
     });
 
-    it('should return new IExcelReportExport if id is not provided', () => {
+    it('should return null if id is not provided', () => {
       // GIVEN
       service.find = jest.fn();
       mockActivatedRouteSnapshot.params = {};
@@ -76,12 +85,12 @@ describe('ExcelReportExport routing resolve service', () => {
 
       // THEN
       expect(service.find).not.toBeCalled();
-      expect(resultExcelReportExport).toEqual(new ExcelReportExport());
+      expect(resultExcelReportExport).toEqual(null);
     });
 
     it('should route to 404 page if data not found in server', () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse({ body: null as unknown as ExcelReportExport })));
+      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IExcelReportExport>({ body: null })));
       mockActivatedRouteSnapshot.params = { id: 123 };
 
       // WHEN

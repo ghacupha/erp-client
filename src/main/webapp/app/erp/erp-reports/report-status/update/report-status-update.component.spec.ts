@@ -16,42 +16,53 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { ReportStatusFormService } from './report-status-form.service';
 import { ReportStatusService } from '../service/report-status.service';
-import { IReportStatus, ReportStatus } from '../report-status.model';
+import { IReportStatus } from '../report-status.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IProcessStatus } from 'app/entities/system/process-status/process-status.model';
+import { ProcessStatusService } from 'app/entities/system/process-status/service/process-status.service';
+
 import { ReportStatusUpdateComponent } from './report-status-update.component';
-import { ProcessStatusService } from '../../../erp-pages/process-status/service/process-status.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IProcessStatus } from '../../../erp-pages/process-status/process-status.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('ReportStatus Management Update Component', () => {
   let comp: ReportStatusUpdateComponent;
   let fixture: ComponentFixture<ReportStatusUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let reportStatusFormService: ReportStatusFormService;
   let reportStatusService: ReportStatusService;
   let placeholderService: PlaceholderService;
   let processStatusService: ProcessStatusService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportStatusUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(ReportStatusUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(ReportStatusUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    reportStatusFormService = TestBed.inject(ReportStatusFormService);
     reportStatusService = TestBed.inject(ReportStatusService);
     placeholderService = TestBed.inject(PlaceholderService);
     processStatusService = TestBed.inject(ProcessStatusService);
@@ -75,7 +86,10 @@ describe('ReportStatus Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -96,32 +110,33 @@ describe('ReportStatus Management Update Component', () => {
       expect(processStatusService.query).toHaveBeenCalled();
       expect(processStatusService.addProcessStatusToCollectionIfMissing).toHaveBeenCalledWith(
         processStatusCollection,
-        ...additionalProcessStatuses
+        ...additionalProcessStatuses.map(expect.objectContaining)
       );
       expect(comp.processStatusesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const reportStatus: IReportStatus = { id: 456 };
-      const placeholders: IPlaceholder = { id: 18063 };
-      reportStatus.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 18063 };
+      reportStatus.placeholders = [placeholder];
       const processStatus: IProcessStatus = { id: 68314 };
       reportStatus.processStatus = processStatus;
 
       activatedRoute.data = of({ reportStatus });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(reportStatus));
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
       expect(comp.processStatusesSharedCollection).toContain(processStatus);
+      expect(comp.reportStatus).toEqual(reportStatus);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportStatus>>();
+      const saveSubject = new Subject<HttpResponse<IReportStatus>>();
       const reportStatus = { id: 123 };
+      jest.spyOn(reportStatusFormService, 'getReportStatus').mockReturnValue(reportStatus);
       jest.spyOn(reportStatusService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ reportStatus });
@@ -134,18 +149,20 @@ describe('ReportStatus Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(reportStatusFormService.getReportStatus).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(reportStatusService.update).toHaveBeenCalledWith(reportStatus);
+      expect(reportStatusService.update).toHaveBeenCalledWith(expect.objectContaining(reportStatus));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportStatus>>();
-      const reportStatus = new ReportStatus();
+      const saveSubject = new Subject<HttpResponse<IReportStatus>>();
+      const reportStatus = { id: 123 };
+      jest.spyOn(reportStatusFormService, 'getReportStatus').mockReturnValue({ id: null });
       jest.spyOn(reportStatusService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ reportStatus });
+      activatedRoute.data = of({ reportStatus: null });
       comp.ngOnInit();
 
       // WHEN
@@ -155,14 +172,15 @@ describe('ReportStatus Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(reportStatusService.create).toHaveBeenCalledWith(reportStatus);
+      expect(reportStatusFormService.getReportStatus).toHaveBeenCalled();
+      expect(reportStatusService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<ReportStatus>>();
+      const saveSubject = new Subject<HttpResponse<IReportStatus>>();
       const reportStatus = { id: 123 };
       jest.spyOn(reportStatusService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -175,54 +193,30 @@ describe('ReportStatus Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(reportStatusService.update).toHaveBeenCalledWith(reportStatus);
+      expect(reportStatusService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackProcessStatusById', () => {
-      it('Should return tracked ProcessStatus primary key', () => {
+    describe('compareProcessStatus', () => {
+      it('Should forward to processStatusService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackProcessStatusById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(processStatusService, 'compareProcessStatus');
+        comp.compareProcessStatus(entity, entity2);
+        expect(processStatusService.compareProcessStatus).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

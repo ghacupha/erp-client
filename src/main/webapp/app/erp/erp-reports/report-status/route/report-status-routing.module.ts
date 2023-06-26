@@ -24,13 +24,14 @@ import { ReportStatusComponent } from '../list/report-status.component';
 import { ReportStatusDetailComponent } from '../detail/report-status-detail.component';
 import { ReportStatusUpdateComponent } from '../update/report-status-update.component';
 import { ReportStatusRoutingResolveService } from './report-status-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const reportStatusRoute: Routes = [
   {
     path: '',
     component: ReportStatusComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

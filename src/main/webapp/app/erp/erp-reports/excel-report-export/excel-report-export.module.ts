@@ -23,15 +23,14 @@ import { ExcelReportExportDetailComponent } from './detail/excel-report-export-d
 import { ExcelReportExportUpdateComponent } from './update/excel-report-export-update.component';
 import { ExcelReportExportDeleteDialogComponent } from './delete/excel-report-export-delete-dialog.component';
 import { ExcelReportExportRoutingModule } from './route/excel-report-export-routing.module';
-import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-    imports: [SharedModule, ExcelReportExportRoutingModule, ErpCommonModule],
-    declarations: [
-        ExcelReportExportComponent,
-        ExcelReportExportDetailComponent,
-        ExcelReportExportUpdateComponent,
-        ExcelReportExportDeleteDialogComponent,
-    ]
+  imports: [SharedModule, ExcelReportExportRoutingModule],
+  declarations: [
+    ExcelReportExportComponent,
+    ExcelReportExportDetailComponent,
+    ExcelReportExportUpdateComponent,
+    ExcelReportExportDeleteDialogComponent,
+  ],
 })
 export class ExcelReportExportModule {}

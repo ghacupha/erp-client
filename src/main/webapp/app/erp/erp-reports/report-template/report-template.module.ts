@@ -25,12 +25,12 @@ import { ReportTemplateDeleteDialogComponent } from './delete/report-template-de
 import { ReportTemplateRoutingModule } from './route/report-template-routing.module';
 
 @NgModule({
-    imports: [SharedModule, ReportTemplateRoutingModule],
-    declarations: [
-        ReportTemplateComponent,
-        ReportTemplateDetailComponent,
-        ReportTemplateUpdateComponent,
-        ReportTemplateDeleteDialogComponent,
-    ]
+  imports: [SharedModule, ReportTemplateRoutingModule],
+  declarations: [
+    ReportTemplateComponent,
+    ReportTemplateDetailComponent,
+    ReportTemplateUpdateComponent,
+    ReportTemplateDeleteDialogComponent,
+  ],
 })
 export class ReportTemplateModule {}

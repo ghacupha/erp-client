@@ -18,12 +18,12 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IReportContentType, ReportContentType } from '../report-content-type.model';
+import { ReportContentTypeFormService, ReportContentTypeFormGroup } from './report-content-type-form.service';
+import { IReportContentType } from '../report-content-type.model';
 import { ReportContentTypeService } from '../service/report-content-type.service';
 import { ISystemContentType } from '../../system-content-type/system-content-type.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
@@ -36,29 +36,32 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 })
 export class ReportContentTypeUpdateComponent implements OnInit {
   isSaving = false;
+  reportContentType: IReportContentType | null = null;
 
   systemContentTypesSharedCollection: ISystemContentType[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    reportTypeName: [null, [Validators.required]],
-    reportFileExtension: [null, [Validators.required]],
-    systemContentType: [null, Validators.required],
-    placeholders: [],
-  });
+  editForm: ReportContentTypeFormGroup = this.reportContentTypeFormService.createReportContentTypeFormGroup();
 
   constructor(
     protected reportContentTypeService: ReportContentTypeService,
+    protected reportContentTypeFormService: ReportContentTypeFormService,
     protected systemContentTypeService: SystemContentTypeService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareSystemContentType = (o1: ISystemContentType | null, o2: ISystemContentType | null): boolean =>
+    this.systemContentTypeService.compareSystemContentType(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ reportContentType }) => {
-      this.updateForm(reportContentType);
+      this.reportContentType = reportContentType;
+      if (reportContentType) {
+        this.updateForm(reportContentType);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -70,38 +73,19 @@ export class ReportContentTypeUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const reportContentType = this.createFromForm();
-    if (reportContentType.id !== undefined) {
+    const reportContentType = this.reportContentTypeFormService.getReportContentType(this.editForm);
+    if (reportContentType.id !== null) {
       this.subscribeToSaveResponse(this.reportContentTypeService.update(reportContentType));
     } else {
       this.subscribeToSaveResponse(this.reportContentTypeService.create(reportContentType));
     }
   }
 
-  trackSystemContentTypeById(index: number, item: ISystemContentType): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IReportContentType>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -117,19 +101,14 @@ export class ReportContentTypeUpdateComponent implements OnInit {
   }
 
   protected updateForm(reportContentType: IReportContentType): void {
-    this.editForm.patchValue({
-      id: reportContentType.id,
-      reportTypeName: reportContentType.reportTypeName,
-      reportFileExtension: reportContentType.reportFileExtension,
-      systemContentType: reportContentType.systemContentType,
-      placeholders: reportContentType.placeholders,
-    });
+    this.reportContentType = reportContentType;
+    this.reportContentTypeFormService.resetForm(this.editForm, reportContentType);
 
-    this.systemContentTypesSharedCollection = this.systemContentTypeService.addSystemContentTypeToCollectionIfMissing(
+    this.systemContentTypesSharedCollection = this.systemContentTypeService.addSystemContentTypeToCollectionIfMissing<ISystemContentType>(
       this.systemContentTypesSharedCollection,
       reportContentType.systemContentType
     );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(reportContentType.placeholders ?? [])
     );
@@ -141,9 +120,9 @@ export class ReportContentTypeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISystemContentType[]>) => res.body ?? []))
       .pipe(
         map((systemContentTypes: ISystemContentType[]) =>
-          this.systemContentTypeService.addSystemContentTypeToCollectionIfMissing(
+          this.systemContentTypeService.addSystemContentTypeToCollectionIfMissing<ISystemContentType>(
             systemContentTypes,
-            this.editForm.get('systemContentType')!.value
+            this.reportContentType?.systemContentType
           )
         )
       )
@@ -154,20 +133,12 @@ export class ReportContentTypeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.reportContentType?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
-
-  protected createFromForm(): IReportContentType {
-    return {
-      ...new ReportContentType(),
-      id: this.editForm.get(['id'])!.value,
-      reportTypeName: this.editForm.get(['reportTypeName'])!.value,
-      reportFileExtension: this.editForm.get(['reportFileExtension'])!.value,
-      systemContentType: this.editForm.get(['systemContentType'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
   }
 }
