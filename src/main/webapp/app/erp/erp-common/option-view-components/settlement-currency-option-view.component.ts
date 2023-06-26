@@ -27,5 +27,5 @@ import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/s
 })
 export class SettlementCurrencyOptionViewComponent {
 
-  @Input() item: ISettlementCurrency = {};
+  @Input() item?: ISettlementCurrency;
 }

@@ -29,5 +29,5 @@ import { IPurchaseOrder } from '../../erp-settlements/purchase-order/purchase-or
 })
 export class PurchaseOrderOptionViewComponent {
 
-  @Input() item: IPurchaseOrder = {};
+  @Input() item?: IPurchaseOrder;
 }

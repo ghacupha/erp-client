@@ -20,57 +20,75 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { IServiceOutlet, getServiceOutletIdentifier } from '../service-outlet.model';
+import { IServiceOutlet, NewServiceOutlet } from '../service-outlet.model';
+
+export type PartialUpdateServiceOutlet = Partial<IServiceOutlet> & Pick<IServiceOutlet, 'id'>;
+
+type RestOf<T extends IServiceOutlet | NewServiceOutlet> = Omit<
+  T,
+  'outletOpeningDate' | 'regulatorApprovalDate' | 'outletClosureDate' | 'dateLastModified'
+> & {
+  outletOpeningDate?: string | null;
+  regulatorApprovalDate?: string | null;
+  outletClosureDate?: string | null;
+  dateLastModified?: string | null;
+};
+
+export type RestServiceOutlet = RestOf<IServiceOutlet>;
+
+export type NewRestServiceOutlet = RestOf<NewServiceOutlet>;
+
+export type PartialUpdateRestServiceOutlet = RestOf<PartialUpdateServiceOutlet>;
 
 export type EntityResponseType = HttpResponse<IServiceOutlet>;
 export type EntityArrayResponseType = HttpResponse<IServiceOutlet[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ServiceOutletService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/granular-data/service-outlets');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/granular-data/_search/service-outlets');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/service-outlets');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/service-outlets');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(serviceOutlet: IServiceOutlet): Observable<EntityResponseType> {
+  create(serviceOutlet: NewServiceOutlet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(serviceOutlet);
     return this.http
-      .post<IServiceOutlet>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .post<RestServiceOutlet>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(serviceOutlet: IServiceOutlet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(serviceOutlet);
     return this.http
-      .put<IServiceOutlet>(`${this.resourceUrl}/${getServiceOutletIdentifier(serviceOutlet) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .put<RestServiceOutlet>(`${this.resourceUrl}/${this.getServiceOutletIdentifier(serviceOutlet)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
-  partialUpdate(serviceOutlet: IServiceOutlet): Observable<EntityResponseType> {
+  partialUpdate(serviceOutlet: PartialUpdateServiceOutlet): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(serviceOutlet);
     return this.http
-      .patch<IServiceOutlet>(`${this.resourceUrl}/${getServiceOutletIdentifier(serviceOutlet) as number}`, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .patch<RestServiceOutlet>(`${this.resourceUrl}/${this.getServiceOutletIdentifier(serviceOutlet)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
     return this.http
-      .get<IServiceOutlet>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      .get<RestServiceOutlet>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IServiceOutlet[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestServiceOutlet[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -80,22 +98,30 @@ export class ServiceOutletService {
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IServiceOutlet[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
-      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+      .get<RestServiceOutlet[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
-  addServiceOutletToCollectionIfMissing(
-    serviceOutletCollection: IServiceOutlet[],
-    ...serviceOutletsToCheck: (IServiceOutlet | null | undefined)[]
-  ): IServiceOutlet[] {
-    const serviceOutlets: IServiceOutlet[] = serviceOutletsToCheck.filter(isPresent);
+  getServiceOutletIdentifier(serviceOutlet: Pick<IServiceOutlet, 'id'>): number {
+    return serviceOutlet.id;
+  }
+
+  compareServiceOutlet(o1: Pick<IServiceOutlet, 'id'> | null, o2: Pick<IServiceOutlet, 'id'> | null): boolean {
+    return o1 && o2 ? this.getServiceOutletIdentifier(o1) === this.getServiceOutletIdentifier(o2) : o1 === o2;
+  }
+
+  addServiceOutletToCollectionIfMissing<Type extends Pick<IServiceOutlet, 'id'>>(
+    serviceOutletCollection: Type[],
+    ...serviceOutletsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const serviceOutlets: Type[] = serviceOutletsToCheck.filter(isPresent);
     if (serviceOutlets.length > 0) {
       const serviceOutletCollectionIdentifiers = serviceOutletCollection.map(
-        serviceOutletItem => getServiceOutletIdentifier(serviceOutletItem)!
+        serviceOutletItem => this.getServiceOutletIdentifier(serviceOutletItem)!
       );
       const serviceOutletsToAdd = serviceOutlets.filter(serviceOutletItem => {
-        const serviceOutletIdentifier = getServiceOutletIdentifier(serviceOutletItem);
-        if (serviceOutletIdentifier == null || serviceOutletCollectionIdentifiers.includes(serviceOutletIdentifier)) {
+        const serviceOutletIdentifier = this.getServiceOutletIdentifier(serviceOutletItem);
+        if (serviceOutletCollectionIdentifiers.includes(serviceOutletIdentifier)) {
           return false;
         }
         serviceOutletCollectionIdentifiers.push(serviceOutletIdentifier);
@@ -106,36 +132,35 @@ export class ServiceOutletService {
     return serviceOutletCollection;
   }
 
-  protected convertDateFromClient(serviceOutlet: IServiceOutlet): IServiceOutlet {
-    return Object.assign({}, serviceOutlet, {
-      outletOpeningDate: serviceOutlet.outletOpeningDate?.isValid() ? serviceOutlet.outletOpeningDate.format(DATE_FORMAT) : undefined,
-      regulatorApprovalDate: serviceOutlet.regulatorApprovalDate?.isValid()
-        ? serviceOutlet.regulatorApprovalDate.format(DATE_FORMAT)
-        : undefined,
-      outletClosureDate: serviceOutlet.outletClosureDate?.isValid() ? serviceOutlet.outletClosureDate.format(DATE_FORMAT) : undefined,
-      dateLastModified: serviceOutlet.dateLastModified?.isValid() ? serviceOutlet.dateLastModified.format(DATE_FORMAT) : undefined,
+  protected convertDateFromClient<T extends IServiceOutlet | NewServiceOutlet | PartialUpdateServiceOutlet>(serviceOutlet: T): RestOf<T> {
+    return {
+      ...serviceOutlet,
+      outletOpeningDate: serviceOutlet.outletOpeningDate?.format(DATE_FORMAT) ?? null,
+      regulatorApprovalDate: serviceOutlet.regulatorApprovalDate?.format(DATE_FORMAT) ?? null,
+      outletClosureDate: serviceOutlet.outletClosureDate?.format(DATE_FORMAT) ?? null,
+      dateLastModified: serviceOutlet.dateLastModified?.format(DATE_FORMAT) ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restServiceOutlet: RestServiceOutlet): IServiceOutlet {
+    return {
+      ...restServiceOutlet,
+      outletOpeningDate: restServiceOutlet.outletOpeningDate ? dayjs(restServiceOutlet.outletOpeningDate) : undefined,
+      regulatorApprovalDate: restServiceOutlet.regulatorApprovalDate ? dayjs(restServiceOutlet.regulatorApprovalDate) : undefined,
+      outletClosureDate: restServiceOutlet.outletClosureDate ? dayjs(restServiceOutlet.outletClosureDate) : undefined,
+      dateLastModified: restServiceOutlet.dateLastModified ? dayjs(restServiceOutlet.dateLastModified) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestServiceOutlet>): HttpResponse<IServiceOutlet> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
     });
   }
 
-  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
-    if (res.body) {
-      res.body.outletOpeningDate = res.body.outletOpeningDate ? dayjs(res.body.outletOpeningDate) : undefined;
-      res.body.regulatorApprovalDate = res.body.regulatorApprovalDate ? dayjs(res.body.regulatorApprovalDate) : undefined;
-      res.body.outletClosureDate = res.body.outletClosureDate ? dayjs(res.body.outletClosureDate) : undefined;
-      res.body.dateLastModified = res.body.dateLastModified ? dayjs(res.body.dateLastModified) : undefined;
-    }
-    return res;
-  }
-
-  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-    if (res.body) {
-      res.body.forEach((serviceOutlet: IServiceOutlet) => {
-        serviceOutlet.outletOpeningDate = serviceOutlet.outletOpeningDate ? dayjs(serviceOutlet.outletOpeningDate) : undefined;
-        serviceOutlet.regulatorApprovalDate = serviceOutlet.regulatorApprovalDate ? dayjs(serviceOutlet.regulatorApprovalDate) : undefined;
-        serviceOutlet.outletClosureDate = serviceOutlet.outletClosureDate ? dayjs(serviceOutlet.outletClosureDate) : undefined;
-        serviceOutlet.dateLastModified = serviceOutlet.dateLastModified ? dayjs(serviceOutlet.dateLastModified) : undefined;
-      });
-    }
-    return res;
+  protected convertResponseArrayFromServer(res: HttpResponse<RestServiceOutlet[]>): HttpResponse<IServiceOutlet[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

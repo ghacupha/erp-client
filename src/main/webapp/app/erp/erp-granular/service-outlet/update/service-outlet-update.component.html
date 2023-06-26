@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-service-outlet-heading" data-cy="ServiceOutletCreateUpdateHeading">Create or edit a Service Outlet</h2>
@@ -25,13 +25,13 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletCode">Outlet Code</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletCode">Outlet Code</label>
           <input
             type="text"
             class="form-control"
@@ -45,8 +45,8 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletName">Outlet Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletName">Outlet Name</label>
           <input
             type="text"
             class="form-control"
@@ -60,13 +60,13 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_town">Town</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_town">Town</label>
           <input type="text" class="form-control" name="town" id="field_town" data-cy="town" formControlName="town" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_parliamentaryConstituency">Parliamentary Constituency</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_parliamentaryConstituency">Parliamentary Constituency</label>
           <input
             type="text"
             class="form-control"
@@ -77,8 +77,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_gpsCoordinates">Gps Coordinates</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_gpsCoordinates">Gps Coordinates</label>
           <input
             type="text"
             class="form-control"
@@ -89,8 +89,8 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletOpeningDate">Outlet Opening Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletOpeningDate">Outlet Opening Date</label>
           <div class="input-group">
             <input
               id="field_outletOpeningDate"
@@ -102,16 +102,14 @@
               #outletOpeningDateDp="ngbDatepicker"
               formControlName="outletOpeningDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="outletOpeningDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="outletOpeningDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_regulatorApprovalDate">Regulator Approval Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_regulatorApprovalDate">Regulator Approval Date</label>
           <div class="input-group">
             <input
               id="field_regulatorApprovalDate"
@@ -123,16 +121,14 @@
               #regulatorApprovalDateDp="ngbDatepicker"
               formControlName="regulatorApprovalDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="regulatorApprovalDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="regulatorApprovalDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletClosureDate">Outlet Closure Date</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletClosureDate">Outlet Closure Date</label>
           <div class="input-group">
             <input
               id="field_outletClosureDate"
@@ -144,16 +140,14 @@
               #outletClosureDateDp="ngbDatepicker"
               formControlName="outletClosureDate"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="outletClosureDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="outletClosureDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_dateLastModified">Date Last Modified</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_dateLastModified">Date Last Modified</label>
           <div class="input-group">
             <input
               id="field_dateLastModified"
@@ -165,16 +159,14 @@
               #dateLastModifiedDp="ngbDatepicker"
               formControlName="dateLastModified"
             />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="dateLastModifiedDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
+            <button type="button" class="btn btn-secondary" (click)="dateLastModifiedDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_licenseFeePayable">License Fee Payable</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_licenseFeePayable">License Fee Payable</label>
           <input
             type="number"
             class="form-control"
@@ -185,7 +177,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -194,92 +186,94 @@
             multiple
             name="placeholders"
             formControlName="placeholders"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_bankCode">Bank Code</label>
-          <select class="form-control" id="field_bankCode" data-cy="bankCode" name="bankCode" formControlName="bankCode">
+        <div class="row mb-3">
+          <label class="form-label" for="field_bankCode">Bank Code</label>
+          <select
+            class="form-control"
+            id="field_bankCode"
+            data-cy="bankCode"
+            name="bankCode"
+            formControlName="bankCode"
+            [compareWith]="compareBankBranchCode"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                bankBranchCodeOption.id === editForm.get('bankCode')!.value?.id ? editForm.get('bankCode')!.value : bankBranchCodeOption
-              "
-              *ngFor="let bankBranchCodeOption of bankBranchCodesSharedCollection; trackBy: trackBankBranchCodeById"
-            >
+            <option [ngValue]="bankBranchCodeOption" *ngFor="let bankBranchCodeOption of bankBranchCodesSharedCollection">
               {{ bankBranchCodeOption.branchCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletType">Outlet Type</label>
-          <select class="form-control" id="field_outletType" data-cy="outletType" name="outletType" formControlName="outletType">
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletType">Outlet Type</label>
+          <select
+            class="form-control"
+            id="field_outletType"
+            data-cy="outletType"
+            name="outletType"
+            formControlName="outletType"
+            [compareWith]="compareOutletType"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                outletTypeOption.id === editForm.get('outletType')!.value?.id ? editForm.get('outletType')!.value : outletTypeOption
-              "
-              *ngFor="let outletTypeOption of outletTypesSharedCollection; trackBy: trackOutletTypeById"
-            >
+            <option [ngValue]="outletTypeOption" *ngFor="let outletTypeOption of outletTypesSharedCollection">
               {{ outletTypeOption.outletType }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_outletStatus">Outlet Status</label>
-          <select class="form-control" id="field_outletStatus" data-cy="outletStatus" name="outletStatus" formControlName="outletStatus">
+        <div class="row mb-3">
+          <label class="form-label" for="field_outletStatus">Outlet Status</label>
+          <select
+            class="form-control"
+            id="field_outletStatus"
+            data-cy="outletStatus"
+            name="outletStatus"
+            formControlName="outletStatus"
+            [compareWith]="compareOutletStatus"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                outletStatusOption.id === editForm.get('outletStatus')!.value?.id ? editForm.get('outletStatus')!.value : outletStatusOption
-              "
-              *ngFor="let outletStatusOption of outletStatusesSharedCollection; trackBy: trackOutletStatusById"
-            >
+            <option [ngValue]="outletStatusOption" *ngFor="let outletStatusOption of outletStatusesSharedCollection">
               {{ outletStatusOption.branchStatusType }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_countyName">County Name</label>
-          <select class="form-control" id="field_countyName" data-cy="countyName" name="countyName" formControlName="countyName">
+        <div class="row mb-3">
+          <label class="form-label" for="field_countyName">County Name</label>
+          <select
+            class="form-control"
+            id="field_countyName"
+            data-cy="countyName"
+            name="countyName"
+            formControlName="countyName"
+            [compareWith]="compareCountyCode"
+          >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                countyCodeOption.id === editForm.get('countyName')!.value?.id ? editForm.get('countyName')!.value : countyCodeOption
-              "
-              *ngFor="let countyCodeOption of countyCodesSharedCollection; trackBy: trackCountyCodeById"
-            >
+            <option [ngValue]="countyCodeOption" *ngFor="let countyCodeOption of countyCodesSharedCollection">
               {{ countyCodeOption.countyName }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_subCountyName">Sub County Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_subCountyName">Sub County Name</label>
           <select
             class="form-control"
             id="field_subCountyName"
             data-cy="subCountyName"
             name="subCountyName"
             formControlName="subCountyName"
+            [compareWith]="compareCountyCode"
           >
             <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                countyCodeOption.id === editForm.get('subCountyName')!.value?.id ? editForm.get('subCountyName')!.value : countyCodeOption
-              "
-              *ngFor="let countyCodeOption of countyCodesSharedCollection; trackBy: trackCountyCodeById"
-            >
+            <option [ngValue]="countyCodeOption" *ngFor="let countyCodeOption of countyCodesSharedCollection">
               {{ countyCodeOption.subCountyName }}
             </option>
           </select>

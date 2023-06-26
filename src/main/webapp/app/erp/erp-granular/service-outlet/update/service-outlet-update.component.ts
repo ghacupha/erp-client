@@ -18,12 +18,12 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IServiceOutlet, ServiceOutlet } from '../service-outlet.model';
+import { ServiceOutletFormService, ServiceOutletFormGroup } from './service-outlet-form.service';
+import { IServiceOutlet } from '../service-outlet.model';
 import { ServiceOutletService } from '../service/service-outlet.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { OutletStatusService } from '../../outlet-status/service/outlet-status.service';
@@ -42,6 +42,7 @@ import { ICountyCode } from '../../county-code/county-code.model';
 })
 export class ServiceOutletUpdateComponent implements OnInit {
   isSaving = false;
+  serviceOutlet: IServiceOutlet | null = null;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   bankBranchCodesSharedCollection: IBankBranchCode[] = [];
@@ -49,40 +50,37 @@ export class ServiceOutletUpdateComponent implements OnInit {
   outletStatusesSharedCollection: IOutletStatus[] = [];
   countyCodesSharedCollection: ICountyCode[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    outletCode: [null, [Validators.required]],
-    outletName: [null, [Validators.required]],
-    town: [],
-    parliamentaryConstituency: [],
-    gpsCoordinates: [],
-    outletOpeningDate: [],
-    regulatorApprovalDate: [],
-    outletClosureDate: [],
-    dateLastModified: [],
-    licenseFeePayable: [],
-    placeholders: [],
-    bankCode: [],
-    outletType: [],
-    outletStatus: [],
-    countyName: [],
-    subCountyName: [],
-  });
+  editForm: ServiceOutletFormGroup = this.serviceOutletFormService.createServiceOutletFormGroup();
 
   constructor(
     protected serviceOutletService: ServiceOutletService,
+    protected serviceOutletFormService: ServiceOutletFormService,
     protected placeholderService: PlaceholderService,
     protected bankBranchCodeService: BankBranchCodeService,
     protected outletTypeService: OutletTypeService,
     protected outletStatusService: OutletStatusService,
     protected countyCodeService: CountyCodeService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBankBranchCode = (o1: IBankBranchCode | null, o2: IBankBranchCode | null): boolean =>
+    this.bankBranchCodeService.compareBankBranchCode(o1, o2);
+
+  compareOutletType = (o1: IOutletType | null, o2: IOutletType | null): boolean => this.outletTypeService.compareOutletType(o1, o2);
+
+  compareOutletStatus = (o1: IOutletStatus | null, o2: IOutletStatus | null): boolean =>
+    this.outletStatusService.compareOutletStatus(o1, o2);
+
+  compareCountyCode = (o1: ICountyCode | null, o2: ICountyCode | null): boolean => this.countyCodeService.compareCountyCode(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ serviceOutlet }) => {
-      this.updateForm(serviceOutlet);
+      this.serviceOutlet = serviceOutlet;
+      if (serviceOutlet) {
+        this.updateForm(serviceOutlet);
+      }
 
       this.loadRelationshipsOptions();
     });
@@ -94,50 +92,19 @@ export class ServiceOutletUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const serviceOutlet = this.createFromForm();
-    if (serviceOutlet.id !== undefined) {
+    const serviceOutlet = this.serviceOutletFormService.getServiceOutlet(this.editForm);
+    if (serviceOutlet.id !== null) {
       this.subscribeToSaveResponse(this.serviceOutletService.update(serviceOutlet));
     } else {
       this.subscribeToSaveResponse(this.serviceOutletService.create(serviceOutlet));
     }
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackBankBranchCodeById(index: number, item: IBankBranchCode): number {
-    return item.id!;
-  }
-
-  trackOutletTypeById(index: number, item: IOutletType): number {
-    return item.id!;
-  }
-
-  trackOutletStatusById(index: number, item: IOutletStatus): number {
-    return item.id!;
-  }
-
-  trackCountyCodeById(index: number, item: ICountyCode): number {
-    return item.id!;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IServiceOutlet>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -153,43 +120,26 @@ export class ServiceOutletUpdateComponent implements OnInit {
   }
 
   protected updateForm(serviceOutlet: IServiceOutlet): void {
-    this.editForm.patchValue({
-      id: serviceOutlet.id,
-      outletCode: serviceOutlet.outletCode,
-      outletName: serviceOutlet.outletName,
-      town: serviceOutlet.town,
-      parliamentaryConstituency: serviceOutlet.parliamentaryConstituency,
-      gpsCoordinates: serviceOutlet.gpsCoordinates,
-      outletOpeningDate: serviceOutlet.outletOpeningDate,
-      regulatorApprovalDate: serviceOutlet.regulatorApprovalDate,
-      outletClosureDate: serviceOutlet.outletClosureDate,
-      dateLastModified: serviceOutlet.dateLastModified,
-      licenseFeePayable: serviceOutlet.licenseFeePayable,
-      placeholders: serviceOutlet.placeholders,
-      bankCode: serviceOutlet.bankCode,
-      outletType: serviceOutlet.outletType,
-      outletStatus: serviceOutlet.outletStatus,
-      countyName: serviceOutlet.countyName,
-      subCountyName: serviceOutlet.subCountyName,
-    });
+    this.serviceOutlet = serviceOutlet;
+    this.serviceOutletFormService.resetForm(this.editForm, serviceOutlet);
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(serviceOutlet.placeholders ?? [])
     );
-    this.bankBranchCodesSharedCollection = this.bankBranchCodeService.addBankBranchCodeToCollectionIfMissing(
+    this.bankBranchCodesSharedCollection = this.bankBranchCodeService.addBankBranchCodeToCollectionIfMissing<IBankBranchCode>(
       this.bankBranchCodesSharedCollection,
       serviceOutlet.bankCode
     );
-    this.outletTypesSharedCollection = this.outletTypeService.addOutletTypeToCollectionIfMissing(
+    this.outletTypesSharedCollection = this.outletTypeService.addOutletTypeToCollectionIfMissing<IOutletType>(
       this.outletTypesSharedCollection,
       serviceOutlet.outletType
     );
-    this.outletStatusesSharedCollection = this.outletStatusService.addOutletStatusToCollectionIfMissing(
+    this.outletStatusesSharedCollection = this.outletStatusService.addOutletStatusToCollectionIfMissing<IOutletStatus>(
       this.outletStatusesSharedCollection,
       serviceOutlet.outletStatus
     );
-    this.countyCodesSharedCollection = this.countyCodeService.addCountyCodeToCollectionIfMissing(
+    this.countyCodesSharedCollection = this.countyCodeService.addCountyCodeToCollectionIfMissing<ICountyCode>(
       this.countyCodesSharedCollection,
       serviceOutlet.countyName,
       serviceOutlet.subCountyName
@@ -202,7 +152,10 @@ export class ServiceOutletUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.serviceOutlet?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
@@ -212,7 +165,7 @@ export class ServiceOutletUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IBankBranchCode[]>) => res.body ?? []))
       .pipe(
         map((bankBranchCodes: IBankBranchCode[]) =>
-          this.bankBranchCodeService.addBankBranchCodeToCollectionIfMissing(bankBranchCodes, this.editForm.get('bankCode')!.value)
+          this.bankBranchCodeService.addBankBranchCodeToCollectionIfMissing<IBankBranchCode>(bankBranchCodes, this.serviceOutlet?.bankCode)
         )
       )
       .subscribe((bankBranchCodes: IBankBranchCode[]) => (this.bankBranchCodesSharedCollection = bankBranchCodes));
@@ -222,7 +175,7 @@ export class ServiceOutletUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IOutletType[]>) => res.body ?? []))
       .pipe(
         map((outletTypes: IOutletType[]) =>
-          this.outletTypeService.addOutletTypeToCollectionIfMissing(outletTypes, this.editForm.get('outletType')!.value)
+          this.outletTypeService.addOutletTypeToCollectionIfMissing<IOutletType>(outletTypes, this.serviceOutlet?.outletType)
         )
       )
       .subscribe((outletTypes: IOutletType[]) => (this.outletTypesSharedCollection = outletTypes));
@@ -232,7 +185,7 @@ export class ServiceOutletUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IOutletStatus[]>) => res.body ?? []))
       .pipe(
         map((outletStatuses: IOutletStatus[]) =>
-          this.outletStatusService.addOutletStatusToCollectionIfMissing(outletStatuses, this.editForm.get('outletStatus')!.value)
+          this.outletStatusService.addOutletStatusToCollectionIfMissing<IOutletStatus>(outletStatuses, this.serviceOutlet?.outletStatus)
         )
       )
       .subscribe((outletStatuses: IOutletStatus[]) => (this.outletStatusesSharedCollection = outletStatuses));
@@ -242,36 +195,13 @@ export class ServiceOutletUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ICountyCode[]>) => res.body ?? []))
       .pipe(
         map((countyCodes: ICountyCode[]) =>
-          this.countyCodeService.addCountyCodeToCollectionIfMissing(
+          this.countyCodeService.addCountyCodeToCollectionIfMissing<ICountyCode>(
             countyCodes,
-            this.editForm.get('countyName')!.value,
-            this.editForm.get('subCountyName')!.value
+            this.serviceOutlet?.countyName,
+            this.serviceOutlet?.subCountyName
           )
         )
       )
       .subscribe((countyCodes: ICountyCode[]) => (this.countyCodesSharedCollection = countyCodes));
-  }
-
-  protected createFromForm(): IServiceOutlet {
-    return {
-      ...new ServiceOutlet(),
-      id: this.editForm.get(['id'])!.value,
-      outletCode: this.editForm.get(['outletCode'])!.value,
-      outletName: this.editForm.get(['outletName'])!.value,
-      town: this.editForm.get(['town'])!.value,
-      parliamentaryConstituency: this.editForm.get(['parliamentaryConstituency'])!.value,
-      gpsCoordinates: this.editForm.get(['gpsCoordinates'])!.value,
-      outletOpeningDate: this.editForm.get(['outletOpeningDate'])!.value,
-      regulatorApprovalDate: this.editForm.get(['regulatorApprovalDate'])!.value,
-      outletClosureDate: this.editForm.get(['outletClosureDate'])!.value,
-      dateLastModified: this.editForm.get(['dateLastModified'])!.value,
-      licenseFeePayable: this.editForm.get(['licenseFeePayable'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-      bankCode: this.editForm.get(['bankCode'])!.value,
-      outletType: this.editForm.get(['outletType'])!.value,
-      outletStatus: this.editForm.get(['outletStatus'])!.value,
-      countyName: this.editForm.get(['countyName'])!.value,
-      subCountyName: this.editForm.get(['subCountyName'])!.value,
-    };
   }
 }

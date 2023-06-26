@@ -27,5 +27,5 @@ import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet
 })
 export class ServiceOutletOptionViewComponent {
 
-  @Input() item: IServiceOutlet = {};
+  @Input() item?: IServiceOutlet;
 }

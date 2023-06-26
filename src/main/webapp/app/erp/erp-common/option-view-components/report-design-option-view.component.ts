@@ -26,5 +26,5 @@ import { IReportDesign } from '../../erp-reports/report-design/report-design.mod
   `
 })
 export class ReportDesignOptionViewComponent {
-  @Input() item: IReportDesign = {};
+  @Input() item?: IReportDesign;
 }

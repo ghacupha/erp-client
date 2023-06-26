@@ -22,9 +22,9 @@
     <span>Service Outlets</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span>Refresh List</span>
+        <span>Refresh list</span>
       </button>
 
       <button
@@ -43,56 +43,136 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="row">
+  <form name="searchForm" class="row row-cols-sm-auto align-items-center">
     <div class="col-sm-12">
-      <form name="searchForm" class="form-inline">
-        <div class="input-group w-100 mt-3">
-          <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
+      <div class="input-group w-100 mt-3">
+        <label class="visually-hidden" for="currentSearch">Search for Service Outlet</label>
+        <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="Query" />
 
-          <button class="input-group-append btn btn-info" (click)="search(currentSearch)">
-            <fa-icon icon="search"></fa-icon>
-          </button>
+        <button class="btn btn-info" (click)="search(currentSearch)">
+          <fa-icon icon="search"></fa-icon>
+        </button>
 
-          <button class="input-group-append btn btn-danger" (click)="search('')" *ngIf="currentSearch">
-            <fa-icon icon="trash-alt"></fa-icon>
-          </button>
-        </div>
-      </form>
+        <button class="btn btn-danger" (click)="search('')" *ngIf="currentSearch">
+          <fa-icon icon="trash-alt"></fa-icon>
+        </button>
+      </div>
     </div>
-  </div>
+  </form>
 
   <div class="alert alert-warning" id="no-result" *ngIf="serviceOutlets?.length === 0">
-    <span>No serviceOutlets found</span>
+    <span>No Service Outlets found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="serviceOutlets && serviceOutlets.length > 0">
+  <div class="table-responsive table-entities" id="entities" *ngIf="serviceOutlets && serviceOutlets.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
-          <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outletCode"><span>Outlet Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outletName"><span>Outlet Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="town"><span>Town</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outletCode">
+            <div class="d-flex">
+              <span>Outlet Code</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outletName">
+            <div class="d-flex">
+              <span>Outlet Name</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="town">
+            <div class="d-flex">
+              <span>Town</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col" jhiSortBy="parliamentaryConstituency">
-            <span>Parliamentary Constituency</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Parliamentary Constituency</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
           <th scope="col" jhiSortBy="gpsCoordinates">
-            <span>Gps Coordinates</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <div class="d-flex">
+              <span>Gps Coordinates</span>
+              <fa-icon class="p-1" *ngIf="!currentSearch" icon="sort"></fa-icon>
+            </div>
           </th>
-          <th scope="col" jhiSortBy="outletOpeningDate"><span>Outlet Opening Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="regulatorApprovalDate"><span>Regulator Approval Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outletClosureDate"><span>Outlet Closure Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dateLastModified"><span>Date Last Modified</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="licenseFeePayable"><span>License Fee Payable</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="bankCode.branchCode"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outletType.outletType"><span>Outlet Type</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="outletStatus.branchStatusType"><span>Outlet Status</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="countyName.countyName"><span>County Name</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="subCountyName.subCountyName"><span>Sub County Name</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletOpeningDate">
+            <div class="d-flex">
+              <span>Outlet Opening Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="regulatorApprovalDate">
+            <div class="d-flex">
+              <span>Regulator Approval Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outletClosureDate">
+            <div class="d-flex">
+              <span>Outlet Closure Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="dateLastModified">
+            <div class="d-flex">
+              <span>Date Last Modified</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="licenseFeePayable">
+            <div class="d-flex">
+              <span>License Fee Payable</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="bankCode.branchCode">
+            <div class="d-flex">
+              <span>Bank Code</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outletType.outletType">
+            <div class="d-flex">
+              <span>Outlet Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="outletStatus.branchStatusType">
+            <div class="d-flex">
+              <span>Outlet Status</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="countyName.countyName">
+            <div class="d-flex">
+              <span>County Name</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="subCountyName.subCountyName">
+            <div class="d-flex">
+              <span>Sub County Name</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+      <tbody
+        infinite-scroll
+        (scrolled)="loadPage(page + 1)"
+        [infiniteScrollDisabled]="page - 1 >= links['last']"
+        [infiniteScrollDistance]="0"
+      >
         <tr *ngFor="let serviceOutlet of serviceOutlets; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/service-outlet', serviceOutlet.id, 'view']">{{ serviceOutlet.id }}</a>
@@ -109,34 +189,32 @@
           <td>{{ serviceOutlet.licenseFeePayable }}</td>
           <td>
             <div *ngIf="serviceOutlet.bankCode">
-              <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode?.id, 'view']">{{ serviceOutlet.bankCode?.branchCode }}</a>
+              <a [routerLink]="['/bank-branch-code', serviceOutlet.bankCode.id, 'view']">{{ serviceOutlet.bankCode.branchCode }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="serviceOutlet.outletType">
-              <a [routerLink]="['/outlet-type', serviceOutlet.outletType?.id, 'view']">{{ serviceOutlet.outletType?.outletType }}</a>
+              <a [routerLink]="['/outlet-type', serviceOutlet.outletType.id, 'view']">{{ serviceOutlet.outletType.outletType }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="serviceOutlet.outletStatus">
-              <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus?.id, 'view']">{{
-                serviceOutlet.outletStatus?.branchStatusType
+              <a [routerLink]="['/outlet-status', serviceOutlet.outletStatus.id, 'view']">{{
+                serviceOutlet.outletStatus.branchStatusType
               }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="serviceOutlet.countyName">
-              <a [routerLink]="['/county-code', serviceOutlet.countyName?.id, 'view']">{{ serviceOutlet.countyName?.countyName }}</a>
+              <a [routerLink]="['/county-code', serviceOutlet.countyName.id, 'view']">{{ serviceOutlet.countyName.countyName }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="serviceOutlet.subCountyName">
-              <a [routerLink]="['/county-code', serviceOutlet.subCountyName?.id, 'view']">{{
-                serviceOutlet.subCountyName?.subCountyName
-              }}</a>
+              <a [routerLink]="['/county-code', serviceOutlet.subCountyName.id, 'view']">{{ serviceOutlet.subCountyName.subCountyName }}</a>
             </div>
           </td>
-          <td class="text-right">
+          <td class="text-end">
             <div class="btn-group">
               <button
                 type="submit"

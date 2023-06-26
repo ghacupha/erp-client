@@ -25,7 +25,7 @@ import { ServiceOutletDeleteDialogComponent } from './delete/service-outlet-dele
 import { ServiceOutletRoutingModule } from './route/service-outlet-routing.module';
 
 @NgModule({
-    imports: [SharedModule, ServiceOutletRoutingModule],
-    declarations: [ServiceOutletComponent, ServiceOutletDetailComponent, ServiceOutletUpdateComponent, ServiceOutletDeleteDialogComponent]
+  imports: [SharedModule, ServiceOutletRoutingModule],
+  declarations: [ServiceOutletComponent, ServiceOutletDetailComponent, ServiceOutletUpdateComponent, ServiceOutletDeleteDialogComponent],
 })
 export class ServiceOutletModule {}

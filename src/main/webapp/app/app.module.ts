@@ -53,6 +53,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { ErpCommonModule } from './erp/erp-common/erp-common.module';
 import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler.service';
 import { ErpNavbarModule } from './erp/navbar/erp-navbar.module';
+import { ErpCommonModule } from './erp/erp-common/erp-common.module';
 
 @NgModule({
   imports: [
@@ -64,6 +65,7 @@ import { ErpNavbarModule } from './erp/navbar/erp-navbar.module';
     // ErpSystemModule,
     // ErpFormsModule,
     ErpNavbarModule,
+    ErpCommonModule,
     NgSelectModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.ERROR}),
     // jhipster-needle-angular-add-module JHipster will add new module here

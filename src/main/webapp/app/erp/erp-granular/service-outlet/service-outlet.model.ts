@@ -16,17 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import * as dayjs from 'dayjs';
-import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { IBankBranchCode } from '../bank-branch-code/bank-branch-code.model';
-import { IOutletType } from '../outlet-type/outlet-type.model';
-import { ICountyCode } from '../county-code/county-code.model';
-import { IOutletStatus } from '../outlet-status/outlet-status.model';
+import dayjs from 'dayjs/esm';
 
 export interface IServiceOutlet {
-  id?: number;
-  outletCode?: string;
-  outletName?: string;
+  id: number;
+  outletCode?: string | null;
+  outletName?: string | null;
   town?: string | null;
   parliamentaryConstituency?: string | null;
   gpsCoordinates?: string | null;
@@ -35,36 +30,12 @@ export interface IServiceOutlet {
   outletClosureDate?: dayjs.Dayjs | null;
   dateLastModified?: dayjs.Dayjs | null;
   licenseFeePayable?: number | null;
-  placeholders?: IPlaceholder[] | null;
-  bankCode?: IBankBranchCode | null;
-  outletType?: IOutletType | null;
-  outletStatus?: IOutletStatus | null;
-  countyName?: ICountyCode | null;
-  subCountyName?: ICountyCode | null;
+  placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  bankCode?: Pick<IBankBranchCode, 'id' | 'branchCode'> | null;
+  outletType?: Pick<IOutletType, 'id' | 'outletType'> | null;
+  outletStatus?: Pick<IOutletStatus, 'id' | 'branchStatusType'> | null;
+  countyName?: Pick<ICountyCode, 'id' | 'countyName'> | null;
+  subCountyName?: Pick<ICountyCode, 'id' | 'subCountyName'> | null;
 }
 
-export class ServiceOutlet implements IServiceOutlet {
-  constructor(
-    public id?: number,
-    public outletCode?: string,
-    public outletName?: string,
-    public town?: string | null,
-    public parliamentaryConstituency?: string | null,
-    public gpsCoordinates?: string | null,
-    public outletOpeningDate?: dayjs.Dayjs | null,
-    public regulatorApprovalDate?: dayjs.Dayjs | null,
-    public outletClosureDate?: dayjs.Dayjs | null,
-    public dateLastModified?: dayjs.Dayjs | null,
-    public licenseFeePayable?: number | null,
-    public placeholders?: IPlaceholder[] | null,
-    public bankCode?: IBankBranchCode | null,
-    public outletType?: IOutletType | null,
-    public outletStatus?: IOutletStatus | null,
-    public countyName?: ICountyCode | null,
-    public subCountyName?: ICountyCode | null
-  ) {}
-}
-
-export function getServiceOutletIdentifier(serviceOutlet: IServiceOutlet): number | undefined {
-  return serviceOutlet.id;
-}
+export type NewServiceOutlet = Omit<IServiceOutlet, 'id'> & { id: null };

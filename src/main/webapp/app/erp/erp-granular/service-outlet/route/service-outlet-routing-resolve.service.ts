@@ -22,18 +22,18 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IServiceOutlet, ServiceOutlet } from '../service-outlet.model';
+import { IServiceOutlet } from '../service-outlet.model';
 import { ServiceOutletService } from '../service/service-outlet.service';
 
 @Injectable({ providedIn: 'root' })
-export class ServiceOutletRoutingResolveService implements Resolve<IServiceOutlet> {
+export class ServiceOutletRoutingResolveService implements Resolve<IServiceOutlet | null> {
   constructor(protected service: ServiceOutletService, protected router: Router) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<IServiceOutlet> | Observable<never> {
+  resolve(route: ActivatedRouteSnapshot): Observable<IServiceOutlet | null | never> {
     const id = route.params['id'];
     if (id) {
       return this.service.find(id).pipe(
-        mergeMap((serviceOutlet: HttpResponse<ServiceOutlet>) => {
+        mergeMap((serviceOutlet: HttpResponse<IServiceOutlet>) => {
           if (serviceOutlet.body) {
             return of(serviceOutlet.body);
           } else {
@@ -43,6 +43,6 @@ export class ServiceOutletRoutingResolveService implements Resolve<IServiceOutle
         })
       );
     }
-    return of(new ServiceOutlet());
+    return of(null);
   }
 }
