@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="businessStamp">
       <h2 data-cy="businessStampDetailsHeading"><span>Business Stamp</span></h2>
@@ -52,13 +52,13 @@
         <dt><span>Stamp Holder</span></dt>
         <dd>
           <div *ngIf="businessStamp.stampHolder">
-            <a [routerLink]="['/erp/dealer', businessStamp.stampHolder?.id, 'view']">{{ businessStamp.stampHolder?.dealerName }}</a>
+            <a [routerLink]="['/dealer', businessStamp.stampHolder.id, 'view']">{{ businessStamp.stampHolder.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of businessStamp.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="settlementCurrency">
       <h2 data-cy="settlementCurrencyDetailsHeading"><span>Settlement Currency</span></h2>
@@ -45,6 +45,14 @@
         <dd>
           <span>{{ settlementCurrency.country }}</span>
         </dd>
+        <dt><span>Numeric Code</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.numericCode }}</span>
+        </dd>
+        <dt><span>Minor Unit</span></dt>
+        <dd>
+          <span>{{ settlementCurrency.minorUnit }}</span>
+        </dd>
         <dt><span>File Upload Token</span></dt>
         <dd>
           <span>{{ settlementCurrency.fileUploadToken }}</span>
@@ -56,7 +64,7 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of settlementCurrency.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

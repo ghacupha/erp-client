@@ -24,13 +24,14 @@ import { PaymentCategoryComponent } from '../list/payment-category.component';
 import { PaymentCategoryDetailComponent } from '../detail/payment-category-detail.component';
 import { PaymentCategoryUpdateComponent } from '../update/payment-category-update.component';
 import { PaymentCategoryRoutingResolveService } from './payment-category-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const paymentCategoryRoute: Routes = [
   {
     path: '',
     component: PaymentCategoryComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

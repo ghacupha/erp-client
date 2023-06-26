@@ -24,13 +24,14 @@ import { BusinessStampComponent } from '../list/business-stamp.component';
 import { BusinessStampDetailComponent } from '../detail/business-stamp-detail.component';
 import { BusinessStampUpdateComponent } from '../update/business-stamp-update.component';
 import { BusinessStampRoutingResolveService } from './business-stamp-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const businessStampRoute: Routes = [
   {
     path: '',
     component: BusinessStampComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },

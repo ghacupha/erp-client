@@ -16,45 +16,53 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ErpCommonModule } from '../../../../erp-common/erp-common.module';
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { PaymentCategoryFormService } from './payment-category-form.service';
 import { PaymentCategoryService } from '../service/payment-category.service';
-import { IPaymentCategory, PaymentCategory } from '../payment-category.model';
-import { IPaymentLabel } from '../../../../erp-pages/payment-label/payment-label.model';
-import { PaymentLabelService } from '../../../../erp-pages/payment-label/service/payment-label.service';
+import { IPaymentCategory } from '../payment-category.model';
 
 import { PaymentCategoryUpdateComponent } from './payment-category-update.component';
-import { PlaceholderService } from '../../../../erp-pages/placeholder/service/placeholder.service';
+import { PaymentLabelService } from '../../../../erp-pages/payment-label/service/payment-label.service';
 import { IPlaceholder } from '../../../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../../../erp-pages/payment-label/payment-label.model';
+import { PlaceholderService } from '../../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('PaymentCategory Management Update Component', () => {
   let comp: PaymentCategoryUpdateComponent;
   let fixture: ComponentFixture<PaymentCategoryUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let paymentCategoryFormService: PaymentCategoryFormService;
   let paymentCategoryService: PaymentCategoryService;
   let paymentLabelService: PaymentLabelService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ErpCommonModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [PaymentCategoryUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(PaymentCategoryUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(PaymentCategoryUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    paymentCategoryFormService = TestBed.inject(PaymentCategoryFormService);
     paymentCategoryService = TestBed.inject(PaymentCategoryService);
     paymentLabelService = TestBed.inject(PaymentLabelService);
     placeholderService = TestBed.inject(PlaceholderService);
@@ -80,7 +88,7 @@ describe('PaymentCategory Management Update Component', () => {
       expect(paymentLabelService.query).toHaveBeenCalled();
       expect(paymentLabelService.addPaymentLabelToCollectionIfMissing).toHaveBeenCalledWith(
         paymentLabelCollection,
-        ...additionalPaymentLabels
+        ...additionalPaymentLabels.map(expect.objectContaining)
       );
       expect(comp.paymentLabelsSharedCollection).toEqual(expectedCollection);
     });
@@ -100,31 +108,35 @@ describe('PaymentCategory Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const paymentCategory: IPaymentCategory = { id: 456 };
-      const paymentLabels: IPaymentLabel = { id: 6150 };
-      paymentCategory.paymentLabels = [paymentLabels];
-      const placeholders: IPlaceholder = { id: 45103 };
-      paymentCategory.placeholders = [placeholders];
+      const paymentLabel: IPaymentLabel = { id: 6150 };
+      paymentCategory.paymentLabels = [paymentLabel];
+      const placeholder: IPlaceholder = { id: 45103 };
+      paymentCategory.placeholders = [placeholder];
 
       activatedRoute.data = of({ paymentCategory });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(paymentCategory));
-      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabels);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.paymentLabelsSharedCollection).toContain(paymentLabel);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.paymentCategory).toEqual(paymentCategory);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PaymentCategory>>();
+      const saveSubject = new Subject<HttpResponse<IPaymentCategory>>();
       const paymentCategory = { id: 123 };
+      jest.spyOn(paymentCategoryFormService, 'getPaymentCategory').mockReturnValue(paymentCategory);
       jest.spyOn(paymentCategoryService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ paymentCategory });
@@ -137,18 +149,20 @@ describe('PaymentCategory Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(paymentCategoryFormService.getPaymentCategory).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(paymentCategoryService.update).toHaveBeenCalledWith(paymentCategory);
+      expect(paymentCategoryService.update).toHaveBeenCalledWith(expect.objectContaining(paymentCategory));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PaymentCategory>>();
-      const paymentCategory = new PaymentCategory();
+      const saveSubject = new Subject<HttpResponse<IPaymentCategory>>();
+      const paymentCategory = { id: 123 };
+      jest.spyOn(paymentCategoryFormService, 'getPaymentCategory').mockReturnValue({ id: null });
       jest.spyOn(paymentCategoryService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ paymentCategory });
+      activatedRoute.data = of({ paymentCategory: null });
       comp.ngOnInit();
 
       // WHEN
@@ -158,14 +172,15 @@ describe('PaymentCategory Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(paymentCategoryService.create).toHaveBeenCalledWith(paymentCategory);
+      expect(paymentCategoryFormService.getPaymentCategory).toHaveBeenCalled();
+      expect(paymentCategoryService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<PaymentCategory>>();
+      const saveSubject = new Subject<HttpResponse<IPaymentCategory>>();
       const paymentCategory = { id: 123 };
       jest.spyOn(paymentCategoryService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -178,80 +193,30 @@ describe('PaymentCategory Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(paymentCategoryService.update).toHaveBeenCalledWith(paymentCategory);
+      expect(paymentCategoryService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackPaymentLabelById', () => {
-      it('Should return tracked PaymentLabel primary key', () => {
+  describe('Compare relationships', () => {
+    describe('comparePaymentLabel', () => {
+      it('Should forward to paymentLabelService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPaymentLabelById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(paymentLabelService, 'comparePaymentLabel');
+        comp.comparePaymentLabel(entity, entity2);
+        expect(paymentLabelService.comparePaymentLabel).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedPaymentLabel', () => {
-      it('Should return option if no PaymentLabel is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPaymentLabel(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected PaymentLabel for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this PaymentLabel is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPaymentLabel(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
-      });
-    });
-
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

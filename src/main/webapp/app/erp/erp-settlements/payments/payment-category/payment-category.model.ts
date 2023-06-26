@@ -16,9 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+
 import { CategoryTypes } from '../../../erp-common/enumerations/category-types.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IPaymentLabel } from '../../../erp-pages/payment-label/payment-label.model';
 
 export interface IPaymentCategory {
   id: number;

@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="creditNote">
       <h2 data-cy="creditNoteDetailsHeading"><span>Credit Note</span></h2>
@@ -52,30 +52,38 @@
         <dt><span>Purchase Orders</span></dt>
         <dd>
           <span *ngFor="let purchaseOrders of creditNote.purchaseOrders; let last = last">
-            <a [routerLink]="['/purchase-order', purchaseOrders?.id, 'view']">{{ purchaseOrders.purchaseOrderNumber }}</a
+            <a [routerLink]="['/purchase-order', purchaseOrders.id, 'view']">{{ purchaseOrders.purchaseOrderNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Invoices</span></dt>
         <dd>
           <span *ngFor="let invoices of creditNote.invoices; let last = last">
-            <a [routerLink]="['/payment-invoice', invoices?.id, 'view']">{{ invoices.invoiceNumber }}</a
+            <a [routerLink]="['/payment-invoice', invoices.id, 'view']">{{ invoices.invoiceNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of creditNote.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of creditNote.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="creditNote.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', creditNote.settlementCurrency.id, 'view']">{{
+              creditNote.settlementCurrency.iso4217CurrencyCode
+            }}</a>
+          </div>
         </dd>
       </dl>
 

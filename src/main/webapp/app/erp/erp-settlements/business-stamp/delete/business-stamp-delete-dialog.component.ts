@@ -21,6 +21,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IBusinessStamp } from '../business-stamp.model';
 import { BusinessStampService } from '../service/business-stamp.service';
+import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
   templateUrl: './business-stamp-delete-dialog.component.html',
@@ -36,7 +37,7 @@ export class BusinessStampDeleteDialogComponent {
 
   confirmDelete(id: number): void {
     this.businessStampService.delete(id).subscribe(() => {
-      this.activeModal.close('deleted');
+      this.activeModal.close(ITEM_DELETED_EVENT);
     });
   }
 }

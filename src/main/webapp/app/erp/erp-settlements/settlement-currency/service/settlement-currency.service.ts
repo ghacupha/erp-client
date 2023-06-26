@@ -25,6 +25,7 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { ISettlementCurrency, NewSettlementCurrency } from '../settlement-currency.model';
+
 export type PartialUpdateSettlementCurrency = Partial<ISettlementCurrency> & Pick<ISettlementCurrency, 'id'>;
 
 export type EntityResponseType = HttpResponse<ISettlementCurrency>;

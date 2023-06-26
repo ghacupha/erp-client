@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="deliveryNote">
       <h2 data-cy="deliveryNoteDetailsHeading"><span>Delivery Note</span></h2>
@@ -60,41 +60,55 @@
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of deliveryNote.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Received By</span></dt>
         <dd>
           <div *ngIf="deliveryNote.receivedBy">
-            <a [routerLink]="['/erp/dealer', deliveryNote.receivedBy?.id, 'view']">{{ deliveryNote.receivedBy?.dealerName }}</a>
+            <a [routerLink]="['/dealer', deliveryNote.receivedBy.id, 'view']">{{ deliveryNote.receivedBy.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Delivery Stamps</span></dt>
         <dd>
           <span *ngFor="let deliveryStamps of deliveryNote.deliveryStamps; let last = last">
-            <a [routerLink]="['/business-stamp', deliveryStamps?.id, 'view']">{{ deliveryStamps.details }}</a
+            <a [routerLink]="['/business-stamp', deliveryStamps.id, 'view']">{{ deliveryStamps.details }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Purchase Order</span></dt>
         <dd>
           <div *ngIf="deliveryNote.purchaseOrder">
-            <a [routerLink]="['/purchase-order', deliveryNote.purchaseOrder?.id, 'view']">{{
-              deliveryNote.purchaseOrder?.purchaseOrderNumber
+            <a [routerLink]="['/purchase-order', deliveryNote.purchaseOrder.id, 'view']">{{
+              deliveryNote.purchaseOrder.purchaseOrderNumber
             }}</a>
           </div>
         </dd>
         <dt><span>Supplier</span></dt>
         <dd>
           <div *ngIf="deliveryNote.supplier">
-            <a [routerLink]="['/erp/dealer', deliveryNote.supplier?.id, 'view']">{{ deliveryNote.supplier?.dealerName }}</a>
+            <a [routerLink]="['/dealer', deliveryNote.supplier.id, 'view']">{{ deliveryNote.supplier.dealerName }}</a>
           </div>
         </dd>
         <dt><span>Signatories</span></dt>
         <dd>
           <span *ngFor="let signatories of deliveryNote.signatories; let last = last">
-            <a [routerLink]="['/erp/dealer', signatories?.id, 'view']">{{ signatories.dealerName }}</a
+            <a [routerLink]="['/dealer', signatories.id, 'view']">{{ signatories.dealerName }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Other Purchase Orders</span></dt>
+        <dd>
+          <span *ngFor="let otherPurchaseOrders of deliveryNote.otherPurchaseOrders; let last = last">
+            <a [routerLink]="['/purchase-order', otherPurchaseOrders.id, 'view']">{{ otherPurchaseOrders.purchaseOrderNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of deliveryNote.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument.id, 'view']">{{ businessDocument.documentTitle }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

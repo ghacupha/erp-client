@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-settlement-currency-heading" data-cy="SettlementCurrencyCreateUpdateHeading">Create or edit a Settlement Currency</h2>
@@ -25,20 +25,20 @@
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" [formControlName]="'id'" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_iso4217CurrencyCode">Iso 4217 Currency Code</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_iso4217CurrencyCode">Iso 4217 Currency Code</label>
           <input
             type="text"
             class="form-control"
             name="iso4217CurrencyCode"
             id="field_iso4217CurrencyCode"
             data-cy="iso4217CurrencyCode"
-            formControlName="iso4217CurrencyCode"
+            [formControlName]="'iso4217CurrencyCode'"
           />
           <div
             *ngIf="
@@ -58,15 +58,15 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_currencyName">Currency Name</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_currencyName">Currency Name</label>
           <input
             type="text"
             class="form-control"
             name="currencyName"
             id="field_currencyName"
             data-cy="currencyName"
-            formControlName="currencyName"
+            [formControlName]="'currencyName'"
           />
           <div
             *ngIf="editForm.get('currencyName')!.invalid && (editForm.get('currencyName')!.dirty || editForm.get('currencyName')!.touched)"
@@ -75,39 +75,56 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_country">Country</label>
-          <input type="text" class="form-control" name="country" id="field_country" data-cy="country" formControlName="country" />
+        <div class="row mb-3">
+          <label class="form-label" for="field_country">Country</label>
+          <input type="text" class="form-control" name="country" id="field_country" data-cy="country" [formControlName]="'country'" />
           <div *ngIf="editForm.get('country')!.invalid && (editForm.get('country')!.dirty || editForm.get('country')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('country')?.errors?.required"> This field is required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileUploadToken">File Upload Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_numericCode">Numeric Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="numericCode"
+            id="field_numericCode"
+            data-cy="numericCode"
+            [formControlName]="'numericCode'"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_minorUnit">Minor Unit</label>
+          <input type="text" class="form-control" name="minorUnit" id="field_minorUnit" data-cy="minorUnit" [formControlName]="'minorUnit'" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_fileUploadToken">File Upload Token</label>
           <input
             type="text"
             class="form-control"
             name="fileUploadToken"
             id="field_fileUploadToken"
             data-cy="fileUploadToken"
-            formControlName="fileUploadToken"
+            [formControlName]="'fileUploadToken'"
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationToken">Compilation Token</label>
+        <div class="row mb-3">
+          <label class="form-label" for="field_compilationToken">Compilation Token</label>
           <input
             type="text"
             class="form-control"
             name="compilationToken"
             id="field_compilationToken"
             data-cy="compilationToken"
-            formControlName="compilationToken"
+            [formControlName]="'compilationToken'"
           />
         </div>
 
-        <div class="form-group">
+        <div class="row mb-3">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -115,12 +132,10 @@
             data-cy="placeholder"
             multiple
             name="placeholders"
-            formControlName="placeholders"
+            [formControlName]="'placeholders'"
+            [compareWith]="comparePlaceholder"
           >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
+            <option [ngValue]="placeholderOption" *ngFor="let placeholderOption of placeholdersSharedCollection">
               {{ placeholderOption.description }}
             </option>
           </select>

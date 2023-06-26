@@ -17,7 +17,7 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
+<div class="d-flex justify-content-center">
   <div class="col-8">
     <div *ngIf="paymentCategory">
       <h2 data-cy="paymentCategoryDetailsHeading"><span>Payment Category</span></h2>
@@ -56,14 +56,14 @@
         <dt><span>Payment Label</span></dt>
         <dd>
           <span *ngFor="let paymentLabel of paymentCategory.paymentLabels; let last = last">
-            <a [routerLink]="['/payment-label', paymentLabel?.id, 'view']">{{ paymentLabel.description }}</a
+            <a [routerLink]="['/payment-label', paymentLabel.id, 'view']">{{ paymentLabel.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of paymentCategory.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            <a [routerLink]="['/placeholder', placeholder.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>

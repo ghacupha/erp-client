@@ -24,13 +24,14 @@ import { SettlementCurrencyComponent } from '../list/settlement-currency.compone
 import { SettlementCurrencyDetailComponent } from '../detail/settlement-currency-detail.component';
 import { SettlementCurrencyUpdateComponent } from '../update/settlement-currency-update.component';
 import { SettlementCurrencyRoutingResolveService } from './settlement-currency-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const settlementCurrencyRoute: Routes = [
   {
     path: '',
     component: SettlementCurrencyComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },
