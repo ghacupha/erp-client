@@ -16,52 +16,64 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
-
-jest.mock('@angular/router');
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { of, Subject } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, Subject, from } from 'rxjs';
 
+import { AgencyNoticeFormService } from './agency-notice-form.service';
 import { AgencyNoticeService } from '../service/agency-notice.service';
-import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
+import { IAgencyNotice } from '../agency-notice.model';
 
 import { AgencyNoticeUpdateComponent } from './agency-notice-update.component';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 describe('AgencyNotice Management Update Component', () => {
   let comp: AgencyNoticeUpdateComponent;
   let fixture: ComponentFixture<AgencyNoticeUpdateComponent>;
   let activatedRoute: ActivatedRoute;
+  let agencyNoticeFormService: AgencyNoticeFormService;
   let agencyNoticeService: AgencyNoticeService;
   let dealerService: DealerService;
   let settlementCurrencyService: SettlementCurrencyService;
   let placeholderService: PlaceholderService;
+  let businessDocumentService: BusinessDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ErpCommonModule, HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [AgencyNoticeUpdateComponent],
-      providers: [FormBuilder, ActivatedRoute],
+      providers: [
+        FormBuilder,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     })
       .overrideTemplate(AgencyNoticeUpdateComponent, '')
       .compileComponents();
 
     fixture = TestBed.createComponent(AgencyNoticeUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
+    agencyNoticeFormService = TestBed.inject(AgencyNoticeFormService);
     agencyNoticeService = TestBed.inject(AgencyNoticeService);
     dealerService = TestBed.inject(DealerService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     placeholderService = TestBed.inject(PlaceholderService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
 
     comp = fixture.componentInstance;
   });
@@ -84,7 +96,10 @@ describe('AgencyNotice Management Update Component', () => {
       comp.ngOnInit();
 
       expect(dealerService.query).toHaveBeenCalled();
-      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(dealerCollection, ...additionalDealers);
+      expect(dealerService.addDealerToCollectionIfMissing).toHaveBeenCalledWith(
+        dealerCollection,
+        ...additionalDealers.map(expect.objectContaining)
+      );
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
@@ -105,7 +120,7 @@ describe('AgencyNotice Management Update Component', () => {
       expect(settlementCurrencyService.query).toHaveBeenCalled();
       expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
         settlementCurrencyCollection,
-        ...additionalSettlementCurrencies
+        ...additionalSettlementCurrencies.map(expect.objectContaining)
       );
       expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
     });
@@ -125,8 +140,33 @@ describe('AgencyNotice Management Update Component', () => {
       comp.ngOnInit();
 
       expect(placeholderService.query).toHaveBeenCalled();
-      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(
+        placeholderCollection,
+        ...additionalPlaceholders.map(expect.objectContaining)
+      );
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call BusinessDocument query and add missing value', () => {
+      const agencyNotice: IAgencyNotice = { id: 456 };
+      const businessDocuments: IBusinessDocument[] = [{ id: 39711 }];
+      agencyNotice.businessDocuments = businessDocuments;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 62146 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [...businessDocuments];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ agencyNotice });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments.map(expect.objectContaining)
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
@@ -137,25 +177,29 @@ describe('AgencyNotice Management Update Component', () => {
       agencyNotice.assessor = assessor;
       const settlementCurrency: ISettlementCurrency = { id: 13286 };
       agencyNotice.settlementCurrency = settlementCurrency;
-      const placeholders: IPlaceholder = { id: 23210 };
-      agencyNotice.placeholders = [placeholders];
+      const placeholder: IPlaceholder = { id: 23210 };
+      agencyNotice.placeholders = [placeholder];
+      const businessDocument: IBusinessDocument = { id: 22693 };
+      agencyNotice.businessDocuments = [businessDocument];
 
       activatedRoute.data = of({ agencyNotice });
       comp.ngOnInit();
 
-      expect(comp.editForm.value).toEqual(expect.objectContaining(agencyNotice));
       expect(comp.dealersSharedCollection).toContain(correspondents);
       expect(comp.dealersSharedCollection).toContain(assessor);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
+      expect(comp.agencyNotice).toEqual(agencyNotice);
     });
   });
 
   describe('save', () => {
     it('Should call update service on save for existing entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AgencyNotice>>();
+      const saveSubject = new Subject<HttpResponse<IAgencyNotice>>();
       const agencyNotice = { id: 123 };
+      jest.spyOn(agencyNoticeFormService, 'getAgencyNotice').mockReturnValue(agencyNotice);
       jest.spyOn(agencyNoticeService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
       activatedRoute.data = of({ agencyNotice });
@@ -168,18 +212,20 @@ describe('AgencyNotice Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
+      expect(agencyNoticeFormService.getAgencyNotice).toHaveBeenCalled();
       expect(comp.previousState).toHaveBeenCalled();
-      expect(agencyNoticeService.update).toHaveBeenCalledWith(agencyNotice);
+      expect(agencyNoticeService.update).toHaveBeenCalledWith(expect.objectContaining(agencyNotice));
       expect(comp.isSaving).toEqual(false);
     });
 
     it('Should call create service on save for new entity', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AgencyNotice>>();
-      const agencyNotice = new AgencyNotice();
+      const saveSubject = new Subject<HttpResponse<IAgencyNotice>>();
+      const agencyNotice = { id: 123 };
+      jest.spyOn(agencyNoticeFormService, 'getAgencyNotice').mockReturnValue({ id: null });
       jest.spyOn(agencyNoticeService, 'create').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
-      activatedRoute.data = of({ agencyNotice });
+      activatedRoute.data = of({ agencyNotice: null });
       comp.ngOnInit();
 
       // WHEN
@@ -189,14 +235,15 @@ describe('AgencyNotice Management Update Component', () => {
       saveSubject.complete();
 
       // THEN
-      expect(agencyNoticeService.create).toHaveBeenCalledWith(agencyNotice);
+      expect(agencyNoticeFormService.getAgencyNotice).toHaveBeenCalled();
+      expect(agencyNoticeService.create).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
 
     it('Should set isSaving to false on error', () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<AgencyNotice>>();
+      const saveSubject = new Subject<HttpResponse<IAgencyNotice>>();
       const agencyNotice = { id: 123 };
       jest.spyOn(agencyNoticeService, 'update').mockReturnValue(saveSubject);
       jest.spyOn(comp, 'previousState');
@@ -209,88 +256,50 @@ describe('AgencyNotice Management Update Component', () => {
       saveSubject.error('This is an error!');
 
       // THEN
-      expect(agencyNoticeService.update).toHaveBeenCalledWith(agencyNotice);
+      expect(agencyNoticeService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
     });
   });
 
-  describe('Tracking relationships identifiers', () => {
-    describe('trackDealerById', () => {
-      it('Should return tracked Dealer primary key', () => {
+  describe('Compare relationships', () => {
+    describe('compareDealer', () => {
+      it('Should forward to dealerService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackDealerById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(dealerService, 'compareDealer');
+        comp.compareDealer(entity, entity2);
+        expect(dealerService.compareDealer).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackSettlementCurrencyById', () => {
-      it('Should return tracked SettlementCurrency primary key', () => {
+    describe('compareSettlementCurrency', () => {
+      it('Should forward to settlementCurrencyService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackSettlementCurrencyById(0, entity);
-        expect(trackResult).toEqual(entity.id);
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementCurrencyService, 'compareSettlementCurrency');
+        comp.compareSettlementCurrency(entity, entity2);
+        expect(settlementCurrencyService.compareSettlementCurrency).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('trackPlaceholderById', () => {
-      it('Should return tracked Placeholder primary key', () => {
+    describe('comparePlaceholder', () => {
+      it('Should forward to placeholderService', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackPlaceholderById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
-    });
-  });
-
-  describe('Getting selected relationships', () => {
-    describe('getSelectedDealer', () => {
-      it('Should return option if no Dealer is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedDealer(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Dealer for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Dealer is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedDealer(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+        const entity2 = { id: 456 };
+        jest.spyOn(placeholderService, 'comparePlaceholder');
+        comp.comparePlaceholder(entity, entity2);
+        expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
       });
     });
 
-    describe('getSelectedPlaceholder', () => {
-      it('Should return option if no Placeholder is selected', () => {
-        const option = { id: 123 };
-        const result = comp.getSelectedPlaceholder(option);
-        expect(result === option).toEqual(true);
-      });
-
-      it('Should return selected Placeholder for according option', () => {
-        const option = { id: 123 };
-        const selected = { id: 123 };
-        const selected2 = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
-        expect(result === selected).toEqual(true);
-        expect(result === selected2).toEqual(false);
-        expect(result === option).toEqual(false);
-      });
-
-      it('Should return option if this Placeholder is not selected', () => {
-        const option = { id: 123 };
-        const selected = { id: 456 };
-        const result = comp.getSelectedPlaceholder(option, [selected]);
-        expect(result === option).toEqual(true);
-        expect(result === selected).toEqual(false);
+    describe('compareBusinessDocument', () => {
+      it('Should forward to businessDocumentService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(businessDocumentService, 'compareBusinessDocument');
+        comp.compareBusinessDocument(entity, entity2);
+        expect(businessDocumentService.compareBusinessDocument).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

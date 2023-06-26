@@ -18,31 +18,25 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
-import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
+import { AgencyNoticeFormService, AgencyNoticeFormGroup } from './agency-notice-form.service';
+import { IAgencyNotice } from '../agency-notice.model';
 import { AgencyNoticeService } from '../service/agency-notice.service';
-import { CategorySuggestionService } from '../../../erp-common/suggestion/category-suggestion.service';
-import { LabelSuggestionService } from '../../../erp-common/suggestion/label-suggestion.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { SettlementSuggestionService } from '../../../erp-common/suggestion/settlement-suggestion.service';
-import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
-import { DealerSuggestionService } from '../../../erp-common/suggestion/dealer-suggestion.service';
-import { PaymentInvoiceSuggestionService } from '../../../erp-common/suggestion/payment-invoice-suggestion.service';
-import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
-import { DataUtils, FileLoadError } from '../../../../core/util/data-util.service';
-import { EventManager, EventWithContent } from '../../../../core/util/event-manager.service';
-import { AlertError } from '../../../../shared/alert/alert-error.model';
-import { AgencyStatusType } from 'app/erp/erp-common/enumerations/agency-status-type.model';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { IDealer } from 'app/erp/erp-pages/dealers/dealer/dealer.model';
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { AgencyStatusType } from '../../../erp-common/enumerations/agency-status-type.model';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 @Component({
   selector: 'jhi-agency-notice-update',
@@ -50,74 +44,47 @@ import { SettlementCurrencyService } from '../../../erp-settlements/settlement-c
 })
 export class AgencyNoticeUpdateComponent implements OnInit {
   isSaving = false;
+  agencyNotice: IAgencyNotice | null = null;
   agencyStatusTypeValues = Object.keys(AgencyStatusType);
 
   dealersSharedCollection: IDealer[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
-  editForm = this.fb.group({
-    id: [],
-    referenceNumber: [null, [Validators.required]],
-    referenceDate: [],
-    assessmentAmount: [null, [Validators.required]],
-    agencyStatus: [null, [Validators.required]],
-    assessmentNotice: [],
-    assessmentNoticeContentType: [],
-    correspondents: [],
-    settlementCurrency: [],
-    assessor: [],
-    placeholders: [],
-  });
-
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  correspondentsLoading = false;
-  correspondentControlInput$ = new Subject<string>();
-  correspondentLookups$: Observable<IDealer[]> = of([]);
-
-  settlementCurrenciesLoading = false;
-  settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
-
-  assessorsLoading = false;
-  assessorInput$ = new Subject<string>();
-  assessorLookup$: Observable<IDealer[]> = of([]);
+  editForm: AgencyNoticeFormGroup = this.agencyNoticeFormService.createAgencyNoticeFormGroup();
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected agencyNoticeService: AgencyNoticeService,
+    protected agencyNoticeFormService: AgencyNoticeFormService,
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
-    protected activatedRoute: ActivatedRoute,
-    protected categorySuggestionService: CategorySuggestionService,
-    protected labelSuggestionService: LabelSuggestionService,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
-    protected settlementSuggestionService: SettlementSuggestionService,
-    protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
-    protected dealerSuggestionService: DealerSuggestionService,
-    protected paymentInvoiceSuggestionService: PaymentInvoiceSuggestionService,
-    protected fb: FormBuilder
+    protected businessDocumentService: BusinessDocumentService,
+    protected activatedRoute: ActivatedRoute
   ) {}
+
+  compareDealer = (o1: IDealer | null, o2: IDealer | null): boolean => this.dealerService.compareDealer(o1, o2);
+
+  compareSettlementCurrency = (o1: ISettlementCurrency | null, o2: ISettlementCurrency | null): boolean =>
+    this.settlementCurrencyService.compareSettlementCurrency(o1, o2);
+
+  comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
+
+  compareBusinessDocument = (o1: IBusinessDocument | null, o2: IBusinessDocument | null): boolean =>
+    this.businessDocumentService.compareBusinessDocument(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ agencyNotice }) => {
-      this.updateForm(agencyNotice);
+      this.agencyNotice = agencyNotice;
+      if (agencyNotice) {
+        this.updateForm(agencyNotice);
+      }
 
       this.loadRelationshipsOptions();
     });
-
-    // fire-up typeahead items
-    this.loadPlaceholders();
-    this.loadCurrencies();
-    this.loadAssessors();
-    this.loadCorrespondents();
   }
 
   byteSize(base64String: string): string {
@@ -135,155 +102,25 @@ export class AgencyNoticeUpdateComponent implements OnInit {
     });
   }
 
-  loadAssessors(): void {
-    this.assessorLookup$ = concat(
-      of([]), // default items
-      this.assessorInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.assessorsLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.assessorsLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
-  }
-
-  loadCurrencies(): void {
-    this.settlementCurrencyLookups$ = concat(
-      of([]), // default items
-      this.settlementCurrencyControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.settlementCurrenciesLoading = true),
-        switchMap(term => this.settlementCurrencySuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.settlementCurrenciesLoading = false)
-        ))
-      ),
-      of([...this.settlementCurrenciesSharedCollection])
-    );
-  }
-
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
-  loadCorrespondents(): void {
-    this.correspondentLookups$ = concat(
-      of([]), // default items
-      this.correspondentControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.correspondentsLoading = true),
-        switchMap(term => this.dealerSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.correspondentsLoading = false)
-        ))
-      ),
-      of([...this.dealersSharedCollection])
-    );
-  }
-
-  trackPlaceholdersByFn(item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  trackPaymentInvoiceByFn(item: IPaymentInvoice): number {
-    return item.id!;
-  }
-
-  trackAssessorByFn(item: IDealer): number {
-    return item.id!;
-  }
-
-  trackCorrespondentByFn(item: IDealer): number {
-    return item.id!;
-  }
-
-  trackCurrencyByFn(item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
   previousState(): void {
     window.history.back();
   }
 
   save(): void {
     this.isSaving = true;
-    const agencyNotice = this.createFromForm();
-    if (agencyNotice.id !== undefined) {
+    const agencyNotice = this.agencyNoticeFormService.getAgencyNotice(this.editForm);
+    if (agencyNotice.id !== null) {
       this.subscribeToSaveResponse(this.agencyNoticeService.update(agencyNotice));
     } else {
       this.subscribeToSaveResponse(this.agencyNoticeService.create(agencyNotice));
     }
   }
 
-  trackDealerById(index: number, item: IDealer): number {
-    return item.id!;
-  }
-
-  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
-    return item.id!;
-  }
-
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
-  }
-
-  getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
-  }
-
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAgencyNotice>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
   }
 
   protected onSaveSuccess(): void {
@@ -299,33 +136,26 @@ export class AgencyNoticeUpdateComponent implements OnInit {
   }
 
   protected updateForm(agencyNotice: IAgencyNotice): void {
-    this.editForm.patchValue({
-      id: agencyNotice.id,
-      referenceNumber: agencyNotice.referenceNumber,
-      referenceDate: agencyNotice.referenceDate,
-      /* taxCode: agencyNotice.taxCode, */
-      assessmentAmount: agencyNotice.assessmentAmount,
-      agencyStatus: agencyNotice.agencyStatus,
-      assessmentNotice: agencyNotice.assessmentNotice,
-      assessmentNoticeContentType: agencyNotice.assessmentNoticeContentType,
-      correspondents: agencyNotice.correspondents,
-      settlementCurrency: agencyNotice.settlementCurrency,
-      assessor: agencyNotice.assessor,
-      placeholders: agencyNotice.placeholders,
-    });
+    this.agencyNotice = agencyNotice;
+    this.agencyNoticeFormService.resetForm(this.editForm, agencyNotice);
 
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing<IDealer>(
       this.dealersSharedCollection,
       ...(agencyNotice.correspondents ?? []),
       agencyNotice.assessor
     );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      agencyNotice.settlementCurrency
-    );
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    this.settlementCurrenciesSharedCollection =
+      this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
+        this.settlementCurrenciesSharedCollection,
+        agencyNotice.settlementCurrency
+      );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(agencyNotice.placeholders ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+      this.businessDocumentsSharedCollection,
+      ...(agencyNotice.businessDocuments ?? [])
     );
   }
 
@@ -335,10 +165,10 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(
         map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
+          this.dealerService.addDealerToCollectionIfMissing<IDealer>(
             dealers,
-            ...(this.editForm.get('correspondents')!.value ?? []),
-            this.editForm.get('assessor')!.value
+            ...(this.agencyNotice?.correspondents ?? []),
+            this.agencyNotice?.assessor
           )
         )
       )
@@ -349,9 +179,9 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
       .pipe(
         map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing<ISettlementCurrency>(
             settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
+            this.agencyNotice?.settlementCurrency
           )
         )
       )
@@ -362,26 +192,25 @@ export class AgencyNoticeUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
       .pipe(
         map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+          this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
+            placeholders,
+            ...(this.agencyNotice?.placeholders ?? [])
+          )
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-  }
 
-  protected createFromForm(): IAgencyNotice {
-    return {
-      ...new AgencyNotice(),
-      id: this.editForm.get(['id'])!.value,
-      referenceNumber: this.editForm.get(['referenceNumber'])!.value,
-      referenceDate: this.editForm.get(['referenceDate'])!.value,
-      assessmentAmount: this.editForm.get(['assessmentAmount'])!.value,
-      agencyStatus: this.editForm.get(['agencyStatus'])!.value,
-      assessmentNoticeContentType: this.editForm.get(['assessmentNoticeContentType'])!.value,
-      assessmentNotice: this.editForm.get(['assessmentNotice'])!.value,
-      correspondents: this.editForm.get(['correspondents'])!.value,
-      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
-      assessor: this.editForm.get(['assessor'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
-    };
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing<IBusinessDocument>(
+            businessDocuments,
+            ...(this.agencyNotice?.businessDocuments ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 }

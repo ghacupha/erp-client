@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IAgencyNotice } from '../agency-notice.model';
-import { DataUtils } from '../../../../core/util/data-util.service';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-agency-notice-detail',

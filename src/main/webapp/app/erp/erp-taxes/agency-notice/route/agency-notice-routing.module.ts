@@ -24,13 +24,14 @@ import { AgencyNoticeComponent } from '../list/agency-notice.component';
 import { AgencyNoticeDetailComponent } from '../detail/agency-notice-detail.component';
 import { AgencyNoticeUpdateComponent } from '../update/agency-notice-update.component';
 import { AgencyNoticeRoutingResolveService } from './agency-notice-routing-resolve.service';
+import { ASC } from 'app/config/navigation.constants';
 
 const agencyNoticeRoute: Routes = [
   {
     path: '',
     component: AgencyNoticeComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,' + ASC,
     },
     canActivate: [UserRouteAccessService],
   },
