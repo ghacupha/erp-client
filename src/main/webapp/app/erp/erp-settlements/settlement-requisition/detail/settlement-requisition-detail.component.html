@@ -144,6 +144,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Settlement</span></dt>
+        <dd>
+          <span *ngFor="let settlement of settlementRequisition.settlements; let last = last">
+            <a [routerLink]="['/settlement', settlement.id, 'view']">{{ settlement.paymentNumber }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

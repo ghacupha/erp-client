@@ -75,35 +75,6 @@ export class SettlementRequisitionComponent implements OnInit {
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
   }
 
-  // indexList(page?: number, dontNavigate?: boolean): void {
-  //   this.isLoading = true;
-  //   const pageToLoad: number = page ?? this.page ?? 1;
-  //
-  //   this.settlementRequisitionService.indexAll({
-  //     page: pageToLoad - 1,
-  //     size: this.itemsPerPage,
-  //     sort: this.getSortQueryParam(),
-  //   }).subscribe((res: HttpResponse<ISettlementRequisition[]>) => {
-  //       this.isLoading = false;
-  //       this.onResponseSuccess(res);
-  //     }
-  //   );
-  //
-  //   this.settlementRequisitionService
-  //     .query({
-  //       page: pageToLoad - 1,
-  //       size: this.itemsPerPage,
-  //       sort: this.getSortQueryParam(),
-  //     })
-  //     .subscribe(
-  //       {
-  //         next: (res: EntityArrayResponseType) => {
-  //           this.isLoading = false;
-  //           this.onResponseSuccess(res);
-  //         }
-  //       });
-  // }
-
   delete(settlementRequisition: ISettlementRequisition): void {
     const modalRef = this.modalService.open(SettlementRequisitionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.settlementRequisition = settlementRequisition;

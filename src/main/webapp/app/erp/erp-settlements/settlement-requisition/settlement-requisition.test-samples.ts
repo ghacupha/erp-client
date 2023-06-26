@@ -17,9 +17,9 @@
 ///
 
 import dayjs from 'dayjs/esm';
-
 import { ISettlementRequisition, NewSettlementRequisition } from './settlement-requisition.model';
 import { PaymentStatus } from '../../erp-common/enumerations/payment-status.model';
+
 
 export const sampleWithRequiredData: ISettlementRequisition = {
   id: 65430,

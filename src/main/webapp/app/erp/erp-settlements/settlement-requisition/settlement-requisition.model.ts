@@ -26,6 +26,7 @@ import { IDeliveryNote } from '../delivery-note/delivery-note.model';
 import { IPaymentInvoice } from '../payment-invoice/payment-invoice.model';
 import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ISettlement } from '../settlement/settlement.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 export interface ISettlementRequisition {
@@ -48,6 +49,7 @@ export interface ISettlementRequisition {
   businessDocuments?: Pick<IBusinessDocument, 'id' | 'documentTitle'>[] | null;
   applicationMappings?: Pick<IUniversallyUniqueMapping, 'id' | 'universalKey'>[] | null;
   placeholders?: Pick<IPlaceholder, 'id' | 'description'>[] | null;
+  settlements?: Pick<ISettlement, 'id' | 'paymentNumber'>[] | null;
 }
 
 export type NewSettlementRequisition = Omit<ISettlementRequisition, 'id'> & { id: null };

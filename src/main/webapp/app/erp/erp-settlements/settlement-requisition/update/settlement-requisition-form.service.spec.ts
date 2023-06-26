@@ -17,9 +17,7 @@
 ///
 
 import { TestBed } from '@angular/core/testing';
-
 import { sampleWithRequiredData, sampleWithNewData } from '../settlement-requisition.test-samples';
-
 import { SettlementRequisitionFormService } from './settlement-requisition-form.service';
 
 describe('SettlementRequisition Form Service', () => {
@@ -56,6 +54,7 @@ describe('SettlementRequisition Form Service', () => {
             businessDocuments: expect.any(Object),
             applicationMappings: expect.any(Object),
             placeholders: expect.any(Object),
+            settlements: expect.any(Object),
           })
         );
       });
@@ -84,6 +83,7 @@ describe('SettlementRequisition Form Service', () => {
             businessDocuments: expect.any(Object),
             applicationMappings: expect.any(Object),
             placeholders: expect.any(Object),
+            settlements: expect.any(Object),
           })
         );
       });

@@ -29,13 +29,14 @@ import { SettlementRequisitionService } from '../service/settlement-requisition.
 import { ISettlementRequisition } from '../settlement-requisition.model';
 
 import { SettlementRequisitionUpdateComponent } from './settlement-requisition-update.component';
+import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
 import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
 import { IJobSheet } from '../../job-sheet/job-sheet.model';
+import { SettlementService } from '../../settlement/service/settlement.service';
 import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
 import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
-import { SettlementCurrencyService } from '../../settlement-currency/service/settlement-currency.service';
 import { PaymentInvoiceService } from '../../payment-invoice/service/payment-invoice.service';
 import { JobSheetService } from '../../job-sheet/service/job-sheet.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
@@ -47,6 +48,7 @@ import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ISettlement } from '../../settlement/settlement.model';
 
 describe('SettlementRequisition Management Update Component', () => {
   let comp: SettlementRequisitionUpdateComponent;
@@ -63,6 +65,7 @@ describe('SettlementRequisition Management Update Component', () => {
   let businessDocumentService: BusinessDocumentService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
   let placeholderService: PlaceholderService;
+  let settlementService: SettlementService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -94,6 +97,7 @@ describe('SettlementRequisition Management Update Component', () => {
     businessDocumentService = TestBed.inject(BusinessDocumentService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
     placeholderService = TestBed.inject(PlaceholderService);
+    settlementService = TestBed.inject(SettlementService);
 
     comp = fixture.componentInstance;
   });
@@ -308,6 +312,28 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call Settlement query and add missing value', () => {
+      const settlementRequisition: ISettlementRequisition = { id: 456 };
+      const settlements: ISettlement[] = [{ id: 35776 }];
+      settlementRequisition.settlements = settlements;
+
+      const settlementCollection: ISettlement[] = [{ id: 60099 }];
+      jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
+      const additionalSettlements = [...settlements];
+      const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
+      jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ settlementRequisition });
+      comp.ngOnInit();
+
+      expect(settlementService.query).toHaveBeenCalled();
+      expect(settlementService.addSettlementToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCollection,
+        ...additionalSettlements.map(expect.objectContaining)
+      );
+      expect(comp.settlementsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const settlementRequisition: ISettlementRequisition = { id: 456 };
       const settlementCurrency: ISettlementCurrency = { id: 18727 };
@@ -334,6 +360,8 @@ describe('SettlementRequisition Management Update Component', () => {
       settlementRequisition.applicationMappings = [applicationMapping];
       const placeholder: IPlaceholder = { id: 9021 };
       settlementRequisition.placeholders = [placeholder];
+      const settlement: ISettlement = { id: 89183 };
+      settlementRequisition.settlements = [settlement];
 
       activatedRoute.data = of({ settlementRequisition });
       comp.ngOnInit();
@@ -350,6 +378,7 @@ describe('SettlementRequisition Management Update Component', () => {
       expect(comp.businessDocumentsSharedCollection).toContain(businessDocument);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(applicationMapping);
       expect(comp.placeholdersSharedCollection).toContain(placeholder);
+      expect(comp.settlementsSharedCollection).toContain(settlement);
       expect(comp.settlementRequisition).toEqual(settlementRequisition);
     });
   });
@@ -510,6 +539,16 @@ describe('SettlementRequisition Management Update Component', () => {
         jest.spyOn(placeholderService, 'comparePlaceholder');
         comp.comparePlaceholder(entity, entity2);
         expect(placeholderService.comparePlaceholder).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareSettlement', () => {
+      it('Should forward to settlementService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(settlementService, 'compareSettlement');
+        comp.compareSettlement(entity, entity2);
+        expect(settlementService.compareSettlement).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

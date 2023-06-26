@@ -56,6 +56,7 @@ type SettlementRequisitionFormDefaults = Pick<
   | 'businessDocuments'
   | 'applicationMappings'
   | 'placeholders'
+  | 'settlements'
 >;
 
 type SettlementRequisitionFormGroupContent = {
@@ -78,6 +79,7 @@ type SettlementRequisitionFormGroupContent = {
   businessDocuments: FormControl<SettlementRequisitionFormRawValue['businessDocuments']>;
   applicationMappings: FormControl<SettlementRequisitionFormRawValue['applicationMappings']>;
   placeholders: FormControl<SettlementRequisitionFormRawValue['placeholders']>;
+  settlements: FormControl<SettlementRequisitionFormRawValue['settlements']>;
 };
 
 export type SettlementRequisitionFormGroup = FormGroup<SettlementRequisitionFormGroupContent>;
@@ -137,6 +139,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: new FormControl(settlementRequisitionRawValue.businessDocuments ?? []),
       applicationMappings: new FormControl(settlementRequisitionRawValue.applicationMappings ?? []),
       placeholders: new FormControl(settlementRequisitionRawValue.placeholders ?? []),
+      settlements: new FormControl(settlementRequisitionRawValue.settlements ?? []),
     });
   }
 
@@ -172,6 +175,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: [],
       applicationMappings: [],
       placeholders: [],
+      settlements: [],
     };
   }
 
@@ -199,6 +203,7 @@ export class SettlementRequisitionFormService {
       businessDocuments: settlementRequisition.businessDocuments ?? [],
       applicationMappings: settlementRequisition.applicationMappings ?? [],
       placeholders: settlementRequisition.placeholders ?? [],
+      settlements: settlementRequisition.settlements ?? [],
     };
   }
 }

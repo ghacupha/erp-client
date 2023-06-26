@@ -27,6 +27,7 @@ import { ISettlementRequisition } from '../settlement-requisition.model';
 import { SettlementRequisitionService } from '../service/settlement-requisition.service';
 import { ISettlementCurrency } from '../../settlement-currency/settlement-currency.model';
 import { IJobSheet } from '../../job-sheet/job-sheet.model';
+import { SettlementService } from '../../settlement/service/settlement.service';
 import { IDeliveryNote } from '../../delivery-note/delivery-note.model';
 import { IPaymentInvoice } from '../../payment-invoice/payment-invoice.model';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
@@ -43,13 +44,8 @@ import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { PaymentStatus } from '../../../erp-common/enumerations/payment-status.model';
-import { v4 as uuidv4 } from 'uuid';
-import { SearchWithPagination } from '../../../../core/request/request.model';
 import { ISettlement } from '../../settlement/settlement.model';
-import { SettlementService } from '../../settlement/service/settlement.service';
-import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from '../../../../config/input.constants';
+import { PaymentStatus } from '../../../erp-common/enumerations/payment-status.model';
 
 @Component({
   selector: 'jhi-settlement-requisition-update',
@@ -59,7 +55,6 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   isSaving = false;
   settlementRequisition: ISettlementRequisition | null = null;
   paymentStatusValues = Object.keys(PaymentStatus);
-  tod = dayjs();
 
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
@@ -70,6 +65,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  settlementsSharedCollection: ISettlement[] = [];
 
   editForm: SettlementRequisitionFormGroup = this.settlementRequisitionFormService.createSettlementRequisitionFormGroup();
 
@@ -85,6 +81,7 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected placeholderService: PlaceholderService,
+    protected settlementService: SettlementService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
@@ -112,142 +109,16 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
 
   comparePlaceholder = (o1: IPlaceholder | null, o2: IPlaceholder | null): boolean => this.placeholderService.comparePlaceholder(o1, o2);
 
+  compareSettlement = (o1: ISettlement | null, o2: ISettlement | null): boolean => this.settlementService.compareSettlement(o1, o2);
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlementRequisition }) => {
       this.settlementRequisition = settlementRequisition;
-
-
-      if (settlementRequisition.id === undefined) {
-        // settlementRequisition.timeOfRequisition = dayjs();
-        settlementRequisition.paymentStatus = PaymentStatus.IN_PROCESS;
-
-        const reqSerial = uuidv4();
-        this.editForm.patchValue({
-          serialNumber: reqSerial,
-          requisitionNumber: reqSerial.substring(0,8),
-          timeOfRequisition: this.tod.format(DATE_TIME_FORMAT)
-        })
-
-        // TODO REVIEW EDIT ROUTE
-        if (settlementRequisition) {
-          this.updateForm(settlementRequisition);
-        }
-
-        if (settlementRequisition.id !== undefined) {
-          this.copyForm(settlementRequisition);
-        }
+      if (settlementRequisition) {
+        this.updateForm(settlementRequisition);
       }
 
       this.loadRelationshipsOptions();
-    });
-
-    this.updatePreferredSignatories();
-    this.updatePreferredCurrency();
-  }
-
-  updatePreferredSignatories(): void {
-    if (this.editForm.get(['id'])?.value === undefined ) {
-      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementRequisitionUpdateSignatoryName")
-        .subscribe((mapped) => {
-          this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
-            .subscribe(({ body: vals }) => {
-              if (vals) {
-                this.editForm.get(['signatures'])?.setValue(vals)
-              }
-            });
-        });
-    }
-  }
-
-  updatePreferredCurrency(): void {
-    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementIso4217CurrencyCode")
-      .subscribe(mapped => {
-          this.settlementCurrencyService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-            .subscribe(({ body: currencies }) => {
-              if (currencies) {
-                this.editForm.get(['settlementCurrency'])?.setValue(currencies[0]);
-              }
-            });
-        }
-      );
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  updateBusinessDocument(update: IBusinessDocument[]): void {
-    this.editForm.patchValue({
-      businessDocuments: [...update],
-    });
-  }
-
-  updateCurrencies(update: ISettlementCurrency): void {
-    this.editForm.patchValue({
-      settlementCurrency: update
-    });
-  }
-
-  updateCurrentOwner(update: IApplicationUser): void {
-    this.editForm.patchValue({
-      currentOwner: update
-    });
-  }
-
-  updateNativeOwner(update: IApplicationUser): void {
-    this.editForm.patchValue({
-      nativeOwner: update
-    });
-  }
-
-  updateBiller(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      biller: dealerUpdate,
-    });
-  }
-
-  updateNativeDepartment(dealerUpdate: IDealer): void {
-    this.editForm.patchValue({
-      nativeDepartment: dealerUpdate,
-    });
-  }
-
-  updatePaymentInvoices(update: IPaymentInvoice[]): void {
-    this.editForm.patchValue({
-      paymentInvoices: update
-    });
-  }
-
-  updateSignatories(dealerUpdate: IDealer[]): void {
-    this.editForm.patchValue({
-      signatures: [...dealerUpdate]
-    });
-  }
-
-  // updateSettlements(updates: ISettlement[]): void {
-  //   this.editForm.patchValue({
-  //     settlements: [...updates]
-  //   });
-  // }
-
-  updatePlaceholders(update: IPlaceholder[]): void {
-    this.editForm.patchValue({
-      placeholders: [...update]
-    });
-  }
-
-  updateApplicationMapping(update: IUniversallyUniqueMapping[]): void {
-    this.editForm.patchValue({
-      applicationMappings: [...update]
-    });
-  }
-
-  updateJobSheetItems(update: IJobSheet[]): void {
-    this.editForm.patchValue({
-      jobSheets: [...update]
-    });
-  }
-
-  updateDeliveryNotesItems(update: IDeliveryNote[]): void {
-    this.editForm.patchValue({
-      deliveryNotes: [...update]
     });
   }
 
@@ -328,6 +199,10 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing<IPlaceholder>(
       this.placeholdersSharedCollection,
       ...(settlementRequisition.placeholders ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
+      this.settlementsSharedCollection,
+      ...(settlementRequisition.settlements ?? [])
     );
   }
 
@@ -451,5 +326,18 @@ export class SettlementRequisitionUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.settlementService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
+      .pipe(
+        map((settlements: ISettlement[]) =>
+          this.settlementService.addSettlementToCollectionIfMissing<ISettlement>(
+            settlements,
+            ...(this.settlementRequisition?.settlements ?? [])
+          )
+        )
+      )
+      .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
   }
 }

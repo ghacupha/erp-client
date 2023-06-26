@@ -16,23 +16,16 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { SettlementRequisitionRoutingModule } from './route/settlement-requisition-routing.module';
-import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { NgModule } from '@angular/core';
+import { SharedModule } from 'app/shared/shared.module';
+import { SettlementRequisitionComponent } from './list/settlement-requisition.component';
 import { SettlementRequisitionDetailComponent } from './detail/settlement-requisition-detail.component';
 import { SettlementRequisitionUpdateComponent } from './update/settlement-requisition-update.component';
 import { SettlementRequisitionDeleteDialogComponent } from './delete/settlement-requisition-delete-dialog.component';
-import { SettlementRequisitionComponent } from './list/settlement-requisition.component';
-import { SharedModule } from '../../../shared/shared.module';
-import { SettlementRequisitionCustomRoutingModule } from './route/settlement-requisition-custom-routing.module';
-import { NgModule } from '@angular/core';
+import { SettlementRequisitionRoutingModule } from './route/settlement-requisition-routing.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    SettlementRequisitionRoutingModule,
-    SettlementRequisitionCustomRoutingModule,
-    ErpCommonModule,
-  ],
+  imports: [SharedModule, SettlementRequisitionRoutingModule],
   declarations: [
     SettlementRequisitionComponent,
     SettlementRequisitionDetailComponent,
