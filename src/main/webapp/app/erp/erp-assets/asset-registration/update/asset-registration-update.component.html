@@ -129,7 +129,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -146,7 +146,7 @@
               {{ placeholderOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label for="field_paymentInvoices">Payment Invoices</label>
@@ -414,7 +414,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_assetAccessories">Asset Accessory</label>
           <select
             class="form-control"
@@ -431,9 +431,19 @@
               {{ assetAccessoryOption.assetDetails }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-asset-accessory-form-control
+          ngDefaultControl
+          formControlName='assetAccessories'
+          [inputValues]="editForm.get(['assetAccessories'])!.value"
+          (selectedValues)='updateAssetAccessories($event)'
+          inputControlLabel='Asset Accessor(y/ies)'
+        >
+        </jhi-m2m-asset-accessory-form-control>
+
+
+        <!--<div class="form-group">
           <label for="field_serviceOutlets">Service Outlet</label>
           <select
             class="form-control"
@@ -450,7 +460,17 @@
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlets'
+          [inputValues]="editForm.get(['serviceOutlets'])!.value"
+          (selectedValues)='updateOtherServiceOutlets($event)'
+          inputControlLabel='Other Service Outlet(s)'
+        >
+        </jhi-m2m-service-outlet-form-control>
+
       </div>
 
       <div>

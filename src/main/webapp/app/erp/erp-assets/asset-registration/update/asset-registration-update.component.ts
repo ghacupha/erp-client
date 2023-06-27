@@ -137,6 +137,14 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     });
   }
 
+  updateAssetAccessories(updated: IAssetAccessory[]): void  {
+    this.editForm.patchValue({ assetAccessories: [...updated]});
+  }
+
+  updateOtherServiceOutlets(updated: IServiceOutlet[]): void {
+    this.editForm.patchValue({ serviceOutlets: updated});
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
