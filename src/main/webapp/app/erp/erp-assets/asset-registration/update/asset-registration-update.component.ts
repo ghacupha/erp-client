@@ -142,11 +142,15 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   updateOtherServiceOutlets(updated: IServiceOutlet[]): void {
-    this.editForm.patchValue({ serviceOutlets: updated});
+    this.editForm.patchValue({ serviceOutlets: [...updated] });
   }
 
   updateUniversallyUniqueMappings(updated: IUniversallyUniqueMapping[]): void {
     this.editForm.patchValue({ universallyUniqueMappings: [...updated]});
+  }
+
+  updateAssetWarranties(updated: IAssetWarranty[]): void {
+    this.editForm.patchValue({ assetWarranties: [...updated] });
   }
 
   byteSize(base64String: string): string {

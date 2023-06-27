@@ -371,7 +371,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_assetWarranties">Asset Warranty</label>
           <select
             class="form-control"
@@ -388,7 +388,16 @@
               {{ assetWarrantyOption.description }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-asset-warranty-form-control
+          ngDefaultControl
+          formControlName='assetWarranties'
+          [inputValues]="editForm.get(['assetWarranties'])!.value"
+          (selectedValues)='updateAssetWarranties($event)'
+          inputControlLabel='Asset Warranty(ies)'
+        >
+        </jhi-m2m-asset-warranty-form-control>
 
         <!--<div class="form-group">
           <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
