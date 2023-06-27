@@ -4,10 +4,10 @@ import { settlementUpdateFormStateSelector } from '../reducers/settlement-update
 
 export const settlementStatusFeatureSelector = createFeatureSelector<State>(settlementUpdateFormStateSelector);
 
-// export const updateSelectedPayment = createSelector(
-//   paymentStatusFeatureSelector,
-//   state => state.paymentsFormState.selectedPayment
-// );
+export const settlementUpdateSelectedPayment = createSelector(
+  settlementStatusFeatureSelector,
+  state => state.settlementsFormState.selectedSettlement
+);
 
 export const editingSettlementStatus = createSelector(
   settlementStatusFeatureSelector,

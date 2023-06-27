@@ -47,22 +47,15 @@ import { PaymentCalculatorService } from '../service/payment-calculator.service'
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { select, Store } from '@ngrx/store';
-import {
-  copyingPaymentStatus,
-  creatingPaymentStatus,
-  editingPaymentStatus
-} from '../../../store/selectors/update-menu-status.selectors';
 import { State } from '../../../store/global-store.definition';
-import {
-  paymentUpdateButtonClicked,
-  paymentUpdateCancelButtonClicked, paymentUpdateErrorHasOccurred
-} from '../../../store/actions/update-menu-status.actions';
-import { paymentToDealerReset } from '../../../store/actions/dealer-workflows-status.actions';
-import { dealerInvoiceStateReset } from '../../../store/actions/dealer-invoice-workflows-status.actions';
 import {
   settlementUpdateErrorHasOccurred,
   settlementUpdatePreviousStateMethodCalled, settlementUpdateSaveHasBeenFinalized
 } from '../../../store/actions/settlement-update-menu.actions';
+import {
+  copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus,
+  settlementUpdateSelectedPayment
+} from '../../../store/selectors/settlement-update-menu-status.selectors';
 
 @Component({
   selector: 'jhi-settlement-update',
@@ -125,9 +118,9 @@ export class SettlementUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     protected store: Store<State>,
   ) {
-    this.store.pipe(select(copyingPaymentStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
-    this.store.pipe(select(editingPaymentStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
-    this.store.pipe(select(creatingPaymentStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
+    this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
+    this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
+    this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
   }
 
   ngOnInit(): void {
@@ -135,11 +128,18 @@ export class SettlementUpdateComponent implements OnInit {
       /* this.updateForm(settlement); */
 
       if(this.weAreEditingAPayment) {
-        this.updateForm(settlement);
+        // this.updateForm(settlement);
+
+        this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => {
+          this.updateForm(copiedSettlement);
+        });
       }
 
       if (this.weAreCopyingAPayment) {
-        this.copyForm(settlement);
+        // Fetching data from the store
+        this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => {
+          this.copyForm(copiedSettlement);
+        });
       }
 
       this.loadRelationshipsOptions();

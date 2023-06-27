@@ -1,7 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, State } from '../global-store.definition';
 import {
-  newSettlementCreationSequenceInitiatedFomList,
+  newSettlementCreationSequenceInitiatedFomList, settlementCopyWorkflowInitiated,
   settlementCopyWorkflowInitiatedFromDetails,
   settlementCopyWorkflowInitiatedFromList,
   settlementEditWorkflowInitiatedFromDetails,
@@ -32,7 +32,18 @@ const _settlementUpdateStateReducer = createReducer(
     settlementsFormState: {
       ...state.settlementsFormState,
       selectedSettlement: copiedSettlement,
-      weAreCopying: true
+      weAreCopying: true,
+      weAreEditing: false
+    }
+  })),
+
+  on(settlementCopyWorkflowInitiated, (state, {copiedSettlement}) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedSettlement: copiedSettlement,
+      weAreCopying: true,
+      weAreEditing: false
     }
   })),
 
@@ -41,7 +52,8 @@ const _settlementUpdateStateReducer = createReducer(
     settlementsFormState: {
       ...state.settlementsFormState,
       selectedSettlement: copiedSettlement,
-      weAreCopying: true
+      weAreCopying: true,
+      weAreEditing: false
     }
   })),
 
@@ -50,6 +62,7 @@ const _settlementUpdateStateReducer = createReducer(
     settlementsFormState: {
       ...state.settlementsFormState,
       selectedSettlement: editedSettlement,
+      weAreCopying: false,
       weAreEditing: true
     }
   })),
@@ -59,6 +72,7 @@ const _settlementUpdateStateReducer = createReducer(
     settlementsFormState: {
       ...state.settlementsFormState,
       selectedSettlement: editedSettlement,
+      weAreCopying: false,
       weAreEditing: true
     }
   })),
@@ -68,7 +82,9 @@ const _settlementUpdateStateReducer = createReducer(
       settlementsFormState: {
         ...state.settlementsFormState,
         selectedPayment: newSettlement,
-        weAreCreating: true
+        weAreCreating: true,
+        weAreCopying: false,
+        weAreEditing: false
       }
     }
   )),

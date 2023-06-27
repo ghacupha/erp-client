@@ -1,6 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 
+export const settlementCopyWorkflowInitiated = createAction(
+  '[Settlements Copy Route] settlement copy workflow initiated',
+  props<{ copiedSettlement: ISettlement }>()
+);
+
 export const settlementCopyWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement copy workflow initiated',
   props<{copiedSettlement: ISettlement}>()

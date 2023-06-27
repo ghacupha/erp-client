@@ -22,6 +22,7 @@ import {StoreModule} from "@ngrx/store";
 import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows-status.reducer";
 import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
 import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
+import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
@@ -36,6 +37,7 @@ import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.ef
     StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
     StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
+    StoreModule.forFeature('settlementsUpdateForm', fromSettlementUpdates.settlementUpdateStateReducer),
     StoreModule.forRoot({}, {runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
