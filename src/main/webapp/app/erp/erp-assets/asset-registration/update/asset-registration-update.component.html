@@ -137,7 +137,7 @@
           </select>
         </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_paymentInvoices">Payment Invoices</label>
           <select
             class="form-control"
@@ -154,9 +154,18 @@
               {{ paymentInvoiceOption.invoiceNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-payment-invoice-form-control
+          ngDefaultControl
+          formControlName='paymentInvoices'
+          [inputValues]="editForm.get(['paymentInvoices'])!.value"
+          (valueSelected)='updatePaymentInvoices($event)'
+          inputControlLabel='Payment Invoice(s)'
+        >
+        </jhi-m2m-payment-invoice-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_mainServiceOutlet">Main Service Outlet</label>
           <select
             class="form-control"
@@ -177,9 +186,18 @@
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='mainServiceOutlet'
+          [inputValue]="editForm.get(['mainServiceOutlet'])!.value"
+          (valueSelected)='updateMainServiceOutlet($event)'
+          inputControlLabel='Main Service Outlet'
+        >
+          <option [ngValue]="editForm.get(['mainServiceOutlet'])!.value"></option>
+        </jhi-m21-service-outlet-form-control>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_settlements">Settlement</label>
           <select
             class="form-control"
@@ -201,9 +219,18 @@
           *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Settlements(s)'
+        >
+        </jhi-m2m-settlement-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_assetCategory">Asset Category</label>
           <select
             class="form-control"
@@ -231,9 +258,18 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['assetCategory'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName='assetCategory'
+          [inputValue]="editForm.get(['assetCategory'])!.value"
+          (valueSelected)='updateAssetCategory($event)'
+          inputControlLabel='Asset Category'
+        >
+          <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
+        </jhi-m21-asset-category-form-control>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_purchaseOrders">Purchase Order</label>
           <select
             class="form-control"
@@ -250,9 +286,18 @@
               {{ purchaseOrderOption.purchaseOrderNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-purchase-order-form-control
+          ngDefaultControl
+          formControlName='purchaseOrders'
+          [inputValues]="editForm.get(['purchaseOrders'])!.value"
+          (selectedValues)='updatePurchaseOrders($event)'
+          inputControlLabel='Purchase Orders(s)'
+        >
+        </jhi-m2m-purchase-order-form-control>
+
+        <!--<div class="form-group">
           <label for="field_deliveryNotes">Delivery Note</label>
           <select
             class="form-control"
@@ -269,9 +314,18 @@
               {{ deliveryNoteOption.deliveryNoteNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m2m-delivery-note-form-control
+          ngDefaultControl
+          formControlName='deliveryNotes'
+          [inputValues]="editForm.get(['deliveryNotes'])!.value"
+          (selectedValues)='updateDeliveryNotes($event)'
+          inputControlLabel='Delivery Note(s)'
+        >
+        </jhi-m2m-delivery-note-form-control>
+
+        <!--<div class="form-group">
           <label for="field_jobSheets">Job Sheet</label>
           <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
             <option
@@ -281,7 +335,16 @@
               {{ jobSheetOption.serialNumber }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-job-sheet-form-control
+          ngDefaultControl
+          formControlName='jobSheets'
+          [inputValues]="editForm.get(['jobSheets'])!.value"
+          (selectedValues)='updateJobSheets($event)'
+          inputControlLabel='Job Sheets(s)'
+        >
+        </jhi-m2m-job-sheet-form-control>
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_dealer">Dealer</label>

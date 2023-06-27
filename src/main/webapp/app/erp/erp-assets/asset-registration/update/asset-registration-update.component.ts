@@ -169,6 +169,34 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.editForm.patchValue( { dealer: updated });
   }
 
+  updatePaymentInvoices(updated: IPaymentInvoice[]): void {
+    this.editForm.patchValue({ paymentInvoices: [...updated] });
+  }
+
+  updateMainServiceOutlet(updated: IServiceOutlet): void {
+    this.editForm.patchValue({ mainServiceOutlet: updated });
+  }
+
+  updateSettlements(updated: ISettlement[]): void {
+    this.editForm.patchValue({ settlements: [...updated] });
+  }
+
+  updateAssetCategory(updated: IAssetCategory): void {
+    this.editForm.patchValue({ assetCategory: updated });
+  }
+
+  updatePurchaseOrders(updated: IPurchaseOrder[]): void {
+    this.editForm.patchValue({ purchaseOrders: [...updated] });
+  }
+
+  updateDeliveryNotes(updated: IDeliveryNote[]): void {
+    this.editForm.patchValue({ deliveryNotes: [...updated] })
+  }
+
+  updateJobSheets(updated: IJobSheet[]): void {
+    this.editForm.patchValue({ jobSheets: [...updated] })
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
