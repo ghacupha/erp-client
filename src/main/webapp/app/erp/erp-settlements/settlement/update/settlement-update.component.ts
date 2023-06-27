@@ -429,6 +429,66 @@ export class SettlementUpdateComponent implements OnInit {
     );
   }
 
+  protected copyForm(settlement: ISettlement): void {
+    this.editForm.patchValue({
+      id: settlement.id,
+      paymentNumber: settlement.paymentNumber,
+      paymentDate: settlement.paymentDate,
+      paymentAmount: settlement.paymentAmount,
+      description: settlement.description,
+      notes: settlement.notes,
+      remarks: settlement.remarks,
+      calculationFile: settlement.calculationFile,
+      calculationFileContentType: settlement.calculationFileContentType,
+      fileUploadToken: settlement.fileUploadToken,
+      compilationToken: settlement.compilationToken,
+      placeholders: settlement.placeholders,
+      settlementCurrency: settlement.settlementCurrency,
+      paymentLabels: settlement.paymentLabels,
+      paymentCategory: settlement.paymentCategory,
+      groupSettlement: settlement.groupSettlement,
+      biller: settlement.biller,
+      paymentInvoices: settlement.paymentInvoices,
+      signatories: settlement.signatories,
+      businessDocuments: settlement.businessDocuments,
+    });
+
+    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentCollection,
+      ...(settlement.businessDocuments ?? [])
+    );
+
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(settlement.placeholders ?? [])
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      settlement.settlementCurrency
+    );
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(settlement.paymentLabels ?? [])
+    );
+    this.paymentCategoriesSharedCollection = this.paymentCategoryService.addPaymentCategoryToCollectionIfMissing(
+      this.paymentCategoriesSharedCollection,
+      settlement.paymentCategory
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      settlement.groupSettlement
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      settlement.biller,
+      ...(settlement.signatories ?? [])
+    );
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+      this.paymentInvoicesSharedCollection,
+      ...(settlement.paymentInvoices ?? [])
+    );
+  }
+
   protected loadRelationshipsOptions(): void {
     this.placeholderService
       .query()
