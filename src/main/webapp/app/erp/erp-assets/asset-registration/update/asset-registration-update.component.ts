@@ -153,6 +153,18 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.editForm.patchValue({ assetWarranties: [...updated] });
   }
 
+  updateBusinessDocuments(updated: IBusinessDocument[]): void {
+    this.editForm.patchValue({ businessDocuments: [...updated] });
+  }
+
+  updateSettlementCurrency(updated: ISettlementCurrency): void {
+    this.editForm.patchValue({ settlementCurrency: updated });
+  }
+
+  updateDesignatedUsers(updated: IDealer[]): void {
+    this.editForm.patchValue({ designatedUsers: [...updated] });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

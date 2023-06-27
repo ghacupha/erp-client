@@ -66,17 +66,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_assetCost">Asset Cost</label>
-          <input type="number" class="form-control" name="assetCost" id="field_assetCost" data-cy="assetCost" formControlName="assetCost" />
-          <div *ngIf="editForm.get('assetCost')!.invalid && (editForm.get('assetCost')!.dirty || editForm.get('assetCost')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('assetCost')?.errors?.required"> This field is required. </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('assetCost')?.errors?.number">
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_comments">Comments</label>
           <div>
             <div *ngIf="editForm.get('comments')!.value" class="form-text text-danger clearfix">
@@ -310,26 +299,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_designatedUsers">Designated Users</label>
-          <select
-            class="form-control"
-            id="field_designatedUsers"
-            data-cy="designatedUsers"
-            multiple
-            name="designatedUsers"
-            formControlName="designatedUsers"
-          >
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('designatedUsers')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
           <select
             class="form-control"
@@ -350,9 +320,30 @@
               {{ settlementCurrencyOption.iso4217CurrencyCode }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateSettlementCurrency($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_assetCost">Asset Cost</label>
+          <input type="number" class="form-control" name="assetCost" id="field_assetCost" data-cy="assetCost" formControlName="assetCost" />
+          <div *ngIf="editForm.get('assetCost')!.invalid && (editForm.get('assetCost')!.dirty || editForm.get('assetCost')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('assetCost')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('assetCost')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <!--<div class="form-group">
           <label for="field_businessDocuments">Business Document</label>
           <select
             class="form-control"
@@ -369,7 +360,16 @@
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocuments($event)'
+          inputControlLabel='businessDocument(s)'
+        >
+        </jhi-m2m-business-document-form-control>
 
         <!--<div class="form-group">
           <label for="field_assetWarranties">Asset Warranty</label>
@@ -479,6 +479,34 @@
             </option>
           </select>
         </div>-->
+
+        <!--<div class="form-group">
+          <label for="field_designatedUsers">Designated Users</label>
+          <select
+            class="form-control"
+            id="field_designatedUsers"
+            data-cy="designatedUsers"
+            multiple
+            name="designatedUsers"
+            formControlName="designatedUsers"
+          >
+            <option
+              [ngValue]="getSelectedDealer(dealerOption, editForm.get('designatedUsers')!.value)"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName='designatedUsers'
+          [inputValues]="editForm.get(['designatedUsers'])!.value"
+          (valueSelected)='updateDesignatedUsers($event)'
+          inputControlLabel='Designated User(s)'
+        >
+        </jhi-m2m-dealer-form-control>
 
         <jhi-m2m-service-outlet-form-control
           ngDefaultControl
