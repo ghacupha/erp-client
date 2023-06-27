@@ -283,7 +283,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_dealer">Dealer</label>
           <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
             <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
@@ -297,7 +297,17 @@
         </div>
         <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='dealer'
+          [inputValue]="editForm.get(['dealer'])!.value"
+          (valueSelected)='updateDealer($event)'
+          inputControlLabel='Dealer'
+        >
+          <option [ngValue]="editForm.get(['dealer'])!.value"></option>
+        </jhi-m21-dealer-form-control>
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
