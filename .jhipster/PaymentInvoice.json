@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220203125725",
+  "clientRootFolder": "settlement",
   "dto": "mapstruct",
   "fields": [
     {
@@ -74,28 +75,28 @@
       "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "deliveryNote",
-      "otherEntityName": "deliveryNote",
-      "relationshipType": "many-to-many",
       "otherEntityField": "deliveryNoteNumber",
+      "otherEntityName": "deliveryNote",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "deliveryNote",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "jobSheet",
-      "otherEntityName": "jobSheet",
-      "relationshipType": "many-to-many",
       "otherEntityField": "serialNumber",
+      "otherEntityName": "jobSheet",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "jobSheet",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "paymentInvoice",
       "ownerSide": true,
-      "otherEntityRelationshipName": "paymentInvoice"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

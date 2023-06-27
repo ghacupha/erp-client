@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220302155848",
+  "clientRootFolder": "settlement",
   "dto": "mapstruct",
   "fields": [
     {
@@ -81,20 +82,20 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "otherPurchaseOrders",
-      "otherEntityName": "purchaseOrder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "deliveryNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "deliveryNote"
+      "relationshipName": "otherPurchaseOrders",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "deliveryNote",
       "ownerSide": true,
-      "otherEntityRelationshipName": "deliveryNote"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

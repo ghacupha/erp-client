@@ -1,6 +1,6 @@
 {
   "changelogDate": "20210722140431",
-  "clientRootFolder": "payments",
+  "clientRootFolder": "tax",
   "databaseType": "sql",
   "dto": "mapstruct",
   "entityTableName": "tax_rule",

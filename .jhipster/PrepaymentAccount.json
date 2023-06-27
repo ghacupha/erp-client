@@ -1,4 +1,7 @@
 {
+  "changelogDate": "20220501104047",
+  "clientRootFolder": "prepayments",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "catalogueNumber",
@@ -24,82 +27,80 @@
       "fieldType": "UUID"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentAccount",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "prepaymentTransaction",
+      "otherEntityField": "paymentNumber",
       "otherEntityName": "settlement",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "paymentNumber"
+      "relationshipName": "prepaymentTransaction",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "serviceOutlet",
+      "otherEntityField": "outletCode",
       "otherEntityName": "serviceOutlet",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "outletCode"
+      "relationshipName": "serviceOutlet",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "dealer",
+      "otherEntityField": "dealerName",
       "otherEntityName": "dealer",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "dealerName"
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountName",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "debitAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountName"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountName",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "transferAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountName"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentAccount",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentAccount"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "generalParameters",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "mappedValue",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "prepaymentAccount",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentAccount"
+      "relationshipName": "generalParameters",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "prepaymentParameters",
-      "otherEntityName": "prepaymentMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "parameterKey",
+      "otherEntityName": "prepaymentMapping",
+      "otherEntityRelationshipName": "prepaymentAccount",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentAccount"
+      "relationshipName": "prepaymentParameters",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "prepaymentAccount",
       "ownerSide": true,
-      "otherEntityRelationshipName": "prepaymentAccount"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "PrepaymentAccount",
-  "changelogDate": "20220501104047",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

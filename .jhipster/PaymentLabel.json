@@ -1,5 +1,6 @@
 {
   "changelogDate": "20210920142924",
+  "clientRootFolder": "settlement",
   "dto": "mapstruct",
   "fields": [
     {

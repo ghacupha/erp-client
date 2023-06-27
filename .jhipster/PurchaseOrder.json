@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220203123759",
+  "clientRootFolder": "settlement",
   "dto": "mapstruct",
   "fields": [
     {
@@ -74,12 +75,12 @@
       "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "purchaseOrder",
       "ownerSide": true,
-      "otherEntityRelationshipName": "purchaseOrder"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
   "service": "serviceImpl"

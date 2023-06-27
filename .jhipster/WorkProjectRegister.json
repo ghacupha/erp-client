@@ -1,4 +1,7 @@
 {
+  "changelogDate": "20220428124926",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "catalogueNumber",
@@ -25,45 +28,43 @@
       "fieldTypeBlobContent": "any"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "WorkProjectRegister",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "dealers",
-      "otherEntityName": "dealer",
-      "relationshipType": "many-to-many",
-      "relationshipValidateRules": ["required"],
       "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "workProjectRegister",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workProjectRegister"
+      "relationshipName": "dealers",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "workProjectRegister",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workProjectRegister"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "workProjectRegister",
       "ownerSide": true,
-      "otherEntityRelationshipName": "workProjectRegister"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "WorkProjectRegister",
-  "changelogDate": "20220428124926",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

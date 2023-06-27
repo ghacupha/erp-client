@@ -1,6 +1,6 @@
 {
   "changelogDate": "20210414144655",
-  "clientRootFolder": "files",
+  "clientRootFolder": "system",
   "databaseType": "sql",
   "dto": "mapstruct",
   "embedded": false,

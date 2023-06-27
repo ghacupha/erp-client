@@ -1,4 +1,7 @@
 {
+  "changelogDate": "20230328100320",
+  "clientRootFolder": "leases",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "modelTitle",
@@ -59,108 +62,106 @@
       "fieldType": "Double"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LeaseModelMetadata",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "leaseModelMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseModelMetadata"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "leaseMapping",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "leaseModelMetadata",
       "ownerSide": true,
-      "otherEntityRelationshipName": "leaseModelMetadata"
+      "relationshipName": "leaseMapping",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "leaseContract",
+      "otherEntityField": "bookingId",
       "otherEntityName": "leaseContract",
+      "relationshipName": "leaseContract",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "predecessor",
-      "otherEntityName": "leaseModelMetadata",
-      "relationshipType": "one-to-one",
-      "otherEntityField": "modelTitle",
-      "ownerSide": true,
       "id": false,
-      "otherEntityRelationshipName": "successor"
+      "otherEntityField": "modelTitle",
+      "otherEntityName": "leaseModelMetadata",
+      "otherEntityRelationshipName": "successor",
+      "ownerSide": true,
+      "relationshipName": "predecessor",
+      "relationshipType": "one-to-one"
     },
     {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
       "relationshipName": "liabilityCurrency",
-      "otherEntityName": "settlementCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipValidateRules": ["required"]
     },
     {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
       "relationshipName": "rouAssetCurrency",
-      "otherEntityName": "settlementCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipValidateRules": ["required"]
     },
     {
-      "relationshipName": "modelAttachments",
+      "otherEntityField": "documentTitle",
       "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "documentTitle"
+      "relationshipName": "modelAttachments",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "securityClearance",
+      "otherEntityField": "clearanceLevel",
       "otherEntityName": "securityClearance",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "clearanceLevel"
+      "relationshipName": "securityClearance",
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "leaseLiabilityAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "interestPayableAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "interestExpenseAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "rouAssetAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipType": "many-to-one"
     },
     {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
       "relationshipName": "rouDepreciationAccount",
-      "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "accruedDepreciationAccount",
+      "otherEntityField": "accountNumber",
       "otherEntityName": "transactionAccount",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "accountNumber"
+      "relationshipName": "accruedDepreciationAccount",
+      "relationshipType": "many-to-one"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "LeaseModelMetadata",
-  "changelogDate": "20230328100320",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

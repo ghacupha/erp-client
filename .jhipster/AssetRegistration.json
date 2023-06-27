@@ -1,5 +1,6 @@
 {
   "changelogDate": "20220413150618",
+  "clientRootFolder": "assets",
   "dto": "mapstruct",
   "fields": [
     {
@@ -58,10 +59,10 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "mainServiceOutlet",
+      "otherEntityField": "outletCode",
       "otherEntityName": "serviceOutlet",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "outletCode"
+      "relationshipName": "mainServiceOutlet",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "paymentNumber",
@@ -119,42 +120,42 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "settlementCurrency",
+      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "iso4217CurrencyCode"
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetRegistration"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "assetWarranty",
-      "otherEntityName": "assetWarranty",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "assetWarranty",
+      "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetRegistration"
+      "relationshipName": "assetWarranty",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "universallyUniqueMapping",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetRegistration"
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "assetAccessory",
-      "otherEntityName": "assetAccessory",
-      "relationshipType": "many-to-many",
       "otherEntityField": "assetDetails",
+      "otherEntityName": "assetAccessory",
+      "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetRegistration"
+      "relationshipName": "assetAccessory",
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "outletCode",

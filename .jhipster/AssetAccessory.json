@@ -1,4 +1,7 @@
 {
+  "changelogDate": "20230505113336",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "assetTag",
@@ -22,22 +25,27 @@
       "fieldType": "String"
     }
   ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "AssetAccessory",
+  "pagination": "pagination",
+  "readOnly": false,
   "relationships": [
     {
-      "relationshipName": "assetWarranty",
-      "otherEntityName": "assetWarranty",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "assetWarranty",
+      "otherEntityRelationshipName": "assetAccessory",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetAccessory"
+      "relationshipName": "assetWarranty",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "placeholder",
-      "otherEntityName": "placeholder",
-      "relationshipType": "many-to-many",
       "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "assetAccessory",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetAccessory"
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
     },
     {
       "otherEntityField": "invoiceNumber",
@@ -110,28 +118,21 @@
       "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "businessDocument",
-      "otherEntityName": "businessDocument",
-      "relationshipType": "many-to-many",
       "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "assetRegistration",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetRegistration"
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
     },
     {
-      "relationshipName": "universallyUniqueMapping",
-      "otherEntityName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many",
       "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "assetAccessory",
       "ownerSide": true,
-      "otherEntityRelationshipName": "assetAccessory"
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
     }
   ],
-  "service": "serviceImpl",
-  "dto": "mapstruct",
-  "jpaMetamodelFiltering": true,
-  "readOnly": false,
-  "pagination": "pagination",
-  "name": "AssetAccessory",
-  "changelogDate": "20230505113336",
-  "incrementalChangelog": false
+  "service": "serviceImpl"
 }

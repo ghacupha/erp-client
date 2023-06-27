@@ -1,6 +1,6 @@
 {
   "changelogDate": "20210721163636",
-  "clientRootFolder": "dealers",
+  "clientRootFolder": "people",
   "databaseType": "sql",
   "dto": "mapstruct",
   "entityTableName": "dealer",
