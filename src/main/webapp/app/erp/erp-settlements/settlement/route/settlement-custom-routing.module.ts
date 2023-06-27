@@ -21,6 +21,7 @@ import { UserRouteAccessService } from '../../../../core/auth/user-route-access.
 import { NgModule } from '@angular/core';
 import { SettlementUpdateComponent } from '../update/settlement-update.component';
 import { SettlementRoutingResolveService } from './settlement-routing-resolve.service';
+import { SettlementCopyRoutingResolveService } from './settlement-copy-routing-resolve.service';
 
 const settlementRoute: Routes = [
   {
@@ -28,6 +29,14 @@ const settlementRoute: Routes = [
     component: SettlementUpdateComponent,
     resolve: {
       settlement: SettlementRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'copy',
+    component: SettlementUpdateComponent,
+    resolve: {
+      settlement: SettlementCopyRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },

@@ -168,6 +168,17 @@
                 <span class="d-none d-md-inline">Edit</span>
               </button>
 
+              <button
+                type="submit"
+                (click)='copyButtonEvent(settlement)'
+                [routerLink]="['/settlement', settlement.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
+              </button>
+
               <button type="submit" (click)="delete(settlement)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline">Delete</span>

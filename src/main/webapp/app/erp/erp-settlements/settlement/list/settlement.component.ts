@@ -28,6 +28,10 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { SettlementService } from '../service/settlement.service';
 import { SettlementDeleteDialogComponent } from '../delete/settlement-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { paymentUpdateErrorHasOccurred } from '../../../store/actions/update-menu-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { settlementCopyWorkflowInitiatedFromList } from '../../../store/actions/settlement-update-menu.actions';
 
 @Component({
   selector: 'jhi-settlement',
@@ -50,9 +54,14 @@ export class SettlementComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  copyButtonEvent(instance: ISettlement): void {
+    this.store.dispatch(settlementCopyWorkflowInitiatedFromList({copiedSettlement: instance}));
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

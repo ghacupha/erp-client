@@ -19,9 +19,11 @@
 import {PaymentsFormState} from "./reducers/update-menu-status.reducer";
 import {DealerWorkflowState} from "./reducers/dealer-workflows-status.reducer";
 import {DealerInvoiceWorkflowState} from "./reducers/dealer-invoice-workflows-status.reducer";
+import { SettlementsFormState } from './reducers/settlement-update-menu-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
+  settlementsFormState: SettlementsFormState,
   dealerWorkflowState: DealerWorkflowState
   dealerInvoiceWorkflowState: DealerInvoiceWorkflowState
 }
@@ -29,6 +31,12 @@ export interface State {
 export const initialState: State = {
   paymentsFormState: {
     selectedPayment: {},
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  settlementsFormState: {
+    selectedSettlement: {},
     weAreCopying: false,
     weAreEditing: false,
     weAreCreating: false,
