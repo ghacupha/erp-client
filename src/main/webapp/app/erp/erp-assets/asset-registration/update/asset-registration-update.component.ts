@@ -145,6 +145,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     this.editForm.patchValue({ serviceOutlets: updated});
   }
 
+  updateUniversallyUniqueMappings(updated: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({ universallyUniqueMappings: [...updated]});
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

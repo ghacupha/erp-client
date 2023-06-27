@@ -390,7 +390,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_universallyUniqueMappings">Universally Unique Mapping</label>
           <select
             class="form-control"
@@ -412,7 +412,16 @@
               {{ universallyUniqueMappingOption.universalKey }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='universallyUniqueMappings'
+          [inputValues]="editForm.get(['universallyUniqueMappings'])!.value"
+          (selectedValues)='updateUniversallyUniqueMappings($event)'
+          inputControlLabel='System Mapping(s)'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
 
         <!--<div class="form-group">
           <label for="field_assetAccessories">Asset Accessory</label>
