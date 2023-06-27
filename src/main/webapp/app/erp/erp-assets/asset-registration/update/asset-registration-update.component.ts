@@ -190,11 +190,15 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   updateDeliveryNotes(updated: IDeliveryNote[]): void {
-    this.editForm.patchValue({ deliveryNotes: [...updated] })
+    this.editForm.patchValue({ deliveryNotes: [...updated] });
   }
 
   updateJobSheets(updated: IJobSheet[]): void {
-    this.editForm.patchValue({ jobSheets: [...updated] })
+    this.editForm.patchValue({ jobSheets: [...updated] });
+  }
+
+  updatePlaceholders(updated: IPlaceholder[]): void {
+    this.editForm.patchValue({ placeholders: [...updated] });
   }
 
   byteSize(base64String: string): string {

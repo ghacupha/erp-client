@@ -590,6 +590,16 @@
         >
         </jhi-m2m-service-outlet-form-control>
 
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder(s)'
+        >
+        </jhi-m2m-placeholder-form-control>
+
       </div>
 
       <div>
