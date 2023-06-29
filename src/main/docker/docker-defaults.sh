@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #
-# Erp System - Mark III No 17 (Caleb Series) Client 1.3.9
+# Erp System - Mark V No 1 (Ehud Series) Client 1.4.2
 # Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify
