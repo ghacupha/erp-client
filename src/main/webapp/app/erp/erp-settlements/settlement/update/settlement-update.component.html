@@ -21,7 +21,7 @@
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='weAreCopyingAPayment'>Create or edit a Settlement</h2>
-      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCopyingAPayment'>Copy a Settlement</h2>
+      <h2 id="jhi-settlement-heading-copy" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCopyingAPayment'>Copy: {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>

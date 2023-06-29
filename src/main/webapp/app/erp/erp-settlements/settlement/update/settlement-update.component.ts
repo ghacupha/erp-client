@@ -78,7 +78,7 @@ export class SettlementUpdateComponent implements OnInit {
   weAreEditingAPayment = false;
   weAreCreatingAPayment = false;
 
-  selectedSettlement!: ISettlement;
+  selectedSettlement: ISettlement = {...new Settlement()};
 
   editForm = this.fb.group({
     id: [],
@@ -124,22 +124,10 @@ export class SettlementUpdateComponent implements OnInit {
     this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
     this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
-    // this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement= copiedSettlement);
+    this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement= copiedSettlement);
   }
 
   ngOnInit(): void {
-
-    // this.activatedRoute.data.subscribe(({settlement}) => {
-    //   if (settlement && this.weAreEditingAPayment) {
-    //     this.updateForm(settlement);
-    //   }
-    //
-    //   if (settlement && this.weAreCopyingAPayment) {
-    //     this.copyForm(settlement);
-    //   }
-    // });
-
-      // this.loadRelationshipsOptions();
 
     if (this.weAreEditingAPayment || this.weAreCopyingAPayment) {
       this.activatedRoute.data.subscribe(({settlement}) => {
