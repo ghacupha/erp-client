@@ -37,6 +37,7 @@ export const initialState: State = {
   },
   settlementsFormState: {
     selectedSettlement: {},
+    backEndFetchComplete: false,
     weAreCopying: false,
     weAreEditing: false,
     weAreCreating: false,

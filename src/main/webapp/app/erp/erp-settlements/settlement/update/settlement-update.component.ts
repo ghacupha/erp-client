@@ -78,6 +78,8 @@ export class SettlementUpdateComponent implements OnInit {
   weAreEditingAPayment = false;
   weAreCreatingAPayment = false;
 
+  selectedSettlement!: ISettlement;
+
   editForm = this.fb.group({
     id: [],
     paymentNumber: [],
@@ -118,35 +120,39 @@ export class SettlementUpdateComponent implements OnInit {
     protected fb: FormBuilder,
     protected store: Store<State>,
   ) {
+
     this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
     this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
+    // this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement= copiedSettlement);
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ settlement }) => {
-      /* this.updateForm(settlement); */
 
-      if(this.weAreEditingAPayment) {
-        // this.updateForm(settlement);
+    // this.activatedRoute.data.subscribe(({settlement}) => {
+    //   if (settlement && this.weAreEditingAPayment) {
+    //     this.updateForm(settlement);
+    //   }
+    //
+    //   if (settlement && this.weAreCopyingAPayment) {
+    //     this.copyForm(settlement);
+    //   }
+    // });
 
-        this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => {
-          this.updateForm(copiedSettlement);
-        });
-      }
+      // this.loadRelationshipsOptions();
 
-      if (this.weAreCopyingAPayment) {
-        // Fetching data from the store
-        this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => {
-          this.copyForm(copiedSettlement);
-        });
-      }
-
-      this.loadRelationshipsOptions();
-    });
+    if (this.weAreEditingAPayment || this.weAreCopyingAPayment) {
+      this.activatedRoute.data.subscribe(({settlement}) => {
+        this.copyForm(settlement);
+      });
+    }else {
+      this.activatedRoute.data.subscribe(({settlement}) => {
+        this.updateForm(settlement);
+      });
+    }
+    this.loadRelationshipsOptions();
 
     this.updateTodaysDate();
-
     this.updatePreferredCurrency();
     this.updatePreferredCategory();
     this.updatePreferredSignatories();

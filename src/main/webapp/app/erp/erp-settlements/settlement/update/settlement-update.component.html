@@ -20,7 +20,8 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading">Create or edit a Settlement</h2>
+      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='weAreCopyingAPayment'>Create or edit a Settlement</h2>
+      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCopyingAPayment'>Copy a Settlement</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>

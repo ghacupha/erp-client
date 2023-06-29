@@ -9,6 +9,11 @@ export const settlementUpdateSelectedPayment = createSelector(
   state => state.settlementsFormState.selectedSettlement
 );
 
+export const settlementBackEndFetchCompletion = createSelector(
+  settlementStatusFeatureSelector,
+  state => state.settlementsFormState.backEndFetchComplete
+);
+
 export const editingSettlementStatus = createSelector(
   settlementStatusFeatureSelector,
   state => state.settlementsFormState.weAreEditing

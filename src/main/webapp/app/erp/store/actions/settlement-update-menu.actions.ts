@@ -1,24 +1,24 @@
 import { createAction, props } from '@ngrx/store';
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 
-export const settlementCopyWorkflowInitiated = createAction(
+export const settlementCopyWorkflowInitiatedEnRoute = createAction(
   '[Settlements Copy Route] settlement copy workflow initiated',
   props<{ copiedSettlement: ISettlement }>()
 );
 
 export const settlementCopyWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement copy workflow initiated',
-  props<{copiedSettlement: ISettlement}>()
+  props<{ copiedSettlement: ISettlement }>()
 );
 
 export const settlementCopyWorkflowInitiatedFromDetails = createAction(
   '[Settlement Detail] settlement copy workflow initiated',
-  props<{copiedSettlement: ISettlement}>()
+  props<{ copiedSettlement: ISettlement }>()
 );
 
 export const settlementEditWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement edit workflow initiated',
-  props<{editedSettlement: ISettlement}>()
+  props<{ editedSettlement: ISettlement }>()
 );
 
 export const settlementEditWorkflowInitiatedFromDetails = createAction(
@@ -30,6 +30,16 @@ export const settlementEditWorkflowInitiatedFromDetails = createAction(
 export const newSettlementCreationSequenceInitiatedFomList = createAction(
   '[Settlement Detail] new settlement creation workflow initiated',
   props<{newSettlement: ISettlement}>()
+);
+
+export const settlementUpdateInstanceAcquiredFromBackend = createAction(
+  '[SettlementUpdateEffects: Copied-Settlement-effects] settlement-update instance acquired for copy',
+  props<{backendAcquiredSettlement: ISettlement}>()
+);
+
+export const settlementUpdateInstanceAcquisitionFromBackendFailed = createAction(
+  '[SettlementUpdateEffects: Copied-Settlement-effects] settlement-update instance acquisition failed',
+  props<{error: string}>()
 );
 
 export const settlementUpdatePreviousStateMethodCalled = createAction(

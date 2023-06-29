@@ -1,7 +1,8 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, State } from '../global-store.definition';
 import {
-  newSettlementCreationSequenceInitiatedFomList, settlementCopyWorkflowInitiated,
+  newSettlementCreationSequenceInitiatedFomList,
+  settlementCopyWorkflowInitiatedEnRoute,
   settlementCopyWorkflowInitiatedFromDetails,
   settlementCopyWorkflowInitiatedFromList,
   settlementEditWorkflowInitiatedFromDetails,
@@ -10,6 +11,8 @@ import {
   settlementUpdateCopyHasBeenFinalized,
   settlementUpdateEditHasBeenFinalized,
   settlementUpdateErrorHasOccurred,
+  settlementUpdateInstanceAcquiredFromBackend,
+  settlementUpdateInstanceAcquisitionFromBackendFailed,
   settlementUpdatePreviousStateMethodCalled,
   settlementUpdateSaveHasBeenFinalized
 } from '../actions/settlement-update-menu.actions';
@@ -18,10 +21,11 @@ import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 export const settlementUpdateFormStateSelector = 'settlementUpdateForm';
 
 export interface SettlementsFormState {
-  selectedSettlement: ISettlement,
-  weAreCopying: boolean
-  weAreEditing: boolean
-  weAreCreating: boolean
+  backEndFetchComplete: boolean;
+  selectedSettlement: ISettlement;
+  weAreCopying: boolean;
+  weAreEditing: boolean;
+  weAreCreating: boolean;
 }
 
 const _settlementUpdateStateReducer = createReducer(
@@ -37,13 +41,14 @@ const _settlementUpdateStateReducer = createReducer(
     }
   })),
 
-  on(settlementCopyWorkflowInitiated, (state, {copiedSettlement}) => ({
+  on(settlementCopyWorkflowInitiatedEnRoute, (state, {copiedSettlement}) => ({
     ...state,
     settlementsFormState: {
       ...state.settlementsFormState,
-      selectedSettlement: copiedSettlement,
+      // selectedSettlement: copiedSettlement,
       weAreCopying: true,
-      weAreEditing: false
+      weAreEditing: false,
+      weAreCreating: false,
     }
   })),
 
@@ -88,6 +93,25 @@ const _settlementUpdateStateReducer = createReducer(
       }
     }
   )),
+
+  on(settlementUpdateInstanceAcquiredFromBackend, (state, { backendAcquiredSettlement }) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedPayment: backendAcquiredSettlement,
+      backEndFetchComplete: true,
+    }
+  })),
+
+  on(settlementUpdateInstanceAcquisitionFromBackendFailed, (state, {error}) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedPayment: {},
+      errorMessage: error,
+      backEndFetchComplete: false,
+    }
+  })),
 
   // TODO IMPLEMENT REMAINING SETTLEMENT STATES
   // on(paymentCopyButtonClicked, (state) => ({

@@ -67,7 +67,7 @@ export class SettlementComponent implements OnInit {
   }
 
   editButtonEvent(instance: ISettlement): void {
-    this.store.dispatch(settlementEditWorkflowInitiatedFromList({editedSettlement: instance}));
+    this.store.dispatch(settlementEditWorkflowInitiatedFromList({ editedSettlement: instance }));
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

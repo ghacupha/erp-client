@@ -26,18 +26,12 @@ import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
+import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([]),
-    EffectsModule.forFeature([
-      DealerInvoiceWorkflowEffects,
-      DealerPaymentsEffects
-    ]),
-    StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
-    StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
-    StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
-    StoreModule.forFeature('settlementsUpdateForm', fromSettlementUpdates.settlementUpdateStateReducer),
+    EffectsModule.forRoot([SettlementUpdatesEffects, DealerInvoiceWorkflowEffects, DealerPaymentsEffects]),
+    EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
@@ -50,6 +44,10 @@ import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.ef
       name: 'ERP App States',
       maxAge: 25, // Retains last 25 states
     }),
+    StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
+    StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
+    StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
+    StoreModule.forFeature('settlementUpdateForm', fromSettlementUpdates.settlementUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

@@ -33,10 +33,10 @@ const settlementRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'copy',
+    path: ':id/copy',
     component: SettlementUpdateComponent,
     resolve: {
-      settlement: SettlementRoutingResolveService,
+      settlement: SettlementCopyRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },
