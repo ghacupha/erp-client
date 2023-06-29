@@ -31,7 +31,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
-  settlementCopyWorkflowInitiatedFromList,
+  settlementCopyWorkflowInitiatedFromList, settlementCreationWorkflowInitiatedFromList,
   settlementEditWorkflowInitiatedFromList
 } from '../../../store/actions/settlement-update-menu.actions';
 
@@ -60,6 +60,10 @@ export class SettlementComponent implements OnInit {
     protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(settlementCreationWorkflowInitiatedFromList());
   }
 
   copyButtonEvent(instance: ISettlement): void {

@@ -4,7 +4,7 @@ import {
   newSettlementCreationSequenceInitiatedFomList,
   settlementCopyWorkflowInitiatedEnRoute,
   settlementCopyWorkflowInitiatedFromDetails,
-  settlementCopyWorkflowInitiatedFromList,
+  settlementCopyWorkflowInitiatedFromList, settlementCreationWorkflowInitiatedFromList,
   settlementEditWorkflowInitiatedFromDetails,
   settlementEditWorkflowInitiatedFromList,
   settlementUpdateCancelButtonClicked,
@@ -30,6 +30,16 @@ export interface SettlementsFormState {
 
 const _settlementUpdateStateReducer = createReducer(
   initialState,
+
+  on(settlementCreationWorkflowInitiatedFromList, (state) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+    }
+  })),
 
   on(settlementCopyWorkflowInitiatedFromDetails, (state, {copiedSettlement}) => ({
     ...state,

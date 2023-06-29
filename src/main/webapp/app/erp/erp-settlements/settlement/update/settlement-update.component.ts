@@ -121,27 +121,36 @@ export class SettlementUpdateComponent implements OnInit {
     protected store: Store<State>,
   ) {
 
+
+  }
+
+  ngOnInit(): void {
+
     this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
     this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
     this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement= copiedSettlement);
-  }
-
-  ngOnInit(): void {
 
     if (this.weAreCopyingAPayment) {
       this.activatedRoute.data.subscribe(({ settlement }) => {
         this.copyForm(settlement);
       });
+      this.loadRelationshipsOptions();
     }
 
     if (this.weAreEditingAPayment ){
       this.activatedRoute.data.subscribe(({ settlement }) => {
         this.updateForm(settlement);
       });
+      this.loadRelationshipsOptions();
     }
 
-    this.loadRelationshipsOptions();
+    if (this.weAreCreatingAPayment ){
+      this.activatedRoute.data.subscribe(({ settlement }) => {
+        // this.updateForm(settlement);
+        this.loadRelationshipsOptions();
+      });
+    }
 
     this.updateTodaysDate();
     this.updatePreferredCurrency();
@@ -391,11 +400,7 @@ export class SettlementUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const settlement = this.createFromForm();
-    if (settlement.id !== undefined) {
-      this.subscribeToSaveResponse(this.settlementService.update(settlement));
-    } else {
-      this.subscribeToSaveResponse(this.settlementService.create(settlement));
-    }
+    this.subscribeToSaveResponse(this.settlementService.create(settlement));
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ISettlement>>): void {

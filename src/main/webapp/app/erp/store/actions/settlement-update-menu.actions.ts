@@ -6,6 +6,10 @@ export const settlementCopyWorkflowInitiatedEnRoute = createAction(
   props<{ copiedSettlement: ISettlement }>()
 );
 
+export const settlementCreationWorkflowInitiatedFromList = createAction(
+  '[Settlements Page] settlement creation workflow initiated'
+);
+
 export const settlementCopyWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement copy workflow initiated',
   props<{ copiedSettlement: ISettlement }>()
