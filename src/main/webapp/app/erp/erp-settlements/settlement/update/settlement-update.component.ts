@@ -16,10 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map,} from 'rxjs/operators';
 
@@ -49,11 +49,11 @@ import { IBusinessDocument } from '../../../erp-pages/business-document/business
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
-  settlementUpdateErrorHasOccurred,
+  settlementUpdateErrorHasOccurred, settlementUpdateFormHasBeenDestroyed,
   settlementUpdatePreviousStateMethodCalled, settlementUpdateSaveHasBeenFinalized
 } from '../../../store/actions/settlement-update-menu.actions';
 import {
-  copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus,
+  copyingSettlementStatus, creatingSettlementStatus, editingSettlementStatus, settlementBrowserRefreshStatus,
   settlementUpdateSelectedPayment
 } from '../../../store/selectors/settlement-update-menu-status.selectors';
 
@@ -61,7 +61,7 @@ import {
   selector: 'jhi-settlement-update',
   templateUrl: './settlement-update.component.html',
 })
-export class SettlementUpdateComponent implements OnInit {
+export class SettlementUpdateComponent implements OnInit, OnDestroy {
   isSaving = false;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -77,8 +77,11 @@ export class SettlementUpdateComponent implements OnInit {
   weAreCopyingAPayment = false;
   weAreEditingAPayment = false;
   weAreCreatingAPayment = false;
+  browserHasBeenRefreshed = false;
 
   selectedSettlement: ISettlement = {...new Settlement()};
+
+  browserRefresh = false;
 
   editForm = this.fb.group({
     id: [],
@@ -119,44 +122,57 @@ export class SettlementUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected fb: FormBuilder,
     protected store: Store<State>,
+    protected router: Router,
   ) {
-
-
-  }
-
-  ngOnInit(): void {
 
     this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
     this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
     this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
-    this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement= copiedSettlement);
+    this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement = copiedSettlement);
+    this.store.pipe(select(settlementBrowserRefreshStatus)).subscribe(refreshed => this.browserHasBeenRefreshed = refreshed);
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this. browserRefresh = !router.navigated;
+      }
+    });
+
+  }
+
+  ngOnDestroy(): void {
+    // todo workflow to restore inputs when browser is refreshed
+    this.store.dispatch(settlementUpdateFormHasBeenDestroyed({ copiedPartialSettlement: this.createPartialFromForm() }));
+  }
+
+  ngOnInit(): void {
 
     if (this.weAreCopyingAPayment) {
       this.activatedRoute.data.subscribe(({ settlement }) => {
         this.copyForm(settlement);
       });
-      this.loadRelationshipsOptions();
-    }
-
-    if (this.weAreEditingAPayment ){
+    } else if (this.weAreEditingAPayment ){
       this.activatedRoute.data.subscribe(({ settlement }) => {
         this.updateForm(settlement);
       });
-      this.loadRelationshipsOptions();
+    } else {
+
+      // todo workflow to restore inputs when browser is refreshed
+      if (this.browserHasBeenRefreshed) {
+        this.copyForm(this.selectedSettlement);
+      }
+
+      // todo workflow to restore inputs when browser is refreshed
+      // Because you never know if someone will be needlessly refreshing this form
+      // this.store.dispatch(settlementCreationWorkflowInitiatedFromUpdateFormOnInit({ copiedPartialSettlement: this.createPartialFromForm() }))
+
+      this.updateTodaysDate()
+      this.updatePreferredCategory();
+      this.updatePreferredCurrency();
+      this.updatePreferredSignatories();
+      this.updatePreferredPaymentLabels();
     }
 
-    if (this.weAreCreatingAPayment ){
-      this.activatedRoute.data.subscribe(({ settlement }) => {
-        // this.updateForm(settlement);
-        this.loadRelationshipsOptions();
-      });
-    }
-
-    this.updateTodaysDate();
-    this.updatePreferredCurrency();
-    this.updatePreferredCategory();
-    this.updatePreferredSignatories();
-    this.updatePreferredPaymentLabels();
+    // this.loadRelationshipsOptions();
     this.updatePreferredBillerGivenInvoice();
     this.updatePreferredPaymentAmountGivenInvoice();
     this.updatePreferredCurrencyGivenInvoice();
@@ -166,11 +182,9 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updateTodaysDate(): void {
-    if (this.editForm.get(['id'])?.value === undefined ) {
       this.editForm.patchValue({
         paymentDate: dayjs().startOf('day')
       });
-    }
   }
 
   updatePreferredCurrency(): void {
@@ -187,7 +201,6 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredCategory(): void {
-    if (this.editForm.get(['id'])?.value === undefined ) {
     this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentCategoryName")
       .subscribe((mapped) => {
           this.paymentCategoryService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
@@ -197,21 +210,18 @@ export class SettlementUpdateComponent implements OnInit {
               }
             });
         });
-    }
   }
 
   updatePreferredSignatories(): void {
-    if (this.editForm.get(['id'])?.value === undefined ) {
-      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
-        .subscribe((mapped) => {
-          this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
-            .subscribe(({ body: vals }) => {
-              if (vals) {
-                  this.editForm.get(['signatories'])?.setValue(vals)
-              }
-            });
-        });
-    }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdateSignatoryName")
+      .subscribe((mapped) => {
+        this.dealerService.search(<SearchWithPagination>{page: 0,size: 0,sort: [],query: mapped.body?.mappedValue})
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+                this.editForm.get(['signatories'])?.setValue(vals)
+            }
+          });
+      });
   }
 
   updatePreferredBillerGivenInvoice(): void {
@@ -291,19 +301,17 @@ export class SettlementUpdateComponent implements OnInit {
   }
 
   updatePreferredPaymentLabels(): void {
-    if (this.editForm.get(['id'])?.value === undefined ) {
-      this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentLabel")
-        .subscribe((mapped) => {
-          this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
-            .subscribe(({ body: vals }) => {
-              if (vals) {
-                this.editForm.patchValue({
-                  paymentLabels: [...vals]
-                });
-              }
-            });
-        });
-    }
+    this.universallyUniqueMappingService.findMap("globallyPreferredSettlementUpdatePaymentLabel")
+      .subscribe((mapped) => {
+        this.paymentLabelService.search(<SearchWithPagination>{ page: 0, size: 0, sort: [], query: mapped.body?.mappedValue })
+          .subscribe(({ body: vals }) => {
+            if (vals) {
+              this.editForm.patchValue({
+                paymentLabels: [...vals]
+              });
+            }
+          });
+      });
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -691,5 +699,9 @@ export class SettlementUpdateComponent implements OnInit {
       signatories: this.editForm.get(['signatories'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
+  }
+
+  protected createPartialFromForm(): ISettlement {
+    return this.copyFromForm();
   }
 }

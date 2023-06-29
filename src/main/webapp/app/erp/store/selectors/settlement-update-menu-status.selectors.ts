@@ -28,3 +28,8 @@ export const copyingSettlementStatus = createSelector(
   settlementStatusFeatureSelector,
   state => state.settlementsFormState.weAreCopying
 );
+
+export const settlementBrowserRefreshStatus = createSelector(
+  settlementStatusFeatureSelector,
+  state => state.settlementsFormState.browserHasBeenRefreshed
+);

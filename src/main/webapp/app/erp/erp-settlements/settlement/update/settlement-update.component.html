@@ -106,6 +106,15 @@
           />
         </div>
 
+        <jhi-m2m-payment-label-form-control
+          ngDefaultControl
+          formControlName='paymentLabels'
+          [inputValues]="editForm.get(['paymentLabels'])!.value"
+          (selectedValues)='updatePaymentLabels($event)'
+          inputControlLabel='Payment Labels'
+        >
+        </jhi-m2m-payment-label-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
@@ -200,15 +209,6 @@
           <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
         </div>
 
-        <jhi-m2m-payment-label-form-control
-          ngDefaultControl
-          formControlName='paymentLabels'
-          [inputValues]="editForm.get(['paymentLabels'])!.value"
-          (selectedValues)='updatePaymentLabels($event)'
-          inputControlLabel='Payment Labels'
-        >
-        </jhi-m2m-payment-label-form-control>
-
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
           formControlName='placeholders'
@@ -265,6 +265,7 @@
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
           [hidden]='!weAreCreatingAPayment'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>

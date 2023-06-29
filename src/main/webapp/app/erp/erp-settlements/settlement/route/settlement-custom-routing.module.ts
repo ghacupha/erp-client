@@ -20,7 +20,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserRouteAccessService } from '../../../../core/auth/user-route-access.service';
 import { NgModule } from '@angular/core';
 import { SettlementUpdateComponent } from '../update/settlement-update.component';
-import { SettlementRoutingResolveService } from './settlement-routing-resolve.service';
+import { SettlementNewRoutingResolveService } from './settlement-new-routing-resolve.service';
 import { SettlementCopyRoutingResolveService } from './settlement-copy-routing-resolve.service';
 
 const settlementRoute: Routes = [
@@ -28,7 +28,7 @@ const settlementRoute: Routes = [
     path: 'extension/new',
     component: SettlementUpdateComponent,
     resolve: {
-      settlement: SettlementRoutingResolveService,
+      settlement: SettlementNewRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -37,6 +37,14 @@ const settlementRoute: Routes = [
     component: SettlementUpdateComponent,
     resolve: {
       settlement: SettlementCopyRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'new',
+    component: SettlementUpdateComponent,
+    resolve: {
+      settlement: SettlementNewRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },

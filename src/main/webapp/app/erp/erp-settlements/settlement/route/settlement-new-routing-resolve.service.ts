@@ -1,18 +1,16 @@
-import { SettlementService } from '../service/settlement.service';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
-import { ISettlement, Settlement } from '../settlement.model';
-import { mergeMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ISettlement, Settlement } from '../settlement.model';
+import { SettlementService } from '../service/settlement.service';
 import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
-import {
-  settlementCopyWorkflowInitiatedEnRoute
-} from '../../../store/actions/settlement-update-menu.actions';
+import { EMPTY, Observable, of } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { HttpResponse } from '@angular/common/http';
+import { settlementCreationWorkflowInitiatedEnRoute } from '../../../store/actions/settlement-update-menu.actions';
 
 @Injectable({ providedIn: 'root' })
-export class SettlementCopyRoutingResolveService implements Resolve<ISettlement> {
+export class SettlementNewRoutingResolveService implements Resolve<ISettlement> {
 
   constructor(
     protected service: SettlementService,
@@ -25,7 +23,7 @@ export class SettlementCopyRoutingResolveService implements Resolve<ISettlement>
       return this.service.find(id).pipe(
         mergeMap((settlement: HttpResponse<Settlement>) => {
           if (settlement.body) {
-            this.store.dispatch(settlementCopyWorkflowInitiatedEnRoute({ copiedSettlement: settlement.body }));
+            this.store.dispatch(settlementCreationWorkflowInitiatedEnRoute());
             return of(settlement.body);
           } else {
             this.router.navigate(['404']);

@@ -43,14 +43,6 @@ const settlementRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: 'new',
-    component: SettlementUpdateComponent,
-    resolve: {
-      settlement: SettlementRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
     path: ':id/edit',
     component: SettlementUpdateComponent,
     resolve: {

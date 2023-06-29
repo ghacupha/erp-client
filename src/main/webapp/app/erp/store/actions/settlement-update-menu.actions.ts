@@ -10,6 +10,25 @@ export const settlementCreationWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement creation workflow initiated'
 );
 
+export const settlementCreationWorkflowInitiatedEnRoute = createAction(
+  '[Settlements AddNew Route] settlement creation workflow initiated en route'
+);
+
+export const settlementCreationWorkflowInitiatedFromUpdateFormOnInit = createAction(
+  '[Settlements Update From: OnInit] settlement creation workflow initiated on form initialization',
+  props<{ copiedPartialSettlement: ISettlement }>()
+);
+
+export const settlementCreationWorkflowRefreshedFromForm = createAction(
+  '[Settlements Update Refreshed] settlement creation workflow initiated on form initialization',
+  props<{ copiedPartialSettlement: ISettlement }>()
+);
+
+export const settlementUpdateFormHasBeenDestroyed = createAction(
+  '[Settlements Update Form Destroyed Event] settlement creation workflow interrupted by refresh event',
+  props<{ copiedPartialSettlement: ISettlement }>()
+);
+
 export const settlementCopyWorkflowInitiatedFromList = createAction(
   '[Settlements Page] settlement copy workflow initiated',
   props<{ copiedSettlement: ISettlement }>()

@@ -4,13 +4,17 @@ import {
   newSettlementCreationSequenceInitiatedFomList,
   settlementCopyWorkflowInitiatedEnRoute,
   settlementCopyWorkflowInitiatedFromDetails,
-  settlementCopyWorkflowInitiatedFromList, settlementCreationWorkflowInitiatedFromList,
+  settlementCopyWorkflowInitiatedFromList,
+  settlementCreationWorkflowInitiatedEnRoute,
+  settlementCreationWorkflowInitiatedFromList,
+  settlementCreationWorkflowInitiatedFromUpdateFormOnInit,
+  settlementCreationWorkflowRefreshedFromForm,
   settlementEditWorkflowInitiatedFromDetails,
   settlementEditWorkflowInitiatedFromList,
   settlementUpdateCancelButtonClicked,
   settlementUpdateCopyHasBeenFinalized,
   settlementUpdateEditHasBeenFinalized,
-  settlementUpdateErrorHasOccurred,
+  settlementUpdateErrorHasOccurred, settlementUpdateFormHasBeenDestroyed,
   settlementUpdateInstanceAcquiredFromBackend,
   settlementUpdateInstanceAcquisitionFromBackendFailed,
   settlementUpdatePreviousStateMethodCalled,
@@ -22,6 +26,7 @@ export const settlementUpdateFormStateSelector = 'settlementUpdateForm';
 
 export interface SettlementsFormState {
   backEndFetchComplete: boolean;
+  browserHasBeenRefreshed: boolean;
   selectedSettlement: ISettlement;
   weAreCopying: boolean;
   weAreEditing: boolean;
@@ -41,6 +46,52 @@ const _settlementUpdateStateReducer = createReducer(
     }
   })),
 
+  on(settlementCreationWorkflowInitiatedEnRoute, (state) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+    }
+  })),
+
+  on(settlementCreationWorkflowInitiatedFromUpdateFormOnInit, (state, {copiedPartialSettlement}) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedSettlement: copiedPartialSettlement,
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+      browserHasBeenRefreshed: true,
+    }
+  })),
+
+  on(settlementCreationWorkflowRefreshedFromForm, (state, {copiedPartialSettlement}) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedSettlement: copiedPartialSettlement,
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+      browserHasBeenRefreshed: true,
+    }
+  })),
+
+  on(settlementUpdateFormHasBeenDestroyed, (state, {copiedPartialSettlement}) => ({
+    ...state,
+    settlementsFormState: {
+      ...state.settlementsFormState,
+      selectedSettlement: copiedPartialSettlement,
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+      browserHasBeenRefreshed: true,
+    }
+  })),
+
   on(settlementCopyWorkflowInitiatedFromDetails, (state, {copiedSettlement}) => ({
     ...state,
     settlementsFormState: {
@@ -51,7 +102,7 @@ const _settlementUpdateStateReducer = createReducer(
     }
   })),
 
-  on(settlementCopyWorkflowInitiatedEnRoute, (state, {copiedSettlement}) => ({
+  on(settlementCopyWorkflowInitiatedEnRoute, (state) => ({
     ...state,
     settlementsFormState: {
       ...state.settlementsFormState,
@@ -139,7 +190,8 @@ const _settlementUpdateStateReducer = createReducer(
       selectedPayment: {},
       weAreEditing: false,
       weAreCopying: false,
-      weAreCreating: false
+      weAreCreating: false,
+      browserHasBeenRefreshed: false,
     }
   })),
 
@@ -149,7 +201,10 @@ const _settlementUpdateStateReducer = createReducer(
       settlementsFormState: {
         ...state.settlementsFormState,
         selectedPayment: {},
-        weAreCreating: false
+        weAreCreating: false,
+        weAreEditing: false,
+        weAreCopying: false,
+        browserHasBeenRefreshed: false,
       }
     }
   )),
@@ -159,7 +214,10 @@ const _settlementUpdateStateReducer = createReducer(
       settlementsFormState: {
         ...state.settlementsFormState,
         selectedPayment: {},
-        weAreCopying: false
+        weAreCreating: false,
+        weAreEditing: false,
+        weAreCopying: false,
+        browserHasBeenRefreshed: false,
       }
     }
   )),
@@ -169,7 +227,10 @@ const _settlementUpdateStateReducer = createReducer(
       settlementsFormState: {
         ...state.settlementsFormState,
         selectedPayment: {},
-        weAreEditing: false
+        weAreCreating: false,
+        weAreEditing: false,
+        weAreCopying: false,
+        browserHasBeenRefreshed: false,
       }
     }
   )),
@@ -182,6 +243,7 @@ const _settlementUpdateStateReducer = createReducer(
         weAreCreating: false,
         weAreEditing: false,
         weAreCopying: false,
+        browserHasBeenRefreshed: false,
       }
     }
   )),
@@ -194,6 +256,7 @@ const _settlementUpdateStateReducer = createReducer(
         weAreCreating: false,
         weAreEditing: false,
         weAreCopying: false,
+        browserHasBeenRefreshed: false,
       }
     }
   )),
