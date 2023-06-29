@@ -129,15 +129,18 @@ export class SettlementUpdateComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.weAreEditingAPayment || this.weAreCopyingAPayment) {
-      this.activatedRoute.data.subscribe(({settlement}) => {
+    if (this.weAreCopyingAPayment) {
+      this.activatedRoute.data.subscribe(({ settlement }) => {
         this.copyForm(settlement);
       });
-    }else {
-      this.activatedRoute.data.subscribe(({settlement}) => {
+    }
+
+    if (this.weAreEditingAPayment ){
+      this.activatedRoute.data.subscribe(({ settlement }) => {
         this.updateForm(settlement);
       });
     }
+
     this.loadRelationshipsOptions();
 
     this.updateTodaysDate();
@@ -369,6 +372,20 @@ export class SettlementUpdateComponent implements OnInit {
     // todo create action for previous-state-update
     this.store.dispatch(settlementUpdatePreviousStateMethodCalled());
     window.history.back();
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    const settlement = this.copyFromForm();
+    this.subscribeToSaveResponse(this.settlementService.create(settlement));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    const settlement = this.createFromForm();
+    if (settlement.id !== undefined) {
+      this.subscribeToSaveResponse(this.settlementService.update(settlement));
+    }
   }
 
   save(): void {
@@ -623,6 +640,32 @@ export class SettlementUpdateComponent implements OnInit {
     return {
       ...new Settlement(),
       id: this.editForm.get(['id'])!.value,
+      paymentNumber: this.editForm.get(['paymentNumber'])!.value,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
+      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      notes: this.editForm.get(['notes'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
+      calculationFileContentType: this.editForm.get(['calculationFileContentType'])!.value,
+      calculationFile: this.editForm.get(['calculationFile'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      paymentCategory: this.editForm.get(['paymentCategory'])!.value,
+      groupSettlement: this.editForm.get(['groupSettlement'])!.value,
+      biller: this.editForm.get(['biller'])!.value,
+      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
+      signatories: this.editForm.get(['signatories'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+    };
+  }
+
+
+  protected copyFromForm(): ISettlement {
+    return {
+      ...new Settlement(),
       paymentNumber: this.editForm.get(['paymentNumber'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,

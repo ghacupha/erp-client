@@ -20,8 +20,9 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='weAreCopyingAPayment'>Create or edit a Settlement</h2>
-      <h2 id="jhi-settlement-heading-copy" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCopyingAPayment'>Copy: {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</h2>
+      <h2 id="jhi-settlement-heading" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreEditingAPayment'>Editing {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</h2>
+      <h2 id="jhi-settlement-heading-copy" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCopyingAPayment'>Copying {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</h2>
+      <h2 id="jhi-settlement-heading-create" data-cy="SettlementCreateUpdateHeading" [hidden]='!weAreCreatingAPayment'>New Settlement</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -259,12 +260,37 @@
 
         <button
           type="submit"
-          id="save-entity"
+          id="create-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreatingAPayment'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditingAPayment'
+          (click)="edit()"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Edit: {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</span>
+        </button>
+
+        <button
+          type="button"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopyingAPayment'
+          (click)="copy()"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Copy: {{ selectedSettlement.paymentNumber }}; {{ selectedSettlement.paymentDate | formatMediumDate  }}</span>
         </button>
       </div>
     </form>
