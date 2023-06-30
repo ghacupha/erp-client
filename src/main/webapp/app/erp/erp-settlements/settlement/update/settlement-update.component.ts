@@ -157,9 +157,9 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
     } else {
 
       // todo workflow to restore inputs when browser is refreshed
-      if (this.browserHasBeenRefreshed) {
-        this.copyForm(this.selectedSettlement);
-      }
+      // if (this.browserHasBeenRefreshed) {
+      //   this.copyForm(this.selectedSettlement);
+      // }
 
       // todo workflow to restore inputs when browser is refreshed
       // Because you never know if someone will be needlessly refreshing this form
