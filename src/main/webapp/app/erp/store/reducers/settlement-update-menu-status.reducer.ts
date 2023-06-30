@@ -105,7 +105,7 @@ const _settlementUpdateStateReducer = createReducer(
       selectedSettlement: copiedPartialSettlement,
       weAreCopying: false,
       weAreEditing: false,
-      weAreCreating: true,
+      weAreCreating: false,
       browserHasBeenRefreshed: true,
     }
   })),
