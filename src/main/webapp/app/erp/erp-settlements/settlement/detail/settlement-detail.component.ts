@@ -21,6 +21,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ISettlement } from '../settlement.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  settlementCopyWorkflowInitiatedFromDetails,
+  settlementEditWorkflowInitiatedFromDetails
+} from '../../../store/actions/settlement-update-menu.actions';
 
 @Component({
   selector: 'jhi-settlement-detail',
@@ -29,12 +35,20 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class SettlementDetailComponent implements OnInit {
   settlement: ISettlement | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>,) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ settlement }) => {
       this.settlement = settlement;
     });
+  }
+
+  copyButtonEvent(instance: ISettlement): void {
+    this.store.dispatch(settlementCopyWorkflowInitiatedFromDetails({copiedSettlement: instance}));
+  }
+
+  editButtonEvent(instance: ISettlement): void {
+    this.store.dispatch(settlementEditWorkflowInitiatedFromDetails({editedSettlement: instance}));
   }
 
   byteSize(base64String: string): string {

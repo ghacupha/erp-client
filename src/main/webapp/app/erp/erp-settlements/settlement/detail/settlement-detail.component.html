@@ -141,8 +141,12 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/settlement', settlement.id, 'edit']" class="btn btn-primary">
+      <button type="button" [routerLink]="['/settlement', settlement.id, 'edit']" (click)='editButtonEvent(settlement)' class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      <button type="button" [routerLink]="['/settlement', settlement.id, 'edit']" (click)='copyButtonEvent(settlement)' class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

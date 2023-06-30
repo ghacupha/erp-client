@@ -394,7 +394,7 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
   copy(): void {
     this.isSaving = true;
     const settlement = this.copyFromForm();
-    this.subscribeToSaveResponse(this.settlementService.create(settlement));
+    this.subscribeToCopyResponse(this.settlementService.create(settlement));
   }
 
   edit(): void {
@@ -416,6 +416,19 @@ export class SettlementUpdateComponent implements OnInit, OnDestroy {
       () => this.onSaveSuccess(),
       () => this.onSaveError()
     );
+  }
+
+  protected subscribeToCopyResponse(result: Observable<HttpResponse<ISettlement>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      (res) => this.onCopySuccess(res.body),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onCopySuccess(res: ISettlement | null): void {
+    if (res) {
+      this.router.navigate(['/settlement', res.id, 'view']);
+    }
   }
 
   protected onSaveSuccess(): void {
