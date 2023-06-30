@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = versionInfo.hash.substring(0,8);
 
-  clientVersion = '1.4.2';
+  clientVersion = '1.4.3';
 
   serverVersion = versionInfo.tag;
 
