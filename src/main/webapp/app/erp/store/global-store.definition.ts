@@ -21,6 +21,7 @@ import {DealerWorkflowState} from "./reducers/dealer-workflows-status.reducer";
 import {DealerInvoiceWorkflowState} from "./reducers/dealer-invoice-workflows-status.reducer";
 import { SettlementsFormState } from './reducers/settlement-update-menu-status.reducer';
 import { AssetRegistrationFormState } from './reducers/asset-registration-workflow-status.reducer';
+import { AssetAccessoryFormState } from './reducers/asset-accessory-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -28,6 +29,7 @@ export interface State {
   dealerWorkflowState: DealerWorkflowState,
   dealerInvoiceWorkflowState: DealerInvoiceWorkflowState,
   assetRegistrationFormState: AssetRegistrationFormState,
+  assetAccessoryFormState: AssetAccessoryFormState,
 }
 
 export const initialState: State = {
@@ -46,6 +48,14 @@ export const initialState: State = {
     weAreCreating: false,
   },
   assetRegistrationFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  assetAccessoryFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

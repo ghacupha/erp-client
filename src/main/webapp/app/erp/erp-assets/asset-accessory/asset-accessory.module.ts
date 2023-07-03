@@ -22,11 +22,11 @@ import { AssetAccessoryComponent } from './list/asset-accessory.component';
 import { AssetAccessoryDetailComponent } from './detail/asset-accessory-detail.component';
 import { AssetAccessoryUpdateComponent } from './update/asset-accessory-update.component';
 import { AssetAccessoryDeleteDialogComponent } from './delete/asset-accessory-delete-dialog.component';
-import { AssetAccessoryRoutingModule } from './route/asset-accessory-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { AssetAccessoryCustomRoutingModule } from './route/asset-accessory-custom-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetAccessoryRoutingModule, ErpCommonModule],
+  imports: [SharedModule, AssetAccessoryCustomRoutingModule, ErpCommonModule],
   declarations: [
     AssetAccessoryComponent,
     AssetAccessoryDetailComponent,

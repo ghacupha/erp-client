@@ -21,6 +21,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IAssetAccessory } from '../asset-accessory.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  assetAccessoryCopyWorkflowInitiatedFromView,
+  assetAccessoryEditWorkflowInitiatedFromView
+} from '../../../store/actions/asset-accessory-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-accessory-detail',
@@ -29,12 +35,20 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class AssetAccessoryDetailComponent implements OnInit {
   assetAccessory: IAssetAccessory | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetAccessory }) => {
       this.assetAccessory = assetAccessory;
     });
+  }
+
+  editButtonEvent(instance: IAssetAccessory): void {
+    this.store.dispatch(assetAccessoryEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IAssetAccessory): void {
+    this.store.dispatch(assetAccessoryCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   byteSize(base64String: string): string {

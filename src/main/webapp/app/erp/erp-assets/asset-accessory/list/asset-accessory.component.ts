@@ -28,6 +28,12 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { AssetAccessoryService } from '../service/asset-accessory.service';
 import { AssetAccessoryDeleteDialogComponent } from '../delete/asset-accessory-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  assetAccessoryCopyWorkflowInitiatedFromList,
+  assetAccessoryCreationInitiatedFromList, assetAccessoryEditWorkflowInitiatedFromList
+} from '../../../store/actions/asset-accessory-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-accessory',
@@ -49,9 +55,22 @@ export class AssetAccessoryComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(assetAccessoryCreationInitiatedFromList())
+  }
+
+  copyButtonEvent(instance: IAssetAccessory): void {
+    this.store.dispatch(assetAccessoryCopyWorkflowInitiatedFromList({copiedInstance: instance}));
+  }
+
+  editButtonEvent(instance: IAssetAccessory): void {
+    this.store.dispatch(assetAccessoryEditWorkflowInitiatedFromList({editedInstance: instance}))
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

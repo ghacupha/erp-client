@@ -50,8 +50,16 @@ import { ServiceOutletService } from '../../../erp-granular/service-outlet/servi
 import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { ISettlement} from '../../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  assetAccessoryUpdateSelectedInstance,
+  copyingAssetAccessoryStatus, creatingAssetAccessoryStatus,
+  editingAssetAccessoryStatus
+} from '../../../store/selectors/asset-accessory-workflow-status.selector';
+import { assetAccessoryDataHasMutated } from '../../../store/actions/asset-accessory-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-accessory-update',
@@ -72,6 +80,12 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new AssetAccessory()}
 
   editForm = this.fb.group({
     id: [],
@@ -113,15 +127,28 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     protected businessDocumentService: BusinessDocumentService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingAssetAccessoryStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingAssetAccessoryStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingAssetAccessoryStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(assetAccessoryUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ assetAccessory }) => {
-      this.updateForm(assetAccessory);
 
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem)
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
-    });
+    }
   }
 
   updateDealer(dealerUpdate: IDealer): void {
@@ -218,17 +245,24 @@ export class AssetAccessoryUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(assetAccessoryDataHasMutated());
+
     window.history.back();
   }
 
   save(): void {
     this.isSaving = true;
-    const assetAccessory = this.createFromForm();
-    if (assetAccessory.id !== undefined) {
-      this.subscribeToSaveResponse(this.assetAccessoryService.update(assetAccessory));
-    } else {
-      this.subscribeToSaveResponse(this.assetAccessoryService.create(assetAccessory));
-    }
+    this.subscribeToSaveResponse(this.assetAccessoryService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.assetAccessoryService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.assetAccessoryService.create(this.copyFromForm()));
   }
 
   trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
@@ -486,6 +520,81 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     );
   }
 
+  protected copyForm(assetAccessory: IAssetAccessory): void {
+    this.editForm.patchValue({
+      id: assetAccessory.id,
+      assetTag: assetAccessory.assetTag,
+      assetDetails: assetAccessory.assetDetails,
+      comments: assetAccessory.comments,
+      commentsContentType: assetAccessory.commentsContentType,
+      modelNumber: assetAccessory.modelNumber,
+      serialNumber: assetAccessory.serialNumber,
+      assetWarranties: assetAccessory.assetWarranties,
+      placeholders: assetAccessory.placeholders,
+      paymentInvoices: assetAccessory.paymentInvoices,
+      serviceOutlet: assetAccessory.serviceOutlet,
+      settlements: assetAccessory.settlements,
+      assetCategory: assetAccessory.assetCategory,
+      purchaseOrders: assetAccessory.purchaseOrders,
+      deliveryNotes: assetAccessory.deliveryNotes,
+      jobSheets: assetAccessory.jobSheets,
+      dealer: assetAccessory.dealer,
+      designatedUsers: assetAccessory.designatedUsers,
+      businessDocuments: assetAccessory.businessDocuments,
+      universallyUniqueMappings: assetAccessory.universallyUniqueMappings,
+    });
+
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(assetAccessory.assetWarranties ?? [])
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(assetAccessory.placeholders ?? [])
+    );
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+      this.paymentInvoicesSharedCollection,
+      ...(assetAccessory.paymentInvoices ?? [])
+    );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      assetAccessory.serviceOutlet
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(assetAccessory.settlements ?? [])
+    );
+    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+      this.assetCategoriesSharedCollection,
+      assetAccessory.assetCategory
+    );
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+      this.purchaseOrdersSharedCollection,
+      ...(assetAccessory.purchaseOrders ?? [])
+    );
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(assetAccessory.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(assetAccessory.jobSheets ?? [])
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      assetAccessory.dealer,
+      ...(assetAccessory.designatedUsers ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(assetAccessory.businessDocuments ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(assetAccessory.universallyUniqueMappings ?? [])
+    );
+  }
+
   protected loadRelationshipsOptions(): void {
     this.assetWarrantyService
       .query()
@@ -634,6 +743,31 @@ export class AssetAccessoryUpdateComponent implements OnInit {
     return {
       ...new AssetAccessory(),
       id: this.editForm.get(['id'])!.value,
+      assetTag: this.editForm.get(['assetTag'])!.value,
+      assetDetails: this.editForm.get(['assetDetails'])!.value,
+      commentsContentType: this.editForm.get(['commentsContentType'])!.value,
+      comments: this.editForm.get(['comments'])!.value,
+      modelNumber: this.editForm.get(['modelNumber'])!.value,
+      serialNumber: this.editForm.get(['serialNumber'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      settlements: this.editForm.get(['settlements'])!.value,
+      assetCategory: this.editForm.get(['assetCategory'])!.value,
+      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
+      designatedUsers: this.editForm.get(['designatedUsers'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IAssetAccessory {
+    return {
+      ...new AssetAccessory(),
       assetTag: this.editForm.get(['assetTag'])!.value,
       assetDetails: this.editForm.get(['assetDetails'])!.value,
       commentsContentType: this.editForm.get(['commentsContentType'])!.value,

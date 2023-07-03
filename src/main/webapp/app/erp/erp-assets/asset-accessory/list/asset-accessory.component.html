@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-asset-accessory"
         [routerLink]="['/asset-accessory/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Asset Accessory </span>
@@ -114,7 +115,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button
@@ -122,14 +123,26 @@
                 [routerLink]="['/asset-accessory', assetAccessory.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
+                (click)='editButtonEvent(assetAccessory)'
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                (click)='copyButtonEvent(assetAccessory)'
+                [routerLink]="['/asset-accessory', assetAccessory.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button type="submit" (click)="delete(assetAccessory)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>
