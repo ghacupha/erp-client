@@ -19,6 +19,10 @@
 import { createAction, props } from '@ngrx/store';
 import { IAssetRegistration } from '../../erp-assets/asset-registration/asset-registration.model';
 
+export const assetRegistrationCreationInitiatedFromList = createAction(
+  '[FA Registration Creation: List] FA registration creation workflow initiated',
+);
+
 export const assetRegistrationCopyWorkflowInitiatedEnRoute = createAction(
   '[FA Registration Copy: Route] FA registration copy workflow initiated',
   props<{ copiedInstance: IAssetRegistration }>()
@@ -49,6 +53,18 @@ export const assetRegistrationEditWorkflowInitiatedFromView = createAction(
   props<{ editedInstance: IAssetRegistration }>()
 );
 
+export const assetRegistrationCreationInitiatedEnRoute = createAction(
+  '[FA Registration: Route] FA registration create workflow initiated',
+);
+
 export const assetRegistrationCreationWorkflowInitiatedFromList = createAction(
   '[FA Registration Create: List] FA registration create workflow initiated',
+);
+
+export const assetRegistrationUpdateFormHasBeenDestroyed = createAction(
+  '[AssetReg Form] AssetReg form destroyed',
+);
+
+export const assetRegistrationDataHasMutated = createAction(
+  '[AssetReg Form] AssetReg form data mutated',
 );

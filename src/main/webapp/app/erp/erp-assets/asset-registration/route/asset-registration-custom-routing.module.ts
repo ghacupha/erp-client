@@ -16,37 +16,27 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { AssetRegistrationComponent } from '../list/asset-registration.component';
-import { AssetRegistrationDetailComponent } from '../detail/asset-registration-detail.component';
+import { UserRouteAccessService } from '../../../../core/auth/user-route-access.service';
 import { AssetRegistrationUpdateComponent } from '../update/asset-registration-update.component';
-import { AssetRegistrationRoutingResolveService } from './asset-registration-routing-resolve.service';
+import { NgModule } from '@angular/core';
+import { AssetRegistrationCopyRoutingResolveService } from './asset-registration-copy-routing-resolve.service';
+import { AssetRegistrationCreationRoutingResolveService } from './asset-registration-creation-routing-resolve.service';
 
 const assetRegistrationRoute: Routes = [
   {
-    path: '',
-    component: AssetRegistrationComponent,
-    data: {
-      defaultSort: 'id,asc',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/view',
-    component: AssetRegistrationDetailComponent,
-    resolve: {
-      assetRegistration: AssetRegistrationRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/edit',
+    path: ':id/copy',
     component: AssetRegistrationUpdateComponent,
     resolve: {
-      assetRegistration: AssetRegistrationRoutingResolveService,
+      assetRegistration: AssetRegistrationCopyRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'new',
+    component: AssetRegistrationUpdateComponent,
+    resolve: {
+      assetRegistration: AssetRegistrationCreationRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },
@@ -56,4 +46,6 @@ const assetRegistrationRoute: Routes = [
   imports: [RouterModule.forChild(assetRegistrationRoute)],
   exports: [RouterModule],
 })
-export class AssetRegistrationRoutingModule {}
+export class AssetRegistrationCustomRoutingModule {
+
+}

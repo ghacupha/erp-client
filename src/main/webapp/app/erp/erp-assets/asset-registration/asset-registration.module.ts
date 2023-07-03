@@ -24,9 +24,10 @@ import { AssetRegistrationUpdateComponent } from './update/asset-registration-up
 import { AssetRegistrationDeleteDialogComponent } from './delete/asset-registration-delete-dialog.component';
 import { AssetRegistrationRoutingModule } from './route/asset-registration-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { AssetRegistrationCustomRoutingModule } from './route/asset-registration-custom-routing.module';
 
 @NgModule({
-  imports: [SharedModule, AssetRegistrationRoutingModule, ErpCommonModule],
+  imports: [SharedModule, AssetRegistrationRoutingModule, AssetRegistrationCustomRoutingModule, ErpCommonModule],
   declarations: [
     AssetRegistrationComponent,
     AssetRegistrationDetailComponent,

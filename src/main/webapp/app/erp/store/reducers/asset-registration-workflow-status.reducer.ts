@@ -23,10 +23,14 @@ import {
   assetRegistrationCopyWorkflowInitiatedEnRoute,
   assetRegistrationCopyWorkflowInitiatedFromList,
   assetRegistrationCopyWorkflowInitiatedFromView,
+  assetRegistrationCreationInitiatedEnRoute,
+  assetRegistrationCreationInitiatedFromList,
   assetRegistrationCreationWorkflowInitiatedFromList,
+  assetRegistrationDataHasMutated,
   assetRegistrationEditWorkflowInitiatedEnRoute,
   assetRegistrationEditWorkflowInitiatedFromList,
-  assetRegistrationEditWorkflowInitiatedFromView
+  assetRegistrationEditWorkflowInitiatedFromView,
+  assetRegistrationUpdateFormHasBeenDestroyed
 } from '../actions/fixed-assets-register-update-status.actions';
 
 export const assetRegistrationUpdateFormStateSelector = 'assetRegistrationUpdateForm';
@@ -120,6 +124,50 @@ const _assetRegistrationUpdateStateReducer = createReducer(
       weAreCopying: false,
       weAreEditing: true,
       weAreCreating: false,
+    }
+  })),
+
+  on(assetRegistrationUpdateFormHasBeenDestroyed, (state) => ({
+    ...state,
+    assetRegistrationFormState: {
+      ...state.assetRegistrationFormState,
+      selectedInstance: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: false,
+    }
+  })),
+
+  on(assetRegistrationDataHasMutated, (state) => ({
+    ...state,
+    assetRegistrationFormState: {
+      ...state.assetRegistrationFormState,
+      selectedInstance: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: false,
+    }
+  })),
+
+  on(assetRegistrationCreationInitiatedFromList, (state) => ({
+    ...state,
+    assetRegistrationFormState: {
+      ...state.assetRegistrationFormState,
+      selectedInstance: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
+    }
+  })),
+
+  on(assetRegistrationCreationInitiatedEnRoute, (state) => ({
+    ...state,
+    assetRegistrationFormState: {
+      ...state.assetRegistrationFormState,
+      selectedInstance: {},
+      weAreCopying: false,
+      weAreEditing: false,
+      weAreCreating: true,
     }
   })),
 );

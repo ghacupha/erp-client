@@ -28,6 +28,13 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { AssetRegistrationService } from '../service/asset-registration.service';
 import { AssetRegistrationDeleteDialogComponent } from '../delete/asset-registration-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  assetRegistrationCopyWorkflowInitiatedFromList,
+  assetRegistrationCreationInitiatedFromList,
+  assetRegistrationEditWorkflowInitiatedFromList
+} from '../../../store/actions/fixed-assets-register-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-registration',
@@ -49,7 +56,8 @@ export class AssetRegistrationComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -108,6 +116,18 @@ export class AssetRegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(assetRegistrationCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: IAssetRegistration): void {
+    this.store.dispatch(assetRegistrationEditWorkflowInitiatedFromList({ editedInstance: instance }))
+  }
+
+  copyButtonEvent(instance: IAssetRegistration): void {
+    this.store.dispatch(assetRegistrationCopyWorkflowInitiatedFromList({ copiedInstance: instance }))
   }
 
   trackId(index: number, item: IAssetRegistration): number {
