@@ -293,9 +293,36 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Update {{ selectedItem.assetNumber }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy {{ selectedItem.assetNumber }}</span>
+        </button>
+
       </div>
     </form>
   </div>

@@ -64,6 +64,7 @@ import {
 } from '../../../store/selectors/asset-registration-workflow-status.selector';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
+import { assetRegistrationDataHasMutated } from '../../../store/actions/fixed-assets-register-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -243,17 +244,24 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(assetRegistrationDataHasMutated());
+
     window.history.back();
   }
 
   save(): void {
     this.isSaving = true;
-    const assetRegistration = this.createFromForm();
-    if (assetRegistration.id !== undefined) {
-      this.subscribeToSaveResponse(this.assetRegistrationService.update(assetRegistration));
-    } else {
-      this.subscribeToSaveResponse(this.assetRegistrationService.create(assetRegistration));
-    }
+    this.subscribeToSaveResponse(this.assetRegistrationService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.assetRegistrationService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.assetRegistrationService.create(this.copyFromForm()));
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
