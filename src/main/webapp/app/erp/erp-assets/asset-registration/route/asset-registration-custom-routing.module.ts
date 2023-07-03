@@ -20,24 +20,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserRouteAccessService } from '../../../../core/auth/user-route-access.service';
 import { AssetRegistrationUpdateComponent } from '../update/asset-registration-update.component';
 import { NgModule } from '@angular/core';
-import { AssetRegistrationCopyRoutingResolveService } from './asset-registration-copy-routing-resolve.service';
-import { AssetRegistrationCreationRoutingResolveService } from './asset-registration-creation-routing-resolve.service';
 
 const assetRegistrationRoute: Routes = [
   {
     path: ':id/copy',
     component: AssetRegistrationUpdateComponent,
-    // resolve: {
-    //   assetRegistration: AssetRegistrationCopyRoutingResolveService,
-    // },
     canActivate: [UserRouteAccessService],
   },
   {
     path: 'new',
     component: AssetRegistrationUpdateComponent,
-    resolve: {
-      assetRegistration: AssetRegistrationCreationRoutingResolveService,
-    },
     canActivate: [UserRouteAccessService],
   },
 ];
