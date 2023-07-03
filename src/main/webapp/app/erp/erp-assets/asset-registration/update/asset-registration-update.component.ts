@@ -56,6 +56,14 @@ import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import {
+  assetRegistrationUpdateUpdateSelectedInstance,
+  copyingAssetRegistrationStatus,
+  creatingAssetRegistrationStatus,
+  editingAssetRegistrationStatus
+} from '../../../store/selectors/asset-registration-workflow-status.selector';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-asset-registration-update',
@@ -78,6 +86,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   assetAccessoriesSharedCollection: IAssetAccessory[] = [];
+
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new AssetRegistration()}
 
   editForm = this.fb.group({
     id: [],
@@ -126,15 +139,28 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected assetAccessoryService: AssetAccessoryService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingAssetRegistrationStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingAssetRegistrationStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingAssetRegistrationStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(assetRegistrationUpdateUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ assetRegistration }) => {
-      this.updateForm(assetRegistration);
 
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem)
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
-    });
+    }
   }
 
   updateAssetAccessories(updated: IAssetAccessory[]): void  {
@@ -529,6 +555,94 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
   }
 
+  protected copyForm(assetRegistration: IAssetRegistration): void {
+    this.editForm.patchValue({
+      assetNumber: assetRegistration.assetNumber,
+      assetTag: assetRegistration.assetTag,
+      assetDetails: assetRegistration.assetDetails,
+      assetCost: assetRegistration.assetCost,
+      comments: assetRegistration.comments,
+      commentsContentType: assetRegistration.commentsContentType,
+      modelNumber: assetRegistration.modelNumber,
+      serialNumber: assetRegistration.serialNumber,
+      placeholders: assetRegistration.placeholders,
+      paymentInvoices: assetRegistration.paymentInvoices,
+      mainServiceOutlet: assetRegistration.mainServiceOutlet,
+      settlements: assetRegistration.settlements,
+      assetCategory: assetRegistration.assetCategory,
+      purchaseOrders: assetRegistration.purchaseOrders,
+      deliveryNotes: assetRegistration.deliveryNotes,
+      jobSheets: assetRegistration.jobSheets,
+      dealer: assetRegistration.dealer,
+      designatedUsers: assetRegistration.designatedUsers,
+      settlementCurrency: assetRegistration.settlementCurrency,
+      businessDocuments: assetRegistration.businessDocuments,
+      assetWarranties: assetRegistration.assetWarranties,
+      universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
+      assetAccessories: assetRegistration.assetAccessories,
+      serviceOutlets: assetRegistration.serviceOutlets,
+    });
+
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(assetRegistration.placeholders ?? [])
+    );
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+      this.paymentInvoicesSharedCollection,
+      ...(assetRegistration.paymentInvoices ?? [])
+    );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      assetRegistration.mainServiceOutlet,
+      ...(assetRegistration.serviceOutlets ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(assetRegistration.settlements ?? [])
+    );
+    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+      this.assetCategoriesSharedCollection,
+      assetRegistration.assetCategory
+    );
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+      this.purchaseOrdersSharedCollection,
+      ...(assetRegistration.purchaseOrders ?? [])
+    );
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(assetRegistration.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(assetRegistration.jobSheets ?? [])
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      assetRegistration.dealer,
+      ...(assetRegistration.designatedUsers ?? [])
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      assetRegistration.settlementCurrency
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(assetRegistration.businessDocuments ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(assetRegistration.assetWarranties ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(assetRegistration.universallyUniqueMappings ?? [])
+    );
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+      this.assetAccessoriesSharedCollection,
+      ...(assetRegistration.assetAccessories ?? [])
+    );
+  }
+
   protected loadRelationshipsOptions(): void {
     this.placeholderService
       .query()
@@ -707,6 +821,36 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     return {
       ...new AssetRegistration(),
       id: this.editForm.get(['id'])!.value,
+      assetNumber: this.editForm.get(['assetNumber'])!.value,
+      assetTag: this.editForm.get(['assetTag'])!.value,
+      assetDetails: this.editForm.get(['assetDetails'])!.value,
+      assetCost: this.editForm.get(['assetCost'])!.value,
+      commentsContentType: this.editForm.get(['commentsContentType'])!.value,
+      comments: this.editForm.get(['comments'])!.value,
+      modelNumber: this.editForm.get(['modelNumber'])!.value,
+      serialNumber: this.editForm.get(['serialNumber'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
+      mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
+      settlements: this.editForm.get(['settlements'])!.value,
+      assetCategory: this.editForm.get(['assetCategory'])!.value,
+      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
+      designatedUsers: this.editForm.get(['designatedUsers'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
+      universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
+      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
+      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IAssetRegistration {
+    return {
+      ...new AssetRegistration(),
       assetNumber: this.editForm.get(['assetNumber'])!.value,
       assetTag: this.editForm.get(['assetTag'])!.value,
       assetDetails: this.editForm.get(['assetDetails'])!.value,

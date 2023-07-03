@@ -27,9 +27,9 @@ const assetRegistrationRoute: Routes = [
   {
     path: ':id/copy',
     component: AssetRegistrationUpdateComponent,
-    resolve: {
-      assetRegistration: AssetRegistrationCopyRoutingResolveService,
-    },
+    // resolve: {
+    //   assetRegistration: AssetRegistrationCopyRoutingResolveService,
+    // },
     canActivate: [UserRouteAccessService],
   },
   {

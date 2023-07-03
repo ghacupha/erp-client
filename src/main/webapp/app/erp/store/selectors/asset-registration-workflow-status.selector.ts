@@ -27,27 +27,17 @@ export const assetRegistrationUpdateUpdateSelectedInstance = createSelector(
   state => state.assetRegistrationFormState.selectedInstance
 );
 
-export const assetRegistrationBackEndFetchCompletion = createSelector(
-  assetRegistrationUpdateFormState,
-  state => state.assetRegistrationFormState.backEndFetchComplete
-);
-
 export const editingAssetRegistrationStatus = createSelector(
   assetRegistrationUpdateFormState,
-  state => state.settlementsFormState.weAreEditing
+  state => state.assetRegistrationFormState.weAreEditing
 );
 
 export const creatingAssetRegistrationStatus = createSelector(
   assetRegistrationUpdateFormState,
-  state => state.settlementsFormState.weAreCreating
+  state => state.assetRegistrationFormState.weAreCreating
 );
 
 export const copyingAssetRegistrationStatus = createSelector(
   assetRegistrationUpdateFormState,
-  state => state.settlementsFormState.weAreCopying
-);
-
-export const assetRegistrationBrowserRefreshStatus = createSelector(
-  assetRegistrationUpdateFormState,
-  state => state.settlementsFormState.browserHasBeenRefreshed
+  state => state.assetRegistrationFormState.weAreCopying
 );

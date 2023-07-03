@@ -20,7 +20,9 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-asset-registration-heading" data-cy="AssetRegistrationCreateUpdateHeading">Create or edit a Asset Registration</h2>
+      <h2 id="jhi-asset-registration-heading" data-cy="AssetRegistrationCreateUpdateHeading" [hidden]='!weAreCreating'>Create or edit a Asset Registration</h2>
+      <h2 id="jhi-asset-registration-copy-heading" data-cy="AssetRegistrationCreateUpdateHeading" [hidden]='!weAreCopying'>Copy Asset Registration</h2>
+      <h2 id="jhi-asset-registration-edit-heading" data-cy="AssetRegistrationCreateUpdateHeading" [hidden]='!weAreEditing'>Edit Asset Registration</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
