@@ -557,7 +557,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
   protected copyForm(assetRegistration: IAssetRegistration): void {
     this.editForm.patchValue({
-      assetNumber: assetRegistration.assetNumber,
+      // assetNumber: assetRegistration.assetNumber,
       assetTag: assetRegistration.assetTag,
       assetDetails: assetRegistration.assetDetails,
       assetCost: assetRegistration.assetCost,
