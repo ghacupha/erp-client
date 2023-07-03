@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 1 (Ehud Series) Client 1.4.4
+/// Erp System - Mark V No 1 (Ehud Series) Client 1.5.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@ import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows
 import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
 import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
 import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status.reducer";
+import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
@@ -48,6 +49,7 @@ import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
     StoreModule.forFeature('paymentUpdateForm', fromPaymentUpdates.paymentUpdateStateReducer),
     StoreModule.forFeature('settlementUpdateForm', fromSettlementUpdates.settlementUpdateStateReducer),
+    StoreModule.forFeature('assetRegistrationUpdateForm', fromAssetRegistrationUpdates.assetRegistrationUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

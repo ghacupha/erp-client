@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 1 (Ehud Series) Client 1.4.4
+/// Erp System - Mark V No 1 (Ehud Series) Client 1.5.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,14 @@ import {PaymentsFormState} from "./reducers/update-menu-status.reducer";
 import {DealerWorkflowState} from "./reducers/dealer-workflows-status.reducer";
 import {DealerInvoiceWorkflowState} from "./reducers/dealer-invoice-workflows-status.reducer";
 import { SettlementsFormState } from './reducers/settlement-update-menu-status.reducer';
+import { AssetRegistrationFormState } from './reducers/asset-registration-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
   settlementsFormState: SettlementsFormState,
-  dealerWorkflowState: DealerWorkflowState
-  dealerInvoiceWorkflowState: DealerInvoiceWorkflowState
+  dealerWorkflowState: DealerWorkflowState,
+  dealerInvoiceWorkflowState: DealerInvoiceWorkflowState,
+  assetRegistrationFormState: AssetRegistrationFormState,
 }
 
 export const initialState: State = {
@@ -37,6 +39,14 @@ export const initialState: State = {
   },
   settlementsFormState: {
     selectedSettlement: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  assetRegistrationFormState: {
+    selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,
     weAreCopying: false,
