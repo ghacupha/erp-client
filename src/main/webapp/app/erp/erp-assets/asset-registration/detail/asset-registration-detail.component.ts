@@ -21,6 +21,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IAssetRegistration } from '../asset-registration.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { assetRegistrationCopyWorkflowInitiatedFromView } from '../../../store/actions/fixed-assets-register-update-status.actions';
 
 @Component({
   selector: 'jhi-asset-registration-detail',
@@ -29,12 +32,16 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class AssetRegistrationDetailComponent implements OnInit {
   assetRegistration: IAssetRegistration | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetRegistration }) => {
       this.assetRegistration = assetRegistration;
     });
+  }
+
+  copy(instance: IAssetRegistration): void {
+    this.store.dispatch(assetRegistrationCopyWorkflowInitiatedFromView({copiedInstance: instance}));
   }
 
   byteSize(base64String: string): string {

@@ -182,7 +182,7 @@
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
 
-      <button type="button" [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
+      <button type="button" (click)='copy(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
         <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
