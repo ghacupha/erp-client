@@ -138,10 +138,20 @@
 
       <button
         type="button"
+        (click)='editButtonEvent(workInProgressRegistration)'
         [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'edit']"
         class="btn btn-primary"
       >
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(workInProgressRegistration)'
+        [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'copy']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

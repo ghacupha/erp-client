@@ -59,6 +59,13 @@ import { IAssetWarranty } from '../../asset-warranty/asset-warranty.model';
 import { IAssetAccessory } from '../../asset-accessory/asset-accessory.model';
 import { AssetAccessoryService } from '../../asset-accessory/service/asset-accessory.service';
 import { AssetWarrantyService } from '../../asset-warranty/service/asset-warranty.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingWIPRegistrationStatus, creatingWIPRegistrationStatus, editingWIPRegistrationStatus,
+  wipRegistrationUpdateSelectedInstance
+} from '../../../store/selectors/wip-registration-workflow-status.selector';
+import { wipRegistrationDataHasMutated } from '../../../store/actions/wip-registration-update-status.actions';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -139,6 +146,12 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   jobSheetsControlInput$ = new Subject<string>();
   jobSheetLookups$: Observable<IJobSheet[]> = of([]);
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new WorkInProgressRegistration()}
+
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -164,14 +177,32 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected assetCategorySuggestionService: AssetCategorySuggestionService,
     protected assetAccessoryService: AssetAccessoryService,
     protected assetWarrantyService: AssetWarrantyService,
-  ) {}
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingWIPRegistrationStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingWIPRegistrationStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingWIPRegistrationStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(wipRegistrationUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ workInProgressRegistration }) => {
-      this.updateForm(workInProgressRegistration);
+    // this.activatedRoute.data.subscribe(({ workInProgressRegistration }) => {
+    //   this.updateForm(workInProgressRegistration);
+    //
+    //   this.loadRelationshipsOptions();
+    // });
 
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem)
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
-    });
+    }
 
     // fire-up typeahead items
     this.loadPlaceholders();
@@ -449,17 +480,23 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(wipRegistrationDataHasMutated());
     window.history.back();
   }
 
   save(): void {
     this.isSaving = true;
-    const workInProgressRegistration = this.createFromForm();
-    if (workInProgressRegistration.id !== undefined) {
-      this.subscribeToSaveResponse(this.workInProgressRegistrationService.update(workInProgressRegistration));
-    } else {
-      this.subscribeToSaveResponse(this.workInProgressRegistrationService.create(workInProgressRegistration));
-    }
+    this.subscribeToSaveResponse(this.workInProgressRegistrationService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.workInProgressRegistrationService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.workInProgressRegistrationService.create(this.copyFromForm()));
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
@@ -674,6 +711,67 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     );
   }
 
+   protected copyForm(workInProgressRegistration: IWorkInProgressRegistration): void {
+      this.editForm.patchValue({
+        sequenceNumber: workInProgressRegistration.sequenceNumber,
+        particulars: workInProgressRegistration.particulars,
+        instalmentAmount: workInProgressRegistration.instalmentAmount,
+        comments: workInProgressRegistration.comments,
+        commentsContentType: workInProgressRegistration.commentsContentType,
+        placeholders: workInProgressRegistration.placeholders,
+        paymentInvoices: workInProgressRegistration.paymentInvoices,
+        serviceOutlets: workInProgressRegistration.serviceOutlets,
+        settlements: workInProgressRegistration.settlements,
+        purchaseOrders: workInProgressRegistration.purchaseOrders,
+        deliveryNotes: workInProgressRegistration.deliveryNotes,
+        jobSheets: workInProgressRegistration.jobSheets,
+        dealer: workInProgressRegistration.dealer,
+        assetAccessories: workInProgressRegistration.assetAccessories,
+        assetWarranties: workInProgressRegistration.assetWarranties,
+      });
+
+      this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+        this.placeholdersSharedCollection,
+        ...(workInProgressRegistration.placeholders ?? [])
+      );
+      this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+        this.paymentInvoicesSharedCollection,
+        ...(workInProgressRegistration.paymentInvoices ?? [])
+      );
+      this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+        this.serviceOutletsSharedCollection,
+        ...(workInProgressRegistration.serviceOutlets ?? [])
+      );
+      this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+        this.settlementsSharedCollection,
+        ...(workInProgressRegistration.settlements ?? [])
+      );
+      this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+        this.purchaseOrdersSharedCollection,
+        ...(workInProgressRegistration.purchaseOrders ?? [])
+      );
+      this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+        this.deliveryNotesSharedCollection,
+        ...(workInProgressRegistration.deliveryNotes ?? [])
+      );
+      this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+        this.jobSheetsSharedCollection,
+        ...(workInProgressRegistration.jobSheets ?? [])
+      );
+      this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+        this.dealersSharedCollection,
+        workInProgressRegistration.dealer
+      );
+      this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+        this.assetAccessoriesSharedCollection,
+        ...(workInProgressRegistration.assetAccessories ?? [])
+      );
+      this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+        this.assetWarrantiesSharedCollection,
+        ...(workInProgressRegistration.assetWarranties ?? [])
+      );
+  }
+
   protected loadRelationshipsOptions(): void {
     this.placeholderService
       .query()
@@ -790,6 +888,28 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return {
       ...new WorkInProgressRegistration(),
       id: this.editForm.get(['id'])!.value,
+      sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
+      particulars: this.editForm.get(['particulars'])!.value,
+      instalmentAmount: this.editForm.get(['instalmentAmount'])!.value,
+      commentsContentType: this.editForm.get(['commentsContentType'])!.value,
+      comments: this.editForm.get(['comments'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
+      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
+      settlements: this.editForm.get(['settlements'])!.value,
+      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
+      assetAccessories: this.editForm.get(['assetAccessories'])!.value,
+      assetWarranties: this.editForm.get(['assetWarranties'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IWorkInProgressRegistration {
+    return {
+      ...new WorkInProgressRegistration(),
+      // id: this.editForm.get(['id'])!.value,
       sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
       particulars: this.editForm.get(['particulars'])!.value,
       instalmentAmount: this.editForm.get(['instalmentAmount'])!.value,

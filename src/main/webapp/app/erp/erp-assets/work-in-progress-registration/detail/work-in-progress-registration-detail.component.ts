@@ -21,6 +21,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IWorkInProgressRegistration } from '../work-in-progress-registration.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  wipRegistrationCopyWorkflowInitiatedFromView,
+  wipRegistrationEditWorkflowInitiatedFromView
+} from '../../../store/actions/wip-registration-update-status.actions';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-detail',
@@ -29,12 +35,20 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class WorkInProgressRegistrationDetailComponent implements OnInit {
   workInProgressRegistration: IWorkInProgressRegistration | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressRegistration }) => {
       this.workInProgressRegistration = workInProgressRegistration;
     });
+  }
+
+  editButtonEvent(instance: IWorkInProgressRegistration): void {
+    this.store.dispatch(wipRegistrationEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IWorkInProgressRegistration): void {
+    this.store.dispatch(wipRegistrationCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   byteSize(base64String: string): string {

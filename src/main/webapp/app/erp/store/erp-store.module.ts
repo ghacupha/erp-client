@@ -25,6 +25,7 @@ import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
 import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status.reducer";
 import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
+import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
@@ -52,6 +53,7 @@ import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
     StoreModule.forFeature('settlementUpdateForm', fromSettlementUpdates.settlementUpdateStateReducer),
     StoreModule.forFeature('assetRegistrationUpdateForm', fromAssetRegistrationUpdates.assetRegistrationUpdateStateReducer),
     StoreModule.forFeature('assetAccessoryUpdateForm', fromAssetAccessoryUpdates.assetAccessoryUpdateStateReducer),
+    StoreModule.forFeature('wipRegistrationUpdateForm', fromWIPRegistrationUpdates.wipRegistrationUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

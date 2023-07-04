@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-work-in-progress-registration"
         [routerLink]="['/work-in-progress-registration/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Work In Progress Registration </span>
@@ -109,6 +110,7 @@
           </td>
           <td class="text-right">
             <div class="btn-group">
+
               <button
                 type="submit"
                 [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'view']"
@@ -116,7 +118,7 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button
@@ -124,15 +126,28 @@
                 [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
+                (click)='editButtonEvent(workInProgressRegistration)'
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                (click)='copyButtonEvent(workInProgressRegistration)'
+                [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'copy']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button type="submit" (click)="delete(workInProgressRegistration)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
+
             </div>
           </td>
         </tr>

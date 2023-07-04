@@ -28,6 +28,13 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
 import { WorkInProgressRegistrationDeleteDialogComponent } from '../delete/work-in-progress-registration-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  wipRegistrationCopyWorkflowInitiatedFromList,
+  wipRegistrationCreationWorkflowInitiatedFromList,
+  wipRegistrationEditWorkflowInitiatedFromList
+} from '../../../store/actions/wip-registration-update-status.actions';
 
 @Component({
   selector: 'jhi-work-in-progress-registration',
@@ -49,9 +56,22 @@ export class WorkInProgressRegistrationComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(wipRegistrationCreationWorkflowInitiatedFromList())
+  }
+
+  copyButtonEvent(instance: IWorkInProgressRegistration): void {
+    this.store.dispatch(wipRegistrationCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
+  editButtonEvent(instance: IWorkInProgressRegistration): void {
+    this.store.dispatch(wipRegistrationEditWorkflowInitiatedFromList({editedInstance: instance}));
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {

@@ -20,8 +20,22 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-work-in-progress-registration-heading" data-cy="WorkInProgressRegistrationCreateUpdateHeading">
-        Create or edit a Work In Progress Registration
+      <h2 id="jhi-work-in-progress-registration-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreCreating'>
+        New Work In Progress Registration
+      </h2>
+
+      <h2 id="jhi-work-in-progress-registration-copy-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreCopying'>
+        Copy # {{ selectedItem.id }} Sequence No. {{ selectedItem.sequenceNumber }}
+      </h2>
+
+      <h2 id="jhi-work-in-progress-registration-edit-heading"
+          data-cy="WorkInProgressRegistrationCreateUpdateHeading"
+          [hidden]='!weAreEditing'>
+        Edit # {{ selectedItem.id }} Sequence No. {{ selectedItem.sequenceNumber }}
       </h2>
 
       <div>
@@ -549,8 +563,34 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
         </button>
       </div>
     </form>
