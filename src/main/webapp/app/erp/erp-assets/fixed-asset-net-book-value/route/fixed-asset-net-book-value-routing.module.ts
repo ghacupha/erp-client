@@ -30,7 +30,7 @@ const fixedAssetNetBookValueRoute: Routes = [
     path: '',
     component: FixedAssetNetBookValueComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

@@ -30,7 +30,7 @@ const paymentCategoryRoute: Routes = [
     path: '',
     component: PaymentCategoryComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

@@ -30,7 +30,7 @@ const fixedAssetAcquisitionRoute: Routes = [
     path: '',
     component: FixedAssetAcquisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

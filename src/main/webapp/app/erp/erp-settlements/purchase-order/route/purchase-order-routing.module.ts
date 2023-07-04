@@ -30,7 +30,7 @@ const purchaseOrderRoute: Routes = [
     path: '',
     component: PurchaseOrderComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

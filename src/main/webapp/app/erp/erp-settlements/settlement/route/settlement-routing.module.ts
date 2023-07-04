@@ -30,7 +30,7 @@ const settlementRoute: Routes = [
     path: '',
     component: SettlementComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

@@ -30,7 +30,7 @@ const assetAccessoryRoute: Routes = [
     path: '',
     component: AssetAccessoryComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

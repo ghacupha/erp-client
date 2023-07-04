@@ -30,7 +30,7 @@ const assetRegistrationRoute: Routes = [
     path: '',
     component: AssetRegistrationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

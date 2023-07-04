@@ -30,7 +30,7 @@ const creditNoteRoute: Routes = [
     path: '',
     component: CreditNoteComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

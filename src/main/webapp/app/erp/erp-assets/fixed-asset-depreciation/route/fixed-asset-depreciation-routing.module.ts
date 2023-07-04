@@ -30,7 +30,7 @@ const fixedAssetDepreciationRoute: Routes = [
     path: '',
     component: FixedAssetDepreciationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

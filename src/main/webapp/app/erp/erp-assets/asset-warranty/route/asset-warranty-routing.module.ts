@@ -30,7 +30,7 @@ const assetWarrantyRoute: Routes = [
     path: '',
     component: AssetWarrantyComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

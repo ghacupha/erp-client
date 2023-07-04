@@ -30,7 +30,7 @@ const businessStampRoute: Routes = [
     path: '',
     component: BusinessStampComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

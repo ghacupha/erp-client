@@ -30,7 +30,7 @@ const depreciationMethodRoute: Routes = [
     path: '',
     component: DepreciationMethodComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

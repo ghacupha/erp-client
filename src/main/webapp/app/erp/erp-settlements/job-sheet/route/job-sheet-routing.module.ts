@@ -30,7 +30,7 @@ const jobSheetRoute: Routes = [
     path: '',
     component: JobSheetComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

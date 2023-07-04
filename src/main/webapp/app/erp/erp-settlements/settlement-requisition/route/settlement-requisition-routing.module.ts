@@ -31,7 +31,7 @@ const settlementRequisitionRoute: Routes = [
     path: '',
     component: SettlementRequisitionComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

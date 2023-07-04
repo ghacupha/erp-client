@@ -30,7 +30,7 @@ const paymentInvoiceRoute: Routes = [
     path: '',
     component: PaymentInvoiceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

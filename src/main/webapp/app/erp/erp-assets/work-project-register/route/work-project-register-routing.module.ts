@@ -30,7 +30,7 @@ const workProjectRegisterRoute: Routes = [
     path: '',
     component: WorkProjectRegisterComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
