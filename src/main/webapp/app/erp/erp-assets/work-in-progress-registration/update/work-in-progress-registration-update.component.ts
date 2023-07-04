@@ -186,12 +186,6 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.activatedRoute.data.subscribe(({ workInProgressRegistration }) => {
-    //   this.updateForm(workInProgressRegistration);
-    //
-    //   this.loadRelationshipsOptions();
-    // });
-
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
     }

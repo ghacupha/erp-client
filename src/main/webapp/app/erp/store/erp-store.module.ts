@@ -19,6 +19,11 @@
 import {NgModule} from "@angular/core";
 import {EffectsModule} from "@ngrx/effects";
 import {StoreModule} from "@ngrx/store";
+import {StoreDevtoolsModule} from "@ngrx/store-devtools";
+import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
+import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
+import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
+
 import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows-status.reducer";
 import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
 import * as fromPaymentUpdates from "./reducers/update-menu-status.reducer";
@@ -26,10 +31,7 @@ import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status
 import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
 import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
-import {StoreDevtoolsModule} from "@ngrx/store-devtools";
-import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
-import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
-import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
+import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
 
 @NgModule({
   imports: [
@@ -54,6 +56,7 @@ import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
     StoreModule.forFeature('assetRegistrationUpdateForm', fromAssetRegistrationUpdates.assetRegistrationUpdateStateReducer),
     StoreModule.forFeature('assetAccessoryUpdateForm', fromAssetAccessoryUpdates.assetAccessoryUpdateStateReducer),
     StoreModule.forFeature('wipRegistrationUpdateForm', fromWIPRegistrationUpdates.wipRegistrationUpdateStateReducer),
+    StoreModule.forFeature('paymentInvoiceUpdateForm', fromPaymentInvoiceUpdates.paymentInvoiceUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

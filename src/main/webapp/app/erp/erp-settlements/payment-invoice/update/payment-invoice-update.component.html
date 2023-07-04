@@ -20,7 +20,24 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-payment-invoice-heading" data-cy="PaymentInvoiceCreateUpdateHeading">Create or edit a Payment Invoice</h2>
+      <h2 id="jhi-payment-invoice-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          [hidden]='!weAreCreating'>
+        New Invoice
+      </h2>
+
+      <h2 id="jhi-payment-invoice-copy-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          [hidden]='!weAreCopying'>
+        Copy: Invoice# {{ selectedItem.invoiceNumber }} Dated: {{ selectedItem!.invoiceDate | formatMediumDate }}
+      </h2>
+
+      <h2 id="jhi-payment-invoice-edit-heading"
+          data-cy="PaymentInvoiceCreateUpdateHeading"
+          *ngIf='selectedItem.invoiceDate'
+          [hidden]='!weAreEditing'>
+        Edit: Invoice# {{ selectedItem.invoiceNumber }} Dated: {{ selectedItem.invoiceDate | formatMediumDate }}
+      </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -309,8 +326,34 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update Inv # {{ selectedItem.invoiceNumber }} Date: {{ selectedItem.invoiceDate | formatMediumDate }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy Inv # {{ selectedItem.invoiceNumber }} Date: {{ selectedItem.invoiceDate | formatMediumDate }}</span>
         </button>
       </div>
     </form>

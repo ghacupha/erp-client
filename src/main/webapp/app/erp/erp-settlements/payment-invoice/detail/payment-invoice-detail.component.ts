@@ -19,7 +19,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
 import { IPaymentInvoice } from '../payment-invoice.model';
+import {
+  paymentInvoiceCopyWorkflowInitiatedFromView,
+  paymentInvoiceEditWorkflowInitiatedFromView
+} from '../../../store/actions/payment-invoice-workflow-status.action';
 
 @Component({
   selector: 'jhi-payment-invoice-detail',
@@ -28,12 +34,20 @@ import { IPaymentInvoice } from '../payment-invoice.model';
 export class PaymentInvoiceDetailComponent implements OnInit {
   paymentInvoice: IPaymentInvoice | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ paymentInvoice }) => {
       this.paymentInvoice = paymentInvoice;
     });
+  }
+
+  editButtonEvent(instance: IPaymentInvoice): void {
+    this.store.dispatch(paymentInvoiceEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IPaymentInvoice): void {
+    this.store.dispatch(paymentInvoiceCopyWorkflowInitiatedFromView({ copiedInstance: instance }));
   }
 
   previousState(): void {

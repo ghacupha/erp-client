@@ -27,6 +27,13 @@ import { IPaymentInvoice } from '../payment-invoice.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PaymentInvoiceService } from '../service/payment-invoice.service';
 import { PaymentInvoiceDeleteDialogComponent } from '../delete/payment-invoice-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  paymentInvoiceCopyWorkflowInitiatedFromList,
+  paymentInvoiceCreationWorkflowInitiatedFromList,
+  paymentInvoiceEditWorkflowInitiatedFromList
+} from '../../../store/actions/payment-invoice-workflow-status.action';
 
 @Component({
   selector: 'jhi-payment-invoice',
@@ -47,9 +54,22 @@ export class PaymentInvoiceComponent implements OnInit {
     protected paymentInvoiceService: PaymentInvoiceService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(paymentInvoiceCreationWorkflowInitiatedFromList());
+  }
+
+  copyButtonEvent(instance: IPaymentInvoice): void {
+    this.store.dispatch(paymentInvoiceCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
+  editButtonEvent(instance: IPaymentInvoice): void {
+    this.store.dispatch(paymentInvoiceEditWorkflowInitiatedFromList({ editedInstance: instance }));
   }
 
   loadPage(page?: number, dontNavigate?: boolean): void {
@@ -133,7 +153,7 @@ export class PaymentInvoiceComponent implements OnInit {
   search(query: string): void {
     if (query && ['invoiceNumber', 'fileUploadToken', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
-      this.ascending = false;
+      this.ascending = true;
     }
     this.currentSearch = query;
     this.loadPage(1);
@@ -159,7 +179,7 @@ export class PaymentInvoiceComponent implements OnInit {
   }
 
   protected sort(): string[] {
-    const result = [this.predicate + ',' + (this.ascending ? DESC : ASC)];
+    const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
     if (this.predicate !== 'id') {
       result.push('id');
     }

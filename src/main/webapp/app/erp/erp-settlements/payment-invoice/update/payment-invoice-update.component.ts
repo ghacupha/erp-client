@@ -55,6 +55,13 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingPaymentInvoiceStatus, creatingPaymentInvoiceStatus,
+  editingPaymentInvoiceStatus, paymentInvoiceUpdateSelectedInstance
+} from '../../../store/selectors/payment-invoice-workflow-status.selectors';
+import { paymentInvoiceDataHasMutated } from '../../../store/actions/payment-invoice-workflow-status.action';
 
 @Component({
   selector: 'jhi-payment-invoice-update',
@@ -120,6 +127,12 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   jobSheetsControlInput$ = new Subject<string>();
   jobSheetLookups$: Observable<IJobSheet[]> = of([]);
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new PaymentInvoice()}
+
   constructor(
     protected paymentInvoiceService: PaymentInvoiceService,
     protected purchaseOrderService: PurchaseOrderService,
@@ -142,14 +155,27 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
     protected jobSheetService: JobSheetService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected businessDocumentService: BusinessDocumentService,
-  ) {}
+    protected store: Store<State>
+  ) {
+    this.store.pipe(select(copyingPaymentInvoiceStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingPaymentInvoiceStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingPaymentInvoiceStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(paymentInvoiceUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ paymentInvoice }) => {
-      this.updateForm(paymentInvoice);
 
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem)
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
-    });
+    }
 
     // fire-up typeahead items
     this.loadLabels();
@@ -401,17 +427,23 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
   }
 
   previousState(): void {
+    this.store.dispatch(paymentInvoiceDataHasMutated());
     window.history.back();
   }
 
   save(): void {
     this.isSaving = true;
-    const paymentInvoice = this.createFromForm();
-    if (paymentInvoice.id !== undefined) {
-      this.subscribeToSaveResponse(this.paymentInvoiceService.update(paymentInvoice));
-    } else {
-      this.subscribeToSaveResponse(this.paymentInvoiceService.create(paymentInvoice));
-    }
+    this.subscribeToSaveResponse(this.paymentInvoiceService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.paymentInvoiceService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.paymentInvoiceService.create(this.copyFromForm()));
   }
 
   trackPurchaseOrderById(index: number, item: IPurchaseOrder): number {
@@ -529,6 +561,58 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: paymentInvoice.paymentLabels,
       settlementCurrency: paymentInvoice.settlementCurrency,
       biller: paymentInvoice.biller,
+      remarks: paymentInvoice.remarks,
+      deliveryNotes: paymentInvoice.deliveryNotes,
+      jobSheets: paymentInvoice.jobSheets,
+      businessDocuments: paymentInvoice.businessDocuments,
+    });
+
+    this.businessDocumentCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentCollection,
+      ...(paymentInvoice.businessDocuments ?? [])
+    );
+
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+      this.purchaseOrdersSharedCollection,
+      ...(paymentInvoice.purchaseOrders ?? [])
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(paymentInvoice.placeholders ?? [])
+    );
+    this.paymentLabelsSharedCollection = this.paymentLabelService.addPaymentLabelToCollectionIfMissing(
+      this.paymentLabelsSharedCollection,
+      ...(paymentInvoice.paymentLabels ?? [])
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      paymentInvoice.settlementCurrency
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(this.dealersSharedCollection, paymentInvoice.biller);
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(paymentInvoice.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(paymentInvoice.jobSheets ?? [])
+    );
+  }
+
+  protected copyForm(paymentInvoice: IPaymentInvoice): void {
+    this.editForm.patchValue({
+      id: paymentInvoice.id,
+      invoiceNumber: paymentInvoice.invoiceNumber,
+      invoiceDate: paymentInvoice.invoiceDate,
+      invoiceAmount: paymentInvoice.invoiceAmount,
+      fileUploadToken: paymentInvoice.fileUploadToken,
+      compilationToken: paymentInvoice.compilationToken,
+      purchaseOrders: paymentInvoice.purchaseOrders,
+      placeholders: paymentInvoice.placeholders,
+      paymentLabels: paymentInvoice.paymentLabels,
+      settlementCurrency: paymentInvoice.settlementCurrency,
+      biller: paymentInvoice.biller,
+      remarks: paymentInvoice.remarks,
       deliveryNotes: paymentInvoice.deliveryNotes,
       jobSheets: paymentInvoice.jobSheets,
       businessDocuments: paymentInvoice.businessDocuments,
@@ -667,6 +751,27 @@ export class PaymentInvoiceUpdateComponent implements OnInit {
       paymentLabels: this.editForm.get(['paymentLabels'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       biller: this.editForm.get(['biller'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
+      deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
+      jobSheets: this.editForm.get(['jobSheets'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+    };
+  }
+  protected copyFromForm(): IPaymentInvoice {
+    return {
+      ...new PaymentInvoice(),
+      // id: this.editForm.get(['id'])!.value,
+      invoiceNumber: this.editForm.get(['invoiceNumber'])!.value,
+      invoiceDate: this.editForm.get(['invoiceDate'])!.value,
+      invoiceAmount: this.editForm.get(['invoiceAmount'])!.value,
+      fileUploadToken: this.editForm.get(['fileUploadToken'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
+      purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      paymentLabels: this.editForm.get(['paymentLabels'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      biller: this.editForm.get(['biller'])!.value,
+      remarks: this.editForm.get(['remarks'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       businessDocuments: this.editForm.get(['businessDocuments'])!.value,

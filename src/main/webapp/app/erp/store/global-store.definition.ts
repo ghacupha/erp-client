@@ -23,6 +23,7 @@ import { SettlementsFormState } from './reducers/settlement-update-menu-status.r
 import { AssetRegistrationFormState } from './reducers/asset-registration-workflow-status.reducer';
 import { AssetAccessoryFormState } from './reducers/asset-accessory-workflow-status.reducer';
 import { WIPRegistrationFormState } from './reducers/wip-registration-workflow-status.reducer';
+import { PaymentInvoiceFormState } from './reducers/payment-invoice-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -32,6 +33,7 @@ export interface State {
   assetRegistrationFormState: AssetRegistrationFormState,
   assetAccessoryFormState: AssetAccessoryFormState,
   wipRegistrationFormState: WIPRegistrationFormState
+  paymentInvoiceFormState: PaymentInvoiceFormState,
 }
 
 export const initialState: State = {
@@ -66,6 +68,14 @@ export const initialState: State = {
     weAreCreating: false,
   },
   assetAccessoryFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  paymentInvoiceFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,
