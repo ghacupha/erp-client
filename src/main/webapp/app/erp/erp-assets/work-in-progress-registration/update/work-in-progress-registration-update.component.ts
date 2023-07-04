@@ -187,6 +187,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.loadAssetCategory();
   }
 
+  updateAssetWarranties(updated: IAssetWarranty[]): void {
+    this.editForm.patchValue({ assetWarranties: [...updated] });
+  }
+
+  updateAssetAccessories(updated: IAssetAccessory[]): void  {
+    this.editForm.patchValue({ assetAccessories: [...updated]});
+  }
+
   // Load dynamic AssetCategory instances from the input-search stream
   loadAssetCategory(): void {
     this.assetCategoryLookups$ = concat(
