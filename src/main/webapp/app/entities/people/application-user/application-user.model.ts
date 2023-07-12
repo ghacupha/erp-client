@@ -16,9 +16,9 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IUser } from 'app/core/user/user.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
-import { IUser } from 'app/entities/user/user.model';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IApplicationUser {

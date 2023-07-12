@@ -36,6 +36,42 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           ),
       },
       {
+        path: 'depreciation-entry',
+        data: {
+          pageTitle: 'ERP | Depreciation Entries',
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-entry/depreciation-entry.module').then(
+            m => m.DepreciationEntryModule
+          ),
+      },
+      {
+        path: 'depreciation-job',
+        data: {
+          pageTitle: 'ERP | Depreciation Job',
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-job/depreciation-job.module').then(
+            m => m.DepreciationJobModule
+          ),
+      },
+      {
+        path: 'depreciation-period',
+        data: {
+          pageTitle: 'ERP | Depreciation Periods',
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-period/depreciation-period.module').then(
+            m => m.DepreciationPeriodModule
+          ),
+      },
+      {
         path: 'work-in-progress-registration',
         data: {
           pageTitle: 'ERP | W.I.P. Registration',

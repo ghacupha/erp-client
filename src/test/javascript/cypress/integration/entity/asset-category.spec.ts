@@ -34,7 +34,7 @@ describe('AssetCategory e2e test', () => {
   const assetCategoryPageUrlPattern = new RegExp('/asset-category(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const assetCategorySample = { assetCategoryName: 'bus Steel redefine' };
+  const assetCategorySample = { assetCategoryName: 'AGP Cotton Compatible' };
 
   let assetCategory: any;
   let depreciationMethod: any;
@@ -53,7 +53,12 @@ describe('AssetCategory e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/depreciation-methods',
-      body: { depreciationMethodName: 'optical', description: 'green ADP', remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=' },
+      body: {
+        depreciationMethodName: 'optical',
+        description: 'green ADP',
+        depreciationType: 'DECLINING_BALANCE',
+        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
+      },
     }).then(({ body }) => {
       depreciationMethod = body;
     });
@@ -221,6 +226,8 @@ describe('AssetCategory e2e test', () => {
         .type('../fake-data/blob/hipster.txt')
         .invoke('val')
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
+      cy.get(`[data-cy="depreciationRateYearly"]`).type('71563').should('have.value', '71563');
 
       cy.get(`[data-cy="depreciationMethod"]`).select(1);
 

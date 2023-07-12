@@ -64,7 +64,7 @@ describe('AssetRegistration e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/asset-categories',
-      body: {"assetCategoryName":"Lead","description":"deposit Decentralized Gloves","notes":"Account","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
+      body: {"assetCategoryName":"Lead","description":"deposit Decentralized Gloves","notes":"Account","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","depreciationRateYearly":33289},
     }).then(({ body }) => {
       assetCategory = body;
     });

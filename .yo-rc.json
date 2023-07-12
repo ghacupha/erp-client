@@ -117,7 +117,11 @@
       "LeaseModelMetadata",
       "LeaseLiabilityScheduleItem",
       "AssetAccessory",
-      "AssetWarranty"
+      "AssetWarranty",
+      "DepreciationPeriod",
+      "DepreciationEntry",
+      "DepreciationJob",
+      "DepreciationBatchSequence"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

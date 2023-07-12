@@ -25,6 +25,7 @@ export interface IAssetCategory {
   description?: string | null;
   notes?: string | null;
   remarks?: string | null;
+  depreciationRateYearly?: number | null;
   depreciationMethod?: IDepreciationMethod;
   placeholders?: IPlaceholder[] | null;
 }
@@ -36,6 +37,7 @@ export class AssetCategory implements IAssetCategory {
     public description?: string | null,
     public notes?: string | null,
     public remarks?: string | null,
+    public depreciationRateYearly?: number | null,
     public depreciationMethod?: IDepreciationMethod,
     public placeholders?: IPlaceholder[] | null
   ) {}

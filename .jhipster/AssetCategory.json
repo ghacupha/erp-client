@@ -20,6 +20,10 @@
       "fieldName": "remarks",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "text"
+    },
+    {
+      "fieldName": "depreciationRateYearly",
+      "fieldType": "BigDecimal"
     }
   ],
   "incrementalChangelog": false,

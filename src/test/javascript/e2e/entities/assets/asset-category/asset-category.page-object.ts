@@ -52,6 +52,7 @@ export class AssetCategoryUpdatePage {
   descriptionInput = element(by.id('field_description'));
   notesInput = element(by.id('field_notes'));
   remarksInput = element(by.id('field_remarks'));
+  depreciationRateYearlyInput = element(by.id('field_depreciationRateYearly'));
 
   depreciationMethodSelect = element(by.id('field_depreciationMethod'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -98,6 +99,14 @@ export class AssetCategoryUpdatePage {
 
   async getRemarksInput(): Promise<string> {
     return await this.remarksInput.getAttribute('value');
+  }
+
+  async setDepreciationRateYearlyInput(depreciationRateYearly: string): Promise<void> {
+    await this.depreciationRateYearlyInput.sendKeys(depreciationRateYearly);
+  }
+
+  async getDepreciationRateYearlyInput(): Promise<string> {
+    return await this.depreciationRateYearlyInput.getAttribute('value');
   }
 
   async depreciationMethodSelectLastOption(): Promise<void> {

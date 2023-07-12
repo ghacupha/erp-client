@@ -48,6 +48,7 @@ export class AssetCategoryUpdateComponent implements OnInit {
     assetCategoryName: [null, [Validators.required]],
     description: [],
     notes: [],
+    depreciationRateYearly: [],
     depreciationMethod: [null, Validators.required],
     placeholders: [],
   });
@@ -187,6 +188,7 @@ export class AssetCategoryUpdateComponent implements OnInit {
       assetCategoryName: assetCategory.assetCategoryName,
       description: assetCategory.description,
       notes: assetCategory.notes,
+      depreciationRateYearly: assetCategory.depreciationRateYearly,
       depreciationMethod: assetCategory.depreciationMethod,
       placeholders: assetCategory.placeholders,
     });
@@ -233,6 +235,7 @@ export class AssetCategoryUpdateComponent implements OnInit {
       assetCategoryName: this.editForm.get(['assetCategoryName'])!.value,
       description: this.editForm.get(['description'])!.value,
       notes: this.editForm.get(['notes'])!.value,
+      depreciationRateYearly: this.editForm.get(['depreciationRateYearly'])!.value,
       depreciationMethod: this.editForm.get(['depreciationMethod'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };

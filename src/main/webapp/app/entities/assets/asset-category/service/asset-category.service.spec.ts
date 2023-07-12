@@ -43,6 +43,7 @@ describe('AssetCategory Service', () => {
       description: 'AAAAAAA',
       notes: 'AAAAAAA',
       remarks: 'AAAAAAA',
+      depreciationRateYearly: 0,
     };
   });
 
@@ -82,6 +83,7 @@ describe('AssetCategory Service', () => {
           description: 'BBBBBB',
           notes: 'BBBBBB',
           remarks: 'BBBBBB',
+          depreciationRateYearly: 1,
         },
         elemDefault
       );
@@ -123,6 +125,7 @@ describe('AssetCategory Service', () => {
           description: 'BBBBBB',
           notes: 'BBBBBB',
           remarks: 'BBBBBB',
+          depreciationRateYearly: 1,
         },
         elemDefault
       );
@@ -174,7 +177,7 @@ describe('AssetCategory Service', () => {
       });
 
       it('should add only unique AssetCategory to an array', () => {
-        const assetCategoryArray: IAssetCategory[] = [{ id: 123 }, { id: 456 }, { id: 33125 }];
+        const assetCategoryArray: IAssetCategory[] = [{ id: 123 }, { id: 456 }, { id: 20997 }];
         const assetCategoryCollection: IAssetCategory[] = [{ id: 123 }];
         expectedResult = service.addAssetCategoryToCollectionIfMissing(assetCategoryCollection, ...assetCategoryArray);
         expect(expectedResult).toHaveLength(3);

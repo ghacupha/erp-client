@@ -73,7 +73,7 @@ describe('AssetAccessory e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/asset-categories',
-      body: {"assetCategoryName":"copying throughput Bolivia","description":"Euro","notes":"Switchable Pines","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
+      body: {"assetCategoryName":"copying throughput Bolivia","description":"Euro","notes":"Switchable Pines","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","depreciationRateYearly":26606},
     }).then(({ body }) => {
       assetCategory = body;
     });
