@@ -21,6 +21,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
+import { DepreciationPeriodStatusTypes } from 'app/entities/enumerations/depreciation-period-status-types.model';
 import { IDepreciationPeriod, DepreciationPeriod } from '../depreciation-period.model';
 
 import { DepreciationPeriodService } from './depreciation-period.service';
@@ -45,6 +46,9 @@ describe('DepreciationPeriod Service', () => {
       id: 0,
       startDate: currentDate,
       endDate: currentDate,
+      depreciationPeriodStatus: DepreciationPeriodStatusTypes.OPEN,
+      periodCode: 'AAAAAAA',
+      processLocked: false,
     };
   });
 
@@ -96,6 +100,9 @@ describe('DepreciationPeriod Service', () => {
           id: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          depreciationPeriodStatus: 'BBBBBB',
+          periodCode: 'BBBBBB',
+          processLocked: true,
         },
         elemDefault
       );
@@ -119,6 +126,8 @@ describe('DepreciationPeriod Service', () => {
       const patchObject = Object.assign(
         {
           endDate: currentDate.format(DATE_FORMAT),
+          depreciationPeriodStatus: 'BBBBBB',
+          processLocked: true,
         },
         new DepreciationPeriod()
       );
@@ -146,6 +155,9 @@ describe('DepreciationPeriod Service', () => {
           id: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          depreciationPeriodStatus: 'BBBBBB',
+          periodCode: 'BBBBBB',
+          processLocked: true,
         },
         elemDefault
       );
@@ -203,7 +215,7 @@ describe('DepreciationPeriod Service', () => {
       });
 
       it('should add only unique DepreciationPeriod to an array', () => {
-        const depreciationPeriodArray: IDepreciationPeriod[] = [{ id: 123 }, { id: 456 }, { id: 96228 }];
+        const depreciationPeriodArray: IDepreciationPeriod[] = [{ id: 123 }, { id: 456 }, { id: 56507 }];
         const depreciationPeriodCollection: IDepreciationPeriod[] = [{ id: 123 }];
         expectedResult = service.addDepreciationPeriodToCollectionIfMissing(depreciationPeriodCollection, ...depreciationPeriodArray);
         expect(expectedResult).toHaveLength(3);

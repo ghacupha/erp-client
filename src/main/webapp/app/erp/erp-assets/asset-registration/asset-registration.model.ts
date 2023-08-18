@@ -30,6 +30,7 @@ import { IBusinessDocument } from '../../erp-pages/business-document/business-do
 import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import * as dayjs from 'dayjs';
 
 export interface IAssetRegistration {
   id?: number;
@@ -41,9 +42,11 @@ export interface IAssetRegistration {
   comments?: string | null;
   modelNumber?: string | null;
   serialNumber?: string | null;
+  remarks?: string | null;
+  capitalizationDate?: dayjs.Dayjs;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  mainServiceOutlet?: IServiceOutlet | null;
+  serviceOutlets?: IServiceOutlet[] | null;
   settlements?: ISettlement[];
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
@@ -56,7 +59,7 @@ export interface IAssetRegistration {
   assetWarranties?: IAssetWarranty[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
-  serviceOutlets?: IServiceOutlet[] | null;
+  mainServiceOutlet?: IServiceOutlet | null;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -70,9 +73,11 @@ export class AssetRegistration implements IAssetRegistration {
     public comments?: string | null,
     public modelNumber?: string | null,
     public serialNumber?: string | null,
+    public remarks?: string | null,
+    public capitalizationDate?: dayjs.Dayjs,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public mainServiceOutlet?: IServiceOutlet | null,
+    public serviceOutlets?: IServiceOutlet[] | null,
     public settlements?: ISettlement[],
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,
@@ -85,7 +90,7 @@ export class AssetRegistration implements IAssetRegistration {
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public serviceOutlets?: IServiceOutlet[] | null
+    public mainServiceOutlet?: IServiceOutlet | null
   ) {}
 }
 

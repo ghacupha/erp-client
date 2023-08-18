@@ -148,6 +148,37 @@
         >
         </jhi-m2m-settlement-form-control>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_capitalizationDate">Capitalization Date</label>
+          <div class="input-group">
+            <input
+              id="field_capitalizationDate"
+              data-cy="capitalizationDate"
+              type="text"
+              class="form-control"
+              name="capitalizationDate"
+              ngbDatepicker
+              #capitalizationDateDp="ngbDatepicker"
+              formControlName="capitalizationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="capitalizationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('capitalizationDate')!.invalid &&
+              (editForm.get('capitalizationDate')!.dirty || editForm.get('capitalizationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('capitalizationDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
         <jhi-m21-asset-category-form-control
           ngDefaultControl
           formControlName='assetCategory'
@@ -279,6 +310,11 @@
           inputControlLabel='Placeholder(s)'
         >
         </jhi-m2m-placeholder-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
 
       </div>
 

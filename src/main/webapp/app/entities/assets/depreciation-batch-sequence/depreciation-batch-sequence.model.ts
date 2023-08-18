@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import * as dayjs from 'dayjs';
 import { IDepreciationJob } from 'app/entities/assets/depreciation-job/depreciation-job.model';
 import { DepreciationBatchStatusType } from 'app/entities/enumerations/depreciation-batch-status-type.model';
 
@@ -23,6 +24,7 @@ export interface IDepreciationBatchSequence {
   id?: number;
   startIndex?: number | null;
   endIndex?: number | null;
+  createdAt?: dayjs.Dayjs | null;
   depreciationBatchStatus?: DepreciationBatchStatusType | null;
   depreciationJob?: IDepreciationJob | null;
 }
@@ -32,6 +34,7 @@ export class DepreciationBatchSequence implements IDepreciationBatchSequence {
     public id?: number,
     public startIndex?: number | null,
     public endIndex?: number | null,
+    public createdAt?: dayjs.Dayjs | null,
     public depreciationBatchStatus?: DepreciationBatchStatusType | null,
     public depreciationJob?: IDepreciationJob | null
   ) {}

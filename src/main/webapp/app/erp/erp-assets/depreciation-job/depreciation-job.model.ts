@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationJobStatusType } from 'app/entities/enumerations/depreciation-job-status-type.model';
+import { DepreciationJobStatusType } from '../../erp-common/enumerations/depreciation-job-status-type.model';
+import { IDepreciationPeriod } from '../depreciation-period/depreciation-period.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 export interface IDepreciationJob {
   id?: number;

@@ -175,6 +175,8 @@ describe('DepreciationBatchSequence e2e test', () => {
 
       cy.get(`[data-cy="endIndex"]`).type('85251').should('have.value', '85251');
 
+      cy.get(`[data-cy="createdAt"]`).type('2023-07-04T16:14').should('have.value', '2023-07-04T16:14');
+
       cy.get(`[data-cy="depreciationBatchStatus"]`).select('ERRORED');
 
       cy.get(entityCreateSaveButtonSelector).click();

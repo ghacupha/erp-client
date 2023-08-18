@@ -19,8 +19,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
@@ -37,32 +40,41 @@ export class AssetRegistrationService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' });
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .post<IAssetRegistration>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.put<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
-      assetRegistration,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .put<IAssetRegistration>(`${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.patch<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
-      assetRegistration,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .patch<IAssetRegistration>(`${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAssetRegistration>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<IAssetRegistration>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAssetRegistration[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IAssetRegistration[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -71,7 +83,9 @@ export class AssetRegistrationService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAssetRegistration[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IAssetRegistration[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addAssetRegistrationToCollectionIfMissing(
@@ -94,5 +108,31 @@ export class AssetRegistrationService {
       return [...assetRegistrationsToAdd, ...assetRegistrationCollection];
     }
     return assetRegistrationCollection;
+  }
+
+  protected convertDateFromClient(assetRegistration: IAssetRegistration): IAssetRegistration {
+    return Object.assign({}, assetRegistration, {
+      capitalizationDate: assetRegistration.capitalizationDate?.isValid()
+        ? assetRegistration.capitalizationDate.format(DATE_FORMAT)
+        : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.capitalizationDate = res.body.capitalizationDate ? dayjs(res.body.capitalizationDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((assetRegistration: IAssetRegistration) => {
+        assetRegistration.capitalizationDate = assetRegistration.capitalizationDate
+          ? dayjs(assetRegistration.capitalizationDate)
+          : undefined;
+      });
+    }
+    return res;
   }
 }

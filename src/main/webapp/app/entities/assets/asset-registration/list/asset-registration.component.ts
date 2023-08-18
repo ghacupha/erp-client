@@ -98,7 +98,10 @@ export class AssetRegistrationComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['assetNumber', 'assetTag', 'assetDetails', 'comments', 'modelNumber', 'serialNumber'].includes(this.predicate)) {
+    if (
+      query &&
+      ['assetNumber', 'assetTag', 'assetDetails', 'comments', 'modelNumber', 'serialNumber', 'remarks'].includes(this.predicate)
+    ) {
       this.predicate = 'id';
       this.ascending = true;
     }

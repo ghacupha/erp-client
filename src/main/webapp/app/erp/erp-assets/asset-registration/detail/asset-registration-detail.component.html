@@ -45,6 +45,10 @@
         <dd>
           <span>{{ assetRegistration.assetDetails }}</span>
         </dd>
+        <dt><span>Capitalization Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.capitalizationDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Asset Cost</span></dt>
         <dd>
           <span>{{ assetRegistration.assetCost }}</span>
@@ -171,6 +175,10 @@
             <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ assetRegistration.remarks }}</span>
         </dd>
       </dl>
 

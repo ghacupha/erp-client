@@ -17,12 +17,24 @@
 ///
 
 import * as dayjs from 'dayjs';
+import { DepreciationPeriodStatusTypes } from '../../erp-common/enumerations/depreciation-period-status-types.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
+import { IFiscalQuarter } from '../../erp-pages/fiscal-quarter/fiscal-quarter.model';
 
 export interface IDepreciationPeriod {
   id?: number;
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs;
+  depreciationPeriodStatus?: DepreciationPeriodStatusTypes | null;
+  periodCode?: string;
+  processLocked?: boolean | null;
   previousPeriod?: IDepreciationPeriod | null;
+  createdBy?: IApplicationUser | null;
+  fiscalYear?: IFiscalYear;
+  fiscalMonth?: IFiscalMonth;
+  fiscalQuarter?: IFiscalQuarter;
 }
 
 export class DepreciationPeriod implements IDepreciationPeriod {
@@ -30,8 +42,17 @@ export class DepreciationPeriod implements IDepreciationPeriod {
     public id?: number,
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
-    public previousPeriod?: IDepreciationPeriod | null
-  ) {}
+    public depreciationPeriodStatus?: DepreciationPeriodStatusTypes | null,
+    public periodCode?: string,
+    public processLocked?: boolean | null,
+    public previousPeriod?: IDepreciationPeriod | null,
+    public createdBy?: IApplicationUser | null,
+    public fiscalYear?: IFiscalYear,
+    public fiscalMonth?: IFiscalMonth,
+    public fiscalQuarter?: IFiscalQuarter
+  ) {
+    this.processLocked = this.processLocked ?? false;
+  }
 }
 
 export function getDepreciationPeriodIdentifier(depreciationPeriod: IDepreciationPeriod): number | undefined {

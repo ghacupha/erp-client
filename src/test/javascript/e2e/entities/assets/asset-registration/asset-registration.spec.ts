@@ -79,9 +79,11 @@ describe('AssetRegistration e2e test', () => {
             assetRegistrationUpdatePage.setCommentsInput(absolutePath),
             assetRegistrationUpdatePage.setModelNumberInput('modelNumber'),
             assetRegistrationUpdatePage.setSerialNumberInput('serialNumber'),
+            assetRegistrationUpdatePage.setRemarksInput('remarks'),
+            assetRegistrationUpdatePage.setCapitalizationDateInput('2000-12-31'),
             // assetRegistrationUpdatePage.placeholderSelectLastOption(),
             // assetRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
-            assetRegistrationUpdatePage.mainServiceOutletSelectLastOption(),
+            // assetRegistrationUpdatePage.serviceOutletSelectLastOption(),
             // assetRegistrationUpdatePage.settlementSelectLastOption(),
             assetRegistrationUpdatePage.assetCategorySelectLastOption(),
             // assetRegistrationUpdatePage.purchaseOrderSelectLastOption(),
@@ -94,7 +96,7 @@ describe('AssetRegistration e2e test', () => {
             // assetRegistrationUpdatePage.assetWarrantySelectLastOption(),
             // assetRegistrationUpdatePage.universallyUniqueMappingSelectLastOption(),
             // assetRegistrationUpdatePage.assetAccessorySelectLastOption(),
-            // assetRegistrationUpdatePage.serviceOutletSelectLastOption(),
+            assetRegistrationUpdatePage.mainServiceOutletSelectLastOption(),
         ]);
 
         await assetRegistrationUpdatePage.save();

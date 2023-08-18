@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
@@ -73,6 +73,7 @@ describe('DepreciationBatchSequence e2e test', () => {
     await promise.all([
       depreciationBatchSequenceUpdatePage.setStartIndexInput('5'),
       depreciationBatchSequenceUpdatePage.setEndIndexInput('5'),
+      depreciationBatchSequenceUpdatePage.setCreatedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       depreciationBatchSequenceUpdatePage.depreciationBatchStatusSelectLastOption(),
       depreciationBatchSequenceUpdatePage.depreciationJobSelectLastOption(),
     ]);

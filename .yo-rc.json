@@ -121,7 +121,11 @@
       "DepreciationPeriod",
       "DepreciationEntry",
       "DepreciationJob",
-      "DepreciationBatchSequence"
+      "DepreciationBatchSequence",
+      "FiscalYear",
+      "FiscalQuarter",
+      "FiscalMonth",
+      "DepreciationJobNotice"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

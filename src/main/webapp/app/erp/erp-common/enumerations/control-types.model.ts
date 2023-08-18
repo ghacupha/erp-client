@@ -38,6 +38,4 @@ export enum ControlTypes {
   TEL = 'TEL',
 
   TEXTAREA = 'TEXTAREA',
-
-  STRING = 'STRING'
 }

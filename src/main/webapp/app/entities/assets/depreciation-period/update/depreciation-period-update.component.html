@@ -77,6 +77,52 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_depreciationPeriodStatus">Depreciation Period Status</label>
+          <select
+            class="form-control"
+            name="depreciationPeriodStatus"
+            formControlName="depreciationPeriodStatus"
+            id="field_depreciationPeriodStatus"
+            data-cy="depreciationPeriodStatus"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              *ngFor="let depreciationPeriodStatusTypes of depreciationPeriodStatusTypesValues"
+              [value]="depreciationPeriodStatusTypes"
+            >
+              depreciationPeriodStatusTypes
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_periodCode">Period Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="periodCode"
+            id="field_periodCode"
+            data-cy="periodCode"
+            formControlName="periodCode"
+          />
+          <div *ngIf="editForm.get('periodCode')!.invalid && (editForm.get('periodCode')!.dirty || editForm.get('periodCode')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('periodCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processLocked">Process Locked</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="processLocked"
+            id="field_processLocked"
+            data-cy="processLocked"
+            formControlName="processLocked"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_previousPeriod">Previous Period</label>
           <select
             class="form-control"
@@ -97,6 +143,91 @@
               {{ depreciationPeriodOption.endDate }}
             </option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_createdBy">Created By</label>
+          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
+          <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
+            <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalYearOption.id === editForm.get('fiscalYear')!.value?.id ? editForm.get('fiscalYear')!.value : fiscalYearOption
+              "
+              *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
+            >
+              {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['fiscalYear'])!.invalid && (editForm.get(['fiscalYear'])!.dirty || editForm.get(['fiscalYear'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalYear'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
+          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
+            <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.id }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option *ngIf="!editForm.get('fiscalQuarter')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.id }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['fiscalQuarter'])!.invalid && (editForm.get(['fiscalQuarter'])!.dirty || editForm.get(['fiscalQuarter'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalQuarter'])?.errors?.required"> This field is required. </small>
         </div>
       </div>
 

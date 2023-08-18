@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { IServiceOutlet } from 'app/entities/data/service-outlet/service-outlet.model';
@@ -41,9 +42,11 @@ export interface IAssetRegistration {
   comments?: string | null;
   modelNumber?: string | null;
   serialNumber?: string | null;
+  remarks?: string | null;
+  capitalizationDate?: dayjs.Dayjs;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  mainServiceOutlet?: IServiceOutlet | null;
+  serviceOutlets?: IServiceOutlet[] | null;
   settlements?: ISettlement[];
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
@@ -56,7 +59,7 @@ export interface IAssetRegistration {
   assetWarranties?: IAssetWarranty[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
-  serviceOutlets?: IServiceOutlet[] | null;
+  mainServiceOutlet?: IServiceOutlet | null;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -70,9 +73,11 @@ export class AssetRegistration implements IAssetRegistration {
     public comments?: string | null,
     public modelNumber?: string | null,
     public serialNumber?: string | null,
+    public remarks?: string | null,
+    public capitalizationDate?: dayjs.Dayjs,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public mainServiceOutlet?: IServiceOutlet | null,
+    public serviceOutlets?: IServiceOutlet[] | null,
     public settlements?: ISettlement[],
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,
@@ -85,7 +90,7 @@ export class AssetRegistration implements IAssetRegistration {
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public serviceOutlets?: IServiceOutlet[] | null
+    public mainServiceOutlet?: IServiceOutlet | null
   ) {}
 }
 

@@ -152,14 +152,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const mainServiceOutlet: IServiceOutlet = { id: 10495 };
-      assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const serviceOutlets: IServiceOutlet[] = [{ id: 12055 }];
+      const serviceOutlets: IServiceOutlet[] = [{ id: 10495 }];
       assetRegistration.serviceOutlets = serviceOutlets;
+      const mainServiceOutlet: IServiceOutlet = { id: 12055 };
+      assetRegistration.mainServiceOutlet = mainServiceOutlet;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 40506 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [mainServiceOutlet, ...serviceOutlets];
+      const additionalServiceOutlets = [...serviceOutlets, mainServiceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -420,10 +420,10 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const mainServiceOutlet: IServiceOutlet = { id: 53824 };
-      assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const serviceOutlets: IServiceOutlet = { id: 72754 };
+      const serviceOutlets: IServiceOutlet = { id: 53824 };
       assetRegistration.serviceOutlets = [serviceOutlets];
+      const mainServiceOutlet: IServiceOutlet = { id: 72754 };
+      assetRegistration.mainServiceOutlet = mainServiceOutlet;
       const settlements: ISettlement = { id: 26803 };
       assetRegistration.settlements = [settlements];
       const assetCategory: IAssetCategory = { id: 64108 };
@@ -455,8 +455,8 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
+      expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
       expect(comp.settlementsSharedCollection).toContain(settlements);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);

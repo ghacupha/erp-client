@@ -77,12 +77,14 @@
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="capitalizationDate"><span>Capitalization Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -105,13 +107,8 @@
           </td>
           <td>{{ assetRegistration.modelNumber }}</td>
           <td>{{ assetRegistration.serialNumber }}</td>
-          <td>
-            <div *ngIf="assetRegistration.mainServiceOutlet">
-              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
-                assetRegistration.mainServiceOutlet?.outletCode
-              }}</a>
-            </div>
-          </td>
+          <td>{{ assetRegistration.remarks }}</td>
+          <td>{{ assetRegistration.capitalizationDate | formatMediumDate }}</td>
           <td>
             <div *ngIf="assetRegistration.assetCategory">
               <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
@@ -128,6 +125,13 @@
             <div *ngIf="assetRegistration.settlementCurrency">
               <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{
                 assetRegistration.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetRegistration.mainServiceOutlet">
+              <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+                assetRegistration.mainServiceOutlet?.outletCode
               }}</a>
             </div>
           </td>

@@ -130,6 +130,42 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_remarks">Remarks</label>
+          <textarea class="form-control" name="remarks" id="field_remarks" data-cy="remarks" formControlName="remarks"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_capitalizationDate">Capitalization Date</label>
+          <div class="input-group">
+            <input
+              id="field_capitalizationDate"
+              data-cy="capitalizationDate"
+              type="text"
+              class="form-control"
+              name="capitalizationDate"
+              ngbDatepicker
+              #capitalizationDateDp="ngbDatepicker"
+              formControlName="capitalizationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="capitalizationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('capitalizationDate')!.invalid &&
+              (editForm.get('capitalizationDate')!.dirty || editForm.get('capitalizationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('capitalizationDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -168,21 +204,17 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_mainServiceOutlet">Main Service Outlet</label>
+          <label for="field_serviceOutlets">Service Outlet</label>
           <select
             class="form-control"
-            id="field_mainServiceOutlet"
-            data-cy="mainServiceOutlet"
-            name="mainServiceOutlet"
-            formControlName="mainServiceOutlet"
+            id="field_serviceOutlets"
+            data-cy="serviceOutlet"
+            multiple
+            name="serviceOutlets"
+            formControlName="serviceOutlets"
           >
-            <option [ngValue]="null"></option>
             <option
-              [ngValue]="
-                serviceOutletOption.id === editForm.get('mainServiceOutlet')!.value?.id
-                  ? editForm.get('mainServiceOutlet')!.value
-                  : serviceOutletOption
-              "
+              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
               *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
             >
               {{ serviceOutletOption.outletCode }}
@@ -434,17 +466,21 @@
         </div>
 
         <div class="form-group">
-          <label for="field_serviceOutlets">Service Outlet</label>
+          <label class="form-control-label" for="field_mainServiceOutlet">Main Service Outlet</label>
           <select
             class="form-control"
-            id="field_serviceOutlets"
-            data-cy="serviceOutlet"
-            multiple
-            name="serviceOutlets"
-            formControlName="serviceOutlets"
+            id="field_mainServiceOutlet"
+            data-cy="mainServiceOutlet"
+            name="mainServiceOutlet"
+            formControlName="mainServiceOutlet"
           >
+            <option [ngValue]="null"></option>
             <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('mainServiceOutlet')!.value?.id
+                  ? editForm.get('mainServiceOutlet')!.value
+                  : serviceOutletOption
+              "
               *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
             >
               {{ serviceOutletOption.outletCode }}

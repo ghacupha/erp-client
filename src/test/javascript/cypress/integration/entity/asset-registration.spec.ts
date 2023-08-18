@@ -34,7 +34,12 @@ describe('AssetRegistration e2e test', () => {
   const assetRegistrationPageUrlPattern = new RegExp('/asset-registration(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const assetRegistrationSample = { assetNumber: 'Strategist compress', assetTag: 'Communications heuristic', assetCost: 66620 };
+  const assetRegistrationSample = {
+    assetNumber: 'Assistant Operative Communications',
+    assetTag: 'Mountains',
+    assetCost: 10995,
+    capitalizationDate: '2022-04-13',
+  };
 
   let assetRegistration: any;
   //let settlement: any;
@@ -341,6 +346,13 @@ describe('AssetRegistration e2e test', () => {
       cy.get(`[data-cy="modelNumber"]`).type('B2B').should('have.value', 'B2B');
 
       cy.get(`[data-cy="serialNumber"]`).type('Latvian').should('have.value', 'Latvian');
+
+      cy.get(`[data-cy="remarks"]`)
+        .type('../fake-data/blob/hipster.txt')
+        .invoke('val')
+        .should('match', new RegExp('../fake-data/blob/hipster.txt'));
+
+      cy.get(`[data-cy="capitalizationDate"]`).type('2022-04-12').should('have.value', '2022-04-12');
 
       cy.get(`[data-cy="settlement"]`).select([0]);
       cy.get(`[data-cy="assetCategory"]`).select(1);

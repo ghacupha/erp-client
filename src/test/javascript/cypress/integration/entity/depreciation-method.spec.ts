@@ -34,7 +34,7 @@ describe('DepreciationMethod e2e test', () => {
   const depreciationMethodPageUrlPattern = new RegExp('/depreciation-method(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const depreciationMethodSample = { depreciationMethodName: 'Niue support' };
+  const depreciationMethodSample = { depreciationMethodName: 'synthesize', depreciationType: 'STRAIGHT_LINE' };
 
   let depreciationMethod: any;
 
@@ -175,7 +175,7 @@ describe('DepreciationMethod e2e test', () => {
 
       cy.get(`[data-cy="description"]`).type('blue Hill Health').should('have.value', 'blue Hill Health');
 
-      cy.get(`[data-cy="depreciationType"]`).select('STRAIGHT_LINE');
+      cy.get(`[data-cy="depreciationType"]`).select('DECLINING_BALANCE');
 
       cy.get(`[data-cy="remarks"]`)
         .type('../fake-data/blob/hipster.txt')

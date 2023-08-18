@@ -53,12 +53,7 @@ describe('AssetCategory e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/depreciation-methods',
-      body: {
-        depreciationMethodName: 'optical',
-        description: 'green ADP',
-        depreciationType: 'DECLINING_BALANCE',
-        remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
-      },
+      body: { depreciationMethodName: 'optical', description: 'green ADP', remarks: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=' },
     }).then(({ body }) => {
       depreciationMethod = body;
     });

@@ -28,16 +28,16 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IDepreciationEntry, DepreciationEntry } from '../depreciation-entry.model';
 import { DepreciationEntryService } from '../service/depreciation-entry.service';
-import { IServiceOutlet } from 'app/entities/data/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/data/service-outlet/service/service-outlet.service';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
-import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';
-import { DepreciationMethodService } from 'app/entities/assets/depreciation-method/service/depreciation-method.service';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { AssetRegistrationService } from 'app/entities/assets/asset-registration/service/asset-registration.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
+import { IAssetCategory } from '../../asset-category/asset-category.model';
+import { IAssetRegistration } from '../../asset-registration/asset-registration.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { AssetRegistrationService } from '../../asset-registration/service/asset-registration.service';
+import { IDepreciationMethod } from '../../depreciation-method/depreciation-method.model';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { DepreciationMethodService } from '../../depreciation-method/service/depreciation-method.service';
 
 @Component({
   selector: 'jhi-depreciation-entry-update',

@@ -72,7 +72,16 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationPeriodStatus">
+            <span>Depreciation Period Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="periodCode"><span>Period Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processLocked"><span>Process Locked</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="previousPeriod.endDate"><span>Previous Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalMonth.id"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalQuarter.id"><span>Fiscal Quarter</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -83,10 +92,39 @@
           </td>
           <td>{{ depreciationPeriod.startDate | formatMediumDate }}</td>
           <td>{{ depreciationPeriod.endDate | formatMediumDate }}</td>
+          <td>{{ depreciationPeriod.depreciationPeriodStatus }}</td>
+          <td>{{ depreciationPeriod.periodCode }}</td>
+          <td>{{ depreciationPeriod.processLocked }}</td>
           <td>
             <div *ngIf="depreciationPeriod.previousPeriod">
               <a [routerLink]="['/depreciation-period', depreciationPeriod.previousPeriod?.id, 'view']">{{
                 depreciationPeriod.previousPeriod?.endDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.createdBy">
+              <a [routerLink]="['/application-user', depreciationPeriod.createdBy?.id, 'view']">{{
+                depreciationPeriod.createdBy?.applicationIdentity
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalYear">
+              <a [routerLink]="['/fiscal-year', depreciationPeriod.fiscalYear?.id, 'view']">{{
+                depreciationPeriod.fiscalYear?.fiscalYearCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalMonth">
+              <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">{{ depreciationPeriod.fiscalMonth?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationPeriod.fiscalQuarter">
+              <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">{{
+                depreciationPeriod.fiscalQuarter?.id
               }}</a>
             </div>
           </td>

@@ -50,8 +50,15 @@ export class DepreciationPeriodUpdatePage {
   idInput = element(by.id('field_id'));
   startDateInput = element(by.id('field_startDate'));
   endDateInput = element(by.id('field_endDate'));
+  depreciationPeriodStatusSelect = element(by.id('field_depreciationPeriodStatus'));
+  periodCodeInput = element(by.id('field_periodCode'));
+  processLockedInput = element(by.id('field_processLocked'));
 
   previousPeriodSelect = element(by.id('field_previousPeriod'));
+  createdBySelect = element(by.id('field_createdBy'));
+  fiscalYearSelect = element(by.id('field_fiscalYear'));
+  fiscalMonthSelect = element(by.id('field_fiscalMonth'));
+  fiscalQuarterSelect = element(by.id('field_fiscalQuarter'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -81,6 +88,30 @@ export class DepreciationPeriodUpdatePage {
     return await this.endDateInput.getAttribute('value');
   }
 
+  async setDepreciationPeriodStatusSelect(depreciationPeriodStatus: string): Promise<void> {
+    await this.depreciationPeriodStatusSelect.sendKeys(depreciationPeriodStatus);
+  }
+
+  async getDepreciationPeriodStatusSelect(): Promise<string> {
+    return await this.depreciationPeriodStatusSelect.element(by.css('option:checked')).getText();
+  }
+
+  async depreciationPeriodStatusSelectLastOption(): Promise<void> {
+    await this.depreciationPeriodStatusSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setPeriodCodeInput(periodCode: string): Promise<void> {
+    await this.periodCodeInput.sendKeys(periodCode);
+  }
+
+  async getPeriodCodeInput(): Promise<string> {
+    return await this.periodCodeInput.getAttribute('value');
+  }
+
+  getProcessLockedInput(): ElementFinder {
+    return this.processLockedInput;
+  }
+
   async previousPeriodSelectLastOption(): Promise<void> {
     await this.previousPeriodSelect.all(by.tagName('option')).last().click();
   }
@@ -95,6 +126,70 @@ export class DepreciationPeriodUpdatePage {
 
   async getPreviousPeriodSelectedOption(): Promise<string> {
     return await this.previousPeriodSelect.element(by.css('option:checked')).getText();
+  }
+
+  async createdBySelectLastOption(): Promise<void> {
+    await this.createdBySelect.all(by.tagName('option')).last().click();
+  }
+
+  async createdBySelectOption(option: string): Promise<void> {
+    await this.createdBySelect.sendKeys(option);
+  }
+
+  getCreatedBySelect(): ElementFinder {
+    return this.createdBySelect;
+  }
+
+  async getCreatedBySelectedOption(): Promise<string> {
+    return await this.createdBySelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalYearSelectLastOption(): Promise<void> {
+    await this.fiscalYearSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalYearSelectOption(option: string): Promise<void> {
+    await this.fiscalYearSelect.sendKeys(option);
+  }
+
+  getFiscalYearSelect(): ElementFinder {
+    return this.fiscalYearSelect;
+  }
+
+  async getFiscalYearSelectedOption(): Promise<string> {
+    return await this.fiscalYearSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalMonthSelectLastOption(): Promise<void> {
+    await this.fiscalMonthSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalMonthSelectOption(option: string): Promise<void> {
+    await this.fiscalMonthSelect.sendKeys(option);
+  }
+
+  getFiscalMonthSelect(): ElementFinder {
+    return this.fiscalMonthSelect;
+  }
+
+  async getFiscalMonthSelectedOption(): Promise<string> {
+    return await this.fiscalMonthSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalQuarterSelectLastOption(): Promise<void> {
+    await this.fiscalQuarterSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalQuarterSelectOption(option: string): Promise<void> {
+    await this.fiscalQuarterSelect.sendKeys(option);
+  }
+
+  getFiscalQuarterSelect(): ElementFinder {
+    return this.fiscalQuarterSelect;
+  }
+
+  async getFiscalQuarterSelectedOption(): Promise<string> {
+    return await this.fiscalQuarterSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

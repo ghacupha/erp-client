@@ -151,6 +151,33 @@ import {RouterModule} from '@angular/router';
         loadChildren: () => import('./contract-metadata/contract-metadata.module')
           .then(m => m.ContractMetadataModule),
       },
+      {
+        path: 'fiscal-year',
+        data: {
+          pageTitle: 'ERP | Reports',
+          authorities: [],
+        },
+        loadChildren: () => import('./fiscal-year/fiscal-year.module')
+          .then(m => m.FiscalYearModule),
+      },
+      {
+        path: 'fiscal-month',
+        data: {
+          pageTitle: 'ERP | Reports',
+          authorities: [],
+        },
+        loadChildren: () => import('./fiscal-month/fiscal-month.module')
+          .then(m => m.FiscalMonthModule),
+      },
+      {
+        path: 'fiscal-quarter',
+        data: {
+          pageTitle: 'ERP | Reports',
+          authorities: [],
+        },
+        loadChildren: () => import('./fiscal-quarter/fiscal-quarter.module')
+          .then(m => m.FiscalQuarterModule),
+      },
   ])]
 })
 export class ErpPagesModule {}

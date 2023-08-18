@@ -173,7 +173,7 @@ describe('DepreciationJob e2e test', () => {
     it('should create an instance of DepreciationJob', () => {
       cy.get(`[data-cy="timeOfCommencement"]`).type('2023-07-04T20:00').should('have.value', '2023-07-04T20:00');
 
-      cy.get(`[data-cy="depreciationJobStatus"]`).select('CREATED');
+      cy.get(`[data-cy="depreciationJobStatus"]`).select('ERRORED');
 
       cy.get(`[data-cy="description"]`).type('scalable revolutionize Shilling').should('have.value', 'scalable revolutionize Shilling');
 

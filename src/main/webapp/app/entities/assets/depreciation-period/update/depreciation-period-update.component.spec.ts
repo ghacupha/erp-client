@@ -27,6 +27,14 @@ import { of, Subject } from 'rxjs';
 
 import { DepreciationPeriodService } from '../service/depreciation-period.service';
 import { IDepreciationPeriod, DepreciationPeriod } from '../depreciation-period.model';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
+import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
+import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
+import { FiscalQuarterService } from 'app/entities/system/fiscal-quarter/service/fiscal-quarter.service';
 
 import { DepreciationPeriodUpdateComponent } from './depreciation-period-update.component';
 
@@ -35,6 +43,10 @@ describe('DepreciationPeriod Management Update Component', () => {
   let fixture: ComponentFixture<DepreciationPeriodUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let depreciationPeriodService: DepreciationPeriodService;
+  let applicationUserService: ApplicationUserService;
+  let fiscalYearService: FiscalYearService;
+  let fiscalMonthService: FiscalMonthService;
+  let fiscalQuarterService: FiscalQuarterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,6 +60,10 @@ describe('DepreciationPeriod Management Update Component', () => {
     fixture = TestBed.createComponent(DepreciationPeriodUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     depreciationPeriodService = TestBed.inject(DepreciationPeriodService);
+    applicationUserService = TestBed.inject(ApplicationUserService);
+    fiscalYearService = TestBed.inject(FiscalYearService);
+    fiscalMonthService = TestBed.inject(FiscalMonthService);
+    fiscalQuarterService = TestBed.inject(FiscalQuarterService);
 
     comp = fixture.componentInstance;
   });
@@ -74,16 +90,110 @@ describe('DepreciationPeriod Management Update Component', () => {
       expect(comp.previousPeriodsCollection).toEqual(expectedCollection);
     });
 
+    it('Should call ApplicationUser query and add missing value', () => {
+      const depreciationPeriod: IDepreciationPeriod = { id: 456 };
+      const createdBy: IApplicationUser = { id: 40330 };
+      depreciationPeriod.createdBy = createdBy;
+
+      const applicationUserCollection: IApplicationUser[] = [{ id: 30397 }];
+      jest.spyOn(applicationUserService, 'query').mockReturnValue(of(new HttpResponse({ body: applicationUserCollection })));
+      const additionalApplicationUsers = [createdBy];
+      const expectedCollection: IApplicationUser[] = [...additionalApplicationUsers, ...applicationUserCollection];
+      jest.spyOn(applicationUserService, 'addApplicationUserToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationPeriod });
+      comp.ngOnInit();
+
+      expect(applicationUserService.query).toHaveBeenCalled();
+      expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
+        applicationUserCollection,
+        ...additionalApplicationUsers
+      );
+      expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call FiscalYear query and add missing value', () => {
+      const depreciationPeriod: IDepreciationPeriod = { id: 456 };
+      const fiscalYear: IFiscalYear = { id: 86509 };
+      depreciationPeriod.fiscalYear = fiscalYear;
+
+      const fiscalYearCollection: IFiscalYear[] = [{ id: 22186 }];
+      jest.spyOn(fiscalYearService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalYearCollection })));
+      const additionalFiscalYears = [fiscalYear];
+      const expectedCollection: IFiscalYear[] = [...additionalFiscalYears, ...fiscalYearCollection];
+      jest.spyOn(fiscalYearService, 'addFiscalYearToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationPeriod });
+      comp.ngOnInit();
+
+      expect(fiscalYearService.query).toHaveBeenCalled();
+      expect(fiscalYearService.addFiscalYearToCollectionIfMissing).toHaveBeenCalledWith(fiscalYearCollection, ...additionalFiscalYears);
+      expect(comp.fiscalYearsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call FiscalMonth query and add missing value', () => {
+      const depreciationPeriod: IDepreciationPeriod = { id: 456 };
+      const fiscalMonth: IFiscalMonth = { id: 15456 };
+      depreciationPeriod.fiscalMonth = fiscalMonth;
+
+      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 4425 }];
+      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
+      const additionalFiscalMonths = [fiscalMonth];
+      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
+      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationPeriod });
+      comp.ngOnInit();
+
+      expect(fiscalMonthService.query).toHaveBeenCalled();
+      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
+      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call FiscalQuarter query and add missing value', () => {
+      const depreciationPeriod: IDepreciationPeriod = { id: 456 };
+      const fiscalQuarter: IFiscalQuarter = { id: 81542 };
+      depreciationPeriod.fiscalQuarter = fiscalQuarter;
+
+      const fiscalQuarterCollection: IFiscalQuarter[] = [{ id: 39951 }];
+      jest.spyOn(fiscalQuarterService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalQuarterCollection })));
+      const additionalFiscalQuarters = [fiscalQuarter];
+      const expectedCollection: IFiscalQuarter[] = [...additionalFiscalQuarters, ...fiscalQuarterCollection];
+      jest.spyOn(fiscalQuarterService, 'addFiscalQuarterToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationPeriod });
+      comp.ngOnInit();
+
+      expect(fiscalQuarterService.query).toHaveBeenCalled();
+      expect(fiscalQuarterService.addFiscalQuarterToCollectionIfMissing).toHaveBeenCalledWith(
+        fiscalQuarterCollection,
+        ...additionalFiscalQuarters
+      );
+      expect(comp.fiscalQuartersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const depreciationPeriod: IDepreciationPeriod = { id: 456 };
       const previousPeriod: IDepreciationPeriod = { id: 31832 };
       depreciationPeriod.previousPeriod = previousPeriod;
+      const createdBy: IApplicationUser = { id: 77078 };
+      depreciationPeriod.createdBy = createdBy;
+      const fiscalYear: IFiscalYear = { id: 48391 };
+      depreciationPeriod.fiscalYear = fiscalYear;
+      const fiscalMonth: IFiscalMonth = { id: 80430 };
+      depreciationPeriod.fiscalMonth = fiscalMonth;
+      const fiscalQuarter: IFiscalQuarter = { id: 59535 };
+      depreciationPeriod.fiscalQuarter = fiscalQuarter;
 
       activatedRoute.data = of({ depreciationPeriod });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(depreciationPeriod));
       expect(comp.previousPeriodsCollection).toContain(previousPeriod);
+      expect(comp.applicationUsersSharedCollection).toContain(createdBy);
+      expect(comp.fiscalYearsSharedCollection).toContain(fiscalYear);
+      expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
+      expect(comp.fiscalQuartersSharedCollection).toContain(fiscalQuarter);
     });
   });
 
@@ -156,6 +266,38 @@ describe('DepreciationPeriod Management Update Component', () => {
       it('Should return tracked DepreciationPeriod primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackDepreciationPeriodById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackApplicationUserById', () => {
+      it('Should return tracked ApplicationUser primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackApplicationUserById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalYearById', () => {
+      it('Should return tracked FiscalYear primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalYearById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalMonthById', () => {
+      it('Should return tracked FiscalMonth primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalMonthById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalQuarterById', () => {
+      it('Should return tracked FiscalQuarter primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalQuarterById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

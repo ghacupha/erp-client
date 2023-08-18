@@ -10,6 +10,20 @@
       "fieldName": "endDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "depreciationPeriodStatus",
+      "fieldType": "DepreciationPeriodStatusTypes",
+      "fieldValues": "OPEN,CLOSED,PROCESSING"
+    },
+    {
+      "fieldName": "periodCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "processLocked",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [
@@ -21,6 +35,33 @@
       "ownerSide": true,
       "id": false,
       "otherEntityRelationshipName": "nextPeriod"
+    },
+    {
+      "relationshipName": "createdBy",
+      "otherEntityName": "applicationUser",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "applicationIdentity"
+    },
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "fiscalYearCode"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "fiscalQuarter",
+      "otherEntityName": "fiscalQuarter",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

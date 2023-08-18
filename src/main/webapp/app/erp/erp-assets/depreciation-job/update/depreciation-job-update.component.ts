@@ -28,11 +28,11 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IDepreciationJob, DepreciationJob } from '../depreciation-job.model';
 import { DepreciationJobService } from '../service/depreciation-job.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
-import { DepreciationJobStatusType } from 'app/entities/enumerations/depreciation-job-status-type.model';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { DepreciationJobStatusType } from '../../../erp-common/enumerations/depreciation-job-status-type.model';
 
 @Component({
   selector: 'jhi-depreciation-job-update',

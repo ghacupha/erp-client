@@ -50,6 +50,7 @@ export class DepreciationBatchSequenceUpdatePage {
   idInput = element(by.id('field_id'));
   startIndexInput = element(by.id('field_startIndex'));
   endIndexInput = element(by.id('field_endIndex'));
+  createdAtInput = element(by.id('field_createdAt'));
   depreciationBatchStatusSelect = element(by.id('field_depreciationBatchStatus'));
 
   depreciationJobSelect = element(by.id('field_depreciationJob'));
@@ -80,6 +81,14 @@ export class DepreciationBatchSequenceUpdatePage {
 
   async getEndIndexInput(): Promise<string> {
     return await this.endIndexInput.getAttribute('value');
+  }
+
+  async setCreatedAtInput(createdAt: string): Promise<void> {
+    await this.createdAtInput.sendKeys(createdAt);
+  }
+
+  async getCreatedAtInput(): Promise<string> {
+    return await this.createdAtInput.getAttribute('value');
   }
 
   async setDepreciationBatchStatusSelect(depreciationBatchStatus: string): Promise<void> {

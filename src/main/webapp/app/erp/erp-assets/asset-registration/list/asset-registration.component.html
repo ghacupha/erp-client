@@ -74,6 +74,7 @@
           <th scope="col" jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetTag"><span>Asset Tag</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetDetails"><span>Asset Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="capitalizationDate"><span>Capitalization Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -94,6 +95,8 @@
           <td>{{ assetRegistration.assetNumber }}</td>
           <td>{{ assetRegistration.assetTag }}</td>
           <td>{{ assetRegistration.assetDetails }}</td>
+          <td>{{ assetRegistration.capitalizationDate | formatMediumDate }}</td>
+
           <td>
             <div *ngIf="assetRegistration.settlementCurrency">
               <a [routerLink]="['/settlement-currency', assetRegistration.settlementCurrency?.id, 'view']">{{

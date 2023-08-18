@@ -23,6 +23,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
+import * as dayjs from 'dayjs';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+
 import { IDepreciationBatchSequence, DepreciationBatchSequence } from '../depreciation-batch-sequence.model';
 import { DepreciationBatchSequenceService } from '../service/depreciation-batch-sequence.service';
 import { IDepreciationJob } from 'app/entities/assets/depreciation-job/depreciation-job.model';
@@ -43,6 +46,7 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
     id: [],
     startIndex: [],
     endIndex: [],
+    createdAt: [],
     depreciationBatchStatus: [],
     depreciationJob: [],
   });
@@ -56,6 +60,11 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationBatchSequence }) => {
+      if (depreciationBatchSequence.id === undefined) {
+        const today = dayjs().startOf('day');
+        depreciationBatchSequence.createdAt = today;
+      }
+
       this.updateForm(depreciationBatchSequence);
 
       this.loadRelationshipsOptions();
@@ -104,6 +113,7 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
       id: depreciationBatchSequence.id,
       startIndex: depreciationBatchSequence.startIndex,
       endIndex: depreciationBatchSequence.endIndex,
+      createdAt: depreciationBatchSequence.createdAt ? depreciationBatchSequence.createdAt.format(DATE_TIME_FORMAT) : null,
       depreciationBatchStatus: depreciationBatchSequence.depreciationBatchStatus,
       depreciationJob: depreciationBatchSequence.depreciationJob,
     });
@@ -132,6 +142,7 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       startIndex: this.editForm.get(['startIndex'])!.value,
       endIndex: this.editForm.get(['endIndex'])!.value,
+      createdAt: this.editForm.get(['createdAt'])!.value ? dayjs(this.editForm.get(['createdAt'])!.value, DATE_TIME_FORMAT) : undefined,
       depreciationBatchStatus: this.editForm.get(['depreciationBatchStatus'])!.value,
       depreciationJob: this.editForm.get(['depreciationJob'])!.value,
     };

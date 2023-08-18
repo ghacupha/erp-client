@@ -60,6 +60,30 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           ),
       },
       {
+        path: 'depreciation-job-notice',
+        data: {
+          pageTitle: 'ERP | Depreciation Notifications',
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-job-notice/depreciation-job-notice.module').then(
+            m => m.DepreciationJobNoticeModule
+          ),
+      },
+      {
+        path: 'depreciation-batch-sequence',
+        data: {
+          pageTitle: 'ERP | Depreciation Notifications',
+          authorities: ['ROLE_FIXED_ASSETS_USER', 'ROLE_LEASE_MANAGER'],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-batch-sequence/depreciation-batch-sequence.module').then(
+            m => m.DepreciationBatchSequenceModule
+          ),
+      },
+      {
         path: 'depreciation-period',
         data: {
           pageTitle: 'ERP | Depreciation Periods',

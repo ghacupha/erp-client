@@ -18,7 +18,9 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import * as dayjs from 'dayjs';
 
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { DepreciationBatchStatusType } from 'app/entities/enumerations/depreciation-batch-status-type.model';
 import { IDepreciationBatchSequence, DepreciationBatchSequence } from '../depreciation-batch-sequence.model';
 
@@ -29,6 +31,7 @@ describe('DepreciationBatchSequence Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: IDepreciationBatchSequence;
   let expectedResult: IDepreciationBatchSequence | IDepreciationBatchSequence[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,18 +40,25 @@ describe('DepreciationBatchSequence Service', () => {
     expectedResult = null;
     service = TestBed.inject(DepreciationBatchSequenceService);
     httpMock = TestBed.inject(HttpTestingController);
+    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       startIndex: 0,
       endIndex: 0,
+      createdAt: currentDate,
       depreciationBatchStatus: DepreciationBatchStatusType.CREATED,
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = Object.assign(
+        {
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+        },
+        elemDefault
+      );
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -61,11 +71,17 @@ describe('DepreciationBatchSequence Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          createdAt: currentDate,
+        },
+        returnedFromService
+      );
 
       service.create(new DepreciationBatchSequence()).subscribe(resp => (expectedResult = resp.body));
 
@@ -80,12 +96,18 @@ describe('DepreciationBatchSequence Service', () => {
           id: 1,
           startIndex: 1,
           endIndex: 1,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationBatchStatus: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          createdAt: currentDate,
+        },
+        returnedFromService
+      );
 
       service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -95,11 +117,21 @@ describe('DepreciationBatchSequence Service', () => {
     });
 
     it('should partial update a DepreciationBatchSequence', () => {
-      const patchObject = Object.assign({}, new DepreciationBatchSequence());
+      const patchObject = Object.assign(
+        {
+          depreciationBatchStatus: 'BBBBBB',
+        },
+        new DepreciationBatchSequence()
+      );
 
       const returnedFromService = Object.assign(patchObject, elemDefault);
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          createdAt: currentDate,
+        },
+        returnedFromService
+      );
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -114,12 +146,18 @@ describe('DepreciationBatchSequence Service', () => {
           id: 1,
           startIndex: 1,
           endIndex: 1,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationBatchStatus: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          createdAt: currentDate,
+        },
+        returnedFromService
+      );
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -172,7 +210,7 @@ describe('DepreciationBatchSequence Service', () => {
       });
 
       it('should add only unique DepreciationBatchSequence to an array', () => {
-        const depreciationBatchSequenceArray: IDepreciationBatchSequence[] = [{ id: 123 }, { id: 456 }, { id: 91058 }];
+        const depreciationBatchSequenceArray: IDepreciationBatchSequence[] = [{ id: 123 }, { id: 456 }, { id: 1117 }];
         const depreciationBatchSequenceCollection: IDepreciationBatchSequence[] = [{ id: 123 }];
         expectedResult = service.addDepreciationBatchSequenceToCollectionIfMissing(
           depreciationBatchSequenceCollection,

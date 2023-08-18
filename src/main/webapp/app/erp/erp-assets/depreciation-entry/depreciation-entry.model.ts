@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IServiceOutlet } from 'app/entities/data/service-outlet/service-outlet.model';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IAssetCategory } from '../asset-category/asset-category.model';
+import { IAssetRegistration } from '../asset-registration/asset-registration.model';
+import { IDepreciationMethod } from '../depreciation-method/depreciation-method.model';
+import { IDepreciationPeriod } from '../depreciation-period/depreciation-period.model';
 
 export interface IDepreciationEntry {
   id?: number;

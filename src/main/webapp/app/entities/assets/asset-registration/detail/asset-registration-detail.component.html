@@ -64,6 +64,14 @@
         <dd>
           <span>{{ assetRegistration.serialNumber }}</span>
         </dd>
+        <dt><span>Remarks</span></dt>
+        <dd>
+          <span>{{ assetRegistration.remarks }}</span>
+        </dd>
+        <dt><span>Capitalization Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.capitalizationDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of assetRegistration.placeholders; let last = last">
@@ -78,13 +86,12 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Main Service Outlet</span></dt>
+        <dt><span>Service Outlet</span></dt>
         <dd>
-          <div *ngIf="assetRegistration.mainServiceOutlet">
-            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
-              assetRegistration.mainServiceOutlet?.outletCode
-            }}</a>
-          </div>
+          <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
+            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
         </dd>
         <dt><span>Settlement</span></dt>
         <dd>
@@ -173,12 +180,13 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Service Outlet</span></dt>
+        <dt><span>Main Service Outlet</span></dt>
         <dd>
-          <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
-            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <div *ngIf="assetRegistration.mainServiceOutlet">
+            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+              assetRegistration.mainServiceOutlet?.outletCode
+            }}</a>
+          </div>
         </dd>
       </dl>
 
