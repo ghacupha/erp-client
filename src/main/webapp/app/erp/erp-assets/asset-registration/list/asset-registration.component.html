@@ -79,8 +79,6 @@
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="assetCost"><span>Asset Cost</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="modelNumber"><span>Model Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="mainServiceOutlet"><span>Outlet</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
@@ -105,8 +103,6 @@
             </div>
           </td>
           <td>{{ assetRegistration.assetCost }}</td>
-          <td>{{ assetRegistration.modelNumber }}</td>
-          <td>{{ assetRegistration.serialNumber }}</td>
           <td>
             <div *ngIf="assetRegistration.mainServiceOutlet">
               <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{

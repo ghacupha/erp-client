@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFiscalMonth, FiscalMonth } from '../fiscal-month.model';
 import { FiscalMonthService } from '../service/fiscal-month.service';
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { FiscalYearService } from '../../fiscal-year/service/fiscal-year.service';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { IFiscalYear } from '../../fiscal-year/fiscal-year.model';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-fiscal-month-update',
@@ -48,6 +48,7 @@ export class FiscalMonthUpdateComponent implements OnInit {
     monthNumber: [null, [Validators.required]],
     startDate: [null, [Validators.required]],
     endDate: [null, [Validators.required]],
+    fiscalMonthCode: [null, [Validators.required]],
     fiscalYear: [null, Validators.required],
     placeholders: [],
     universallyUniqueMappings: [],
@@ -146,6 +147,7 @@ export class FiscalMonthUpdateComponent implements OnInit {
       monthNumber: fiscalMonth.monthNumber,
       startDate: fiscalMonth.startDate,
       endDate: fiscalMonth.endDate,
+      fiscalMonthCode: fiscalMonth.fiscalMonthCode,
       fiscalYear: fiscalMonth.fiscalYear,
       placeholders: fiscalMonth.placeholders,
       universallyUniqueMappings: fiscalMonth.universallyUniqueMappings,
@@ -210,6 +212,7 @@ export class FiscalMonthUpdateComponent implements OnInit {
       monthNumber: this.editForm.get(['monthNumber'])!.value,
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
+      fiscalMonthCode: this.editForm.get(['fiscalMonthCode'])!.value,
       fiscalYear: this.editForm.get(['fiscalYear'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,

@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "private": true,
-  "description": "Mark V No 1 (Ehud Series) Client 1.5.1",
+  "description": "Mark V No 5 (Ehud Series) Client 1.5.2",
   "license": "GPLv3",
   "browser": {
     "fs": false,

@@ -1,5 +1,4 @@
 {
-  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "monthNumber",
@@ -15,6 +14,11 @@
       "fieldName": "endDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fiscalMonthCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [

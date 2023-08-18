@@ -19,8 +19,8 @@
 import * as dayjs from 'dayjs';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
+import { IFiscalMonth } from 'app/entities/fiscal-month/fiscal-month.model';
+import { IFiscalQuarter } from 'app/entities/fiscal-quarter/fiscal-quarter.model';
 import { DepreciationPeriodStatusTypes } from 'app/entities/enumerations/depreciation-period-status-types.model';
 
 export interface IDepreciationPeriod {

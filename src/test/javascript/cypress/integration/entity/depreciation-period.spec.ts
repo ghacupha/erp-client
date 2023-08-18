@@ -64,7 +64,7 @@ describe('DepreciationPeriod e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/fiscal-months',
-      body: {"monthNumber":36882,"startDate":"2023-08-16","endDate":"2023-08-15"},
+      body: {"monthNumber":36882,"startDate":"2023-08-16","endDate":"2023-08-15","fiscalMonthCode":"online Home"},
     }).then(({ body }) => {
       fiscalMonth = body;
     });
@@ -72,7 +72,7 @@ describe('DepreciationPeriod e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/fiscal-quarters',
-      body: {"quarterNumber":70955,"startDate":"2023-08-16","endDate":"2023-08-15"},
+      body: {"quarterNumber":70955,"startDate":"2023-08-16","endDate":"2023-08-15","fiscalQuarterCode":"B2B Cloned Arizona"},
     }).then(({ body }) => {
       fiscalQuarter = body;
     });

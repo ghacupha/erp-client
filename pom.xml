@@ -7,9 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
     <name>Erp System</name>
-    <description>Mark V No 1 (Ehud Series) Client 1.5.1</description>
+    <description>Mark V No 5 (Ehud Series) Client 1.5.2</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

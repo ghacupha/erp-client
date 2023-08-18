@@ -34,7 +34,7 @@ describe('FiscalMonth e2e test', () => {
   const fiscalMonthPageUrlPattern = new RegExp('/fiscal-month(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const fiscalMonthSample = { monthNumber: 14142, startDate: '2023-08-16', endDate: '2023-08-15' };
+  const fiscalMonthSample = { monthNumber: 71770, startDate: '2023-08-16', endDate: '2023-08-15', fiscalMonthCode: 'Islands Refined' };
 
   let fiscalMonth: any;
   let fiscalYear: any;
@@ -221,6 +221,8 @@ describe('FiscalMonth e2e test', () => {
       cy.get(`[data-cy="startDate"]`).type('2023-08-16').should('have.value', '2023-08-16');
 
       cy.get(`[data-cy="endDate"]`).type('2023-08-15').should('have.value', '2023-08-15');
+
+      cy.get(`[data-cy="fiscalMonthCode"]`).type('edge').should('have.value', 'edge');
 
       cy.get(`[data-cy="fiscalYear"]`).select(1);
 

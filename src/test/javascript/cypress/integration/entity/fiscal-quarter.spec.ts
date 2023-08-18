@@ -34,7 +34,12 @@ describe('FiscalQuarter e2e test', () => {
   const fiscalQuarterPageUrlPattern = new RegExp('/fiscal-quarter(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const fiscalQuarterSample = { quarterNumber: 13476, startDate: '2023-08-16', endDate: '2023-08-16' };
+  const fiscalQuarterSample = {
+    quarterNumber: 68994,
+    startDate: '2023-08-15',
+    endDate: '2023-08-15',
+    fiscalQuarterCode: 'Unit Oklahoma Liaison',
+  };
 
   let fiscalQuarter: any;
   let fiscalYear: any;
@@ -221,6 +226,8 @@ describe('FiscalQuarter e2e test', () => {
       cy.get(`[data-cy="startDate"]`).type('2023-08-16').should('have.value', '2023-08-16');
 
       cy.get(`[data-cy="endDate"]`).type('2023-08-16').should('have.value', '2023-08-16');
+
+      cy.get(`[data-cy="fiscalQuarterCode"]`).type('synergies').should('have.value', 'synergies');
 
       cy.get(`[data-cy="fiscalYear"]`).select(1);
 

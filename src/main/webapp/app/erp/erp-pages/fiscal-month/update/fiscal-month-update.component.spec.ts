@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { FiscalYearService } from '../../fiscal-year/service/fiscal-year.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { FiscalMonthService } from '../service/fiscal-month.service';
 import { IFiscalMonth, FiscalMonth } from '../fiscal-month.model';
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 
 import { FiscalMonthUpdateComponent } from './fiscal-month-update.component';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { IFiscalYear } from '../../fiscal-year/fiscal-year.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 
 describe('FiscalMonth Management Update Component', () => {
   let comp: FiscalMonthUpdateComponent;

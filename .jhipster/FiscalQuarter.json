@@ -1,5 +1,4 @@
 {
-  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "quarterNumber",
@@ -15,6 +14,11 @@
       "fieldName": "endDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fiscalQuarterCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
     }
   ],
   "relationships": [

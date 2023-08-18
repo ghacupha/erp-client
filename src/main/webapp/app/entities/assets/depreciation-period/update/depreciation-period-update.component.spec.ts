@@ -31,10 +31,10 @@ import { IApplicationUser } from 'app/entities/people/application-user/applicati
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
 import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
-import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
-import { FiscalQuarterService } from 'app/entities/system/fiscal-quarter/service/fiscal-quarter.service';
+import { IFiscalMonth } from 'app/entities/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/fiscal-month/service/fiscal-month.service';
+import { IFiscalQuarter } from 'app/entities/fiscal-quarter/fiscal-quarter.model';
+import { FiscalQuarterService } from 'app/entities/fiscal-quarter/service/fiscal-quarter.service';
 
 import { DepreciationPeriodUpdateComponent } from './depreciation-period-update.component';
 

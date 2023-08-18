@@ -34,8 +34,8 @@ export type EntityArrayResponseType = HttpResponse<IFiscalYear[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FiscalYearService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fiscal-years');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/fiscal-years');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/fiscal-years');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/fiscal-years');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
