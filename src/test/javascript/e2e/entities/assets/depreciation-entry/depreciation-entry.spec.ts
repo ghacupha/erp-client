@@ -76,6 +76,9 @@ describe('DepreciationEntry e2e test', () => {
       depreciationEntryUpdatePage.depreciationMethodSelectLastOption(),
       depreciationEntryUpdatePage.assetRegistrationSelectLastOption(),
       depreciationEntryUpdatePage.depreciationPeriodSelectLastOption(),
+      depreciationEntryUpdatePage.fiscalMonthSelectLastOption(),
+      depreciationEntryUpdatePage.fiscalQuarterSelectLastOption(),
+      depreciationEntryUpdatePage.fiscalYearSelectLastOption(),
     ]);
 
     await depreciationEntryUpdatePage.save();

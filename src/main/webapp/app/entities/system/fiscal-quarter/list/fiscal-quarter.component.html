@@ -73,6 +73,9 @@
           <th scope="col" jhiSortBy="quarterNumber"><span>Quarter Number</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalQuarterCode">
+            <span>Fiscal Quarter Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -85,6 +88,7 @@
           <td>{{ fiscalQuarter.quarterNumber }}</td>
           <td>{{ fiscalQuarter.startDate | formatMediumDate }}</td>
           <td>{{ fiscalQuarter.endDate | formatMediumDate }}</td>
+          <td>{{ fiscalQuarter.fiscalQuarterCode }}</td>
           <td>
             <div *ngIf="fiscalQuarter.fiscalYear">
               <a [routerLink]="['/fiscal-year', fiscalQuarter.fiscalYear?.id, 'view']">{{ fiscalQuarter.fiscalYear?.fiscalYearCode }}</a>

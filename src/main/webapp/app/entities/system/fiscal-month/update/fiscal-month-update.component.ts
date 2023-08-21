@@ -31,6 +31,8 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
+import { FiscalQuarterService } from 'app/entities/system/fiscal-quarter/service/fiscal-quarter.service';
 
 @Component({
   selector: 'jhi-fiscal-month-update',
@@ -42,15 +44,18 @@ export class FiscalMonthUpdateComponent implements OnInit {
   fiscalYearsSharedCollection: IFiscalYear[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+  fiscalQuartersSharedCollection: IFiscalQuarter[] = [];
 
   editForm = this.fb.group({
     id: [],
     monthNumber: [null, [Validators.required]],
     startDate: [null, [Validators.required]],
     endDate: [null, [Validators.required]],
+    fiscalMonthCode: [null, [Validators.required]],
     fiscalYear: [null, Validators.required],
     placeholders: [],
     universallyUniqueMappings: [],
+    fiscalQuarter: [],
   });
 
   constructor(
@@ -58,6 +63,7 @@ export class FiscalMonthUpdateComponent implements OnInit {
     protected fiscalYearService: FiscalYearService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected fiscalQuarterService: FiscalQuarterService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -93,6 +99,10 @@ export class FiscalMonthUpdateComponent implements OnInit {
   }
 
   trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
+  }
+
+  trackFiscalQuarterById(index: number, item: IFiscalQuarter): number {
     return item.id!;
   }
 
@@ -146,9 +156,11 @@ export class FiscalMonthUpdateComponent implements OnInit {
       monthNumber: fiscalMonth.monthNumber,
       startDate: fiscalMonth.startDate,
       endDate: fiscalMonth.endDate,
+      fiscalMonthCode: fiscalMonth.fiscalMonthCode,
       fiscalYear: fiscalMonth.fiscalYear,
       placeholders: fiscalMonth.placeholders,
       universallyUniqueMappings: fiscalMonth.universallyUniqueMappings,
+      fiscalQuarter: fiscalMonth.fiscalQuarter,
     });
 
     this.fiscalYearsSharedCollection = this.fiscalYearService.addFiscalYearToCollectionIfMissing(
@@ -162,6 +174,10 @@ export class FiscalMonthUpdateComponent implements OnInit {
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
       ...(fiscalMonth.universallyUniqueMappings ?? [])
+    );
+    this.fiscalQuartersSharedCollection = this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(
+      this.fiscalQuartersSharedCollection,
+      fiscalMonth.fiscalQuarter
     );
   }
 
@@ -201,6 +217,16 @@ export class FiscalMonthUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
+
+    this.fiscalQuarterService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalQuarter[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalQuarters: IFiscalQuarter[]) =>
+          this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(fiscalQuarters, this.editForm.get('fiscalQuarter')!.value)
+        )
+      )
+      .subscribe((fiscalQuarters: IFiscalQuarter[]) => (this.fiscalQuartersSharedCollection = fiscalQuarters));
   }
 
   protected createFromForm(): IFiscalMonth {
@@ -210,9 +236,11 @@ export class FiscalMonthUpdateComponent implements OnInit {
       monthNumber: this.editForm.get(['monthNumber'])!.value,
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
+      fiscalMonthCode: this.editForm.get(['fiscalMonthCode'])!.value,
       fiscalYear: this.editForm.get(['fiscalYear'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
+      fiscalQuarter: this.editForm.get(['fiscalQuarter'])!.value,
     };
   }
 }

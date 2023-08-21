@@ -176,6 +176,29 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

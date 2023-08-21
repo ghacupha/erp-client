@@ -38,6 +38,12 @@ import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset
 import { AssetRegistrationService } from 'app/entities/assets/asset-registration/service/asset-registration.service';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
 import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
+import { FiscalQuarterService } from 'app/entities/system/fiscal-quarter/service/fiscal-quarter.service';
+import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
+import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
 
 @Component({
   selector: 'jhi-depreciation-entry-update',
@@ -51,6 +57,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
   depreciationMethodsSharedCollection: IDepreciationMethod[] = [];
   assetRegistrationsSharedCollection: IAssetRegistration[] = [];
   depreciationPeriodsSharedCollection: IDepreciationPeriod[] = [];
+  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+  fiscalQuartersSharedCollection: IFiscalQuarter[] = [];
+  fiscalYearsSharedCollection: IFiscalYear[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -62,6 +71,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     depreciationMethod: [],
     assetRegistration: [],
     depreciationPeriod: [],
+    fiscalMonth: [],
+    fiscalQuarter: [],
+    fiscalYear: [],
   });
 
   constructor(
@@ -71,6 +83,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     protected depreciationMethodService: DepreciationMethodService,
     protected assetRegistrationService: AssetRegistrationService,
     protected depreciationPeriodService: DepreciationPeriodService,
+    protected fiscalMonthService: FiscalMonthService,
+    protected fiscalQuarterService: FiscalQuarterService,
+    protected fiscalYearService: FiscalYearService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -122,6 +137,18 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
+    return item.id!;
+  }
+
+  trackFiscalQuarterById(index: number, item: IFiscalQuarter): number {
+    return item.id!;
+  }
+
+  trackFiscalYearById(index: number, item: IFiscalYear): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepreciationEntry>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -152,6 +179,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       depreciationMethod: depreciationEntry.depreciationMethod,
       assetRegistration: depreciationEntry.assetRegistration,
       depreciationPeriod: depreciationEntry.depreciationPeriod,
+      fiscalMonth: depreciationEntry.fiscalMonth,
+      fiscalQuarter: depreciationEntry.fiscalQuarter,
+      fiscalYear: depreciationEntry.fiscalYear,
     });
 
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
@@ -173,6 +203,18 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     this.depreciationPeriodsSharedCollection = this.depreciationPeriodService.addDepreciationPeriodToCollectionIfMissing(
       this.depreciationPeriodsSharedCollection,
       depreciationEntry.depreciationPeriod
+    );
+    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
+      this.fiscalMonthsSharedCollection,
+      depreciationEntry.fiscalMonth
+    );
+    this.fiscalQuartersSharedCollection = this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(
+      this.fiscalQuartersSharedCollection,
+      depreciationEntry.fiscalQuarter
+    );
+    this.fiscalYearsSharedCollection = this.fiscalYearService.addFiscalYearToCollectionIfMissing(
+      this.fiscalYearsSharedCollection,
+      depreciationEntry.fiscalYear
     );
   }
 
@@ -235,6 +277,36 @@ export class DepreciationEntryUpdateComponent implements OnInit {
         )
       )
       .subscribe((depreciationPeriods: IDepreciationPeriod[]) => (this.depreciationPeriodsSharedCollection = depreciationPeriods));
+
+    this.fiscalMonthService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalMonths: IFiscalMonth[]) =>
+          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(fiscalMonths, this.editForm.get('fiscalMonth')!.value)
+        )
+      )
+      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
+
+    this.fiscalQuarterService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalQuarter[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalQuarters: IFiscalQuarter[]) =>
+          this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(fiscalQuarters, this.editForm.get('fiscalQuarter')!.value)
+        )
+      )
+      .subscribe((fiscalQuarters: IFiscalQuarter[]) => (this.fiscalQuartersSharedCollection = fiscalQuarters));
+
+    this.fiscalYearService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalYear[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalYears: IFiscalYear[]) =>
+          this.fiscalYearService.addFiscalYearToCollectionIfMissing(fiscalYears, this.editForm.get('fiscalYear')!.value)
+        )
+      )
+      .subscribe((fiscalYears: IFiscalYear[]) => (this.fiscalYearsSharedCollection = fiscalYears));
   }
 
   protected createFromForm(): IDepreciationEntry {
@@ -249,6 +321,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       depreciationMethod: this.editForm.get(['depreciationMethod'])!.value,
       assetRegistration: this.editForm.get(['assetRegistration'])!.value,
       depreciationPeriod: this.editForm.get(['depreciationPeriod'])!.value,
+      fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
+      fiscalQuarter: this.editForm.get(['fiscalQuarter'])!.value,
+      fiscalYear: this.editForm.get(['fiscalYear'])!.value,
     };
   }
 }

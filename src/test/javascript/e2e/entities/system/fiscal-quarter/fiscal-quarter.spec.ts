@@ -71,6 +71,7 @@ describe('FiscalQuarter e2e test', () => {
             fiscalQuarterUpdatePage.setQuarterNumberInput('5'),
             fiscalQuarterUpdatePage.setStartDateInput('2000-12-31'),
             fiscalQuarterUpdatePage.setEndDateInput('2000-12-31'),
+            fiscalQuarterUpdatePage.setFiscalQuarterCodeInput('fiscalQuarterCode'),
             fiscalQuarterUpdatePage.fiscalYearSelectLastOption(),
             // fiscalQuarterUpdatePage.placeholderSelectLastOption(),
             // fiscalQuarterUpdatePage.universallyUniqueMappingSelectLastOption(),

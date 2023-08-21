@@ -45,6 +45,10 @@
         <dd>
           <span>{{ fiscalQuarter.endDate | formatMediumDate }}</span>
         </dd>
+        <dt><span>Fiscal Quarter Code</span></dt>
+        <dd>
+          <span>{{ fiscalQuarter.fiscalQuarterCode }}</span>
+        </dd>
         <dt><span>Fiscal Year</span></dt>
         <dd>
           <div *ngIf="fiscalQuarter.fiscalYear">

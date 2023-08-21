@@ -1,4 +1,5 @@
 {
+  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "monthNumber",
@@ -44,6 +45,12 @@
       "otherEntityField": "universalKey",
       "ownerSide": true,
       "otherEntityRelationshipName": "fiscalMonth"
+    },
+    {
+      "relationshipName": "fiscalQuarter",
+      "otherEntityName": "fiscalQuarter",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "fiscalQuarterCode"
     }
   ],
   "service": "serviceImpl",

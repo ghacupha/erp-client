@@ -33,9 +33,11 @@ import { IFiscalMonth, FiscalMonth } from '../fiscal-month.model';
 import { FiscalMonthUpdateComponent } from './fiscal-month-update.component';
 import { IPlaceholder } from '../../placeholder/placeholder.model';
 import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { FiscalQuarterService } from '../../fiscal-quarter/service/fiscal-quarter.service';
 import { IFiscalYear } from '../../fiscal-year/fiscal-year.model';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { IFiscalQuarter } from '../../fiscal-quarter/fiscal-quarter.model';
 
 describe('FiscalMonth Management Update Component', () => {
   let comp: FiscalMonthUpdateComponent;
@@ -45,6 +47,7 @@ describe('FiscalMonth Management Update Component', () => {
   let fiscalYearService: FiscalYearService;
   let placeholderService: PlaceholderService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let fiscalQuarterService: FiscalQuarterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -61,6 +64,7 @@ describe('FiscalMonth Management Update Component', () => {
     fiscalYearService = TestBed.inject(FiscalYearService);
     placeholderService = TestBed.inject(PlaceholderService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    fiscalQuarterService = TestBed.inject(FiscalQuarterService);
 
     comp = fixture.componentInstance;
   });
@@ -131,6 +135,28 @@ describe('FiscalMonth Management Update Component', () => {
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call FiscalQuarter query and add missing value', () => {
+      const fiscalMonth: IFiscalMonth = { id: 456 };
+      const fiscalQuarter: IFiscalQuarter = { id: 49157 };
+      fiscalMonth.fiscalQuarter = fiscalQuarter;
+
+      const fiscalQuarterCollection: IFiscalQuarter[] = [{ id: 49551 }];
+      jest.spyOn(fiscalQuarterService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalQuarterCollection })));
+      const additionalFiscalQuarters = [fiscalQuarter];
+      const expectedCollection: IFiscalQuarter[] = [...additionalFiscalQuarters, ...fiscalQuarterCollection];
+      jest.spyOn(fiscalQuarterService, 'addFiscalQuarterToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ fiscalMonth });
+      comp.ngOnInit();
+
+      expect(fiscalQuarterService.query).toHaveBeenCalled();
+      expect(fiscalQuarterService.addFiscalQuarterToCollectionIfMissing).toHaveBeenCalledWith(
+        fiscalQuarterCollection,
+        ...additionalFiscalQuarters
+      );
+      expect(comp.fiscalQuartersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const fiscalMonth: IFiscalMonth = { id: 456 };
       const fiscalYear: IFiscalYear = { id: 17337 };
@@ -139,6 +165,8 @@ describe('FiscalMonth Management Update Component', () => {
       fiscalMonth.placeholders = [placeholders];
       const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 63395 };
       fiscalMonth.universallyUniqueMappings = [universallyUniqueMappings];
+      const fiscalQuarter: IFiscalQuarter = { id: 53256 };
+      fiscalMonth.fiscalQuarter = fiscalQuarter;
 
       activatedRoute.data = of({ fiscalMonth });
       comp.ngOnInit();
@@ -147,6 +175,7 @@ describe('FiscalMonth Management Update Component', () => {
       expect(comp.fiscalYearsSharedCollection).toContain(fiscalYear);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
+      expect(comp.fiscalQuartersSharedCollection).toContain(fiscalQuarter);
     });
   });
 
@@ -235,6 +264,14 @@ describe('FiscalMonth Management Update Component', () => {
       it('Should return tracked UniversallyUniqueMapping primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalQuarterById', () => {
+      it('Should return tracked FiscalQuarter primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalQuarterById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

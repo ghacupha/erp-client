@@ -57,6 +57,9 @@ export class DepreciationEntryUpdatePage {
   depreciationMethodSelect = element(by.id('field_depreciationMethod'));
   assetRegistrationSelect = element(by.id('field_assetRegistration'));
   depreciationPeriodSelect = element(by.id('field_depreciationPeriod'));
+  fiscalMonthSelect = element(by.id('field_fiscalMonth'));
+  fiscalQuarterSelect = element(by.id('field_fiscalQuarter'));
+  fiscalYearSelect = element(by.id('field_fiscalYear'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -172,6 +175,54 @@ export class DepreciationEntryUpdatePage {
 
   async getDepreciationPeriodSelectedOption(): Promise<string> {
     return await this.depreciationPeriodSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalMonthSelectLastOption(): Promise<void> {
+    await this.fiscalMonthSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalMonthSelectOption(option: string): Promise<void> {
+    await this.fiscalMonthSelect.sendKeys(option);
+  }
+
+  getFiscalMonthSelect(): ElementFinder {
+    return this.fiscalMonthSelect;
+  }
+
+  async getFiscalMonthSelectedOption(): Promise<string> {
+    return await this.fiscalMonthSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalQuarterSelectLastOption(): Promise<void> {
+    await this.fiscalQuarterSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalQuarterSelectOption(option: string): Promise<void> {
+    await this.fiscalQuarterSelect.sendKeys(option);
+  }
+
+  getFiscalQuarterSelect(): ElementFinder {
+    return this.fiscalQuarterSelect;
+  }
+
+  async getFiscalQuarterSelectedOption(): Promise<string> {
+    return await this.fiscalQuarterSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalYearSelectLastOption(): Promise<void> {
+    await this.fiscalYearSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalYearSelectOption(option: string): Promise<void> {
+    await this.fiscalYearSelect.sendKeys(option);
+  }
+
+  getFiscalYearSelect(): ElementFinder {
+    return this.fiscalYearSelect;
+  }
+
+  async getFiscalYearSelectedOption(): Promise<string> {
+    return await this.fiscalYearSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

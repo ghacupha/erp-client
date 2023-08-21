@@ -20,8 +20,11 @@ import * as dayjs from 'dayjs';
 import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 import { IAssetCategory } from '../asset-category/asset-category.model';
 import { IAssetRegistration } from '../asset-registration/asset-registration.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 import { IDepreciationMethod } from '../depreciation-method/depreciation-method.model';
 import { IDepreciationPeriod } from '../depreciation-period/depreciation-period.model';
+import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
+import { IFiscalQuarter } from '../../erp-pages/fiscal-quarter/fiscal-quarter.model';
 
 export interface IDepreciationEntry {
   id?: number;
@@ -33,6 +36,9 @@ export interface IDepreciationEntry {
   depreciationMethod?: IDepreciationMethod | null;
   assetRegistration?: IAssetRegistration | null;
   depreciationPeriod?: IDepreciationPeriod | null;
+  fiscalMonth?: IFiscalMonth | null;
+  fiscalQuarter?: IFiscalQuarter | null;
+  fiscalYear?: IFiscalYear | null;
 }
 
 export class DepreciationEntry implements IDepreciationEntry {
@@ -45,7 +51,10 @@ export class DepreciationEntry implements IDepreciationEntry {
     public assetCategory?: IAssetCategory | null,
     public depreciationMethod?: IDepreciationMethod | null,
     public assetRegistration?: IAssetRegistration | null,
-    public depreciationPeriod?: IDepreciationPeriod | null
+    public depreciationPeriod?: IDepreciationPeriod | null,
+    public fiscalMonth?: IFiscalMonth | null,
+    public fiscalQuarter?: IFiscalQuarter | null,
+    public fiscalYear?: IFiscalYear | null
   ) {}
 }
 

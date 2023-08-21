@@ -85,6 +85,30 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalMonth">
+            <a [routerLink]="['/fiscal-month', depreciationEntry.fiscalMonth?.id, 'view']">{{
+              depreciationEntry.fiscalMonth?.fiscalMonthCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Quarter</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalQuarter">
+            <a [routerLink]="['/fiscal-quarter', depreciationEntry.fiscalQuarter?.id, 'view']">{{
+              depreciationEntry.fiscalQuarter?.fiscalQuarterCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Fiscal Year</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.fiscalYear">
+            <a [routerLink]="['/fiscal-year', depreciationEntry.fiscalYear?.id, 'view']">{{
+              depreciationEntry.fiscalYear?.fiscalYearCode
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -51,10 +51,12 @@ export class FiscalMonthUpdatePage {
   monthNumberInput = element(by.id('field_monthNumber'));
   startDateInput = element(by.id('field_startDate'));
   endDateInput = element(by.id('field_endDate'));
+  fiscalMonthCodeInput = element(by.id('field_fiscalMonthCode'));
 
   fiscalYearSelect = element(by.id('field_fiscalYear'));
   placeholderSelect = element(by.id('field_placeholder'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
+  fiscalQuarterSelect = element(by.id('field_fiscalQuarter'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -90,6 +92,14 @@ export class FiscalMonthUpdatePage {
 
   async getEndDateInput(): Promise<string> {
     return await this.endDateInput.getAttribute('value');
+  }
+
+  async setFiscalMonthCodeInput(fiscalMonthCode: string): Promise<void> {
+    await this.fiscalMonthCodeInput.sendKeys(fiscalMonthCode);
+  }
+
+  async getFiscalMonthCodeInput(): Promise<string> {
+    return await this.fiscalMonthCodeInput.getAttribute('value');
   }
 
   async fiscalYearSelectLastOption(): Promise<void> {
@@ -138,6 +148,22 @@ export class FiscalMonthUpdatePage {
 
   async getUniversallyUniqueMappingSelectedOption(): Promise<string> {
     return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalQuarterSelectLastOption(): Promise<void> {
+    await this.fiscalQuarterSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalQuarterSelectOption(option: string): Promise<void> {
+    await this.fiscalQuarterSelect.sendKeys(option);
+  }
+
+  getFiscalQuarterSelect(): ElementFinder {
+    return this.fiscalQuarterSelect;
+  }
+
+  async getFiscalQuarterSelectedOption(): Promise<string> {
+    return await this.fiscalQuarterSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -96,6 +96,10 @@ export class FiscalQuarterComponent implements OnInit {
   }
 
   search(query: string): void {
+    if (query && ['fiscalQuarterCode'].includes(this.predicate)) {
+      this.predicate = 'id';
+      this.ascending = true;
+    }
     this.currentSearch = query;
     this.loadPage(1);
   }

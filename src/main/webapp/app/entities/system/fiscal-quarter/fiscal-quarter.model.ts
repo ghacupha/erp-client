@@ -26,6 +26,7 @@ export interface IFiscalQuarter {
   quarterNumber?: number;
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs;
+  fiscalQuarterCode?: string;
   fiscalYear?: IFiscalYear;
   placeholders?: IPlaceholder[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
@@ -37,6 +38,7 @@ export class FiscalQuarter implements IFiscalQuarter {
     public quarterNumber?: number,
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
+    public fiscalQuarterCode?: string,
     public fiscalYear?: IFiscalYear,
     public placeholders?: IPlaceholder[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null

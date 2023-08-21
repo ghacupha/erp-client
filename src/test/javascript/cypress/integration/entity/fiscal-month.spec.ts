@@ -81,6 +81,11 @@ describe('FiscalMonth e2e test', () => {
       statusCode: 200,
       body: [],
     });
+
+    cy.intercept('GET', '/api/fiscal-quarters', {
+      statusCode: 200,
+      body: [],
+    });
   });
 
   afterEach(() => {

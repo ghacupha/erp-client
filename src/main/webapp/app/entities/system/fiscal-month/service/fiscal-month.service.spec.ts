@@ -46,6 +46,7 @@ describe('FiscalMonth Service', () => {
       monthNumber: 0,
       startDate: currentDate,
       endDate: currentDate,
+      fiscalMonthCode: 'AAAAAAA',
     };
   });
 
@@ -98,6 +99,7 @@ describe('FiscalMonth Service', () => {
           monthNumber: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          fiscalMonthCode: 'BBBBBB',
         },
         elemDefault
       );
@@ -123,6 +125,7 @@ describe('FiscalMonth Service', () => {
           monthNumber: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          fiscalMonthCode: 'BBBBBB',
         },
         new FiscalMonth()
       );
@@ -151,6 +154,7 @@ describe('FiscalMonth Service', () => {
           monthNumber: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          fiscalMonthCode: 'BBBBBB',
         },
         elemDefault
       );
@@ -208,7 +212,7 @@ describe('FiscalMonth Service', () => {
       });
 
       it('should add only unique FiscalMonth to an array', () => {
-        const fiscalMonthArray: IFiscalMonth[] = [{ id: 123 }, { id: 456 }, { id: 98757 }];
+        const fiscalMonthArray: IFiscalMonth[] = [{ id: 123 }, { id: 456 }, { id: 32299 }];
         const fiscalMonthCollection: IFiscalMonth[] = [{ id: 123 }];
         expectedResult = service.addFiscalMonthToCollectionIfMissing(fiscalMonthCollection, ...fiscalMonthArray);
         expect(expectedResult).toHaveLength(3);

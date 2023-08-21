@@ -183,6 +183,59 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
+          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
+              "
+              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+            >
+              {{ fiscalMonthOption.fiscalMonthCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
+          <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalYearOption.id === editForm.get('fiscalYear')!.value?.id ? editForm.get('fiscalYear')!.value : fiscalYearOption
+              "
+              *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
+            >
+              {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

@@ -71,6 +71,14 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Fiscal Quarter</span></dt>
+        <dd>
+          <div *ngIf="fiscalMonth.fiscalQuarter">
+            <a [routerLink]="['/fiscal-quarter', fiscalMonth.fiscalQuarter?.id, 'view']">{{
+              fiscalMonth.fiscalQuarter?.fiscalQuarterCode
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

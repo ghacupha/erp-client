@@ -20,6 +20,7 @@ import * as dayjs from 'dayjs';
 import { IFiscalYear } from '../fiscal-year/fiscal-year.model';
 import { IPlaceholder } from '../placeholder/placeholder.model';
 import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
+import { IFiscalQuarter } from '../fiscal-quarter/fiscal-quarter.model';
 
 export interface IFiscalMonth {
   id?: number;
@@ -30,6 +31,7 @@ export interface IFiscalMonth {
   fiscalYear?: IFiscalYear;
   placeholders?: IPlaceholder[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
+  fiscalQuarter?: IFiscalQuarter | null;
 }
 
 export class FiscalMonth implements IFiscalMonth {
@@ -41,10 +43,9 @@ export class FiscalMonth implements IFiscalMonth {
     public fiscalMonthCode?: string,
     public fiscalYear?: IFiscalYear,
     public placeholders?: IPlaceholder[] | null,
-    public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null
-  ) {
-
-  }
+    public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
+    public fiscalQuarter?: IFiscalQuarter | null
+  ) {}
 }
 
 export function getFiscalMonthIdentifier(fiscalMonth: IFiscalMonth): number | undefined {

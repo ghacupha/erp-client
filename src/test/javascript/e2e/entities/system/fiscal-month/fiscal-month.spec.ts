@@ -71,9 +71,11 @@ describe('FiscalMonth e2e test', () => {
             fiscalMonthUpdatePage.setMonthNumberInput('5'),
             fiscalMonthUpdatePage.setStartDateInput('2000-12-31'),
             fiscalMonthUpdatePage.setEndDateInput('2000-12-31'),
+            fiscalMonthUpdatePage.setFiscalMonthCodeInput('fiscalMonthCode'),
             fiscalMonthUpdatePage.fiscalYearSelectLastOption(),
             // fiscalMonthUpdatePage.placeholderSelectLastOption(),
             // fiscalMonthUpdatePage.universallyUniqueMappingSelectLastOption(),
+            fiscalMonthUpdatePage.fiscalQuarterSelectLastOption(),
         ]);
 
         await fiscalMonthUpdatePage.save();

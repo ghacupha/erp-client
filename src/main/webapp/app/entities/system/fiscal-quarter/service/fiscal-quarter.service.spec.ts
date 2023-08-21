@@ -46,6 +46,7 @@ describe('FiscalQuarter Service', () => {
       quarterNumber: 0,
       startDate: currentDate,
       endDate: currentDate,
+      fiscalQuarterCode: 'AAAAAAA',
     };
   });
 
@@ -98,6 +99,7 @@ describe('FiscalQuarter Service', () => {
           quarterNumber: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          fiscalQuarterCode: 'BBBBBB',
         },
         elemDefault
       );
@@ -149,6 +151,7 @@ describe('FiscalQuarter Service', () => {
           quarterNumber: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          fiscalQuarterCode: 'BBBBBB',
         },
         elemDefault
       );
@@ -206,7 +209,7 @@ describe('FiscalQuarter Service', () => {
       });
 
       it('should add only unique FiscalQuarter to an array', () => {
-        const fiscalQuarterArray: IFiscalQuarter[] = [{ id: 123 }, { id: 456 }, { id: 6386 }];
+        const fiscalQuarterArray: IFiscalQuarter[] = [{ id: 123 }, { id: 456 }, { id: 90183 }];
         const fiscalQuarterCollection: IFiscalQuarter[] = [{ id: 123 }];
         expectedResult = service.addFiscalQuarterToCollectionIfMissing(fiscalQuarterCollection, ...fiscalQuarterArray);
         expect(expectedResult).toHaveLength(3);

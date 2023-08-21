@@ -80,6 +80,9 @@
           </th>
           <th scope="col" jhiSortBy="assetRegistration.assetNumber"><span>Asset Registration</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationPeriod.endDate"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalMonth.fiscalMonthCode"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalQuarter.fiscalQuarterCode"><span>Fiscal Quarter</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -123,6 +126,27 @@
             <div *ngIf="depreciationEntry.depreciationPeriod">
               <a [routerLink]="['/depreciation-period', depreciationEntry.depreciationPeriod?.id, 'view']">{{
                 depreciationEntry.depreciationPeriod?.endDate
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationEntry.fiscalMonth">
+              <a [routerLink]="['/fiscal-month', depreciationEntry.fiscalMonth?.id, 'view']">{{
+                depreciationEntry.fiscalMonth?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationEntry.fiscalQuarter">
+              <a [routerLink]="['/fiscal-quarter', depreciationEntry.fiscalQuarter?.id, 'view']">{{
+                depreciationEntry.fiscalQuarter?.fiscalQuarterCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationEntry.fiscalYear">
+              <a [routerLink]="['/fiscal-year', depreciationEntry.fiscalYear?.id, 'view']">{{
+                depreciationEntry.fiscalYear?.fiscalYearCode
               }}</a>
             </div>
           </td>

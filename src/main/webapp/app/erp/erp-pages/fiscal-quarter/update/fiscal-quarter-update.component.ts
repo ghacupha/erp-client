@@ -25,10 +25,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFiscalQuarter, FiscalQuarter } from '../fiscal-quarter.model';
 import { FiscalQuarterService } from '../service/fiscal-quarter.service';
-import { FiscalYearService } from '../../fiscal-year/service/fiscal-year.service';
-import { IPlaceholder } from '../../placeholder/placeholder.model';
-import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { IFiscalYear } from '../../fiscal-year/fiscal-year.model';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { FiscalYearService } from '../../fiscal-year/service/fiscal-year.service';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
 import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 

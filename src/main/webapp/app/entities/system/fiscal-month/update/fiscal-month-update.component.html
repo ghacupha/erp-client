@@ -95,6 +95,26 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_fiscalMonthCode">Fiscal Month Code</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fiscalMonthCode"
+            id="field_fiscalMonthCode"
+            data-cy="fiscalMonthCode"
+            formControlName="fiscalMonthCode"
+          />
+          <div
+            *ngIf="
+              editForm.get('fiscalMonthCode')!.invalid &&
+              (editForm.get('fiscalMonthCode')!.dirty || editForm.get('fiscalMonthCode')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fiscalMonthCode')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
           <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
             <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
@@ -153,6 +173,29 @@
               "
             >
               {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
+          <select
+            class="form-control"
+            id="field_fiscalQuarter"
+            data-cy="fiscalQuarter"
+            name="fiscalQuarter"
+            formControlName="fiscalQuarter"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
+                  ? editForm.get('fiscalQuarter')!.value
+                  : fiscalQuarterOption
+              "
+              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
+            >
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
             </option>
           </select>
         </div>

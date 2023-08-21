@@ -51,6 +51,7 @@ export class FiscalQuarterUpdatePage {
   quarterNumberInput = element(by.id('field_quarterNumber'));
   startDateInput = element(by.id('field_startDate'));
   endDateInput = element(by.id('field_endDate'));
+  fiscalQuarterCodeInput = element(by.id('field_fiscalQuarterCode'));
 
   fiscalYearSelect = element(by.id('field_fiscalYear'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -90,6 +91,14 @@ export class FiscalQuarterUpdatePage {
 
   async getEndDateInput(): Promise<string> {
     return await this.endDateInput.getAttribute('value');
+  }
+
+  async setFiscalQuarterCodeInput(fiscalQuarterCode: string): Promise<void> {
+    await this.fiscalQuarterCodeInput.sendKeys(fiscalQuarterCode);
+  }
+
+  async getFiscalQuarterCodeInput(): Promise<string> {
+    return await this.fiscalQuarterCodeInput.getAttribute('value');
   }
 
   async fiscalYearSelectLastOption(): Promise<void> {
