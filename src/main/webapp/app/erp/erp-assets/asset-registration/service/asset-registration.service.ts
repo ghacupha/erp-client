@@ -25,6 +25,9 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IAssetRegistration, getAssetRegistrationIdentifier } from '../asset-registration.model';
+import { DATE_FORMAT } from '../../../../config/input.constants';
+import * as dayjs from 'dayjs';
+import { map } from 'rxjs/operators';
 
 export type EntityResponseType = HttpResponse<IAssetRegistration>;
 export type EntityArrayResponseType = HttpResponse<IAssetRegistration[]>;
@@ -37,7 +40,9 @@ export class AssetRegistrationService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' });
+    return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
@@ -45,7 +50,8 @@ export class AssetRegistrationService {
       `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
       assetRegistration,
       { observe: 'response' }
-    );
+    )
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
@@ -53,16 +59,19 @@ export class AssetRegistrationService {
       `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
       assetRegistration,
       { observe: 'response' }
-    );
+    )
+    .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IAssetRegistration>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http.get<IAssetRegistration>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAssetRegistration[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IAssetRegistration[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -71,7 +80,8 @@ export class AssetRegistrationService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IAssetRegistration[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http.get<IAssetRegistration[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addAssetRegistrationToCollectionIfMissing(
@@ -94,5 +104,31 @@ export class AssetRegistrationService {
       return [...assetRegistrationsToAdd, ...assetRegistrationCollection];
     }
     return assetRegistrationCollection;
+  }
+
+  protected convertDateFromClient(assetRegistration: IAssetRegistration): IAssetRegistration {
+    return Object.assign({}, assetRegistration, {
+      capitalizationDate: assetRegistration.capitalizationDate?.isValid()
+        ? assetRegistration.capitalizationDate.format(DATE_FORMAT)
+        : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.capitalizationDate = res.body.capitalizationDate ? dayjs(res.body.capitalizationDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((assetRegistration: IAssetRegistration) => {
+        assetRegistration.capitalizationDate = assetRegistration.capitalizationDate
+          ? dayjs(assetRegistration.capitalizationDate)
+          : undefined;
+      });
+    }
+    return res;
   }
 }
