@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -27,8 +27,8 @@ import { IFiscalYear, FiscalYear } from '../fiscal-year.model';
 import { FiscalYearService } from '../service/fiscal-year.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 import { FiscalYearStatusType } from 'app/entities/enumerations/fiscal-year-status-type.model';

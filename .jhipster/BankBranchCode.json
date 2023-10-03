@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220301112455",
-  "clientRootFolder": "data",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "bankCode",
@@ -15,7 +15,7 @@
     {
       "fieldName": "branchCode",
       "fieldType": "String",
-      "fieldValidateRules": ["unique"]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "branchName",
@@ -29,7 +29,7 @@
   "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
   "name": "BankBranchCode",
-  "pagination": "infinite-scroll",
+  "pagination": "pagination",
   "readOnly": false,
   "relationships": [
     {

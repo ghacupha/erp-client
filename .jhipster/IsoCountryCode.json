@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220406130104",
-  "clientRootFolder": "data",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "countryCode",
@@ -10,6 +10,18 @@
     {
       "fieldName": "countryDescription",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "continentCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "continentName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "subRegion",
+      "fieldType": "String"
     }
   ],
   "incrementalChangelog": false,
@@ -17,15 +29,6 @@
   "name": "IsoCountryCode",
   "pagination": "infinite-scroll",
   "readOnly": false,
-  "relationships": [
-    {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "isoCountryCode",
-      "ownerSide": true,
-      "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
-    }
-  ],
+  "relationships": [],
   "service": "serviceImpl"
 }

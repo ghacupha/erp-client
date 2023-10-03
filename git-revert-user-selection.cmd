@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+@REM Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 @REM Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
@@ -22,11 +22,10 @@
 @REM Required git
 @REM JAVA_HOME - location of a JDK home dir
 @REM
-@REM This is necessitated by the default system implementation of incremental
-@REM liquibase changes as opposed to write-off of current schema.
-@REM The script is meant to be invoked everytime there are massive code changes
-@REM to make sure that changelogs are then manually created by the dev
+@REM These files are reverted after generator run to maintain consistency with the
+@REM project design
 @REM ----------------------------------------------------------------------------
 
 @echo off
 git checkout HEAD~1 src/main/webapp/app/entities/people/
+git checkout HEAD~1 src/main/webapp/app/entities/entity-routing.module.ts

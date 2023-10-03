@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -32,8 +32,8 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { PaymentInvoiceService } from 'app/entities/settlement/payment-invoice/service/payment-invoice.service';
-import { IServiceOutlet } from 'app/entities/data/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/data/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
@@ -46,14 +46,14 @@ import { IJobSheet } from 'app/entities/settlement/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/settlement/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from 'app/entities/assets/asset-warranty/service/asset-warranty.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IAssetAccessory } from 'app/entities/assets/asset-accessory/asset-accessory.model';
 import { AssetAccessoryService } from 'app/entities/assets/asset-accessory/service/asset-accessory.service';
 

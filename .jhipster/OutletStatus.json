@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220301113030",
-  "clientRootFolder": "data",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "branchStatusTypeCode",

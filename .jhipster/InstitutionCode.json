@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220406080053",
-  "clientRootFolder": "data",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "institutionCode",
@@ -23,6 +23,18 @@
     },
     {
       "fieldName": "institutionCategory",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "institutionOwnership",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateLicensed",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "institutionStatus",
       "fieldType": "String"
     }
   ],

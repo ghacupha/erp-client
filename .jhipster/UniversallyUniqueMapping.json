@@ -1,6 +1,6 @@
 {
   "changelogDate": "20220608075128",
-  "clientRootFolder": "system",
+  "clientRootFolder": "gdi",
   "dto": "mapstruct",
   "fields": [
     {
@@ -19,6 +19,23 @@
   "name": "UniversallyUniqueMapping",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipName": "parentMapping",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "universallyUniqueMapping",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

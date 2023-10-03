@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -29,8 +29,8 @@ import { AgencyNoticeService } from '../service/agency-notice.service';
 import { IAgencyNotice, AgencyNotice } from '../agency-notice.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/settlement/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';

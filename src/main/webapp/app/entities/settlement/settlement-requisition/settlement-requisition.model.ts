@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,14 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ISettlementCurrency } from 'app/entities/settlement/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { IDeliveryNote } from 'app/entities/settlement/delivery-note/delivery-note.model';
 import { IJobSheet } from 'app/entities/settlement/job-sheet/job-sheet.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { PaymentStatus } from 'app/entities/enumerations/payment-status.model';

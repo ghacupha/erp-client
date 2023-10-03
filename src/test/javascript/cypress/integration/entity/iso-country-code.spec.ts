@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -174,6 +174,12 @@ describe('IsoCountryCode e2e test', () => {
       cy.get(`[data-cy="countryCode"]`).type('NL').should('have.value', 'NL');
 
       cy.get(`[data-cy="countryDescription"]`).type('Specialist connect Dynamic').should('have.value', 'Specialist connect Dynamic');
+
+      cy.get(`[data-cy="continentCode"]`).type('Lead').should('have.value', 'Lead');
+
+      cy.get(`[data-cy="continentName"]`).type('Health THX Frozen').should('have.value', 'Health THX Frozen');
+
+      cy.get(`[data-cy="subRegion"]`).type('Music Bedfordshire Market').should('have.value', 'Music Bedfordshire Market');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

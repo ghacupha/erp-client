@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IServiceOutlet } from 'app/entities/data/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';
 import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';

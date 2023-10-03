@@ -1,12 +1,12 @@
 {
   "changelogDate": "20220203121814",
-  "clientRootFolder": "settlement",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "iso4217CurrencyCode",
       "fieldType": "String",
-      "fieldValidateRules": ["required", "unique", "minlength", "maxlength"],
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
       "fieldValidateRulesMaxlength": "3",
       "fieldValidateRulesMinlength": "3"
     },

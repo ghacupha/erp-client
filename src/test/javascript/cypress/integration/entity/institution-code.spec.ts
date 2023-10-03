@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ describe('InstitutionCode e2e test', () => {
   const institutionCodePageUrlPattern = new RegExp('/institution-code(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const institutionCodeSample = { institutionCode: 'COM', institutionName: 'Borders Buckinghamshire Generic' };
+  const institutionCodeSample = { institutionCode: 'Optional Buckinghamshire', institutionName: 'intermediate connect' };
 
   let institutionCode: any;
 
@@ -180,6 +180,12 @@ describe('InstitutionCode e2e test', () => {
       cy.get(`[data-cy="category"]`).type('Ohio').should('have.value', 'Ohio');
 
       cy.get(`[data-cy="institutionCategory"]`).type('bus indexing auxiliary').should('have.value', 'bus indexing auxiliary');
+
+      cy.get(`[data-cy="institutionOwnership"]`).type('COM').should('have.value', 'COM');
+
+      cy.get(`[data-cy="dateLicensed"]`).type('2022-04-05').should('have.value', '2022-04-05');
+
+      cy.get(`[data-cy="institutionStatus"]`).type('Illinois cross-platform').should('have.value', 'Illinois cross-platform');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

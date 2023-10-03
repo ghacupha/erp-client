@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -27,8 +27,8 @@ import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-a
 import { PrepaymentAmortizationService } from '../service/prepayment-amortization.service';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { ISettlementCurrency } from 'app/entities/settlement/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/settlement/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';

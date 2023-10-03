@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220406110354",
-  "clientRootFolder": "data",
   "dto": "mapstruct",
+  "clientRootFolder": "gdi",
   "fields": [
     {
       "fieldName": "bankCode",

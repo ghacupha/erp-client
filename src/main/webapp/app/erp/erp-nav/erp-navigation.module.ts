@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -31,6 +31,7 @@ import { SystemAdminNavComponent } from './system-admin-nav/system-admin-nav.com
 import { LeasesNavComponent } from './leases-nav/leases-nav.component';
 import { TablesNavComponent } from './tables-nav/tables-nav.component';
 import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-nav.component';
+import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-na
     LeasesNavComponent,
     TablesNavComponent,
     ErpMaintenanceNavComponent,
+    GdiNavComponent,
   ],
   imports: [
     SharedModule,
@@ -62,7 +64,8 @@ import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-na
     SystemAdminNavComponent,
     LeasesNavComponent,
     TablesNavComponent,
-    ErpMaintenanceNavComponent
+    ErpMaintenanceNavComponent,
+    GdiNavComponent,
   ]
 })
 export class ErpNavigationModule {}

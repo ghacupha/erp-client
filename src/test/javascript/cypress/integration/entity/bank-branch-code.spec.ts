@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ describe('BankBranchCode e2e test', () => {
   const bankBranchCodePageUrlPattern = new RegExp('/bank-branch-code(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const bankBranchCodeSample = { bankName: 'Pizza Barthelemy vortals' };
+  const bankBranchCodeSample = { bankName: 'Pizza Barthelemy vortals', branchCode: 'Guatemala impactful' };
 
   let bankBranchCode: any;
 
