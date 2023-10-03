@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -19,15 +19,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-/**
- * This file is reverted after every generator run because actual navigations are implemented in the
- * several use case modules
- */
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
+  imports: [RouterModule.forChild([])],
 })
 export class EntityRoutingModule {}
