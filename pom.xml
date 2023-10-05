@@ -9,7 +9,7 @@
     <artifactId>erp-client</artifactId>
     <version>1.5.3</version>
     <name>Erp System</name>
-    <description>Mark VI No 1 (Phoebe Series) Client 1.5.3</description>
+    <description>Mark VI No 2 (Phoebe Series) Client 1.5.3</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

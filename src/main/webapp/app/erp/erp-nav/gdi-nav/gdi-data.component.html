@@ -1,0 +1,268 @@
+<!--
+
+    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div  [ngSwitch]="isAuthenticated()">
+  <ul  class="navbar-nav ml-auto">
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="registry-menu">
+          <span>
+              <fa-icon icon="book-open"></fa-icon>
+              <span>
+                 Data
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="registry-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="agent-banking-activity"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Agent Banking Activity</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="account-attribute"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Account Attribute</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="account-attribute-metadata"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Account Attribute Metadata</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="exchange-rate"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Exchange Rate</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="particulars-of-outlet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Particulars Of Outlet</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="weekly-counterfeit-holding"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Weekly Counterfeit Holding</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="weekly-cash-holding"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Weekly Cash Holding</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="county-sub-county-code"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>County Sub County Code</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="related-party-relationship"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Related Party Relationship</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="terminals-and-pos"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Terminals And POS</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="performance-of-foreign-subsidiaries"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Performance Of Foreign Subsidiaries</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="account-balance"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Account Balance</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="card-acquiring-transaction"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Card Acquiring Transaction</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="card-issuer-charges"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Card Issuer Charges</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="card-fraud-information"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Card Fraud Information</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="card-usage-information"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Card Usage Information</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="collateral-information"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Collateral Information</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="credit-card-facility"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Credit Card Facility</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="card-state"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Card State</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Navigation for maintenance modules-->
+    <jhi-maintenance-nav></jhi-maintenance-nav>
+
+  </ul>
+</div>

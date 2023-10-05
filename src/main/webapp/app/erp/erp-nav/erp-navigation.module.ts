@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -32,6 +32,7 @@ import { LeasesNavComponent } from './leases-nav/leases-nav.component';
 import { TablesNavComponent } from './tables-nav/tables-nav.component';
 import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-nav.component';
 import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
+import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
     TablesNavComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
+    GdiDataNavComponent,
   ],
   imports: [
     SharedModule,
@@ -66,6 +68,7 @@ import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
     TablesNavComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
+    GdiDataNavComponent,
   ]
 })
 export class ErpNavigationModule {}

@@ -1,8 +1,8 @@
 {
   "name": "erp-system",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "private": true,
-  "description": "Mark V No 5 (Ehud Series) Client 1.5.2",
+  "description": "Mark VI No 2 (Phoebe Series) Client 1.5.3",
   "license": "GPLv3",
   "browser": {
     "fs": false,
@@ -36,7 +36,7 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss}\"",
     "serve": "npm run start --",
     "sonar": "sonar-scanner",
-    "start": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng serve --hmr",
+    "start": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --hmr",
     "start-tls": "npm run webapp:dev-ssl",
     "pretest": "npm run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",

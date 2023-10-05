@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = versionInfo.hash.substring(0,8);
 
-  clientVersion = '1.5.2';
+  clientVersion = '1.5.3';
 
   serverVersion = versionInfo.tag;
 
@@ -46,7 +46,7 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
-        this.serverVersion = appStatus.body.version ?? '1.2.8';
+        this.serverVersion = appStatus.body.version ?? '1.5.2';
         this.serverHash = appStatus.body.build ?? '1.3.5';
       }
     });

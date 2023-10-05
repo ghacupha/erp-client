@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark V No 5 (Ehud Series) Client 1.5.2
+/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -16,10 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IUser } from 'app/core/user/user.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { IUser } from 'app/entities/user/user.model';
+import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IApplicationUser {
   id?: number;
