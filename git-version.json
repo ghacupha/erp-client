@@ -1,0 +1,23 @@
+{
+  "dirty": false,
+  "raw": "v1.1.2-79-g35c8ea108376c2ad",
+  "hash": "g35c8ea108376c2ad",
+  "distance": 79,
+  "tag": "v1.1.2",
+  "semver": {
+    "options": {
+      "loose": false,
+      "includePrerelease": false
+    },
+    "loose": false,
+    "raw": "v1.1.2",
+    "major": 1,
+    "minor": 1,
+    "patch": 2,
+    "prerelease": [],
+    "build": [],
+    "version": "1.1.2"
+  },
+  "suffix": "79-g35c8ea108376c2ad",
+  "semverString": "1.1.2+79.g35c8ea108376c2ad"
+}

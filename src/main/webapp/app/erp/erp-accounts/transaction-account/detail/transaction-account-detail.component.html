@@ -1,0 +1,77 @@
+<!--
+
+    Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="transactionAccount">
+      <h2 data-cy="transactionAccountDetailsHeading"><span>Transaction Account</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ transactionAccount.id }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountNumber }}</span>
+        </dd>
+        <dt><span>Account Name</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountName }}</span>
+        </dd>
+        <dt><span>Notes</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.notes">
+            <a (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">open</a>
+            {{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}
+          </div>
+        </dd>
+        <dt><span>Parent Account</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.parentAccount">
+            <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
+              transactionAccount.parentAccount?.accountNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of transactionAccount.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/transaction-account', transactionAccount.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

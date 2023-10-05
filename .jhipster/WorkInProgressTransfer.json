@@ -1,0 +1,47 @@
+{
+  "changelogDate": "20220418094424",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "targetAssetNumber",
+      "fieldType": "String"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "WorkInProgressTransfer",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "workInProgressRegistration",
+      "otherEntityRelationshipName": "workInProgressTransfer",
+      "ownerSide": true,
+      "relationshipName": "workInProgressRegistration",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "workInProgressTransfer",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "workInProgressTransfer",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

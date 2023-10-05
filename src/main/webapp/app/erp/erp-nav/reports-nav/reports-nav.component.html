@@ -1,0 +1,232 @@
+<!--
+
+    Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div  [ngSwitch]="isAuthenticated()">
+  <ul  class="navbar-nav ml-auto">
+     <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="report-definition-menu">
+          <span>
+              <fa-icon icon="book-open"></fa-icon>
+              <span>
+                 Report Definition
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="report-definition-menu">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="report-template"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Template</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="report-design"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Design</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="universally-unique-mapping"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Parameters</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="question-base"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Question Base</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="string-question-base"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>String Question Base</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="test/dynamic-form/test-1"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Dynamic Form Test 1</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="test/dynamic-form/test-2"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Dynamic Form Test 2</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="test/dynamic-form/test-3"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Dynamic Form Test 3</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="system-content-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>System Content Type</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
+          <a
+            class="dropdown-item"
+            routerLink="report-content-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Content Type</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Navigation for Accounts Maintenance-->
+    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
+        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="reports-menu">
+          <span>
+              <fa-icon icon="map-marked-alt"></fa-icon>
+              <span>
+                 Reports
+              </span>
+          </span>
+      </a>
+      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Requisition</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="excel-report-export"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Excel Report Export</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+          <a
+            class="dropdown-item"
+            routerLink="report-status"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Status</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="xlsx-report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Excel Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="pdf-report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>PDF Report</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+  </ul>
+</div>

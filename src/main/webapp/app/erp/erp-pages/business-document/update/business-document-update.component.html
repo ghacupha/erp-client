@@ -1,0 +1,375 @@
+<!--
+
+    Erp System - Mark VI No 1 (Phoebe Series) Client 1.5.3
+    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-business-document-heading" data-cy="BusinessDocumentCreateUpdateHeading">Create or edit a Business Document</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentTitle">Document Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentTitle"
+            id="field_documentTitle"
+            data-cy="documentTitle"
+            formControlName="documentTitle"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentTitle')!.invalid && (editForm.get('documentTitle')!.dirty || editForm.get('documentTitle')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentSerial">Document Serial</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentSerial"
+            id="field_documentSerial"
+            data-cy="documentSerial"
+            formControlName="documentSerial"
+            [readonly]="editForm.get('id')!.value == null"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentSerial')!.invalid && (editForm.get('documentSerial')!.dirty || editForm.get('documentSerial')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentSerial')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastModified">Last Modified</label>
+          <div class="d-flex">
+            <input
+              id="field_lastModified"
+              data-cy="lastModified"
+              type="datetime-local"
+              class="form-control"
+              name="lastModified"
+              formControlName="lastModified"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_attachmentFilePath">Attachment File Path</label>
+          <input
+            type="text"
+            class="form-control"
+            name="attachmentFilePath"
+            id="field_attachmentFilePath"
+            data-cy="attachmentFilePath"
+            formControlName="attachmentFilePath"
+          />
+          <div
+            *ngIf="
+              editForm.get('attachmentFilePath')!.invalid &&
+              (editForm.get('attachmentFilePath')!.dirty || editForm.get('attachmentFilePath')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('attachmentFilePath')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentFile">Document File</label>
+          <div>
+            <div *ngIf="editForm.get('documentFile')!.value" class="form-text text-danger clearfix">
+              <a class="pull-left" (click)="openFile(editForm.get('documentFile')!.value, editForm.get('documentFileContentType')!.value)"
+                >open</a
+              ><br />
+              <span class="pull-left"
+                >{{ editForm.get('documentFileContentType')!.value }}, {{ byteSize(editForm.get('documentFile')!.value) }}</span
+              >
+              <button
+                type="button"
+                (click)="editForm.patchValue({ documentFile: null }); editForm.patchValue({ documentFileContentType: null })"
+                class="btn btn-secondary btn-xs pull-right"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_documentFile" data-cy="documentFile" (change)="setFileData($event, 'documentFile', false)" />
+          </div>
+          <input
+            type="hidden"
+            class="form-control"
+            name="documentFile"
+            id="field_documentFile"
+            data-cy="documentFile"
+            formControlName="documentFile"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            name="documentFileContentType"
+            id="field_documentFileContentType"
+            formControlName="documentFileContentType"
+          />
+          <div
+            *ngIf="editForm.get('documentFile')!.invalid && (editForm.get('documentFile')!.dirty || editForm.get('documentFile')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentFile')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_fileTampered">File Tampered</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="fileTampered"
+            id="field_fileTampered"
+            data-cy="fileTampered"
+            formControlName="fileTampered"
+          />
+        </div>
+
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
+          <select
+            class="form-control"
+            id="field_fileChecksumAlgorithm"
+            data-cy="fileChecksumAlgorithm"
+            name="fileChecksumAlgorithm"
+            formControlName="fileChecksumAlgorithm"
+          >
+            <option *ngIf="!editForm.get('fileChecksumAlgorithm')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                algorithmOption.id === editForm.get('fileChecksumAlgorithm')!.value?.id
+                  ? editForm.get('fileChecksumAlgorithm')!.value
+                  : algorithmOption
+              "
+              *ngFor="let algorithmOption of algorithmsSharedCollection; trackBy: trackAlgorithmById"
+            >
+              {{ algorithmOption.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['fileChecksumAlgorithm'])!.invalid &&
+            (editForm.get(['fileChecksumAlgorithm'])!.dirty || editForm.get(['fileChecksumAlgorithm'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['fileChecksumAlgorithm'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>-->
+
+        <jhi-algorithm-form-control
+          ngDefaultControl
+          formControlName='fileChecksumAlgorithm'
+          [inputValue]="editForm.get(['fileChecksumAlgorithm'])!.value"
+          (valueSelected)='updateFileChecksumAlgorithm($event)'
+          inputControlLabel='File Checksum Algorithm'
+        >
+          <option [ngValue]="editForm.get('fileChecksumAlgorithm')!.value"></option>
+        </jhi-algorithm-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_documentFileChecksum">Document File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="documentFileChecksum"
+            id="field_documentFileChecksum"
+            data-cy="documentFileChecksum"
+            formControlName="documentFileChecksum"
+            [readonly]="true"
+          />
+          <div
+            *ngIf="
+              editForm.get('documentFileChecksum')!.invalid &&
+              (editForm.get('documentFileChecksum')!.dirty || editForm.get('documentFileChecksum')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('documentFileChecksum')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='createdBy'
+          [inputValue]="editForm.get(['createdBy'])!.value"
+          (valueSelected)='updateCreatedBy($event)'
+          inputControlLabel='Created By:'
+        >
+          <option [ngValue]="editForm.get('createdBy')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-application-user-form-control
+          ngDefaultControl
+          formControlName='lastModifiedBy'
+          [inputValue]="editForm.get(['lastModifiedBy'])!.value"
+          (valueSelected)='updateLastModifiedBy($event)'
+          inputControlLabel='Last Modified By:'
+        >
+          <option [ngValue]="editForm.get('lastModifiedBy')!.value"></option>
+        </jhi-m21-application-user-form-control>
+
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='originatingDepartment'
+          [inputValue]="editForm.get(['originatingDepartment'])!.value"
+          (valueSelected)='updateOriginatingDepartment($event)'
+          inputControlLabel='Originating Department'
+        >
+          <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
+        </jhi-m21-dealer-form-control>
+
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
+          <select
+            class="form-control"
+            id="field_securityClearance"
+            data-cy="securityClearance"
+            name="securityClearance"
+            formControlName="securityClearance"
+          >
+            <option *ngIf="!editForm.get('securityClearance')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                securityClearanceOption.id === editForm.get('securityClearance')!.value?.id
+                  ? editForm.get('securityClearance')!.value
+                  : securityClearanceOption
+              "
+              *ngFor="let securityClearanceOption of securityClearancesSharedCollection; trackBy: trackSecurityClearanceById"
+            >
+              {{ securityClearanceOption.clearanceLevel }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['securityClearance'])!.invalid &&
+            (editForm.get(['securityClearance'])!.dirty || editForm.get(['securityClearance'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['securityClearance'])?.errors?.required">
+            This field is required.
+          </small>
+        </div>-->
+
+        <jhi-m21-security-clearance-form-control
+          ngDefaultControl
+          formControlName='securityClearance'
+          [inputValue]="editForm.get(['securityClearance'])!.value"
+          (valueSelected)='updateSecurityClearance($event)'
+          inputControlLabel='Security Clearance'
+        >
+          <option [ngValue]="editForm.get('securityClearance')!.value"></option>
+        </jhi-m21-security-clearance-form-control>
+
+
+        <!--<div class="form-group">
+          <label for="field_applicationMappings">Application Mappings</label>
+          <select
+            class="form-control"
+            id="field_applicationMappings"
+            data-cy="applicationMappings"
+            multiple
+            name="applicationMappings"
+            formControlName="applicationMappings"
+          >
+            <option
+              [ngValue]="getSelectedUniversallyUniqueMapping(universallyUniqueMappingOption, editForm.get('applicationMappings')!.value)"
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>-->
+
+        <jhi-m2m-universally-unique-mapping-form-control
+          ngDefaultControl
+          formControlName='applicationMappings'
+          [inputValues]="editForm.get(['applicationMappings'])!.value"
+          (selectedValues)='updateMappings($event)'
+          inputControlLabel='Application Mappings'
+        >
+        </jhi-m2m-universally-unique-mapping-form-control>
+
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

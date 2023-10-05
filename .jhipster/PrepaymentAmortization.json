@@ -1,0 +1,63 @@
+{
+  "changelogDate": "20220503162809",
+  "clientRootFolder": "prepayments",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "prepaymentPeriod",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "prepaymentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "inactive",
+      "fieldType": "Boolean"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "PrepaymentAmortization",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "catalogueNumber",
+      "otherEntityName": "prepaymentAccount",
+      "relationshipName": "prepaymentAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
+      "relationshipName": "debitAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "accountNumber",
+      "otherEntityName": "transactionAccount",
+      "relationshipName": "creditAccount",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "prepaymentAmortization",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

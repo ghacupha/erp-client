@@ -1,0 +1,137 @@
+{
+  "changelogDate": "20220413185958",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "particulars",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "instalmentAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "comments",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "WorkInProgressRegistration",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "invoiceNumber",
+      "otherEntityName": "paymentInvoice",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "paymentInvoices",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "outletCode",
+      "otherEntityName": "serviceOutlet",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "serviceOutlet",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "paymentNumber",
+      "otherEntityName": "settlement",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "settlement",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "purchaseOrderNumber",
+      "otherEntityName": "purchaseOrder",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "purchaseOrder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "deliveryNoteNumber",
+      "otherEntityName": "deliveryNote",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "deliveryNote",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "serialNumber",
+      "otherEntityName": "jobSheet",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "jobSheet",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "relationshipName": "dealer",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "sequenceNumber",
+      "otherEntityName": "workInProgressRegistration",
+      "relationshipName": "workInProgressGroup",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "catalogueNumber",
+      "otherEntityName": "workProjectRegister",
+      "relationshipName": "workProjectRegister",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "assetDetails",
+      "otherEntityName": "assetAccessory",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "assetAccessory",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "assetWarranty",
+      "otherEntityRelationshipName": "workInProgressRegistration",
+      "ownerSide": true,
+      "relationshipName": "assetWarranty",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

@@ -1,0 +1,92 @@
+{
+  "changelogDate": "20230328143440",
+  "clientRootFolder": "leases",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "periodIncluded",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "periodStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "periodEndDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "openingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "cashPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "principalPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayment",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "outstandingBalance",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableOpening",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestExpenseAccrued",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "interestPayableBalance",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "LeaseLiabilityScheduleItem",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "bookingId",
+      "otherEntityName": "leaseContract",
+      "relationshipName": "leaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "modelTitle",
+      "otherEntityName": "leaseModelMetadata",
+      "relationshipName": "leaseModelMetadata",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "universalKey",
+      "otherEntityName": "universallyUniqueMapping",
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
+      "ownerSide": true,
+      "relationshipName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

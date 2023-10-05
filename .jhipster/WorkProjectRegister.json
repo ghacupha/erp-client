@@ -1,0 +1,70 @@
+{
+  "changelogDate": "20220428124926",
+  "clientRootFolder": "assets",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "catalogueNumber",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "details",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "totalProjectCost",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "additionalNotes",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    }
+  ],
+  "incrementalChangelog": false,
+  "jpaMetamodelFiltering": true,
+  "name": "WorkProjectRegister",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "dealerName",
+      "otherEntityName": "dealer",
+      "otherEntityRelationshipName": "workProjectRegister",
+      "ownerSide": true,
+      "relationshipName": "dealers",
+      "relationshipType": "many-to-many",
+      "relationshipValidateRules": ["required"]
+    },
+    {
+      "otherEntityField": "iso4217CurrencyCode",
+      "otherEntityName": "settlementCurrency",
+      "relationshipName": "settlementCurrency",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "description",
+      "otherEntityName": "placeholder",
+      "otherEntityRelationshipName": "workProjectRegister",
+      "ownerSide": true,
+      "relationshipName": "placeholder",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "documentTitle",
+      "otherEntityName": "businessDocument",
+      "otherEntityRelationshipName": "workProjectRegister",
+      "ownerSide": true,
+      "relationshipName": "businessDocument",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "service": "serviceImpl"
+}

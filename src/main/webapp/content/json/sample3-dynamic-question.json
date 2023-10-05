@@ -1,0 +1,18 @@
+[
+  {
+    "key": "firstName",
+    "label": "First name",
+    "value": "Bombasto",
+    "required": true,
+    "type": "textbox",
+    "order": 1
+  },
+  {
+    "key": "emailAddress",
+    "label": "Email",
+    "value": "",
+    "required": false,
+    "type": "email",
+    "order": 2
+  }
+]

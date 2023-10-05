@@ -1,0 +1,6 @@
+.git
+/target
+/.jhipster
+/.github
+/node_modules
+stats.html
