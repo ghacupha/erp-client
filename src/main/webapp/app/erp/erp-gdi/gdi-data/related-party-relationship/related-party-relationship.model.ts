@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { IPartyRelationType } from 'app/entities/gdi/party-relation-type/party-relation-type.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { IPartyRelationType } from '../../master/party-relation-type/party-relation-type.model';
 
 export interface IRelatedPartyRelationship {
   id?: number;

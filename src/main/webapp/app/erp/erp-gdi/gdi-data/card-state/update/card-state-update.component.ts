@@ -25,7 +25,7 @@ import { finalize } from 'rxjs/operators';
 
 import { ICardState, CardState } from '../card-state.model';
 import { CardStateService } from '../service/card-state.service';
-import { CardStateFlagTypes } from 'app/entities/enumerations/card-state-flag-types.model';
+import { CardStateFlagTypes } from '../../../../erp-common/enumerations/card-state-flag-types.model';
 
 @Component({
   selector: 'jhi-card-state-update',

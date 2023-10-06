@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAgentBankingActivity, AgentBankingActivity } from '../agent-banking-activity.model';
 import { AgentBankingActivityService } from '../service/agent-banking-activity.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IBankTransactionType } from 'app/entities/gdi/bank-transaction-type/bank-transaction-type.model';
-import { BankTransactionTypeService } from 'app/entities/gdi/bank-transaction-type/service/bank-transaction-type.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { IBankTransactionType } from '../../../master/bank-transaction-type/bank-transaction-type.model';
 
 @Component({
   selector: 'jhi-agent-banking-activity-update',

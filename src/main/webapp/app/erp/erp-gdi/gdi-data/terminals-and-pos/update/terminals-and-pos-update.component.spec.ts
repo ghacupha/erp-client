@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { CountySubCountyCodeService } from '../../county-sub-county-code/service/county-sub-county-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,18 +29,15 @@ import { of, Subject } from 'rxjs';
 
 import { TerminalsAndPOSService } from '../service/terminals-and-pos.service';
 import { ITerminalsAndPOS, TerminalsAndPOS } from '../terminals-and-pos.model';
-import { ITerminalTypes } from 'app/entities/gdi/terminal-types/terminal-types.model';
-import { TerminalTypesService } from 'app/entities/gdi/terminal-types/service/terminal-types.service';
-import { ITerminalFunctions } from 'app/entities/gdi/terminal-functions/terminal-functions.model';
-import { TerminalFunctionsService } from 'app/entities/gdi/terminal-functions/service/terminal-functions.service';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CountySubCountyCodeService } from 'app/entities/gdi-data/county-sub-county-code/service/county-sub-county-code.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
 
 import { TerminalsAndPOSUpdateComponent } from './terminals-and-pos-update.component';
+import { ITerminalTypes } from '../../../master/terminal-types/terminal-types.model';
+import { TerminalTypesService } from '../../../master/terminal-types/service/terminal-types.service';
+import { ITerminalFunctions } from '../../../master/terminal-functions/terminal-functions.model';
+import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-county-code.model';
+import { TerminalFunctionsService } from '../../../master/terminal-functions/service/terminal-functions.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
 
 describe('TerminalsAndPOS Management Update Component', () => {
   let comp: TerminalsAndPOSUpdateComponent;

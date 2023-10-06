@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { CardStateFlagTypes } from 'app/entities/enumerations/card-state-flag-types.model';
+import { CardStateFlagTypes } from '../../../erp-common/enumerations/card-state-flag-types.model';
 
 export interface ICardState {
   id?: number;

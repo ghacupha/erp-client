@@ -25,20 +25,20 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICardUsageInformation, CardUsageInformation } from '../card-usage-information.model';
 import { CardUsageInformationService } from '../service/card-usage-information.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { ICardTypes } from 'app/entities/gdi/card-types/card-types.model';
-import { CardTypesService } from 'app/entities/gdi/card-types/service/card-types.service';
-import { ICardBrandType } from 'app/entities/gdi/card-brand-type/card-brand-type.model';
-import { CardBrandTypeService } from 'app/entities/gdi/card-brand-type/service/card-brand-type.service';
-import { ICardCategoryType } from 'app/entities/gdi/card-category-type/card-category-type.model';
-import { CardCategoryTypeService } from 'app/entities/gdi/card-category-type/service/card-category-type.service';
-import { IBankTransactionType } from 'app/entities/gdi/bank-transaction-type/bank-transaction-type.model';
-import { BankTransactionTypeService } from 'app/entities/gdi/bank-transaction-type/service/bank-transaction-type.service';
-import { IChannelType } from 'app/entities/gdi/channel-type/channel-type.model';
-import { ChannelTypeService } from 'app/entities/gdi/channel-type/service/channel-type.service';
-import { ICardState } from 'app/entities/gdi-data/card-state/card-state.model';
-import { CardStateService } from 'app/entities/gdi-data/card-state/service/card-state.service';
+import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
+import { CardTypesService } from '../../../master/card-types/service/card-types.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { ICardState } from '../../card-state/card-state.model';
+import { ChannelTypeService } from '../../../master/channel-type/service/channel-type.service';
+import { CardCategoryTypeService } from '../../../master/card-category-type/service/card-category-type.service';
+import { ICardBrandType } from '../../../master/card-brand-type/card-brand-type.model';
+import { ICardTypes } from '../../../master/card-types/card-types.model';
+import { CardBrandTypeService } from '../../../master/card-brand-type/service/card-brand-type.service';
+import { CardStateService } from '../../card-state/service/card-state.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { ICardCategoryType } from '../../../master/card-category-type/card-category-type.model';
+import { IBankTransactionType } from '../../../master/bank-transaction-type/bank-transaction-type.model';
+import { IChannelType } from '../../../master/channel-type/channel-type.model';
 
 @Component({
   selector: 'jhi-card-usage-information-update',

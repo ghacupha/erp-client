@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { CountySubCountyCodeService } from '../../county-sub-county-code/service/county-sub-county-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,16 +29,15 @@ import { of, Subject } from 'rxjs';
 
 import { WeeklyCashHoldingService } from '../service/weekly-cash-holding.service';
 import { IWeeklyCashHolding, WeeklyCashHolding } from '../weekly-cash-holding.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CountySubCountyCodeService } from 'app/entities/gdi-data/county-sub-county-code/service/county-sub-county-code.service';
-import { IKenyanCurrencyDenomination } from 'app/entities/gdi/kenyan-currency-denomination/kenyan-currency-denomination.model';
-import { KenyanCurrencyDenominationService } from 'app/entities/gdi/kenyan-currency-denomination/service/kenyan-currency-denomination.service';
 
 import { WeeklyCashHoldingUpdateComponent } from './weekly-cash-holding-update.component';
+import { KenyanCurrencyDenominationService } from '../../../master/kenyan-currency-denomination/service/kenyan-currency-denomination.service';
+import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-county-code.model';
+import { IKenyanCurrencyDenomination } from '../../../master/kenyan-currency-denomination/kenyan-currency-denomination.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
 
 describe('WeeklyCashHolding Management Update Component', () => {
   let comp: WeeklyCashHoldingUpdateComponent;

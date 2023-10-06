@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { GdiMasterDataIndexService } from '../../../master/gdi-master-data-index/service/gdi-master-data-index.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,10 +29,9 @@ import { of, Subject } from 'rxjs';
 
 import { AccountAttributeMetadataService } from '../service/account-attribute-metadata.service';
 import { IAccountAttributeMetadata, AccountAttributeMetadata } from '../account-attribute-metadata.model';
-import { IGdiMasterDataIndex } from 'app/entities/gdi/gdi-master-data-index/gdi-master-data-index.model';
-import { GdiMasterDataIndexService } from 'app/entities/gdi/gdi-master-data-index/service/gdi-master-data-index.service';
 
 import { AccountAttributeMetadataUpdateComponent } from './account-attribute-metadata-update.component';
+import { IGdiMasterDataIndex } from '../../../master/gdi-master-data-index/gdi-master-data-index.model';
 
 describe('AccountAttributeMetadata Management Update Component', () => {
   let comp: AccountAttributeMetadataUpdateComponent;

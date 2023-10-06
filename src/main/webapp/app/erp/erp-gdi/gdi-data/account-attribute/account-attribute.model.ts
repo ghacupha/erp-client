@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { IAccountOwnershipType } from 'app/entities/gdi/account-ownership-type/account-ownership-type.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { IAccountOwnershipType } from '../../master/account-ownership-type/account-ownership-type.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
 
 export interface IAccountAttribute {
   id?: number;

@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,18 +29,17 @@ import { of, Subject } from 'rxjs';
 
 import { ParticularsOfOutletService } from '../service/particulars-of-outlet.service';
 import { IParticularsOfOutlet, ParticularsOfOutlet } from '../particulars-of-outlet.model';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CountySubCountyCodeService } from 'app/entities/gdi-data/county-sub-county-code/service/county-sub-county-code.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IOutletType } from 'app/entities/gdi/outlet-type/outlet-type.model';
-import { OutletTypeService } from 'app/entities/gdi/outlet-type/service/outlet-type.service';
-import { IOutletStatus } from 'app/entities/gdi/outlet-status/outlet-status.model';
-import { OutletStatusService } from 'app/entities/gdi/outlet-status/service/outlet-status.service';
 
 import { ParticularsOfOutletUpdateComponent } from './particulars-of-outlet-update.component';
+import { OutletStatusService } from '../../../master/outlet-status/service/outlet-status.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { CountySubCountyCodeService } from '../../county-sub-county-code/service/county-sub-county-code.service';
+import { IOutletType } from '../../../master/outlet-type/outlet-type.model';
+import { OutletTypeService } from '../../../master/outlet-type/service/outlet-type.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-county-code.model';
+import { IOutletStatus } from '../../../master/outlet-status/outlet-status.model';
 
 describe('ParticularsOfOutlet Management Update Component', () => {
   let comp: ParticularsOfOutletUpdateComponent;

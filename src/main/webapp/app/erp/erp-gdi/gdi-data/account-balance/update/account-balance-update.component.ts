@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAccountBalance, AccountBalance } from '../account-balance.model';
 import { AccountBalanceService } from '../service/account-balance.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 
 @Component({
   selector: 'jhi-account-balance-update',

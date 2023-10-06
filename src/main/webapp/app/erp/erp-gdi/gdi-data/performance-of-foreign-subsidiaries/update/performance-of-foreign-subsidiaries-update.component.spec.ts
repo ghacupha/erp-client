@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,12 +29,11 @@ import { of, Subject } from 'rxjs';
 
 import { PerformanceOfForeignSubsidiariesService } from '../service/performance-of-foreign-subsidiaries.service';
 import { IPerformanceOfForeignSubsidiaries, PerformanceOfForeignSubsidiaries } from '../performance-of-foreign-subsidiaries.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IIsoCountryCode } from 'app/entities/gdi/iso-country-code/iso-country-code.model';
-import { IsoCountryCodeService } from 'app/entities/gdi/iso-country-code/service/iso-country-code.service';
 
 import { PerformanceOfForeignSubsidiariesUpdateComponent } from './performance-of-foreign-subsidiaries-update.component';
+import { IsoCountryCodeService } from '../../../master/iso-country-code/service/iso-country-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IIsoCountryCode } from '../../../master/iso-country-code/iso-country-code.model';
 
 describe('PerformanceOfForeignSubsidiaries Management Update Component', () => {
   let comp: PerformanceOfForeignSubsidiariesUpdateComponent;

@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICreditCardFacility, CreditCardFacility } from '../credit-card-facility.model';
 import { CreditCardFacilityService } from '../service/credit-card-facility.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { ICreditCardOwnership } from 'app/entities/gdi/credit-card-ownership/credit-card-ownership.model';
-import { CreditCardOwnershipService } from 'app/entities/gdi/credit-card-ownership/service/credit-card-ownership.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { CreditCardOwnershipService } from '../../../master/credit-card-ownership/service/credit-card-ownership.service';
+import { ICreditCardOwnership } from '../../../master/credit-card-ownership/credit-card-ownership.model';
 
 @Component({
   selector: 'jhi-credit-card-facility-update',

@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,12 +29,11 @@ import { of, Subject } from 'rxjs';
 
 import { ExchangeRateService } from '../service/exchange-rate.service';
 import { IExchangeRate, ExchangeRate } from '../exchange-rate.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
 
 import { ExchangeRateUpdateComponent } from './exchange-rate-update.component';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 
 describe('ExchangeRate Management Update Component', () => {
   let comp: ExchangeRateUpdateComponent;

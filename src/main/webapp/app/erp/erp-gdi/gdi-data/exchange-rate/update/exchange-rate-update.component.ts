@@ -25,10 +25,10 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IExchangeRate, ExchangeRate } from '../exchange-rate.model';
 import { ExchangeRateService } from '../service/exchange-rate.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 
 @Component({
   selector: 'jhi-exchange-rate-update',

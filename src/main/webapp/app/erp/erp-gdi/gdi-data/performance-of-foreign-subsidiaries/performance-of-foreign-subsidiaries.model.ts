@@ -17,8 +17,8 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IIsoCountryCode } from 'app/entities/gdi/iso-country-code/iso-country-code.model';
+import { IIsoCountryCode } from '../../master/iso-country-code/iso-country-code.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
 
 export interface IPerformanceOfForeignSubsidiaries {
   id?: number;

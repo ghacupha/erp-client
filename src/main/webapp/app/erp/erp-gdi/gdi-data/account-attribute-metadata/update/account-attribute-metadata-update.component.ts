@@ -28,9 +28,9 @@ import { AccountAttributeMetadataService } from '../service/account-attribute-me
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IGdiMasterDataIndex } from 'app/entities/gdi/gdi-master-data-index/gdi-master-data-index.model';
-import { GdiMasterDataIndexService } from 'app/entities/gdi/gdi-master-data-index/service/gdi-master-data-index.service';
-import { MandatoryFieldFlagTypes } from 'app/entities/enumerations/mandatory-field-flag-types.model';
+import { GdiMasterDataIndexService } from '../../../master/gdi-master-data-index/service/gdi-master-data-index.service';
+import { MandatoryFieldFlagTypes } from '../../../../erp-common/enumerations/mandatory-field-flag-types.model';
+import { IGdiMasterDataIndex } from '../../../master/gdi-master-data-index/gdi-master-data-index.model';
 
 @Component({
   selector: 'jhi-account-attribute-metadata-update',

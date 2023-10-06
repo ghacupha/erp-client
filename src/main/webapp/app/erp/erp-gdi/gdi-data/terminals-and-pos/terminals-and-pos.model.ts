@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ITerminalTypes } from 'app/entities/gdi/terminal-types/terminal-types.model';
-import { ITerminalFunctions } from 'app/entities/gdi/terminal-functions/terminal-functions.model';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { ITerminalTypes } from '../../master/terminal-types/terminal-types.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { ITerminalFunctions } from '../../master/terminal-functions/terminal-functions.model';
+import { ICountySubCountyCode } from '../county-sub-county-code/county-sub-county-code.model';
 
 export interface ITerminalsAndPOS {
   id?: number;

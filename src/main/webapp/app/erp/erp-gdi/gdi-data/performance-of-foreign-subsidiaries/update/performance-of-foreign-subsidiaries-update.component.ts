@@ -25,10 +25,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPerformanceOfForeignSubsidiaries, PerformanceOfForeignSubsidiaries } from '../performance-of-foreign-subsidiaries.model';
 import { PerformanceOfForeignSubsidiariesService } from '../service/performance-of-foreign-subsidiaries.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IIsoCountryCode } from 'app/entities/gdi/iso-country-code/iso-country-code.model';
-import { IsoCountryCodeService } from 'app/entities/gdi/iso-country-code/service/iso-country-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IIsoCountryCode } from '../../../master/iso-country-code/iso-country-code.model';
+import { IsoCountryCodeService } from '../../../master/iso-country-code/service/iso-country-code.service';
 
 @Component({
   selector: 'jhi-performance-of-foreign-subsidiaries-update',

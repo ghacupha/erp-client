@@ -17,8 +17,8 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { IIsoCurrencyCode } from '../../master/iso-currency-code/iso-currency-code.model';
 
 export interface IExchangeRate {
   id?: number;

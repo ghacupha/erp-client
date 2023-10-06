@@ -17,10 +17,10 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { IKenyanCurrencyDenomination } from 'app/entities/gdi/kenyan-currency-denomination/kenyan-currency-denomination.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { ICountySubCountyCode } from '../county-sub-county-code/county-sub-county-code.model';
+import { IKenyanCurrencyDenomination } from '../../master/kenyan-currency-denomination/kenyan-currency-denomination.model';
 
 export interface IWeeklyCashHolding {
   id?: number;

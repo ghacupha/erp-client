@@ -25,16 +25,16 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICardAcquiringTransaction, CardAcquiringTransaction } from '../card-acquiring-transaction.model';
 import { CardAcquiringTransactionService } from '../service/card-acquiring-transaction.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IChannelType } from 'app/entities/gdi/channel-type/channel-type.model';
-import { ChannelTypeService } from 'app/entities/gdi/channel-type/service/channel-type.service';
-import { ICardBrandType } from 'app/entities/gdi/card-brand-type/card-brand-type.model';
-import { CardBrandTypeService } from 'app/entities/gdi/card-brand-type/service/card-brand-type.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
-import { ICardCategoryType } from 'app/entities/gdi/card-category-type/card-category-type.model';
-import { CardCategoryTypeService } from 'app/entities/gdi/card-category-type/service/card-category-type.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { ICardCategoryType } from '../../../master/card-category-type/card-category-type.model';
+import { ChannelTypeService } from '../../../master/channel-type/service/channel-type.service';
+import { CardCategoryTypeService } from '../../../master/card-category-type/service/card-category-type.service';
+import { IChannelType } from '../../../master/channel-type/channel-type.model';
+import { ICardBrandType } from '../../../master/card-brand-type/card-brand-type.model';
+import { CardBrandTypeService } from '../../../master/card-brand-type/service/card-brand-type.service';
 
 @Component({
   selector: 'jhi-card-acquiring-transaction-update',

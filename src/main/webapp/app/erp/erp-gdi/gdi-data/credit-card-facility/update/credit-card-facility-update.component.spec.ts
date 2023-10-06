@@ -27,12 +27,6 @@ import { of, Subject } from 'rxjs';
 
 import { CreditCardFacilityService } from '../service/credit-card-facility.service';
 import { ICreditCardFacility, CreditCardFacility } from '../credit-card-facility.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { ICreditCardOwnership } from 'app/entities/gdi/credit-card-ownership/credit-card-ownership.model';
-import { CreditCardOwnershipService } from 'app/entities/gdi/credit-card-ownership/service/credit-card-ownership.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
 
 import { CreditCardFacilityUpdateComponent } from './credit-card-facility-update.component';
 

@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { IOutletType } from 'app/entities/gdi/outlet-type/outlet-type.model';
-import { IOutletStatus } from 'app/entities/gdi/outlet-status/outlet-status.model';
+import { IOutletStatus } from '../../master/outlet-status/outlet-status.model';
+import { IOutletType } from '../../master/outlet-type/outlet-type.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { ICountySubCountyCode } from '../county-sub-county-code/county-sub-county-code.model';
 
 export interface IParticularsOfOutlet {
   id?: number;

@@ -25,16 +25,14 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ITerminalsAndPOS, TerminalsAndPOS } from '../terminals-and-pos.model';
 import { TerminalsAndPOSService } from '../service/terminals-and-pos.service';
-import { ITerminalTypes } from 'app/entities/gdi/terminal-types/terminal-types.model';
-import { TerminalTypesService } from 'app/entities/gdi/terminal-types/service/terminal-types.service';
-import { ITerminalFunctions } from 'app/entities/gdi/terminal-functions/terminal-functions.model';
-import { TerminalFunctionsService } from 'app/entities/gdi/terminal-functions/service/terminal-functions.service';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CountySubCountyCodeService } from 'app/entities/gdi-data/county-sub-county-code/service/county-sub-county-code.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
+import { CountySubCountyCodeService } from '../../county-sub-county-code/service/county-sub-county-code.service';
+import { ITerminalTypes } from '../../../master/terminal-types/terminal-types.model';
+import { ITerminalFunctions } from '../../../master/terminal-functions/terminal-functions.model';
+import { TerminalTypesService } from '../../../master/terminal-types/service/terminal-types.service';
+import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-county-code.model';
+import { TerminalFunctionsService } from '../../../master/terminal-functions/service/terminal-functions.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 
 @Component({
   selector: 'jhi-terminals-and-pos-update',

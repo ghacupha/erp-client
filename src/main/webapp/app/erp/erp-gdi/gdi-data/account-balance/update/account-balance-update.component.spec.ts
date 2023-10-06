@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { AccountBalanceService } from '../service/account-balance.service';
 import { IAccountBalance, AccountBalance } from '../account-balance.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { IsoCurrencyCodeService } from 'app/entities/gdi/iso-currency-code/service/iso-currency-code.service';
 
 import { AccountBalanceUpdateComponent } from './account-balance-update.component';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 
 describe('AccountBalance Management Update Component', () => {
   let comp: AccountBalanceUpdateComponent;

@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAccountAttribute, AccountAttribute } from '../account-attribute.model';
 import { AccountAttributeService } from '../service/account-attribute.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IAccountOwnershipType } from 'app/entities/gdi/account-ownership-type/account-ownership-type.model';
-import { AccountOwnershipTypeService } from 'app/entities/gdi/account-ownership-type/service/account-ownership-type.service';
+import { IAccountOwnershipType } from '../../../master/account-ownership-type/account-ownership-type.model';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { AccountOwnershipTypeService } from '../../../master/account-ownership-type/service/account-ownership-type.service';
 
 @Component({
   selector: 'jhi-account-attribute-update',

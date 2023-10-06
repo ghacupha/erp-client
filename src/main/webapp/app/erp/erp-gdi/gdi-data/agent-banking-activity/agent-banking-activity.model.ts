@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { IBankTransactionType } from 'app/entities/gdi/bank-transaction-type/bank-transaction-type.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { IBankTransactionType } from '../../master/bank-transaction-type/bank-transaction-type.model';
 
 export interface IAgentBankingActivity {
   id?: number;

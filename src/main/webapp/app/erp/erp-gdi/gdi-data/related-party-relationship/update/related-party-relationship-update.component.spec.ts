@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,12 @@ import { of, Subject } from 'rxjs';
 
 import { RelatedPartyRelationshipService } from '../service/related-party-relationship.service';
 import { IRelatedPartyRelationship, RelatedPartyRelationship } from '../related-party-relationship.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IPartyRelationType } from 'app/entities/gdi/party-relation-type/party-relation-type.model';
-import { PartyRelationTypeService } from 'app/entities/gdi/party-relation-type/service/party-relation-type.service';
 
 import { RelatedPartyRelationshipUpdateComponent } from './related-party-relationship-update.component';
+import { PartyRelationTypeService } from '../../../master/party-relation-type/service/party-relation-type.service';
+import { IPartyRelationType } from '../../../master/party-relation-type/party-relation-type.model';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 
 describe('RelatedPartyRelationship Management Update Component', () => {
   let comp: RelatedPartyRelationshipUpdateComponent;

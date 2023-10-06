@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IRelatedPartyRelationship, RelatedPartyRelationship } from '../related-party-relationship.model';
 import { RelatedPartyRelationshipService } from '../service/related-party-relationship.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IPartyRelationType } from 'app/entities/gdi/party-relation-type/party-relation-type.model';
-import { PartyRelationTypeService } from 'app/entities/gdi/party-relation-type/service/party-relation-type.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { PartyRelationTypeService } from '../../../master/party-relation-type/service/party-relation-type.service';
+import { IPartyRelationType } from '../../../master/party-relation-type/party-relation-type.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 
 @Component({
   selector: 'jhi-related-party-relationship-update',

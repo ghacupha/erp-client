@@ -25,15 +25,15 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICollateralInformation, CollateralInformation } from '../collateral-information.model';
 import { CollateralInformationService } from '../service/collateral-information.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { ICollateralType } from 'app/entities/gdi/collateral-type/collateral-type.model';
-import { CollateralTypeService } from 'app/entities/gdi/collateral-type/service/collateral-type.service';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CountySubCountyCodeService } from 'app/entities/gdi-data/county-sub-county-code/service/county-sub-county-code.service';
-import { CollateralInsuredFlagTypes } from 'app/entities/enumerations/collateral-insured-flag-types.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { CollateralTypeService } from '../../../master/collateral-type/service/collateral-type.service';
+import { CountySubCountyCodeService } from '../../county-sub-county-code/service/county-sub-county-code.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { ICollateralType } from '../../../master/collateral-type/collateral-type.model';
+import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-county-code.model';
+import { CollateralInsuredFlagTypes } from '../../../../erp-common/enumerations/collateral-insured-flag-types.model';
 
 @Component({
   selector: 'jhi-collateral-information-update',

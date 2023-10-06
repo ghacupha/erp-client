@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { AgentBankingActivityService } from '../service/agent-banking-activity.service';
 import { IAgentBankingActivity, AgentBankingActivity } from '../agent-banking-activity.model';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IBankTransactionType } from 'app/entities/gdi/bank-transaction-type/bank-transaction-type.model';
-import { BankTransactionTypeService } from 'app/entities/gdi/bank-transaction-type/service/bank-transaction-type.service';
 
 import { AgentBankingActivityUpdateComponent } from './agent-banking-activity-update.component';
+import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IBankTransactionType } from '../../../master/bank-transaction-type/bank-transaction-type.model';
 
 describe('AgentBankingActivity Management Update Component', () => {
   let comp: AgentBankingActivityUpdateComponent;

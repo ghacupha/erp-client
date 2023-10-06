@@ -25,18 +25,18 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICardIssuerCharges, CardIssuerCharges } from '../card-issuer-charges.model';
 import { CardIssuerChargesService } from '../service/card-issuer-charges.service';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { ICardCategoryType } from 'app/entities/gdi/card-category-type/card-category-type.model';
-import { CardCategoryTypeService } from 'app/entities/gdi/card-category-type/service/card-category-type.service';
-import { ICardTypes } from 'app/entities/gdi/card-types/card-types.model';
-import { CardTypesService } from 'app/entities/gdi/card-types/service/card-types.service';
-import { ICardBrandType } from 'app/entities/gdi/card-brand-type/card-brand-type.model';
-import { CardBrandTypeService } from 'app/entities/gdi/card-brand-type/service/card-brand-type.service';
-import { ICardClassType } from 'app/entities/gdi/card-class-type/card-class-type.model';
-import { CardClassTypeService } from 'app/entities/gdi/card-class-type/service/card-class-type.service';
-import { ICardCharges } from 'app/entities/gdi/card-charges/card-charges.model';
-import { CardChargesService } from 'app/entities/gdi/card-charges/service/card-charges.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { CardClassTypeService } from '../../../master/card-class-type/service/card-class-type.service';
+import { CardChargesService } from '../../../master/card-charges/service/card-charges.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { CardTypesService } from '../../../master/card-types/service/card-types.service';
+import { ICardCategoryType } from '../../../master/card-category-type/card-category-type.model';
+import { ICardClassType } from '../../../master/card-class-type/card-class-type.model';
+import { CardCategoryTypeService } from '../../../master/card-category-type/service/card-category-type.service';
+import { ICardBrandType } from '../../../master/card-brand-type/card-brand-type.model';
+import { ICardCharges } from '../../../master/card-charges/card-charges.model';
+import { ICardTypes } from '../../../master/card-types/card-types.model';
+import { CardBrandTypeService } from '../../../master/card-brand-type/service/card-brand-type.service';
 
 @Component({
   selector: 'jhi-card-issuer-charges-update',

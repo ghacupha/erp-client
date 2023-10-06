@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IChannelType } from 'app/entities/gdi/channel-type/channel-type.model';
-import { ICardBrandType } from 'app/entities/gdi/card-brand-type/card-brand-type.model';
-import { IIsoCurrencyCode } from 'app/entities/gdi/iso-currency-code/iso-currency-code.model';
-import { ICardCategoryType } from 'app/entities/gdi/card-category-type/card-category-type.model';
+import { IIsoCurrencyCode } from '../../master/iso-currency-code/iso-currency-code.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { ICardCategoryType } from '../../master/card-category-type/card-category-type.model';
+import { IChannelType } from '../../master/channel-type/channel-type.model';
+import { ICardBrandType } from '../../master/card-brand-type/card-brand-type.model';
 
 export interface ICardAcquiringTransaction {
   id?: number;

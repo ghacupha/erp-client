@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { ICollateralType } from 'app/entities/gdi/collateral-type/collateral-type.model';
-import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
-import { CollateralInsuredFlagTypes } from 'app/entities/enumerations/collateral-insured-flag-types.model';
+import { CollateralInsuredFlagTypes } from '../../../erp-common/enumerations/collateral-insured-flag-types.model';
+import { ICollateralType } from '../../master/collateral-type/collateral-type.model';
+import { IBankBranchCode } from '../../master/bank-branch-code/bank-branch-code.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { ICountySubCountyCode } from '../county-sub-county-code/county-sub-county-code.model';
 
 export interface ICollateralInformation {
   id?: number;

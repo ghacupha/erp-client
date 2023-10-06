@@ -16,8 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IGdiMasterDataIndex } from 'app/entities/gdi/gdi-master-data-index/gdi-master-data-index.model';
-import { MandatoryFieldFlagTypes } from 'app/entities/enumerations/mandatory-field-flag-types.model';
+import { MandatoryFieldFlagTypes } from '../../../erp-common/enumerations/mandatory-field-flag-types.model';
+import { IGdiMasterDataIndex } from '../../master/gdi-master-data-index/gdi-master-data-index.model';
 
 export interface IAccountAttributeMetadata {
   id?: number;

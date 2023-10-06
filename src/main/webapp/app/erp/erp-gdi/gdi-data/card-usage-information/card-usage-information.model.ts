@@ -17,13 +17,13 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { ICardTypes } from 'app/entities/gdi/card-types/card-types.model';
-import { ICardBrandType } from 'app/entities/gdi/card-brand-type/card-brand-type.model';
-import { ICardCategoryType } from 'app/entities/gdi/card-category-type/card-category-type.model';
-import { IBankTransactionType } from 'app/entities/gdi/bank-transaction-type/bank-transaction-type.model';
-import { IChannelType } from 'app/entities/gdi/channel-type/channel-type.model';
-import { ICardState } from 'app/entities/gdi-data/card-state/card-state.model';
+import { ICardBrandType } from '../../master/card-brand-type/card-brand-type.model';
+import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
+import { ICardCategoryType } from '../../master/card-category-type/card-category-type.model';
+import { ICardState } from '../card-state/card-state.model';
+import { IBankTransactionType } from '../../master/bank-transaction-type/bank-transaction-type.model';
+import { IChannelType } from '../../master/channel-type/channel-type.model';
+import { ICardTypes } from '../../master/card-types/card-types.model';
 
 export interface ICardUsageInformation {
   id?: number;
