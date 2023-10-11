@@ -28,6 +28,7 @@ import { PerformanceOfForeignSubsidiariesService } from '../service/performance-
 import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 import { IIsoCountryCode } from '../../../master/iso-country-code/iso-country-code.model';
 import { IsoCountryCodeService } from '../../../master/iso-country-code/service/iso-country-code.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 
 @Component({
   selector: 'jhi-performance-of-foreign-subsidiaries-update',

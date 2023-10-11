@@ -33,6 +33,8 @@ import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-co
 import { TerminalFunctionsService } from '../../../master/terminal-functions/service/terminal-functions.service';
 import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
 import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
 
 @Component({
   selector: 'jhi-terminals-and-pos-update',

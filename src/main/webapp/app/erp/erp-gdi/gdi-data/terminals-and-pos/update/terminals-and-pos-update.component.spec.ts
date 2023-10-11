@@ -38,6 +38,8 @@ import { ICountySubCountyCode } from '../../county-sub-county-code/county-sub-co
 import { TerminalFunctionsService } from '../../../master/terminal-functions/service/terminal-functions.service';
 import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
 
 describe('TerminalsAndPOS Management Update Component', () => {
   let comp: TerminalsAndPOSUpdateComponent;

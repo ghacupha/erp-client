@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -29,6 +31,11 @@ import { CreditCardFacilityService } from '../service/credit-card-facility.servi
 import { ICreditCardFacility, CreditCardFacility } from '../credit-card-facility.model';
 
 import { CreditCardFacilityUpdateComponent } from './credit-card-facility-update.component';
+import { IsoCurrencyCodeService } from '../../../master/iso-currency-code/service/iso-currency-code.service';
+import { IIsoCurrencyCode } from '../../../master/iso-currency-code/iso-currency-code.model';
+import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { CreditCardOwnershipService } from '../../../master/credit-card-ownership/service/credit-card-ownership.service';
+import { ICreditCardOwnership } from '../../../master/credit-card-ownership/credit-card-ownership.model';
 
 describe('CreditCardFacility Management Update Component', () => {
   let comp: CreditCardFacilityUpdateComponent;
