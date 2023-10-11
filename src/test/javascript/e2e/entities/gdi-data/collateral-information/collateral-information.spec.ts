@@ -70,7 +70,7 @@ describe('CollateralInformation e2e test', () => {
         await promise.all([
             collateralInformationUpdatePage.setReportingDateInput('2000-12-31'),
             collateralInformationUpdatePage.setCollateralIdInput('collateralId'),
-            collateralInformationUpdatePage.setLoanContractIdInput('493942639303847'),
+            collateralInformationUpdatePage.setLoanContractIdInput('203594685936471'),
             collateralInformationUpdatePage.setCustomerIdInput('customerId'),
             collateralInformationUpdatePage.setRegistrationPropertyNumberInput('registrationPropertyNumber'),
             collateralInformationUpdatePage.setCollateralOMVInCCYInput('5'),

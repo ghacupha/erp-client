@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ICardBrandType } from '../../master/card-brand-type/card-brand-type.model';
 import { IInstitutionCode } from '../../master/institution-code/institution-code.model';
 import { ICardCategoryType } from '../../master/card-category-type/card-category-type.model';
 import { ICardState } from '../card-state/card-state.model';
 import { IBankTransactionType } from '../../master/bank-transaction-type/bank-transaction-type.model';
+import { ICardBrandType } from '../../master/card-brand-type/card-brand-type.model';
 import { IChannelType } from '../../master/channel-type/channel-type.model';
 import { ICardTypes } from '../../master/card-types/card-types.model';
 

@@ -35,6 +35,7 @@ import { PartyRelationTypeService } from '../../../master/party-relation-type/se
 import { IPartyRelationType } from '../../../master/party-relation-type/party-relation-type.model';
 import { BankBranchCodeService } from '../../../master/bank-branch-code/service/bank-branch-code.service';
 import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
+import { IBankBranchCode } from '../../../master/bank-branch-code/bank-branch-code.model';
 
 describe('RelatedPartyRelationship Management Update Component', () => {
   let comp: RelatedPartyRelationshipUpdateComponent;

@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
+import { CardCategoryTypeService } from '../../../master/card-category-type/service/card-category-type.service';
 
 jest.mock('@angular/router');
 
@@ -31,11 +31,11 @@ import { CardUsageInformationService } from '../service/card-usage-information.s
 import { ICardUsageInformation, CardUsageInformation } from '../card-usage-information.model';
 
 import { CardUsageInformationUpdateComponent } from './card-usage-information-update.component';
+import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
 import { CardTypesService } from '../../../master/card-types/service/card-types.service';
 import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
 import { ICardState } from '../../card-state/card-state.model';
 import { ChannelTypeService } from '../../../master/channel-type/service/channel-type.service';
-import { CardCategoryTypeService } from '../../../master/card-category-type/service/card-category-type.service';
 import { ICardBrandType } from '../../../master/card-brand-type/card-brand-type.model';
 import { CardBrandTypeService } from '../../../master/card-brand-type/service/card-brand-type.service';
 import { ICardTypes } from '../../../master/card-types/card-types.model';

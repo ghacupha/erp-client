@@ -25,6 +25,7 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICardUsageInformation, CardUsageInformation } from '../card-usage-information.model';
 import { CardUsageInformationService } from '../service/card-usage-information.service';
+import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 import { BankTransactionTypeService } from '../../../master/bank-transaction-type/service/bank-transaction-type.service';
 import { CardTypesService } from '../../../master/card-types/service/card-types.service';
 import { IInstitutionCode } from '../../../master/institution-code/institution-code.model';
@@ -35,7 +36,6 @@ import { ICardBrandType } from '../../../master/card-brand-type/card-brand-type.
 import { ICardTypes } from '../../../master/card-types/card-types.model';
 import { CardBrandTypeService } from '../../../master/card-brand-type/service/card-brand-type.service';
 import { CardStateService } from '../../card-state/service/card-state.service';
-import { InstitutionCodeService } from '../../../master/institution-code/service/institution-code.service';
 import { ICardCategoryType } from '../../../master/card-category-type/card-category-type.model';
 import { IBankTransactionType } from '../../../master/bank-transaction-type/bank-transaction-type.model';
 import { IChannelType } from '../../../master/channel-type/channel-type.model';

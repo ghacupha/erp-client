@@ -77,9 +77,7 @@
           </th>
           <th scope="col" jhiSortBy="bankCode.institutionName"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="branchId.branchCode"><span>Branch Id</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="relationshipType.partyRelationshipType">
-            <span>Relationship Type</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="relationshipType.partyRelationType"><span>Relationship Type</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -108,7 +106,7 @@
           <td>
             <div *ngIf="relatedPartyRelationship.relationshipType">
               <a [routerLink]="['/party-relation-type', relatedPartyRelationship.relationshipType?.id, 'view']">{{
-                relatedPartyRelationship.relationshipType?.partyRelationshipType
+                relatedPartyRelationship.relationshipType?.partyRelationType
               }}</a>
             </div>
           </td>

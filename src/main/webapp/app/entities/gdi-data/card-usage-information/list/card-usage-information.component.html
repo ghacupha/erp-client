@@ -82,7 +82,7 @@
           <th scope="col" jhiSortBy="bankCode.institutionName"><span>Bank Code</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="cardType.cardType"><span>Card Type</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="cardBrand.cardBrandType"><span>Card Brand</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="cardCategoryType.cardCategoryTypeDescription">
+          <th scope="col" jhiSortBy="cardCategoryType.cardCategoryDescription">
             <span>Card Category Type</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="transactionType.transactionTypeDetails">
@@ -125,7 +125,7 @@
           <td>
             <div *ngIf="cardUsageInformation.cardCategoryType">
               <a [routerLink]="['/card-category-type', cardUsageInformation.cardCategoryType?.id, 'view']">{{
-                cardUsageInformation.cardCategoryType?.cardCategoryTypeDescription
+                cardUsageInformation.cardCategoryType?.cardCategoryDescription
               }}</a>
             </div>
           </td>
