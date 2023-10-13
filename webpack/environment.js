@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+// require('dotenv').config();
+
 module.exports = {
   I18N_HASH: 'generated_hash',
   // SERVER_API_URL: `"http://localhost:8980/"`,

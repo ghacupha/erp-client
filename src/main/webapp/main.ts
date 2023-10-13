@@ -16,4 +16,6 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+// import 'dotenv/config';
+
 import('./bootstrap').catch(err => console.error(err));

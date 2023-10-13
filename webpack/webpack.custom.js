@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+// require('dotenv').config();
+
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const path = require('path');
@@ -49,10 +51,6 @@ module.exports = async (config, options, targetOptions) => {
     config.plugins.push(
       new ESLintPlugin({
         extensions: ['js', 'ts'],
-        // fallback: {
-        //   "child_process": false,
-        //   // and also other packages that are not found
-        // }
       }),
       new WebpackNotifierPlugin({
         title: 'Erp System',
@@ -83,7 +81,7 @@ module.exports = async (config, options, targetOptions) => {
           },
           socket: {
             clients: {
-              heartbeatTimeout: 60000,
+              heartbeatTimeout: 90000,
             },
           },
           /*
@@ -112,7 +110,7 @@ module.exports = async (config, options, targetOptions) => {
         //   // and also other packages that are not found
         // },
         // Webpack statistics in target folder
-        reportFilename: '../stats.html',
+        reportFilename: '../target/stats.html',
       })
     );
   }
