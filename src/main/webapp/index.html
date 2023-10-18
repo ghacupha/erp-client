@@ -33,10 +33,10 @@
     <link rel="json" href="/git-version.json" />
 
     <!--// Upload datatables globally-->
-    <link rel="stylesheet" type="text/css" href="/content/datatables/datatables.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/content/datatables/dataTables.dateTime.css"/>
-    <script type="text/javascript" src="/content/datatables/datatables.min.js"></script>
-    <script type="text/javascript" src="/content/datatables/dataTables.dateTime.js"></script>
+<!--    <link rel="stylesheet" type="text/css" href="/content/datatables/datatables.min.css"/>-->
+<!--    <link rel="stylesheet" type="text/css" href="/content/datatables/dataTables.dateTime.css"/>-->
+<!--    <script type="text/javascript" src="/content/datatables/datatables.min.js"></script>-->
+<!--    <script type="text/javascript" src="/content/datatables/dataTables.dateTime.js"></script>-->
 
     <!-- Load environment variables -->
     <script  src="content/js/env.js"></script>
@@ -134,7 +134,7 @@
     <script type="text/javascript">
       // show an error message if the app loading takes more than 4 sec
       window.onload = function () {
-        setTimeout(showError, 4000);
+        setTimeout(showError, 10000);
       };
       function showError() {
         var errorElm = document.getElementById('jhipster-error');

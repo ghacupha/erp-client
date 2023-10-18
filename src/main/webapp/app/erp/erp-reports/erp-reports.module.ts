@@ -22,42 +22,6 @@ import { RouterModule } from '@angular/router';
 @NgModule({
   imports: [RouterModule.forChild([
     {
-      path: 'datatables/ledgers',
-      data: {
-        pageTitle: 'ERP | Datatables',
-        authorities: [
-          'ROLE_FIXED_ASSETS_USER',
-          'ROLE_PREPAYMENTS_MODULE_USER',
-          'ROLE_BOOK_KEEPING',
-        ],
-      },
-      loadChildren: () => import('./ledger-data-display/ledger-data-display.module')
-        .then(m => m.LedgerDataDisplayModule),
-    },
-    {
-      path: 'datatables/requisitions/by/billers',
-      data: {
-        pageTitle: 'ERP | Requisitions By Biller',
-        authorities: [
-          'ROLE_REQUISITION_MANAGER',
-          'ROLE_PAYMENTS_USER',
-        ],
-      },
-      loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')
-        .then(m => m.SettlementRequisitionReportsModule),
-    },
-    {
-      path: 'datatables/lease-contract-listing',
-      data: {
-        pageTitle: 'ERP | Lease Contracts',
-        authorities: [
-          'ROLE_LEASE_MANAGER',
-        ],
-      },
-      loadChildren: () => import('./lease-contract-listing/lease-contract-reports.module')
-        .then(m => m.LeaseContractReportsModule),
-    },
-    {
       path: 'report-template',
       data: {
         pageTitle: 'ERP | Report Template',

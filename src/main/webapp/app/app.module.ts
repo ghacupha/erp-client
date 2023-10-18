@@ -49,7 +49,6 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ErpStoreModule } from './erp/store/erp-store.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ErpSystemModule } from './erp/erp-system.module';
-import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ErpCommonModule } from './erp/erp-common/erp-common.module';
@@ -65,7 +64,6 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
     ErpSystemModule,
     NgSelectModule,
     ErpStoreModule,
-    ErpMaterialModule,
     ErpFormsModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.DEBUG}),
     // jhipster-needle-angular-add-module JHipster will add new module here
