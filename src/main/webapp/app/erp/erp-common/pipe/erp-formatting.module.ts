@@ -40,6 +40,9 @@ import { FormatContractMetadataPipe } from './format-contract-metadata.pipe';
 import { FormatLeaseContractPipe } from './format-lease-contract.pipe';
 import { FormatLeaseModelMetadataPipe } from './format-lease-model-metadata.pipe';
 import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
+import { FormatWipTransferPipe } from './format-wip-transfer.pipe';
+import { FormatWorkProjectPipe } from './format-work-project.pipe';
+import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
 
 @NgModule({
   declarations: [
@@ -65,6 +68,9 @@ import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
     FormatAssetCategoryPipe,
+    FormatWipTransferPipe,
+    FormatWorkProjectPipe,
+    FormatWipRegistrationPipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -90,6 +96,9 @@ import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
     FormatAssetCategoryPipe,
+    FormatWipTransferPipe,
+    FormatWorkProjectPipe,
+    FormatWipRegistrationPipe,
   ]
 })
 export class ErpFormattingModule{}

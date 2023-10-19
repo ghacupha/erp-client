@@ -245,6 +245,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     this.editForm.patchValue({ settlementCurrency: updated});
   }
 
+  updateWorkInProgressGroup(updated: IWorkInProgressRegistration): void  {
+    this.editForm.patchValue({ workInProgressGroup: updated});
+  }
+
+  updateWorkProjectRegister(updated: IWorkProjectRegister): void  {
+    this.editForm.patchValue({ workProjectRegister: updated});
+  }
+
   // Load dynamic AssetCategory instances from the input-search stream
   loadAssetCategory(): void {
     this.assetCategoryLookups$ = concat(

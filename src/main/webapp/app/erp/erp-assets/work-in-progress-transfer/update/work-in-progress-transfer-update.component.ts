@@ -40,6 +40,7 @@ import { SettlementService } from 'app/entities/settlement/settlement/service/se
 import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
 import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
 import { WorkInProgressTransferType } from 'app/entities/enumerations/work-in-progress-transfer-type.model';
+import { IPaymentCategory } from '../../../erp-settlements/payments/payment-category/payment-category.model';
 
 @Component({
   selector: 'jhi-work-in-progress-transfer-update',
@@ -91,6 +92,47 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       this.updateForm(workInProgressTransfer);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateAssetCategory(update: IAssetCategory): void {
+    this.editForm.patchValue({
+      assetCategory: update
+    });
+  }
+
+  updateBusinessDocuments(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateServiceOutlet(update: IServiceOutlet): void {
+    this.editForm.patchValue({
+      serviceOutlet: update
+    });
+  }
+
+  updateSettlement(update: ISettlement): void {
+    this.editForm.patchValue({
+      settlement: update
+    });
+  }
+  updateWorkProjectRegister(update: IWorkProjectRegister): void {
+    this.editForm.patchValue({
+      workProjectRegister: update
+    });
+  }
+
+  updateWIPRegistration(update: IWorkInProgressRegistration): void {
+    this.editForm.patchValue({
+      workInProgressRegistration: update
     });
   }
 
@@ -206,15 +248,15 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       this.assetCategoriesSharedCollection,
       workInProgressTransfer.assetCategory
     );
-    this.workInProgressRegistrationsSharedCollection =
-      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
-        this.workInProgressRegistrationsSharedCollection,
-        workInProgressTransfer.workInProgressRegistration
-      );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-      this.serviceOutletsSharedCollection,
-      workInProgressTransfer.serviceOutlet
-    );
+    // this.workInProgressRegistrationsSharedCollection =
+    //   this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+    //     this.workInProgressRegistrationsSharedCollection,
+    //     workInProgressTransfer.workInProgressRegistration
+    //   );
+    // this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    //   this.serviceOutletsSharedCollection,
+    //   workInProgressTransfer.serviceOutlet
+    // );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
       workInProgressTransfer.settlement

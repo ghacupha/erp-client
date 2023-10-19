@@ -56,6 +56,11 @@ import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
 import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
 import { M2mServiceOutletFormControlComponent } from './service-outlet-form-components/m2m-service-outlet-form-control.component';
+import { M21WIPTransferFormControlComponent } from './wip-transfer/m21-wip-transfer-form-control.component';
+import { M2mWipTransferFormControlComponent } from './wip-transfer/m2m-wip-transfer-form-control.component';
+import { M21WorkProjectRegisterFormControlComponent } from './work-project-register/m21-work-project-register-form-control.component';
+import { M2mWorkProjectRegisterFormControlComponent } from './work-project-register/m2m-work-project-register-form-control.component';
+import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +99,11 @@ import { M2mServiceOutletFormControlComponent } from './service-outlet-form-comp
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
     M2mServiceOutletFormControlComponent,
+    M21WIPTransferFormControlComponent,
+    M2mWipTransferFormControlComponent,
+    M21WorkProjectRegisterFormControlComponent,
+    M2mWorkProjectRegisterFormControlComponent,
+    M21WipRegistrationFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -137,6 +147,11 @@ import { M2mServiceOutletFormControlComponent } from './service-outlet-form-comp
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
     M2mServiceOutletFormControlComponent,
+    M21WIPTransferFormControlComponent,
+    M2mWipTransferFormControlComponent,
+    M21WorkProjectRegisterFormControlComponent,
+    M2mWorkProjectRegisterFormControlComponent,
+    M21WipRegistrationFormControlComponent,
   ]
 })
 export class FormComponentsModule {

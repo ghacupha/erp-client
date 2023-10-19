@@ -23,9 +23,10 @@ import { WorkInProgressTransferDetailComponent } from './detail/work-in-progress
 import { WorkInProgressTransferUpdateComponent } from './update/work-in-progress-transfer-update.component';
 import { WorkInProgressTransferDeleteDialogComponent } from './delete/work-in-progress-transfer-delete-dialog.component';
 import { WorkInProgressTransferRoutingModule } from './route/work-in-progress-transfer-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, WorkInProgressTransferRoutingModule],
+  imports: [SharedModule, WorkInProgressTransferRoutingModule, ErpCommonModule],
   declarations: [
     WorkInProgressTransferComponent,
     WorkInProgressTransferDetailComponent,
