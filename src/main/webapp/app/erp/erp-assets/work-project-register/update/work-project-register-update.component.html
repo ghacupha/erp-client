@@ -90,7 +90,7 @@
         >
           <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
         </jhi-m21-settlement-currency-form-control>
-        
+
         <div class="form-group">
           <label class="form-control-label" for="field_totalProjectCost">Total Project Cost</label>
           <input
@@ -112,15 +112,6 @@
           >
         </jhi-m2m-dealer-form-control>
 
-        <jhi-m2m-placeholder-form-control
-          ngDefaultControl
-          formControlName='placeholders'
-          [inputValues]="editForm.get(['placeholders'])!.value"
-          (selectedValues)='updatePlaceholders($event)'
-          inputControlLabel='Placeholder Items'
-        >
-        </jhi-m2m-placeholder-form-control>
-
         <jhi-m2m-business-document-form-control
           ngDefaultControl
           formControlName='businessDocuments'
@@ -129,6 +120,15 @@
           inputControlLabel='Business Document Attachments'
         >
         </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_details">Details</label>
