@@ -25,22 +25,21 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
-import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
-import { IWorkInProgressRegistration } from 'app/entities/assets/work-in-progress-registration/work-in-progress-registration.model';
-import { WorkInProgressRegistrationService } from 'app/entities/assets/work-in-progress-registration/service/work-in-progress-registration.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
-import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
-import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
-import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
-import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
-import { WorkInProgressTransferType } from 'app/entities/enumerations/work-in-progress-transfer-type.model';
-import { IPaymentCategory } from '../../../erp-settlements/payments/payment-category/payment-category.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IAssetCategory } from '../../asset-category/asset-category.model';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
+import { WorkInProgressTransferType } from '../../../erp-common/enumerations/work-in-progress-transfer-type.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { IWorkInProgressRegistration } from '../../work-in-progress-registration/work-in-progress-registration.model';
+import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
+import { WorkInProgressRegistrationService } from '../../work-in-progress-registration/service/work-in-progress-registration.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { WorkProjectRegisterService } from '../../work-project-register/service/work-project-register.service';
+import { IWorkProjectRegister } from '../../work-project-register/work-project-register.model';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 
 @Component({
   selector: 'jhi-work-in-progress-transfer-update',

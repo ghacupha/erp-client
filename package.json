@@ -36,7 +36,7 @@
     "prettier:format": "prettier --write \"{,src/**/,webpack/}*.{md,json,yml,html,cjs,mjs,js,ts,tsx,css,scss}\"",
     "serve": "npm run start --",
     "sonar": "sonar-scanner",
-    "start": "node --max_old_space_size=6144 ./node_modules/@angular/cli/bin/ng serve --hmr",
+    "start": "node --max_old_space_size=8192 ./node_modules/@angular/cli/bin/ng serve --hmr",
     "start-tls": "npm run webapp:dev-ssl",
     "pretest": "npm run lint",
     "test": "ng test --coverage --log-heap-usage -w=2",
