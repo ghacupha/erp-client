@@ -16,8 +16,6 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -29,24 +27,34 @@ import { of, Subject } from 'rxjs';
 
 import { WorkInProgressRegistrationService } from '../service/work-in-progress-registration.service';
 import { IWorkInProgressRegistration, WorkInProgressRegistration } from '../work-in-progress-registration.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
+import { PaymentInvoiceService } from 'app/entities/settlement/payment-invoice/service/payment-invoice.service';
+import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
+import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
+import { IPurchaseOrder } from 'app/entities/settlement/purchase-order/purchase-order.model';
+import { PurchaseOrderService } from 'app/entities/settlement/purchase-order/service/purchase-order.service';
+import { IDeliveryNote } from 'app/entities/settlement/delivery-note/delivery-note.model';
+import { DeliveryNoteService } from 'app/entities/settlement/delivery-note/service/delivery-note.service';
+import { IJobSheet } from 'app/entities/settlement/job-sheet/job-sheet.model';
+import { JobSheetService } from 'app/entities/settlement/job-sheet/service/job-sheet.service';
+import { IDealer } from 'app/entities/people/dealer/dealer.model';
+import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
+import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { IWorkProjectRegister } from 'app/entities/work-project-register/work-project-register.model';
+import { WorkProjectRegisterService } from 'app/entities/work-project-register/service/work-project-register.service';
+import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
+import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { IAssetAccessory } from 'app/entities/assets/asset-accessory/asset-accessory.model';
+import { AssetAccessoryService } from 'app/entities/assets/asset-accessory/service/asset-accessory.service';
+import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warranty.model';
+import { AssetWarrantyService } from 'app/entities/assets/asset-warranty/service/asset-warranty.service';
 
 import { WorkInProgressRegistrationUpdateComponent } from './work-in-progress-registration-update.component';
-import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
-import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
-import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
-import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
-import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
-import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
-import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
-import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
-import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
-import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
-import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
-import { ErpCommonModule } from '../../../erp-common/erp-common.module';
 
 describe('WorkInProgressRegistration Management Update Component', () => {
   let comp: WorkInProgressRegistrationUpdateComponent;
@@ -61,10 +69,15 @@ describe('WorkInProgressRegistration Management Update Component', () => {
   let deliveryNoteService: DeliveryNoteService;
   let jobSheetService: JobSheetService;
   let dealerService: DealerService;
+  let settlementCurrencyService: SettlementCurrencyService;
+  let workProjectRegisterService: WorkProjectRegisterService;
+  let businessDocumentService: BusinessDocumentService;
+  let assetAccessoryService: AssetAccessoryService;
+  let assetWarrantyService: AssetWarrantyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, ErpCommonModule],
+      imports: [HttpClientTestingModule],
       declarations: [WorkInProgressRegistrationUpdateComponent],
       providers: [FormBuilder, ActivatedRoute],
     })
@@ -82,6 +95,11 @@ describe('WorkInProgressRegistration Management Update Component', () => {
     deliveryNoteService = TestBed.inject(DeliveryNoteService);
     jobSheetService = TestBed.inject(JobSheetService);
     dealerService = TestBed.inject(DealerService);
+    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
+    workProjectRegisterService = TestBed.inject(WorkProjectRegisterService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
+    assetAccessoryService = TestBed.inject(AssetAccessoryService);
+    assetWarrantyService = TestBed.inject(AssetWarrantyService);
 
     comp = fixture.componentInstance;
   });
@@ -251,6 +269,145 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.dealersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call WorkInProgressRegistration query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const workInProgressGroup: IWorkInProgressRegistration = { id: 71550 };
+      workInProgressRegistration.workInProgressGroup = workInProgressGroup;
+
+      const workInProgressRegistrationCollection: IWorkInProgressRegistration[] = [{ id: 19737 }];
+      jest
+        .spyOn(workInProgressRegistrationService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: workInProgressRegistrationCollection })));
+      const additionalWorkInProgressRegistrations = [workInProgressGroup];
+      const expectedCollection: IWorkInProgressRegistration[] = [
+        ...additionalWorkInProgressRegistrations,
+        ...workInProgressRegistrationCollection,
+      ];
+      jest
+        .spyOn(workInProgressRegistrationService, 'addWorkInProgressRegistrationToCollectionIfMissing')
+        .mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(workInProgressRegistrationService.query).toHaveBeenCalled();
+      expect(workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing).toHaveBeenCalledWith(
+        workInProgressRegistrationCollection,
+        ...additionalWorkInProgressRegistrations
+      );
+      expect(comp.workInProgressRegistrationsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call SettlementCurrency query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const settlementCurrency: ISettlementCurrency = { id: 88925 };
+      workInProgressRegistration.settlementCurrency = settlementCurrency;
+
+      const settlementCurrencyCollection: ISettlementCurrency[] = [{ id: 48153 }];
+      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCurrencyCollection })));
+      const additionalSettlementCurrencies = [settlementCurrency];
+      const expectedCollection: ISettlementCurrency[] = [...additionalSettlementCurrencies, ...settlementCurrencyCollection];
+      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(settlementCurrencyService.query).toHaveBeenCalled();
+      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
+        settlementCurrencyCollection,
+        ...additionalSettlementCurrencies
+      );
+      expect(comp.settlementCurrenciesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call WorkProjectRegister query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const workProjectRegister: IWorkProjectRegister = { id: 55547 };
+      workInProgressRegistration.workProjectRegister = workProjectRegister;
+
+      const workProjectRegisterCollection: IWorkProjectRegister[] = [{ id: 5036 }];
+      jest.spyOn(workProjectRegisterService, 'query').mockReturnValue(of(new HttpResponse({ body: workProjectRegisterCollection })));
+      const additionalWorkProjectRegisters = [workProjectRegister];
+      const expectedCollection: IWorkProjectRegister[] = [...additionalWorkProjectRegisters, ...workProjectRegisterCollection];
+      jest.spyOn(workProjectRegisterService, 'addWorkProjectRegisterToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(workProjectRegisterService.query).toHaveBeenCalled();
+      expect(workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing).toHaveBeenCalledWith(
+        workProjectRegisterCollection,
+        ...additionalWorkProjectRegisters
+      );
+      expect(comp.workProjectRegistersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call BusinessDocument query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const businessDocuments: IBusinessDocument[] = [{ id: 96779 }];
+      workInProgressRegistration.businessDocuments = businessDocuments;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 50202 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [...businessDocuments];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call AssetAccessory query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const assetAccessories: IAssetAccessory[] = [{ id: 36726 }];
+      workInProgressRegistration.assetAccessories = assetAccessories;
+
+      const assetAccessoryCollection: IAssetAccessory[] = [{ id: 28409 }];
+      jest.spyOn(assetAccessoryService, 'query').mockReturnValue(of(new HttpResponse({ body: assetAccessoryCollection })));
+      const additionalAssetAccessories = [...assetAccessories];
+      const expectedCollection: IAssetAccessory[] = [...additionalAssetAccessories, ...assetAccessoryCollection];
+      jest.spyOn(assetAccessoryService, 'addAssetAccessoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(assetAccessoryService.query).toHaveBeenCalled();
+      expect(assetAccessoryService.addAssetAccessoryToCollectionIfMissing).toHaveBeenCalledWith(
+        assetAccessoryCollection,
+        ...additionalAssetAccessories
+      );
+      expect(comp.assetAccessoriesSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call AssetWarranty query and add missing value', () => {
+      const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
+      const assetWarranties: IAssetWarranty[] = [{ id: 21548 }];
+      workInProgressRegistration.assetWarranties = assetWarranties;
+
+      const assetWarrantyCollection: IAssetWarranty[] = [{ id: 35876 }];
+      jest.spyOn(assetWarrantyService, 'query').mockReturnValue(of(new HttpResponse({ body: assetWarrantyCollection })));
+      const additionalAssetWarranties = [...assetWarranties];
+      const expectedCollection: IAssetWarranty[] = [...additionalAssetWarranties, ...assetWarrantyCollection];
+      jest.spyOn(assetWarrantyService, 'addAssetWarrantyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workInProgressRegistration });
+      comp.ngOnInit();
+
+      expect(assetWarrantyService.query).toHaveBeenCalled();
+      expect(assetWarrantyService.addAssetWarrantyToCollectionIfMissing).toHaveBeenCalledWith(
+        assetWarrantyCollection,
+        ...additionalAssetWarranties
+      );
+      expect(comp.assetWarrantiesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const workInProgressRegistration: IWorkInProgressRegistration = { id: 456 };
       const placeholders: IPlaceholder = { id: 54597 };
@@ -269,6 +426,18 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       workInProgressRegistration.jobSheets = [jobSheets];
       const dealer: IDealer = { id: 30945 };
       workInProgressRegistration.dealer = dealer;
+      const workInProgressGroup: IWorkInProgressRegistration = { id: 39161 };
+      workInProgressRegistration.workInProgressGroup = workInProgressGroup;
+      const settlementCurrency: ISettlementCurrency = { id: 47782 };
+      workInProgressRegistration.settlementCurrency = settlementCurrency;
+      const workProjectRegister: IWorkProjectRegister = { id: 74342 };
+      workInProgressRegistration.workProjectRegister = workProjectRegister;
+      const businessDocuments: IBusinessDocument = { id: 65752 };
+      workInProgressRegistration.businessDocuments = [businessDocuments];
+      const assetAccessories: IAssetAccessory = { id: 17611 };
+      workInProgressRegistration.assetAccessories = [assetAccessories];
+      const assetWarranties: IAssetWarranty = { id: 48566 };
+      workInProgressRegistration.assetWarranties = [assetWarranties];
 
       activatedRoute.data = of({ workInProgressRegistration });
       comp.ngOnInit();
@@ -282,6 +451,12 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);
       expect(comp.jobSheetsSharedCollection).toContain(jobSheets);
       expect(comp.dealersSharedCollection).toContain(dealer);
+      expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressGroup);
+      expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
+      expect(comp.workProjectRegistersSharedCollection).toContain(workProjectRegister);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
+      expect(comp.assetAccessoriesSharedCollection).toContain(assetAccessories);
+      expect(comp.assetWarrantiesSharedCollection).toContain(assetWarranties);
     });
   });
 
@@ -410,6 +585,54 @@ describe('WorkInProgressRegistration Management Update Component', () => {
       it('Should return tracked Dealer primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackDealerById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackWorkInProgressRegistrationById', () => {
+      it('Should return tracked WorkInProgressRegistration primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackWorkInProgressRegistrationById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackSettlementCurrencyById', () => {
+      it('Should return tracked SettlementCurrency primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementCurrencyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackWorkProjectRegisterById', () => {
+      it('Should return tracked WorkProjectRegister primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackWorkProjectRegisterById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackBusinessDocumentById', () => {
+      it('Should return tracked BusinessDocument primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetAccessoryById', () => {
+      it('Should return tracked AssetAccessory primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetAccessoryById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAssetWarrantyById', () => {
+      it('Should return tracked AssetWarranty primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAssetWarrantyById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
@@ -593,6 +816,84 @@ describe('WorkInProgressRegistration Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedJobSheet(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedBusinessDocument', () => {
+      it('Should return option if no BusinessDocument is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedBusinessDocument(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected BusinessDocument for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this BusinessDocument is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedBusinessDocument(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetAccessory', () => {
+      it('Should return option if no AssetAccessory is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetAccessory(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetAccessory for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetAccessory is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetAccessory(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedAssetWarranty', () => {
+      it('Should return option if no AssetWarranty is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedAssetWarranty(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected AssetWarranty for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this AssetWarranty is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedAssetWarranty(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

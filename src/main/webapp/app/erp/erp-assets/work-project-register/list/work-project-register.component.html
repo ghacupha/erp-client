@@ -73,6 +73,7 @@
           <th scope="col" jhiSortBy="catalogueNumber">
             <span>Catalogue Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="projectTitle"><span>Project Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="details"><span>Details</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="totalProjectCost"><span>Total Project Cost</span> <fa-icon icon="sort"></fa-icon></th>
@@ -91,6 +92,7 @@
             <a [routerLink]="['/work-project-register', workProjectRegister.id, 'view']">{{ workProjectRegister.id }}</a>
           </td>
           <td>{{ workProjectRegister.catalogueNumber }}</td>
+          <td>{{ workProjectRegister.projectTitle }}</td>
           <td>{{ workProjectRegister.description }}</td>
           <td>
             <a *ngIf="workProjectRegister.details" (click)="openFile(workProjectRegister.details, workProjectRegister.detailsContentType)"

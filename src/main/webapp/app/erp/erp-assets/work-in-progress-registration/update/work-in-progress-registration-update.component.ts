@@ -66,6 +66,12 @@ import {
   wipRegistrationUpdateSelectedInstance
 } from '../../../store/selectors/wip-registration-workflow-status.selector';
 import { wipRegistrationDataHasMutated } from '../../../store/actions/wip-registration-update-status.actions';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IWorkProjectRegister } from '../../work-project-register/work-project-register.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { WorkProjectRegisterService } from '../../work-project-register/service/work-project-register.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 @Component({
   selector: 'jhi-work-in-progress-registration-update',
@@ -82,6 +88,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
   deliveryNotesSharedCollection: IDeliveryNote[] = [];
   jobSheetsSharedCollection: IJobSheet[] = [];
   dealersSharedCollection: IDealer[] = [];
+  workInProgressRegistrationsSharedCollection: IWorkInProgressRegistration[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  workProjectRegistersSharedCollection: IWorkProjectRegister[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
   assetAccessoriesSharedCollection: IAssetAccessory[] = [];
   assetWarrantiesSharedCollection: IAssetWarranty[] = [];
 
@@ -100,6 +110,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     deliveryNotes: [],
     jobSheets: [],
     dealer: [null, Validators.required],
+    workInProgressGroup: [],
+    settlementCurrency: [],
+    workProjectRegister: [],
+    businessDocuments: [],
     assetAccessories: [],
     assetWarranties: [],
   });
@@ -164,6 +178,11 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected deliveryNoteService: DeliveryNoteService,
     protected jobSheetService: JobSheetService,
     protected dealerService: DealerService,
+    protected settlementCurrencyService: SettlementCurrencyService,
+    protected workProjectRegisterService: WorkProjectRegisterService,
+    protected businessDocumentService: BusinessDocumentService,
+    protected assetAccessoryService: AssetAccessoryService,
+    protected assetWarrantyService: AssetWarrantyService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected placeholderSuggestionService: PlaceholderSuggestionService,
@@ -175,8 +194,6 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     protected jobSheetsSuggestionService: JobSheetSuggestionService,
     protected serviceOutletSuggestionService: ServiceOutletSuggestionService,
     protected assetCategorySuggestionService: AssetCategorySuggestionService,
-    protected assetAccessoryService: AssetAccessoryService,
-    protected assetWarrantyService: AssetWarrantyService,
     protected store: Store<State>,
   ) {
     this.store.pipe(select(copyingWIPRegistrationStatus)).subscribe(stat => this.weAreCopying = stat);
@@ -218,6 +235,14 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
 
   updateAssetAccessories(updated: IAssetAccessory[]): void  {
     this.editForm.patchValue({ assetAccessories: [...updated]});
+  }
+
+  updateBusinessDocuments(updated: IBusinessDocument[]): void  {
+    this.editForm.patchValue({ businessDocuments: [...updated]});
+  }
+
+  updateCurrency(updated: ISettlementCurrency): void  {
+    this.editForm.patchValue({ settlementCurrency: updated});
   }
 
   // Load dynamic AssetCategory instances from the input-search stream
@@ -418,14 +443,6 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
-    return item.id!;
-  }
-
-  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
-    return item.id!;
-  }
-
   trackServiceOutletByFn(item: IServiceOutlet): number {
     return item.id!;
   }
@@ -525,26 +542,28 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
+  trackWorkInProgressRegistrationById(index: number, item: IWorkInProgressRegistration): number {
+    return item.id!;
   }
 
-  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackWorkProjectRegisterById(index: number, item: IWorkProjectRegister): number {
+    return item.id!;
+  }
+
+  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
+  trackAssetAccessoryById(index: number, item: IAssetAccessory): number {
+    return item.id!;
+  }
+
+  trackAssetWarrantyById(index: number, item: IAssetWarranty): number {
+    return item.id!;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -624,6 +643,39 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     return option;
   }
 
+  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetAccessory(option: IAssetAccessory, selectedVals?: IAssetAccessory[]): IAssetAccessory {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedAssetWarranty(option: IAssetWarranty, selectedVals?: IAssetWarranty[]): IAssetWarranty {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWorkInProgressRegistration>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -659,6 +711,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: workInProgressRegistration.deliveryNotes,
       jobSheets: workInProgressRegistration.jobSheets,
       dealer: workInProgressRegistration.dealer,
+      workInProgressGroup: workInProgressRegistration.workInProgressGroup,
+      settlementCurrency: workInProgressRegistration.settlementCurrency,
+      workProjectRegister: workInProgressRegistration.workProjectRegister,
+      businessDocuments: workInProgressRegistration.businessDocuments,
       assetAccessories: workInProgressRegistration.assetAccessories,
       assetWarranties: workInProgressRegistration.assetWarranties,
     });
@@ -695,6 +751,23 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       this.dealersSharedCollection,
       workInProgressRegistration.dealer
     );
+    this.workInProgressRegistrationsSharedCollection =
+      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+        this.workInProgressRegistrationsSharedCollection,
+        workInProgressRegistration.workInProgressGroup
+      );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      workInProgressRegistration.settlementCurrency
+    );
+    this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+      this.workProjectRegistersSharedCollection,
+      workInProgressRegistration.workProjectRegister
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(workInProgressRegistration.businessDocuments ?? [])
+    );
     this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
       this.assetAccessoriesSharedCollection,
       ...(workInProgressRegistration.assetAccessories ?? [])
@@ -705,65 +778,87 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     );
   }
 
-   protected copyForm(workInProgressRegistration: IWorkInProgressRegistration): void {
-      this.editForm.patchValue({
-        sequenceNumber: workInProgressRegistration.sequenceNumber,
-        particulars: workInProgressRegistration.particulars,
-        instalmentAmount: workInProgressRegistration.instalmentAmount,
-        comments: workInProgressRegistration.comments,
-        commentsContentType: workInProgressRegistration.commentsContentType,
-        placeholders: workInProgressRegistration.placeholders,
-        paymentInvoices: workInProgressRegistration.paymentInvoices,
-        serviceOutlets: workInProgressRegistration.serviceOutlets,
-        settlements: workInProgressRegistration.settlements,
-        purchaseOrders: workInProgressRegistration.purchaseOrders,
-        deliveryNotes: workInProgressRegistration.deliveryNotes,
-        jobSheets: workInProgressRegistration.jobSheets,
-        dealer: workInProgressRegistration.dealer,
-        assetAccessories: workInProgressRegistration.assetAccessories,
-        assetWarranties: workInProgressRegistration.assetWarranties,
-      });
+  protected copyForm(workInProgressRegistration: IWorkInProgressRegistration): void {
+    this.editForm.patchValue({
+      id: workInProgressRegistration.id,
+      sequenceNumber: workInProgressRegistration.sequenceNumber,
+      particulars: workInProgressRegistration.particulars,
+      instalmentAmount: workInProgressRegistration.instalmentAmount,
+      comments: workInProgressRegistration.comments,
+      commentsContentType: workInProgressRegistration.commentsContentType,
+      placeholders: workInProgressRegistration.placeholders,
+      paymentInvoices: workInProgressRegistration.paymentInvoices,
+      serviceOutlets: workInProgressRegistration.serviceOutlets,
+      settlements: workInProgressRegistration.settlements,
+      purchaseOrders: workInProgressRegistration.purchaseOrders,
+      deliveryNotes: workInProgressRegistration.deliveryNotes,
+      jobSheets: workInProgressRegistration.jobSheets,
+      dealer: workInProgressRegistration.dealer,
+      workInProgressGroup: workInProgressRegistration.workInProgressGroup,
+      settlementCurrency: workInProgressRegistration.settlementCurrency,
+      workProjectRegister: workInProgressRegistration.workProjectRegister,
+      businessDocuments: workInProgressRegistration.businessDocuments,
+      assetAccessories: workInProgressRegistration.assetAccessories,
+      assetWarranties: workInProgressRegistration.assetWarranties,
+    });
 
-      this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
-        this.placeholdersSharedCollection,
-        ...(workInProgressRegistration.placeholders ?? [])
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(workInProgressRegistration.placeholders ?? [])
+    );
+    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+      this.paymentInvoicesSharedCollection,
+      ...(workInProgressRegistration.paymentInvoices ?? [])
+    );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      ...(workInProgressRegistration.serviceOutlets ?? [])
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      ...(workInProgressRegistration.settlements ?? [])
+    );
+    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+      this.purchaseOrdersSharedCollection,
+      ...(workInProgressRegistration.purchaseOrders ?? [])
+    );
+    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+      this.deliveryNotesSharedCollection,
+      ...(workInProgressRegistration.deliveryNotes ?? [])
+    );
+    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+      this.jobSheetsSharedCollection,
+      ...(workInProgressRegistration.jobSheets ?? [])
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      workInProgressRegistration.dealer
+    );
+    this.workInProgressRegistrationsSharedCollection =
+      this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+        this.workInProgressRegistrationsSharedCollection,
+        workInProgressRegistration.workInProgressGroup
       );
-      this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
-        this.paymentInvoicesSharedCollection,
-        ...(workInProgressRegistration.paymentInvoices ?? [])
-      );
-      this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-        this.serviceOutletsSharedCollection,
-        ...(workInProgressRegistration.serviceOutlets ?? [])
-      );
-      this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
-        this.settlementsSharedCollection,
-        ...(workInProgressRegistration.settlements ?? [])
-      );
-      this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
-        this.purchaseOrdersSharedCollection,
-        ...(workInProgressRegistration.purchaseOrders ?? [])
-      );
-      this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
-        this.deliveryNotesSharedCollection,
-        ...(workInProgressRegistration.deliveryNotes ?? [])
-      );
-      this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
-        this.jobSheetsSharedCollection,
-        ...(workInProgressRegistration.jobSheets ?? [])
-      );
-      this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-        this.dealersSharedCollection,
-        workInProgressRegistration.dealer
-      );
-      this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
-        this.assetAccessoriesSharedCollection,
-        ...(workInProgressRegistration.assetAccessories ?? [])
-      );
-      this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
-        this.assetWarrantiesSharedCollection,
-        ...(workInProgressRegistration.assetWarranties ?? [])
-      );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      workInProgressRegistration.settlementCurrency
+    );
+    this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+      this.workProjectRegistersSharedCollection,
+      workInProgressRegistration.workProjectRegister
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(workInProgressRegistration.businessDocuments ?? [])
+    );
+    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+      this.assetAccessoriesSharedCollection,
+      ...(workInProgressRegistration.assetAccessories ?? [])
+    );
+    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+      this.assetWarrantiesSharedCollection,
+      ...(workInProgressRegistration.assetWarranties ?? [])
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -851,6 +946,62 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
       .pipe(map((dealers: IDealer[]) => this.dealerService.addDealerToCollectionIfMissing(dealers, this.editForm.get('dealer')!.value)))
       .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+
+    this.workInProgressRegistrationService
+      .query()
+      .pipe(map((res: HttpResponse<IWorkInProgressRegistration[]>) => res.body ?? []))
+      .pipe(
+        map((workInProgressRegistrations: IWorkInProgressRegistration[]) =>
+          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
+            workInProgressRegistrations,
+            this.editForm.get('workInProgressGroup')!.value
+          )
+        )
+      )
+      .subscribe(
+        (workInProgressRegistrations: IWorkInProgressRegistration[]) =>
+          (this.workInProgressRegistrationsSharedCollection = workInProgressRegistrations)
+      );
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.workProjectRegisterService
+      .query()
+      .pipe(map((res: HttpResponse<IWorkProjectRegister[]>) => res.body ?? []))
+      .pipe(
+        map((workProjectRegisters: IWorkProjectRegister[]) =>
+          this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
+            workProjectRegisters,
+            this.editForm.get('workProjectRegister')!.value
+          )
+        )
+      )
+      .subscribe((workProjectRegisters: IWorkProjectRegister[]) => (this.workProjectRegistersSharedCollection = workProjectRegisters));
+
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            ...(this.editForm.get('businessDocuments')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+
     this.assetAccessoryService
       .query()
       .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
@@ -895,6 +1046,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
+      workInProgressGroup: this.editForm.get(['workInProgressGroup'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
     };
@@ -917,6 +1072,10 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
       jobSheets: this.editForm.get(['jobSheets'])!.value,
       dealer: this.editForm.get(['dealer'])!.value,
+      workInProgressGroup: this.editForm.get(['workInProgressGroup'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       assetWarranties: this.editForm.get(['assetWarranties'])!.value,
     };

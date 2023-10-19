@@ -49,6 +49,7 @@ export class WorkProjectRegisterUpdatePage {
 
   idInput = element(by.id('field_id'));
   catalogueNumberInput = element(by.id('field_catalogueNumber'));
+  projectTitleInput = element(by.id('field_projectTitle'));
   descriptionInput = element(by.id('field_description'));
   detailsInput = element(by.id('file_details'));
   totalProjectCostInput = element(by.id('field_totalProjectCost'));
@@ -77,6 +78,14 @@ export class WorkProjectRegisterUpdatePage {
 
   async getCatalogueNumberInput(): Promise<string> {
     return await this.catalogueNumberInput.getAttribute('value');
+  }
+
+  async setProjectTitleInput(projectTitle: string): Promise<void> {
+    await this.projectTitleInput.sendKeys(projectTitle);
+  }
+
+  async getProjectTitleInput(): Promise<string> {
+    return await this.projectTitleInput.getAttribute('value');
   }
 
   async setDescriptionInput(description: string): Promise<void> {

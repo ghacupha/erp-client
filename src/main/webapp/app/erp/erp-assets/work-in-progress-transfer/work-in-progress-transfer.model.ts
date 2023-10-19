@@ -18,13 +18,28 @@
 
 import { IWorkInProgressRegistration } from 'app/erp/erp-assets/work-in-progress-registration/work-in-progress-registration.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { WorkInProgressTransferType } from '../../erp-common/enumerations/work-in-progress-transfer-type.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { IAssetCategory } from '../asset-category/asset-category.model';
+import dayjs from 'dayjs';
+import { IWorkProjectRegister } from '../work-project-register/work-project-register.model';
+import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 
 export interface IWorkInProgressTransfer {
   id?: number;
   description?: string | null;
   targetAssetNumber?: string | null;
-  workInProgressRegistrations?: IWorkInProgressRegistration[] | null;
+  transferAmount?: number;
+  transferDate?: dayjs.Dayjs;
+  transferType?: WorkInProgressTransferType;
   placeholders?: IPlaceholder[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
+  assetCategory?: IAssetCategory | null;
+  workInProgressRegistration?: IWorkInProgressRegistration | null;
+  serviceOutlet?: IServiceOutlet | null;
+  settlement?: ISettlement | null;
+  workProjectRegister?: IWorkProjectRegister | null;
 }
 
 export class WorkInProgressTransfer implements IWorkInProgressTransfer {
@@ -32,8 +47,16 @@ export class WorkInProgressTransfer implements IWorkInProgressTransfer {
     public id?: number,
     public description?: string | null,
     public targetAssetNumber?: string | null,
-    public workInProgressRegistrations?: IWorkInProgressRegistration[] | null,
-    public placeholders?: IPlaceholder[] | null
+    public transferAmount?: number,
+    public transferDate?: dayjs.Dayjs,
+    public transferType?: WorkInProgressTransferType,
+    public placeholders?: IPlaceholder[] | null,
+    public businessDocuments?: IBusinessDocument[] | null,
+    public assetCategory?: IAssetCategory | null,
+    public workInProgressRegistration?: IWorkInProgressRegistration | null,
+    public serviceOutlet?: IServiceOutlet | null,
+    public settlement?: ISettlement | null,
+    public workProjectRegister?: IWorkProjectRegister | null
   ) {}
 }
 

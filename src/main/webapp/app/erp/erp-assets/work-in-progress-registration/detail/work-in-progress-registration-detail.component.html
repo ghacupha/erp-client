@@ -109,6 +109,30 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Work In Progress Group</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.workInProgressGroup">
+            <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
+              workInProgressRegistration.workInProgressGroup?.sequenceNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
+              workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Work Project Register</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.workProjectRegister">
+            <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
+              workInProgressRegistration.workProjectRegister?.catalogueNumber
+            }}</a>
+          </div>
+        </dd>
         <dt><span>Business Document</span></dt>
         <dd>
           <span *ngFor="let businessDocument of workInProgressRegistration.businessDocuments; let last = last">

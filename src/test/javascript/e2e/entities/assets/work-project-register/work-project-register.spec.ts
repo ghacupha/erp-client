@@ -73,6 +73,7 @@ describe('WorkProjectRegister e2e test', () => {
 
         await promise.all([
             workProjectRegisterUpdatePage.setCatalogueNumberInput('catalogueNumber'),
+            workProjectRegisterUpdatePage.setProjectTitleInput('projectTitle'),
             workProjectRegisterUpdatePage.setDescriptionInput('description'),
             workProjectRegisterUpdatePage.setDetailsInput(absolutePath),
             workProjectRegisterUpdatePage.setTotalProjectCostInput('5'),

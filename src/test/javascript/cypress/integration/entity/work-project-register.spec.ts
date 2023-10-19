@@ -34,7 +34,7 @@ describe('WorkProjectRegister e2e test', () => {
   const workProjectRegisterPageUrlPattern = new RegExp('/work-project-register(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const workProjectRegisterSample = { catalogueNumber: 'Fully-configurable Electronics Chile', description: 'AGP Markets synergies' };
+  const workProjectRegisterSample = { catalogueNumber: 'AGP Markets synergies', projectTitle: 'architecture' };
 
   let workProjectRegister: any;
   let dealer: any;
@@ -241,11 +241,13 @@ describe('WorkProjectRegister e2e test', () => {
     it('should create an instance of WorkProjectRegister', () => {
       cy.get(`[data-cy="catalogueNumber"]`).type('backing actuating').should('have.value', 'backing actuating');
 
-      cy.get(`[data-cy="description"]`).type('product silver').should('have.value', 'product silver');
+      cy.get(`[data-cy="projectTitle"]`).type('product silver').should('have.value', 'product silver');
+
+      cy.get(`[data-cy="description"]`).type('program red incremental').should('have.value', 'program red incremental');
 
       cy.setFieldImageAsBytesOfEntity('details', 'integration-test.png', 'image/png');
 
-      cy.get(`[data-cy="totalProjectCost"]`).type('75055').should('have.value', '75055');
+      cy.get(`[data-cy="totalProjectCost"]`).type('62830').should('have.value', '62830');
 
       cy.setFieldImageAsBytesOfEntity('additionalNotes', 'integration-test.png', 'image/png');
 

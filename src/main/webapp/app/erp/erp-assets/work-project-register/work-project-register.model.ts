@@ -19,11 +19,13 @@
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 
 export interface IWorkProjectRegister {
   id?: number;
   catalogueNumber?: string;
-  description?: string;
+  projectTitle?: string;
+  description?: string | null;
   detailsContentType?: string | null;
   details?: string | null;
   totalProjectCost?: number | null;
@@ -32,13 +34,15 @@ export interface IWorkProjectRegister {
   dealers?: IDealer[];
   settlementCurrency?: ISettlementCurrency | null;
   placeholders?: IPlaceholder[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
 }
 
 export class WorkProjectRegister implements IWorkProjectRegister {
   constructor(
     public id?: number,
     public catalogueNumber?: string,
-    public description?: string,
+    public projectTitle?: string,
+    public description?: string | null,
     public detailsContentType?: string | null,
     public details?: string | null,
     public totalProjectCost?: number | null,
@@ -46,7 +50,8 @@ export class WorkProjectRegister implements IWorkProjectRegister {
     public additionalNotes?: string | null,
     public dealers?: IDealer[],
     public settlementCurrency?: ISettlementCurrency | null,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public businessDocuments?: IBusinessDocument[] | null
   ) {}
 }
 

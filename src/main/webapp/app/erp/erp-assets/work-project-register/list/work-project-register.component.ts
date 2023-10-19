@@ -98,7 +98,7 @@ export class WorkProjectRegisterComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['catalogueNumber', 'description', 'details', 'additionalNotes'].includes(this.predicate)) {
+    if (query && ['catalogueNumber', 'projectTitle', 'description', 'details', 'additionalNotes'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

@@ -91,46 +91,46 @@
       "relationshipType": "many-to-one"
     },
     {
-      "otherEntityField": "sequenceNumber",
-      "otherEntityName": "workInProgressRegistration",
       "relationshipName": "workInProgressGroup",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "workInProgressRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "sequenceNumber"
     },
     {
-      "otherEntityField": "iso4217CurrencyCode",
-      "otherEntityName": "settlementCurrency",
       "relationshipName": "settlementCurrency",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
     },
     {
-      "otherEntityField": "catalogueNumber",
-      "otherEntityName": "workProjectRegister",
       "relationshipName": "workProjectRegister",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "workProjectRegister",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "catalogueNumber"
     },
     {
-      "otherEntityField": "documentTitle",
-      "otherEntityName": "businessDocument",
-      "otherEntityRelationshipName": "workInProgressRegistration",
-      "ownerSide": true,
       "relationshipName": "businessDocument",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
     },
     {
-      "otherEntityField": "assetDetails",
-      "otherEntityName": "assetAccessory",
-      "otherEntityRelationshipName": "workInProgressRegistration",
-      "ownerSide": true,
       "relationshipName": "assetAccessory",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "assetAccessory",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "assetDetails",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
     },
     {
-      "otherEntityField": "description",
-      "otherEntityName": "assetWarranty",
-      "otherEntityRelationshipName": "workInProgressRegistration",
-      "ownerSide": true,
       "relationshipName": "assetWarranty",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "assetWarranty",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressRegistration"
     }
   ],
   "service": "serviceImpl"

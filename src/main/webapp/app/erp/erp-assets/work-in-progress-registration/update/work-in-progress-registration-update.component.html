@@ -77,6 +77,16 @@
           />
         </div>
 
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateCurrency($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
           <input
@@ -118,68 +128,6 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Placeholder(s)</label>
-          <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
-            formControlName="placeholders"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
-
-        <!--<div class="form-group">
-          <label for="field_paymentInvoices">Payment Invoices</label>
-          <select
-            class="form-control"
-            id="field_paymentInvoices"
-            data-cy="paymentInvoices"
-            multiple
-            name="paymentInvoices"
-            formControlName="paymentInvoices"
-          >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
-              {{ paymentInvoiceOption.invoiceNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <!--// TODO Payment Invoice Field-->
         <div class="form-group">
           <label class="form-control-label">Payment Invoice(s)</label>
@@ -208,57 +156,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['paymentInvoices'])!.value|json}}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label for="field_serviceOutlets">Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_serviceOutlets"
-            data-cy="serviceOutlet"
-            multiple
-            name="serviceOutlets"
-            formControlName="serviceOutlets"
-          >
-            <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['serviceOutlets'])!.invalid &&
-            (editForm.get(['serviceOutlets'])!.dirty || editForm.get(['serviceOutlets'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlets'])?.errors?.required"> This field is required. </small>
-        </div>-->
-
-        <!--<div class="form-group">
-          <label for="field_settlements">Settlement</label>
-          <select
-            class="form-control"
-            id="field_settlements"
-            data-cy="settlement"
-            multiple
-            name="settlements"
-            formControlName="settlements"
-          >
-            <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
-              {{ settlementOption.paymentNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
-        </div>-->
 
         <!--// TODO Service Outlet(s)-->
         <div class="form-group">
@@ -324,25 +221,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['settlements'])!.value|json}}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_purchaseOrders">Purchase Order</label>
-          <select
-            class="form-control"
-            id="field_purchaseOrders"
-            data-cy="purchaseOrder"
-            multiple
-            name="purchaseOrders"
-            formControlName="purchaseOrders"
-          >
-            <option
-              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
-              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
-            >
-              {{ purchaseOrderOption.purchaseOrderNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <!--// TODO Purchase Order field-->
         <div class="form-group">
           <label class="form-control-label">Purchase Order(s)</label>
@@ -368,25 +246,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'" >{{editForm.get(['purchaseOrders'])!.value|json}}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label for="field_deliveryNotes">Delivery Note</label>
-          <select
-            class="form-control"
-            id="field_deliveryNotes"
-            data-cy="deliveryNote"
-            multiple
-            name="deliveryNotes"
-            formControlName="deliveryNotes"
-          >
-            <option
-              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
-              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
-            >
-              {{ deliveryNoteOption.deliveryNoteNumber }}
-            </option>
-          </select>
-        </div>-->
 
         <!--// TODO Delivery Notes-->
         <div class="form-group">
@@ -414,18 +273,6 @@
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get('deliveryNotes')!.value|json}}</div>
         </div>
 
-        <!--<div class="form-group">
-          <label for="field_jobSheets">Job Sheet</label>
-          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
-            <option
-              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
-              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
-            >
-              {{ jobSheetOption.serialNumber }}
-            </option>
-          </select>
-        </div>-->
-
         <!--// TODO Job-Sheet (s)-->
         <div class="form-group">
           <label class="form-control-label">Job Sheet(s)</label>
@@ -451,22 +298,6 @@
           </ng-select>
           <div *jhiHasAnyAuthority="'ROLE_DEV'">{{ editForm.get('jobSheets')!.value|json }}</div>
         </div>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option *ngIf="!editForm.get('dealer')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>-->
 
         <!--// TODO Dealer field-->
         <div class="form-group">
@@ -494,25 +325,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-       <!-- <div class="form-group">
-          <label for="field_assetAccessories">Asset Accessory</label>
-          <select
-            class="form-control"
-            id="field_assetAccessories"
-            data-cy="assetAccessory"
-            multiple
-            name="assetAccessories"
-            formControlName="assetAccessories"
-          >
-            <option
-              [ngValue]="getSelectedAssetAccessory(assetAccessoryOption, editForm.get('assetAccessories')!.value)"
-              *ngFor="let assetAccessoryOption of assetAccessoriesSharedCollection; trackBy: trackAssetAccessoryById"
-            >
-              {{ assetAccessoryOption.assetDetails }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-asset-accessory-form-control
           ngDefaultControl
           formControlName='assetAccessories'
@@ -522,25 +334,6 @@
         >
         </jhi-m2m-asset-accessory-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_assetWarranties">Asset Warranty</label>
-          <select
-            class="form-control"
-            id="field_assetWarranties"
-            data-cy="assetWarranty"
-            multiple
-            name="assetWarranties"
-            formControlName="assetWarranties"
-          >
-            <option
-              [ngValue]="getSelectedAssetWarranty(assetWarrantyOption, editForm.get('assetWarranties')!.value)"
-              *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
-            >
-              {{ assetWarrantyOption.description }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m2m-asset-warranty-form-control
           ngDefaultControl
           formControlName='assetWarranties'
@@ -549,6 +342,88 @@
           inputControlLabel='Asset Warranty(ies)'
         >
         </jhi-m2m-asset-warranty-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workProjectRegister">Work Project Register</label>
+          <select
+            class="form-control"
+            id="field_workProjectRegister"
+            data-cy="workProjectRegister"
+            name="workProjectRegister"
+            formControlName="workProjectRegister"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workProjectRegisterOption.id === editForm.get('workProjectRegister')!.value?.id
+                  ? editForm.get('workProjectRegister')!.value
+                  : workProjectRegisterOption
+              "
+              *ngFor="let workProjectRegisterOption of workProjectRegistersSharedCollection; trackBy: trackWorkProjectRegisterById"
+            >
+              {{ workProjectRegisterOption.catalogueNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_workInProgressGroup">Work In Progress Group</label>
+          <select
+            class="form-control"
+            id="field_workInProgressGroup"
+            data-cy="workInProgressGroup"
+            name="workInProgressGroup"
+            formControlName="workInProgressGroup"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                workInProgressRegistrationOption.id === editForm.get('workInProgressGroup')!.value?.id
+                  ? editForm.get('workInProgressGroup')!.value
+                  : workInProgressRegistrationOption
+              "
+              *ngFor="
+                let workInProgressRegistrationOption of workInProgressRegistrationsSharedCollection;
+                trackBy: trackWorkInProgressRegistrationById
+              "
+            >
+              {{ workInProgressRegistrationOption.sequenceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocuments($event)'
+          inputControlLabel='Attachment'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label">Placeholder(s)</label>
+          <ng-select
+            [items]="placeholderLookups$ | async"
+            bindLabel="description"
+            [trackByFn]="trackPlaceholdersByFn"
+            [minTermLength]="minAccountLengthTerm"
+            [loading]="placeholdersLoading"
+            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
+            [typeahead]="placeholderControlInput$"
+            formControlName="placeholders"
+            [multiple]='true'
+          >
+            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
+              {{ option.description }}
+            </ng-option>
+            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
+              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
+            </ng-template>
+          </ng-select>
+          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
+        </div>
 
       </div>
 

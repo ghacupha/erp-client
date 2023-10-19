@@ -96,7 +96,7 @@ export class WorkInProgressTransferComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['description', 'targetAssetNumber'].includes(this.predicate)) {
+    if (query && ['description', 'targetAssetNumber', 'transferType'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

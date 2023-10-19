@@ -70,9 +70,16 @@ describe('WorkInProgressTransfer e2e test', () => {
     await promise.all([
       workInProgressTransferUpdatePage.setDescriptionInput('description'),
       workInProgressTransferUpdatePage.setTargetAssetNumberInput('targetAssetNumber'),
-      // workInProgressTransferUpdatePage.workInProgressRegistrationSelectLastOption(),
+      workInProgressTransferUpdatePage.setTransferAmountInput('5'),
+      workInProgressTransferUpdatePage.setTransferDateInput('2000-12-31'),
+      workInProgressTransferUpdatePage.transferTypeSelectLastOption(),
       // workInProgressTransferUpdatePage.placeholderSelectLastOption(),
       // workInProgressTransferUpdatePage.businessDocumentSelectLastOption(),
+      workInProgressTransferUpdatePage.assetCategorySelectLastOption(),
+      workInProgressTransferUpdatePage.workInProgressRegistrationSelectLastOption(),
+      workInProgressTransferUpdatePage.serviceOutletSelectLastOption(),
+      workInProgressTransferUpdatePage.settlementSelectLastOption(),
+      workInProgressTransferUpdatePage.workProjectRegisterSelectLastOption(),
     ]);
 
     await workInProgressTransferUpdatePage.save();

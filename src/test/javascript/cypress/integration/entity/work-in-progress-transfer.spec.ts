@@ -34,7 +34,7 @@ describe('WorkInProgressTransfer e2e test', () => {
   const workInProgressTransferPageUrlPattern = new RegExp('/work-in-progress-transfer(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const workInProgressTransferSample = {};
+  const workInProgressTransferSample = { transferAmount: 91875, transferDate: '2022-04-17', transferType: 'CREDIT_NOTE' };
 
   let workInProgressTransfer: any;
 
@@ -174,6 +174,12 @@ describe('WorkInProgressTransfer e2e test', () => {
       cy.get(`[data-cy="description"]`).type('Algerian bandwidth').should('have.value', 'Algerian bandwidth');
 
       cy.get(`[data-cy="targetAssetNumber"]`).type('Quetzal Utah').should('have.value', 'Quetzal Utah');
+
+      cy.get(`[data-cy="transferAmount"]`).type('56912').should('have.value', '56912');
+
+      cy.get(`[data-cy="transferDate"]`).type('2022-04-18').should('have.value', '2022-04-18');
+
+      cy.get(`[data-cy="transferType"]`).select('CREDIT_NOTE');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

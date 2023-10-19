@@ -53,6 +53,23 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_projectTitle">Project Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="projectTitle"
+            id="field_projectTitle"
+            data-cy="projectTitle"
+            formControlName="projectTitle"
+          />
+          <div
+            *ngIf="editForm.get('projectTitle')!.invalid && (editForm.get('projectTitle')!.dirty || editForm.get('projectTitle')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('projectTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
             type="text"
@@ -62,9 +79,6 @@
             data-cy="description"
             formControlName="description"
           />
-          <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.required"> This field is required. </small>
-          </div>
         </div>
 
         <div class="form-group">
@@ -203,6 +217,25 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_businessDocuments">Business Document</label>
+          <select
+            class="form-control"
+            id="field_businessDocuments"
+            data-cy="businessDocument"
+            multiple
+            name="businessDocuments"
+            formControlName="businessDocuments"
+          >
+            <option
+              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('businessDocuments')!.value)"
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
         </div>

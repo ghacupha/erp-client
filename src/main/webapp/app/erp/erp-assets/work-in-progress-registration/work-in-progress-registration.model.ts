@@ -27,6 +27,8 @@ import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IWorkProjectRegister } from '../work-project-register/work-project-register.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;
@@ -37,12 +39,15 @@ export interface IWorkInProgressRegistration {
   comments?: string | null;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[];
-  settlements?: ISettlement[];
+  serviceOutlets?: IServiceOutlet[] | null;
+  settlements?: ISettlement[] | null;
   purchaseOrders?: IPurchaseOrder[] | null;
   deliveryNotes?: IDeliveryNote[] | null;
   jobSheets?: IJobSheet[] | null;
-  dealer?: IDealer;
+  dealer?: IDealer | null;
+  workInProgressGroup?: IWorkInProgressRegistration | null;
+  settlementCurrency?: ISettlementCurrency | null;
+  workProjectRegister?: IWorkProjectRegister | null;
   businessDocuments?: IBusinessDocument[] | null;
   assetAccessories?: IAssetAccessory[] | null;
   assetWarranties?: IAssetWarranty[] | null;
@@ -58,12 +63,15 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public comments?: string | null,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[],
-    public settlements?: ISettlement[],
+    public serviceOutlets?: IServiceOutlet[] | null,
+    public settlements?: ISettlement[] | null,
     public purchaseOrders?: IPurchaseOrder[] | null,
     public deliveryNotes?: IDeliveryNote[] | null,
     public jobSheets?: IJobSheet[] | null,
-    public dealer?: IDealer,
+    public dealer?: IDealer | null,
+    public workInProgressGroup?: IWorkInProgressRegistration | null,
+    public settlementCurrency?: ISettlementCurrency | null,
+    public workProjectRegister?: IWorkProjectRegister | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
     public assetWarranties?: IAssetWarranty[] | null
