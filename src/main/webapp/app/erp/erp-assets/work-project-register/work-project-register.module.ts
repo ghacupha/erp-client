@@ -23,9 +23,10 @@ import { WorkProjectRegisterDetailComponent } from './detail/work-project-regist
 import { WorkProjectRegisterUpdateComponent } from './update/work-project-register-update.component';
 import { WorkProjectRegisterDeleteDialogComponent } from './delete/work-project-register-delete-dialog.component';
 import { WorkProjectRegisterRoutingModule } from './route/work-project-register-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, WorkProjectRegisterRoutingModule],
+  imports: [SharedModule, WorkProjectRegisterRoutingModule, ErpCommonModule],
   declarations: [
     WorkProjectRegisterComponent,
     WorkProjectRegisterDetailComponent,

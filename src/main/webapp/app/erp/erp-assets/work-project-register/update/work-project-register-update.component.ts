@@ -85,6 +85,30 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     });
   }
 
+  updateSettlementCurrency(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      settlementCurrency: update
+    });
+  }
+
+  updateDealers(update: IDealer[]): void {
+    this.editForm.patchValue({
+      dealers: [ ...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [ ...update]
+    });
+  }
+
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [ ...update]
+    });
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }
