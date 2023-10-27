@@ -61,6 +61,8 @@ import { M2mWipTransferFormControlComponent } from './wip-transfer/m2m-wip-trans
 import { M21WorkProjectRegisterFormControlComponent } from './work-project-register/m21-work-project-register-form-control.component';
 import { M2mWorkProjectRegisterFormControlComponent } from './work-project-register/m2m-work-project-register-form-control.component';
 import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
+import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
+import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +106,8 @@ import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-w
     M21WorkProjectRegisterFormControlComponent,
     M2mWorkProjectRegisterFormControlComponent,
     M21WipRegistrationFormControlComponent,
+    M21DeliveryNoteControlComponent,
+    M21JobSheetControlComponent,
   ],
   imports: [
     CommonModule,
@@ -152,6 +156,8 @@ import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-w
     M21WorkProjectRegisterFormControlComponent,
     M2mWorkProjectRegisterFormControlComponent,
     M21WipRegistrationFormControlComponent,
+    M21DeliveryNoteControlComponent,
+    M21JobSheetControlComponent,
   ]
 })
 export class FormComponentsModule {

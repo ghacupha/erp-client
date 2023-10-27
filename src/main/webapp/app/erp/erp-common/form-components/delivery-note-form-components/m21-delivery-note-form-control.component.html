@@ -21,7 +21,7 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookUps$ | async"
-    bindLabel="invoiceNumber"
+    bindLabel="deliveryNoteNumber"
     [trackByFn]="trackValueByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"
@@ -33,9 +33,10 @@
     <option [ngValue]="inputValue"></option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <jhi-payment-invoice-option-view [item]='item'></jhi-payment-invoice-option-view>
+      <jhi-delivery-note-option-view [item]='item'></jhi-delivery-note-option-view>
     </ng-template>
   </ng-select>
-  <div>{{inputValue|formatPaymentInvoice}}</div>
+  <!--// TODO Add entity-specific views-->
+  <div>{{inputValue|formatDeliveryNote: [35, '...']}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>

@@ -52,6 +52,14 @@
             {{ workInProgressRegistration.commentsContentType }}, {{ byteSize(workInProgressRegistration.comments) }}
           </div>
         </dd>
+        <dt><span>Level Of Completion</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.levelOfCompletion }}</span>
+        </dd>
+        <dt><span>Completed</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.completed }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of workInProgressRegistration.placeholders; let last = last">
@@ -59,62 +67,12 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Payment Invoices</span></dt>
-        <dd>
-          <span *ngFor="let paymentInvoices of workInProgressRegistration.paymentInvoices; let last = last">
-            <a [routerLink]="['/payment-invoice', paymentInvoices?.id, 'view']">{{ paymentInvoices.invoiceNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Service Outlet</span></dt>
-        <dd>
-          <span *ngFor="let serviceOutlet of workInProgressRegistration.serviceOutlets; let last = last">
-            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Settlement</span></dt>
-        <dd>
-          <span *ngFor="let settlement of workInProgressRegistration.settlements; let last = last">
-            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Purchase Order</span></dt>
-        <dd>
-          <span *ngFor="let purchaseOrder of workInProgressRegistration.purchaseOrders; let last = last">
-            <a [routerLink]="['/purchase-order', purchaseOrder?.id, 'view']">{{ purchaseOrder.purchaseOrderNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Delivery Note</span></dt>
-        <dd>
-          <span *ngFor="let deliveryNote of workInProgressRegistration.deliveryNotes; let last = last">
-            <a [routerLink]="['/delivery-note', deliveryNote?.id, 'view']">{{ deliveryNote.deliveryNoteNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Job Sheet</span></dt>
-        <dd>
-          <span *ngFor="let jobSheet of workInProgressRegistration.jobSheets; let last = last">
-            <a [routerLink]="['/job-sheet', jobSheet?.id, 'view']">{{ jobSheet.serialNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="workInProgressRegistration.dealer">
-            <a [routerLink]="['/erp/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
-              workInProgressRegistration.dealer?.dealerName
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Work In Progress Group</span></dt>
         <dd>
           <div *ngIf="workInProgressRegistration.workInProgressGroup">
             <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
               workInProgressRegistration.workInProgressGroup?.sequenceNumber
-            }}</a>
+              }}</a>
           </div>
         </dd>
         <dt><span>Settlement Currency</span></dt>
@@ -122,7 +80,7 @@
           <div *ngIf="workInProgressRegistration.settlementCurrency">
             <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
               workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
-            }}</a>
+              }}</a>
           </div>
         </dd>
         <dt><span>Work Project Register</span></dt>
@@ -130,7 +88,7 @@
           <div *ngIf="workInProgressRegistration.workProjectRegister">
             <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
               workInProgressRegistration.workProjectRegister?.catalogueNumber
-            }}</a>
+              }}</a>
           </div>
         </dd>
         <dt><span>Business Document</span></dt>
@@ -153,6 +111,62 @@
             <a [routerLink]="['/asset-warranty', assetWarranty?.id, 'view']">{{ assetWarranty.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Invoice</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.invoice">
+            <a [routerLink]="['/payment-invoice', workInProgressRegistration.invoice?.id, 'view']">{{
+              workInProgressRegistration.invoice?.invoiceNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Outlet Code</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.outletCode">
+            <a [routerLink]="['/service-outlet', workInProgressRegistration.outletCode?.id, 'view']">{{
+              workInProgressRegistration.outletCode?.outletCode
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Transaction</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.settlementTransaction">
+            <a [routerLink]="['/settlement', workInProgressRegistration.settlementTransaction?.id, 'view']">{{
+              workInProgressRegistration.settlementTransaction?.paymentNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Purchase Order</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.purchaseOrder">
+            <a [routerLink]="['/purchase-order', workInProgressRegistration.purchaseOrder?.id, 'view']">{{
+              workInProgressRegistration.purchaseOrder?.purchaseOrderNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Delivery Note</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.deliveryNote">
+            <a [routerLink]="['/delivery-note', workInProgressRegistration.deliveryNote?.id, 'view']">{{
+              workInProgressRegistration.deliveryNote?.deliveryNoteNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Job Sheet</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.jobSheet">
+            <a [routerLink]="['/job-sheet', workInProgressRegistration.jobSheet?.id, 'view']">{{
+              workInProgressRegistration.jobSheet?.serialNumber
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="workInProgressRegistration.dealer">
+            <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+              workInProgressRegistration.dealer?.dealerName
+              }}</a>
+          </div>
         </dd>
       </dl>
 

@@ -34,7 +34,7 @@ describe('WorkInProgressRegistration e2e test', () => {
   const workInProgressRegistrationPageUrlPattern = new RegExp('/work-in-progress-registration(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const workInProgressRegistrationSample = { sequenceNumber: 'indigo Village' };
+  const workInProgressRegistrationSample = { sequenceNumber: 'sensor Functionality matrix' };
 
   let workInProgressRegistration: any;
 
@@ -178,6 +178,11 @@ describe('WorkInProgressRegistration e2e test', () => {
       cy.get(`[data-cy="instalmentAmount"]`).type('42556').should('have.value', '42556');
 
       cy.setFieldImageAsBytesOfEntity('comments', 'integration-test.png', 'image/png');
+
+      cy.get(`[data-cy="levelOfCompletion"]`).type('52173').should('have.value', '52173');
+
+      cy.get(`[data-cy="completed"]`).should('not.be.checked');
+      cy.get(`[data-cy="completed"]`).click().should('be.checked');
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

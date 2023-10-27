@@ -43,6 +43,8 @@ import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
 import { FormatWipTransferPipe } from './format-wip-transfer.pipe';
 import { FormatWorkProjectPipe } from './format-work-project.pipe';
 import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
+import { FormatJobSheetPipe } from './format-job-sheet.pipe';
+import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,8 @@ import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
     FormatWipTransferPipe,
     FormatWorkProjectPipe,
     FormatWipRegistrationPipe,
+    FormatJobSheetPipe,
+    FormatDeliveryNotePipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -99,6 +103,8 @@ import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
     FormatWipTransferPipe,
     FormatWorkProjectPipe,
     FormatWipRegistrationPipe,
+    FormatJobSheetPipe,
+    FormatDeliveryNotePipe
   ]
 })
 export class ErpFormattingModule{}

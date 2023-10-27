@@ -44,6 +44,8 @@ describe('WorkInProgressRegistration Service', () => {
       instalmentAmount: 0,
       commentsContentType: 'image/png',
       comments: 'AAAAAAA',
+      levelOfCompletion: 0,
+      completed: false,
     };
   });
 
@@ -83,6 +85,8 @@ describe('WorkInProgressRegistration Service', () => {
           particulars: 'BBBBBB',
           instalmentAmount: 1,
           comments: 'BBBBBB',
+          levelOfCompletion: 1,
+          completed: true,
         },
         elemDefault
       );
@@ -102,6 +106,8 @@ describe('WorkInProgressRegistration Service', () => {
           sequenceNumber: 'BBBBBB',
           instalmentAmount: 1,
           comments: 'BBBBBB',
+          levelOfCompletion: 1,
+          completed: true,
         },
         new WorkInProgressRegistration()
       );
@@ -125,6 +131,8 @@ describe('WorkInProgressRegistration Service', () => {
           particulars: 'BBBBBB',
           instalmentAmount: 1,
           comments: 'BBBBBB',
+          levelOfCompletion: 1,
+          completed: true,
         },
         elemDefault
       );
@@ -182,7 +190,7 @@ describe('WorkInProgressRegistration Service', () => {
       });
 
       it('should add only unique WorkInProgressRegistration to an array', () => {
-        const workInProgressRegistrationArray: IWorkInProgressRegistration[] = [{ id: 123 }, { id: 456 }, { id: 96826 }];
+        const workInProgressRegistrationArray: IWorkInProgressRegistration[] = [{ id: 123 }, { id: 456 }, { id: 70753 }];
         const workInProgressRegistrationCollection: IWorkInProgressRegistration[] = [{ id: 123 }];
         expectedResult = service.addWorkInProgressRegistrationToCollectionIfMissing(
           workInProgressRegistrationCollection,
