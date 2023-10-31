@@ -41,6 +41,8 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  reportDate = '2023-10-31'
+
   constructor(
     protected workInProgressOutstandingReportService: WorkInProgressOutstandingReportService,
     protected activatedRoute: ActivatedRoute,
@@ -83,7 +85,8 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
     }
 
     this.workInProgressOutstandingReportService
-      .query({
+      .queryByReportDate(
+        this.reportDate, {
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),

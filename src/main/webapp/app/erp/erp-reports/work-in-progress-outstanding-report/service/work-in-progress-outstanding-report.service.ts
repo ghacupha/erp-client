@@ -44,8 +44,8 @@ export class WorkInProgressOutstandingReportService {
   }
 
   queryByReportDate(reportDate: string, req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
-    options.set('reportDate', reportDate)
+    let options = createRequestOption(req);
+    options = options.set('reportDate', reportDate)
 
     return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceUrl + `/reported`, { params: options, observe: 'response' });
   }
