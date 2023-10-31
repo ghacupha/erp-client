@@ -2629,6 +2629,18 @@
               <span>Card State</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="work-in-progress-outstanding-report"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Work In Progress Outstanding Report</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

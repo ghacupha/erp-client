@@ -66,6 +66,30 @@
             <span>Report Parameters</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-outstanding-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER','ROLE_REPORT_ACCESSOR']">
+          <a
+            class="dropdown-item"
+            routerLink="report-date-parameter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Date</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
@@ -165,6 +189,30 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-outstanding-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_DESIGNER','ROLE_REPORT_ACCESSOR']">
+          <a
+            class="dropdown-item"
+            routerLink="report-date-parameter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Date</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"

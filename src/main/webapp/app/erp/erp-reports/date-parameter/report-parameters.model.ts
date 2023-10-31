@@ -16,14 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import * as dayjs from 'dayjs';
 
-@NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
-})
-export class EntityRoutingModule {}
+export interface IReportParameter {
+  reportDate?: dayjs.Dayjs;
+}
+
+export class ReportParameter implements IReportParameter {
+  constructor(
+    public reportDate?: dayjs.Dayjs,
+  ) {}
+}

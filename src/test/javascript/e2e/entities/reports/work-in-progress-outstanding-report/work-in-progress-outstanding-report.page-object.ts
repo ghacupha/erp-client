@@ -16,14 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { element, by } from 'protractor';
 
-@NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
-})
-export class EntityRoutingModule {}
+export class WorkInProgressOutstandingReportComponentsPage {
+  title = element.all(by.css('jhi-work-in-progress-outstanding-report div h2#page-heading span')).first();
+  noResult = element(by.id('no-result'));
+  entities = element(by.id('entities'));
+
+  async getTitle(): Promise<string> {
+    return this.title.getText();
+  }
+}

@@ -17,13 +17,13 @@
 ///
 
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { SharedModule } from 'app/shared/shared.module';
+import { WorkInProgressOutstandingReportComponent } from './list/work-in-progress-outstanding-report.component';
+import { WorkInProgressOutstandingReportDetailComponent } from './detail/work-in-progress-outstanding-report-detail.component';
+import { WorkInProgressOutstandingReportRoutingModule } from './route/work-in-progress-outstanding-report-routing.module';
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
+  imports: [SharedModule, WorkInProgressOutstandingReportRoutingModule],
+  declarations: [WorkInProgressOutstandingReportComponent, WorkInProgressOutstandingReportDetailComponent],
 })
-export class EntityRoutingModule {}
+export class WorkInProgressOutstandingReportModule {}

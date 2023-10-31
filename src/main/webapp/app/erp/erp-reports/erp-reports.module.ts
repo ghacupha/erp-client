@@ -24,11 +24,27 @@ import { RouterModule } from '@angular/router';
     {
       path: 'report-template',
       data: {
-        pageTitle: 'ERP | Report Template',
+        pageTitle: 'ERP| Report Template',
         authorities: ['ROLE_DEV','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./report-template/report-template.module')
         .then(m => m.ReportTemplateModule),
+    },
+    {
+      path: 'report-date-parameter',
+      data: { pageTitle: 'ERP| Report Date' },
+      loadChildren: () =>
+        import('./date-parameter/report-parameters.module').then(
+          m => m.ReportParametersModule
+        ),
+    },
+    {
+      path: 'work-in-progress-outstanding-report',
+      data: { pageTitle: 'ERP| WIP Report' },
+      loadChildren: () =>
+        import('./work-in-progress-outstanding-report/work-in-progress-outstanding-report.module').then(
+          m => m.WorkInProgressOutstandingReportModule
+        ),
     },
     {
       path: 'report-design',

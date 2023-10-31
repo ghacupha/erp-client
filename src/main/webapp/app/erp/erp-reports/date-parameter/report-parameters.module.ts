@@ -17,13 +17,27 @@
 ///
 
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../../shared/shared.module';
+import { ReportDateParameterComponent } from './report-date-parameter.component';
+import { RouterModule, Routes } from '@angular/router';
+import { UserRouteAccessService } from '../../../core/auth/user-route-access.service';
+
+const reportsRoute: Routes = [
+  {
+    path: '',
+    component: ReportDateParameterComponent,
+    data: {
+      defaultSort: 'id,asc',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild([
-      /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
-    ]),
-  ],
+  imports: [CommonModule, SharedModule, RouterModule.forChild(reportsRoute)],
+  declarations: [ReportDateParameterComponent],
+  exports: [RouterModule]
 })
-export class EntityRoutingModule {}
+export class ReportParametersModule {
+}
