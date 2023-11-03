@@ -19,12 +19,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { combineLatest, Subject } from 'rxjs';
 
 import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstanding-report.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { WorkInProgressOutstandingReportService } from '../service/work-in-progress-outstanding-report.service';
+import * as dayjs from 'dayjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-work-in-progress-outstanding-report',
@@ -41,7 +43,10 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
-  reportDate = '2023-10-31'
+  outstandingAmount = 0;
+  selectedReportDate: dayjs.Dayjs = dayjs();
+
+  reportDateControlInput$ = new Subject<dayjs.Dayjs>();
 
   constructor(
     protected workInProgressOutstandingReportService: WorkInProgressOutstandingReportService,
@@ -50,12 +55,6 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
     protected route: ActivatedRoute,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
-
-    // this.route.params.subscribe((params) => {
-    //   const reportDate = params['report-date'];
-    //   // Use the report date to run the report
-    //   this.loadPage(-1);
-    // });
 
   }
 
@@ -86,7 +85,8 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
 
     this.workInProgressOutstandingReportService
       .queryByReportDate(
-        this.reportDate, {
+        this.selectedReportDate,
+        {
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
@@ -114,6 +114,16 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+
+    this.reportDateControlInput$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+    ).subscribe(() => this.loadPage(1));
+
+  }
+
+  onDateInputChange(): void {
+    this.reportDateControlInput$.next(this.selectedReportDate);
   }
 
   trackId(index: number, item: IWorkInProgressOutstandingReport): number {

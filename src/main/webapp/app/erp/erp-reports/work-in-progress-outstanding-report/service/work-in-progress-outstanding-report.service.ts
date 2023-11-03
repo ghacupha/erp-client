@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
@@ -25,9 +25,11 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import {
-  IWorkInProgressOutstandingReport,
   getWorkInProgressOutstandingReportIdentifier,
+  IWorkInProgressOutstandingReport
 } from '../work-in-progress-outstanding-report.model';
+import * as dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 export type EntityResponseType = HttpResponse<IWorkInProgressOutstandingReport>;
 export type EntityArrayResponseType = HttpResponse<IWorkInProgressOutstandingReport[]>;
@@ -43,9 +45,9 @@ export class WorkInProgressOutstandingReportService {
     return this.http.get<IWorkInProgressOutstandingReport>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  queryByReportDate(reportDate: string, req?: any): Observable<EntityArrayResponseType> {
+  queryByReportDate(reportDate: dayjs.Dayjs, req?: any): Observable<EntityArrayResponseType> {
     let options = createRequestOption(req);
-    options = options.set('reportDate', reportDate)
+    options = options.set('reportDate', this.convertDateFromClient(reportDate))
 
     return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceUrl + `/reported`, { params: options, observe: 'response' });
   }
@@ -83,5 +85,9 @@ export class WorkInProgressOutstandingReportService {
       return [...workInProgressOutstandingReportsToAdd, ...workInProgressOutstandingReportCollection];
     }
     return workInProgressOutstandingReportCollection;
+  }
+
+  convertDateFromClient(dateItem: dayjs.Dayjs): string {
+    return dateItem.isValid() ? dateItem.format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
   }
 }
