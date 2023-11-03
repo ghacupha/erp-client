@@ -27,6 +27,7 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { WorkInProgressOutstandingReportService } from '../service/work-in-progress-outstanding-report.service';
 import * as dayjs from 'dayjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 @Component({
   selector: 'jhi-work-in-progress-outstanding-report',
@@ -45,6 +46,7 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
 
   outstandingAmount = 0;
   selectedReportDate: dayjs.Dayjs = dayjs();
+  selectedNavDate = dayjs().format(DATE_FORMAT);
 
   reportDateControlInput$ = new Subject<dayjs.Dayjs>();
 
@@ -124,6 +126,7 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
 
   onDateInputChange(): void {
     this.reportDateControlInput$.next(this.selectedReportDate);
+    this.selectedNavDate = this.selectedReportDate.format(DATE_FORMAT);
   }
 
   trackId(index: number, item: IWorkInProgressOutstandingReport): number {

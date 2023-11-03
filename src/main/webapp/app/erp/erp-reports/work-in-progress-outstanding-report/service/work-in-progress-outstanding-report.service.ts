@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
@@ -37,12 +37,19 @@ export type EntityArrayResponseType = HttpResponse<IWorkInProgressOutstandingRep
 @Injectable({ providedIn: 'root' })
 export class WorkInProgressOutstandingReportService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/work-in-progress-outstanding-reports');
+  protected reportsUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/work-in-progress-outstanding-reports/reported');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/work-in-progress-outstanding-reports');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<IWorkInProgressOutstandingReport>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  findByDate(reportDate: string, id: number): Observable<EntityResponseType> {
+    let reportParams: HttpParams = new HttpParams();
+    reportParams = reportParams.set('reportDate', reportDate);
+    return this.http.get<IWorkInProgressOutstandingReport>(`${this.reportsUrl}/${id}`, { params: reportParams, observe: 'response' });
   }
 
   queryByReportDate(reportDate: dayjs.Dayjs, req?: any): Observable<EntityArrayResponseType> {
