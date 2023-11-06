@@ -44,7 +44,7 @@
     "watch": "concurrently npm:start",
     "webapp:build": "node git-version.js && npm run clean-www && npm run webapp:build:dev",
     "webapp:build:dev": "node git-version.js && ng build --configuration development",
-    "webapp:build:prod": "node git-version.js && ng build --configuration production",
+    "webapp:build:prod": "ng build --configuration production",
     "webapp:dev": "ng serve",
     "webapp:dev-ssl": "ng serve --ssl",
     "webapp:dev-verbose": "ng serve --verbose",

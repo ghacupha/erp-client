@@ -28,9 +28,6 @@ const workInProgressOutstandingReportRoute: Routes = [
   {
     path: '',
     component: WorkInProgressOutstandingReportComponent,
-    data: {
-      defaultSort: 'id,desc',
-    },
     canActivate: [UserRouteAccessService],
   },
   {
