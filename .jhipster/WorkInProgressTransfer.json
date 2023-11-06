@@ -80,7 +80,7 @@
   "service": "serviceImpl",
   "jpaMetamodelFiltering": true,
   "readOnly": false,
-  "pagination": "pagination",
+  "pagination": "infinite-scroll",
   "name": "WorkInProgressTransfer",
   "incrementalChangelog": false
 }

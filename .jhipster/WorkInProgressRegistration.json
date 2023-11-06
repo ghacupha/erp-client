@@ -33,7 +33,7 @@
   "incrementalChangelog": false,
   "jpaMetamodelFiltering": true,
   "name": "WorkInProgressRegistration",
-  "pagination": "pagination",
+  "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [
     {

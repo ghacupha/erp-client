@@ -28,6 +28,9 @@ COPY package-lock.json /opt/app
 COPY . /opt/app
 RUN npm install --silent
 
+# Install Git using apk
+RUN apk update && apk add git
+
 ENV PATH="./node_modules/.bin:$PATH" \
     NODE_OPTIONS="--max-old-space-size=8192"
 

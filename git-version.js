@@ -18,11 +18,14 @@
 // This script runs operations *synchronously* which is normally not the best
 // approach, but it keeps things simple, readable, and for now is good enough.
 
-const { gitDescribeSync } = require('git-describe');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { gitDescribe, gitDescribeSync } = require('git-describe');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { writeFileSync } = require('fs');
 
+// eslint-disable-next-line no-undef
 const gitInfo = gitDescribeSync(__dirname, {
-  longSemver: false,
+  longSemver: true,
   dirtySemver: false,
   customArguments: ['--abbrev=16']
 });
