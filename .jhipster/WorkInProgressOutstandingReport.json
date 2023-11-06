@@ -35,7 +35,7 @@
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,
   "readOnly": true,
-  "pagination": "pagination",
+  "pagination": "infinite-scroll",
   "name": "WorkInProgressOutstandingReport",
   "changelogDate": "20231030075738",
   "incrementalChangelog": false

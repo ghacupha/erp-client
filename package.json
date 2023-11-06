@@ -48,7 +48,7 @@
     "webapp:dev": "ng serve",
     "webapp:dev-ssl": "ng serve --ssl",
     "webapp:dev-verbose": "ng serve --verbose",
-    "webapp:prod": "node git-version.js && npm run clean-www && npm run webapp:build:prod",
+    "webapp:prod": "npm run clean-www && npm run webapp:build:prod",
     "webapp:test": "npm run test --"
   },
   "config": {
