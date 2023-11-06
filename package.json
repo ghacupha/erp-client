@@ -1,8 +1,8 @@
 {
   "name": "erp-ng-client",
-  "version": "1.5.3",
+  "version": "1.5.5",
   "private": true,
-  "description": "Mark VI No 2 (Phoebe Series) Client 1.5.3",
+  "description": "Mark VII No 1 (Gideon Series) Client 1.5.5",
   "license": "GPLv3",
   "browser": {
     "fs": false,

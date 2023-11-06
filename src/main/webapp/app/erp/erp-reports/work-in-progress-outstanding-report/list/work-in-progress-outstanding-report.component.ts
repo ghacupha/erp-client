@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VII No 1 (Gideon Series) Client 1.5.5
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstanding-report.model';
 
