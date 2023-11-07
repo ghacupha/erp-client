@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "fieldName": "totalOutstandingAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalTransferredAmount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalItems",
+      "fieldType": "Integer"
+    }
+  ],
+  "relationships": [],
+  "service": "no",
+  "readOnly": true,
+  "clientRootFolder": "assets",
+  "pagination": "infinite-scroll",
+  "name": "WorkInProgressOverview",
+  "changelogDate": "20231107054628",
+  "incrementalChangelog": false
+}

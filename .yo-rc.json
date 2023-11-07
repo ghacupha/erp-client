@@ -258,7 +258,9 @@
       "CollateralInformation",
       "CreditCardFacility",
       "CardState",
-      "WorkInProgressOutstandingReport"
+      "WorkInProgressOutstandingReport",
+      "WorkInProgressReport",
+      "WorkInProgressOverview"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

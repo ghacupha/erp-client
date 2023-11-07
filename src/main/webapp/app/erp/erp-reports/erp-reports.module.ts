@@ -40,10 +40,24 @@ import { RouterModule } from '@angular/router';
     },
     {
       path: 'work-in-progress-outstanding-report',
-      data: { pageTitle: 'ERP| WIP Report' },
+      data: {
+        pageTitle: 'ERP| WIP Report',
+        authorities: ['ROLE_FIXED_ASSETS_USER','ROLE_DEV']
+      },
       loadChildren: () =>
         import('./work-in-progress-outstanding-report/work-in-progress-outstanding-report.module').then(
           m => m.WorkInProgressOutstandingReportModule
+        ),
+    },
+    {
+      path: 'work-in-progress-report',
+      data: {
+        pageTitle: 'ERP| WIP Summary',
+        authorities: ['ROLE_FIXED_ASSETS_USER','ROLE_DEV']
+      },
+      loadChildren: () =>
+        import('./work-in-progress-report/work-in-progress-report.module').then(
+          m => m.WorkInProgressReportModule
         ),
     },
     {
