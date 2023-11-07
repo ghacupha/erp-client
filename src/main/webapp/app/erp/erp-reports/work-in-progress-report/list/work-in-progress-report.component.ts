@@ -25,6 +25,10 @@ import { IWorkInProgressReport } from '../work-in-progress-report.model';
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { WorkInProgressReportService } from '../service/work-in-progress-report.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import * as dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../../config/input.constants';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'jhi-work-in-progress-report',
@@ -40,7 +44,8 @@ export class WorkInProgressReportComponent implements OnInit {
   ascending: boolean;
   currentSearch: string;
 
-  reportDate = '2023-11-07'
+  reportDateControlInput$ = new Subject<dayjs.Dayjs>();
+  reportDate: dayjs.Dayjs = dayjs();
 
   constructor(
     protected workInProgressReportService: WorkInProgressReportService,
@@ -85,7 +90,7 @@ export class WorkInProgressReportComponent implements OnInit {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.sort(),
-        reportDate: this.reportDate,
+        reportDate: this.reportDate.format(DATE_FORMAT),
       })
       .subscribe(
         (res: HttpResponse<IWorkInProgressReport[]>) => {
@@ -125,6 +130,15 @@ export class WorkInProgressReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+
+    this.reportDateControlInput$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+    ).subscribe(() => this.loadPage(1));
+  }
+
+  onDateInputChange(): void {
+    this.reportDateControlInput$.next(this.reportDate);
   }
 
   trackId(index: number, item: IWorkInProgressReport): number {

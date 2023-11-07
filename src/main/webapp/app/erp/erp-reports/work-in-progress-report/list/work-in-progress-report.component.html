@@ -22,6 +22,30 @@
     <span>Work In Progress Summary by Project and Dealer</span>
 
     <div class="d-flex justify-content-end">
+
+      <div class="row-md">
+        <div>
+          <div class="input-group">
+            <span class="input-group-append">
+                <input
+                  type="text"
+                  id="reportDate"
+                  class="form-control"
+                  ngbDatepicker
+                  #paymentDateDp="ngbDatepicker"
+                  [(ngModel)]="reportDate"
+                  (ngModelChange)="onDateInputChange()"
+                />
+              </span>
+            <span class="input-group-append">
+                  <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+                    <fa-icon icon="calendar-alt"></fa-icon>
+                  </button>
+              </span>
+          </div>
+        </div>
+      </div>
+
       <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
