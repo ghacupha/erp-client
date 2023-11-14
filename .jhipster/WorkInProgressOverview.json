@@ -1,24 +1,29 @@
 {
   "fields": [
     {
-      "fieldName": "totalOutstandingAmount",
+      "fieldName": "currencyCode",
+      "fieldType": "String",
+      "fieldValidateRules": []
+    },
+    {
+      "fieldName": "instalmentAmount",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "totalTransferredAmount",
+      "fieldName": "totalTransferAmount",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "totalItems",
-      "fieldType": "Integer"
+      "fieldName": "outstandingAmount",
+      "fieldType": "BigDecimal"
     }
   ],
   "relationships": [],
   "service": "no",
   "readOnly": true,
   "clientRootFolder": "assets",
-  "pagination": "infinite-scroll",
+  "pagination": "pagination",
   "name": "WorkInProgressOverview",
-  "changelogDate": "20231107054628",
+  "changelogDate": "20231114132844",
   "incrementalChangelog": false
 }

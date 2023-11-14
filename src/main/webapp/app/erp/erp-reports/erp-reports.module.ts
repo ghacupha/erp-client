@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VII No 1 (Gideon Series) Client 1.5.5
+/// Erp System - Mark VII No 4 (Gideon Series) Client 1.5.6
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,6 +18,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
 
 @NgModule({
   imports: [RouterModule.forChild([
@@ -130,6 +131,18 @@ import { RouterModule } from '@angular/router';
       },
       loadChildren: () => import('./system-content-type/system-content-type.module')
         .then(m => m.SystemContentTypeModule),
+    },
+    {
+      path: 'work-in-progress-overview',
+      data: {
+        pageTitle: 'ERP | WIP Overview',
+        authorities: ['ROLE_FIXED_ASSETS_USER'],
+      },
+      canActivate: [UserRouteAccessService],
+      loadChildren: () =>
+        import('./work-in-progress-overview/work-in-progress-overview.module').then(
+          m => m.WorkInProgressOverviewModule
+        ),
     },
   ])
   ]
