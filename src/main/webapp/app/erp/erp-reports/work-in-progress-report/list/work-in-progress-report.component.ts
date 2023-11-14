@@ -58,7 +58,7 @@ export class WorkInProgressReportComponent implements OnInit {
     this.links = {
       last: 0,
     };
-    this.predicate = 'id';
+    this.predicate = 'projectTitle';
     this.ascending = true;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -147,8 +147,8 @@ export class WorkInProgressReportComponent implements OnInit {
 
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-    if (this.predicate !== 'id') {
-      result.push('id');
+    if (this.predicate !== 'projectTitle') {
+      result.push('projectTitle');
     }
     return result;
   }
