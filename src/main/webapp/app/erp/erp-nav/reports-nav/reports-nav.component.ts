@@ -23,6 +23,13 @@ import {AccountService} from "../../../core/auth/account.service";
 import {ProfileService} from "../../../layouts/profiles/profile.service";
 import {Router} from "@angular/router";
 import {VERSION} from "../../../app.constants";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReportDateParameterComponent } from '../../erp-reports/date-parameter/report-date-parameter.component';
+import {
+  wipOverviewReportNavigationInitiatedFromNavbar,
+} from '../../store/actions/report-navigation-profile-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../store/global-store.definition';
 
 @Component({
   selector: "jhi-reports-nav",
@@ -39,6 +46,8 @@ export class ReportsNavComponent implements OnInit{
     private loginService: LoginService,
     private accountService: AccountService,
     private profileService: ProfileService,
+    protected modalService: NgbModal,
+    protected store: Store<State>,
     private router: Router
   ) {
     if (VERSION) {
@@ -74,5 +83,27 @@ export class ReportsNavComponent implements OnInit{
 
   isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
+  }
+
+  openReportDateModal(): void {
+
+    this.isNavbarCollapsed = true;
+
+    this.store.dispatch(wipOverviewReportNavigationInitiatedFromNavbar({ wipOverviewReportNavigationPath: 'work-in-progress-overview' }));
+
+    const modalRef = this.modalService.open(ReportDateParameterComponent, { size: 'lg', backdrop: 'static' });
+
+    // modalRef.componentInstance.reportsNavComponent = reportsNavComponent;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'dateSelected') {
+        this.reset();
+      }
+    });
+  }
+
+  reset(): void {
+    // this.page = 0;
+    // this.loadAll();
   }
 }

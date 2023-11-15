@@ -32,6 +32,7 @@ import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-wor
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
 import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
 import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
+import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-
     StoreModule.forFeature('assetAccessoryUpdateForm', fromAssetAccessoryUpdates.assetAccessoryUpdateStateReducer),
     StoreModule.forFeature('wipRegistrationUpdateForm', fromWIPRegistrationUpdates.wipRegistrationUpdateStateReducer),
     StoreModule.forFeature('paymentInvoiceUpdateForm', fromPaymentInvoiceUpdates.paymentInvoiceUpdateStateReducer),
+    StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
   ],
   exports: [
     EffectsModule,

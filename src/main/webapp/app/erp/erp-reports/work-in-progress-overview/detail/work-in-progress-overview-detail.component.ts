@@ -25,6 +25,9 @@ import { DATE_FORMAT } from '../../../../config/input.constants';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { WorkInProgressOverviewService } from '../service/work-in-progress-overview.service';
+import { select, Store } from '@ngrx/store';
+import { wipOverviewNavigationReportDateState } from '../../../store/selectors/report-navigation-profile-status.selector';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-work-in-progress-overview-detail',
@@ -41,8 +44,11 @@ export class WorkInProgressOverviewDetailComponent implements OnInit {
   isLoading = false;
 
   constructor(
+    protected store: Store<State>,
     protected workInProgressOverviewService: WorkInProgressOverviewService,
-    protected activatedRoute: ActivatedRoute) {}
+    protected activatedRoute: ActivatedRoute) {
+    this.store.pipe(select(wipOverviewNavigationReportDateState)).subscribe(reportDate => this.selectedReportDate = dayjs(reportDate));
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressOverview }) => {

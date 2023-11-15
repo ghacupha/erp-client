@@ -16,19 +16,24 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component} from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+// import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute,  Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 
 import { EventManager } from 'app/core/util/event-manager.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../config/input.constants';
+import { select, Store } from '@ngrx/store';
+import { wipOverviewReportNavigationInitiatedFromReportDateModal } from '../../store/actions/report-navigation-profile-status.actions';
+import { State } from '../../store/global-store.definition';
+// import { IReportParameter, ReportParameter } from './report-parameters.model';
 import {
-  IUniversallyUniqueMapping,
-  UniversallyUniqueMapping
-} from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from '../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+  wipOverviewNavigationPathState,
+  wipOverviewNavigationReportDateState
+} from '../../store/selectors/report-navigation-profile-status.selector';
+// import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'jhi-report-date-parameter',
@@ -37,74 +42,61 @@ import { UniversallyUniqueMappingService } from '../../erp-pages/universally-uni
 export class ReportDateParameterComponent {
   isSaving = false;
 
-  editForm = this.fb.group({
-    reportDate: [null, [Validators.required]],
-  });
+  reportDate: dayjs.Dayjs = dayjs();
+
+  reportPath = '';
+
+  // editForm = this.fb.group({
+  //   reportDate: [null, [Validators.required]],
+  // });
+
+  reportDateControlInput$ = new Subject<dayjs.Dayjs>();
 
   constructor(
     protected eventManager: EventManager,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder,
+    // protected fb: FormBuilder,
+    protected activeModal: NgbActiveModal,
+    protected store: Store<State>,
     protected router: Router,
-    protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    // protected store: Store<State>,
-    // protected router: Router,
   ) {
 
-    // this.store.pipe(select(copyingSettlementStatus)).subscribe(stat => this.weAreCopyingAPayment = stat);
-    // this.store.pipe(select(editingSettlementStatus)).subscribe(stat => this.weAreEditingAPayment = stat);
-    // this.store.pipe(select(creatingSettlementStatus)).subscribe(stat => this.weAreCreatingAPayment = stat);
-    // this.store.pipe(select(settlementUpdateSelectedPayment)).subscribe(copiedSettlement => this.selectedSettlement = copiedSettlement);
-    // this.store.pipe(select(settlementBrowserRefreshStatus)).subscribe(refreshed => this.browserHasBeenRefreshed = refreshed);
+    this.store.pipe(select(wipOverviewNavigationPathState)).subscribe(reportPath => this.reportPath = reportPath);
+    this.store.pipe(select(wipOverviewNavigationReportDateState)).subscribe(reportDate => this.reportDate = dayjs(reportDate));
+  }
+
+  // ngOnInit(): void {
+  //   // this.reportDateControlInput$.pipe(
+  //   //   debounceTime(500),
+  //   //   distinctUntilChanged(),
+  //   // ).subscribe(() => this.onDateInputChange());
+  // }
+
+  onDateInputChange(): void {
+    this.reportDateControlInput$.next(this.reportDate);
+  }
+
+  cancel(): void {
+    this.activeModal.dismiss();
+  }
+
+  confirmReportDate(): void {
+    this.store.dispatch(wipOverviewReportNavigationInitiatedFromReportDateModal({wipOverviewReportDate: this.reportDate.format(DATE_FORMAT) }));
+
+    this.router.navigate([this.reportPath, {reportDate: this.reportDate.format(DATE_FORMAT)}]).finally(() => {
+      this.activeModal.close('dateSelected');
+    });
   }
 
   previousState(): void {
     window.history.back();
   }
-
-  save(): void {
-    this.isSaving = true;
-    const universallyUniqueMapping = this.createFromForm();
-    if (universallyUniqueMapping.id !== undefined) {
-      this.subscribeToSaveResponse(this.universallyUniqueMappingService.update(universallyUniqueMapping));
-    } else {
-      this.subscribeToSaveResponse(this.universallyUniqueMappingService.create(universallyUniqueMapping));
-    }
-  }
-
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IUniversallyUniqueMapping>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
-  }
-
-  protected onSaveSuccess(): void {
-    this.previousState();
-  }
-
-  protected onSaveError(): void {
-    // Api for inheritance.
-  }
-
-  protected onSaveFinalize(): void {
-    this.isSaving = false;
-  }
-
-  protected updateForm(universallyUniqueMapping: IUniversallyUniqueMapping): void {
-    this.editForm.patchValue({
-      id: universallyUniqueMapping.id,
-      universalKey: universallyUniqueMapping.universalKey,
-      mappedValue: universallyUniqueMapping.mappedValue,
-    });
-  }
-
-  protected createFromForm(): IUniversallyUniqueMapping {
-    return {
-      ...new UniversallyUniqueMapping(),
-      universalKey: 'Report_date',
-      mappedValue: this.editForm.get(['mappedValue'])!.value,
-    };
-  }
+  //
+  // protected createFromForm(): IReportParameter {
+  //   return {
+  //     ...new ReportParameter(),
+  //     reportDate: this.editForm.get(['reportDate'])!.value,
+  //   };
+  // }
 
 }

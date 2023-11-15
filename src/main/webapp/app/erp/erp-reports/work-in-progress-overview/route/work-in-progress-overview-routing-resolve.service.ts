@@ -20,14 +20,20 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 
 import { IWorkInProgressOverview, WorkInProgressOverview } from '../work-in-progress-overview.model';
 import { WorkInProgressOverviewService } from '../service/work-in-progress-overview.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { wipOverviewResetReportPathAction } from '../../../store/actions/report-navigation-profile-status.actions';
 
 @Injectable({ providedIn: 'root' })
 export class WorkInProgressOverviewRoutingResolveService implements Resolve<IWorkInProgressOverview> {
-  constructor(protected service: WorkInProgressOverviewService, protected router: Router) {}
+  constructor(
+    protected store: Store<State>,
+    protected service: WorkInProgressOverviewService,
+    protected router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<IWorkInProgressOverview> | Observable<never> {
     const reportDate = route.params['reportDate'];
@@ -41,7 +47,10 @@ export class WorkInProgressOverviewRoutingResolveService implements Resolve<IWor
             return EMPTY;
           }
         })
-      );
+      ).pipe(tap(() => {
+        // TODO cleanup report-path which is no longer required
+        this.store.dispatch(wipOverviewResetReportPathAction());
+      }));
     }
     return of(new WorkInProgressOverview());
   }

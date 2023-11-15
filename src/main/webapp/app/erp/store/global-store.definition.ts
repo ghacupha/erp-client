@@ -24,6 +24,9 @@ import { AssetRegistrationFormState } from './reducers/asset-registration-workfl
 import { AssetAccessoryFormState } from './reducers/asset-accessory-workflow-status.reducer';
 import { WIPRegistrationFormState } from './reducers/wip-registration-workflow-status.reducer';
 import { PaymentInvoiceFormState } from './reducers/payment-invoice-workflow-status.reducer';
+import { ReportNavigationProfileState } from './reducers/report-navigation-profile-status.reducer';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../config/input.constants';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -34,6 +37,7 @@ export interface State {
   assetAccessoryFormState: AssetAccessoryFormState,
   wipRegistrationFormState: WIPRegistrationFormState
   paymentInvoiceFormState: PaymentInvoiceFormState,
+  reportNavigationProfileState: ReportNavigationProfileState
 }
 
 export const initialState: State = {
@@ -98,5 +102,9 @@ export const initialState: State = {
     selectedInvoicePlaceholders: [],
     weArePayingAnInvoiceDealer: false,
     errorMessage: '',
+  },
+  reportNavigationProfileState: {
+    reportPath: '',
+    reportDate: dayjs().format(DATE_FORMAT)
   }
 }
