@@ -17,6 +17,41 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
+<div class="d-flex justify-content-end">
+  <!--<div class="form-group">
+    <label for="reportDate">For Report Date:</label>
+    <input type="date" id="reportDate" [(ngModel)]="selectedReportDate" (ngModelChange)="onDateInputChange()">
+  </div>-->
+
+  <div class="row-md">
+    <div>
+      <div class="input-group">
+        <span class="input-group-append">
+          <input
+            type="text"
+            id="reportDate"
+            class="form-control"
+            ngbDatepicker
+            #paymentDateDp="ngbDatepicker"
+            [(ngModel)]="selectedReportDate"
+            (ngModelChange)="onDateInputChange()"
+          />
+        </span>
+        <span class="input-group-append">
+          <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+            <fa-icon icon="calendar-alt"></fa-icon>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-info mr-2" (click)="reset(selectedReportDate)" [disabled]="isLoading">
+    <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+    <span>Refresh</span>
+  </button>
+</div>
+
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="workInProgressOverview">
@@ -29,13 +64,9 @@
       <jhi-alert></jhi-alert>
 
       <dl class="row-md jh-entity-details">
-        <dt><span>ID</span></dt>
+        <dt><span>Number of Items</span></dt>
         <dd>
-          <span>{{ workInProgressOverview.id }}</span>
-        </dd>
-        <dt><span>Currency Code</span></dt>
-        <dd>
-          <span>{{ workInProgressOverview.currencyCode }}</span>
+          <span>{{ workInProgressOverview.numberOfItems }}</span>
         </dd>
         <dt><span>Instalment Amount</span></dt>
         <dd>

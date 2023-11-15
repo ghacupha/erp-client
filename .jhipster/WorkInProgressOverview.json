@@ -1,9 +1,8 @@
 {
   "fields": [
     {
-      "fieldName": "currencyCode",
-      "fieldType": "String",
-      "fieldValidateRules": []
+      "fieldName": "numberOfItem",
+      "fieldType": "BigDecimal"
     },
     {
       "fieldName": "instalmentAmount",

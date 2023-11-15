@@ -20,6 +20,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IWorkInProgressOverview } from '../work-in-progress-overview.model';
+import * as dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../../config/input.constants';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { WorkInProgressOverviewService } from '../service/work-in-progress-overview.service';
 
 @Component({
   selector: 'jhi-work-in-progress-overview-detail',
@@ -28,12 +33,42 @@ import { IWorkInProgressOverview } from '../work-in-progress-overview.model';
 export class WorkInProgressOverviewDetailComponent implements OnInit {
   workInProgressOverview: IWorkInProgressOverview | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  selectedReportDate: dayjs.Dayjs = dayjs();
+
+  reportDateControlInput$ = new Subject<dayjs.Dayjs>();
+  selectedNavDate = dayjs().format(DATE_FORMAT);
+
+  isLoading = false;
+
+  constructor(
+    protected workInProgressOverviewService: WorkInProgressOverviewService,
+    protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressOverview }) => {
       this.workInProgressOverview = workInProgressOverview;
     });
+
+    this.reportDateControlInput$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+    ).subscribe(() => this.reset(this.selectedReportDate));
+  }
+
+  onDateInputChange(): void {
+    this.isLoading = true;
+    this.reportDateControlInput$.next(this.selectedReportDate);
+    this.selectedNavDate = this.selectedReportDate.format(DATE_FORMAT);
+    this.isLoading = false;
+  }
+
+  reset(reportDate: dayjs.Dayjs): void {
+    this.isLoading = true;
+    this.workInProgressOverviewService.findByDate(reportDate.format(DATE_FORMAT))
+      .subscribe(res => {
+        this.workInProgressOverview = res.body;
+      });
+    this.isLoading = false;
   }
 
   previousState(): void {
