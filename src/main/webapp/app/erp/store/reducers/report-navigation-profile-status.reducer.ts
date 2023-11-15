@@ -6,6 +6,8 @@ import {
   wipOverviewResetReportDateAction,
   wipOverviewResetReportPathAction
 } from '../actions/report-navigation-profile-status.actions';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../config/input.constants';
 
 export const reportNavigationProfileStateSelector = 'reportNavigationProfileState';
 
@@ -47,7 +49,7 @@ const _reportNavigationProfileStateReducer = createReducer(
     ...state,
     reportNavigationProfileState: {
       ...state.reportNavigationProfileState,
-      reportDate: ''
+      reportDate: dayjs().format(DATE_FORMAT)
     }
   })),
 

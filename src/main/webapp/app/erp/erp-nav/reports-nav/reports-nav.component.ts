@@ -26,7 +26,7 @@ import {VERSION} from "../../../app.constants";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReportDateParameterComponent } from '../../erp-reports/date-parameter/report-date-parameter.component';
 import {
-  wipOverviewReportNavigationInitiatedFromNavbar,
+  wipOverviewReportNavigationInitiatedFromNavbar, wipOverviewResetReportDateAction
 } from '../../store/actions/report-navigation-profile-status.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../store/global-store.definition';
@@ -86,6 +86,8 @@ export class ReportsNavComponent implements OnInit{
   }
 
   openReportDateModal(): void {
+
+    this.store.dispatch(wipOverviewResetReportDateAction());
 
     this.isNavbarCollapsed = true;
 
