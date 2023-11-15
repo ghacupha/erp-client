@@ -105,6 +105,7 @@ export const initialState: State = {
   },
   reportNavigationProfileState: {
     reportPath: '',
+    reportTitle: 'ERP Reports',
     reportDate: dayjs().format(DATE_FORMAT)
   }
 }

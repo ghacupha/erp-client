@@ -14,6 +14,7 @@ export const reportNavigationProfileStateSelector = 'reportNavigationProfileStat
 export interface ReportNavigationProfileState {
   reportPath: string,
   reportDate: string,
+  reportTitle: string,
 }
 
 const _reportNavigationProfileStateReducer = createReducer(
@@ -25,6 +26,7 @@ const _reportNavigationProfileStateReducer = createReducer(
     reportNavigationProfileState: {
       ...state.reportNavigationProfileState,
       reportPath: wipOverviewReportNavigationPath,
+      reportTitle: 'Work In Progress Overview'
     }
   })),
 
@@ -41,7 +43,8 @@ const _reportNavigationProfileStateReducer = createReducer(
     ...state,
     reportNavigationProfileState: {
       ...state.reportNavigationProfileState,
-      reportPath: ''
+      reportPath: '',
+      reportTitle: 'ERP Reports'
     }
   })),
 

@@ -17,7 +17,6 @@
 ///
 
 import { Component } from '@angular/core';
-// import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute,  Router } from '@angular/router';
 
 import { EventManager } from 'app/core/util/event-manager.service';
@@ -27,12 +26,10 @@ import { DATE_FORMAT } from '../../../config/input.constants';
 import { select, Store } from '@ngrx/store';
 import { wipOverviewReportNavigationInitiatedFromReportDateModal } from '../../store/actions/report-navigation-profile-status.actions';
 import { State } from '../../store/global-store.definition';
-// import { IReportParameter, ReportParameter } from './report-parameters.model';
 import {
   wipOverviewNavigationPathState,
-  wipOverviewNavigationReportDateState
+  wipOverviewNavigationReportDateState, wipOverviewNavigationReportTitleState
 } from '../../store/selectors/report-navigation-profile-status.selector';
-// import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -46,16 +43,13 @@ export class ReportDateParameterComponent {
 
   reportPath = '';
 
-  // editForm = this.fb.group({
-  //   reportDate: [null, [Validators.required]],
-  // });
+  reportTitle = 'Report Parameter Selection';
 
   reportDateControlInput$ = new Subject<dayjs.Dayjs>();
 
   constructor(
     protected eventManager: EventManager,
     protected activatedRoute: ActivatedRoute,
-    // protected fb: FormBuilder,
     protected activeModal: NgbActiveModal,
     protected store: Store<State>,
     protected router: Router,
@@ -63,14 +57,8 @@ export class ReportDateParameterComponent {
 
     this.store.pipe(select(wipOverviewNavigationPathState)).subscribe(reportPath => this.reportPath = reportPath);
     this.store.pipe(select(wipOverviewNavigationReportDateState)).subscribe(reportDate => this.reportDate = dayjs(reportDate));
+    this.store.pipe(select(wipOverviewNavigationReportTitleState)).subscribe(reportTitle => this.reportTitle = reportTitle);
   }
-
-  // ngOnInit(): void {
-  //   // this.reportDateControlInput$.pipe(
-  //   //   debounceTime(500),
-  //   //   distinctUntilChanged(),
-  //   // ).subscribe(() => this.onDateInputChange());
-  // }
 
   onDateInputChange(): void {
     this.reportDateControlInput$.next(this.reportDate);
@@ -91,12 +79,4 @@ export class ReportDateParameterComponent {
   previousState(): void {
     window.history.back();
   }
-  //
-  // protected createFromForm(): IReportParameter {
-  //   return {
-  //     ...new ReportParameter(),
-  //     reportDate: this.editForm.get(['reportDate'])!.value,
-  //   };
-  // }
-
 }

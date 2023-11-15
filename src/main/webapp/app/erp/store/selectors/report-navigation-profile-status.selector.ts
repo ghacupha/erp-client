@@ -13,3 +13,8 @@ export const wipOverviewNavigationReportDateState = createSelector(
   reportNavigationProfileState,
   state => state.reportNavigationProfileState.reportDate
 );
+
+export const wipOverviewNavigationReportTitleState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportTitle
+);
