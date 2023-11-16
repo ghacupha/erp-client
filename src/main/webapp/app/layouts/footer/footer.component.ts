@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VII No 5 (Gideon Series) Client 1.5.7
+/// Erp System - Mark VII No 5 (Gideon Series) Client 1.5.8
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = versionInfo.hash.substring(0,8);
 
-  clientVersion = '1.5.7';
+  clientVersion = '1.5.8';
 
   serverVersion = '1.5.9';
 
@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
         // this.serverVersion = appStatus.body.version ?? '1.5.8';
-        this.serverHash = appStatus.body.build ?? 'b489f72af';
+        this.serverHash = appStatus.body.build ?? '6b31b3ee';
       }
     });
   }

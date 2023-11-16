@@ -7,9 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8</version>
     <name>Erp System</name>
-    <description>Mark VII No 5 (Gideon Series) Client 1.5.7</description>
+    <description>Mark VII No 5 (Gideon Series) Client 1.5.8</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->
