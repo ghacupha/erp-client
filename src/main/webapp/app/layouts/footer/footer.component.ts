@@ -38,7 +38,7 @@ export class FooterComponent implements OnInit {
 
   clientVersion = '1.5.7';
 
-  serverVersion = versionInfo.tag;
+  serverVersion = '1.5.9';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }
@@ -46,7 +46,7 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
-        this.serverVersion = appStatus.body.version ?? '1.5.8';
+        // this.serverVersion = appStatus.body.version ?? '1.5.8';
         this.serverHash = appStatus.body.build ?? 'b489f72af';
       }
     });
