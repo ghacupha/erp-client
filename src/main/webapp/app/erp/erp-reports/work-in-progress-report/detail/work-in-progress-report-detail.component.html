@@ -47,15 +47,15 @@
         </dd>
         <dt><span>Instalment Amount</span></dt>
         <dd>
-          <span>{{ workInProgressReport.instalmentAmount }}</span>
+          <span>{{ workInProgressReport.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
         </dd>
         <dt><span>Transfer Amount</span></dt>
         <dd>
-          <span>{{ workInProgressReport.transferAmount }}</span>
+          <span>{{ workInProgressReport.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
         </dd>
         <dt><span>Outstanding Amount</span></dt>
         <dd>
-          <span>{{ workInProgressReport.outstandingAmount }}</span>
+          <span>{{ workInProgressReport.outstandingAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
         </dd>
       </dl>
 

@@ -43,7 +43,7 @@
         </dd>
         <dt><span>Instalment Amount</span></dt>
         <dd>
-          <span>{{ workInProgressRegistration.instalmentAmount }}</span>
+          <span>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
         </dd>
         <dt><span>Comments</span></dt>
         <dd>

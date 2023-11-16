@@ -18,7 +18,7 @@
 
 // noinspection ES6UnusedImports
 
-import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/en';
@@ -75,6 +75,7 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
   ],
   providers: [
     Title,
+    { provide: DEFAULT_CURRENCY_CODE, useValue: '' },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },

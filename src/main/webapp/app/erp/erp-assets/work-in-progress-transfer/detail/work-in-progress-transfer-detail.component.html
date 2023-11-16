@@ -43,7 +43,7 @@
         </dd>
         <dt><span>Transfer Amount</span></dt>
         <dd>
-          <span>{{ workInProgressTransfer.transferAmount }}</span>
+          <span>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
         </dd>
         <dt><span>Transfer Date</span></dt>
         <dd>

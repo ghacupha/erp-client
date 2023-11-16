@@ -111,7 +111,7 @@
             </td>
             <td>{{ workInProgressRegistration.sequenceNumber }}</td>
             <td>{{ workInProgressRegistration.particulars }}</td>
-            <td>{{ workInProgressRegistration.instalmentAmount }}</td>
+            <td>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
             <td>
               <a
                 *ngIf="workInProgressRegistration.comments"

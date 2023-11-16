@@ -96,7 +96,7 @@
           </td>
           <td>{{ workInProgressTransfer.description }}</td>
           <td>{{ workInProgressTransfer.targetAssetNumber }}</td>
-          <td>{{ workInProgressTransfer.transferAmount }}</td>
+          <td>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
           <td>{{ workInProgressTransfer.transferDate | formatMediumDate }}</td>
           <td>{{ workInProgressTransfer.transferType }}</td>
           <td>

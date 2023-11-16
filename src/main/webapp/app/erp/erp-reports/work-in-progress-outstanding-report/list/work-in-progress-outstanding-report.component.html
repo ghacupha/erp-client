@@ -114,9 +114,9 @@
           <td>{{ workInProgressOutstandingReport.particulars }}</td>
           <td>{{ workInProgressOutstandingReport.dealerName }}</td>
           <td>{{ workInProgressOutstandingReport.iso4217Code }}</td>
-          <td>{{ workInProgressOutstandingReport.instalmentAmount }}</td>
-          <td>{{ workInProgressOutstandingReport.totalTransferAmount }}</td>
-          <td>{{ workInProgressOutstandingReport.outstandingAmount }}</td>
+          <td>{{ workInProgressOutstandingReport.instalmentAmount | currency }}</td>
+          <td>{{ workInProgressOutstandingReport.totalTransferAmount | currency }}</td>
+          <td>{{ workInProgressOutstandingReport.outstandingAmount | currency }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

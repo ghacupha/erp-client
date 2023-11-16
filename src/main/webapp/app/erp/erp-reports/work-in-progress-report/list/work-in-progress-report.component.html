@@ -101,9 +101,9 @@
           <td>{{ workInProgressReport.projectTitle }}</td>
           <td>{{ workInProgressReport.dealerName }}</td>
           <td>{{ workInProgressReport.numberOfItems }}</td>
-          <td>{{ workInProgressReport.instalmentAmount }}</td>
-          <td>{{ workInProgressReport.transferAmount }}</td>
-          <td>{{ workInProgressReport.outstandingAmount }}</td>
+          <td>{{ workInProgressReport.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
+          <td>{{ workInProgressReport.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
+          <td>{{ workInProgressReport.outstandingAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

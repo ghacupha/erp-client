@@ -20,6 +20,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstanding-report.model';
+import { WorkInProgressTransferService } from '../../../erp-assets/work-in-progress-transfer/service/work-in-progress-transfer.service';
+import { IWorkInProgressTransfer } from '../../../erp-assets/work-in-progress-transfer/work-in-progress-transfer.model';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { WorkInProgressRegistrationService } from '../../../erp-assets/work-in-progress-registration/service/work-in-progress-registration.service';
 
 @Component({
   selector: 'jhi-work-in-progress-outstanding-report-detail',
@@ -27,12 +32,32 @@ import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstandin
 })
 export class WorkInProgressOutstandingReportDetailComponent implements OnInit {
   workInProgressOutstandingReport: IWorkInProgressOutstandingReport | null = null;
+  settlementTransaction: ISettlement | null = null;
+  appliedWorkInProgressTransferItems: IWorkInProgressTransfer[] = []
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected settlementService: SettlementService,
+    protected workInProgressRegistrationService: WorkInProgressRegistrationService,
+    protected workInProgressTransferService: WorkInProgressTransferService,
+    protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressOutstandingReport }) => {
       this.workInProgressOutstandingReport = workInProgressOutstandingReport;
+
+      this.workInProgressTransferService.query({'workInProgressRegistrationId.equals': workInProgressOutstandingReport.id})
+        .subscribe(response => {
+            this.appliedWorkInProgressTransferItems = response.body ?? [];
+        })
+
+      this.workInProgressRegistrationService.find(workInProgressOutstandingReport.id).subscribe(registrationRes => {
+        if (registrationRes.body?.settlementTransaction?.id) {
+          this.settlementService.find(registrationRes.body.settlementTransaction.id)
+            .subscribe(response => {
+              this.settlementTransaction = response.body;
+            });
+        }
+      });
     });
   }
 
