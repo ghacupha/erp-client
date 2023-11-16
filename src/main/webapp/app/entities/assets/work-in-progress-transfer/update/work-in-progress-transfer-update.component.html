@@ -72,9 +72,6 @@
             "
           >
             <small class="form-text text-danger" *ngIf="editForm.get('transferAmount')?.errors?.required"> This field is required. </small>
-            <small class="form-text text-danger" *ngIf="editForm.get('transferAmount')?.errors?.min">
-              This field should be at least 0.
-            </small>
             <small class="form-text text-danger" [hidden]="!editForm.get('transferAmount')?.errors?.number">
               This field should be a number.
             </small>

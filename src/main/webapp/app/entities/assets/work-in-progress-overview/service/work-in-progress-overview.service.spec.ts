@@ -39,7 +39,7 @@ describe('WorkInProgressOverview Service', () => {
 
     elemDefault = {
       id: 0,
-      currencyCode: 'AAAAAAA',
+      numberOfItems: 0,
       instalmentAmount: 0,
       totalTransferAmount: 0,
       outstandingAmount: 0,
@@ -61,7 +61,7 @@ describe('WorkInProgressOverview Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          currencyCode: 'BBBBBB',
+          numberOfItems: 1,
           instalmentAmount: 1,
           totalTransferAmount: 1,
           outstandingAmount: 1,

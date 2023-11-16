@@ -61,7 +61,7 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     id: [],
     description: [],
     targetAssetNumber: [],
-    transferAmount: [null, [Validators.required, Validators.min(0)]],
+    transferAmount: [null, [Validators.required]],
     transferDate: [null, [Validators.required]],
     transferType: [null, [Validators.required]],
     placeholders: [],

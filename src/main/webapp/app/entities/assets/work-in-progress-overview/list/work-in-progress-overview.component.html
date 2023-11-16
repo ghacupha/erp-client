@@ -60,7 +60,7 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="currencyCode"><span>Currency Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="numberOfItems"><span>Number Of Items</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="totalTransferAmount"><span>Total Transfer Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="outstandingAmount"><span>Outstanding Amount</span> <fa-icon icon="sort"></fa-icon></th>
@@ -72,7 +72,7 @@
           <td>
             <a [routerLink]="['/work-in-progress-overview', workInProgressOverview.id, 'view']">{{ workInProgressOverview.id }}</a>
           </td>
-          <td>{{ workInProgressOverview.currencyCode }}</td>
+          <td>{{ workInProgressOverview.numberOfItems }}</td>
           <td>{{ workInProgressOverview.instalmentAmount }}</td>
           <td>{{ workInProgressOverview.totalTransferAmount }}</td>
           <td>{{ workInProgressOverview.outstandingAmount }}</td>

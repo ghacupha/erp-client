@@ -93,10 +93,6 @@ export class WorkInProgressOverviewComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['currencyCode'].includes(this.predicate)) {
-      this.predicate = 'id';
-      this.ascending = true;
-    }
     this.currentSearch = query;
     this.loadPage(1);
   }

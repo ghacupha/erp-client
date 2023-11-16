@@ -18,7 +18,7 @@
 
 export interface IWorkInProgressOverview {
   id?: number;
-  currencyCode?: string | null;
+  numberOfItems?: number | null;
   instalmentAmount?: number | null;
   totalTransferAmount?: number | null;
   outstandingAmount?: number | null;
@@ -27,7 +27,7 @@ export interface IWorkInProgressOverview {
 export class WorkInProgressOverview implements IWorkInProgressOverview {
   constructor(
     public id?: number,
-    public currencyCode?: string | null,
+    public numberOfItems?: number | null,
     public instalmentAmount?: number | null,
     public totalTransferAmount?: number | null,
     public outstandingAmount?: number | null
