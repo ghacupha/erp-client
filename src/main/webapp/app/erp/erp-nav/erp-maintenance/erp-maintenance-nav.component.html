@@ -42,7 +42,7 @@
             <span>Depreciation Method</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENT_MODULE_USER'">
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
           <a
             class='dropdown-item'
             routerLink='prepayment-mapping'
@@ -54,7 +54,7 @@
             <span>Prepayment Parameters</span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENT_MODULE_USER'">
+        <li *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'">
           <a
             class='dropdown-item'
             routerLink='amortization-sequence'
@@ -80,7 +80,7 @@
         </li>
         <li *jhiHasAnyAuthority=
               "[
-                'ROLE_PREPAYMENT_MODULE_USER',
+                'ROLE_PREPAYMENTS_MODULE_USER',
                 'ROLE_LEASE_MANAGER',
                 ]"
         >
@@ -97,7 +97,7 @@
         </li>
         <li *jhiHasAnyAuthority=
           "[
-          'ROLE_PREPAYMENT_MODULE_USER',
+          'ROLE_PREPAYMENTS_MODULE_USER',
           'ROLE_LEASE_MANAGER',
           ]">
           <a
@@ -113,7 +113,7 @@
         </li>
         <li *jhiHasAnyAuthority=
               "[
-                'ROLE_PREPAYMENT_MODULE_USER',
+                'ROLE_PREPAYMENTS_MODULE_USER',
                 'ROLE_FIXED_ASSETS_USER',
                 'ROLE_LEASE_MANAGER',
                 ]">
@@ -182,7 +182,7 @@
           </span>
           </a>
         </li>
-        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER','ROLE_FIXED_ASSETS_USER','ROLE_PREPAYMENT_MODULE_USER']">
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER','ROLE_FIXED_ASSETS_USER','ROLE_PREPAYMENTS_MODULE_USER']">
           <a
             class='dropdown-item'
             routerLink='/business-document'
@@ -196,6 +196,124 @@
           </span>
           </a>
         </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-month"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Month</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-quarter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Quarter</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-year"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Year</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-marshalling"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Marshalling</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-mapping"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Mapping</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-month"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Month</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-quarter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Quarter</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="fiscal-year"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Fiscal Year</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-marshalling"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Marshalling</span>
+          </a>
+        </li>
+
       </ul>
     </li>
   </ul>

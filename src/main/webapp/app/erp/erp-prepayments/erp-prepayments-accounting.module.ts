@@ -59,7 +59,7 @@ import { NgModule } from '@angular/core';
               m => m.AmortizationSequenceModule
             ),
         },
-      {
+        {
           path: 'prepayment-mapping',
           data: {
             pageTitle: 'ERP | Prepayment Mapping',
@@ -69,6 +69,30 @@ import { NgModule } from '@angular/core';
           loadChildren: () =>
             import('./prepayment-mapping/prepayment-mapping.module').then(
               m => m.PrepaymentMappingModule
+            ),
+        },
+        {
+          path: 'prepayment-marshalling',
+          data: {
+            pageTitle: 'ERP | Prepayment Marshalling',
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-marshalling/prepayment-marshalling.module').then(
+              m => m.PrepaymentMarshallingModule
+            ),
+        },
+        {
+          path: 'prepayment-amortization',
+          data: {
+            pageTitle: 'ERP | Prepayment Amortization',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-amortization/prepayment-amortization.module').then(
+              m => m.PrepaymentAmortizationModule
             ),
         },
       ]
