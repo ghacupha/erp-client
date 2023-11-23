@@ -29,6 +29,8 @@ import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
@@ -39,20 +41,24 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
 
   editForm = this.fb.group({
     id: [],
     inactive: [null, [Validators.required]],
-    amortizationCommencementDate: [],
     amortizationPeriods: [],
+    processed: [],
     prepaymentAccount: [null, Validators.required],
     placeholders: [],
+    firstFiscalMonth: [null, Validators.required],
+    lastFiscalMonth: [null, Validators.required],
   });
 
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected prepaymentAccountService: PrepaymentAccountService,
     protected placeholderService: PlaceholderService,
+    protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -84,6 +90,10 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
     return item.id!;
   }
 
@@ -121,10 +131,12 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: prepaymentMarshalling.id,
       inactive: prepaymentMarshalling.inactive,
-      amortizationCommencementDate: prepaymentMarshalling.amortizationCommencementDate,
       amortizationPeriods: prepaymentMarshalling.amortizationPeriods,
+      processed: prepaymentMarshalling.processed,
       prepaymentAccount: prepaymentMarshalling.prepaymentAccount,
       placeholders: prepaymentMarshalling.placeholders,
+      firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
+      lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
     });
 
     this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
@@ -134,6 +146,11 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(prepaymentMarshalling.placeholders ?? [])
+    );
+    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
+      this.fiscalMonthsSharedCollection,
+      prepaymentMarshalling.firstFiscalMonth,
+      prepaymentMarshalling.lastFiscalMonth
     );
   }
 
@@ -160,6 +177,20 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.fiscalMonthService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalMonths: IFiscalMonth[]) =>
+          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
+            fiscalMonths,
+            this.editForm.get('firstFiscalMonth')!.value,
+            this.editForm.get('lastFiscalMonth')!.value
+          )
+        )
+      )
+      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
   }
 
   protected createFromForm(): IPrepaymentMarshalling {
@@ -167,10 +198,12 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       ...new PrepaymentMarshalling(),
       id: this.editForm.get(['id'])!.value,
       inactive: this.editForm.get(['inactive'])!.value,
-      amortizationCommencementDate: this.editForm.get(['amortizationCommencementDate'])!.value,
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
+      processed: this.editForm.get(['processed'])!.value,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
+      lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
     };
   }
 }

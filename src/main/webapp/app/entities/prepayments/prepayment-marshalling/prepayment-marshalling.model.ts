@@ -16,29 +16,34 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import * as dayjs from 'dayjs';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 
 export interface IPrepaymentMarshalling {
   id?: number;
   inactive?: boolean;
-  amortizationCommencementDate?: dayjs.Dayjs | null;
   amortizationPeriods?: number | null;
+  processed?: boolean | null;
   prepaymentAccount?: IPrepaymentAccount;
   placeholders?: IPlaceholder[] | null;
+  firstFiscalMonth?: IFiscalMonth;
+  lastFiscalMonth?: IFiscalMonth;
 }
 
 export class PrepaymentMarshalling implements IPrepaymentMarshalling {
   constructor(
     public id?: number,
     public inactive?: boolean,
-    public amortizationCommencementDate?: dayjs.Dayjs | null,
     public amortizationPeriods?: number | null,
+    public processed?: boolean | null,
     public prepaymentAccount?: IPrepaymentAccount,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public firstFiscalMonth?: IFiscalMonth,
+    public lastFiscalMonth?: IFiscalMonth
   ) {
     this.inactive = this.inactive ?? false;
+    this.processed = this.processed ?? false;
   }
 }
 

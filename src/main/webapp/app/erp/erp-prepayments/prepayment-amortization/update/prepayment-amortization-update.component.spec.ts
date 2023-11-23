@@ -34,10 +34,14 @@ import { PrepaymentAmortizationUpdateComponent } from './prepayment-amortization
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { PrepaymentCompilationRequestService } from '../../prepayment-compilation-request/service/prepayment-compilation-request.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { IPrepaymentCompilationRequest } from '../../prepayment-compilation-request/prepayment-compilation-request.model';
 
 describe('PrepaymentAmortization Management Update Component', () => {
   let comp: PrepaymentAmortizationUpdateComponent;
@@ -48,6 +52,8 @@ describe('PrepaymentAmortization Management Update Component', () => {
   let settlementCurrencyService: SettlementCurrencyService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let fiscalMonthService: FiscalMonthService;
+  let prepaymentCompilationRequestService: PrepaymentCompilationRequestService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -65,6 +71,8 @@ describe('PrepaymentAmortization Management Update Component', () => {
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    fiscalMonthService = TestBed.inject(FiscalMonthService);
+    prepaymentCompilationRequestService = TestBed.inject(PrepaymentCompilationRequestService);
 
     comp = fixture.componentInstance;
   });
@@ -157,6 +165,54 @@ describe('PrepaymentAmortization Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call FiscalMonth query and add missing value', () => {
+      const prepaymentAmortization: IPrepaymentAmortization = { id: 456 };
+      const fiscalMonth: IFiscalMonth = { id: 97025 };
+      prepaymentAmortization.fiscalMonth = fiscalMonth;
+
+      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 8719 }];
+      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
+      const additionalFiscalMonths = [fiscalMonth];
+      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
+      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentAmortization });
+      comp.ngOnInit();
+
+      expect(fiscalMonthService.query).toHaveBeenCalled();
+      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
+      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call PrepaymentCompilationRequest query and add missing value', () => {
+      const prepaymentAmortization: IPrepaymentAmortization = { id: 456 };
+      const prepaymentCompilationRequest: IPrepaymentCompilationRequest = { id: 36110 };
+      prepaymentAmortization.prepaymentCompilationRequest = prepaymentCompilationRequest;
+
+      const prepaymentCompilationRequestCollection: IPrepaymentCompilationRequest[] = [{ id: 36228 }];
+      jest
+        .spyOn(prepaymentCompilationRequestService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: prepaymentCompilationRequestCollection })));
+      const additionalPrepaymentCompilationRequests = [prepaymentCompilationRequest];
+      const expectedCollection: IPrepaymentCompilationRequest[] = [
+        ...additionalPrepaymentCompilationRequests,
+        ...prepaymentCompilationRequestCollection,
+      ];
+      jest
+        .spyOn(prepaymentCompilationRequestService, 'addPrepaymentCompilationRequestToCollectionIfMissing')
+        .mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentAmortization });
+      comp.ngOnInit();
+
+      expect(prepaymentCompilationRequestService.query).toHaveBeenCalled();
+      expect(prepaymentCompilationRequestService.addPrepaymentCompilationRequestToCollectionIfMissing).toHaveBeenCalledWith(
+        prepaymentCompilationRequestCollection,
+        ...additionalPrepaymentCompilationRequests
+      );
+      expect(comp.prepaymentCompilationRequestsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const prepaymentAmortization: IPrepaymentAmortization = { id: 456 };
       const prepaymentAccount: IPrepaymentAccount = { id: 29845 };
@@ -169,6 +225,10 @@ describe('PrepaymentAmortization Management Update Component', () => {
       prepaymentAmortization.creditAccount = creditAccount;
       const placeholders: IPlaceholder = { id: 68088 };
       prepaymentAmortization.placeholders = [placeholders];
+      const fiscalMonth: IFiscalMonth = { id: 60534 };
+      prepaymentAmortization.fiscalMonth = fiscalMonth;
+      const prepaymentCompilationRequest: IPrepaymentCompilationRequest = { id: 2753 };
+      prepaymentAmortization.prepaymentCompilationRequest = prepaymentCompilationRequest;
 
       activatedRoute.data = of({ prepaymentAmortization });
       comp.ngOnInit();
@@ -179,6 +239,8 @@ describe('PrepaymentAmortization Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(creditAccount);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
+      expect(comp.prepaymentCompilationRequestsSharedCollection).toContain(prepaymentCompilationRequest);
     });
   });
 
@@ -275,6 +337,22 @@ describe('PrepaymentAmortization Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalMonthById', () => {
+      it('Should return tracked FiscalMonth primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalMonthById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackPrepaymentCompilationRequestById', () => {
+      it('Should return tracked PrepaymentCompilationRequest primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackPrepaymentCompilationRequestById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

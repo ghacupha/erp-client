@@ -58,6 +58,8 @@ export class PrepaymentAmortizationUpdatePage {
   debitAccountSelect = element(by.id('field_debitAccount'));
   creditAccountSelect = element(by.id('field_creditAccount'));
   placeholderSelect = element(by.id('field_placeholder'));
+  fiscalMonthSelect = element(by.id('field_fiscalMonth'));
+  prepaymentCompilationRequestSelect = element(by.id('field_prepaymentCompilationRequest'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -177,6 +179,38 @@ export class PrepaymentAmortizationUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async fiscalMonthSelectLastOption(): Promise<void> {
+    await this.fiscalMonthSelect.all(by.tagName('option')).last().click();
+  }
+
+  async fiscalMonthSelectOption(option: string): Promise<void> {
+    await this.fiscalMonthSelect.sendKeys(option);
+  }
+
+  getFiscalMonthSelect(): ElementFinder {
+    return this.fiscalMonthSelect;
+  }
+
+  async getFiscalMonthSelectedOption(): Promise<string> {
+    return await this.fiscalMonthSelect.element(by.css('option:checked')).getText();
+  }
+
+  async prepaymentCompilationRequestSelectLastOption(): Promise<void> {
+    await this.prepaymentCompilationRequestSelect.all(by.tagName('option')).last().click();
+  }
+
+  async prepaymentCompilationRequestSelectOption(option: string): Promise<void> {
+    await this.prepaymentCompilationRequestSelect.sendKeys(option);
+  }
+
+  getPrepaymentCompilationRequestSelect(): ElementFinder {
+    return this.prepaymentCompilationRequestSelect;
+  }
+
+  async getPrepaymentCompilationRequestSelectedOption(): Promise<string> {
+    return await this.prepaymentCompilationRequestSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

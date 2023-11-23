@@ -21,6 +21,8 @@ import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/
 import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
 
 export interface IPrepaymentAmortization {
   id?: number;
@@ -33,6 +35,8 @@ export interface IPrepaymentAmortization {
   debitAccount?: ITransactionAccount | null;
   creditAccount?: ITransactionAccount | null;
   placeholders?: IPlaceholder[] | null;
+  fiscalMonth?: IFiscalMonth;
+  prepaymentCompilationRequest?: IPrepaymentCompilationRequest;
 }
 
 export class PrepaymentAmortization implements IPrepaymentAmortization {
@@ -46,7 +50,9 @@ export class PrepaymentAmortization implements IPrepaymentAmortization {
     public settlementCurrency?: ISettlementCurrency | null,
     public debitAccount?: ITransactionAccount | null,
     public creditAccount?: ITransactionAccount | null,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public fiscalMonth?: IFiscalMonth,
+    public prepaymentCompilationRequest?: IPrepaymentCompilationRequest
   ) {
     this.inactive = this.inactive ?? false;
   }

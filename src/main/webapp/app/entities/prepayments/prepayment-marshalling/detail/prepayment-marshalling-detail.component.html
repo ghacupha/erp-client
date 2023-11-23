@@ -37,13 +37,13 @@
         <dd>
           <span>{{ prepaymentMarshalling.inactive }}</span>
         </dd>
-        <dt><span>Amortization Commencement Date</span></dt>
-        <dd>
-          <span>{{ prepaymentMarshalling.amortizationCommencementDate | formatMediumDate }}</span>
-        </dd>
         <dt><span>Amortization Periods</span></dt>
         <dd>
           <span>{{ prepaymentMarshalling.amortizationPeriods }}</span>
+        </dd>
+        <dt><span>Processed</span></dt>
+        <dd>
+          <span>{{ prepaymentMarshalling.processed }}</span>
         </dd>
         <dt><span>Prepayment Account</span></dt>
         <dd>
@@ -59,6 +59,22 @@
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>First Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.firstFiscalMonth">
+            <a [routerLink]="['/fiscal-month', prepaymentMarshalling.firstFiscalMonth?.id, 'view']">{{
+              prepaymentMarshalling.firstFiscalMonth?.startDate
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Last Fiscal Month</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.lastFiscalMonth">
+            <a [routerLink]="['/fiscal-month', prepaymentMarshalling.lastFiscalMonth?.id, 'view']">{{
+              prepaymentMarshalling.lastFiscalMonth?.endDate
+            }}</a>
+          </div>
         </dd>
       </dl>
 

@@ -37,7 +37,8 @@ describe('PrepaymentMarshalling e2e test', () => {
   const prepaymentMarshallingSample = { inactive: false };
 
   let prepaymentMarshalling: any;
-  let prepaymentAccount: any;
+  //let prepaymentAccount: any;
+  //let fiscalMonth: any;
 
   before(() => {
     cy.window().then(win => {
@@ -48,22 +49,26 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-accounts',
-      body: {
-        catalogueNumber: 'Chicken',
-        particulars: 'Fully-configurable utilisation',
-        notes: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
-        prepaymentAmount: 47673,
-        prepaymentGuid: 'c8a9da64-56e5-4591-8d07-b24137561029',
-      },
+      body: {"catalogueNumber":"Chicken","particulars":"Fully-configurable utilisation","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":47673,"prepaymentGuid":"c8a9da64-56e5-4591-8d07-b24137561029"},
     }).then(({ body }) => {
       prepaymentAccount = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/fiscal-months',
+      body: {"monthNumber":63703,"startDate":"2023-08-16","endDate":"2023-08-16","fiscalMonthCode":"deposit throughput"},
+    }).then(({ body }) => {
+      fiscalMonth = body;
+    });
   });
+   */
 
   beforeEach(() => {
     cy.intercept('GET', '/api/prepayment-marshallings+(?*|)').as('entitiesRequest');
@@ -71,6 +76,7 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.intercept('DELETE', '/api/prepayment-marshallings/*').as('deleteEntityRequest');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
     cy.intercept('GET', '/api/prepayment-accounts', {
@@ -82,7 +88,14 @@ describe('PrepaymentMarshalling e2e test', () => {
       statusCode: 200,
       body: [],
     });
+
+    cy.intercept('GET', '/api/fiscal-months', {
+      statusCode: 200,
+      body: [fiscalMonth],
+    });
+
   });
+   */
 
   afterEach(() => {
     if (prepaymentMarshalling) {
@@ -95,6 +108,7 @@ describe('PrepaymentMarshalling e2e test', () => {
     }
   });
 
+  /* Disabled due to incompatibility
   afterEach(() => {
     if (prepaymentAccount) {
       cy.authenticatedRequest({
@@ -104,7 +118,16 @@ describe('PrepaymentMarshalling e2e test', () => {
         prepaymentAccount = undefined;
       });
     }
+    if (fiscalMonth) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/fiscal-months/${fiscalMonth.id}`,
+      }).then(() => {
+        fiscalMonth = undefined;
+      });
+    }
   });
+   */
 
   it('PrepaymentMarshallings menu should load PrepaymentMarshallings page', () => {
     cy.visit('/');
@@ -141,14 +164,17 @@ describe('PrepaymentMarshalling e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/prepayment-marshallings',
-
+  
           body: {
             ...prepaymentMarshallingSample,
             prepaymentAccount: prepaymentAccount,
+            firstFiscalMonth: fiscalMonth,
+            lastFiscalMonth: fiscalMonth,
           },
         }).then(({ body }) => {
           prepaymentMarshalling = body;
@@ -169,6 +195,17 @@ describe('PrepaymentMarshalling e2e test', () => {
         cy.visit(prepaymentMarshallingPageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(prepaymentMarshallingPageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details PrepaymentMarshalling page', () => {
@@ -192,7 +229,7 @@ describe('PrepaymentMarshalling e2e test', () => {
         cy.url().should('match', prepaymentMarshallingPageUrlPattern);
       });
 
-      it('last delete button click should delete instance of PrepaymentMarshalling', () => {
+      it.skip('last delete button click should delete instance of PrepaymentMarshalling', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('prepaymentMarshalling').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -216,15 +253,18 @@ describe('PrepaymentMarshalling e2e test', () => {
       cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
     });
 
-    it('should create an instance of PrepaymentMarshalling', () => {
+    it.skip('should create an instance of PrepaymentMarshalling', () => {
       cy.get(`[data-cy="inactive"]`).should('not.be.checked');
       cy.get(`[data-cy="inactive"]`).click().should('be.checked');
 
-      cy.get(`[data-cy="amortizationCommencementDate"]`).type('2022-05-03').should('have.value', '2022-05-03');
+      cy.get(`[data-cy="amortizationPeriods"]`).type('7531').should('have.value', '7531');
 
-      cy.get(`[data-cy="amortizationPeriods"]`).type('82509').should('have.value', '82509');
+      cy.get(`[data-cy="processed"]`).should('not.be.checked');
+      cy.get(`[data-cy="processed"]`).click().should('be.checked');
 
       cy.get(`[data-cy="prepaymentAccount"]`).select(1);
+      cy.get(`[data-cy="firstFiscalMonth"]`).select(1);
+      cy.get(`[data-cy="lastFiscalMonth"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -2665,6 +2665,18 @@
               <span>Work In Progress Overview</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="prepayment-compilation-request"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Prepayment Compilation Request</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

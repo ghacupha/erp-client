@@ -49,11 +49,13 @@ export class PrepaymentMarshallingUpdatePage {
 
   idInput = element(by.id('field_id'));
   inactiveInput = element(by.id('field_inactive'));
-  amortizationCommencementDateInput = element(by.id('field_amortizationCommencementDate'));
   amortizationPeriodsInput = element(by.id('field_amortizationPeriods'));
+  processedInput = element(by.id('field_processed'));
 
   prepaymentAccountSelect = element(by.id('field_prepaymentAccount'));
   placeholderSelect = element(by.id('field_placeholder'));
+  firstFiscalMonthSelect = element(by.id('field_firstFiscalMonth'));
+  lastFiscalMonthSelect = element(by.id('field_lastFiscalMonth'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -71,20 +73,16 @@ export class PrepaymentMarshallingUpdatePage {
     return this.inactiveInput;
   }
 
-  async setAmortizationCommencementDateInput(amortizationCommencementDate: string): Promise<void> {
-    await this.amortizationCommencementDateInput.sendKeys(amortizationCommencementDate);
-  }
-
-  async getAmortizationCommencementDateInput(): Promise<string> {
-    return await this.amortizationCommencementDateInput.getAttribute('value');
-  }
-
   async setAmortizationPeriodsInput(amortizationPeriods: string): Promise<void> {
     await this.amortizationPeriodsInput.sendKeys(amortizationPeriods);
   }
 
   async getAmortizationPeriodsInput(): Promise<string> {
     return await this.amortizationPeriodsInput.getAttribute('value');
+  }
+
+  getProcessedInput(): ElementFinder {
+    return this.processedInput;
   }
 
   async prepaymentAccountSelectLastOption(): Promise<void> {
@@ -117,6 +115,38 @@ export class PrepaymentMarshallingUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async firstFiscalMonthSelectLastOption(): Promise<void> {
+    await this.firstFiscalMonthSelect.all(by.tagName('option')).last().click();
+  }
+
+  async firstFiscalMonthSelectOption(option: string): Promise<void> {
+    await this.firstFiscalMonthSelect.sendKeys(option);
+  }
+
+  getFirstFiscalMonthSelect(): ElementFinder {
+    return this.firstFiscalMonthSelect;
+  }
+
+  async getFirstFiscalMonthSelectedOption(): Promise<string> {
+    return await this.firstFiscalMonthSelect.element(by.css('option:checked')).getText();
+  }
+
+  async lastFiscalMonthSelectLastOption(): Promise<void> {
+    await this.lastFiscalMonthSelect.all(by.tagName('option')).last().click();
+  }
+
+  async lastFiscalMonthSelectOption(option: string): Promise<void> {
+    await this.lastFiscalMonthSelect.sendKeys(option);
+  }
+
+  getLastFiscalMonthSelect(): ElementFinder {
+    return this.lastFiscalMonthSelect;
+  }
+
+  async getLastFiscalMonthSelectedOption(): Promise<string> {
+    return await this.lastFiscalMonthSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

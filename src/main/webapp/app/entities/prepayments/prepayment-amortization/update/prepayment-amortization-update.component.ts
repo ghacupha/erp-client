@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
@@ -33,6 +33,10 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
+import { PrepaymentCompilationRequestService } from 'app/entities/prepayments/prepayment-compilation-request/service/prepayment-compilation-request.service';
 
 @Component({
   selector: 'jhi-prepayment-amortization-update',
@@ -45,6 +49,8 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+  prepaymentCompilationRequestsSharedCollection: IPrepaymentCompilationRequest[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -57,6 +63,8 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     debitAccount: [],
     creditAccount: [],
     placeholders: [],
+    fiscalMonth: [null, Validators.required],
+    prepaymentCompilationRequest: [null, Validators.required],
   });
 
   constructor(
@@ -65,6 +73,8 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     protected settlementCurrencyService: SettlementCurrencyService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected fiscalMonthService: FiscalMonthService,
+    protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -104,6 +114,14 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
+    return item.id!;
+  }
+
+  trackPrepaymentCompilationRequestById(index: number, item: IPrepaymentCompilationRequest): number {
     return item.id!;
   }
 
@@ -149,6 +167,8 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       debitAccount: prepaymentAmortization.debitAccount,
       creditAccount: prepaymentAmortization.creditAccount,
       placeholders: prepaymentAmortization.placeholders,
+      fiscalMonth: prepaymentAmortization.fiscalMonth,
+      prepaymentCompilationRequest: prepaymentAmortization.prepaymentCompilationRequest,
     });
 
     this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
@@ -168,6 +188,15 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       this.placeholdersSharedCollection,
       ...(prepaymentAmortization.placeholders ?? [])
     );
+    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
+      this.fiscalMonthsSharedCollection,
+      prepaymentAmortization.fiscalMonth
+    );
+    this.prepaymentCompilationRequestsSharedCollection =
+      this.prepaymentCompilationRequestService.addPrepaymentCompilationRequestToCollectionIfMissing(
+        this.prepaymentCompilationRequestsSharedCollection,
+        prepaymentAmortization.prepaymentCompilationRequest
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -220,6 +249,32 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.fiscalMonthService
+      .query()
+      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
+      .pipe(
+        map((fiscalMonths: IFiscalMonth[]) =>
+          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(fiscalMonths, this.editForm.get('fiscalMonth')!.value)
+        )
+      )
+      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
+
+    this.prepaymentCompilationRequestService
+      .query()
+      .pipe(map((res: HttpResponse<IPrepaymentCompilationRequest[]>) => res.body ?? []))
+      .pipe(
+        map((prepaymentCompilationRequests: IPrepaymentCompilationRequest[]) =>
+          this.prepaymentCompilationRequestService.addPrepaymentCompilationRequestToCollectionIfMissing(
+            prepaymentCompilationRequests,
+            this.editForm.get('prepaymentCompilationRequest')!.value
+          )
+        )
+      )
+      .subscribe(
+        (prepaymentCompilationRequests: IPrepaymentCompilationRequest[]) =>
+          (this.prepaymentCompilationRequestsSharedCollection = prepaymentCompilationRequests)
+      );
   }
 
   protected createFromForm(): IPrepaymentAmortization {
@@ -235,6 +290,8 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       debitAccount: this.editForm.get(['debitAccount'])!.value,
       creditAccount: this.editForm.get(['creditAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
+      prepaymentCompilationRequest: this.editForm.get(['prepaymentCompilationRequest'])!.value,
     };
   }
 }

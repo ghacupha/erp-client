@@ -260,7 +260,8 @@
       "CardState",
       "WorkInProgressOutstandingReport",
       "WorkInProgressReport",
-      "WorkInProgressOverview"
+      "WorkInProgressOverview",
+      "PrepaymentCompilationRequest"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

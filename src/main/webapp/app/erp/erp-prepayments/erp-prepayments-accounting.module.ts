@@ -95,6 +95,18 @@ import { NgModule } from '@angular/core';
               m => m.PrepaymentAmortizationModule
             ),
         },
+        {
+          path: 'prepayment-compilation-request',
+          data: {
+            pageTitle: 'ERP | Prepayment Compilation',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-compilation-request/prepayment-compilation-request.module').then(
+              m => m.PrepaymentCompilationRequestModule
+            ),
+        },
       ]
     )
   ]

@@ -69,10 +69,12 @@ describe('PrepaymentMarshalling e2e test', () => {
 
         await promise.all([
             prepaymentMarshallingUpdatePage.getInactiveInput().click(),
-            prepaymentMarshallingUpdatePage.setAmortizationCommencementDateInput('2000-12-31'),
             prepaymentMarshallingUpdatePage.setAmortizationPeriodsInput('5'),
+            prepaymentMarshallingUpdatePage.getProcessedInput().click(),
             prepaymentMarshallingUpdatePage.prepaymentAccountSelectLastOption(),
             // prepaymentMarshallingUpdatePage.placeholderSelectLastOption(),
+            prepaymentMarshallingUpdatePage.firstFiscalMonthSelectLastOption(),
+            prepaymentMarshallingUpdatePage.lastFiscalMonthSelectLastOption(),
         ]);
 
         await prepaymentMarshallingUpdatePage.save();

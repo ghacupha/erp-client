@@ -31,6 +31,8 @@ import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 
 import { PrepaymentMarshallingUpdateComponent } from './prepayment-marshalling-update.component';
 
@@ -41,6 +43,7 @@ describe('PrepaymentMarshalling Management Update Component', () => {
   let prepaymentMarshallingService: PrepaymentMarshallingService;
   let prepaymentAccountService: PrepaymentAccountService;
   let placeholderService: PlaceholderService;
+  let fiscalMonthService: FiscalMonthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,6 +59,7 @@ describe('PrepaymentMarshalling Management Update Component', () => {
     prepaymentMarshallingService = TestBed.inject(PrepaymentMarshallingService);
     prepaymentAccountService = TestBed.inject(PrepaymentAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    fiscalMonthService = TestBed.inject(FiscalMonthService);
 
     comp = fixture.componentInstance;
   });
@@ -102,12 +106,37 @@ describe('PrepaymentMarshalling Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call FiscalMonth query and add missing value', () => {
+      const prepaymentMarshalling: IPrepaymentMarshalling = { id: 456 };
+      const firstFiscalMonth: IFiscalMonth = { id: 40032 };
+      prepaymentMarshalling.firstFiscalMonth = firstFiscalMonth;
+      const lastFiscalMonth: IFiscalMonth = { id: 4790 };
+      prepaymentMarshalling.lastFiscalMonth = lastFiscalMonth;
+
+      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 94111 }];
+      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
+      const additionalFiscalMonths = [firstFiscalMonth, lastFiscalMonth];
+      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
+      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentMarshalling });
+      comp.ngOnInit();
+
+      expect(fiscalMonthService.query).toHaveBeenCalled();
+      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
+      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const prepaymentMarshalling: IPrepaymentMarshalling = { id: 456 };
       const prepaymentAccount: IPrepaymentAccount = { id: 39745 };
       prepaymentMarshalling.prepaymentAccount = prepaymentAccount;
       const placeholders: IPlaceholder = { id: 72390 };
       prepaymentMarshalling.placeholders = [placeholders];
+      const firstFiscalMonth: IFiscalMonth = { id: 2653 };
+      prepaymentMarshalling.firstFiscalMonth = firstFiscalMonth;
+      const lastFiscalMonth: IFiscalMonth = { id: 50711 };
+      prepaymentMarshalling.lastFiscalMonth = lastFiscalMonth;
 
       activatedRoute.data = of({ prepaymentMarshalling });
       comp.ngOnInit();
@@ -115,6 +144,8 @@ describe('PrepaymentMarshalling Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(prepaymentMarshalling));
       expect(comp.prepaymentAccountsSharedCollection).toContain(prepaymentAccount);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.fiscalMonthsSharedCollection).toContain(firstFiscalMonth);
+      expect(comp.fiscalMonthsSharedCollection).toContain(lastFiscalMonth);
     });
   });
 
@@ -195,6 +226,14 @@ describe('PrepaymentMarshalling Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackFiscalMonthById', () => {
+      it('Should return tracked FiscalMonth primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackFiscalMonthById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
