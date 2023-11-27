@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ import { NgModule } from '@angular/core';
               m => m.AmortizationSequenceModule
             ),
         },
-      {
+        {
           path: 'prepayment-mapping',
           data: {
             pageTitle: 'ERP | Prepayment Mapping',
@@ -69,6 +69,42 @@ import { NgModule } from '@angular/core';
           loadChildren: () =>
             import('./prepayment-mapping/prepayment-mapping.module').then(
               m => m.PrepaymentMappingModule
+            ),
+        },
+        {
+          path: 'prepayment-marshalling',
+          data: {
+            pageTitle: 'ERP | Prepayment Marshalling',
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-marshalling/prepayment-marshalling.module').then(
+              m => m.PrepaymentMarshallingModule
+            ),
+        },
+        {
+          path: 'prepayment-amortization',
+          data: {
+            pageTitle: 'ERP | Prepayment Amortization',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-amortization/prepayment-amortization.module').then(
+              m => m.PrepaymentAmortizationModule
+            ),
+        },
+        {
+          path: 'prepayment-compilation-request',
+          data: {
+            pageTitle: 'ERP | Prepayment Compilation',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-compilation-request/prepayment-compilation-request.module').then(
+              m => m.PrepaymentCompilationRequestModule
             ),
         },
       ]

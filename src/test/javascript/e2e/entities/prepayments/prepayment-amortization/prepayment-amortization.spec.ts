@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -16,12 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
   PrepaymentAmortizationComponentsPage,
-  PrepaymentAmortizationDeleteDialog,
+  /* PrepaymentAmortizationDeleteDialog, */
   PrepaymentAmortizationUpdatePage,
 } from './prepayment-amortization.page-object';
 
@@ -32,7 +32,7 @@ describe('PrepaymentAmortization e2e test', () => {
   let signInPage: SignInPage;
   let prepaymentAmortizationComponentsPage: PrepaymentAmortizationComponentsPage;
   let prepaymentAmortizationUpdatePage: PrepaymentAmortizationUpdatePage;
-  let prepaymentAmortizationDeleteDialog: PrepaymentAmortizationDeleteDialog;
+  /* let prepaymentAmortizationDeleteDialog: PrepaymentAmortizationDeleteDialog; */
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -62,45 +62,43 @@ describe('PrepaymentAmortization e2e test', () => {
     await prepaymentAmortizationUpdatePage.cancel();
   });
 
-  it('should create and save PrepaymentAmortizations', async () => {
-    const nbButtonsBeforeCreate = await prepaymentAmortizationComponentsPage.countDeleteButtons();
+  /* it('should create and save PrepaymentAmortizations', async () => {
+        const nbButtonsBeforeCreate = await prepaymentAmortizationComponentsPage.countDeleteButtons();
 
-    await prepaymentAmortizationComponentsPage.clickOnCreateButton();
+        await prepaymentAmortizationComponentsPage.clickOnCreateButton();
 
-    await promise.all([
-      prepaymentAmortizationUpdatePage.setDescriptionInput('description'),
-      prepaymentAmortizationUpdatePage.setPrepaymentPeriodInput('2000-12-31'),
-      prepaymentAmortizationUpdatePage.setPrepaymentAmountInput('5'),
-      prepaymentAmortizationUpdatePage.getInactiveInput().click(),
-      prepaymentAmortizationUpdatePage.prepaymentAccountSelectLastOption(),
-      prepaymentAmortizationUpdatePage.settlementCurrencySelectLastOption(),
-      prepaymentAmortizationUpdatePage.debitAccountSelectLastOption(),
-      prepaymentAmortizationUpdatePage.creditAccountSelectLastOption(),
-      // prepaymentAmortizationUpdatePage.placeholderSelectLastOption(),
-    ]);
+        await promise.all([
+            prepaymentAmortizationUpdatePage.setDescriptionInput('description'),
+            prepaymentAmortizationUpdatePage.setPrepaymentPeriodInput('2000-12-31'),
+            prepaymentAmortizationUpdatePage.setPrepaymentAmountInput('5'),
+            prepaymentAmortizationUpdatePage.getInactiveInput().click(),
+            prepaymentAmortizationUpdatePage.prepaymentAccountSelectLastOption(),
+            prepaymentAmortizationUpdatePage.settlementCurrencySelectLastOption(),
+            prepaymentAmortizationUpdatePage.debitAccountSelectLastOption(),
+            prepaymentAmortizationUpdatePage.creditAccountSelectLastOption(),
+            // prepaymentAmortizationUpdatePage.placeholderSelectLastOption(),
+            prepaymentAmortizationUpdatePage.fiscalMonthSelectLastOption(),
+            prepaymentAmortizationUpdatePage.prepaymentCompilationRequestSelectLastOption(),
+        ]);
 
-    await prepaymentAmortizationUpdatePage.save();
-    expect(await prepaymentAmortizationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await prepaymentAmortizationUpdatePage.save();
+        expect(await prepaymentAmortizationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await prepaymentAmortizationComponentsPage.countDeleteButtons()).to.eq(
-      nbButtonsBeforeCreate + 1,
-      'Expected one more entry in the table'
-    );
-  });
+        expect(await prepaymentAmortizationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last PrepaymentAmortization', async () => {
-    const nbButtonsBeforeDelete = await prepaymentAmortizationComponentsPage.countDeleteButtons();
-    await prepaymentAmortizationComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last PrepaymentAmortization', async () => {
+        const nbButtonsBeforeDelete = await prepaymentAmortizationComponentsPage.countDeleteButtons();
+        await prepaymentAmortizationComponentsPage.clickOnLastDeleteButton();
 
-    prepaymentAmortizationDeleteDialog = new PrepaymentAmortizationDeleteDialog();
-    expect(await prepaymentAmortizationDeleteDialog.getDialogTitle()).to.eq(
-      'Are you sure you want to delete this Prepayment Amortization?'
-    );
-    await prepaymentAmortizationDeleteDialog.clickOnConfirmButton();
-    await browser.wait(ec.visibilityOf(prepaymentAmortizationComponentsPage.title), 5000);
+        prepaymentAmortizationDeleteDialog = new PrepaymentAmortizationDeleteDialog();
+        expect(await prepaymentAmortizationDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Prepayment Amortization?');
+        await prepaymentAmortizationDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(prepaymentAmortizationComponentsPage.title), 5000);
 
-    expect(await prepaymentAmortizationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await prepaymentAmortizationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

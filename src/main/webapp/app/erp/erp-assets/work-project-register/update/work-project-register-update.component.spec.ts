@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,6 +36,8 @@ import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 describe('WorkProjectRegister Management Update Component', () => {
   let comp: WorkProjectRegisterUpdateComponent;
@@ -45,6 +47,7 @@ describe('WorkProjectRegister Management Update Component', () => {
   let dealerService: DealerService;
   let settlementCurrencyService: SettlementCurrencyService;
   let placeholderService: PlaceholderService;
+  let businessDocumentService: BusinessDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -61,6 +64,7 @@ describe('WorkProjectRegister Management Update Component', () => {
     dealerService = TestBed.inject(DealerService);
     settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
     placeholderService = TestBed.inject(PlaceholderService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
 
     comp = fixture.componentInstance;
   });
@@ -126,6 +130,28 @@ describe('WorkProjectRegister Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call BusinessDocument query and add missing value', () => {
+      const workProjectRegister: IWorkProjectRegister = { id: 456 };
+      const businessDocuments: IBusinessDocument[] = [{ id: 55695 }];
+      workProjectRegister.businessDocuments = businessDocuments;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 25329 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [...businessDocuments];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ workProjectRegister });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const workProjectRegister: IWorkProjectRegister = { id: 456 };
       const dealers: IDealer = { id: 32359 };
@@ -134,6 +160,8 @@ describe('WorkProjectRegister Management Update Component', () => {
       workProjectRegister.settlementCurrency = settlementCurrency;
       const placeholders: IPlaceholder = { id: 97619 };
       workProjectRegister.placeholders = [placeholders];
+      const businessDocuments: IBusinessDocument = { id: 39744 };
+      workProjectRegister.businessDocuments = [businessDocuments];
 
       activatedRoute.data = of({ workProjectRegister });
       comp.ngOnInit();
@@ -142,6 +170,7 @@ describe('WorkProjectRegister Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(dealers);
       expect(comp.settlementCurrenciesSharedCollection).toContain(settlementCurrency);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.businessDocumentsSharedCollection).toContain(businessDocuments);
     });
   });
 
@@ -233,6 +262,14 @@ describe('WorkProjectRegister Management Update Component', () => {
         expect(trackResult).toEqual(entity.id);
       });
     });
+
+    describe('trackBusinessDocumentById', () => {
+      it('Should return tracked BusinessDocument primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackBusinessDocumentById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
   });
 
   describe('Getting selected relationships', () => {
@@ -283,6 +320,32 @@ describe('WorkProjectRegister Management Update Component', () => {
         const option = { id: 123 };
         const selected = { id: 456 };
         const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
+    });
+
+    describe('getSelectedBusinessDocument', () => {
+      it('Should return option if no BusinessDocument is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedBusinessDocument(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected BusinessDocument for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedBusinessDocument(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this BusinessDocument is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedBusinessDocument(option, [selected]);
         expect(result === option).toEqual(true);
         expect(result === selected).toEqual(false);
       });

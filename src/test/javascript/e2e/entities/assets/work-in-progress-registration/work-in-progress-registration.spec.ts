@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -79,20 +79,22 @@ describe('WorkInProgressRegistration e2e test', () => {
       workInProgressRegistrationUpdatePage.setParticularsInput('particulars'),
       workInProgressRegistrationUpdatePage.setInstalmentAmountInput('5'),
       workInProgressRegistrationUpdatePage.setCommentsInput(absolutePath),
+      workInProgressRegistrationUpdatePage.setLevelOfCompletionInput('5'),
+      workInProgressRegistrationUpdatePage.getCompletedInput().click(),
       // workInProgressRegistrationUpdatePage.placeholderSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.serviceOutletSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.settlementSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.purchaseOrderSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.deliveryNoteSelectLastOption(),
-      // workInProgressRegistrationUpdatePage.jobSheetSelectLastOption(),
-      workInProgressRegistrationUpdatePage.dealerSelectLastOption(),
       workInProgressRegistrationUpdatePage.workInProgressGroupSelectLastOption(),
       workInProgressRegistrationUpdatePage.settlementCurrencySelectLastOption(),
       workInProgressRegistrationUpdatePage.workProjectRegisterSelectLastOption(),
       // workInProgressRegistrationUpdatePage.businessDocumentSelectLastOption(),
       // workInProgressRegistrationUpdatePage.assetAccessorySelectLastOption(),
       // workInProgressRegistrationUpdatePage.assetWarrantySelectLastOption(),
+      workInProgressRegistrationUpdatePage.invoiceSelectLastOption(),
+      workInProgressRegistrationUpdatePage.outletCodeSelectLastOption(),
+      workInProgressRegistrationUpdatePage.settlementTransactionSelectLastOption(),
+      workInProgressRegistrationUpdatePage.purchaseOrderSelectLastOption(),
+      workInProgressRegistrationUpdatePage.deliveryNoteSelectLastOption(),
+      workInProgressRegistrationUpdatePage.jobSheetSelectLastOption(),
+      workInProgressRegistrationUpdatePage.dealerSelectLastOption(),
     ]);
 
     await workInProgressRegistrationUpdatePage.save();

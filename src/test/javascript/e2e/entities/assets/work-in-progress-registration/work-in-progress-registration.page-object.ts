@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -52,21 +52,23 @@ export class WorkInProgressRegistrationUpdatePage {
   particularsInput = element(by.id('field_particulars'));
   instalmentAmountInput = element(by.id('field_instalmentAmount'));
   commentsInput = element(by.id('file_comments'));
+  levelOfCompletionInput = element(by.id('field_levelOfCompletion'));
+  completedInput = element(by.id('field_completed'));
 
   placeholderSelect = element(by.id('field_placeholder'));
-  paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
-  serviceOutletSelect = element(by.id('field_serviceOutlet'));
-  settlementSelect = element(by.id('field_settlement'));
-  purchaseOrderSelect = element(by.id('field_purchaseOrder'));
-  deliveryNoteSelect = element(by.id('field_deliveryNote'));
-  jobSheetSelect = element(by.id('field_jobSheet'));
-  dealerSelect = element(by.id('field_dealer'));
   workInProgressGroupSelect = element(by.id('field_workInProgressGroup'));
   settlementCurrencySelect = element(by.id('field_settlementCurrency'));
   workProjectRegisterSelect = element(by.id('field_workProjectRegister'));
   businessDocumentSelect = element(by.id('field_businessDocument'));
   assetAccessorySelect = element(by.id('field_assetAccessory'));
   assetWarrantySelect = element(by.id('field_assetWarranty'));
+  invoiceSelect = element(by.id('field_invoice'));
+  outletCodeSelect = element(by.id('field_outletCode'));
+  settlementTransactionSelect = element(by.id('field_settlementTransaction'));
+  purchaseOrderSelect = element(by.id('field_purchaseOrder'));
+  deliveryNoteSelect = element(by.id('field_deliveryNote'));
+  jobSheetSelect = element(by.id('field_jobSheet'));
+  dealerSelect = element(by.id('field_dealer'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -112,6 +114,18 @@ export class WorkInProgressRegistrationUpdatePage {
     return await this.commentsInput.getAttribute('value');
   }
 
+  async setLevelOfCompletionInput(levelOfCompletion: string): Promise<void> {
+    await this.levelOfCompletionInput.sendKeys(levelOfCompletion);
+  }
+
+  async getLevelOfCompletionInput(): Promise<string> {
+    return await this.levelOfCompletionInput.getAttribute('value');
+  }
+
+  getCompletedInput(): ElementFinder {
+    return this.completedInput;
+  }
+
   async placeholderSelectLastOption(): Promise<void> {
     await this.placeholderSelect.all(by.tagName('option')).last().click();
   }
@@ -126,118 +140,6 @@ export class WorkInProgressRegistrationUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
-  }
-
-  async paymentInvoicesSelectLastOption(): Promise<void> {
-    await this.paymentInvoicesSelect.all(by.tagName('option')).last().click();
-  }
-
-  async paymentInvoicesSelectOption(option: string): Promise<void> {
-    await this.paymentInvoicesSelect.sendKeys(option);
-  }
-
-  getPaymentInvoicesSelect(): ElementFinder {
-    return this.paymentInvoicesSelect;
-  }
-
-  async getPaymentInvoicesSelectedOption(): Promise<string> {
-    return await this.paymentInvoicesSelect.element(by.css('option:checked')).getText();
-  }
-
-  async serviceOutletSelectLastOption(): Promise<void> {
-    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
-  }
-
-  async serviceOutletSelectOption(option: string): Promise<void> {
-    await this.serviceOutletSelect.sendKeys(option);
-  }
-
-  getServiceOutletSelect(): ElementFinder {
-    return this.serviceOutletSelect;
-  }
-
-  async getServiceOutletSelectedOption(): Promise<string> {
-    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
-  }
-
-  async settlementSelectLastOption(): Promise<void> {
-    await this.settlementSelect.all(by.tagName('option')).last().click();
-  }
-
-  async settlementSelectOption(option: string): Promise<void> {
-    await this.settlementSelect.sendKeys(option);
-  }
-
-  getSettlementSelect(): ElementFinder {
-    return this.settlementSelect;
-  }
-
-  async getSettlementSelectedOption(): Promise<string> {
-    return await this.settlementSelect.element(by.css('option:checked')).getText();
-  }
-
-  async purchaseOrderSelectLastOption(): Promise<void> {
-    await this.purchaseOrderSelect.all(by.tagName('option')).last().click();
-  }
-
-  async purchaseOrderSelectOption(option: string): Promise<void> {
-    await this.purchaseOrderSelect.sendKeys(option);
-  }
-
-  getPurchaseOrderSelect(): ElementFinder {
-    return this.purchaseOrderSelect;
-  }
-
-  async getPurchaseOrderSelectedOption(): Promise<string> {
-    return await this.purchaseOrderSelect.element(by.css('option:checked')).getText();
-  }
-
-  async deliveryNoteSelectLastOption(): Promise<void> {
-    await this.deliveryNoteSelect.all(by.tagName('option')).last().click();
-  }
-
-  async deliveryNoteSelectOption(option: string): Promise<void> {
-    await this.deliveryNoteSelect.sendKeys(option);
-  }
-
-  getDeliveryNoteSelect(): ElementFinder {
-    return this.deliveryNoteSelect;
-  }
-
-  async getDeliveryNoteSelectedOption(): Promise<string> {
-    return await this.deliveryNoteSelect.element(by.css('option:checked')).getText();
-  }
-
-  async jobSheetSelectLastOption(): Promise<void> {
-    await this.jobSheetSelect.all(by.tagName('option')).last().click();
-  }
-
-  async jobSheetSelectOption(option: string): Promise<void> {
-    await this.jobSheetSelect.sendKeys(option);
-  }
-
-  getJobSheetSelect(): ElementFinder {
-    return this.jobSheetSelect;
-  }
-
-  async getJobSheetSelectedOption(): Promise<string> {
-    return await this.jobSheetSelect.element(by.css('option:checked')).getText();
-  }
-
-  async dealerSelectLastOption(): Promise<void> {
-    await this.dealerSelect.all(by.tagName('option')).last().click();
-  }
-
-  async dealerSelectOption(option: string): Promise<void> {
-    await this.dealerSelect.sendKeys(option);
-  }
-
-  getDealerSelect(): ElementFinder {
-    return this.dealerSelect;
-  }
-
-  async getDealerSelectedOption(): Promise<string> {
-    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async workInProgressGroupSelectLastOption(): Promise<void> {
@@ -334,6 +236,118 @@ export class WorkInProgressRegistrationUpdatePage {
 
   async getAssetWarrantySelectedOption(): Promise<string> {
     return await this.assetWarrantySelect.element(by.css('option:checked')).getText();
+  }
+
+  async invoiceSelectLastOption(): Promise<void> {
+    await this.invoiceSelect.all(by.tagName('option')).last().click();
+  }
+
+  async invoiceSelectOption(option: string): Promise<void> {
+    await this.invoiceSelect.sendKeys(option);
+  }
+
+  getInvoiceSelect(): ElementFinder {
+    return this.invoiceSelect;
+  }
+
+  async getInvoiceSelectedOption(): Promise<string> {
+    return await this.invoiceSelect.element(by.css('option:checked')).getText();
+  }
+
+  async outletCodeSelectLastOption(): Promise<void> {
+    await this.outletCodeSelect.all(by.tagName('option')).last().click();
+  }
+
+  async outletCodeSelectOption(option: string): Promise<void> {
+    await this.outletCodeSelect.sendKeys(option);
+  }
+
+  getOutletCodeSelect(): ElementFinder {
+    return this.outletCodeSelect;
+  }
+
+  async getOutletCodeSelectedOption(): Promise<string> {
+    return await this.outletCodeSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementTransactionSelectLastOption(): Promise<void> {
+    await this.settlementTransactionSelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementTransactionSelectOption(option: string): Promise<void> {
+    await this.settlementTransactionSelect.sendKeys(option);
+  }
+
+  getSettlementTransactionSelect(): ElementFinder {
+    return this.settlementTransactionSelect;
+  }
+
+  async getSettlementTransactionSelectedOption(): Promise<string> {
+    return await this.settlementTransactionSelect.element(by.css('option:checked')).getText();
+  }
+
+  async purchaseOrderSelectLastOption(): Promise<void> {
+    await this.purchaseOrderSelect.all(by.tagName('option')).last().click();
+  }
+
+  async purchaseOrderSelectOption(option: string): Promise<void> {
+    await this.purchaseOrderSelect.sendKeys(option);
+  }
+
+  getPurchaseOrderSelect(): ElementFinder {
+    return this.purchaseOrderSelect;
+  }
+
+  async getPurchaseOrderSelectedOption(): Promise<string> {
+    return await this.purchaseOrderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async deliveryNoteSelectLastOption(): Promise<void> {
+    await this.deliveryNoteSelect.all(by.tagName('option')).last().click();
+  }
+
+  async deliveryNoteSelectOption(option: string): Promise<void> {
+    await this.deliveryNoteSelect.sendKeys(option);
+  }
+
+  getDeliveryNoteSelect(): ElementFinder {
+    return this.deliveryNoteSelect;
+  }
+
+  async getDeliveryNoteSelectedOption(): Promise<string> {
+    return await this.deliveryNoteSelect.element(by.css('option:checked')).getText();
+  }
+
+  async jobSheetSelectLastOption(): Promise<void> {
+    await this.jobSheetSelect.all(by.tagName('option')).last().click();
+  }
+
+  async jobSheetSelectOption(option: string): Promise<void> {
+    await this.jobSheetSelect.sendKeys(option);
+  }
+
+  getJobSheetSelect(): ElementFinder {
+    return this.jobSheetSelect;
+  }
+
+  async getJobSheetSelectedOption(): Promise<string> {
+    return await this.jobSheetSelect.element(by.css('option:checked')).getText();
+  }
+
+  async dealerSelectLastOption(): Promise<void> {
+    await this.dealerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async dealerSelectOption(option: string): Promise<void> {
+    await this.dealerSelect.sendKeys(option);
+  }
+
+  getDealerSelect(): ElementFinder {
+    return this.dealerSelect;
+  }
+
+  async getDealerSelectedOption(): Promise<string> {
+    return await this.dealerSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

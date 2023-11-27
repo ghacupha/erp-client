@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -50,10 +50,17 @@ export class WorkInProgressTransferUpdatePage {
   idInput = element(by.id('field_id'));
   descriptionInput = element(by.id('field_description'));
   targetAssetNumberInput = element(by.id('field_targetAssetNumber'));
+  transferAmountInput = element(by.id('field_transferAmount'));
+  transferDateInput = element(by.id('field_transferDate'));
+  transferTypeSelect = element(by.id('field_transferType'));
 
-  workInProgressRegistrationSelect = element(by.id('field_workInProgressRegistration'));
   placeholderSelect = element(by.id('field_placeholder'));
   businessDocumentSelect = element(by.id('field_businessDocument'));
+  assetCategorySelect = element(by.id('field_assetCategory'));
+  workInProgressRegistrationSelect = element(by.id('field_workInProgressRegistration'));
+  serviceOutletSelect = element(by.id('field_serviceOutlet'));
+  settlementSelect = element(by.id('field_settlement'));
+  workProjectRegisterSelect = element(by.id('field_workProjectRegister'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -83,20 +90,32 @@ export class WorkInProgressTransferUpdatePage {
     return await this.targetAssetNumberInput.getAttribute('value');
   }
 
-  async workInProgressRegistrationSelectLastOption(): Promise<void> {
-    await this.workInProgressRegistrationSelect.all(by.tagName('option')).last().click();
+  async setTransferAmountInput(transferAmount: string): Promise<void> {
+    await this.transferAmountInput.sendKeys(transferAmount);
   }
 
-  async workInProgressRegistrationSelectOption(option: string): Promise<void> {
-    await this.workInProgressRegistrationSelect.sendKeys(option);
+  async getTransferAmountInput(): Promise<string> {
+    return await this.transferAmountInput.getAttribute('value');
   }
 
-  getWorkInProgressRegistrationSelect(): ElementFinder {
-    return this.workInProgressRegistrationSelect;
+  async setTransferDateInput(transferDate: string): Promise<void> {
+    await this.transferDateInput.sendKeys(transferDate);
   }
 
-  async getWorkInProgressRegistrationSelectedOption(): Promise<string> {
-    return await this.workInProgressRegistrationSelect.element(by.css('option:checked')).getText();
+  async getTransferDateInput(): Promise<string> {
+    return await this.transferDateInput.getAttribute('value');
+  }
+
+  async setTransferTypeSelect(transferType: string): Promise<void> {
+    await this.transferTypeSelect.sendKeys(transferType);
+  }
+
+  async getTransferTypeSelect(): Promise<string> {
+    return await this.transferTypeSelect.element(by.css('option:checked')).getText();
+  }
+
+  async transferTypeSelectLastOption(): Promise<void> {
+    await this.transferTypeSelect.all(by.tagName('option')).last().click();
   }
 
   async placeholderSelectLastOption(): Promise<void> {
@@ -129,6 +148,86 @@ export class WorkInProgressTransferUpdatePage {
 
   async getBusinessDocumentSelectedOption(): Promise<string> {
     return await this.businessDocumentSelect.element(by.css('option:checked')).getText();
+  }
+
+  async assetCategorySelectLastOption(): Promise<void> {
+    await this.assetCategorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async assetCategorySelectOption(option: string): Promise<void> {
+    await this.assetCategorySelect.sendKeys(option);
+  }
+
+  getAssetCategorySelect(): ElementFinder {
+    return this.assetCategorySelect;
+  }
+
+  async getAssetCategorySelectedOption(): Promise<string> {
+    return await this.assetCategorySelect.element(by.css('option:checked')).getText();
+  }
+
+  async workInProgressRegistrationSelectLastOption(): Promise<void> {
+    await this.workInProgressRegistrationSelect.all(by.tagName('option')).last().click();
+  }
+
+  async workInProgressRegistrationSelectOption(option: string): Promise<void> {
+    await this.workInProgressRegistrationSelect.sendKeys(option);
+  }
+
+  getWorkInProgressRegistrationSelect(): ElementFinder {
+    return this.workInProgressRegistrationSelect;
+  }
+
+  async getWorkInProgressRegistrationSelectedOption(): Promise<string> {
+    return await this.workInProgressRegistrationSelect.element(by.css('option:checked')).getText();
+  }
+
+  async serviceOutletSelectLastOption(): Promise<void> {
+    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
+  }
+
+  async serviceOutletSelectOption(option: string): Promise<void> {
+    await this.serviceOutletSelect.sendKeys(option);
+  }
+
+  getServiceOutletSelect(): ElementFinder {
+    return this.serviceOutletSelect;
+  }
+
+  async getServiceOutletSelectedOption(): Promise<string> {
+    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementSelectLastOption(): Promise<void> {
+    await this.settlementSelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementSelectOption(option: string): Promise<void> {
+    await this.settlementSelect.sendKeys(option);
+  }
+
+  getSettlementSelect(): ElementFinder {
+    return this.settlementSelect;
+  }
+
+  async getSettlementSelectedOption(): Promise<string> {
+    return await this.settlementSelect.element(by.css('option:checked')).getText();
+  }
+
+  async workProjectRegisterSelectLastOption(): Promise<void> {
+    await this.workProjectRegisterSelect.all(by.tagName('option')).last().click();
+  }
+
+  async workProjectRegisterSelectOption(option: string): Promise<void> {
+    await this.workProjectRegisterSelect.sendKeys(option);
+  }
+
+  getWorkProjectRegisterSelect(): ElementFinder {
+    return this.workProjectRegisterSelect;
+  }
+
+  async getWorkProjectRegisterSelectedOption(): Promise<string> {
+    return await this.workProjectRegisterSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

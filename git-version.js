@@ -1,5 +1,5 @@
 /*
- * Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+ * Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,11 +18,14 @@
 // This script runs operations *synchronously* which is normally not the best
 // approach, but it keeps things simple, readable, and for now is good enough.
 
-const { gitDescribeSync } = require('git-describe');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { gitDescribe, gitDescribeSync } = require('git-describe');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { writeFileSync } = require('fs');
 
+// eslint-disable-next-line no-undef
 const gitInfo = gitDescribeSync(__dirname, {
-  longSemver: false,
+  longSemver: true,
   dirtySemver: false,
   customArguments: ['--abbrev=16']
 });

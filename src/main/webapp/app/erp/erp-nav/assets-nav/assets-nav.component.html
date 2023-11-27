@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -186,6 +186,66 @@
             <span>Settlement</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="service-outlet"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Service Outlet</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="bank-branch-code"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Bank Branch Code</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="county-code"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>County Code</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="outlet-status"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Outlet Status</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="outlet-type"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Outlet Type</span>
+          </a>
+        </li>
       </ul>
     </li>
 
@@ -296,96 +356,7 @@
             <span>Fiscal Quarter</span>
           </a>
         </li>
-      </ul>
-    </li>
 
-    <!-- Navigation for locations-->
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
-        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="locations-menu">
-          <span>
-              <fa-icon icon="map-marked-alt"></fa-icon>
-              <span>
-                 Locations
-              </span>
-          </span>
-      </a>
-      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="locations-menu">
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="service-outlet"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Service Outlet</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="bank-branch-code"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Bank Branch Code</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="county-code"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>County Code</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="outlet-status"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Outlet Status</span>
-          </a>
-        </li>
-        <li>
-          <a
-            class="dropdown-item"
-            routerLink="outlet-type"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
-          >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>Outlet Type</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-
-    <!-- Navigation for maintenance modules-->
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
-        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="assets-maintenance-menu">
-          <span>
-              <fa-icon icon="wrench"></fa-icon>
-              <span>
-                 Maintenance
-              </span>
-          </span>
-      </a>
-      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="assets-maintenance-menu">
         <li>
           <a
             class="dropdown-item"
@@ -472,7 +443,9 @@
           </span>
           </a>
         </li>
+
       </ul>
     </li>
+
   </ul>
 </div>

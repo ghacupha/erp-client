@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
     <span>Work In Progress Transfers</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -68,22 +68,72 @@
   <div class="table-responsive" id="entities" *ngIf="workInProgressTransfers && workInProgressTransfers.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="targetAssetNumber">
             <span>Target Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="transferAmount"><span>Transfer Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferDate"><span>Transfer Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferType"><span>Transfer Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="workInProgressRegistration.sequenceNumber">
+            <span>Work In Progress Registration</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlement.paymentNumber"><span>Settlement</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="workProjectRegister.projectTitle">
+            <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
         <tr *ngFor="let workInProgressTransfer of workInProgressTransfers; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/work-in-progress-transfer', workInProgressTransfer.id, 'view']">{{ workInProgressTransfer.id }}</a>
           </td>
           <td>{{ workInProgressTransfer.description }}</td>
           <td>{{ workInProgressTransfer.targetAssetNumber }}</td>
+          <td>{{ workInProgressTransfer.transferAmount }}</td>
+          <td>{{ workInProgressTransfer.transferDate | formatMediumDate }}</td>
+          <td>{{ workInProgressTransfer.transferType }}</td>
+          <td>
+            <div *ngIf="workInProgressTransfer.assetCategory">
+              <a [routerLink]="['/asset-category', workInProgressTransfer.assetCategory?.id, 'view']">{{
+                workInProgressTransfer.assetCategory?.assetCategoryName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressTransfer.workInProgressRegistration">
+              <a [routerLink]="['/work-in-progress-registration', workInProgressTransfer.workInProgressRegistration?.id, 'view']">{{
+                workInProgressTransfer.workInProgressRegistration?.sequenceNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressTransfer.serviceOutlet">
+              <a [routerLink]="['/service-outlet', workInProgressTransfer.serviceOutlet?.id, 'view']">{{
+                workInProgressTransfer.serviceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressTransfer.settlement">
+              <a [routerLink]="['/settlement', workInProgressTransfer.settlement?.id, 'view']">{{
+                workInProgressTransfer.settlement?.paymentNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressTransfer.workProjectRegister">
+              <a [routerLink]="['/work-project-register', workInProgressTransfer.workProjectRegister?.id, 'view']">{{
+                workInProgressTransfer.workProjectRegister?.projectTitle
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button
@@ -115,23 +165,5 @@
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <div *ngIf="workInProgressTransfers && workInProgressTransfers.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
-    </div>
   </div>
 </div>

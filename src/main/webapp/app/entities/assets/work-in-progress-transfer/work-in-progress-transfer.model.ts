@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -16,17 +16,30 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IWorkInProgressRegistration } from 'app/entities/assets/work-in-progress-registration/work-in-progress-registration.model';
+import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
+import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
+import { IWorkInProgressRegistration } from 'app/entities/assets/work-in-progress-registration/work-in-progress-registration.model';
+import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
+import { IWorkProjectRegister } from 'app/entities/assets/work-project-register/work-project-register.model';
+import { WorkInProgressTransferType } from 'app/entities/enumerations/work-in-progress-transfer-type.model';
 
 export interface IWorkInProgressTransfer {
   id?: number;
   description?: string | null;
   targetAssetNumber?: string | null;
-  workInProgressRegistrations?: IWorkInProgressRegistration[] | null;
+  transferAmount?: number;
+  transferDate?: dayjs.Dayjs;
+  transferType?: WorkInProgressTransferType;
   placeholders?: IPlaceholder[] | null;
   businessDocuments?: IBusinessDocument[] | null;
+  assetCategory?: IAssetCategory | null;
+  workInProgressRegistration?: IWorkInProgressRegistration | null;
+  serviceOutlet?: IServiceOutlet | null;
+  settlement?: ISettlement | null;
+  workProjectRegister?: IWorkProjectRegister | null;
 }
 
 export class WorkInProgressTransfer implements IWorkInProgressTransfer {
@@ -34,9 +47,16 @@ export class WorkInProgressTransfer implements IWorkInProgressTransfer {
     public id?: number,
     public description?: string | null,
     public targetAssetNumber?: string | null,
-    public workInProgressRegistrations?: IWorkInProgressRegistration[] | null,
+    public transferAmount?: number,
+    public transferDate?: dayjs.Dayjs,
+    public transferType?: WorkInProgressTransferType,
     public placeholders?: IPlaceholder[] | null,
-    public businessDocuments?: IBusinessDocument[] | null
+    public businessDocuments?: IBusinessDocument[] | null,
+    public assetCategory?: IAssetCategory | null,
+    public workInProgressRegistration?: IWorkInProgressRegistration | null,
+    public serviceOutlet?: IServiceOutlet | null,
+    public settlement?: ISettlement | null,
+    public workProjectRegister?: IWorkProjectRegister | null
   ) {}
 }
 

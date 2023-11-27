@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -53,6 +53,23 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_projectTitle">Project Title</label>
+          <input
+            type="text"
+            class="form-control"
+            name="projectTitle"
+            id="field_projectTitle"
+            data-cy="projectTitle"
+            formControlName="projectTitle"
+          />
+          <div
+            *ngIf="editForm.get('projectTitle')!.invalid && (editForm.get('projectTitle')!.dirty || editForm.get('projectTitle')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('projectTitle')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
             type="text"
@@ -62,10 +79,56 @@
             data-cy="description"
             formControlName="description"
           />
-          <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('description')?.errors?.required"> This field is required. </small>
-          </div>
         </div>
+
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get(['settlementCurrency'])!.value"
+          (valueSelected)='updateSettlementCurrency($event)'
+          inputControlLabel='Currency Code (Required)'
+        >
+          <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalProjectCost">Total Project Cost</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalProjectCost"
+            id="field_totalProjectCost"
+            data-cy="totalProjectCost"
+            formControlName="totalProjectCost"
+          />
+        </div>
+
+        <jhi-m2m-dealer-form-control
+          ngDefaultControl
+          formControlName="dealers"
+          [inputValues]="editForm.get(['dealers'])!.value"
+          (valueSelected)='updateDealers($event)'
+          inputControlLabel='Dealers/Suppliers (List All)'
+          >
+        </jhi-m2m-dealer-form-control>
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_details">Details</label>
@@ -95,28 +158,16 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_totalProjectCost">Total Project Cost</label>
-          <input
-            type="number"
-            class="form-control"
-            name="totalProjectCost"
-            id="field_totalProjectCost"
-            data-cy="totalProjectCost"
-            formControlName="totalProjectCost"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_additionalNotes">Additional Notes</label>
           <div>
             <div *ngIf="editForm.get('additionalNotes')!.value" class="form-text text-danger clearfix">
               <a
                 class="pull-left"
                 (click)="openFile(editForm.get('additionalNotes')!.value, editForm.get('additionalNotesContentType')!.value)"
-                >open</a
+              >open</a
               ><br />
               <span class="pull-left"
-                >{{ editForm.get('additionalNotesContentType')!.value }}, {{ byteSize(editForm.get('additionalNotes')!.value) }}</span
+              >{{ editForm.get('additionalNotesContentType')!.value }}, {{ byteSize(editForm.get('additionalNotes')!.value) }}</span
               >
               <button
                 type="button"
@@ -148,63 +199,6 @@
             id="field_additionalNotesContentType"
             formControlName="additionalNotesContentType"
           />
-        </div>
-
-        <div class="form-group">
-          <label for="field_dealers">Dealers</label>
-          <select class="form-control" id="field_dealers" data-cy="dealers" multiple name="dealers" formControlName="dealers">
-            <option
-              [ngValue]="getSelectedDealer(dealerOption, editForm.get('dealers')!.value)"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['dealers'])!.invalid && (editForm.get(['dealers'])!.dirty || editForm.get(['dealers'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealers'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
-          <select
-            class="form-control"
-            id="field_settlementCurrency"
-            data-cy="settlementCurrency"
-            name="settlementCurrency"
-            formControlName="settlementCurrency"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
         </div>
       </div>
 

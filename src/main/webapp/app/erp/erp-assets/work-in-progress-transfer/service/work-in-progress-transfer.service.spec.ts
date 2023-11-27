@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,10 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import * as dayjs from 'dayjs';
 
+import { DATE_FORMAT } from 'app/config/input.constants';
+import { WorkInProgressTransferType } from 'app/entities/enumerations/work-in-progress-transfer-type.model';
 import { IWorkInProgressTransfer, WorkInProgressTransfer } from '../work-in-progress-transfer.model';
 
 import { WorkInProgressTransferService } from './work-in-progress-transfer.service';
@@ -28,6 +31,7 @@ describe('WorkInProgressTransfer Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: IWorkInProgressTransfer;
   let expectedResult: IWorkInProgressTransfer | IWorkInProgressTransfer[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,17 +40,26 @@ describe('WorkInProgressTransfer Service', () => {
     expectedResult = null;
     service = TestBed.inject(WorkInProgressTransferService);
     httpMock = TestBed.inject(HttpTestingController);
+    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       description: 'AAAAAAA',
       targetAssetNumber: 'AAAAAAA',
+      transferAmount: 0,
+      transferDate: currentDate,
+      transferType: WorkInProgressTransferType.DEBIT_TRANSFER,
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = Object.assign(
+        {
+          transferDate: currentDate.format(DATE_FORMAT),
+        },
+        elemDefault
+      );
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -59,11 +72,17 @@ describe('WorkInProgressTransfer Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
+          transferDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          transferDate: currentDate,
+        },
+        returnedFromService
+      );
 
       service.create(new WorkInProgressTransfer()).subscribe(resp => (expectedResult = resp.body));
 
@@ -78,11 +97,19 @@ describe('WorkInProgressTransfer Service', () => {
           id: 1,
           description: 'BBBBBB',
           targetAssetNumber: 'BBBBBB',
+          transferAmount: 1,
+          transferDate: currentDate.format(DATE_FORMAT),
+          transferType: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          transferDate: currentDate,
+        },
+        returnedFromService
+      );
 
       service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -95,13 +122,19 @@ describe('WorkInProgressTransfer Service', () => {
       const patchObject = Object.assign(
         {
           description: 'BBBBBB',
+          transferType: 'BBBBBB',
         },
         new WorkInProgressTransfer()
       );
 
       const returnedFromService = Object.assign(patchObject, elemDefault);
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          transferDate: currentDate,
+        },
+        returnedFromService
+      );
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -116,11 +149,19 @@ describe('WorkInProgressTransfer Service', () => {
           id: 1,
           description: 'BBBBBB',
           targetAssetNumber: 'BBBBBB',
+          transferAmount: 1,
+          transferDate: currentDate.format(DATE_FORMAT),
+          transferType: 'BBBBBB',
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          transferDate: currentDate,
+        },
+        returnedFromService
+      );
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -167,7 +208,7 @@ describe('WorkInProgressTransfer Service', () => {
       });
 
       it('should add only unique WorkInProgressTransfer to an array', () => {
-        const workInProgressTransferArray: IWorkInProgressTransfer[] = [{ id: 123 }, { id: 456 }, { id: 22379 }];
+        const workInProgressTransferArray: IWorkInProgressTransfer[] = [{ id: 123 }, { id: 456 }, { id: 89955 }];
         const workInProgressTransferCollection: IWorkInProgressTransfer[] = [{ id: 123 }];
         expectedResult = service.addWorkInProgressTransferToCollectionIfMissing(
           workInProgressTransferCollection,

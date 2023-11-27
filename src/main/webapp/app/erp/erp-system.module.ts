@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,6 @@ import { ErpPrepaymentsAccountingModule } from './erp-prepayments/erp-prepayment
 import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-account.module';
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
 import { EntityRoutingModule } from '../entities/entity-routing.module';
-import { SampleClientModule } from './erp-forms/Questionnaire/dynamic-form-question/sample-client/sample-client.module';
 import { ErpLeasesModule } from './erp-leases/erp-leases.module';
 import { ErpGDIModule } from "./erp-gdi/erp-gdi.module";
 
@@ -58,7 +57,6 @@ export const routes: Routes = [];
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
-    SampleClientModule,
     ErpLeasesModule,
     ErpGDIModule,
   ],

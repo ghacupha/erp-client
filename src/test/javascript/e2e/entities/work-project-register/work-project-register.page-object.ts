@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -49,6 +49,7 @@ export class WorkProjectRegisterUpdatePage {
 
   idInput = element(by.id('field_id'));
   catalogueNumberInput = element(by.id('field_catalogueNumber'));
+  projectTitleInput = element(by.id('field_projectTitle'));
   descriptionInput = element(by.id('field_description'));
   detailsInput = element(by.id('file_details'));
   totalProjectCostInput = element(by.id('field_totalProjectCost'));
@@ -77,6 +78,14 @@ export class WorkProjectRegisterUpdatePage {
 
   async getCatalogueNumberInput(): Promise<string> {
     return await this.catalogueNumberInput.getAttribute('value');
+  }
+
+  async setProjectTitleInput(projectTitle: string): Promise<void> {
+    await this.projectTitleInput.sendKeys(projectTitle);
+  }
+
+  async getProjectTitleInput(): Promise<string> {
+    return await this.projectTitleInput.getAttribute('value');
   }
 
   async setDescriptionInput(description: string): Promise<void> {

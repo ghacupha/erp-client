@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -19,8 +19,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
@@ -37,32 +40,43 @@ export class WorkInProgressTransferService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
-    return this.http.post<IWorkInProgressTransfer>(this.resourceUrl, workInProgressTransfer, { observe: 'response' });
+    const copy = this.convertDateFromClient(workInProgressTransfer);
+    return this.http
+      .post<IWorkInProgressTransfer>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
-    return this.http.put<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
-      workInProgressTransfer,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(workInProgressTransfer);
+    return this.http
+      .put<IWorkInProgressTransfer>(`${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(workInProgressTransfer: IWorkInProgressTransfer): Observable<EntityResponseType> {
-    return this.http.patch<IWorkInProgressTransfer>(
-      `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
-      workInProgressTransfer,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(workInProgressTransfer);
+    return this.http
+      .patch<IWorkInProgressTransfer>(
+        `${this.resourceUrl}/${getWorkInProgressTransferIdentifier(workInProgressTransfer) as number}`,
+        copy,
+        { observe: 'response' }
+      )
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IWorkInProgressTransfer>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<IWorkInProgressTransfer>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IWorkInProgressTransfer[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IWorkInProgressTransfer[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -71,7 +85,9 @@ export class WorkInProgressTransferService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IWorkInProgressTransfer[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IWorkInProgressTransfer[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addWorkInProgressTransferToCollectionIfMissing(
@@ -97,5 +113,27 @@ export class WorkInProgressTransferService {
       return [...workInProgressTransfersToAdd, ...workInProgressTransferCollection];
     }
     return workInProgressTransferCollection;
+  }
+
+  protected convertDateFromClient(workInProgressTransfer: IWorkInProgressTransfer): IWorkInProgressTransfer {
+    return Object.assign({}, workInProgressTransfer, {
+      transferDate: workInProgressTransfer.transferDate?.isValid() ? workInProgressTransfer.transferDate.format(DATE_FORMAT) : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.transferDate = res.body.transferDate ? dayjs(res.body.transferDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((workInProgressTransfer: IWorkInProgressTransfer) => {
+        workInProgressTransfer.transferDate = workInProgressTransfer.transferDate ? dayjs(workInProgressTransfer.transferDate) : undefined;
+      });
+    }
+    return res;
   }
 }

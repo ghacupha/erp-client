@@ -10,38 +10,76 @@
     {
       "fieldName": "targetAssetNumber",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "transferAmount",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transferDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transferType",
+      "fieldType": "WorkInProgressTransferType",
+      "fieldValues": "DEBIT_TRANSFER,REVERSAL,CREDIT_NOTE,CAPITALIZATION",
+      "fieldValidateRules": ["required"]
     }
   ],
-  "incrementalChangelog": false,
-  "jpaMetamodelFiltering": true,
-  "name": "WorkInProgressTransfer",
-  "pagination": "pagination",
-  "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "id",
-      "otherEntityName": "workInProgressRegistration",
-      "otherEntityRelationshipName": "workInProgressTransfer",
-      "ownerSide": true,
-      "relationshipName": "workInProgressRegistration",
-      "relationshipType": "many-to-many"
-    },
-    {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "workInProgressTransfer",
-      "ownerSide": true,
       "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressTransfer"
     },
     {
-      "otherEntityField": "documentTitle",
-      "otherEntityName": "businessDocument",
-      "otherEntityRelationshipName": "workInProgressTransfer",
-      "ownerSide": true,
       "relationshipName": "businessDocument",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "documentTitle",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "workInProgressTransfer"
+    },
+    {
+      "relationshipName": "assetCategory",
+      "otherEntityName": "assetCategory",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "assetCategoryName"
+    },
+    {
+      "relationshipName": "workInProgressRegistration",
+      "otherEntityName": "workInProgressRegistration",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "sequenceNumber"
+    },
+    {
+      "relationshipName": "serviceOutlet",
+      "otherEntityName": "serviceOutlet",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "outletCode"
+    },
+    {
+      "relationshipName": "settlement",
+      "otherEntityName": "settlement",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "paymentNumber"
+    },
+    {
+      "relationshipName": "workProjectRegister",
+      "otherEntityName": "workProjectRegister",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "projectTitle"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "infinite-scroll",
+  "name": "WorkInProgressTransfer",
+  "incrementalChangelog": false
 }

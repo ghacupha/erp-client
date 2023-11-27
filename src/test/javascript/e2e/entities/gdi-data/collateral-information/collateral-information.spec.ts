@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -70,7 +70,7 @@ describe('CollateralInformation e2e test', () => {
         await promise.all([
             collateralInformationUpdatePage.setReportingDateInput('2000-12-31'),
             collateralInformationUpdatePage.setCollateralIdInput('collateralId'),
-            collateralInformationUpdatePage.setLoanContractIdInput('203594685936471'),
+            collateralInformationUpdatePage.setLoanContractIdInput('493942639303847'),
             collateralInformationUpdatePage.setCustomerIdInput('customerId'),
             collateralInformationUpdatePage.setRegistrationPropertyNumberInput('registrationPropertyNumber'),
             collateralInformationUpdatePage.setCollateralOMVInCCYInput('5'),

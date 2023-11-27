@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErpMaterialModule } from '../../../erp-material.module';
 import { UserRouteAccessService } from '../../../core/auth/user-route-access.service';
 import { RouterModule, Routes } from '@angular/router';
 import { DealerMaintenanceFormComponent } from './dealer-maintenance-form.component';
@@ -42,7 +41,6 @@ const dealerMaintenanceRoute: Routes = [
     CommonModule,
     SharedModule,
     FormsModule,
-    ErpMaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(dealerMaintenanceRoute),
     ErpCommonModule

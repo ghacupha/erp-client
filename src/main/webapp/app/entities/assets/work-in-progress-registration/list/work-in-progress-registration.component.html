@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
     <span>Work In Progress Registrations</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -68,7 +68,7 @@
   <div class="table-responsive" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="sequenceNumber">
             <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
@@ -76,7 +76,8 @@
           <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="levelOfCompletion"><span>Level Of Completion</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="completed"><span>Completed</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="workInProgressGroup.sequenceNumber">
             <span>Work In Progress Group</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -86,10 +87,19 @@
           <th scope="col" jhiSortBy="workProjectRegister.catalogueNumber">
             <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="invoice.invoiceNumber"><span>Invoice</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="outletCode.outletCode"><span>Outlet Code</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementTransaction.paymentNumber">
+            <span>Settlement Transaction</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="purchaseOrder.purchaseOrderNumber"><span>Purchase Order</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="deliveryNote.deliveryNoteNumber"><span>Delivery Note</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="jobSheet.serialNumber"><span>Job Sheet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
         <tr *ngFor="let workInProgressRegistration of workInProgressRegistrations; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'view']">{{
@@ -109,13 +119,8 @@
               >{{ workInProgressRegistration.commentsContentType }}, {{ byteSize(workInProgressRegistration.comments) }}</span
             >
           </td>
-          <td>
-            <div *ngIf="workInProgressRegistration.dealer">
-              <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
-                workInProgressRegistration.dealer?.dealerName
-              }}</a>
-            </div>
-          </td>
+          <td>{{ workInProgressRegistration.levelOfCompletion }}</td>
+          <td>{{ workInProgressRegistration.completed }}</td>
           <td>
             <div *ngIf="workInProgressRegistration.workInProgressGroup">
               <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
@@ -134,6 +139,55 @@
             <div *ngIf="workInProgressRegistration.workProjectRegister">
               <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
                 workInProgressRegistration.workProjectRegister?.catalogueNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.invoice">
+              <a [routerLink]="['/payment-invoice', workInProgressRegistration.invoice?.id, 'view']">{{
+                workInProgressRegistration.invoice?.invoiceNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.outletCode">
+              <a [routerLink]="['/service-outlet', workInProgressRegistration.outletCode?.id, 'view']">{{
+                workInProgressRegistration.outletCode?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.settlementTransaction">
+              <a [routerLink]="['/settlement', workInProgressRegistration.settlementTransaction?.id, 'view']">{{
+                workInProgressRegistration.settlementTransaction?.paymentNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.purchaseOrder">
+              <a [routerLink]="['/purchase-order', workInProgressRegistration.purchaseOrder?.id, 'view']">{{
+                workInProgressRegistration.purchaseOrder?.purchaseOrderNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.deliveryNote">
+              <a [routerLink]="['/delivery-note', workInProgressRegistration.deliveryNote?.id, 'view']">{{
+                workInProgressRegistration.deliveryNote?.deliveryNoteNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.jobSheet">
+              <a [routerLink]="['/job-sheet', workInProgressRegistration.jobSheet?.id, 'view']">{{
+                workInProgressRegistration.jobSheet?.serialNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressRegistration.dealer">
+              <a [routerLink]="['/dealer', workInProgressRegistration.dealer?.id, 'view']">{{
+                workInProgressRegistration.dealer?.dealerName
               }}</a>
             </div>
           </td>
@@ -168,23 +222,5 @@
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <div *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
-    </div>
   </div>
 </div>

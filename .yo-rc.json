@@ -257,7 +257,11 @@
       "CardUsageInformation",
       "CollateralInformation",
       "CreditCardFacility",
-      "CardState"
+      "CardState",
+      "WorkInProgressOutstandingReport",
+      "WorkInProgressReport",
+      "WorkInProgressOverview",
+      "PrepaymentCompilationRequest"
     ],
     "lastLiquibaseTimestamp": 1667297792000,
     "monorepository": true,

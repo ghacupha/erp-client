@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,16 +18,13 @@
 
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ErpMaterialModule } from '../../erp-material.module';
 import { DealerMaintenanceModule } from './dealer-maintenance/dealer-maintenance.module';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
-import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
 
 @NgModule({
  imports: [
    FormsModule,
-   ErpMaterialModule,
    ReactiveFormsModule,
    DealerMaintenanceModule,
    SharedModule,
@@ -38,11 +35,6 @@ import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
          loadChildren: () => import('./dealer-maintenance/dealer-maintenance.module').then(m => m.DealerMaintenanceModule),
        },
        {
-         path: 'question-base',
-         data: { pageTitle: 'Question form control definitions' },
-         loadChildren: () => import('./question-base/question-base.module').then(m => m.QuestionBaseModule),
-       },
-       {
          path: 'string-question-base',
          data: { pageTitle: 'StringQuestionBases' },
          loadChildren: () => import('./string-question-base/string-question-base.module').then(m => m.StringQuestionBaseModule),
@@ -51,7 +43,6 @@ import { QuestionnaireModule } from './Questionnaire/questionnaire.module';
   ],
   exports: [
     DealerMaintenanceModule,
-    QuestionnaireModule
   ]
 })
 export class ErpFormsModule {}

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -137,7 +137,7 @@ import {RouterModule} from '@angular/router';
         path: 'business-document',
         data: {
           pageTitle: 'ERP | Business Document',
-          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_LEASE_MANAGER', 'ROLE_FIXED_ASSETS_USER'],
+          authorities: ['ROLE_PAYMENTS_USER', 'ROLE_LEASE_MANAGER', 'ROLE_FIXED_ASSETS_USER', 'ROLE_PREPAYMENTS_MODULE_USER'],
         },
         loadChildren: () => import('./business-document/business-document.module')
           .then(m => m.BusinessDocumentModule),

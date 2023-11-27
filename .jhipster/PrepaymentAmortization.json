@@ -1,7 +1,5 @@
 {
-  "changelogDate": "20220503162809",
   "clientRootFolder": "prepayments",
-  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "description",
@@ -20,44 +18,60 @@
       "fieldType": "Boolean"
     }
   ],
-  "incrementalChangelog": false,
-  "jpaMetamodelFiltering": true,
-  "name": "PrepaymentAmortization",
-  "pagination": "pagination",
-  "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "catalogueNumber",
-      "otherEntityName": "prepaymentAccount",
       "relationshipName": "prepaymentAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "prepaymentAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "catalogueNumber"
     },
     {
-      "otherEntityField": "iso4217CurrencyCode",
-      "otherEntityName": "settlementCurrency",
       "relationshipName": "settlementCurrency",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "iso4217CurrencyCode"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "debitAccount",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityField": "accountNumber",
       "otherEntityName": "transactionAccount",
-      "relationshipName": "creditAccount",
-      "relationshipType": "many-to-one"
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "prepaymentAmortization",
-      "ownerSide": true,
+      "relationshipName": "creditAccount",
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
+    },
+    {
       "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "prepaymentAmortization"
+    },
+    {
+      "relationshipName": "fiscalMonth",
+      "otherEntityName": "fiscalMonth",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "endDate"
+    },
+    {
+      "relationshipName": "prepaymentCompilationRequest",
+      "otherEntityName": "prepaymentCompilationRequest",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "id"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "PrepaymentAmortization",
+  "changelogDate": "20220503162809",
+  "incrementalChangelog": false
 }

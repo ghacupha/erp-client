@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -56,6 +56,13 @@ import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
 import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
 import { M2mServiceOutletFormControlComponent } from './service-outlet-form-components/m2m-service-outlet-form-control.component';
+import { M21WIPTransferFormControlComponent } from './wip-transfer/m21-wip-transfer-form-control.component';
+import { M2mWipTransferFormControlComponent } from './wip-transfer/m2m-wip-transfer-form-control.component';
+import { M21WorkProjectRegisterFormControlComponent } from './work-project-register/m21-work-project-register-form-control.component';
+import { M2mWorkProjectRegisterFormControlComponent } from './work-project-register/m2m-work-project-register-form-control.component';
+import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
+import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
+import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +101,13 @@ import { M2mServiceOutletFormControlComponent } from './service-outlet-form-comp
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
     M2mServiceOutletFormControlComponent,
+    M21WIPTransferFormControlComponent,
+    M2mWipTransferFormControlComponent,
+    M21WorkProjectRegisterFormControlComponent,
+    M2mWorkProjectRegisterFormControlComponent,
+    M21WipRegistrationFormControlComponent,
+    M21DeliveryNoteControlComponent,
+    M21JobSheetControlComponent,
   ],
   imports: [
     CommonModule,
@@ -137,6 +151,13 @@ import { M2mServiceOutletFormControlComponent } from './service-outlet-form-comp
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
     M2mServiceOutletFormControlComponent,
+    M21WIPTransferFormControlComponent,
+    M2mWipTransferFormControlComponent,
+    M21WorkProjectRegisterFormControlComponent,
+    M2mWorkProjectRegisterFormControlComponent,
+    M21WipRegistrationFormControlComponent,
+    M21DeliveryNoteControlComponent,
+    M21JobSheetControlComponent,
   ]
 })
 export class FormComponentsModule {

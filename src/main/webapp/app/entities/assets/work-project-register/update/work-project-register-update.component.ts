@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -52,7 +52,8 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     catalogueNumber: [null, [Validators.required]],
-    description: [null, [Validators.required]],
+    projectTitle: [null, [Validators.required]],
+    description: [],
     details: [],
     detailsContentType: [],
     totalProjectCost: [],
@@ -185,6 +186,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: workProjectRegister.id,
       catalogueNumber: workProjectRegister.catalogueNumber,
+      projectTitle: workProjectRegister.projectTitle,
       description: workProjectRegister.description,
       details: workProjectRegister.details,
       detailsContentType: workProjectRegister.detailsContentType,
@@ -268,6 +270,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       ...new WorkProjectRegister(),
       id: this.editForm.get(['id'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
+      projectTitle: this.editForm.get(['projectTitle'])!.value,
       description: this.editForm.get(['description'])!.value,
       detailsContentType: this.editForm.get(['detailsContentType'])!.value,
       details: this.editForm.get(['details'])!.value,

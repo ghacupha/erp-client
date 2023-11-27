@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,8 @@ import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { IWorkProjectRegister } from '../work-project-register/work-project-register.model';
 
 export interface IWorkInProgressRegistration {
   id?: number;
@@ -35,17 +37,22 @@ export interface IWorkInProgressRegistration {
   instalmentAmount?: number | null;
   commentsContentType?: string | null;
   comments?: string | null;
+  levelOfCompletion?: number | null;
+  completed?: boolean | null;
   placeholders?: IPlaceholder[] | null;
-  paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[];
-  settlements?: ISettlement[];
-  purchaseOrders?: IPurchaseOrder[] | null;
-  deliveryNotes?: IDeliveryNote[] | null;
-  jobSheets?: IJobSheet[] | null;
-  dealer?: IDealer;
+  workInProgressGroup?: IWorkInProgressRegistration | null;
+  settlementCurrency?: ISettlementCurrency | null;
+  workProjectRegister?: IWorkProjectRegister | null;
   businessDocuments?: IBusinessDocument[] | null;
   assetAccessories?: IAssetAccessory[] | null;
   assetWarranties?: IAssetWarranty[] | null;
+  invoice?: IPaymentInvoice | null;
+  outletCode?: IServiceOutlet | null;
+  settlementTransaction?: ISettlement | null;
+  purchaseOrder?: IPurchaseOrder | null;
+  deliveryNote?: IDeliveryNote | null;
+  jobSheet?: IJobSheet | null;
+  dealer?: IDealer | null;
 }
 
 export class WorkInProgressRegistration implements IWorkInProgressRegistration {
@@ -56,18 +63,25 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public instalmentAmount?: number | null,
     public commentsContentType?: string | null,
     public comments?: string | null,
+    public levelOfCompletion?: number | null,
+    public completed?: boolean | null,
     public placeholders?: IPlaceholder[] | null,
-    public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[],
-    public settlements?: ISettlement[],
-    public purchaseOrders?: IPurchaseOrder[] | null,
-    public deliveryNotes?: IDeliveryNote[] | null,
-    public jobSheets?: IJobSheet[] | null,
-    public dealer?: IDealer,
+    public workInProgressGroup?: IWorkInProgressRegistration | null,
+    public settlementCurrency?: ISettlementCurrency | null,
+    public workProjectRegister?: IWorkProjectRegister | null,
     public businessDocuments?: IBusinessDocument[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public assetWarranties?: IAssetWarranty[] | null
-  ) {}
+    public assetWarranties?: IAssetWarranty[] | null,
+    public invoice?: IPaymentInvoice | null,
+    public outletCode?: IServiceOutlet | null,
+    public settlementTransaction?: ISettlement | null,
+    public purchaseOrder?: IPurchaseOrder | null,
+    public deliveryNote?: IDeliveryNote | null,
+    public jobSheet?: IJobSheet | null,
+    public dealer?: IDealer | null
+  ) {
+    this.completed = this.completed ?? false;
+  }
 }
 
 export function getWorkInProgressRegistrationIdentifier(workInProgressRegistration: IWorkInProgressRegistration): number | undefined {

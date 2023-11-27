@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 // noinspection ES6UnusedImports
 
-import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import locale from '@angular/common/locales/en';
@@ -49,7 +49,6 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ErpStoreModule } from './erp/store/erp-store.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ErpSystemModule } from './erp/erp-system.module';
-import { ErpMaterialModule } from './erp-material.module';
 import { ErpFormsModule } from './erp/erp-forms/erp-forms.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ErpCommonModule } from './erp/erp-common/erp-common.module';
@@ -65,7 +64,6 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
     ErpSystemModule,
     NgSelectModule,
     ErpStoreModule,
-    ErpMaterialModule,
     ErpFormsModule,
     LoggerModule.forRoot({serverLoggingUrl: '/api/logs', level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.DEBUG}),
     // jhipster-needle-angular-add-module JHipster will add new module here
@@ -77,6 +75,7 @@ import { GlobalErrorHandler } from './erp/erp-globals/global-chuck-error-handler
   ],
   providers: [
     Title,
+    { provide: DEFAULT_CURRENCY_CODE, useValue: '' },
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },

@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -105,6 +105,23 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_levelOfCompletion">Level Of Completion</label>
+          <input
+            type="number"
+            class="form-control"
+            name="levelOfCompletion"
+            id="field_levelOfCompletion"
+            data-cy="levelOfCompletion"
+            formControlName="levelOfCompletion"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_completed">Completed</label>
+          <input type="checkbox" class="form-check" name="completed" id="field_completed" data-cy="completed" formControlName="completed" />
+        </div>
+
+        <div class="form-group">
           <label for="field_placeholders">Placeholder</label>
           <select
             class="form-control"
@@ -119,126 +136,6 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_paymentInvoices">Payment Invoices</label>
-          <select
-            class="form-control"
-            id="field_paymentInvoices"
-            data-cy="paymentInvoices"
-            multiple
-            name="paymentInvoices"
-            formControlName="paymentInvoices"
-          >
-            <option
-              [ngValue]="getSelectedPaymentInvoice(paymentInvoiceOption, editForm.get('paymentInvoices')!.value)"
-              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
-            >
-              {{ paymentInvoiceOption.invoiceNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_serviceOutlets">Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_serviceOutlets"
-            data-cy="serviceOutlet"
-            multiple
-            name="serviceOutlets"
-            formControlName="serviceOutlets"
-          >
-            <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_settlements">Settlement</label>
-          <select
-            class="form-control"
-            id="field_settlements"
-            data-cy="settlement"
-            multiple
-            name="settlements"
-            formControlName="settlements"
-          >
-            <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
-              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
-            >
-              {{ settlementOption.paymentNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_purchaseOrders">Purchase Order</label>
-          <select
-            class="form-control"
-            id="field_purchaseOrders"
-            data-cy="purchaseOrder"
-            multiple
-            name="purchaseOrders"
-            formControlName="purchaseOrders"
-          >
-            <option
-              [ngValue]="getSelectedPurchaseOrder(purchaseOrderOption, editForm.get('purchaseOrders')!.value)"
-              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
-            >
-              {{ purchaseOrderOption.purchaseOrderNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_deliveryNotes">Delivery Note</label>
-          <select
-            class="form-control"
-            id="field_deliveryNotes"
-            data-cy="deliveryNote"
-            multiple
-            name="deliveryNotes"
-            formControlName="deliveryNotes"
-          >
-            <option
-              [ngValue]="getSelectedDeliveryNote(deliveryNoteOption, editForm.get('deliveryNotes')!.value)"
-              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
-            >
-              {{ deliveryNoteOption.deliveryNoteNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="field_jobSheets">Job Sheet</label>
-          <select class="form-control" id="field_jobSheets" data-cy="jobSheet" multiple name="jobSheets" formControlName="jobSheets">
-            <option
-              [ngValue]="getSelectedJobSheet(jobSheetOption, editForm.get('jobSheets')!.value)"
-              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
-            >
-              {{ jobSheetOption.serialNumber }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_dealer">Dealer</label>
-          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
             </option>
           </select>
         </div>
@@ -368,6 +265,123 @@
               *ngFor="let assetWarrantyOption of assetWarrantiesSharedCollection; trackBy: trackAssetWarrantyById"
             >
               {{ assetWarrantyOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_invoice">Invoice</label>
+          <select class="form-control" id="field_invoice" data-cy="invoice" name="invoice" formControlName="invoice">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                paymentInvoiceOption.id === editForm.get('invoice')!.value?.id ? editForm.get('invoice')!.value : paymentInvoiceOption
+              "
+              *ngFor="let paymentInvoiceOption of paymentInvoicesSharedCollection; trackBy: trackPaymentInvoiceById"
+            >
+              {{ paymentInvoiceOption.invoiceNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_outletCode">Outlet Code</label>
+          <select class="form-control" id="field_outletCode" data-cy="outletCode" name="outletCode" formControlName="outletCode">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                serviceOutletOption.id === editForm.get('outletCode')!.value?.id ? editForm.get('outletCode')!.value : serviceOutletOption
+              "
+              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
+            >
+              {{ serviceOutletOption.outletCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_settlementTransaction">Settlement Transaction</label>
+          <select
+            class="form-control"
+            id="field_settlementTransaction"
+            data-cy="settlementTransaction"
+            name="settlementTransaction"
+            formControlName="settlementTransaction"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementOption.id === editForm.get('settlementTransaction')!.value?.id
+                  ? editForm.get('settlementTransaction')!.value
+                  : settlementOption
+              "
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_purchaseOrder">Purchase Order</label>
+          <select
+            class="form-control"
+            id="field_purchaseOrder"
+            data-cy="purchaseOrder"
+            name="purchaseOrder"
+            formControlName="purchaseOrder"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                purchaseOrderOption.id === editForm.get('purchaseOrder')!.value?.id
+                  ? editForm.get('purchaseOrder')!.value
+                  : purchaseOrderOption
+              "
+              *ngFor="let purchaseOrderOption of purchaseOrdersSharedCollection; trackBy: trackPurchaseOrderById"
+            >
+              {{ purchaseOrderOption.purchaseOrderNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_deliveryNote">Delivery Note</label>
+          <select class="form-control" id="field_deliveryNote" data-cy="deliveryNote" name="deliveryNote" formControlName="deliveryNote">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                deliveryNoteOption.id === editForm.get('deliveryNote')!.value?.id ? editForm.get('deliveryNote')!.value : deliveryNoteOption
+              "
+              *ngFor="let deliveryNoteOption of deliveryNotesSharedCollection; trackBy: trackDeliveryNoteById"
+            >
+              {{ deliveryNoteOption.deliveryNoteNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_jobSheet">Job Sheet</label>
+          <select class="form-control" id="field_jobSheet" data-cy="jobSheet" name="jobSheet" formControlName="jobSheet">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="jobSheetOption.id === editForm.get('jobSheet')!.value?.id ? editForm.get('jobSheet')!.value : jobSheetOption"
+              *ngFor="let jobSheetOption of jobSheetsSharedCollection; trackBy: trackJobSheetById"
+            >
+              {{ jobSheetOption.serialNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_dealer">Dealer</label>
+          <select class="form-control" id="field_dealer" data-cy="dealer" name="dealer" formControlName="dealer">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="dealerOption.id === editForm.get('dealer')!.value?.id ? editForm.get('dealer')!.value : dealerOption"
+              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
+            >
+              {{ dealerOption.dealerName }}
             </option>
           </select>
         </div>

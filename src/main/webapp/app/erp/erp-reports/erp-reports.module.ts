@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,53 +18,48 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
 
 @NgModule({
   imports: [RouterModule.forChild([
     {
-      path: 'datatables/ledgers',
-      data: {
-        pageTitle: 'ERP | Datatables',
-        authorities: [
-          'ROLE_FIXED_ASSETS_USER',
-          'ROLE_PREPAYMENTS_MODULE_USER',
-          'ROLE_BOOK_KEEPING',
-        ],
-      },
-      loadChildren: () => import('./ledger-data-display/ledger-data-display.module')
-        .then(m => m.LedgerDataDisplayModule),
-    },
-    {
-      path: 'datatables/requisitions/by/billers',
-      data: {
-        pageTitle: 'ERP | Requisitions By Biller',
-        authorities: [
-          'ROLE_REQUISITION_MANAGER',
-          'ROLE_PAYMENTS_USER',
-        ],
-      },
-      loadChildren: () => import('./settlement-requisition-report/settlement-requisition-reports.module')
-        .then(m => m.SettlementRequisitionReportsModule),
-    },
-    {
-      path: 'datatables/lease-contract-listing',
-      data: {
-        pageTitle: 'ERP | Lease Contracts',
-        authorities: [
-          'ROLE_LEASE_MANAGER',
-        ],
-      },
-      loadChildren: () => import('./lease-contract-listing/lease-contract-reports.module')
-        .then(m => m.LeaseContractReportsModule),
-    },
-    {
       path: 'report-template',
       data: {
-        pageTitle: 'ERP | Report Template',
+        pageTitle: 'ERP| Report Template',
         authorities: ['ROLE_DEV','ROLE_REPORT_DESIGNER'],
       },
       loadChildren: () => import('./report-template/report-template.module')
         .then(m => m.ReportTemplateModule),
+    },
+    {
+      path: 'report-date-parameter',
+      data: { pageTitle: 'ERP| Report Date' },
+      loadChildren: () =>
+        import('./date-parameter/report-parameters.module').then(
+          m => m.ReportParametersModule
+        ),
+    },
+    {
+      path: 'work-in-progress-outstanding-report',
+      data: {
+        pageTitle: 'ERP| WIP Report',
+        authorities: ['ROLE_FIXED_ASSETS_USER','ROLE_DEV']
+      },
+      loadChildren: () =>
+        import('./work-in-progress-outstanding-report/work-in-progress-outstanding-report.module').then(
+          m => m.WorkInProgressOutstandingReportModule
+        ),
+    },
+    {
+      path: 'work-in-progress-report',
+      data: {
+        pageTitle: 'ERP| WIP Summary',
+        authorities: ['ROLE_FIXED_ASSETS_USER','ROLE_DEV']
+      },
+      loadChildren: () =>
+        import('./work-in-progress-report/work-in-progress-report.module').then(
+          m => m.WorkInProgressReportModule
+        ),
     },
     {
       path: 'report-design',
@@ -136,6 +131,18 @@ import { RouterModule } from '@angular/router';
       },
       loadChildren: () => import('./system-content-type/system-content-type.module')
         .then(m => m.SystemContentTypeModule),
+    },
+    {
+      path: 'work-in-progress-overview',
+      data: {
+        pageTitle: 'ERP | WIP Overview',
+        authorities: ['ROLE_FIXED_ASSETS_USER'],
+      },
+      canActivate: [UserRouteAccessService],
+      loadChildren: () =>
+        import('./work-in-progress-overview/work-in-progress-overview.module').then(
+          m => m.WorkInProgressOverviewModule
+        ),
     },
   ])
   ]

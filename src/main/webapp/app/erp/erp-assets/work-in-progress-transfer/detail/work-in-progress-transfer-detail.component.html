@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -41,14 +41,17 @@
         <dd>
           <span>{{ workInProgressTransfer.targetAssetNumber }}</span>
         </dd>
-        <dt><span>Work In Progress Registration</span></dt>
+        <dt><span>Transfer Amount</span></dt>
         <dd>
-          <span *ngFor="let workInProgressRegistration of workInProgressTransfer.workInProgressRegistrations; let last = last">
-            <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration?.id, 'view']">{{
-              workInProgressRegistration.id
-            }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <span>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>
+        </dd>
+        <dt><span>Transfer Date</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.transferDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Transfer Type</span></dt>
+        <dd>
+          <span>{{ workInProgressTransfer.transferType }}</span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
@@ -56,6 +59,53 @@
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of workInProgressTransfer.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.assetCategory">
+            <a [routerLink]="['/asset-category', workInProgressTransfer.assetCategory?.id, 'view']">{{
+              workInProgressTransfer.assetCategory?.assetCategoryName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Work In Progress Registration</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.workInProgressRegistration">
+            <a [routerLink]="['/work-in-progress-registration', workInProgressTransfer.workInProgressRegistration?.id, 'view']">{{
+              workInProgressTransfer.workInProgressRegistration?.sequenceNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.serviceOutlet">
+            <a [routerLink]="['/service-outlet', workInProgressTransfer.serviceOutlet?.id, 'view']">{{
+              workInProgressTransfer.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.settlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.settlement?.id, 'view']">{{
+              workInProgressTransfer.settlement?.paymentNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Work Project Register</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.workProjectRegister">
+            <a [routerLink]="['/work-project-register', workInProgressTransfer.workProjectRegister?.id, 'view']">{{
+              workInProgressTransfer.workProjectRegister?.projectTitle
+            }}</a>
+          </div>
         </dd>
       </dl>
 

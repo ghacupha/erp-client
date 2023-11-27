@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -98,7 +98,7 @@ export class WorkProjectRegisterComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['catalogueNumber', 'description', 'details', 'additionalNotes'].includes(this.predicate)) {
+    if (query && ['catalogueNumber', 'projectTitle', 'description', 'details', 'additionalNotes'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

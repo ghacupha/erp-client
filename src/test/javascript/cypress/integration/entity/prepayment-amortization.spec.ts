@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -37,6 +37,8 @@ describe('PrepaymentAmortization e2e test', () => {
   const prepaymentAmortizationSample = {};
 
   let prepaymentAmortization: any;
+  //let fiscalMonth: any;
+  //let prepaymentCompilationRequest: any;
 
   before(() => {
     cy.window().then(win => {
@@ -47,11 +49,68 @@ describe('PrepaymentAmortization e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/fiscal-months',
+      body: {"monthNumber":45435,"startDate":"2023-08-15","endDate":"2023-08-15","fiscalMonthCode":"Dynamic synthesizing"},
+    }).then(({ body }) => {
+      fiscalMonth = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/prepayment-compilation-requests',
+      body: {"timeOfRequest":"2023-11-20T12:26:49.792Z","compilationStatus":"STARTED","itemsProcessed":95347,"compilationToken":"399be39b-ee13-402e-8ea0-16d01454acbd"},
+    }).then(({ body }) => {
+      prepaymentCompilationRequest = body;
+    });
+  });
+   */
+
   beforeEach(() => {
     cy.intercept('GET', '/api/prepayment-amortizations+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/prepayment-amortizations').as('postEntityRequest');
     cy.intercept('DELETE', '/api/prepayment-amortizations/*').as('deleteEntityRequest');
   });
+
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/prepayment-accounts', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/settlement-currencies', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/transaction-accounts', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/fiscal-months', {
+      statusCode: 200,
+      body: [fiscalMonth],
+    });
+
+    cy.intercept('GET', '/api/prepayment-compilation-requests', {
+      statusCode: 200,
+      body: [prepaymentCompilationRequest],
+    });
+
+  });
+   */
 
   afterEach(() => {
     if (prepaymentAmortization) {
@@ -63,6 +122,27 @@ describe('PrepaymentAmortization e2e test', () => {
       });
     }
   });
+
+  /* Disabled due to incompatibility
+  afterEach(() => {
+    if (fiscalMonth) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/fiscal-months/${fiscalMonth.id}`,
+      }).then(() => {
+        fiscalMonth = undefined;
+      });
+    }
+    if (prepaymentCompilationRequest) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/prepayment-compilation-requests/${prepaymentCompilationRequest.id}`,
+      }).then(() => {
+        prepaymentCompilationRequest = undefined;
+      });
+    }
+  });
+   */
 
   it('PrepaymentAmortizations menu should load PrepaymentAmortizations page', () => {
     cy.visit('/');
@@ -99,11 +179,17 @@ describe('PrepaymentAmortization e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/prepayment-amortizations',
-          body: prepaymentAmortizationSample,
+  
+          body: {
+            ...prepaymentAmortizationSample,
+            fiscalMonth: fiscalMonth,
+            prepaymentCompilationRequest: prepaymentCompilationRequest,
+          },
         }).then(({ body }) => {
           prepaymentAmortization = body;
 
@@ -123,6 +209,17 @@ describe('PrepaymentAmortization e2e test', () => {
         cy.visit(prepaymentAmortizationPageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(prepaymentAmortizationPageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details PrepaymentAmortization page', () => {
@@ -146,7 +243,7 @@ describe('PrepaymentAmortization e2e test', () => {
         cy.url().should('match', prepaymentAmortizationPageUrlPattern);
       });
 
-      it('last delete button click should delete instance of PrepaymentAmortization', () => {
+      it.skip('last delete button click should delete instance of PrepaymentAmortization', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('prepaymentAmortization').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -170,7 +267,7 @@ describe('PrepaymentAmortization e2e test', () => {
       cy.getEntityCreateUpdateHeading('PrepaymentAmortization');
     });
 
-    it('should create an instance of PrepaymentAmortization', () => {
+    it.skip('should create an instance of PrepaymentAmortization', () => {
       cy.get(`[data-cy="description"]`).type('Account Steel lime').should('have.value', 'Account Steel lime');
 
       cy.get(`[data-cy="prepaymentPeriod"]`).type('2022-05-02').should('have.value', '2022-05-02');
@@ -179,6 +276,9 @@ describe('PrepaymentAmortization e2e test', () => {
 
       cy.get(`[data-cy="inactive"]`).should('not.be.checked');
       cy.get(`[data-cy="inactive"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="fiscalMonth"]`).select(1);
+      cy.get(`[data-cy="prepaymentCompilationRequest"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

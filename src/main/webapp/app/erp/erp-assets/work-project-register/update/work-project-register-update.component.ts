@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,6 +34,8 @@ import { ISettlementCurrency } from '../../../erp-settlements/settlement-currenc
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 @Component({
   selector: 'jhi-work-project-register-update',
@@ -45,11 +47,13 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
   dealersSharedCollection: IDealer[] = [];
   settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
   editForm = this.fb.group({
     id: [],
     catalogueNumber: [null, [Validators.required]],
-    description: [null, [Validators.required]],
+    projectTitle: [null, [Validators.required]],
+    description: [],
     details: [],
     detailsContentType: [],
     totalProjectCost: [],
@@ -58,6 +62,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     dealers: [null, Validators.required],
     settlementCurrency: [],
     placeholders: [],
+    businessDocuments: [],
   });
 
   constructor(
@@ -67,6 +72,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected settlementCurrencyService: SettlementCurrencyService,
     protected placeholderService: PlaceholderService,
+    protected businessDocumentService: BusinessDocumentService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -76,6 +82,30 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       this.updateForm(workProjectRegister);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateSettlementCurrency(update: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      settlementCurrency: update
+    });
+  }
+
+  updateDealers(update: IDealer[]): void {
+    this.editForm.patchValue({
+      dealers: [ ...update]
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [ ...update]
+    });
+  }
+
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [ ...update]
     });
   }
 
@@ -120,6 +150,10 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackBusinessDocumentById(index: number, item: IBusinessDocument): number {
+    return item.id!;
+  }
+
   getSelectedDealer(option: IDealer, selectedVals?: IDealer[]): IDealer {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -132,6 +166,17 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
+  getSelectedBusinessDocument(option: IBusinessDocument, selectedVals?: IBusinessDocument[]): IBusinessDocument {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
         if (option.id === selectedVal.id) {
@@ -165,6 +210,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: workProjectRegister.id,
       catalogueNumber: workProjectRegister.catalogueNumber,
+      projectTitle: workProjectRegister.projectTitle,
       description: workProjectRegister.description,
       details: workProjectRegister.details,
       detailsContentType: workProjectRegister.detailsContentType,
@@ -174,6 +220,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       dealers: workProjectRegister.dealers,
       settlementCurrency: workProjectRegister.settlementCurrency,
       placeholders: workProjectRegister.placeholders,
+      businessDocuments: workProjectRegister.businessDocuments,
     });
 
     this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
@@ -187,6 +234,10 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(workProjectRegister.placeholders ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(workProjectRegister.businessDocuments ?? [])
     );
   }
 
@@ -223,6 +274,19 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            ...(this.editForm.get('businessDocuments')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 
   protected createFromForm(): IWorkProjectRegister {
@@ -230,6 +294,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       ...new WorkProjectRegister(),
       id: this.editForm.get(['id'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
+      projectTitle: this.editForm.get(['projectTitle'])!.value,
       description: this.editForm.get(['description'])!.value,
       detailsContentType: this.editForm.get(['detailsContentType'])!.value,
       details: this.editForm.get(['details'])!.value,
@@ -239,6 +304,7 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
       dealers: this.editForm.get(['dealers'])!.value,
       settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
   }
 }

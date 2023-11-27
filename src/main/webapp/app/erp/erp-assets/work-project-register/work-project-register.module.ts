@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -23,9 +23,10 @@ import { WorkProjectRegisterDetailComponent } from './detail/work-project-regist
 import { WorkProjectRegisterUpdateComponent } from './update/work-project-register-update.component';
 import { WorkProjectRegisterDeleteDialogComponent } from './delete/work-project-register-delete-dialog.component';
 import { WorkProjectRegisterRoutingModule } from './route/work-project-register-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, WorkProjectRegisterRoutingModule],
+  imports: [SharedModule, WorkProjectRegisterRoutingModule, ErpCommonModule],
   declarations: [
     WorkProjectRegisterComponent,
     WorkProjectRegisterDetailComponent,

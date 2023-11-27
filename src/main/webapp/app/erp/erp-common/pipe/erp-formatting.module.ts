@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,11 @@ import { FormatContractMetadataPipe } from './format-contract-metadata.pipe';
 import { FormatLeaseContractPipe } from './format-lease-contract.pipe';
 import { FormatLeaseModelMetadataPipe } from './format-lease-model-metadata.pipe';
 import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
+import { FormatWipTransferPipe } from './format-wip-transfer.pipe';
+import { FormatWorkProjectPipe } from './format-work-project.pipe';
+import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
+import { FormatJobSheetPipe } from './format-job-sheet.pipe';
+import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
 
 @NgModule({
   declarations: [
@@ -65,6 +70,11 @@ import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
     FormatAssetCategoryPipe,
+    FormatWipTransferPipe,
+    FormatWorkProjectPipe,
+    FormatWipRegistrationPipe,
+    FormatJobSheetPipe,
+    FormatDeliveryNotePipe,
   ],
   imports: [CommonModule],
   exports: [
@@ -90,6 +100,11 @@ import { FormatAssetCategoryPipe } from './format-asset-category.pipe';
     FormatLeaseContractPipe,
     FormatLeaseModelMetadataPipe,
     FormatAssetCategoryPipe,
+    FormatWipTransferPipe,
+    FormatWorkProjectPipe,
+    FormatWipRegistrationPipe,
+    FormatJobSheetPipe,
+    FormatDeliveryNotePipe
   ]
 })
 export class ErpFormattingModule{}

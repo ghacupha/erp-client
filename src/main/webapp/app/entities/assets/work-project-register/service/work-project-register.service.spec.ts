@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -40,6 +40,7 @@ describe('WorkProjectRegister Service', () => {
     elemDefault = {
       id: 0,
       catalogueNumber: 'AAAAAAA',
+      projectTitle: 'AAAAAAA',
       description: 'AAAAAAA',
       detailsContentType: 'image/png',
       details: 'AAAAAAA',
@@ -82,6 +83,7 @@ describe('WorkProjectRegister Service', () => {
         {
           id: 1,
           catalogueNumber: 'BBBBBB',
+          projectTitle: 'BBBBBB',
           description: 'BBBBBB',
           details: 'BBBBBB',
           totalProjectCost: 1,
@@ -103,8 +105,8 @@ describe('WorkProjectRegister Service', () => {
       const patchObject = Object.assign(
         {
           catalogueNumber: 'BBBBBB',
-          description: 'BBBBBB',
-          totalProjectCost: 1,
+          projectTitle: 'BBBBBB',
+          details: 'BBBBBB',
         },
         new WorkProjectRegister()
       );
@@ -125,6 +127,7 @@ describe('WorkProjectRegister Service', () => {
         {
           id: 1,
           catalogueNumber: 'BBBBBB',
+          projectTitle: 'BBBBBB',
           description: 'BBBBBB',
           details: 'BBBBBB',
           totalProjectCost: 1,
@@ -180,7 +183,7 @@ describe('WorkProjectRegister Service', () => {
       });
 
       it('should add only unique WorkProjectRegister to an array', () => {
-        const workProjectRegisterArray: IWorkProjectRegister[] = [{ id: 123 }, { id: 456 }, { id: 29069 }];
+        const workProjectRegisterArray: IWorkProjectRegister[] = [{ id: 123 }, { id: 456 }, { id: 4720 }];
         const workProjectRegisterCollection: IWorkProjectRegister[] = [{ id: 123 }];
         expectedResult = service.addWorkProjectRegisterToCollectionIfMissing(workProjectRegisterCollection, ...workProjectRegisterArray);
         expect(expectedResult).toHaveLength(3);

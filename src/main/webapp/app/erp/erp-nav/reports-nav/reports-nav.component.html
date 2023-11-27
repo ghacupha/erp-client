@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark VI No 2 (Phoebe Series) Client 1.5.3
+    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -64,6 +64,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Report Parameters</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="report-date-parameter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Date</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
@@ -165,6 +177,53 @@
           </span>
       </a>
       <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="reports-menu">
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="openReportDateModal()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Overview</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-outstanding-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP list</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Summary</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_DEV']">
+          <a
+            class="dropdown-item"
+            routerLink="report-date-parameter"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Report Date</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
