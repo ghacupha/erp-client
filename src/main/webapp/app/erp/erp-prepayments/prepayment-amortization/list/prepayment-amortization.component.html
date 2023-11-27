@@ -94,7 +94,7 @@
           </td>
           <td>{{ prepaymentAmortization.description }}</td>
           <td>{{ prepaymentAmortization.prepaymentPeriod | formatMediumDate }}</td>
-          <td>{{ prepaymentAmortization.prepaymentAmount }}</td>
+          <td>{{ prepaymentAmortization.prepaymentAmount | currency }}</td>
           <td>{{ prepaymentAmortization.inactive }}</td>
           <td>
             <div *ngIf="prepaymentAmortization.prepaymentAccount">

@@ -96,7 +96,7 @@ export class PrepaymentCompilationRequestComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['compilationStatus'].includes(this.predicate)) {
+    if (query && ['compilationStatus', 'compilationToken'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

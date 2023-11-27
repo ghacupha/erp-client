@@ -47,6 +47,7 @@ describe('PrepaymentCompilationRequest Service', () => {
       timeOfRequest: currentDate,
       compilationStatus: CompilationStatusTypes.STARTED,
       itemsProcessed: 0,
+      compilationToken: 'AAAAAAA',
     };
   });
 
@@ -96,6 +97,7 @@ describe('PrepaymentCompilationRequest Service', () => {
           timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
           compilationStatus: 'BBBBBB',
           itemsProcessed: 1,
+          compilationToken: 'BBBBBB',
         },
         elemDefault
       );
@@ -140,6 +142,7 @@ describe('PrepaymentCompilationRequest Service', () => {
           timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
           compilationStatus: 'BBBBBB',
           itemsProcessed: 1,
+          compilationToken: 'BBBBBB',
         },
         elemDefault
       );
@@ -202,7 +205,7 @@ describe('PrepaymentCompilationRequest Service', () => {
       });
 
       it('should add only unique PrepaymentCompilationRequest to an array', () => {
-        const prepaymentCompilationRequestArray: IPrepaymentCompilationRequest[] = [{ id: 123 }, { id: 456 }, { id: 42483 }];
+        const prepaymentCompilationRequestArray: IPrepaymentCompilationRequest[] = [{ id: 123 }, { id: 456 }, { id: 31542 }];
         const prepaymentCompilationRequestCollection: IPrepaymentCompilationRequest[] = [{ id: 123 }];
         expectedResult = service.addPrepaymentCompilationRequestToCollectionIfMissing(
           prepaymentCompilationRequestCollection,

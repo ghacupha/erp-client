@@ -74,6 +74,8 @@ describe('PrepaymentCompilationRequest e2e test', () => {
       prepaymentCompilationRequestUpdatePage.setTimeOfRequestInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       prepaymentCompilationRequestUpdatePage.compilationStatusSelectLastOption(),
       prepaymentCompilationRequestUpdatePage.setItemsProcessedInput('5'),
+      prepaymentCompilationRequestUpdatePage.setCompilationTokenInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+      // prepaymentCompilationRequestUpdatePage.placeholderSelectLastOption(),
     ]);
 
     await prepaymentCompilationRequestUpdatePage.save();

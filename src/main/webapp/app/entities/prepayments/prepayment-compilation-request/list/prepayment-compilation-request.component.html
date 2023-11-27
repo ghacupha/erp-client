@@ -75,6 +75,9 @@
             <span>Compilation Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="itemsProcessed"><span>Items Processed</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="compilationToken">
+            <span>Compilation Token</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -88,6 +91,7 @@
           <td>{{ prepaymentCompilationRequest.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ prepaymentCompilationRequest.compilationStatus }}</td>
           <td>{{ prepaymentCompilationRequest.itemsProcessed }}</td>
+          <td>{{ prepaymentCompilationRequest.compilationToken }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

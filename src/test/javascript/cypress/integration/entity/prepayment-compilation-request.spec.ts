@@ -34,7 +34,7 @@ describe('PrepaymentCompilationRequest e2e test', () => {
   const prepaymentCompilationRequestPageUrlPattern = new RegExp('/prepayment-compilation-request(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentCompilationRequestSample = {};
+  const prepaymentCompilationRequestSample = { compilationToken: 'a7fda709-e1ab-4867-9703-67529bf0de6c' };
 
   let prepaymentCompilationRequest: any;
 
@@ -176,6 +176,11 @@ describe('PrepaymentCompilationRequest e2e test', () => {
       cy.get(`[data-cy="compilationStatus"]`).select('COMPLETE');
 
       cy.get(`[data-cy="itemsProcessed"]`).type('59199').should('have.value', '59199');
+
+      cy.get(`[data-cy="compilationToken"]`)
+        .type('e101e6fd-4278-4b89-b653-d1ac282568c7')
+        .invoke('val')
+        .should('match', new RegExp('e101e6fd-4278-4b89-b653-d1ac282568c7'));
 
       cy.get(entityCreateSaveButtonSelector).click();
 

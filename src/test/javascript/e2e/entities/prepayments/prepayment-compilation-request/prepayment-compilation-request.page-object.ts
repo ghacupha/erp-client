@@ -51,6 +51,9 @@ export class PrepaymentCompilationRequestUpdatePage {
   timeOfRequestInput = element(by.id('field_timeOfRequest'));
   compilationStatusSelect = element(by.id('field_compilationStatus'));
   itemsProcessedInput = element(by.id('field_itemsProcessed'));
+  compilationTokenInput = element(by.id('field_compilationToken'));
+
+  placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -90,6 +93,30 @@ export class PrepaymentCompilationRequestUpdatePage {
 
   async getItemsProcessedInput(): Promise<string> {
     return await this.itemsProcessedInput.getAttribute('value');
+  }
+
+  async setCompilationTokenInput(compilationToken: string): Promise<void> {
+    await this.compilationTokenInput.sendKeys(compilationToken);
+  }
+
+  async getCompilationTokenInput(): Promise<string> {
+    return await this.compilationTokenInput.getAttribute('value');
+  }
+
+  async placeholderSelectLastOption(): Promise<void> {
+    await this.placeholderSelect.all(by.tagName('option')).last().click();
+  }
+
+  async placeholderSelectOption(option: string): Promise<void> {
+    await this.placeholderSelect.sendKeys(option);
+  }
+
+  getPlaceholderSelect(): ElementFinder {
+    return this.placeholderSelect;
+  }
+
+  async getPlaceholderSelectedOption(): Promise<string> {
+    return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

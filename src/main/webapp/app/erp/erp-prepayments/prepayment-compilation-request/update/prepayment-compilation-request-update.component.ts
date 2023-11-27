@@ -18,17 +18,20 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IPrepaymentCompilationRequest, PrepaymentCompilationRequest } from '../prepayment-compilation-request.model';
 import { PrepaymentCompilationRequestService } from '../service/prepayment-compilation-request.service';
-import { CompilationStatusTypes } from 'app/entities/enumerations/compilation-status-types.model';
+import { IPlaceholder } from 'app/erp/erp-pages/placeholder/placeholder.model';
+import { CompilationStatusTypes } from '../../../erp-common/enumerations/compilation-status-types.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'jhi-prepayment-compilation-request-update',
@@ -38,15 +41,20 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
   isSaving = false;
   compilationStatusTypesValues = Object.keys(CompilationStatusTypes);
 
+  placeholdersSharedCollection: IPlaceholder[] = [];
+
   editForm = this.fb.group({
     id: [],
     timeOfRequest: [],
     compilationStatus: [],
     itemsProcessed: [],
+    compilationToken: [null, [Validators.required]],
+    placeholders: [],
   });
 
   constructor(
     protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
+    protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -57,9 +65,13 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
         const today = dayjs();
         prepaymentCompilationRequest.timeOfRequest = today;
         prepaymentCompilationRequest.compilationStatus = CompilationStatusTypes.STARTED;
+        prepaymentCompilationRequest.compilationToken = uuidv4();
+
       }
 
       this.updateForm(prepaymentCompilationRequest);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -75,6 +87,21 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.prepaymentCompilationRequestService.create(prepaymentCompilationRequest));
     }
+  }
+
+  trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPrepaymentCompilationRequest>>): void {
@@ -104,7 +131,26 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
         : null,
       compilationStatus: prepaymentCompilationRequest.compilationStatus,
       itemsProcessed: prepaymentCompilationRequest.itemsProcessed,
+      compilationToken: prepaymentCompilationRequest.compilationToken,
+      placeholders: prepaymentCompilationRequest.placeholders,
     });
+
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(prepaymentCompilationRequest.placeholders ?? [])
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.placeholderService
+      .query()
+      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+      .pipe(
+        map((placeholders: IPlaceholder[]) =>
+          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+        )
+      )
+      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
   }
 
   protected createFromForm(): IPrepaymentCompilationRequest {
@@ -116,6 +162,8 @@ export class PrepaymentCompilationRequestUpdateComponent implements OnInit {
         : undefined,
       compilationStatus: this.editForm.get(['compilationStatus'])!.value,
       itemsProcessed: this.editForm.get(['itemsProcessed'])!.value,
+      compilationToken: this.editForm.get(['compilationToken'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }
 }

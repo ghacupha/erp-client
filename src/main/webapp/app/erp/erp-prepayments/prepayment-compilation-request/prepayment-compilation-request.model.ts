@@ -17,13 +17,16 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { CompilationStatusTypes } from 'app/entities/enumerations/compilation-status-types.model';
+import { CompilationStatusTypes } from '../../erp-common/enumerations/compilation-status-types.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 
 export interface IPrepaymentCompilationRequest {
   id?: number;
   timeOfRequest?: dayjs.Dayjs | null;
   compilationStatus?: CompilationStatusTypes | null;
   itemsProcessed?: number | null;
+  compilationToken?: string;
+  placeholders?: IPlaceholder[] | null;
 }
 
 export class PrepaymentCompilationRequest implements IPrepaymentCompilationRequest {
@@ -31,7 +34,9 @@ export class PrepaymentCompilationRequest implements IPrepaymentCompilationReque
     public id?: number,
     public timeOfRequest?: dayjs.Dayjs | null,
     public compilationStatus?: CompilationStatusTypes | null,
-    public itemsProcessed?: number | null
+    public itemsProcessed?: number | null,
+    public compilationToken?: string,
+    public placeholders?: IPlaceholder[] | null
   ) {}
 }
 

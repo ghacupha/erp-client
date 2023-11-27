@@ -63,7 +63,7 @@ describe('PrepaymentAmortization e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-compilation-requests',
-      body: {"timeOfRequest":"2023-11-20T12:26:49.792Z","compilationStatus":"STARTED","itemsProcessed":95347},
+      body: {"timeOfRequest":"2023-11-20T12:26:49.792Z","compilationStatus":"STARTED","itemsProcessed":95347,"compilationToken":"399be39b-ee13-402e-8ea0-16d01454acbd"},
     }).then(({ body }) => {
       prepaymentCompilationRequest = body;
     });

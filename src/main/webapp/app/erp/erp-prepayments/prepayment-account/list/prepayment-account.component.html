@@ -99,7 +99,7 @@
           <td>{{ prepaymentAccount.particulars }}</td>
           <!-- // TODO remove this from list view as it makes the view to busy-->
           <!--<td>{{ prepaymentAccount.notes }}</td>-->
-          <td>{{ prepaymentAccount.prepaymentAmount }}</td>
+          <td>{{ prepaymentAccount.prepaymentAmount | currency }}</td>
           <td>
             <div *ngIf="prepaymentAccount.settlementCurrency">
               <a [routerLink]="['/settlement-currency', prepaymentAccount.settlementCurrency?.id, 'view']">{{

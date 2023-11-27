@@ -47,7 +47,7 @@ export class FooterComponent implements OnInit {
     this.serverInformationService.fetch().subscribe(appStatus => {
       if (appStatus.body) {
         // this.serverVersion = appStatus.body.version ?? '1.5.8';
-        this.serverHash = appStatus.body.build ?? '22dc9dfff';
+        this.serverHash = appStatus.body.build ?? '239dacd2';
       }
     });
   }

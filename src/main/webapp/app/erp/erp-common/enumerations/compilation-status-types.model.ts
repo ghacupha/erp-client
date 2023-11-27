@@ -16,24 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+export enum CompilationStatusTypes {
+  STARTED = 'STARTED',
 
-export interface ISecurityClearance {
-  id?: number;
-  clearanceLevel?: string;
-  grantedClearances?: ISecurityClearance[] | null;
-  placeholders?: IPlaceholder[] | null;
-}
+  IN_PROGRESS = 'IN_PROGRESS',
 
-export class SecurityClearance implements ISecurityClearance {
-  constructor(
-    public id?: number,
-    public clearanceLevel?: string,
-    public grantedClearances?: ISecurityClearance[] | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
-}
+  COMPLETE = 'COMPLETE',
 
-export function getSecurityClearanceIdentifier(securityClearance: ISecurityClearance): number | undefined {
-  return securityClearance.id;
+  REVERSED = 'REVERSED',
 }

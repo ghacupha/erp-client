@@ -45,6 +45,17 @@
         <dd>
           <span>{{ prepaymentCompilationRequest.itemsProcessed }}</span>
         </dd>
+        <dt><span>Compilation Token</span></dt>
+        <dd>
+          <span>{{ prepaymentCompilationRequest.compilationToken }}</span>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentCompilationRequest.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
