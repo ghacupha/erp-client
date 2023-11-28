@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
@@ -35,6 +35,7 @@ export type EntityArrayResponseType = HttpResponse<IPrepaymentReport[]>;
 @Injectable({ providedIn: 'root' })
 export class PrepaymentReportService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayments/prepayment-reports');
+  protected reportsUrl = this.applicationConfigService.getEndpointFor('api/prepayments/prepayment-reports/reported');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/prepayments/_search/prepayment-reports');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -42,6 +43,15 @@ export class PrepaymentReportService {
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IPrepaymentReport>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findByReportDate(reportDate: string, id: number): Observable<EntityResponseType> {
+    let reportParams: HttpParams = new HttpParams();
+    reportParams = reportParams.set('reportDate', reportDate);
+
+    return this.http
+      .get<IPrepaymentReport>(`${this.reportsUrl}/${id}`, { params: reportParams, observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

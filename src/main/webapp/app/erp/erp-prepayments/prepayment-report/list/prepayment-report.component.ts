@@ -44,6 +44,7 @@ export class PrepaymentReportComponent implements OnInit {
   ascending: boolean;
   currentSearch: string;
   reportDate: dayjs.Dayjs = dayjs();
+  selectedNavDate = dayjs().format(DATE_FORMAT);
 
   reportDateControlInput$ = new Subject<dayjs.Dayjs>();
 
@@ -139,6 +140,7 @@ export class PrepaymentReportComponent implements OnInit {
 
   onDateInputChange(): void {
     this.reportDateControlInput$.next(this.reportDate);
+    this.selectedNavDate = this.reportDate.format(DATE_FORMAT);
   }
 
   trackId(index: number, item: IPrepaymentReport): number {

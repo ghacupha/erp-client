@@ -31,8 +31,9 @@ export class PrepaymentReportRoutingResolveService implements Resolve<IPrepaymen
 
   resolve(route: ActivatedRouteSnapshot): Observable<IPrepaymentReport> | Observable<never> {
     const id = route.params['id'];
+    const reportDate = route.params['reportDate'];
     if (id) {
-      return this.service.find(id).pipe(
+      return this.service.findByReportDate(reportDate, id).pipe(
         mergeMap((prepaymentReport: HttpResponse<PrepaymentReport>) => {
           if (prepaymentReport.body) {
             return of(prepaymentReport.body);
