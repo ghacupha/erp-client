@@ -17,9 +17,10 @@
 ///
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { IPrepaymentReport } from '../prepayment-report.model';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-report-detail',
@@ -28,11 +29,18 @@ import { IPrepaymentReport } from '../prepayment-report.model';
 export class PrepaymentReportDetailComponent implements OnInit {
   prepaymentReport: IPrepaymentReport | null = null;
 
+  reportDate: string | null = '';
+
   constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+
     this.activatedRoute.data.subscribe(({ prepaymentReport }) => {
       this.prepaymentReport = prepaymentReport;
+    });
+
+    this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+      this.reportDate = dayjs(params.get('reportDate')).format("DD/MM/YYYY");
     });
   }
 
