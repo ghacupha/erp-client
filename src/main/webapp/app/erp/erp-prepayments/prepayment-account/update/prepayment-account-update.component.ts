@@ -20,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
@@ -47,6 +47,8 @@ import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepa
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
 import { v4 as uuidv4 } from 'uuid';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -63,6 +65,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
+  businessDocumentsSharedCollection: IBusinessDocument[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -80,11 +83,8 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     placeholders: [],
     generalParameters: [],
     prepaymentParameters: [],
+    businessDocuments: [],
   });
-
-  settlementCurrenciesLoading = false;
-  settlementCurrencyControlInput$ = new Subject<string>();
-  settlementCurrencyLookups$: Observable<ISettlementCurrency[]> = of([]);
 
   constructor(
     protected dataUtils: DataUtils,
@@ -99,6 +99,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected settlementCurrencySuggestionService: SettlementCurrencySuggestionService,
     protected prepaymentMappingService: PrepaymentMappingService,
+    protected businessDocumentService: BusinessDocumentService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -150,6 +151,13 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
             });
         }
       );
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateBusinessDocument(update: IBusinessDocument[]): void {
+    this.editForm.patchValue({
+      businessDocuments: [...update],
+    });
   }
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -336,6 +344,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       placeholders: prepaymentAccount.placeholders,
       generalParameters: prepaymentAccount.generalParameters,
       prepaymentParameters: prepaymentAccount.prepaymentParameters,
+      businessDocuments: prepaymentAccount.businessDocuments,
     });
 
     this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
@@ -370,6 +379,10 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
       this.prepaymentMappingsSharedCollection,
       ...(prepaymentAccount.prepaymentParameters ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(prepaymentAccount.businessDocuments ?? [])
     );
   }
 
@@ -465,6 +478,19 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((prepaymentMappings: IPrepaymentMapping[]) => (this.prepaymentMappingsSharedCollection = prepaymentMappings));
+
+    this.businessDocumentService
+      .query()
+      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+      .pipe(
+        map((businessDocuments: IBusinessDocument[]) =>
+          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+            businessDocuments,
+            ...(this.editForm.get('businessDocuments')!.value ?? [])
+          )
+        )
+      )
+      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
   }
 
   protected createFromForm(): IPrepaymentAccount {
@@ -485,6 +511,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       generalParameters: this.editForm.get(['generalParameters'])!.value,
       prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
     };
   }
 }

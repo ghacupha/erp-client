@@ -155,6 +155,15 @@
           <option [ngValue]="editForm.get('transferAccount')!.value"></option>
         </jhi-m21-transaction-account-form-control>
 
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='businessDocuments'
+          [inputValues]="editForm.get(['businessDocuments'])!.value"
+          (selectedValues)='updateBusinessDocument($event)'
+          inputControlLabel='Business Document Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
         <!--jhi-m2m-placeholder-form-control-->
         <jhi-m2m-placeholder-form-control
           ngDefaultControl

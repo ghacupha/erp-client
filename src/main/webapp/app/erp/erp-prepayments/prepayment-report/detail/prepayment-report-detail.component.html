@@ -33,7 +33,9 @@
       <dl class="row-md jh-entity-details">
         <dt><span>ID</span></dt>
         <dd>
-          <span>{{ prepaymentReport.id }}</span>
+          <a [routerLink]="['/prepayment-account', prepaymentReport.id, 'view', { reportDate: reportDate }]">
+           <span>{{ prepaymentReport.id }}</span>
+          </a>
         </dd>
         <dt><span>Particulars</span></dt>
         <dd>

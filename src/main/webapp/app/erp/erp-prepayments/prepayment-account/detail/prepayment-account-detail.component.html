@@ -100,6 +100,14 @@
           </div>
         </dd>
 
+        <dt><span>Business Document</span></dt>
+        <dd>
+          <span *ngFor="let businessDocument of prepaymentAccount.businessDocuments; let last = last">
+            <a [routerLink]="['/business-document', businessDocument?.id, 'view']">{{ businessDocument.documentTitle }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of prepaymentAccount.placeholders; let last = last">
