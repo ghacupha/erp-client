@@ -224,6 +224,18 @@
             <span>Prepayment Report</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-account-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayments By Account Report</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
           <a
             class="dropdown-item"
