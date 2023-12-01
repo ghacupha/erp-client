@@ -215,6 +215,17 @@
         <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
           <a
             class="dropdown-item"
+            routerLinkActive="active"
+            routerLink="prepayment-outstanding-overview-report"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Overview</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
             routerLink="prepayment-report"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"

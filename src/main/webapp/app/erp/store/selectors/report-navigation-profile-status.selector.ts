@@ -36,3 +36,18 @@ export const wipOverviewNavigationReportTitleState = createSelector(
   reportNavigationProfileState,
   state => state.reportNavigationProfileState.reportTitle
 );
+
+export const prepaymentOverviewNavigationPathState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportPath
+);
+
+export const prepaymentOverviewNavigationReportDateState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportDate
+);
+
+export const prepaymentOverviewNavigationReportTitleState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportTitle
+);

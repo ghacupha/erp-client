@@ -131,6 +131,18 @@ import { NgModule } from '@angular/core';
               m => m.PrepaymentAccountReportModule
             ),
         },
+        {
+          path: 'prepayment-outstanding-overview-report',
+          data: {
+            pageTitle: 'ERP | Prepayment Overview',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-outstanding-overview-report/prepayment-outstanding-overview-report.module').then(
+              m => m.PrepaymentOutstandingOverviewReportModule
+            ),
+        },
       ]
     )
   ]
