@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
+/// Erp System - Mark VIII No 2 (Hilkiah Series) Client 1.6.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 
 export interface IPrepaymentAccount {
   id?: number;
@@ -41,6 +42,7 @@ export interface IPrepaymentAccount {
   placeholders?: IPlaceholder[] | null;
   generalParameters?: IUniversallyUniqueMapping[] | null;
   prepaymentParameters?: IPrepaymentMapping[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
 }
 
 export class PrepaymentAccount implements IPrepaymentAccount {
@@ -59,7 +61,8 @@ export class PrepaymentAccount implements IPrepaymentAccount {
     public transferAccount?: ITransactionAccount | null,
     public placeholders?: IPlaceholder[] | null,
     public generalParameters?: IUniversallyUniqueMapping[] | null,
-    public prepaymentParameters?: IPrepaymentMapping[] | null
+    public prepaymentParameters?: IPrepaymentMapping[] | null,
+    public businessDocuments?: IBusinessDocument[] | null
   ) {}
 }
 

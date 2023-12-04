@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
+/// Erp System - Mark VIII No 2 (Hilkiah Series) Client 1.6.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -33,6 +33,21 @@ export const wipOverviewNavigationReportDateState = createSelector(
 );
 
 export const wipOverviewNavigationReportTitleState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportTitle
+);
+
+export const prepaymentOverviewNavigationPathState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportPath
+);
+
+export const prepaymentOverviewNavigationReportDateState = createSelector(
+  reportNavigationProfileState,
+  state => state.reportNavigationProfileState.reportDate
+);
+
+export const prepaymentOverviewNavigationReportTitleState = createSelector(
   reportNavigationProfileState,
   state => state.reportNavigationProfileState.reportTitle
 );

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
+/// Erp System - Mark VIII No 2 (Hilkiah Series) Client 1.6.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -19,6 +19,9 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, State } from '../global-store.definition';
 import {
+  prepaymentOverviewReportNavigationInitiatedFromNavbar,
+  prepaymentOverviewReportNavigationInitiatedFromReportDateModal, prepaymentOverviewResetReportDateAction,
+  prepaymentOverviewResetReportPathAction,
   wipOverviewReportNavigationInitiatedFromNavbar,
   wipOverviewReportNavigationInitiatedFromReportDateModal,
   wipOverviewResetReportDateAction,
@@ -67,6 +70,43 @@ const _reportNavigationProfileStateReducer = createReducer(
   })),
 
   on(wipOverviewResetReportDateAction, (state) => ({
+    ...state,
+    reportNavigationProfileState: {
+      ...state.reportNavigationProfileState,
+      reportDate: dayjs().format(DATE_FORMAT)
+    }
+  })),
+
+
+  // workflows nav from navbar
+  on(prepaymentOverviewReportNavigationInitiatedFromNavbar, (state, {prepaymentOverviewReportNavigationPath}) => ({
+    ...state,
+    reportNavigationProfileState: {
+      ...state.reportNavigationProfileState,
+      reportPath: prepaymentOverviewReportNavigationPath,
+      reportTitle: 'Prepayment Outstanding Overview'
+    }
+  })),
+
+  //    workflows for nav from report-date modal
+  on(prepaymentOverviewReportNavigationInitiatedFromReportDateModal, (state, {prepaymentOverviewReportDate}) => ({
+    ...state,
+    reportNavigationProfileState: {
+      ...state.reportNavigationProfileState,
+      reportDate: prepaymentOverviewReportDate
+    }
+  })),
+
+  on(prepaymentOverviewResetReportPathAction, (state) => ({
+    ...state,
+    reportNavigationProfileState: {
+      ...state.reportNavigationProfileState,
+      reportPath: '',
+      reportTitle: 'ERP Reports'
+    }
+  })),
+
+  on(prepaymentOverviewResetReportDateAction, (state) => ({
     ...state,
     reportNavigationProfileState: {
       ...state.reportNavigationProfileState,

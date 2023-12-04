@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
+/// Erp System - Mark VIII No 2 (Hilkiah Series) Client 1.6.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -105,6 +105,42 @@ import { NgModule } from '@angular/core';
           loadChildren: () =>
             import('./prepayment-compilation-request/prepayment-compilation-request.module').then(
               m => m.PrepaymentCompilationRequestModule
+            ),
+        },
+        {
+          path: 'prepayment-report',
+          data: {
+            pageTitle: 'ERP | Prepayment Report',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-report/prepayment-report.module').then(
+              m => m.PrepaymentReportModule
+            ),
+        },
+        {
+          path: 'prepayment-account-report',
+          data: {
+            pageTitle: 'ERP | Prepayment Account Report',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-account-report/prepayment-account-report.module').then(
+              m => m.PrepaymentAccountReportModule
+            ),
+        },
+        {
+          path: 'prepayment-outstanding-overview-report',
+          data: {
+            pageTitle: 'ERP | Prepayment Overview',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./prepayment-outstanding-overview-report/prepayment-outstanding-overview-report.module').then(
+              m => m.PrepaymentOutstandingOverviewReportModule
             ),
         },
       ]
