@@ -37,6 +37,6 @@
     </ng-template>
   </ng-select>
   <!--// TODO Add entity-specific views-->
-  <div>{{inputValue|formatFiscalMonth:[35, '...']}}</div>
+  <div>{{inputValue|formatFiscalMonth}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>
