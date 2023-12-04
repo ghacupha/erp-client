@@ -261,9 +261,12 @@
       "WorkInProgressOutstandingReport",
       "WorkInProgressReport",
       "WorkInProgressOverview",
-      "PrepaymentCompilationRequest"
+      "PrepaymentCompilationRequest",
+      "PrepaymentReport",
+      "PrepaymentAccountReport",
+      "PrepaymentOutstandingOverviewReport"
     ],
-    "lastLiquibaseTimestamp": 1667297792000,
+    "lastLiquibaseTimestamp": 1701350410000,
     "monorepository": true,
     "skipCommitHook": true
   }

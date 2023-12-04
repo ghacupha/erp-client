@@ -7,9 +7,9 @@
 
     <groupId>io.github.erp</groupId>
     <artifactId>erp-client</artifactId>
-    <version>1.5.9</version>
+    <version>1.6.1</version>
     <name>Erp System</name>
-    <description>Mark VIII No 1 (Hilkiah Series) Client 1.5.9</description>
+    <description>Mark VIII No 2 (Hilkiah Series) Client 1.6.1</description>
 
     <repositories>
         <!-- jhipster-needle-maven-repository -->

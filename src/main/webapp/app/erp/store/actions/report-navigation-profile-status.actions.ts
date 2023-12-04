@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
+/// Erp System - Mark VIII No 2 (Hilkiah Series) Client 1.6.1
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,4 +34,22 @@ export const wipOverviewResetReportPathAction = createAction(
 
 export const wipOverviewResetReportDateAction = createAction(
   '[WIP Overview Navigation] Reset report-date profile'
+);
+
+export const prepaymentOverviewReportNavigationInitiatedFromNavbar = createAction(
+  '[Prepayment Overview Navigation: Navbar] Report navigation initiated',
+  props<{ prepaymentOverviewReportNavigationPath: string }>()
+);
+
+export const prepaymentOverviewReportNavigationInitiatedFromReportDateModal = createAction(
+  '[Prepayment Overview Navigation: Report Date Modal] Report navigation initiated',
+  props<{ prepaymentOverviewReportDate: string }>()
+);
+
+export const prepaymentOverviewResetReportPathAction = createAction(
+  '[Prepayment Overview Navigation] Reset report-path profile'
+);
+
+export const prepaymentOverviewResetReportDateAction = createAction(
+  '[Prepayment Overview Navigation] Reset report-date profile'
 );
