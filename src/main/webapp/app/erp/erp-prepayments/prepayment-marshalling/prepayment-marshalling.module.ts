@@ -23,9 +23,10 @@ import { PrepaymentMarshallingDetailComponent } from './detail/prepayment-marsha
 import { PrepaymentMarshallingUpdateComponent } from './update/prepayment-marshalling-update.component';
 import { PrepaymentMarshallingDeleteDialogComponent } from './delete/prepayment-marshalling-delete-dialog.component';
 import { PrepaymentMarshallingRoutingModule } from './route/prepayment-marshalling-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentMarshallingRoutingModule],
+  imports: [SharedModule, PrepaymentMarshallingRoutingModule, ErpCommonModule],
   declarations: [
     PrepaymentMarshallingComponent,
     PrepaymentMarshallingDetailComponent,

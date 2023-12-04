@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-marshalling.model';
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
@@ -68,6 +68,30 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       this.updateForm(prepaymentMarshalling);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updatePrepaymentAccount(update: IPrepaymentAccount): void {
+    this.editForm.patchValue({
+      prepaymentAccount: update,
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateFirstFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      firstFiscalMonth: update,
+    });
+  }
+
+  updateLastFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      lastFiscalMonth: update,
     });
   }
 
@@ -139,10 +163,6 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
     });
 
-    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
-      this.prepaymentAccountsSharedCollection,
-      prepaymentMarshalling.prepaymentAccount
-    );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(prepaymentMarshalling.placeholders ?? [])

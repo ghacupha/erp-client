@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<IPrepaymentMarshalling[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PrepaymentMarshallingService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayment-marshallings');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/prepayment-marshallings');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayments/prepayment-marshallings');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/prepayments/_search/prepayment-marshallings');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

@@ -63,6 +63,7 @@ import { M2mWorkProjectRegisterFormControlComponent } from './work-project-regis
 import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
 import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
 import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
+import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m21-fiscal-month-form-control.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +109,7 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
+    M21FiscalMonthFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -158,6 +160,7 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
+    M21FiscalMonthFormControlComponent,
   ]
 })
 export class FormComponentsModule {

@@ -45,6 +45,7 @@ import { FormatWorkProjectPipe } from './format-work-project.pipe';
 import { FormatWipRegistrationPipe } from './format-wip-registration.pipe';
 import { FormatJobSheetPipe } from './format-job-sheet.pipe';
 import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
+import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatWipRegistrationPipe,
     FormatJobSheetPipe,
     FormatDeliveryNotePipe,
+    FormatFiscalMonthPipe
   ],
   imports: [CommonModule],
   exports: [
@@ -104,7 +106,8 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatWorkProjectPipe,
     FormatWipRegistrationPipe,
     FormatJobSheetPipe,
-    FormatDeliveryNotePipe
+    FormatDeliveryNotePipe,
+    FormatFiscalMonthPipe,
   ]
 })
 export class ErpFormattingModule{}
