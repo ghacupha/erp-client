@@ -22,7 +22,7 @@ import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 @Component({
   selector: 'jhi-fiscal-month-option-view',
   template: `
-    # {{item.id}} Start Date: {{ item.startDate }} End Date: {{ item.endDate }}
+    # {{item.id}} Code {{ item.fiscalMonthCode }} Start Date: {{ item.startDate }} End Date: {{ item.endDate }}
   `
 })
 export class FiscalMonthOptionViewComponent {

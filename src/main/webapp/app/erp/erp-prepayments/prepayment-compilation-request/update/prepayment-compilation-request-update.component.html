@@ -47,22 +47,6 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_compilationStatus">Compilation Status</label>
-          <select
-            class="form-control"
-            name="compilationStatus"
-            formControlName="compilationStatus"
-            id="field_compilationStatus"
-            data-cy="compilationStatus"
-          >
-            <option [ngValue]="null"></option>
-            <option *ngFor="let compilationStatusTypes of compilationStatusTypesValues" [value]="compilationStatusTypes">
-              {{ compilationStatusTypes }}
-            </option>
-          </select>
-        </div>
-
       </div>
 
       <div>

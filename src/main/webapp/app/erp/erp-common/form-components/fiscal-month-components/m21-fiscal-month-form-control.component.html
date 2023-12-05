@@ -21,7 +21,8 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookUps$ | async"
-    bindLabel="fiscalMonthCode"
+    bindLabel="id"
+    [disabled]="disabledInput"
     [trackByFn]="trackValueByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"

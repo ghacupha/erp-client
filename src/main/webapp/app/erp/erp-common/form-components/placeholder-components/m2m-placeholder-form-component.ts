@@ -41,6 +41,8 @@ export class M2MPlaceholderFormComponent implements OnInit, OnDestroy, ControlVa
 
   @Input() inputControlLabel = '';
 
+  @Input() disabledInput = false;
+
   @Output() selectedValues: EventEmitter<IPlaceholder[]> = new EventEmitter<IPlaceholder[]>();
 
   minAccountLengthTerm = 3;

@@ -22,6 +22,7 @@
   <ng-select
     [items]="valueLookUps$ | async"
     bindLabel="description"
+    [disabled]="disabledInput"
     [trackByFn]="trackValuesByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"

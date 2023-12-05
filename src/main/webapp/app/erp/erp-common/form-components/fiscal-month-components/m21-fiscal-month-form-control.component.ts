@@ -43,6 +43,8 @@ export class M21FiscalMonthFormControlComponent implements OnInit, ControlValueA
 
   @Input() inputControlLabel = '';
 
+  @Input() disabledInput = false;
+
   @Output() valueSelected: EventEmitter<IFiscalMonth> = new EventEmitter<IFiscalMonth>();
 
   minAccountLengthTerm = 3;

@@ -19,7 +19,7 @@
 -->
 <div>
   <h2 id="page-heading" data-cy="PrepaymentMarshallingHeading">
-    <span>Prepayment Marshalling Item</span>
+    <span>Prepayment Marshalling Items</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
@@ -72,8 +72,8 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="inactive"><span>Inactive</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="processed"><span>Processed</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber"><span>Prepayment Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="firstFiscalMonth.startDate"><span>First Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastFiscalMonth.endDate"><span>Last Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
@@ -85,9 +85,14 @@
           <td>
             <a [routerLink]="['/prepayment-marshalling', prepaymentMarshalling.id, 'view']">{{ prepaymentMarshalling.id }}</a>
           </td>
-          <td>{{ prepaymentMarshalling.inactive }}</td>
+          <td *ngIf=prepaymentMarshalling.inactive>Inactive</td>
+          <td *ngIf=!prepaymentMarshalling.inactive>Active</td>
+
+          <td *ngIf=prepaymentMarshalling.processed>Processed</td>
+          <td *ngIf=!prepaymentMarshalling.processed>Not processed</td>
+
           <td>{{ prepaymentMarshalling.amortizationPeriods }}</td>
-          <td>{{ prepaymentMarshalling.processed }}</td>
+
           <td>
             <div *ngIf="prepaymentMarshalling.prepaymentAccount">
               <a [routerLink]="['/prepayment-account', prepaymentMarshalling.prepaymentAccount?.id, 'view']">{{
@@ -140,7 +145,10 @@
                 <fa-icon icon="copy"></fa-icon>
               </button>
 
-              <button type="submit" (click)="delete(prepaymentMarshalling)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button
+                [hidden]="prepaymentMarshalling.processed"
+                type="submit" (click)="delete(prepaymentMarshalling)"
+                class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="trash"></fa-icon>
               </button>
             </div>

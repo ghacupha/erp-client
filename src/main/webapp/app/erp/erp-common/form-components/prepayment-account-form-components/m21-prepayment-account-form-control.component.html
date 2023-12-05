@@ -20,6 +20,7 @@
 <div class="form-group">
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
+    [disabled]="disabledInput"
     [items]="valueLookUps$ | async"
     bindLabel="catalogueNumber"
     [trackByFn]="trackValueByFn"

@@ -25,18 +25,6 @@ import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 export class FormatFiscalMonthPipe implements PipeTransform {
 
   transform(value: IFiscalMonth): string {
-
-    let detail = '';
-
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (value) {
-
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        detail = `Id: ${value.id} | Start Date: ${value.startDate} | End Date: ${value.endDate} | ${value.fiscalMonthCode}`;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return value ? detail :'';
+    return `Id: ${value.id} | Start Date: ${value.startDate} | End Date: ${value.endDate} | ${value.fiscalMonthCode}`;
   }
 }

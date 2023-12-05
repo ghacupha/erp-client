@@ -43,6 +43,8 @@ export class M21PrepaymentAccountFormControlComponent implements OnInit, Control
 
   @Input() inputControlLabel = '';
 
+  @Input() disabledInput = false;
+
   @Output() valueSelected: EventEmitter<IPrepaymentAccount> = new EventEmitter<IPrepaymentAccount>();
 
   minAccountLengthTerm = 3;

@@ -34,8 +34,10 @@ import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
-  copyingPrepaymentMarshallingStatus, creatingPrepaymentMarshallingStatus,
-  editingPrepaymentMarshallingStatus, prepaymentMarshallingUpdateSelectedInstance
+  copyingPrepaymentMarshallingStatus,
+  creatingPrepaymentMarshallingStatus,
+  editingPrepaymentMarshallingStatus,
+  prepaymentMarshallingUpdateSelectedInstance
 } from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
 
 @Component({
@@ -57,7 +59,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    inactive: [null, [Validators.required]],
+    inactive: [],
     amortizationPeriods: [],
     processed: [],
     prepaymentAccount: [null, Validators.required],
@@ -209,7 +211,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       id: prepaymentMarshalling.id,
       inactive: prepaymentMarshalling.inactive,
       amortizationPeriods: prepaymentMarshalling.amortizationPeriods,
-      processed: prepaymentMarshalling.processed,
+      processed: false,
       prepaymentAccount: prepaymentMarshalling.prepaymentAccount,
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
@@ -272,7 +274,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       inactive: this.editForm.get(['inactive'])!.value,
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
-      processed: this.editForm.get(['processed'])!.value,
+      processed: false,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
@@ -284,9 +286,9 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     return {
       ...new PrepaymentMarshalling(),
       // id: this.editForm.get(['id'])!.value,
-      inactive: this.editForm.get(['inactive'])!.value,
+      inactive: false,
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
-      processed: this.editForm.get(['processed'])!.value,
+      processed: false,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,

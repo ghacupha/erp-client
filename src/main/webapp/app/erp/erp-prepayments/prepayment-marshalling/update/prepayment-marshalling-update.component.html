@@ -22,21 +22,21 @@
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2
         id="jhi-prepayment-marshalling-heading-new"
-        data-cy="PrepaymentAccountCreateUpdateHeading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
         [hidden]='!weAreCreating'>
-        New Prepayment Account
+        New Prepayment Marshalling
       </h2>
 
       <h2
         id="jhi-prepayment-marshalling-copying-heading"
-        data-cy="PrepaymentAccountCreateUpdateHeading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
         [hidden]='!weAreCopying'>
         Copy Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
       </h2>
 
       <h2
         id="jhi-prepayment-marshalling-editing-heading"
-        data-cy="PrepaymentAccountCreateUpdateHeading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
         [hidden]='!weAreEditing'>
         Edit Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
       </h2>
@@ -49,9 +49,10 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" >
           <label class="form-control-label" for="field_amortizationPeriods">Amortization Periods</label>
           <input
+            [readonly]="editForm.get('processed')!.value == true && weAreEditing"
             type="number"
             class="form-control"
             name="amortizationPeriods"
@@ -63,6 +64,7 @@
 
         <jhi-m21-prepayment-account-form-control
           ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
           formControlName='prepaymentAccount'
           [inputValue]="editForm.get('prepaymentAccount')!.value"
           (valueSelected)='updatePrepaymentAccount($event)'
@@ -73,6 +75,7 @@
 
         <jhi-m21-fiscal-month-form-control
           ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
           formControlName='firstFiscalMonth'
           [inputValue]="editForm.get('firstFiscalMonth')!.value"
           (valueSelected)='updateFirstFiscalMonth($event)'
@@ -93,6 +96,7 @@
 
         <jhi-m21-fiscal-month-form-control
           ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
           formControlName='lastFiscalMonth'
           [inputValue]="editForm.get('lastFiscalMonth')!.value"
           (valueSelected)='updateLastFiscalMonth($event)'
@@ -111,6 +115,7 @@
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
           formControlName='placeholders'
           [inputValues]="editForm.get(['placeholders'])!.value"
           (selectedValues)='updatePlaceholders($event)'
@@ -127,22 +132,6 @@
         </div>
 
       </div>
-
-      <!--<div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
-        </button>
-      </div>-->
 
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
