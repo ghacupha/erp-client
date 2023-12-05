@@ -33,6 +33,7 @@ import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-wor
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
 import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
 import * as fromPrepaymentAccountUpdates from "./reducers/prepayment-account-workflow-status.reducer";
+import * as fromPrepaymentMarshallingUpdates from "./reducers/prepayment-marshalling-workflow-status.reducer";
 import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
 import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
 
@@ -66,6 +67,7 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
     StoreModule.forFeature('paymentInvoiceUpdateForm', fromPaymentInvoiceUpdates.paymentInvoiceUpdateStateReducer),
     StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
     StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
+    StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

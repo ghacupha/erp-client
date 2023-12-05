@@ -24,6 +24,7 @@ import { AssetRegistrationFormState } from './reducers/asset-registration-workfl
 import { AssetAccessoryFormState } from './reducers/asset-accessory-workflow-status.reducer';
 import { WIPRegistrationFormState } from './reducers/wip-registration-workflow-status.reducer';
 import { PrepaymentAccountFormState } from './reducers/prepayment-account-workflow-status.reducer';
+import { PrepaymentMarshallingFormState } from './reducers/prepayment-marshalling-workflow-status.reducer';
 import { PaymentInvoiceFormState } from './reducers/payment-invoice-workflow-status.reducer';
 import { ReportNavigationProfileState } from './reducers/report-navigation-profile-status.reducer';
 import dayjs from 'dayjs';
@@ -38,6 +39,7 @@ export interface State {
   assetAccessoryFormState: AssetAccessoryFormState,
   wipRegistrationFormState: WIPRegistrationFormState,
   prepaymentAccountFormState: PrepaymentAccountFormState,
+  prepaymentMarshallingFormState: PrepaymentMarshallingFormState,
   paymentInvoiceFormState: PaymentInvoiceFormState,
   reportNavigationProfileState: ReportNavigationProfileState
 }
@@ -74,6 +76,14 @@ export const initialState: State = {
     weAreCreating: false,
   },
   prepaymentAccountFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  prepaymentMarshallingFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

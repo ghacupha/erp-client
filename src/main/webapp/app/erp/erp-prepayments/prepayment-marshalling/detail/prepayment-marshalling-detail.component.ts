@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentMarshallingCopyWorkflowInitiatedFromView,
+  prepaymentMarshallingEditWorkflowInitiatedFromView
+} from '../../../store/actions/prepayment-marshalling-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-detail',
@@ -28,12 +34,20 @@ import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
 export class PrepaymentMarshallingDetailComponent implements OnInit {
   prepaymentMarshalling: IPrepaymentMarshalling | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentMarshalling }) => {
       this.prepaymentMarshalling = prepaymentMarshalling;
     });
+  }
+
+  editButtonEvent(instance: IPrepaymentMarshalling): void {
+    this.store.dispatch(prepaymentMarshallingEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IPrepaymentMarshalling): void {
+    this.store.dispatch(prepaymentMarshallingCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

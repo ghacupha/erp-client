@@ -27,6 +27,14 @@ import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
 import { PrepaymentMarshallingDeleteDialogComponent } from '../delete/prepayment-marshalling-delete-dialog.component';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentMarshallingCopyWorkflowInitiatedFromList,
+  prepaymentMarshallingCreationWorkflowInitiatedFromList,
+  prepaymentMarshallingEditWorkflowInitiatedFromList
+} from '../../../store/actions/prepayment-marshalling-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-marshalling',
@@ -47,7 +55,8 @@ export class PrepaymentMarshallingComponent implements OnInit {
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +111,18 @@ export class PrepaymentMarshallingComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(prepaymentMarshallingCreationWorkflowInitiatedFromList())
+  }
+
+  copyButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentMarshallingCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
+  editButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentMarshallingEditWorkflowInitiatedFromList({editedInstance: instance}));
   }
 
   trackId(index: number, item: IPrepaymentMarshalling): number {
