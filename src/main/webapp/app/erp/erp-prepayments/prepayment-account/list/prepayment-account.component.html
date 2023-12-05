@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-prepayment-account"
         [routerLink]="['/prepayment-account/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Prepayment Account </span>
@@ -156,22 +157,30 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button
                 type="submit"
                 [routerLink]="['/prepayment-account', prepaymentAccount.id, 'edit']"
+                (click)='editButtonEvent(prepaymentAccount)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/prepayment-account', prepaymentAccount.id, 'copy']"
+                (click)='copyButtonEvent(prepaymentAccount)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
               </button>
 
               <button type="submit" (click)="delete(prepaymentAccount)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
           </td>

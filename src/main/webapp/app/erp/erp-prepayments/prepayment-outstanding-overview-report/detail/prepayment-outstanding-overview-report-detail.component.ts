@@ -23,7 +23,7 @@ import { IPrepaymentOutstandingOverviewReport } from '../prepayment-outstanding-
 import * as dayjs from 'dayjs';
 import { Subject } from 'rxjs';
 import { DATE_FORMAT } from '../../../../config/input.constants';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import { PrepaymentOutstandingOverviewReportService } from '../service/prepayment-outstanding-overview-report.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';

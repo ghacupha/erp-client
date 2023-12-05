@@ -30,7 +30,7 @@ const prepaymentAccountRoute: Routes = [
     path: '',
     component: PrepaymentAccountComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

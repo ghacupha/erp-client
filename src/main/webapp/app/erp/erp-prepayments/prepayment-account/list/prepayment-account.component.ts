@@ -28,6 +28,13 @@ import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 import { PrepaymentAccountDeleteDialogComponent } from '../delete/prepayment-account-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentAccountCopyWorkflowInitiatedFromList,
+  prepaymentAccountCreationWorkflowInitiatedFromList,
+  prepaymentAccountEditWorkflowInitiatedFromList
+} from '../../../store/actions/prepayment-account-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-account',
@@ -49,7 +56,8 @@ export class PrepaymentAccountComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -108,6 +116,18 @@ export class PrepaymentAccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(prepaymentAccountCreationWorkflowInitiatedFromList())
+  }
+
+  copyButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentAccountCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
+  editButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentAccountEditWorkflowInitiatedFromList({editedInstance: instance}));
   }
 
   trackId(index: number, item: IPrepaymentAccount): number {

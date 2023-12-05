@@ -23,6 +23,7 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
 import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
+import { PrepaymentAccountWorkflowEffects } from './effects/prepayment-account-workflow.effects';
 
 import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows-status.reducer";
 import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
@@ -31,12 +32,17 @@ import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status
 import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
 import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
+import * as fromPrepaymentAccountUpdates from "./reducers/prepayment-account-workflow-status.reducer";
 import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
 import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([SettlementUpdatesEffects, DealerInvoiceWorkflowEffects, DealerPaymentsEffects]),
+    EffectsModule.forRoot([
+      SettlementUpdatesEffects,
+      PrepaymentAccountWorkflowEffects,
+      DealerInvoiceWorkflowEffects,
+      DealerPaymentsEffects]),
     EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
         strictStateImmutability: true,
@@ -48,7 +54,7 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
       }}),
     StoreDevtoolsModule.instrument({
       name: 'ERP App States',
-      maxAge: 25, // Retains last 25 states
+      maxAge: 100, // Retains last 100 states
     }),
     StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
@@ -59,6 +65,7 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
     StoreModule.forFeature('wipRegistrationUpdateForm', fromWIPRegistrationUpdates.wipRegistrationUpdateStateReducer),
     StoreModule.forFeature('paymentInvoiceUpdateForm', fromPaymentInvoiceUpdates.paymentInvoiceUpdateStateReducer),
     StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
+    StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
   ],
   exports: [
     EffectsModule,

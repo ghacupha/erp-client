@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -49,6 +49,14 @@ import { SearchWithPagination } from '../../../../core/request/request.model';
 import { v4 as uuidv4 } from 'uuid';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingPrepaymentAccountStatus,
+  creatingPrepaymentAccountStatus,
+  editingPrepaymentAccountStatus,
+  prepaymentAccountUpdateSelectedInstance
+} from '../../../store/selectors/prepayment-account-workflows-status.selector';
 
 @Component({
   selector: 'jhi-prepayment-account-update',
@@ -66,6 +74,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   prepaymentMappingsSharedCollection: IPrepaymentMapping[] = [];
   businessDocumentsSharedCollection: IBusinessDocument[] = [];
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new PrepaymentAccount()}
 
   editForm = this.fb.group({
     id: [],
@@ -101,23 +115,38 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     protected prepaymentMappingService: PrepaymentMappingService,
     protected businessDocumentService: BusinessDocumentService,
     protected activatedRoute: ActivatedRoute,
+    protected store: Store<State>,
+    protected router: Router,
     protected fb: FormBuilder
-  ) {}
+  ) {
+    this.store.pipe(select(copyingPrepaymentAccountStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingPrepaymentAccountStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingPrepaymentAccountStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(prepaymentAccountUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ prepaymentAccount }) => {
-      this.updateForm(prepaymentAccount);
+
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem)
+    }
+
+    if (this.weAreCreating) {
+
+      this.editForm.patchValue({
+        prepaymentGuid: uuidv4(),
+      })
+
+      this.updatePreferredCurrency();
 
       this.loadRelationshipsOptions();
-    });
 
-    this.editForm.patchValue({
-      prepaymentGuid: uuidv4(),
-    })
-
-    this.updatePreferredCurrency();
-
-    this.updateDetailsGivenTransaction();
+      this.updateDetailsGivenTransaction();
+    }
   }
 
   updateDetailsGivenTransaction(): void {
@@ -232,12 +261,17 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const prepaymentAccount = this.createFromForm();
-    if (prepaymentAccount.id !== undefined) {
-      this.subscribeToSaveResponse(this.prepaymentAccountService.update(prepaymentAccount));
-    } else {
-      this.subscribeToSaveResponse(this.prepaymentAccountService.create(prepaymentAccount));
-    }
+    this.subscribeToSaveResponse(this.prepaymentAccountService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.prepaymentAccountService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.prepaymentAccountService.create(this.copyFromForm()));
   }
 
   trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
@@ -328,6 +362,65 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   }
 
   protected updateForm(prepaymentAccount: IPrepaymentAccount): void {
+    this.editForm.patchValue({
+      id: prepaymentAccount.id,
+      catalogueNumber: prepaymentAccount.catalogueNumber,
+      particulars: prepaymentAccount.particulars,
+      notes: prepaymentAccount.notes,
+      prepaymentAmount: prepaymentAccount.prepaymentAmount,
+      prepaymentGuid: prepaymentAccount.prepaymentGuid,
+      settlementCurrency: prepaymentAccount.settlementCurrency,
+      prepaymentTransaction: prepaymentAccount.prepaymentTransaction,
+      serviceOutlet: prepaymentAccount.serviceOutlet,
+      dealer: prepaymentAccount.dealer,
+      debitAccount: prepaymentAccount.debitAccount,
+      transferAccount: prepaymentAccount.transferAccount,
+      placeholders: prepaymentAccount.placeholders,
+      generalParameters: prepaymentAccount.generalParameters,
+      prepaymentParameters: prepaymentAccount.prepaymentParameters,
+      businessDocuments: prepaymentAccount.businessDocuments,
+    });
+
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      prepaymentAccount.settlementCurrency
+    );
+    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+      this.settlementsSharedCollection,
+      prepaymentAccount.prepaymentTransaction
+    );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      prepaymentAccount.serviceOutlet
+    );
+    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+      this.dealersSharedCollection,
+      prepaymentAccount.dealer
+    );
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      prepaymentAccount.debitAccount,
+      prepaymentAccount.transferAccount
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(prepaymentAccount.placeholders ?? [])
+    );
+    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+      this.universallyUniqueMappingsSharedCollection,
+      ...(prepaymentAccount.generalParameters ?? [])
+    );
+    this.prepaymentMappingsSharedCollection = this.prepaymentMappingService.addPrepaymentMappingToCollectionIfMissing(
+      this.prepaymentMappingsSharedCollection,
+      ...(prepaymentAccount.prepaymentParameters ?? [])
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(prepaymentAccount.businessDocuments ?? [])
+    );
+  }
+
+  protected copyForm(prepaymentAccount: IPrepaymentAccount): void {
     this.editForm.patchValue({
       id: prepaymentAccount.id,
       catalogueNumber: prepaymentAccount.catalogueNumber,
@@ -497,6 +590,28 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     return {
       ...new PrepaymentAccount(),
       id: this.editForm.get(['id'])!.value,
+      catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
+      particulars: this.editForm.get(['particulars'])!.value,
+      notes: this.editForm.get(['notes'])!.value,
+      prepaymentAmount: this.editForm.get(['prepaymentAmount'])!.value,
+      prepaymentGuid: this.editForm.get(['prepaymentGuid'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      prepaymentTransaction: this.editForm.get(['prepaymentTransaction'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      dealer: this.editForm.get(['dealer'])!.value,
+      debitAccount: this.editForm.get(['debitAccount'])!.value,
+      transferAccount: this.editForm.get(['transferAccount'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      generalParameters: this.editForm.get(['generalParameters'])!.value,
+      prepaymentParameters: this.editForm.get(['prepaymentParameters'])!.value,
+      businessDocuments: this.editForm.get(['businessDocuments'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IPrepaymentAccount {
+    return {
+      ...new PrepaymentAccount(),
+      // id: this.editForm.get(['id'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
       particulars: this.editForm.get(['particulars'])!.value,
       notes: this.editForm.get(['notes'])!.value,
