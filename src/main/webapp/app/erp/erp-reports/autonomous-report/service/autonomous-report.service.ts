@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 2 (Hilkiah Series) Client 1.6.3
+/// Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -33,8 +33,8 @@ export type EntityArrayResponseType = HttpResponse<IAutonomousReport[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AutonomousReportService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/autonomous-reports');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/autonomous-reports');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/autonomous-reports');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/autonomous-reports');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

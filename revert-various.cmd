@@ -1,5 +1,5 @@
 @REM
-@REM Erp System - Mark IX No 2 (Hilkiah Series) Client 1.6.3
+@REM Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
 @REM Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 @REM
 @REM This program is free software: you can redistribute it and/or modify
