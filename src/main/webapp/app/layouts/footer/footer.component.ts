@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark VIII No 3 (Hilkiah Series) Client 1.6.2
+/// Erp System - Mark IX No 2 (Hilkiah Series) Client 1.6.3
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,9 +36,9 @@ export class FooterComponent implements OnInit {
 
   serverHash = '';
 
-  clientVersion = '1.6.2';
+  clientVersion = '1.6.3';
 
-  serverVersion = '1.6.2';
+  serverVersion = '1.6.4';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }

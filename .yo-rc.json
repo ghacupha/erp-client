@@ -264,7 +264,8 @@
       "PrepaymentCompilationRequest",
       "PrepaymentReport",
       "PrepaymentAccountReport",
-      "PrepaymentOutstandingOverviewReport"
+      "PrepaymentOutstandingOverviewReport",
+      "AutonomousReport"
     ],
     "lastLiquibaseTimestamp": 1701350410000,
     "monorepository": true,
