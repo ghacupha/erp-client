@@ -56,6 +56,14 @@
             {{ autonomousReport.reportFileContentType }}, {{ byteSize(autonomousReport.reportFile) }}
           </div>
         </dd>
+        <dt><span>File Checksum</span></dt>
+        <dd>
+          <span>{{ autonomousReport.fileChecksum }}</span>
+        </dd>
+        <dt><span>Report Tampered</span></dt>
+        <dd>
+          <span>{{ autonomousReport.reportTampered }}</span>
+        </dd>
         <dt><span>Report Mapping</span></dt>
         <dd>
           <span *ngFor="let reportMapping of autonomousReport.reportMappings; let last = last">

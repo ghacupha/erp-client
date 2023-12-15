@@ -53,6 +53,8 @@ export class AutonomousReportUpdatePage {
   createdAtInput = element(by.id('field_createdAt'));
   reportFilenameInput = element(by.id('field_reportFilename'));
   reportFileInput = element(by.id('file_reportFile'));
+  fileChecksumInput = element(by.id('field_fileChecksum'));
+  reportTamperedInput = element(by.id('field_reportTampered'));
 
   reportMappingSelect = element(by.id('field_reportMapping'));
   placeholderSelect = element(by.id('field_placeholder'));
@@ -108,6 +110,18 @@ export class AutonomousReportUpdatePage {
 
   async getReportFileInput(): Promise<string> {
     return await this.reportFileInput.getAttribute('value');
+  }
+
+  async setFileChecksumInput(fileChecksum: string): Promise<void> {
+    await this.fileChecksumInput.sendKeys(fileChecksum);
+  }
+
+  async getFileChecksumInput(): Promise<string> {
+    return await this.fileChecksumInput.getAttribute('value');
+  }
+
+  getReportTamperedInput(): ElementFinder {
+    return this.reportTamperedInput;
   }
 
   async reportMappingSelectLastOption(): Promise<void> {

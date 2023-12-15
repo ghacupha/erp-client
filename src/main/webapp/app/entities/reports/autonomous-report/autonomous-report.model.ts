@@ -29,6 +29,8 @@ export interface IAutonomousReport {
   reportFilename?: string;
   reportFileContentType?: string | null;
   reportFile?: string | null;
+  fileChecksum?: string;
+  reportTampered?: boolean | null;
   reportMappings?: IUniversallyUniqueMapping[] | null;
   placeholders?: IPlaceholder[] | null;
   createdBy?: IApplicationUser | null;
@@ -43,10 +45,14 @@ export class AutonomousReport implements IAutonomousReport {
     public reportFilename?: string,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,
+    public fileChecksum?: string,
+    public reportTampered?: boolean | null,
     public reportMappings?: IUniversallyUniqueMapping[] | null,
     public placeholders?: IPlaceholder[] | null,
     public createdBy?: IApplicationUser | null
-  ) {}
+  ) {
+    this.reportTampered = this.reportTampered ?? false;
+  }
 }
 
 export function getAutonomousReportIdentifier(autonomousReport: IAutonomousReport): number | undefined {

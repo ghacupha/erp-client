@@ -35,9 +35,10 @@ describe('AutonomousReport e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const autonomousReportSample = {
-    reportName: 'Kong',
-    createdAt: '2023-12-06T13:29:37.106Z',
-    reportFilename: '57b8359f-d139-427f-a6c6-7a89c1ae2770',
+    reportName: 'Ridge',
+    createdAt: '2023-12-07T02:00:16.985Z',
+    reportFilename: '59fd1392-7f26-4c67-a89c-1ae2770f6191',
+    fileChecksum: 'enable copying',
   };
 
   let autonomousReport: any;
@@ -187,6 +188,11 @@ describe('AutonomousReport e2e test', () => {
         .should('match', new RegExp('adf34fec-3ee4-4ad9-91fe-d497fdc0fdcc'));
 
       cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
+
+      cy.get(`[data-cy="fileChecksum"]`).type('Kong').should('have.value', 'Kong');
+
+      cy.get(`[data-cy="reportTampered"]`).should('not.be.checked');
+      cy.get(`[data-cy="reportTampered"]`).click().should('be.checked');
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

@@ -73,6 +73,8 @@ describe('AutonomousReport e2e test', () => {
       autonomousReportUpdatePage.setCreatedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       autonomousReportUpdatePage.setReportFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
       autonomousReportUpdatePage.setReportFileInput(absolutePath),
+      autonomousReportUpdatePage.setFileChecksumInput('fileChecksum'),
+      autonomousReportUpdatePage.getReportTamperedInput().click(),
       // autonomousReportUpdatePage.reportMappingSelectLastOption(),
       // autonomousReportUpdatePage.placeholderSelectLastOption(),
       autonomousReportUpdatePage.createdBySelectLastOption(),

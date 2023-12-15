@@ -32,8 +32,8 @@ import { DealerService } from 'app/entities/people/dealer/service/dealer.service
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
 import { SecurityClearanceService } from 'app/entities/people/security-clearance/service/security-clearance.service';
 
-import { IUser } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
+import { IUser } from 'app/entities/user/user.model';
+import { UserService } from 'app/entities/user/user.service';
 import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
 

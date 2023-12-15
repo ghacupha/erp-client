@@ -117,7 +117,7 @@ export class AutonomousReportComponent implements OnInit {
       last: 0,
     };
     this.page = 0;
-    if (query && ['reportName', 'reportParameters', 'reportFilename', 'reportFile'].includes(this.predicate)) {
+    if (query && ['reportName', 'reportParameters', 'reportFilename', 'reportFile', 'fileChecksum'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
