@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
+    Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -45,10 +45,6 @@
         <dd>
           <span>{{ autonomousReport.createdAt | formatMediumDatetime }}</span>
         </dd>
-        <dt><span>Report Filename</span></dt>
-        <dd>
-          <span>{{ autonomousReport.reportFilename }}</span>
-        </dd>
         <dt><span>Report File</span></dt>
         <dd>
           <div *ngIf="autonomousReport.reportFile">
@@ -56,13 +52,9 @@
             {{ autonomousReport.reportFileContentType }}, {{ byteSize(autonomousReport.reportFile) }}
           </div>
         </dd>
-        <!--<dt><span>File Checksum</span></dt>
-        <dd>
-          <span>{{ autonomousReport.fileChecksum }}</span>
-        </dd>-->
         <dt *ngIf="autonomousReport.reportTampered"><span>Report Tampered</span></dt>
         <dd *ngIf="autonomousReport.reportTampered">
-          <span>{{ autonomousReport.reportTampered }} ?? 'Report Has Been Tampered" : ""</span>
+          <span>Report is TAMPERED</span>
         </dd>
         <dt><span>Report Mapping</span></dt>
         <dd>
@@ -90,10 +82,6 @@
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/autonomous-report', autonomousReport.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
     </div>
   </div>

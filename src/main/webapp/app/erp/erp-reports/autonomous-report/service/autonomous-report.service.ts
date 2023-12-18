@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
+/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -38,31 +38,6 @@ export class AutonomousReportService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(autonomousReport: IAutonomousReport): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(autonomousReport);
-    return this.http
-      .post<IAutonomousReport>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-  }
-
-  update(autonomousReport: IAutonomousReport): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(autonomousReport);
-    return this.http
-      .put<IAutonomousReport>(`${this.resourceUrl}/${getAutonomousReportIdentifier(autonomousReport) as number}`, copy, {
-        observe: 'response',
-      })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-  }
-
-  partialUpdate(autonomousReport: IAutonomousReport): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(autonomousReport);
-    return this.http
-      .patch<IAutonomousReport>(`${this.resourceUrl}/${getAutonomousReportIdentifier(autonomousReport) as number}`, copy, {
-        observe: 'response',
-      })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-  }
-
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IAutonomousReport>(`${this.resourceUrl}/${id}`, { observe: 'response' })
@@ -74,10 +49,6 @@ export class AutonomousReportService {
     return this.http
       .get<IAutonomousReport[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
-  }
-
-  delete(id: number): Observable<HttpResponse<{}>> {
-    return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {

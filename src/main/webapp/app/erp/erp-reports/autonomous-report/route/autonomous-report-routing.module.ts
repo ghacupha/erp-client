@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
+/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { AutonomousReportComponent } from '../list/autonomous-report.component';
 import { AutonomousReportDetailComponent } from '../detail/autonomous-report-detail.component';
-import { AutonomousReportUpdateComponent } from '../update/autonomous-report-update.component';
 import { AutonomousReportRoutingResolveService } from './autonomous-report-routing-resolve.service';
 
 const autonomousReportRoute: Routes = [
@@ -34,22 +33,6 @@ const autonomousReportRoute: Routes = [
   {
     path: ':id/view',
     component: AutonomousReportDetailComponent,
-    resolve: {
-      autonomousReport: AutonomousReportRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: 'new',
-    component: AutonomousReportUpdateComponent,
-    resolve: {
-      autonomousReport: AutonomousReportRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/edit',
-    component: AutonomousReportUpdateComponent,
     resolve: {
       autonomousReport: AutonomousReportRoutingResolveService,
     },

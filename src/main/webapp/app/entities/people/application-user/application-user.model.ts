@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
+/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
-import { IUser } from 'app/core/user/user.model';
+import { IUser } from 'app/entities/user/user.model';
 import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IApplicationUser {

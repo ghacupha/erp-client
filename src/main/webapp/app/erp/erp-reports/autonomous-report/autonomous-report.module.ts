@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 2 (Iddo Series) Client 1.6.3
+/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -20,18 +20,10 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { AutonomousReportComponent } from './list/autonomous-report.component';
 import { AutonomousReportDetailComponent } from './detail/autonomous-report-detail.component';
-import { AutonomousReportUpdateComponent } from './update/autonomous-report-update.component';
-import { AutonomousReportDeleteDialogComponent } from './delete/autonomous-report-delete-dialog.component';
 import { AutonomousReportRoutingModule } from './route/autonomous-report-routing.module';
 
 @NgModule({
   imports: [SharedModule, AutonomousReportRoutingModule],
-  declarations: [
-    AutonomousReportComponent,
-    AutonomousReportDetailComponent,
-    AutonomousReportUpdateComponent,
-    AutonomousReportDeleteDialogComponent,
-  ],
-  entryComponents: [AutonomousReportDeleteDialogComponent],
+  declarations: [AutonomousReportComponent, AutonomousReportDetailComponent],
 })
 export class AutonomousReportModule {}
