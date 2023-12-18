@@ -18,7 +18,7 @@
 
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
-import { IUser } from 'app/entities/user/user.model';
+import { IUser } from 'app/core/user/user.model';
 import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IApplicationUser {

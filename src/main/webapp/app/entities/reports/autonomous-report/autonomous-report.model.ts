@@ -26,10 +26,8 @@ export interface IAutonomousReport {
   reportName?: string;
   reportParameters?: string | null;
   createdAt?: dayjs.Dayjs;
-  reportFilename?: string;
   reportFileContentType?: string | null;
   reportFile?: string | null;
-  fileChecksum?: string;
   reportTampered?: boolean | null;
   reportMappings?: IUniversallyUniqueMapping[] | null;
   placeholders?: IPlaceholder[] | null;
@@ -42,10 +40,8 @@ export class AutonomousReport implements IAutonomousReport {
     public reportName?: string,
     public reportParameters?: string | null,
     public createdAt?: dayjs.Dayjs,
-    public reportFilename?: string,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,
-    public fileChecksum?: string,
     public reportTampered?: boolean | null,
     public reportMappings?: IUniversallyUniqueMapping[] | null,
     public placeholders?: IPlaceholder[] | null,

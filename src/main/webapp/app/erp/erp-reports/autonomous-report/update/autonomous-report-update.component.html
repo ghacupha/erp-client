@@ -135,6 +135,35 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_fileChecksum">File Checksum</label>
+          <input
+            type="text"
+            class="form-control"
+            name="fileChecksum"
+            id="field_fileChecksum"
+            data-cy="fileChecksum"
+            formControlName="fileChecksum"
+          />
+          <div
+            *ngIf="editForm.get('fileChecksum')!.invalid && (editForm.get('fileChecksum')!.dirty || editForm.get('fileChecksum')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('fileChecksum')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <!--<div class="form-group">
+          <label class="form-control-label" for="field_reportTampered">Report Tampered</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="reportTampered"
+            id="field_reportTampered"
+            data-cy="reportTampered"
+            formControlName="reportTampered"
+          />
+        </div>-->
+
+        <div class="form-group">
           <label for="field_reportMappings">Report Mapping</label>
           <select
             class="form-control"
@@ -175,7 +204,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_createdBy">Created By</label>
           <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
             <option [ngValue]="null"></option>
@@ -188,7 +217,7 @@
               {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
-        </div>
+        </div>-->
       </div>
 
       <div>

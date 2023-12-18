@@ -21,7 +21,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { IAutonomousReport, AutonomousReport } from '../autonomous-report.model';
+import { IAutonomousReport } from '../autonomous-report.model';
 
 import { AutonomousReportService } from './autonomous-report.service';
 
@@ -46,10 +46,8 @@ describe('AutonomousReport Service', () => {
       reportName: 'AAAAAAA',
       reportParameters: 'AAAAAAA',
       createdAt: currentDate,
-      reportFilename: 'AAAAAAA',
       reportFileContentType: 'image/png',
       reportFile: 'AAAAAAA',
-      fileChecksum: 'AAAAAAA',
       reportTampered: false,
     };
   });
@@ -70,84 +68,6 @@ describe('AutonomousReport Service', () => {
       expect(expectedResult).toMatchObject(elemDefault);
     });
 
-    it('should create a AutonomousReport', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 0,
-          createdAt: currentDate.format(DATE_TIME_FORMAT),
-        },
-        elemDefault
-      );
-
-      const expected = Object.assign(
-        {
-          createdAt: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.create(new AutonomousReport()).subscribe(resp => (expectedResult = resp.body));
-
-      const req = httpMock.expectOne({ method: 'POST' });
-      req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(expected);
-    });
-
-    it('should update a AutonomousReport', () => {
-      const returnedFromService = Object.assign(
-        {
-          id: 1,
-          reportName: 'BBBBBB',
-          reportParameters: 'BBBBBB',
-          createdAt: currentDate.format(DATE_TIME_FORMAT),
-          reportFilename: 'BBBBBB',
-          reportFile: 'BBBBBB',
-          fileChecksum: 'BBBBBB',
-          reportTampered: true,
-        },
-        elemDefault
-      );
-
-      const expected = Object.assign(
-        {
-          createdAt: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.update(expected).subscribe(resp => (expectedResult = resp.body));
-
-      const req = httpMock.expectOne({ method: 'PUT' });
-      req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(expected);
-    });
-
-    it('should partial update a AutonomousReport', () => {
-      const patchObject = Object.assign(
-        {
-          reportParameters: 'BBBBBB',
-          reportFilename: 'BBBBBB',
-          reportTampered: true,
-        },
-        new AutonomousReport()
-      );
-
-      const returnedFromService = Object.assign(patchObject, elemDefault);
-
-      const expected = Object.assign(
-        {
-          createdAt: currentDate,
-        },
-        returnedFromService
-      );
-
-      service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
-
-      const req = httpMock.expectOne({ method: 'PATCH' });
-      req.flush(returnedFromService);
-      expect(expectedResult).toMatchObject(expected);
-    });
-
     it('should return a list of AutonomousReport', () => {
       const returnedFromService = Object.assign(
         {
@@ -155,9 +75,7 @@ describe('AutonomousReport Service', () => {
           reportName: 'BBBBBB',
           reportParameters: 'BBBBBB',
           createdAt: currentDate.format(DATE_TIME_FORMAT),
-          reportFilename: 'BBBBBB',
           reportFile: 'BBBBBB',
-          fileChecksum: 'BBBBBB',
           reportTampered: true,
         },
         elemDefault
@@ -176,14 +94,6 @@ describe('AutonomousReport Service', () => {
       req.flush([returnedFromService]);
       httpMock.verify();
       expect(expectedResult).toContainEqual(expected);
-    });
-
-    it('should delete a AutonomousReport', () => {
-      service.delete(123).subscribe(resp => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: 'DELETE' });
-      req.flush({ status: 200 });
-      expect(expectedResult);
     });
 
     describe('addAutonomousReportToCollectionIfMissing', () => {
@@ -215,7 +125,7 @@ describe('AutonomousReport Service', () => {
       });
 
       it('should add only unique AutonomousReport to an array', () => {
-        const autonomousReportArray: IAutonomousReport[] = [{ id: 123 }, { id: 456 }, { id: 82882 }];
+        const autonomousReportArray: IAutonomousReport[] = [{ id: 123 }, { id: 456 }, { id: 2610 }];
         const autonomousReportCollection: IAutonomousReport[] = [{ id: 123 }];
         expectedResult = service.addAutonomousReportToCollectionIfMissing(autonomousReportCollection, ...autonomousReportArray);
         expect(expectedResult).toHaveLength(3);

@@ -16,19 +16,9 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "reportFilename",
-      "fieldType": "UUID",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
       "fieldName": "reportFile",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "any"
-    },
-    {
-      "fieldName": "fileChecksum",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
     },
     {
       "fieldName": "reportTampered",
@@ -62,7 +52,7 @@
   "service": "serviceImpl",
   "dto": "mapstruct",
   "jpaMetamodelFiltering": true,
-  "readOnly": false,
+  "readOnly": true,
   "pagination": "infinite-scroll",
   "name": "AutonomousReport",
   "changelogDate": "20231207063650",

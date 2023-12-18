@@ -19,13 +19,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAutonomousReport } from '../autonomous-report.model';
 
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { AutonomousReportService } from '../service/autonomous-report.service';
-import { AutonomousReportDeleteDialogComponent } from '../delete/autonomous-report-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
 
@@ -46,7 +44,6 @@ export class AutonomousReportComponent implements OnInit {
   constructor(
     protected autonomousReportService: AutonomousReportService,
     protected dataUtils: DataUtils,
-    protected modalService: NgbModal,
     protected parseLinks: ParseLinks,
     protected activatedRoute: ActivatedRoute
   ) {
@@ -117,7 +114,7 @@ export class AutonomousReportComponent implements OnInit {
       last: 0,
     };
     this.page = 0;
-    if (query && ['reportName', 'reportParameters', 'reportFilename', 'reportFile', 'fileChecksum'].includes(this.predicate)) {
+    if (query && ['reportName', 'reportParameters', 'reportFile'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -139,17 +136,6 @@ export class AutonomousReportComponent implements OnInit {
 
   openFile(base64String: string, contentType: string | null | undefined): void {
     return this.dataUtils.openFile(base64String, contentType);
-  }
-
-  delete(autonomousReport: IAutonomousReport): void {
-    const modalRef = this.modalService.open(AutonomousReportDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.autonomousReport = autonomousReport;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.reset();
-      }
-    });
   }
 
   protected sort(): string[] {

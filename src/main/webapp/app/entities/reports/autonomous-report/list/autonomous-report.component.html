@@ -26,16 +26,6 @@
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-autonomous-report"
-        [routerLink]="['/autonomous-report/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span class="hidden-sm-down"> Create a new Autonomous Report </span>
-      </button>
     </div>
   </h2>
 
@@ -75,11 +65,7 @@
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="createdAt"><span>Created At</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="reportFilename">
-            <span>Report Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportTampered"><span>Report Tampered</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -93,7 +79,6 @@
           <td>{{ autonomousReport.reportName }}</td>
           <td>{{ autonomousReport.reportParameters }}</td>
           <td>{{ autonomousReport.createdAt | formatMediumDatetime }}</td>
-          <td>{{ autonomousReport.reportFilename }}</td>
           <td>
             <a *ngIf="autonomousReport.reportFile" (click)="openFile(autonomousReport.reportFile, autonomousReport.reportFileContentType)"
               >open</a
@@ -102,7 +87,6 @@
               >{{ autonomousReport.reportFileContentType }}, {{ byteSize(autonomousReport.reportFile) }}</span
             >
           </td>
-          <td>{{ autonomousReport.fileChecksum }}</td>
           <td>{{ autonomousReport.reportTampered }}</td>
           <td>
             <div *ngIf="autonomousReport.createdBy">
@@ -121,21 +105,6 @@
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline">View</span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/autonomous-report', autonomousReport.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(autonomousReport)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
               </button>
             </div>
           </td>

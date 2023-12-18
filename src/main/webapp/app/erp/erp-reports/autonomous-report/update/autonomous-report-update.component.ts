@@ -57,6 +57,8 @@ export class AutonomousReportUpdateComponent implements OnInit {
     reportFilename: [null, [Validators.required]],
     reportFile: [],
     reportFileContentType: [],
+    fileChecksum: [null, [Validators.required]],
+    reportTampered: [],
     reportMappings: [],
     placeholders: [],
     createdBy: [],
@@ -76,7 +78,7 @@ export class AutonomousReportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ autonomousReport }) => {
       if (autonomousReport.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         autonomousReport.createdAt = today;
       }
 
@@ -180,6 +182,8 @@ export class AutonomousReportUpdateComponent implements OnInit {
       reportFilename: autonomousReport.reportFilename,
       reportFile: autonomousReport.reportFile,
       reportFileContentType: autonomousReport.reportFileContentType,
+      fileChecksum: autonomousReport.fileChecksum,
+      reportTampered: autonomousReport.reportTampered,
       reportMappings: autonomousReport.reportMappings,
       placeholders: autonomousReport.placeholders,
       createdBy: autonomousReport.createdBy,
@@ -247,6 +251,8 @@ export class AutonomousReportUpdateComponent implements OnInit {
       reportFilename: this.editForm.get(['reportFilename'])!.value,
       reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
       reportFile: this.editForm.get(['reportFile'])!.value,
+      fileChecksum: this.editForm.get(['fileChecksum'])!.value,
+      reportTampered: this.editForm.get(['reportTampered'])!.value,
       reportMappings: this.editForm.get(['reportMappings'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,

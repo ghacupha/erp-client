@@ -79,6 +79,8 @@
             <span>Report Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportTampered"><span>Report Tampered</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -100,6 +102,8 @@
               >{{ autonomousReport.reportFileContentType }}, {{ byteSize(autonomousReport.reportFile) }}</span
             >
           </td>
+          <td>{{ autonomousReport.fileChecksum }}</td>
+          <td>{{ autonomousReport.reportTampered }}</td>
           <td>
             <div *ngIf="autonomousReport.createdBy">
               <a [routerLink]="['/application-user', autonomousReport.createdBy?.id, 'view']">{{

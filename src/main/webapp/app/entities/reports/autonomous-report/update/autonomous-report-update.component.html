@@ -79,25 +79,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_reportFilename">Report Filename</label>
-          <input
-            type="text"
-            class="form-control"
-            name="reportFilename"
-            id="field_reportFilename"
-            data-cy="reportFilename"
-            formControlName="reportFilename"
-          />
-          <div
-            *ngIf="
-              editForm.get('reportFilename')!.invalid && (editForm.get('reportFilename')!.dirty || editForm.get('reportFilename')!.touched)
-            "
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('reportFilename')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_reportFile">Report File</label>
           <div>
             <div *ngIf="editForm.get('reportFile')!.value" class="form-text text-danger clearfix">
@@ -132,23 +113,6 @@
             id="field_reportFileContentType"
             formControlName="reportFileContentType"
           />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_fileChecksum">File Checksum</label>
-          <input
-            type="text"
-            class="form-control"
-            name="fileChecksum"
-            id="field_fileChecksum"
-            data-cy="fileChecksum"
-            formControlName="fileChecksum"
-          />
-          <div
-            *ngIf="editForm.get('fileChecksum')!.invalid && (editForm.get('fileChecksum')!.dirty || editForm.get('fileChecksum')!.touched)"
-          >
-            <small class="form-text text-danger" *ngIf="editForm.get('fileChecksum')?.errors?.required"> This field is required. </small>
-          </div>
         </div>
 
         <div class="form-group">

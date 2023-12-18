@@ -17,29 +17,14 @@
 ///
 
 import { entityItemSelector } from '../../support/commands';
-import {
-  entityTableSelector,
-  entityDetailsButtonSelector,
-  entityDetailsBackButtonSelector,
-  entityCreateButtonSelector,
-  entityCreateSaveButtonSelector,
-  entityCreateCancelButtonSelector,
-  entityEditButtonSelector,
-  entityDeleteButtonSelector,
-  entityConfirmDeleteButtonSelector,
-} from '../../support/entity';
+import { entityTableSelector, entityDetailsButtonSelector, entityDetailsBackButtonSelector } from '../../support/entity';
 
 describe('AutonomousReport e2e test', () => {
   const autonomousReportPageUrl = '/autonomous-report';
   const autonomousReportPageUrlPattern = new RegExp('/autonomous-report(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const autonomousReportSample = {
-    reportName: 'Ridge',
-    createdAt: '2023-12-07T02:00:16.985Z',
-    reportFilename: '59fd1392-7f26-4c67-a89c-1ae2770f6191',
-    fileChecksum: 'enable copying',
-  };
+  const autonomousReportSample = { reportName: 'Integration Agent azure', createdAt: '2023-12-06T23:09:59.655Z' };
 
   let autonomousReport: any;
 
@@ -84,50 +69,15 @@ describe('AutonomousReport e2e test', () => {
   });
 
   describe('AutonomousReport page', () => {
-    describe('create button click', () => {
-      beforeEach(() => {
-        cy.visit(autonomousReportPageUrl);
-        cy.wait('@entitiesRequest');
-      });
-
-      it('should load create AutonomousReport page', () => {
-        cy.get(entityCreateButtonSelector).click({ force: true });
-        cy.url().should('match', new RegExp('/autonomous-report/new$'));
-        cy.getEntityCreateUpdateHeading('AutonomousReport');
-        cy.get(entityCreateSaveButtonSelector).should('exist');
-        cy.get(entityCreateCancelButtonSelector).click({ force: true });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', autonomousReportPageUrlPattern);
-      });
-    });
-
     describe('with existing value', () => {
-      beforeEach(() => {
-        cy.authenticatedRequest({
-          method: 'POST',
-          url: '/api/autonomous-reports',
-          body: autonomousReportSample,
-        }).then(({ body }) => {
-          autonomousReport = body;
-
-          cy.intercept(
-            {
-              method: 'GET',
-              url: '/api/autonomous-reports+(?*|)',
-              times: 1,
-            },
-            {
-              statusCode: 200,
-              body: [autonomousReport],
-            }
-          ).as('entitiesRequestInternal');
-        });
-
+      beforeEach(function () {
         cy.visit(autonomousReportPageUrl);
 
-        cy.wait('@entitiesRequestInternal');
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details AutonomousReport page', () => {
@@ -139,73 +89,6 @@ describe('AutonomousReport e2e test', () => {
         });
         cy.url().should('match', autonomousReportPageUrlPattern);
       });
-
-      it('edit button click should load edit AutonomousReport page', () => {
-        cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('AutonomousReport');
-        cy.get(entityCreateSaveButtonSelector).should('exist');
-        cy.get(entityCreateCancelButtonSelector).click({ force: true });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', autonomousReportPageUrlPattern);
-      });
-
-      it('last delete button click should delete instance of AutonomousReport', () => {
-        cy.get(entityDeleteButtonSelector).last().click();
-        cy.getEntityDeleteDialogHeading('autonomousReport').should('exist');
-        cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
-        cy.wait('@deleteEntityRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(204);
-        });
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          expect(response!.statusCode).to.equal(200);
-        });
-        cy.url().should('match', autonomousReportPageUrlPattern);
-
-        autonomousReport = undefined;
-      });
-    });
-  });
-
-  describe('new AutonomousReport page', () => {
-    beforeEach(() => {
-      cy.visit(`${autonomousReportPageUrl}`);
-      cy.get(entityCreateButtonSelector).click({ force: true });
-      cy.getEntityCreateUpdateHeading('AutonomousReport');
-    });
-
-    it('should create an instance of AutonomousReport', () => {
-      cy.get(`[data-cy="reportName"]`).type('FTP JSON').should('have.value', 'FTP JSON');
-
-      cy.get(`[data-cy="reportParameters"]`).type('withdrawal').should('have.value', 'withdrawal');
-
-      cy.get(`[data-cy="createdAt"]`).type('2023-12-06T13:19').should('have.value', '2023-12-06T13:19');
-
-      cy.get(`[data-cy="reportFilename"]`)
-        .type('adf34fec-3ee4-4ad9-91fe-d497fdc0fdcc')
-        .invoke('val')
-        .should('match', new RegExp('adf34fec-3ee4-4ad9-91fe-d497fdc0fdcc'));
-
-      cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
-
-      cy.get(`[data-cy="fileChecksum"]`).type('Kong').should('have.value', 'Kong');
-
-      cy.get(`[data-cy="reportTampered"]`).should('not.be.checked');
-      cy.get(`[data-cy="reportTampered"]`).click().should('be.checked');
-
-      // since cypress clicks submit too fast before the blob fields are validated
-      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
-      cy.get(entityCreateSaveButtonSelector).click();
-
-      cy.wait('@postEntityRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(201);
-        autonomousReport = response!.body;
-      });
-      cy.wait('@entitiesRequest').then(({ response }) => {
-        expect(response!.statusCode).to.equal(200);
-      });
-      cy.url().should('match', autonomousReportPageUrlPattern);
     });
   });
 });

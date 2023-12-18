@@ -49,6 +49,8 @@ describe('AutonomousReport Service', () => {
       reportFilename: 'AAAAAAA',
       reportFileContentType: 'image/png',
       reportFile: 'AAAAAAA',
+      fileChecksum: 'AAAAAAA',
+      reportTampered: false,
     };
   });
 
@@ -100,6 +102,8 @@ describe('AutonomousReport Service', () => {
           createdAt: currentDate.format(DATE_TIME_FORMAT),
           reportFilename: 'BBBBBB',
           reportFile: 'BBBBBB',
+          fileChecksum: 'BBBBBB',
+          reportTampered: true,
         },
         elemDefault
       );
@@ -123,6 +127,7 @@ describe('AutonomousReport Service', () => {
         {
           reportParameters: 'BBBBBB',
           reportFilename: 'BBBBBB',
+          reportTampered: true,
         },
         new AutonomousReport()
       );
@@ -152,6 +157,8 @@ describe('AutonomousReport Service', () => {
           createdAt: currentDate.format(DATE_TIME_FORMAT),
           reportFilename: 'BBBBBB',
           reportFile: 'BBBBBB',
+          fileChecksum: 'BBBBBB',
+          reportTampered: true,
         },
         elemDefault
       );
@@ -208,7 +215,7 @@ describe('AutonomousReport Service', () => {
       });
 
       it('should add only unique AutonomousReport to an array', () => {
-        const autonomousReportArray: IAutonomousReport[] = [{ id: 123 }, { id: 456 }, { id: 6892 }];
+        const autonomousReportArray: IAutonomousReport[] = [{ id: 123 }, { id: 456 }, { id: 82882 }];
         const autonomousReportCollection: IAutonomousReport[] = [{ id: 123 }];
         expectedResult = service.addAutonomousReportToCollectionIfMissing(autonomousReportCollection, ...autonomousReportArray);
         expect(expectedResult).toHaveLength(3);
