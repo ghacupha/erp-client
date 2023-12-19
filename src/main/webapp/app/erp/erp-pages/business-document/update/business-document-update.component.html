@@ -81,7 +81,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_lastModified">Last Modified</label>
           <div class="d-flex">
             <input
@@ -94,9 +94,9 @@
               placeholder="YYYY-MM-DD HH:mm"
             />
           </div>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_attachmentFilePath">Attachment File Path</label>
           <input
             type="text"
@@ -116,7 +116,7 @@
               This field is required.
             </small>
           </div>
-        </div>
+        </div>-->
 
         <div class="form-group">
           <label class="form-control-label" for="field_documentFile">Document File</label>
@@ -160,7 +160,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fileTampered">File Tampered</label>
           <input
             type="checkbox"
@@ -170,7 +170,7 @@
             data-cy="fileTampered"
             formControlName="fileTampered"
           />
-        </div>
+        </div>-->
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_fileChecksumAlgorithm">File Checksum Algorithm</label>
@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <jhi-m21-application-user-form-control
+        <!--<jhi-m21-application-user-form-control
           ngDefaultControl
           formControlName='createdBy'
           [inputValue]="editForm.get(['createdBy'])!.value"
@@ -246,9 +246,9 @@
           inputControlLabel='Created By:'
         >
           <option [ngValue]="editForm.get('createdBy')!.value"></option>
-        </jhi-m21-application-user-form-control>
+        </jhi-m21-application-user-form-control>-->
 
-        <jhi-m21-application-user-form-control
+        <!--<jhi-m21-application-user-form-control
           ngDefaultControl
           formControlName='lastModifiedBy'
           [inputValue]="editForm.get(['lastModifiedBy'])!.value"
@@ -256,9 +256,9 @@
           inputControlLabel='Last Modified By:'
         >
           <option [ngValue]="editForm.get('lastModifiedBy')!.value"></option>
-        </jhi-m21-application-user-form-control>
+        </jhi-m21-application-user-form-control>-->
 
-        <jhi-m21-dealer-form-control
+        <!--<jhi-m21-dealer-form-control
           ngDefaultControl
           formControlName='originatingDepartment'
           [inputValue]="editForm.get(['originatingDepartment'])!.value"
@@ -266,7 +266,7 @@
           inputControlLabel='Originating Department'
         >
           <option [ngValue]="editForm.get('originatingDepartment')!.value"></option>
-        </jhi-m21-dealer-form-control>
+        </jhi-m21-dealer-form-control>-->
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_securityClearance">Security Clearance</label>
@@ -301,7 +301,7 @@
           </small>
         </div>-->
 
-        <jhi-m21-security-clearance-form-control
+        <!--<jhi-m21-security-clearance-form-control
           ngDefaultControl
           formControlName='securityClearance'
           [inputValue]="editForm.get(['securityClearance'])!.value"
@@ -309,7 +309,7 @@
           inputControlLabel='Security Clearance'
         >
           <option [ngValue]="editForm.get('securityClearance')!.value"></option>
-        </jhi-m21-security-clearance-form-control>
+        </jhi-m21-security-clearance-form-control>-->
 
 
         <!--<div class="form-group">
@@ -360,11 +360,17 @@
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
-        <button
+        <!--<button
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >-->
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
           class="btn btn-primary"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>

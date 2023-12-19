@@ -67,18 +67,18 @@ export class BusinessDocumentUpdateComponent implements OnInit {
     description: [],
     documentSerial: [null, [Validators.required]],
     lastModified: [],
-    attachmentFilePath: [null, [Validators.required]],
+    attachmentFilePath: [],
     documentFile: [null, [Validators.required]],
     documentFileContentType: [],
     fileTampered: [],
     documentFileChecksum: [null, [Validators.required]],
-    createdBy: [null, Validators.required],
+    createdBy: [],
     lastModifiedBy: [],
-    originatingDepartment: [null, Validators.required],
+    originatingDepartment: [],
     applicationMappings: [],
     placeholders: [],
     fileChecksumAlgorithm: [null, Validators.required],
-    securityClearance: [null, Validators.required],
+    securityClearance: [],
   });
 
   constructor(
