@@ -123,7 +123,7 @@
         >
         </jhi-m2m-placeholder-form-control>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+        <div class="form-group">
           <label class="form-control-label" for="field_inactive">Inactive</label>
           <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
           <div *ngIf="editForm.get('inactive')!.invalid && (editForm.get('inactive')!.dirty || editForm.get('inactive')!.touched)">

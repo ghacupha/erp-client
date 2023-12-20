@@ -272,7 +272,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     return {
       ...new PrepaymentMarshalling(),
       id: this.editForm.get(['id'])!.value,
-      inactive: this.editForm.get(['inactive'])!.value,
+      inactive: false,
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
       processed: false,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
