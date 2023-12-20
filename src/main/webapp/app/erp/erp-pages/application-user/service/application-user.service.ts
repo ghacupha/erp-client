@@ -60,6 +60,10 @@ export class ApplicationUserService {
     return this.http.get<IApplicationUser>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findCurrentUser(): Observable<EntityResponseType> {
+    return this.http.get<IApplicationUser>(`${this.resourceUrl}/current`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IApplicationUser[]>(this.resourceUrl, { params: options, observe: 'response' });
