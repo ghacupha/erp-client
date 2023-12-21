@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
+/// Erp System - Mark IX No 5 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -16,14 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
-import { SharedModule } from 'app/shared/shared.module';
-import { AmortizationPostingReportComponent } from './list/amortization-posting-report.component';
-import { AmortizationPostingReportDetailComponent } from './detail/amortization-posting-report-detail.component';
-import { AmortizationPostingReportRoutingModule } from './route/amortization-posting-report-routing.module';
+import { element, by } from 'protractor';
 
-@NgModule({
-  imports: [SharedModule, AmortizationPostingReportRoutingModule],
-  declarations: [AmortizationPostingReportComponent, AmortizationPostingReportDetailComponent],
-})
-export class AmortizationPostingReportModule {}
+export class AmortizationPostingReportComponentsPage {
+  title = element.all(by.css('jhi-amortization-posting-report div h2#page-heading span')).first();
+  noResult = element(by.id('no-result'));
+  entities = element(by.id('entities'));
+
+  async getTitle(): Promise<string> {
+    return this.title.getText();
+  }
+}

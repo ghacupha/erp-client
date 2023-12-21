@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
+    Erp System - Mark IX No 5 (Iddo Series) Client 1.6.4
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -162,6 +162,7 @@
             <span>Report Content Type</span>
           </a>
         </li>
+
       </ul>
     </li>
 
@@ -317,6 +318,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>PDF Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="amortization-posting-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Amortization Posting</span>
           </a>
         </li>
         <li>

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
+/// Erp System - Mark IX No 5 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -36,9 +36,9 @@ export class FooterComponent implements OnInit {
 
   serverHash = '';
 
-  clientVersion = '1.6.4';
+  clientVersion = '1.6.5';
 
-  serverVersion = '1.6.4';
+  serverVersion = '1.6.5';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }

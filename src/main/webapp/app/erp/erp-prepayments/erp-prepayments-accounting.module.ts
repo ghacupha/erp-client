@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark IX No 3 (Iddo Series) Client 1.6.4
+/// Erp System - Mark IX No 5 (Iddo Series) Client 1.6.4
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -141,6 +141,18 @@ import { NgModule } from '@angular/core';
           loadChildren: () =>
             import('./prepayment-outstanding-overview-report/prepayment-outstanding-overview-report.module').then(
               m => m.PrepaymentOutstandingOverviewReportModule
+            ),
+        },
+        {
+          path: 'amortization-posting-report',
+          data: {
+            pageTitle: 'ERP | Posting Amortization',
+            authorities: [],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./amortization-posting-report/amortization-posting-report.module').then(
+              m => m.AmortizationPostingReportModule
             ),
         },
       ]
