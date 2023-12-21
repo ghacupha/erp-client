@@ -265,9 +265,10 @@
       "PrepaymentReport",
       "PrepaymentAccountReport",
       "PrepaymentOutstandingOverviewReport",
-      "AutonomousReport"
+      "AutonomousReport",
+      "AmortizationPostingReport"
     ],
-    "lastLiquibaseTimestamp": 1701350410000,
+    "lastLiquibaseTimestamp": 1703087575000,
     "monorepository": true,
     "skipCommitHook": true
   }
