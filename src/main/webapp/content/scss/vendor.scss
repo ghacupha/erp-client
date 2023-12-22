@@ -21,14 +21,15 @@
 put Sass variables here:
 eg $input-color: red;
 ****************************/
-@import '~bootswatch/dist/simplex/variables';
+//@import '~bootswatch/dist/simplex/variables';
+@import '~bootswatch/dist/darkly/variables';
 // Override Bootstrap variables
 @import 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
 @import '~bootstrap/scss/bootstrap';
 // Overriding the fonts.google.api URL in bootswatch
 $web-font-path: '../fonts/google-fonts.css';
-@import '~bootswatch/dist/simplex/bootswatch';
+@import '~bootswatch/dist/darkly/bootswatch';
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
