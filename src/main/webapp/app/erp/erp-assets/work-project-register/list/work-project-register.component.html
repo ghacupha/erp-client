@@ -102,7 +102,7 @@
               >{{ workProjectRegister.detailsContentType }}, {{ byteSize(workProjectRegister.details) }}</span
             >
           </td>
-          <td>{{ workProjectRegister.totalProjectCost }}</td>
+          <td>{{ workProjectRegister.totalProjectCost | currency }}</td>
           <td>
             <a
               *ngIf="workProjectRegister.additionalNotes"
