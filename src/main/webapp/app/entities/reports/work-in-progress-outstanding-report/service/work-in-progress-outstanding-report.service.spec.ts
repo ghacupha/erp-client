@@ -18,7 +18,9 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import * as dayjs from 'dayjs';
 
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstanding-report.model';
 
 import { WorkInProgressOutstandingReportService } from './work-in-progress-outstanding-report.service';
@@ -28,6 +30,7 @@ describe('WorkInProgressOutstandingReport Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: IWorkInProgressOutstandingReport;
   let expectedResult: IWorkInProgressOutstandingReport | IWorkInProgressOutstandingReport[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,12 +39,15 @@ describe('WorkInProgressOutstandingReport Service', () => {
     expectedResult = null;
     service = TestBed.inject(WorkInProgressOutstandingReportService);
     httpMock = TestBed.inject(HttpTestingController);
+    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       sequenceNumber: 'AAAAAAA',
       particulars: 'AAAAAAA',
       dealerName: 'AAAAAAA',
+      instalmentTransactionNumber: 'AAAAAAA',
+      instalmentTransactionDate: currentDate,
       iso4217Code: 'AAAAAAA',
       instalmentAmount: 0,
       totalTransferAmount: 0,
@@ -51,7 +57,12 @@ describe('WorkInProgressOutstandingReport Service', () => {
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = Object.assign(
+        {
+          instalmentTransactionDate: currentDate.format(DATE_FORMAT),
+        },
+        elemDefault
+      );
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -67,6 +78,8 @@ describe('WorkInProgressOutstandingReport Service', () => {
           sequenceNumber: 'BBBBBB',
           particulars: 'BBBBBB',
           dealerName: 'BBBBBB',
+          instalmentTransactionNumber: 'BBBBBB',
+          instalmentTransactionDate: currentDate.format(DATE_FORMAT),
           iso4217Code: 'BBBBBB',
           instalmentAmount: 1,
           totalTransferAmount: 1,
@@ -75,7 +88,12 @@ describe('WorkInProgressOutstandingReport Service', () => {
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          instalmentTransactionDate: currentDate,
+        },
+        returnedFromService
+      );
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 

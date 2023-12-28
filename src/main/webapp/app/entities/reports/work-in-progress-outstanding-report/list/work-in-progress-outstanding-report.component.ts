@@ -112,7 +112,7 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
       last: 0,
     };
     this.page = 0;
-    if (query && ['sequenceNumber', 'particulars', 'dealerName', 'iso4217Code'].includes(this.predicate)) {
+    if (query && ['sequenceNumber', 'particulars', 'dealerName', 'instalmentTransactionNumber', 'iso4217Code'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

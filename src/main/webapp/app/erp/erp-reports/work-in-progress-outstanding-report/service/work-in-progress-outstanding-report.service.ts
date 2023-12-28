@@ -19,17 +19,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import {
+  IWorkInProgressOutstandingReport,
   getWorkInProgressOutstandingReportIdentifier,
-  IWorkInProgressOutstandingReport
 } from '../work-in-progress-outstanding-report.model';
-import * as dayjs from 'dayjs';
-import { DATE_FORMAT } from '../../../../config/input.constants';
 
 export type EntityResponseType = HttpResponse<IWorkInProgressOutstandingReport>;
 export type EntityArrayResponseType = HttpResponse<IWorkInProgressOutstandingReport[]>;
@@ -49,24 +50,30 @@ export class WorkInProgressOutstandingReportService {
   findByDate(reportDate: string, id: number): Observable<EntityResponseType> {
     let reportParams: HttpParams = new HttpParams();
     reportParams = reportParams.set('reportDate', reportDate);
-    return this.http.get<IWorkInProgressOutstandingReport>(`${this.reportsUrl}/${id}`, { params: reportParams, observe: 'response' });
+    return this.http.get<IWorkInProgressOutstandingReport>(`${this.reportsUrl}/${id}`, { params: reportParams, observe: 'response' })
+      .pipe(map((res) => this.convertDateFromServer(res)));
   }
 
   queryByReportDate(reportDate: dayjs.Dayjs, req?: any): Observable<EntityArrayResponseType> {
     let options = createRequestOption(req);
-    options = options.set('reportDate', this.convertDateFromClient(reportDate))
+    options = options.set('reportDate', this.convertDateItemFromClient(reportDate))
 
-    return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceUrl + `/reported`, { params: options, observe: 'response' });
+    return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceUrl + `/reported`, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IWorkInProgressOutstandingReport[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IWorkInProgressOutstandingReport[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IWorkInProgressOutstandingReport[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addWorkInProgressOutstandingReportToCollectionIfMissing(
@@ -94,7 +101,33 @@ export class WorkInProgressOutstandingReportService {
     return workInProgressOutstandingReportCollection;
   }
 
-  convertDateFromClient(dateItem: dayjs.Dayjs): string {
+  convertDateItemFromClient(dateItem: dayjs.Dayjs): string {
     return dateItem.isValid() ? dateItem.format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
+  }
+
+  protected convertDateFromClient(workInProgressOutstandingReport: IWorkInProgressOutstandingReport): IWorkInProgressOutstandingReport {
+    return Object.assign({}, workInProgressOutstandingReport, {
+      instalmentTransactionDate: workInProgressOutstandingReport.instalmentTransactionDate?.isValid()
+        ? workInProgressOutstandingReport.instalmentTransactionDate.format(DATE_FORMAT)
+        : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.instalmentTransactionDate = res.body.instalmentTransactionDate ? dayjs(res.body.instalmentTransactionDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((workInProgressOutstandingReport: IWorkInProgressOutstandingReport) => {
+        workInProgressOutstandingReport.instalmentTransactionDate = workInProgressOutstandingReport.instalmentTransactionDate
+          ? dayjs(workInProgressOutstandingReport.instalmentTransactionDate)
+          : undefined;
+      });
+    }
+    return res;
   }
 }
