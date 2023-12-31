@@ -64,6 +64,9 @@ import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-w
 import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
 import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
 import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m21-fiscal-month-form-control.component';
+import { FiscalMonthOptionViewComponent } from './fiscal-quarter-components/fiscal-quarter-option-view.component';
+import { FormatFiscalQuarterPipe } from './fiscal-quarter-components/format-fiscal-quarter.pipe';
+import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-components/m21-fiscal-quarter-form-control.component';
 
 @NgModule({
   declarations: [
@@ -110,6 +113,9 @@ import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m2
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
     M21FiscalMonthFormControlComponent,
+    FiscalMonthOptionViewComponent,
+    FormatFiscalQuarterPipe,
+    M21FiscalQuarterFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -161,6 +167,9 @@ import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m2
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
     M21FiscalMonthFormControlComponent,
+    FiscalMonthOptionViewComponent,
+    FormatFiscalQuarterPipe,
+    M21FiscalQuarterFormControlComponent
   ]
 })
 export class FormComponentsModule {

@@ -85,6 +85,17 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+
+    this.updateDetailsGivenFiscalMonth();
+  }
+
+  updateDetailsGivenFiscalMonth(): void {
+    this.editForm.get(['fiscalMonth'])?.valueChanges.subscribe((month) => {
+      this.editForm.patchValue({
+        fiscalYear: month.fiscalYear,
+        fiscalQuarter: month.fiscalQuarter
+      })
+    });
   }
 
   previousState(): void {
@@ -104,6 +115,12 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
   updateFiscalMonth(update: IFiscalMonth): void {
     this.editForm.patchValue({
       fiscalMonth: update,
+    });
+  }
+
+  updateFiscalQuarter(update: IFiscalQuarter): void {
+    this.editForm.patchValue({
+      fiscalQuarter: update,
     });
   }
 

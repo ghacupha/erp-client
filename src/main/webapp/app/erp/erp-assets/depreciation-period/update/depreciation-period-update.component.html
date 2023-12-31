@@ -184,35 +184,17 @@
           <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
         </jhi-m21-fiscal-month-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
-          <select
-            class="form-control"
-            id="field_fiscalQuarter"
-            data-cy="fiscalQuarter"
-            name="fiscalQuarter"
-            formControlName="fiscalQuarter"
-          >
-            <option *ngIf="!editForm.get('fiscalQuarter')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
-                  ? editForm.get('fiscalQuarter')!.value
-                  : fiscalQuarterOption
-              "
-              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
-            >
-              {{ fiscalQuarterOption.fiscalQuarterCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['fiscalQuarter'])!.invalid && (editForm.get(['fiscalQuarter'])!.dirty || editForm.get(['fiscalQuarter'])!.touched)
-          "
+        <jhi-m21-fiscal-quarter-form-control
+          ngDefaultControl
+          [disabledInput]="false"
+          formControlName='fiscalQuarter'
+          [inputValue]="editForm.get('fiscalQuarter')!.value"
+          (valueSelected)='updateFiscalQuarter($event)'
+          inputControlLabel='Fiscal Quarter'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalQuarter'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('fiscalQuarter')!.value"></option>
+        </jhi-m21-fiscal-quarter-form-control>
+
       </div>
 
       <div>
