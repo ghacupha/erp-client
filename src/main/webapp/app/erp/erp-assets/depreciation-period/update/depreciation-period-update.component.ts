@@ -101,6 +101,12 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
     }
   }
 
+  updateFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      fiscalMonth: update,
+    });
+  }
+
   trackDepreciationPeriodById(index: number, item: IDepreciationPeriod): number {
     return item.id!;
   }

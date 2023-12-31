@@ -23,9 +23,10 @@ import { DepreciationPeriodDetailComponent } from './detail/depreciation-period-
 import { DepreciationPeriodUpdateComponent } from './update/depreciation-period-update.component';
 import { DepreciationPeriodDeleteDialogComponent } from './delete/depreciation-period-delete-dialog.component';
 import { DepreciationPeriodRoutingModule } from './route/depreciation-period-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, DepreciationPeriodRoutingModule],
+  imports: [SharedModule, DepreciationPeriodRoutingModule, ErpCommonModule],
   declarations: [
     DepreciationPeriodComponent,
     DepreciationPeriodDetailComponent,

@@ -22,18 +22,16 @@ put Sass variables here:
 eg $input-color: red;
 ****************************/
 @import '~bootswatch/dist/simplex/variables';
-// @import '~bootswatch/dist/darkly/variables';
-// Override Bootstrap variables
+/*@import '~bootswatch/dist/darkly/variables';*/
+/* Override Bootstrap variables*/
 @import 'bootstrap-variables';
-// Import Bootstrap source files from node_modules
+/* Import Bootstrap source files from node_modules*/
 @import '~bootstrap/scss/bootstrap';
-// Overriding the fonts.google.api URL in bootswatch
+/* Overriding the fonts.google.api URL in bootswatch*/
 $web-font-path: '../fonts/google-fonts.css';
-// @import '~bootswatch/dist/darkly/bootswatch';
+/* @import '~bootswatch/dist/darkly/bootswatch';*/
 @import '~bootswatch/dist/simplex/bootswatch';
 
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
-//@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
-//@import "~datatables.net-datetime/css/dataTables.dateTime";
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
