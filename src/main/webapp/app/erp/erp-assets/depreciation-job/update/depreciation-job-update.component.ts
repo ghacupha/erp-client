@@ -65,8 +65,9 @@ export class DepreciationJobUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationJob }) => {
       if (depreciationJob.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         depreciationJob.timeOfCommencement = today;
+        depreciationJob.depreciationJobStatus = DepreciationJobStatusType.CREATED;
       }
 
       this.updateForm(depreciationJob);
