@@ -111,18 +111,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_processLocked">Process Locked</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="processLocked"
-            id="field_processLocked"
-            data-cy="processLocked"
-            formControlName="processLocked"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_previousPeriod">Previous Period</label>
           <select
             class="form-control"
@@ -140,22 +128,7 @@
               "
               *ngFor="let depreciationPeriodOption of previousPeriodsCollection; trackBy: trackDepreciationPeriodById"
             >
-              {{ depreciationPeriodOption.endDate }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
+              {{ depreciationPeriodOption.periodCode }}
             </option>
           </select>
         </div>
@@ -190,7 +163,7 @@
               "
               *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
             >
-              {{ fiscalMonthOption.id }}
+              {{ fiscalMonthOption.fiscalMonthCode }}
             </option>
           </select>
         </div>
@@ -218,7 +191,7 @@
               "
               *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
             >
-              {{ fiscalQuarterOption.id }}
+              {{ fiscalQuarterOption.fiscalQuarterCode }}
             </option>
           </select>
         </div>

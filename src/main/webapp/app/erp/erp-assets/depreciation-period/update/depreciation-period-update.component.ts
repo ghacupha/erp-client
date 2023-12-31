@@ -75,6 +75,12 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationPeriod }) => {
+
+      if ( depreciationPeriod.id === undefined ) {
+
+        depreciationPeriod.depreciationPeriodStatus = DepreciationPeriodStatusTypes.OPEN;
+      }
+
       this.updateForm(depreciationPeriod);
 
       this.loadRelationshipsOptions();

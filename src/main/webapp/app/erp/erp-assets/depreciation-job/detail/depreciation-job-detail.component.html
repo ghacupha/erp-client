@@ -48,14 +48,14 @@
         <dt><span>Created By</span></dt>
         <dd>
           <div *ngIf="depreciationJob.createdBy">
-            <a [routerLink]="['/application-user', depreciationJob.createdBy?.id, 'view']">{{ depreciationJob.createdBy?.designation }}</a>
+            <a [routerLink]="['/application-user', depreciationJob.createdBy?.id, 'view']">{{ depreciationJob.createdBy?.applicationIdentity }}</a>
           </div>
         </dd>
         <dt><span>Depreciation Period</span></dt>
         <dd>
           <div *ngIf="depreciationJob.depreciationPeriod">
             <a [routerLink]="['/depreciation-period', depreciationJob.depreciationPeriod?.id, 'view']">{{
-              depreciationJob.depreciationPeriod?.endDate
+              depreciationJob.depreciationPeriod?.periodCode
             }}</a>
           </div>
         </dd>

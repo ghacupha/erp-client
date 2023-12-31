@@ -98,7 +98,7 @@
           <td>
             <div *ngIf="depreciationPeriod.previousPeriod">
               <a [routerLink]="['/depreciation-period', depreciationPeriod.previousPeriod?.id, 'view']">{{
-                depreciationPeriod.previousPeriod?.endDate
+                depreciationPeriod.previousPeriod?.periodCode
               }}</a>
             </div>
           </td>
@@ -118,14 +118,13 @@
           </td>
           <td>
             <div *ngIf="depreciationPeriod.fiscalMonth">
-              <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">{{ depreciationPeriod.fiscalMonth?.id }}</a>
+              <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">{{ depreciationPeriod.fiscalMonth?.fiscalMonthCode }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="depreciationPeriod.fiscalQuarter">
-              <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">{{
-                depreciationPeriod.fiscalQuarter?.id
-              }}</a>
+              <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">
+                {{ depreciationPeriod.fiscalQuarter?.fiscalQuarterCode }}</a>
             </div>
           </td>
           <td class="text-right">

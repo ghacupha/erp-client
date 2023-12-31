@@ -91,7 +91,7 @@
           <td>
             <div *ngIf="depreciationJob.createdBy">
               <a [routerLink]="['/application-user', depreciationJob.createdBy?.id, 'view']">{{
-                depreciationJob.createdBy?.designation
+                depreciationJob.createdBy?.applicationIdentity
               }}</a>
             </div>
           </td>

@@ -6,7 +6,7 @@
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "skipLibCheck": true,
     "declaration": false,
     "downlevelIteration": true,
@@ -23,7 +23,7 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "preserveWhitespaces": true,
+    "preserveWhitespaces": false,
     "allowSyntheticDefaultImports": true
   }
 }
