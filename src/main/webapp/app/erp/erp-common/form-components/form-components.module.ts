@@ -67,6 +67,9 @@ import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m2
 import { FiscalMonthOptionViewComponent } from './fiscal-quarter-components/fiscal-quarter-option-view.component';
 import { FormatFiscalQuarterPipe } from './fiscal-quarter-components/format-fiscal-quarter.pipe';
 import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-components/m21-fiscal-quarter-form-control.component';
+import { FiscalYearOptionViewComponent } from './fiscal-year-components/fiscal-year-option-view.component';
+import { FormatFiscalYearPipe } from './fiscal-year-components/format-fiscal-year.pipe';
+import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-fiscal-year-form-control.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +119,9 @@ import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-component
     FiscalMonthOptionViewComponent,
     FormatFiscalQuarterPipe,
     M21FiscalQuarterFormControlComponent,
+    FiscalYearOptionViewComponent,
+    FormatFiscalYearPipe,
+    M21FiscalYearFormControlComponent,
   ],
   imports: [
     CommonModule,
@@ -169,7 +175,10 @@ import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-component
     M21FiscalMonthFormControlComponent,
     FiscalMonthOptionViewComponent,
     FormatFiscalQuarterPipe,
-    M21FiscalQuarterFormControlComponent
+    M21FiscalQuarterFormControlComponent,
+    FiscalYearOptionViewComponent,
+    FormatFiscalYearPipe,
+    M21FiscalYearFormControlComponent,
   ]
 })
 export class FormComponentsModule {

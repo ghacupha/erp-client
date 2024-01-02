@@ -68,6 +68,11 @@ export class FiscalYearUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ fiscalYear }) => {
+
+      if (fiscalYear.id === undefined ) {
+
+        fiscalYear.fiscalYearStatus = FiscalYearStatusType.OPEN;
+      }
       this.updateForm(fiscalYear);
 
       this.loadRelationshipsOptions();
