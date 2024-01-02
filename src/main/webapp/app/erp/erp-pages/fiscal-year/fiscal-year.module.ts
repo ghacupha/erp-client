@@ -23,9 +23,10 @@ import { FiscalYearDetailComponent } from './detail/fiscal-year-detail.component
 import { FiscalYearUpdateComponent } from './update/fiscal-year-update.component';
 import { FiscalYearDeleteDialogComponent } from './delete/fiscal-year-delete-dialog.component';
 import { FiscalYearRoutingModule } from './route/fiscal-year-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, FiscalYearRoutingModule],
+  imports: [SharedModule, FiscalYearRoutingModule, ErpCommonModule],
   declarations: [FiscalYearComponent, FiscalYearDetailComponent, FiscalYearUpdateComponent, FiscalYearDeleteDialogComponent],
   entryComponents: [FiscalYearDeleteDialogComponent],
 })
