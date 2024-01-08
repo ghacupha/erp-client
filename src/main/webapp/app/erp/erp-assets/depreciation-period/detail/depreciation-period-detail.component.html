@@ -69,27 +69,11 @@
             }}</a>
           </div>
         </dd>
-        <dt><span>Fiscal Year</span></dt>
-        <dd>
-          <div *ngIf="depreciationPeriod.fiscalYear">
-            <a [routerLink]="['/fiscal-year', depreciationPeriod.fiscalYear?.id, 'view']">{{
-              depreciationPeriod.fiscalYear?.fiscalYearCode
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Fiscal Month</span></dt>
         <dd>
           <div *ngIf="depreciationPeriod.fiscalMonth">
             <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">
               {{ depreciationPeriod.fiscalMonth?.fiscalMonthCode }}
-            </a>
-          </div>
-        </dd>
-        <dt><span>Fiscal Quarter</span></dt>
-        <dd>
-          <div *ngIf="depreciationPeriod.fiscalQuarter">
-            <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">
-              {{ depreciationPeriod.fiscalQuarter?.fiscalQuarterCode }}
             </a>
           </div>
         </dd>

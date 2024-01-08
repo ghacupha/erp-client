@@ -133,7 +133,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
           <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
             <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
@@ -151,7 +151,7 @@
           *ngIf="editForm.get(['fiscalYear'])!.invalid && (editForm.get(['fiscalYear'])!.dirty || editForm.get(['fiscalYear'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['fiscalYear'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
         <!--<div class="form-group">
           <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
@@ -184,7 +184,7 @@
           <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
         </jhi-m21-fiscal-month-form-control>
 
-        <jhi-m21-fiscal-quarter-form-control
+        <!--<jhi-m21-fiscal-quarter-form-control
           ngDefaultControl
           [disabledInput]="false"
           formControlName='fiscalQuarter'
@@ -193,7 +193,7 @@
           inputControlLabel='Fiscal Quarter'
         >
           <option [ngValue]="editForm.get('fiscalQuarter')!.value"></option>
-        </jhi-m21-fiscal-quarter-form-control>
+        </jhi-m21-fiscal-quarter-form-control>-->
 
       </div>
 

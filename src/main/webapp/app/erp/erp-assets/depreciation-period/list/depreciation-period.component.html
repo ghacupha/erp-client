@@ -79,9 +79,7 @@
           <th scope="col" jhiSortBy="processLocked"><span>Process Locked</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="previousPeriod.endDate"><span>Previous Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.applicationIdentity"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fiscalMonth.id"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fiscalQuarter.id"><span>Fiscal Quarter</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -110,21 +108,8 @@
             </div>
           </td>
           <td>
-            <div *ngIf="depreciationPeriod.fiscalYear">
-              <a [routerLink]="['/fiscal-year', depreciationPeriod.fiscalYear?.id, 'view']">{{
-                depreciationPeriod.fiscalYear?.fiscalYearCode
-              }}</a>
-            </div>
-          </td>
-          <td>
             <div *ngIf="depreciationPeriod.fiscalMonth">
               <a [routerLink]="['/fiscal-month', depreciationPeriod.fiscalMonth?.id, 'view']">{{ depreciationPeriod.fiscalMonth?.fiscalMonthCode }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="depreciationPeriod.fiscalQuarter">
-              <a [routerLink]="['/fiscal-quarter', depreciationPeriod.fiscalQuarter?.id, 'view']">
-                {{ depreciationPeriod.fiscalQuarter?.fiscalQuarterCode }}</a>
             </div>
           </td>
           <td class="text-right">

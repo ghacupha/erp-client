@@ -76,6 +76,30 @@ export class FiscalMonthUpdateComponent implements OnInit {
     });
   }
 
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateUniversallyUniqueMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...update]
+    });
+  }
+
+  updateFiscalYear(update: IFiscalYear): void {
+    this.editForm.patchValue({
+      fiscalYear: update
+    });
+  }
+
+  updateFiscalQuarter(update: IFiscalQuarter): void {
+    this.editForm.patchValue({
+      fiscalQuarter: update
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

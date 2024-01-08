@@ -23,9 +23,10 @@ import { FiscalQuarterDetailComponent } from './detail/fiscal-quarter-detail.com
 import { FiscalQuarterUpdateComponent } from './update/fiscal-quarter-update.component';
 import { FiscalQuarterDeleteDialogComponent } from './delete/fiscal-quarter-delete-dialog.component';
 import { FiscalQuarterRoutingModule } from './route/fiscal-quarter-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, FiscalQuarterRoutingModule],
+  imports: [SharedModule, FiscalQuarterRoutingModule, ErpCommonModule],
   declarations: [FiscalQuarterComponent, FiscalQuarterDetailComponent, FiscalQuarterUpdateComponent, FiscalQuarterDeleteDialogComponent],
   entryComponents: [FiscalQuarterDeleteDialogComponent],
 })

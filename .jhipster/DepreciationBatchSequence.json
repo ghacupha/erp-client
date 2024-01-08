@@ -17,6 +17,30 @@
       "fieldName": "depreciationBatchStatus",
       "fieldType": "DepreciationBatchStatusType",
       "fieldValues": "CREATED,RUNNING,COMPLETED,ERRORED,ENQUEUED"
+    },
+    {
+      "fieldName": "batchSize",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "processedItems",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "sequenceNumber",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "isLastBatch",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "processingTime",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "totalItems",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [

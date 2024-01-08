@@ -58,9 +58,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
     processLocked: [],
     previousPeriod: [],
     createdBy: [],
-    fiscalYear: [null, Validators.required],
     fiscalMonth: [null, Validators.required],
-    fiscalQuarter: [null, Validators.required],
   });
 
   constructor(
@@ -118,12 +116,6 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
     });
   }
 
-  updateFiscalQuarter(update: IFiscalQuarter): void {
-    this.editForm.patchValue({
-      fiscalQuarter: update,
-    });
-  }
-
   trackDepreciationPeriodById(index: number, item: IDepreciationPeriod): number {
     return item.id!;
   }
@@ -173,9 +165,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       processLocked: depreciationPeriod.processLocked,
       previousPeriod: depreciationPeriod.previousPeriod,
       createdBy: depreciationPeriod.createdBy,
-      fiscalYear: depreciationPeriod.fiscalYear,
       fiscalMonth: depreciationPeriod.fiscalMonth,
-      fiscalQuarter: depreciationPeriod.fiscalQuarter,
     });
 
     this.previousPeriodsCollection = this.depreciationPeriodService.addDepreciationPeriodToCollectionIfMissing(
@@ -186,17 +176,9 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       this.applicationUsersSharedCollection,
       depreciationPeriod.createdBy
     );
-    this.fiscalYearsSharedCollection = this.fiscalYearService.addFiscalYearToCollectionIfMissing(
-      this.fiscalYearsSharedCollection,
-      depreciationPeriod.fiscalYear
-    );
     this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
       this.fiscalMonthsSharedCollection,
       depreciationPeriod.fiscalMonth
-    );
-    this.fiscalQuartersSharedCollection = this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(
-      this.fiscalQuartersSharedCollection,
-      depreciationPeriod.fiscalQuarter
     );
   }
 
@@ -266,9 +248,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       processLocked: this.editForm.get(['processLocked'])!.value,
       previousPeriod: this.editForm.get(['previousPeriod'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,
-      fiscalYear: this.editForm.get(['fiscalYear'])!.value,
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
-      fiscalQuarter: this.editForm.get(['fiscalQuarter'])!.value,
     };
   }
 }

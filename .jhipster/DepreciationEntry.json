@@ -12,6 +12,18 @@
     {
       "fieldName": "assetNumber",
       "fieldType": "Long"
+    },
+    {
+      "relationshipName": "depreciationJob",
+      "otherEntityName": "depreciationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "description"
+    },
+    {
+      "relationshipName": "depreciationBatchSequence",
+      "otherEntityName": "depreciationBatchSequence",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "relationships": [
