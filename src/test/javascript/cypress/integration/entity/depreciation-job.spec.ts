@@ -177,6 +177,18 @@ describe('DepreciationJob e2e test', () => {
 
       cy.get(`[data-cy="description"]`).type('scalable revolutionize Shilling').should('have.value', 'scalable revolutionize Shilling');
 
+      cy.get(`[data-cy="numberOfBatches"]`).type('82368').should('have.value', '82368');
+
+      cy.get(`[data-cy="processedBatches"]`).type('67367').should('have.value', '67367');
+
+      cy.get(`[data-cy="lastBatchSize"]`).type('37752').should('have.value', '37752');
+
+      cy.get(`[data-cy="processedItems"]`).type('72778').should('have.value', '72778');
+
+      cy.get(`[data-cy="processingTime"]`).type('PT25M').should('have.value', 'PT25M');
+
+      cy.get(`[data-cy="totalItems"]`).type('81144').should('have.value', '81144');
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

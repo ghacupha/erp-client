@@ -23,9 +23,10 @@ import { DepreciationJobDetailComponent } from './detail/depreciation-job-detail
 import { DepreciationJobUpdateComponent } from './update/depreciation-job-update.component';
 import { DepreciationJobDeleteDialogComponent } from './delete/depreciation-job-delete-dialog.component';
 import { DepreciationJobRoutingModule } from './route/depreciation-job-routing.module';
+import { FormComponentsModule } from '../../erp-common/form-components/form-components.module';
 
 @NgModule({
-  imports: [SharedModule, DepreciationJobRoutingModule],
+  imports: [SharedModule, DepreciationJobRoutingModule, FormComponentsModule],
   declarations: [
     DepreciationJobComponent,
     DepreciationJobDetailComponent,

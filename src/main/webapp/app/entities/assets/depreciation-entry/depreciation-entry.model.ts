@@ -25,12 +25,17 @@ import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/dep
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarter.model';
 import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
+import { IDepreciationJob } from 'app/entities/assets/depreciation-job/depreciation-job.model';
+import { IDepreciationBatchSequence } from 'app/entities/assets/depreciation-batch-sequence/depreciation-batch-sequence.model';
 
 export interface IDepreciationEntry {
   id?: number;
   postedAt?: dayjs.Dayjs | null;
   depreciationAmount?: number | null;
   assetNumber?: number | null;
+  batchSequenceNumber?: number | null;
+  processedItems?: string | null;
+  totalItemsProcessed?: number | null;
   serviceOutlet?: IServiceOutlet | null;
   assetCategory?: IAssetCategory | null;
   depreciationMethod?: IDepreciationMethod | null;
@@ -39,6 +44,8 @@ export interface IDepreciationEntry {
   fiscalMonth?: IFiscalMonth | null;
   fiscalQuarter?: IFiscalQuarter | null;
   fiscalYear?: IFiscalYear | null;
+  depreciationJob?: IDepreciationJob | null;
+  depreciationBatchSequence?: IDepreciationBatchSequence | null;
 }
 
 export class DepreciationEntry implements IDepreciationEntry {
@@ -47,6 +54,9 @@ export class DepreciationEntry implements IDepreciationEntry {
     public postedAt?: dayjs.Dayjs | null,
     public depreciationAmount?: number | null,
     public assetNumber?: number | null,
+    public batchSequenceNumber?: number | null,
+    public processedItems?: string | null,
+    public totalItemsProcessed?: number | null,
     public serviceOutlet?: IServiceOutlet | null,
     public assetCategory?: IAssetCategory | null,
     public depreciationMethod?: IDepreciationMethod | null,
@@ -54,7 +64,9 @@ export class DepreciationEntry implements IDepreciationEntry {
     public depreciationPeriod?: IDepreciationPeriod | null,
     public fiscalMonth?: IFiscalMonth | null,
     public fiscalQuarter?: IFiscalQuarter | null,
-    public fiscalYear?: IFiscalYear | null
+    public fiscalYear?: IFiscalYear | null,
+    public depreciationJob?: IDepreciationJob | null,
+    public depreciationBatchSequence?: IDepreciationBatchSequence | null
   ) {}
 }
 

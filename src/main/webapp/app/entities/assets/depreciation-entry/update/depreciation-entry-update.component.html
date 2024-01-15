@@ -70,6 +70,42 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_batchSequenceNumber">Batch Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="batchSequenceNumber"
+            id="field_batchSequenceNumber"
+            data-cy="batchSequenceNumber"
+            formControlName="batchSequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItemsProcessed">Total Items Processed</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItemsProcessed"
+            id="field_totalItemsProcessed"
+            data-cy="totalItemsProcessed"
+            formControlName="totalItemsProcessed"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
           <select
             class="form-control"
@@ -233,6 +269,55 @@
               *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
             >
               {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJob">Depreciation Job</label>
+          <select
+            class="form-control"
+            id="field_depreciationJob"
+            data-cy="depreciationJob"
+            name="depreciationJob"
+            formControlName="depreciationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationJobOption.id === editForm.get('depreciationJob')!.value?.id
+                  ? editForm.get('depreciationJob')!.value
+                  : depreciationJobOption
+              "
+              *ngFor="let depreciationJobOption of depreciationJobsSharedCollection; trackBy: trackDepreciationJobById"
+            >
+              {{ depreciationJobOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationBatchSequence">Depreciation Batch Sequence</label>
+          <select
+            class="form-control"
+            id="field_depreciationBatchSequence"
+            data-cy="depreciationBatchSequence"
+            name="depreciationBatchSequence"
+            formControlName="depreciationBatchSequence"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationBatchSequenceOption.id === editForm.get('depreciationBatchSequence')!.value?.id
+                  ? editForm.get('depreciationBatchSequence')!.value
+                  : depreciationBatchSequenceOption
+              "
+              *ngFor="
+                let depreciationBatchSequenceOption of depreciationBatchSequencesSharedCollection;
+                trackBy: trackDepreciationBatchSequenceById
+              "
+            >
+              {{ depreciationBatchSequenceOption.id }}
             </option>
           </select>
         </div>

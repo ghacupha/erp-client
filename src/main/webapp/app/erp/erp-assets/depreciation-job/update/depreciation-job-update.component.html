@@ -45,22 +45,6 @@
           </div>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_depreciationJobStatus">Depreciation Job Status</label>
-          <select
-            class="form-control"
-            name="depreciationJobStatus"
-            formControlName="depreciationJobStatus"
-            id="field_depreciationJobStatus"
-            data-cy="depreciationJobStatus"
-          >
-            <option [ngValue]="null"></option>
-            <option *ngFor="let depreciationJobStatusType of depreciationJobStatusTypeValues" [value]="depreciationJobStatusType">
-              {{ depreciationJobStatusType }}
-            </option>
-          </select>
-        </div>-->
-
         <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
@@ -74,21 +58,6 @@
         </div>
 
         <!--<div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>-->
-
-        <div class="form-group">
           <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
           <select
             class="form-control"
@@ -109,7 +78,17 @@
               {{ depreciationPeriodOption.periodCode }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='depreciationPeriod'
+          [inputValue]="editForm.get('depreciationPeriod')!.value"
+          (valueSelected)='updateDepreciationPeriod($event)'
+          inputControlLabel='Depreciation Period'
+        >
+        </jhi-depreciation-period-form-control>
+
       </div>
 
       <div>

@@ -45,6 +45,18 @@
         <dd>
           <span>{{ depreciationEntry.assetNumber }}</span>
         </dd>
+        <dt><span>Batch Sequence Number</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.batchSequenceNumber }}</span>
+        </dd>
+        <dt><span>Processed Items</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.processedItems }}</span>
+        </dd>
+        <dt><span>Total Items Processed</span></dt>
+        <dd>
+          <span>{{ depreciationEntry.totalItemsProcessed }}</span>
+        </dd>
         <dt><span>Service Outlet</span></dt>
         <dd>
           <div *ngIf="depreciationEntry.serviceOutlet">
@@ -106,6 +118,22 @@
           <div *ngIf="depreciationEntry.fiscalYear">
             <a [routerLink]="['/fiscal-year', depreciationEntry.fiscalYear?.id, 'view']">{{
               depreciationEntry.fiscalYear?.fiscalYearCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Job</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationJob">
+            <a [routerLink]="['/depreciation-job', depreciationEntry.depreciationJob?.id, 'view']">{{
+              depreciationEntry.depreciationJob?.description
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Depreciation Batch Sequence</span></dt>
+        <dd>
+          <div *ngIf="depreciationEntry.depreciationBatchSequence">
+            <a [routerLink]="['/depreciation-batch-sequence', depreciationEntry.depreciationBatchSequence?.id, 'view']">{{
+              depreciationEntry.depreciationBatchSequence?.id
             }}</a>
           </div>
         </dd>

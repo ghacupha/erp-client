@@ -17,15 +17,15 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
+import { IDepreciationJob } from '../../../erp-assets/depreciation-job/depreciation-job.model';
 
 @Component({
-  selector: 'jhi-fiscal-year-option-view',
+  selector: 'jhi-depreciation-job-option-view',
   template: `
-    # {{item.id}} Code {{ item.fiscalYearCode }} Status: {{ item.fiscalYearStatus }} Start Date: {{ item.startDate }} End Date: {{ item.endDate }}
+    # {{item.id}} Code {{ item.description }} <span *ngIf='item.depreciationPeriod'>Period: {{ item.depreciationPeriod?.periodCode }}</span>
   `
 })
-export class FiscalYearOptionViewComponent {
+export class DepreciationJobOptionViewComponent {
 
-  @Input() item: IFiscalYear = {};
+  @Input() item: IDepreciationJob = {};
 }

@@ -71,6 +71,9 @@ describe('DepreciationEntry e2e test', () => {
       depreciationEntryUpdatePage.setPostedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       depreciationEntryUpdatePage.setDepreciationAmountInput('5'),
       depreciationEntryUpdatePage.setAssetNumberInput('5'),
+      depreciationEntryUpdatePage.setBatchSequenceNumberInput('5'),
+      depreciationEntryUpdatePage.setProcessedItemsInput('processedItems'),
+      depreciationEntryUpdatePage.setTotalItemsProcessedInput('5'),
       depreciationEntryUpdatePage.serviceOutletSelectLastOption(),
       depreciationEntryUpdatePage.assetCategorySelectLastOption(),
       depreciationEntryUpdatePage.depreciationMethodSelectLastOption(),
@@ -79,6 +82,8 @@ describe('DepreciationEntry e2e test', () => {
       depreciationEntryUpdatePage.fiscalMonthSelectLastOption(),
       depreciationEntryUpdatePage.fiscalQuarterSelectLastOption(),
       depreciationEntryUpdatePage.fiscalYearSelectLastOption(),
+      depreciationEntryUpdatePage.depreciationJobSelectLastOption(),
+      depreciationEntryUpdatePage.depreciationBatchSequenceSelectLastOption(),
     ]);
 
     await depreciationEntryUpdatePage.save();

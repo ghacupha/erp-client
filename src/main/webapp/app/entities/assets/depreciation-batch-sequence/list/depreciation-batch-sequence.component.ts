@@ -96,7 +96,7 @@ export class DepreciationBatchSequenceComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['depreciationBatchStatus'].includes(this.predicate)) {
+    if (query && ['depreciationBatchStatus', 'processingTime'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

@@ -74,6 +74,78 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_numberOfBatches">Number Of Batches</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberOfBatches"
+            id="field_numberOfBatches"
+            data-cy="numberOfBatches"
+            formControlName="numberOfBatches"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedBatches">Processed Batches</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedBatches"
+            id="field_processedBatches"
+            data-cy="processedBatches"
+            formControlName="processedBatches"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_lastBatchSize">Last Batch Size</label>
+          <input
+            type="number"
+            class="form-control"
+            name="lastBatchSize"
+            id="field_lastBatchSize"
+            data-cy="lastBatchSize"
+            formControlName="lastBatchSize"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processingTime">Processing Time</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processingTime"
+            id="field_processingTime"
+            data-cy="processingTime"
+            formControlName="processingTime"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItems">Total Items</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItems"
+            id="field_totalItems"
+            data-cy="totalItems"
+            formControlName="totalItems"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_createdBy">Created By</label>
           <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
             <option [ngValue]="null"></option>

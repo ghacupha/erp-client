@@ -67,6 +67,12 @@ describe('DepreciationJob e2e test', () => {
       depreciationJobUpdatePage.setTimeOfCommencementInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       depreciationJobUpdatePage.depreciationJobStatusSelectLastOption(),
       depreciationJobUpdatePage.setDescriptionInput('description'),
+      depreciationJobUpdatePage.setNumberOfBatchesInput('5'),
+      depreciationJobUpdatePage.setProcessedBatchesInput('5'),
+      depreciationJobUpdatePage.setLastBatchSizeInput('5'),
+      depreciationJobUpdatePage.setProcessedItemsInput('5'),
+      depreciationJobUpdatePage.setProcessingTimeInput('PT12S'),
+      depreciationJobUpdatePage.setTotalItemsInput('5'),
       depreciationJobUpdatePage.createdBySelectLastOption(),
       depreciationJobUpdatePage.depreciationPeriodSelectLastOption(),
     ]);

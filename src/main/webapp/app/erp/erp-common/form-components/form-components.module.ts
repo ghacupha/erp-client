@@ -70,6 +70,10 @@ import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-component
 import { FiscalYearOptionViewComponent } from './fiscal-year-components/fiscal-year-option-view.component';
 import { FormatFiscalYearPipe } from './fiscal-year-components/format-fiscal-year.pipe';
 import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-fiscal-year-form-control.component';
+import { M21DepreciationJobFormControlComponent } from './depreciation-job/m21-depreciation-job-form-control.component';
+import { DepreciationJobOptionViewComponent } from './depreciation-job/depreciation-job-option-view.component';
+import { FormatDepreciationJobPipe } from './depreciation-job/format-depreciation-job.pipe';
+import { DepreciationPeriodFormComponentsModule } from './depreciation-period/depreciation-period-form-components.module';
 
 @NgModule({
   declarations: [
@@ -122,6 +126,9 @@ import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-
     FiscalYearOptionViewComponent,
     FormatFiscalYearPipe,
     M21FiscalYearFormControlComponent,
+    M21DepreciationJobFormControlComponent,
+    DepreciationJobOptionViewComponent,
+    FormatDepreciationJobPipe,
   ],
   imports: [
     CommonModule,
@@ -179,6 +186,10 @@ import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-
     FiscalYearOptionViewComponent,
     FormatFiscalYearPipe,
     M21FiscalYearFormControlComponent,
+    M21DepreciationJobFormControlComponent,
+    DepreciationJobOptionViewComponent,
+    FormatDepreciationJobPipe,
+    DepreciationPeriodFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

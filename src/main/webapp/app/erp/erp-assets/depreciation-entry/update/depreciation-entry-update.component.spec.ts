@@ -46,21 +46,19 @@ import { AssetCategoryService } from '../../asset-category/service/asset-categor
 import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
 import { FiscalQuarterService } from '../../../erp-pages/fiscal-quarter/service/fiscal-quarter.service';
 import { DepreciationMethodService } from '../../depreciation-method/service/depreciation-method.service';
+import { DepreciationJobService } from '../../depreciation-job/service/depreciation-job.service';
+import { IDepreciationBatchSequence } from '../../depreciation-batch-sequence/depreciation-batch-sequence.model';
+import { IDepreciationJob } from '../../depreciation-job/depreciation-job.model';
+import { DepreciationBatchSequenceService } from '../../depreciation-batch-sequence/service/depreciation-batch-sequence.service';
 
 describe('DepreciationEntry Management Update Component', () => {
-  let comp: DepreciationEntryUpdateComponent;
-  let fixture: ComponentFixture<DepreciationEntryUpdateComponent>;
-  let activatedRoute: ActivatedRoute;
-  let depreciationEntryService: DepreciationEntryService;
-  let serviceOutletService: ServiceOutletService;
-  let assetCategoryService: AssetCategoryService;
-  let depreciationMethodService: DepreciationMethodService;
-  let assetRegistrationService: AssetRegistrationService;
-  let depreciationPeriodService: DepreciationPeriodService;
-  let fiscalMonthService: FiscalMonthService;
-  let fiscalQuarterService: FiscalQuarterService;
-  let fiscalYearService: FiscalYearService;
-
+  let comp: DepreciationEntryUpdateComponent, fixture: ComponentFixture<DepreciationEntryUpdateComponent>,
+    activatedRoute: ActivatedRoute, depreciationEntryService: DepreciationEntryService,
+    serviceOutletService: ServiceOutletService, assetCategoryService: AssetCategoryService,
+    depreciationMethodService: DepreciationMethodService, assetRegistrationService: AssetRegistrationService,
+    depreciationPeriodService: DepreciationPeriodService, fiscalMonthService: FiscalMonthService,
+    fiscalQuarterService: FiscalQuarterService, fiscalYearService: FiscalYearService,
+    depreciationJobService: DepreciationJobService, depreciationBatchSequenceService: DepreciationBatchSequenceService;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
@@ -81,6 +79,8 @@ describe('DepreciationEntry Management Update Component', () => {
     fiscalMonthService = TestBed.inject(FiscalMonthService);
     fiscalQuarterService = TestBed.inject(FiscalQuarterService);
     fiscalYearService = TestBed.inject(FiscalYearService);
+    depreciationJobService = TestBed.inject(DepreciationJobService);
+    depreciationBatchSequenceService = TestBed.inject(DepreciationBatchSequenceService);
 
     comp = fixture.componentInstance;
   });
@@ -256,6 +256,55 @@ describe('DepreciationEntry Management Update Component', () => {
       expect(comp.fiscalYearsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call DepreciationJob query and add missing value', () => {
+      const depreciationEntry: IDepreciationEntry = { id: 456 };
+      const depreciationJob: IDepreciationJob = { id: 13222 };
+      depreciationEntry.depreciationJob = depreciationJob;
+
+      const depreciationJobCollection: IDepreciationJob[] = [{ id: 77330 }];
+      jest.spyOn(depreciationJobService, 'query').mockReturnValue(of(new HttpResponse({ body: depreciationJobCollection })));
+      const additionalDepreciationJobs = [depreciationJob];
+      const expectedCollection: IDepreciationJob[] = [...additionalDepreciationJobs, ...depreciationJobCollection];
+      jest.spyOn(depreciationJobService, 'addDepreciationJobToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationEntry });
+      comp.ngOnInit();
+
+      expect(depreciationJobService.query).toHaveBeenCalled();
+      expect(depreciationJobService.addDepreciationJobToCollectionIfMissing).toHaveBeenCalledWith(
+        depreciationJobCollection,
+        ...additionalDepreciationJobs
+      );
+      expect(comp.depreciationJobsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call DepreciationBatchSequence query and add missing value', () => {
+      const depreciationEntry: IDepreciationEntry = { id: 456 };
+      const depreciationBatchSequence: IDepreciationBatchSequence = { id: 46370 };
+      depreciationEntry.depreciationBatchSequence = depreciationBatchSequence;
+
+      const depreciationBatchSequenceCollection: IDepreciationBatchSequence[] = [{ id: 32758 }];
+      jest
+        .spyOn(depreciationBatchSequenceService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: depreciationBatchSequenceCollection })));
+      const additionalDepreciationBatchSequences = [depreciationBatchSequence];
+      const expectedCollection: IDepreciationBatchSequence[] = [
+        ...additionalDepreciationBatchSequences,
+        ...depreciationBatchSequenceCollection,
+      ];
+      jest.spyOn(depreciationBatchSequenceService, 'addDepreciationBatchSequenceToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationEntry });
+      comp.ngOnInit();
+
+      expect(depreciationBatchSequenceService.query).toHaveBeenCalled();
+      expect(depreciationBatchSequenceService.addDepreciationBatchSequenceToCollectionIfMissing).toHaveBeenCalledWith(
+        depreciationBatchSequenceCollection,
+        ...additionalDepreciationBatchSequences
+      );
+      expect(comp.depreciationBatchSequencesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const depreciationEntry: IDepreciationEntry = { id: 456 };
       const serviceOutlet: IServiceOutlet = { id: 27372 };
@@ -274,6 +323,10 @@ describe('DepreciationEntry Management Update Component', () => {
       depreciationEntry.fiscalQuarter = fiscalQuarter;
       const fiscalYear: IFiscalYear = { id: 14983 };
       depreciationEntry.fiscalYear = fiscalYear;
+      const depreciationJob: IDepreciationJob = { id: 29177 };
+      depreciationEntry.depreciationJob = depreciationJob;
+      const depreciationBatchSequence: IDepreciationBatchSequence = { id: 21118 };
+      depreciationEntry.depreciationBatchSequence = depreciationBatchSequence;
 
       activatedRoute.data = of({ depreciationEntry });
       comp.ngOnInit();
@@ -287,6 +340,8 @@ describe('DepreciationEntry Management Update Component', () => {
       expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
       expect(comp.fiscalQuartersSharedCollection).toContain(fiscalQuarter);
       expect(comp.fiscalYearsSharedCollection).toContain(fiscalYear);
+      expect(comp.depreciationJobsSharedCollection).toContain(depreciationJob);
+      expect(comp.depreciationBatchSequencesSharedCollection).toContain(depreciationBatchSequence);
     });
   });
 
@@ -415,6 +470,22 @@ describe('DepreciationEntry Management Update Component', () => {
       it('Should return tracked FiscalYear primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackFiscalYearById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDepreciationJobById', () => {
+      it('Should return tracked DepreciationJob primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDepreciationJobById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDepreciationBatchSequenceById', () => {
+      it('Should return tracked DepreciationBatchSequence primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDepreciationBatchSequenceById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

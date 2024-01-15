@@ -51,6 +51,9 @@ export class DepreciationEntryUpdatePage {
   postedAtInput = element(by.id('field_postedAt'));
   depreciationAmountInput = element(by.id('field_depreciationAmount'));
   assetNumberInput = element(by.id('field_assetNumber'));
+  batchSequenceNumberInput = element(by.id('field_batchSequenceNumber'));
+  processedItemsInput = element(by.id('field_processedItems'));
+  totalItemsProcessedInput = element(by.id('field_totalItemsProcessed'));
 
   serviceOutletSelect = element(by.id('field_serviceOutlet'));
   assetCategorySelect = element(by.id('field_assetCategory'));
@@ -60,6 +63,8 @@ export class DepreciationEntryUpdatePage {
   fiscalMonthSelect = element(by.id('field_fiscalMonth'));
   fiscalQuarterSelect = element(by.id('field_fiscalQuarter'));
   fiscalYearSelect = element(by.id('field_fiscalYear'));
+  depreciationJobSelect = element(by.id('field_depreciationJob'));
+  depreciationBatchSequenceSelect = element(by.id('field_depreciationBatchSequence'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -95,6 +100,30 @@ export class DepreciationEntryUpdatePage {
 
   async getAssetNumberInput(): Promise<string> {
     return await this.assetNumberInput.getAttribute('value');
+  }
+
+  async setBatchSequenceNumberInput(batchSequenceNumber: string): Promise<void> {
+    await this.batchSequenceNumberInput.sendKeys(batchSequenceNumber);
+  }
+
+  async getBatchSequenceNumberInput(): Promise<string> {
+    return await this.batchSequenceNumberInput.getAttribute('value');
+  }
+
+  async setProcessedItemsInput(processedItems: string): Promise<void> {
+    await this.processedItemsInput.sendKeys(processedItems);
+  }
+
+  async getProcessedItemsInput(): Promise<string> {
+    return await this.processedItemsInput.getAttribute('value');
+  }
+
+  async setTotalItemsProcessedInput(totalItemsProcessed: string): Promise<void> {
+    await this.totalItemsProcessedInput.sendKeys(totalItemsProcessed);
+  }
+
+  async getTotalItemsProcessedInput(): Promise<string> {
+    return await this.totalItemsProcessedInput.getAttribute('value');
   }
 
   async serviceOutletSelectLastOption(): Promise<void> {
@@ -223,6 +252,38 @@ export class DepreciationEntryUpdatePage {
 
   async getFiscalYearSelectedOption(): Promise<string> {
     return await this.fiscalYearSelect.element(by.css('option:checked')).getText();
+  }
+
+  async depreciationJobSelectLastOption(): Promise<void> {
+    await this.depreciationJobSelect.all(by.tagName('option')).last().click();
+  }
+
+  async depreciationJobSelectOption(option: string): Promise<void> {
+    await this.depreciationJobSelect.sendKeys(option);
+  }
+
+  getDepreciationJobSelect(): ElementFinder {
+    return this.depreciationJobSelect;
+  }
+
+  async getDepreciationJobSelectedOption(): Promise<string> {
+    return await this.depreciationJobSelect.element(by.css('option:checked')).getText();
+  }
+
+  async depreciationBatchSequenceSelectLastOption(): Promise<void> {
+    await this.depreciationBatchSequenceSelect.all(by.tagName('option')).last().click();
+  }
+
+  async depreciationBatchSequenceSelectOption(option: string): Promise<void> {
+    await this.depreciationBatchSequenceSelect.sendKeys(option);
+  }
+
+  getDepreciationBatchSequenceSelect(): ElementFinder {
+    return this.depreciationBatchSequenceSelect;
+  }
+
+  async getDepreciationBatchSequenceSelectedOption(): Promise<string> {
+    return await this.depreciationBatchSequenceSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

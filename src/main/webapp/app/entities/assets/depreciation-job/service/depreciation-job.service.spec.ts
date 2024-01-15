@@ -47,6 +47,12 @@ describe('DepreciationJob Service', () => {
       timeOfCommencement: currentDate,
       depreciationJobStatus: DepreciationJobStatusType.COMPLETE,
       description: 'AAAAAAA',
+      numberOfBatches: 0,
+      processedBatches: 0,
+      lastBatchSize: 0,
+      processedItems: 0,
+      processingTime: 'PT1S',
+      totalItems: 0,
     };
   });
 
@@ -96,6 +102,12 @@ describe('DepreciationJob Service', () => {
           timeOfCommencement: currentDate.format(DATE_TIME_FORMAT),
           depreciationJobStatus: 'BBBBBB',
           description: 'BBBBBB',
+          numberOfBatches: 1,
+          processedBatches: 1,
+          lastBatchSize: 1,
+          processedItems: 1,
+          processingTime: 'BBBBBB',
+          totalItems: 1,
         },
         elemDefault
       );
@@ -119,6 +131,8 @@ describe('DepreciationJob Service', () => {
         {
           timeOfCommencement: currentDate.format(DATE_TIME_FORMAT),
           description: 'BBBBBB',
+          processingTime: 'BBBBBB',
+          totalItems: 1,
         },
         new DepreciationJob()
       );
@@ -146,6 +160,12 @@ describe('DepreciationJob Service', () => {
           timeOfCommencement: currentDate.format(DATE_TIME_FORMAT),
           depreciationJobStatus: 'BBBBBB',
           description: 'BBBBBB',
+          numberOfBatches: 1,
+          processedBatches: 1,
+          lastBatchSize: 1,
+          processedItems: 1,
+          processingTime: 'BBBBBB',
+          totalItems: 1,
         },
         elemDefault
       );
@@ -202,7 +222,7 @@ describe('DepreciationJob Service', () => {
       });
 
       it('should add only unique DepreciationJob to an array', () => {
-        const depreciationJobArray: IDepreciationJob[] = [{ id: 123 }, { id: 456 }, { id: 24816 }];
+        const depreciationJobArray: IDepreciationJob[] = [{ id: 123 }, { id: 456 }, { id: 29811 }];
         const depreciationJobCollection: IDepreciationJob[] = [{ id: 123 }];
         expectedResult = service.addDepreciationJobToCollectionIfMissing(depreciationJobCollection, ...depreciationJobArray);
         expect(expectedResult).toHaveLength(3);

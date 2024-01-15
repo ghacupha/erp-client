@@ -14,16 +14,16 @@
       "fieldType": "Long"
     },
     {
-      "relationshipName": "depreciationJob",
-      "otherEntityName": "depreciationJob",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "description"
+      "fieldName": "batchSequenceNumber",
+      "fieldType": "Integer"
     },
     {
-      "relationshipName": "depreciationBatchSequence",
-      "otherEntityName": "depreciationBatchSequence",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
+      "fieldName": "processedItems",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "totalItemsProcessed",
+      "fieldType": "Integer"
     }
   ],
   "relationships": [
@@ -74,6 +74,18 @@
       "otherEntityName": "fiscalYear",
       "relationshipType": "many-to-one",
       "otherEntityField": "fiscalYearCode"
+    },
+    {
+      "relationshipName": "depreciationJob",
+      "otherEntityName": "depreciationJob",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "description"
+    },
+    {
+      "relationshipName": "depreciationBatchSequence",
+      "otherEntityName": "depreciationBatchSequence",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
   "service": "serviceImpl",

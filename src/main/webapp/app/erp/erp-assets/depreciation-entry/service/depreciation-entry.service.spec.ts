@@ -46,6 +46,9 @@ describe('DepreciationEntry Service', () => {
       postedAt: currentDate,
       depreciationAmount: 0,
       assetNumber: 0,
+      batchSequenceNumber: 0,
+      processedItems: 'AAAAAAA',
+      totalItemsProcessed: 0,
     };
   });
 
@@ -95,6 +98,9 @@ describe('DepreciationEntry Service', () => {
           postedAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationAmount: 1,
           assetNumber: 1,
+          batchSequenceNumber: 1,
+          processedItems: 'BBBBBB',
+          totalItemsProcessed: 1,
         },
         elemDefault
       );
@@ -118,6 +124,7 @@ describe('DepreciationEntry Service', () => {
         {
           postedAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationAmount: 1,
+          processedItems: 'BBBBBB',
         },
         new DepreciationEntry()
       );
@@ -145,6 +152,9 @@ describe('DepreciationEntry Service', () => {
           postedAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationAmount: 1,
           assetNumber: 1,
+          batchSequenceNumber: 1,
+          processedItems: 'BBBBBB',
+          totalItemsProcessed: 1,
         },
         elemDefault
       );
@@ -201,7 +211,7 @@ describe('DepreciationEntry Service', () => {
       });
 
       it('should add only unique DepreciationEntry to an array', () => {
-        const depreciationEntryArray: IDepreciationEntry[] = [{ id: 123 }, { id: 456 }, { id: 47217 }];
+        const depreciationEntryArray: IDepreciationEntry[] = [{ id: 123 }, { id: 456 }, { id: 61329 }];
         const depreciationEntryCollection: IDepreciationEntry[] = [{ id: 123 }];
         expectedResult = service.addDepreciationEntryToCollectionIfMissing(depreciationEntryCollection, ...depreciationEntryArray);
         expect(expectedResult).toHaveLength(3);

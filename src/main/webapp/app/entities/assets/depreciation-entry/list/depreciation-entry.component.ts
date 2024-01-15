@@ -96,6 +96,10 @@ export class DepreciationEntryComponent implements OnInit {
   }
 
   search(query: string): void {
+    if (query && ['processedItems'].includes(this.predicate)) {
+      this.predicate = 'id';
+      this.ascending = true;
+    }
     this.currentSearch = query;
     this.loadPage(1);
   }

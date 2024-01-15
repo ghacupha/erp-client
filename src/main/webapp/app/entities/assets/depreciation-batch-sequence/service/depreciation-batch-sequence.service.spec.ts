@@ -48,6 +48,12 @@ describe('DepreciationBatchSequence Service', () => {
       endIndex: 0,
       createdAt: currentDate,
       depreciationBatchStatus: DepreciationBatchStatusType.CREATED,
+      batchSize: 0,
+      processedItems: 0,
+      sequenceNumber: 0,
+      isLastBatch: false,
+      processingTime: 'PT1S',
+      totalItems: 0,
     };
   });
 
@@ -98,6 +104,12 @@ describe('DepreciationBatchSequence Service', () => {
           endIndex: 1,
           createdAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationBatchStatus: 'BBBBBB',
+          batchSize: 1,
+          processedItems: 1,
+          sequenceNumber: 1,
+          isLastBatch: true,
+          processingTime: 'BBBBBB',
+          totalItems: 1,
         },
         elemDefault
       );
@@ -120,6 +132,9 @@ describe('DepreciationBatchSequence Service', () => {
       const patchObject = Object.assign(
         {
           depreciationBatchStatus: 'BBBBBB',
+          processedItems: 1,
+          sequenceNumber: 1,
+          totalItems: 1,
         },
         new DepreciationBatchSequence()
       );
@@ -148,6 +163,12 @@ describe('DepreciationBatchSequence Service', () => {
           endIndex: 1,
           createdAt: currentDate.format(DATE_TIME_FORMAT),
           depreciationBatchStatus: 'BBBBBB',
+          batchSize: 1,
+          processedItems: 1,
+          sequenceNumber: 1,
+          isLastBatch: true,
+          processingTime: 'BBBBBB',
+          totalItems: 1,
         },
         elemDefault
       );
@@ -210,7 +231,7 @@ describe('DepreciationBatchSequence Service', () => {
       });
 
       it('should add only unique DepreciationBatchSequence to an array', () => {
-        const depreciationBatchSequenceArray: IDepreciationBatchSequence[] = [{ id: 123 }, { id: 456 }, { id: 1117 }];
+        const depreciationBatchSequenceArray: IDepreciationBatchSequence[] = [{ id: 123 }, { id: 456 }, { id: 88559 }];
         const depreciationBatchSequenceCollection: IDepreciationBatchSequence[] = [{ id: 123 }];
         expectedResult = service.addDepreciationBatchSequenceToCollectionIfMissing(
           depreciationBatchSequenceCollection,

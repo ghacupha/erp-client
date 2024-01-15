@@ -16,16 +16,15 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Component, Input } from '@angular/core';
-import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
+import { Pipe, PipeTransform } from '@angular/core';
+import { IDepreciationJob } from '../../../erp-assets/depreciation-job/depreciation-job.model';
 
-@Component({
-  selector: 'jhi-fiscal-year-option-view',
-  template: `
-    # {{item.id}} Code {{ item.fiscalYearCode }} Status: {{ item.fiscalYearStatus }} Start Date: {{ item.startDate }} End Date: {{ item.endDate }}
-  `
+@Pipe({
+  name: 'formatDepreciationJob',
 })
-export class FiscalYearOptionViewComponent {
+export class FormatDepreciationJobPipe implements PipeTransform {
 
-  @Input() item: IFiscalYear = {};
+  transform(value: IDepreciationJob): string {
+    return `Id: ${value.id} | Desc: ${value.description} | Code: ${value.depreciationPeriod?.periodCode}`;
+  }
 }

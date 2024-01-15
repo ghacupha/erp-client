@@ -51,6 +51,12 @@ export class DepreciationJobUpdatePage {
   timeOfCommencementInput = element(by.id('field_timeOfCommencement'));
   depreciationJobStatusSelect = element(by.id('field_depreciationJobStatus'));
   descriptionInput = element(by.id('field_description'));
+  numberOfBatchesInput = element(by.id('field_numberOfBatches'));
+  processedBatchesInput = element(by.id('field_processedBatches'));
+  lastBatchSizeInput = element(by.id('field_lastBatchSize'));
+  processedItemsInput = element(by.id('field_processedItems'));
+  processingTimeInput = element(by.id('field_processingTime'));
+  totalItemsInput = element(by.id('field_totalItems'));
 
   createdBySelect = element(by.id('field_createdBy'));
   depreciationPeriodSelect = element(by.id('field_depreciationPeriod'));
@@ -93,6 +99,54 @@ export class DepreciationJobUpdatePage {
 
   async getDescriptionInput(): Promise<string> {
     return await this.descriptionInput.getAttribute('value');
+  }
+
+  async setNumberOfBatchesInput(numberOfBatches: string): Promise<void> {
+    await this.numberOfBatchesInput.sendKeys(numberOfBatches);
+  }
+
+  async getNumberOfBatchesInput(): Promise<string> {
+    return await this.numberOfBatchesInput.getAttribute('value');
+  }
+
+  async setProcessedBatchesInput(processedBatches: string): Promise<void> {
+    await this.processedBatchesInput.sendKeys(processedBatches);
+  }
+
+  async getProcessedBatchesInput(): Promise<string> {
+    return await this.processedBatchesInput.getAttribute('value');
+  }
+
+  async setLastBatchSizeInput(lastBatchSize: string): Promise<void> {
+    await this.lastBatchSizeInput.sendKeys(lastBatchSize);
+  }
+
+  async getLastBatchSizeInput(): Promise<string> {
+    return await this.lastBatchSizeInput.getAttribute('value');
+  }
+
+  async setProcessedItemsInput(processedItems: string): Promise<void> {
+    await this.processedItemsInput.sendKeys(processedItems);
+  }
+
+  async getProcessedItemsInput(): Promise<string> {
+    return await this.processedItemsInput.getAttribute('value');
+  }
+
+  async setProcessingTimeInput(processingTime: string): Promise<void> {
+    await this.processingTimeInput.sendKeys(processingTime);
+  }
+
+  async getProcessingTimeInput(): Promise<string> {
+    return await this.processingTimeInput.getAttribute('value');
+  }
+
+  async setTotalItemsInput(totalItems: string): Promise<void> {
+    await this.totalItemsInput.sendKeys(totalItems);
+  }
+
+  async getTotalItemsInput(): Promise<string> {
+    return await this.totalItemsInput.getAttribute('value');
   }
 
   async createdBySelectLastOption(): Promise<void> {

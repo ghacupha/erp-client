@@ -179,6 +179,19 @@ describe('DepreciationBatchSequence e2e test', () => {
 
       cy.get(`[data-cy="depreciationBatchStatus"]`).select('ERRORED');
 
+      cy.get(`[data-cy="batchSize"]`).type('15128').should('have.value', '15128');
+
+      cy.get(`[data-cy="processedItems"]`).type('93266').should('have.value', '93266');
+
+      cy.get(`[data-cy="sequenceNumber"]`).type('17670').should('have.value', '17670');
+
+      cy.get(`[data-cy="isLastBatch"]`).should('not.be.checked');
+      cy.get(`[data-cy="isLastBatch"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="processingTime"]`).type('PT57M').should('have.value', 'PT57M');
+
+      cy.get(`[data-cy="totalItems"]`).type('38902').should('have.value', '38902');
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

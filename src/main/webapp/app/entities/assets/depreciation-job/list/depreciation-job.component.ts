@@ -96,7 +96,7 @@ export class DepreciationJobComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['depreciationJobStatus', 'description'].includes(this.predicate)) {
+    if (query && ['depreciationJobStatus', 'description', 'processingTime'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

@@ -177,6 +177,12 @@ describe('DepreciationEntry e2e test', () => {
 
       cy.get(`[data-cy="assetNumber"]`).type('31619').should('have.value', '31619');
 
+      cy.get(`[data-cy="batchSequenceNumber"]`).type('4626').should('have.value', '4626');
+
+      cy.get(`[data-cy="processedItems"]`).type('Analyst').should('have.value', 'Analyst');
+
+      cy.get(`[data-cy="totalItemsProcessed"]`).type('3035').should('have.value', '3035');
+
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

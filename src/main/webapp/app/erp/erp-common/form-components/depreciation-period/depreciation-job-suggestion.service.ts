@@ -22,12 +22,12 @@ import { ApplicationConfigService } from '../../../../core/config/application-co
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../../core/request/request-util';
 import { ASC, DESC } from '../../../../config/pagination.constants';
-import { IFiscalQuarter } from '../../../erp-pages/fiscal-quarter/fiscal-quarter.model';
+import { IDepreciationPeriod } from '../../../erp-assets/depreciation-period/depreciation-period.model';
 
 @Injectable({ providedIn: 'root' })
-export class FiscalQuarterSuggestionService {
+export class DepreciationPeriodSuggestionService {
 
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/fiscal-quarters');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/depreciation-periods');
 
   constructor(
     protected http: HttpClient,
@@ -35,14 +35,13 @@ export class FiscalQuarterSuggestionService {
   ) {
   }
 
-
-  search(searchText: string): Observable<IFiscalQuarter[]> {
+  search(searchText: string): Observable<IDepreciationPeriod[]> {
 
     if (searchText === "") {
       return of([])
     }
 
-    return this.http.get<IFiscalQuarter[]>(
+    return this.http.get<IDepreciationPeriod[]>(
       this.resourceSearchUrl,
       { params: createRequestOption({
           query: searchText,

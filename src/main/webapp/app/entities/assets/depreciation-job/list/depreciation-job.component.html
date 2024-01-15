@@ -75,6 +75,14 @@
             <span>Depreciation Job Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="numberOfBatches"><span>Number Of Batches</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedBatches"><span>Processed Batches</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="lastBatchSize"><span>Last Batch Size</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedItems"><span>Processed Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processingTime">
+            <span>Processing Time</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalItems"><span>Total Items</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.designation"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationPeriod.endDate"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -88,6 +96,12 @@
           <td>{{ depreciationJob.timeOfCommencement | formatMediumDatetime }}</td>
           <td>{{ depreciationJob.depreciationJobStatus }}</td>
           <td>{{ depreciationJob.description }}</td>
+          <td>{{ depreciationJob.numberOfBatches }}</td>
+          <td>{{ depreciationJob.processedBatches }}</td>
+          <td>{{ depreciationJob.lastBatchSize }}</td>
+          <td>{{ depreciationJob.processedItems }}</td>
+          <td title="{{ depreciationJob.processingTime }}">{{ depreciationJob.processingTime | duration }}</td>
+          <td>{{ depreciationJob.totalItems }}</td>
           <td>
             <div *ngIf="depreciationJob.createdBy">
               <a [routerLink]="['/application-user', depreciationJob.createdBy?.id, 'view']">{{

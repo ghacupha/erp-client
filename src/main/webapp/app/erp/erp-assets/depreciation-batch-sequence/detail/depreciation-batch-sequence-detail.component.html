@@ -49,6 +49,30 @@
         <dd>
           <span>{{ depreciationBatchSequence.depreciationBatchStatus }}</span>
         </dd>
+        <dt><span>Batch Size</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.batchSize }}</span>
+        </dd>
+        <dt><span>Processed Items</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.processedItems }}</span>
+        </dd>
+        <dt><span>Sequence Number</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.sequenceNumber }}</span>
+        </dd>
+        <dt><span>Is Last Batch</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.isLastBatch }}</span>
+        </dd>
+        <dt><span>Processing Time</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.processingTime | duration }} ({{ depreciationBatchSequence.processingTime }})</span>
+        </dd>
+        <dt><span>Total Items</span></dt>
+        <dd>
+          <span>{{ depreciationBatchSequence.totalItems }}</span>
+        </dd>
         <dt><span>Depreciation Job</span></dt>
         <dd>
           <div *ngIf="depreciationBatchSequence.depreciationJob">

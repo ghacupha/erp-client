@@ -76,6 +76,14 @@
           <th scope="col" jhiSortBy="depreciationBatchStatus">
             <span>Depreciation Batch Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="batchSize"><span>Batch Size</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedItems"><span>Processed Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="isLastBatch"><span>Is Last Batch</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processingTime">
+            <span>Processing Time</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalItems"><span>Total Items</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationJob.id"><span>Depreciation Job</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -89,6 +97,12 @@
           <td>{{ depreciationBatchSequence.endIndex }}</td>
           <td>{{ depreciationBatchSequence.createdAt | formatMediumDatetime }}</td>
           <td>{{ depreciationBatchSequence.depreciationBatchStatus }}</td>
+          <td>{{ depreciationBatchSequence.batchSize }}</td>
+          <td>{{ depreciationBatchSequence.processedItems }}</td>
+          <td>{{ depreciationBatchSequence.sequenceNumber }}</td>
+          <td>{{ depreciationBatchSequence.isLastBatch }}</td>
+          <td title="{{ depreciationBatchSequence.processingTime }}">{{ depreciationBatchSequence.processingTime | duration }}</td>
+          <td>{{ depreciationBatchSequence.totalItems }}</td>
           <td>
             <div *ngIf="depreciationBatchSequence.depreciationJob">
               <a [routerLink]="['/depreciation-job', depreciationBatchSequence.depreciationJob?.id, 'view']">{{
