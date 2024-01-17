@@ -215,6 +215,19 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./asset-accessory/asset-accessory.module').then(m => m.AssetAccessoryModule),
       },
+      {
+        path: 'depreciation-report',
+        data: {
+          pageTitle: 'ERP | Depreciation Report',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./depreciation-report/depreciation-report.module').then(m => m.DepreciationReportModule),
+      },
     ])
   ]
 })
