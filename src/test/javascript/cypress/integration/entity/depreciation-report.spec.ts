@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ describe('DepreciationReport e2e test', () => {
   const depreciationReportPageUrlPattern = new RegExp('/depreciation-report(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const depreciationReportSample = { reportName: 'Japan deposit', timeOfReportRequest: '2024-01-14T23:25:01.715Z' };
+  const depreciationReportSample = { reportName: 'capacitor well-modulated parse', timeOfReportRequest: '2024-01-14T23:58:23.239Z' };
 
   let depreciationReport: any;
   //let depreciationPeriod: any;
@@ -244,8 +244,24 @@ describe('DepreciationReport e2e test', () => {
 
       cy.get(`[data-cy="timeOfReportRequest"]`).type('2024-01-15T01:14').should('have.value', '2024-01-15T01:14');
 
+      cy.get(`[data-cy="fileChecksum"]`).type('Japan deposit').should('have.value', 'Japan deposit');
+
+      cy.get(`[data-cy="tampered"]`).should('not.be.checked');
+      cy.get(`[data-cy="tampered"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="filename"]`)
+        .type('e4dba2bc-024e-49b7-8c08-6905e17b5e15')
+        .invoke('val')
+        .should('match', new RegExp('e4dba2bc-024e-49b7-8c08-6905e17b5e15'));
+
+      cy.get(`[data-cy="reportParameters"]`).type('Borders calculate Organic').should('have.value', 'Borders calculate Organic');
+
+      cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
+
       cy.get(`[data-cy="depreciationPeriod"]`).select(1);
 
+      // since cypress clicks submit too fast before the blob fields are validated
+      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {

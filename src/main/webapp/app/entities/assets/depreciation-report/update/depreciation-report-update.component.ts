@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,9 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IDepreciationReport, DepreciationReport } from '../depreciation-report.model';
 import { DepreciationReportService } from '../service/depreciation-report.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
@@ -53,6 +56,12 @@ export class DepreciationReportUpdateComponent implements OnInit {
     id: [],
     reportName: [null, [Validators.required]],
     timeOfReportRequest: [null, [Validators.required]],
+    fileChecksum: [],
+    tampered: [],
+    filename: [],
+    reportParameters: [],
+    reportFile: [],
+    reportFileContentType: [],
     requestedBy: [],
     depreciationPeriod: [null, Validators.required],
     serviceOutlet: [],
@@ -60,6 +69,8 @@ export class DepreciationReportUpdateComponent implements OnInit {
   });
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected depreciationReportService: DepreciationReportService,
     protected applicationUserService: ApplicationUserService,
     protected depreciationPeriodService: DepreciationPeriodService,
@@ -79,6 +90,21 @@ export class DepreciationReportUpdateComponent implements OnInit {
       this.updateForm(depreciationReport);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('erpSystemApp.error', { message: err.message })),
     });
   }
 
@@ -136,6 +162,12 @@ export class DepreciationReportUpdateComponent implements OnInit {
       id: depreciationReport.id,
       reportName: depreciationReport.reportName,
       timeOfReportRequest: depreciationReport.timeOfReportRequest ? depreciationReport.timeOfReportRequest.format(DATE_TIME_FORMAT) : null,
+      fileChecksum: depreciationReport.fileChecksum,
+      tampered: depreciationReport.tampered,
+      filename: depreciationReport.filename,
+      reportParameters: depreciationReport.reportParameters,
+      reportFile: depreciationReport.reportFile,
+      reportFileContentType: depreciationReport.reportFileContentType,
       requestedBy: depreciationReport.requestedBy,
       depreciationPeriod: depreciationReport.depreciationPeriod,
       serviceOutlet: depreciationReport.serviceOutlet,
@@ -213,6 +245,12 @@ export class DepreciationReportUpdateComponent implements OnInit {
       timeOfReportRequest: this.editForm.get(['timeOfReportRequest'])!.value
         ? dayjs(this.editForm.get(['timeOfReportRequest'])!.value, DATE_TIME_FORMAT)
         : undefined,
+      fileChecksum: this.editForm.get(['fileChecksum'])!.value,
+      tampered: this.editForm.get(['tampered'])!.value,
+      filename: this.editForm.get(['filename'])!.value,
+      reportParameters: this.editForm.get(['reportParameters'])!.value,
+      reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
+      reportFile: this.editForm.get(['reportFile'])!.value,
       requestedBy: this.editForm.get(['requestedBy'])!.value,
       depreciationPeriod: this.editForm.get(['depreciationPeriod'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,

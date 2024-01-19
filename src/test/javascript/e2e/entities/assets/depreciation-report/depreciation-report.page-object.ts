@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -50,6 +50,11 @@ export class DepreciationReportUpdatePage {
   idInput = element(by.id('field_id'));
   reportNameInput = element(by.id('field_reportName'));
   timeOfReportRequestInput = element(by.id('field_timeOfReportRequest'));
+  fileChecksumInput = element(by.id('field_fileChecksum'));
+  tamperedInput = element(by.id('field_tampered'));
+  filenameInput = element(by.id('field_filename'));
+  reportParametersInput = element(by.id('field_reportParameters'));
+  reportFileInput = element(by.id('file_reportFile'));
 
   requestedBySelect = element(by.id('field_requestedBy'));
   depreciationPeriodSelect = element(by.id('field_depreciationPeriod'));
@@ -82,6 +87,42 @@ export class DepreciationReportUpdatePage {
 
   async getTimeOfReportRequestInput(): Promise<string> {
     return await this.timeOfReportRequestInput.getAttribute('value');
+  }
+
+  async setFileChecksumInput(fileChecksum: string): Promise<void> {
+    await this.fileChecksumInput.sendKeys(fileChecksum);
+  }
+
+  async getFileChecksumInput(): Promise<string> {
+    return await this.fileChecksumInput.getAttribute('value');
+  }
+
+  getTamperedInput(): ElementFinder {
+    return this.tamperedInput;
+  }
+
+  async setFilenameInput(filename: string): Promise<void> {
+    await this.filenameInput.sendKeys(filename);
+  }
+
+  async getFilenameInput(): Promise<string> {
+    return await this.filenameInput.getAttribute('value');
+  }
+
+  async setReportParametersInput(reportParameters: string): Promise<void> {
+    await this.reportParametersInput.sendKeys(reportParameters);
+  }
+
+  async getReportParametersInput(): Promise<string> {
+    return await this.reportParametersInput.getAttribute('value');
+  }
+
+  async setReportFileInput(reportFile: string): Promise<void> {
+    await this.reportFileInput.sendKeys(reportFile);
+  }
+
+  async getReportFileInput(): Promise<string> {
+    return await this.reportFileInput.getAttribute('value');
   }
 
   async requestedBySelectLastOption(): Promise<void> {

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { DepreciationReport, IDepreciationReport } from '../depreciation-report.model';
 import { DepreciationReportService } from '../service/depreciation-report.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
+import { IAssetCategory } from '../../asset-category/asset-category.model';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 
 @Component({
   selector: 'jhi-depreciation-report-update',

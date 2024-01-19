@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ import {
   /* DepreciationReportDeleteDialog, */
   DepreciationReportUpdatePage,
 } from './depreciation-report.page-object';
+import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -33,6 +34,9 @@ describe('DepreciationReport e2e test', () => {
   let depreciationReportComponentsPage: DepreciationReportComponentsPage;
   let depreciationReportUpdatePage: DepreciationReportUpdatePage;
   /* let depreciationReportDeleteDialog: DepreciationReportDeleteDialog; */
+  const fileNameToUpload = 'logo-jhipster.png';
+  const fileToUpload = '../../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  const absolutePath = path.resolve(__dirname, fileToUpload);
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -70,6 +74,11 @@ describe('DepreciationReport e2e test', () => {
         await promise.all([
             depreciationReportUpdatePage.setReportNameInput('reportName'),
             depreciationReportUpdatePage.setTimeOfReportRequestInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            depreciationReportUpdatePage.setFileChecksumInput('fileChecksum'),
+            depreciationReportUpdatePage.getTamperedInput().click(),
+            depreciationReportUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+            depreciationReportUpdatePage.setReportParametersInput('reportParameters'),
+            depreciationReportUpdatePage.setReportFileInput(absolutePath),
             depreciationReportUpdatePage.requestedBySelectLastOption(),
             depreciationReportUpdatePage.depreciationPeriodSelectLastOption(),
             depreciationReportUpdatePage.serviceOutletSelectLastOption(),

@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+    Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -72,39 +72,6 @@
             </small>
           </div>
         </div>
-
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
-          <select
-            class="form-control"
-            id="field_depreciationPeriod"
-            data-cy="depreciationPeriod"
-            name="depreciationPeriod"
-            formControlName="depreciationPeriod"
-          >
-            <option *ngIf="!editForm.get('depreciationPeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                depreciationPeriodOption.id === editForm.get('depreciationPeriod')!.value?.id
-                  ? editForm.get('depreciationPeriod')!.value
-                  : depreciationPeriodOption
-              "
-              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
-            >
-              {{ depreciationPeriodOption.periodCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['depreciationPeriod'])!.invalid &&
-            (editForm.get(['depreciationPeriod'])!.dirty || editForm.get(['depreciationPeriod'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['depreciationPeriod'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
 
         <jhi-depreciation-period-form-control
           ngDefaultControl

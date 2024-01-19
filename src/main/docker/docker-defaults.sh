@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #
-# Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+# Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 # Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 #
 # This program is free software: you can redistribute it and/or modify

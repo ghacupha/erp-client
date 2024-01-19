@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+    Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -72,10 +72,11 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportName"><span>Report Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfReportRequest"><span>Time Of Report Request</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportParameters">
+            <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="depreciationPeriod.periodCode"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -86,31 +87,12 @@
           </td>
           <td>{{ depreciationReport.reportName }}</td>
           <td>{{ depreciationReport.timeOfReportRequest | formatMediumDatetime }}</td>
+          <td>{{ depreciationReport.tampered }}</td>
+          <td>{{ depreciationReport.reportParameters }}</td>
           <td>
             <div *ngIf="depreciationReport.requestedBy">
               <a [routerLink]="['/application-user', depreciationReport.requestedBy?.id, 'view']">{{
                 depreciationReport.requestedBy?.applicationIdentity
-              }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="depreciationReport.depreciationPeriod">
-              <a [routerLink]="['/depreciation-period', depreciationReport.depreciationPeriod?.id, 'view']">{{
-                depreciationReport.depreciationPeriod?.periodCode
-              }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="depreciationReport.serviceOutlet">
-              <a [routerLink]="['/service-outlet', depreciationReport.serviceOutlet?.id, 'view']">{{
-                depreciationReport.serviceOutlet?.outletCode
-              }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="depreciationReport.assetCategory">
-              <a [routerLink]="['/asset-category', depreciationReport.assetCategory?.id, 'view']">{{
-                depreciationReport.assetCategory?.assetCategoryName
               }}</a>
             </div>
           </td>

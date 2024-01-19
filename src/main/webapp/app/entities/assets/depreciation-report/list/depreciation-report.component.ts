@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@ import { IDepreciationReport } from '../depreciation-report.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { DepreciationReportService } from '../service/depreciation-report.service';
 import { DepreciationReportDeleteDialogComponent } from '../delete/depreciation-report-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-depreciation-report',
@@ -46,6 +47,7 @@ export class DepreciationReportComponent implements OnInit {
   constructor(
     protected depreciationReportService: DepreciationReportService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -96,7 +98,7 @@ export class DepreciationReportComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['reportName'].includes(this.predicate)) {
+    if (query && ['reportName', 'fileChecksum', 'filename', 'reportParameters', 'reportFile'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
@@ -110,6 +112,14 @@ export class DepreciationReportComponent implements OnInit {
 
   trackId(index: number, item: IDepreciationReport): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(depreciationReport: IDepreciationReport): void {

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 1 (Jehoiada Series) Client 1.7.1
+/// Erp System - Mark X No 2 (Jehoiada Series) Client 1.7.2
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -45,6 +45,12 @@ describe('DepreciationReport Service', () => {
       id: 0,
       reportName: 'AAAAAAA',
       timeOfReportRequest: currentDate,
+      fileChecksum: 'AAAAAAA',
+      tampered: false,
+      filename: 'AAAAAAA',
+      reportParameters: 'AAAAAAA',
+      reportFileContentType: 'image/png',
+      reportFile: 'AAAAAAA',
     };
   });
 
@@ -93,6 +99,11 @@ describe('DepreciationReport Service', () => {
           id: 1,
           reportName: 'BBBBBB',
           timeOfReportRequest: currentDate.format(DATE_TIME_FORMAT),
+          fileChecksum: 'BBBBBB',
+          tampered: true,
+          filename: 'BBBBBB',
+          reportParameters: 'BBBBBB',
+          reportFile: 'BBBBBB',
         },
         elemDefault
       );
@@ -116,6 +127,8 @@ describe('DepreciationReport Service', () => {
         {
           reportName: 'BBBBBB',
           timeOfReportRequest: currentDate.format(DATE_TIME_FORMAT),
+          fileChecksum: 'BBBBBB',
+          filename: 'BBBBBB',
         },
         new DepreciationReport()
       );
@@ -142,6 +155,11 @@ describe('DepreciationReport Service', () => {
           id: 1,
           reportName: 'BBBBBB',
           timeOfReportRequest: currentDate.format(DATE_TIME_FORMAT),
+          fileChecksum: 'BBBBBB',
+          tampered: true,
+          filename: 'BBBBBB',
+          reportParameters: 'BBBBBB',
+          reportFile: 'BBBBBB',
         },
         elemDefault
       );
@@ -198,7 +216,7 @@ describe('DepreciationReport Service', () => {
       });
 
       it('should add only unique DepreciationReport to an array', () => {
-        const depreciationReportArray: IDepreciationReport[] = [{ id: 123 }, { id: 456 }, { id: 89649 }];
+        const depreciationReportArray: IDepreciationReport[] = [{ id: 123 }, { id: 456 }, { id: 58246 }];
         const depreciationReportCollection: IDepreciationReport[] = [{ id: 123 }];
         expectedResult = service.addDepreciationReportToCollectionIfMissing(depreciationReportCollection, ...depreciationReportArray);
         expect(expectedResult).toHaveLength(3);
