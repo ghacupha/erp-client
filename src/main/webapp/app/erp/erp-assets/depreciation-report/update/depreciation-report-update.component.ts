@@ -26,7 +26,7 @@ import { finalize, map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
-import { IDepreciationReport, DepreciationReport } from '../depreciation-report.model';
+import { DepreciationReport, IDepreciationReport } from '../depreciation-report.model';
 import { DepreciationReportService } from '../service/depreciation-report.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
@@ -80,6 +80,12 @@ export class DepreciationReportUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateDepreciationPeriod(update: IDepreciationPeriod): void {
+    this.editForm.patchValue({
+      depreciationPeriod: update
+    })
   }
 
   previousState(): void {

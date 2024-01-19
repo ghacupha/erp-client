@@ -23,9 +23,10 @@ import { DepreciationReportDetailComponent } from './detail/depreciation-report-
 import { DepreciationReportUpdateComponent } from './update/depreciation-report-update.component';
 import { DepreciationReportDeleteDialogComponent } from './delete/depreciation-report-delete-dialog.component';
 import { DepreciationReportRoutingModule } from './route/depreciation-report-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, DepreciationReportRoutingModule],
+  imports: [SharedModule, DepreciationReportRoutingModule, ErpCommonModule],
   declarations: [
     DepreciationReportComponent,
     DepreciationReportDetailComponent,
