@@ -344,6 +344,18 @@
             <span>Depreciation Report</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="asset-additions-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Additions Report</span>
+          </a>
+        </li>
         <li>
           <a
             class="dropdown-item"

@@ -267,7 +267,8 @@
       "PrepaymentOutstandingOverviewReport",
       "AutonomousReport",
       "AmortizationPostingReport",
-      "DepreciationReport"
+      "DepreciationReport",
+      "AssetAdditionsReport"
     ],
     "lastLiquibaseTimestamp": 1703087575000,
     "monorepository": true,
