@@ -60,6 +60,7 @@ export interface IAssetRegistration {
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
   mainServiceOutlet?: IServiceOutlet | null;
+  acquiringTransaction?: ISettlement;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -90,7 +91,8 @@ export class AssetRegistration implements IAssetRegistration {
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public mainServiceOutlet?: IServiceOutlet | null
+    public mainServiceOutlet?: IServiceOutlet | null,
+    public acquiringTransaction?: ISettlement
   ) {}
 }
 

@@ -82,6 +82,9 @@
           <th scope="col" jhiSortBy="mainServiceOutlet"><span>Outlet</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="acquiringTransaction.paymentNumber">
+            <span>Acquiring Transaction</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -122,6 +125,13 @@
               <a [routerLink]="['/erp/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
             </div>
           </td>
+          <td>
+            <div *ngIf="assetRegistration.acquiringTransaction">
+              <a [routerLink]="['/settlement', assetRegistration.acquiringTransaction?.id, 'view']">{{
+                assetRegistration.acquiringTransaction?.paymentNumber
+                }}</a>
+            </div>
+
           <td class="text-right">
             <div class="btn-group">
               <button

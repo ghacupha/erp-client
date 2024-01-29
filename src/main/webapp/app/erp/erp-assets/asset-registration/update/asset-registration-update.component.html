@@ -120,6 +120,17 @@
           />
         </div>
 
+        <!--// TODO acquiringTransaction form-->
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='acquiringTransaction'
+          [inputValue]="editForm.get(['acquiringTransaction'])!.value"
+          (valueSelected)='updateAcquiringTransaction($event)'
+          inputControlLabel='Settlement Transaction (Required)'
+        >
+          <option [ngValue]="editForm.get(['acquiringTransaction'])!.value"></option>
+        </jhi-m21-settlement-form-control>
+
         <jhi-m2m-payment-invoice-form-control
           ngDefaultControl
           formControlName='paymentInvoices'
@@ -138,15 +149,6 @@
         >
           <option [ngValue]="editForm.get(['mainServiceOutlet'])!.value"></option>
         </jhi-m21-service-outlet-form-control>
-
-        <jhi-m2m-settlement-form-control
-          ngDefaultControl
-          formControlName='settlements'
-          [inputValues]="editForm.get(['settlements'])!.value"
-          (valueSelected)='updateSettlements($event)'
-          inputControlLabel='Settlements(s)'
-        >
-        </jhi-m2m-settlement-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_capitalizationDate">Capitalization Date</label>
@@ -255,6 +257,15 @@
           inputControlLabel='businessDocument(s)'
         >
         </jhi-m2m-business-document-form-control>
+
+        <jhi-m2m-settlement-form-control
+          ngDefaultControl
+          formControlName='settlements'
+          [inputValues]="editForm.get(['settlements'])!.value"
+          (valueSelected)='updateSettlements($event)'
+          inputControlLabel='Other related Settlements(s)'
+        >
+        </jhi-m2m-settlement-form-control>
 
         <jhi-m2m-asset-warranty-form-control
           ngDefaultControl

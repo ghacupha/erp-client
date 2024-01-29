@@ -23,7 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IAssetRegistration, AssetRegistration } from '../asset-registration.model';
+import { AssetRegistration, IAssetRegistration } from '../asset-registration.model';
 import { AssetRegistrationService } from '../service/asset-registration.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -108,7 +108,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     placeholders: [],
     paymentInvoices: [],
     serviceOutlets: [],
-    settlements: [null, Validators.required],
+    settlements: [],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
     deliveryNotes: [],
@@ -121,6 +121,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     universallyUniqueMappings: [],
     assetAccessories: [],
     mainServiceOutlet: [],
+    acquiringTransaction: [null, Validators.required],
   });
 
   constructor(
@@ -188,6 +189,10 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
   updateSettlementCurrency(updated: ISettlementCurrency): void {
     this.editForm.patchValue({ settlementCurrency: updated });
+  }
+
+  updateAcquiringTransaction(updated: ISettlement): void {
+    this.editForm.patchValue({ acquiringTransaction: updated });
   }
 
   updateDesignatedUsers(updated: IDealer[]): void {
@@ -505,6 +510,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
       mainServiceOutlet: assetRegistration.mainServiceOutlet,
+      acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -594,6 +600,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
       mainServiceOutlet: assetRegistration.mainServiceOutlet,
+      acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -860,6 +867,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
+      acquiringTransaction: this.editForm.get(['acquiringTransaction'])!.value,
     };
   }
 
@@ -892,6 +900,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
+      acquiringTransaction: this.editForm.get(['acquiringTransaction'])!.value,
     };
   }
 }
