@@ -21,7 +21,7 @@
   <label class="form-control-label">{{ inputControlLabel }}</label>
   <ng-select
     [items]="valueLookUps$ | async"
-    bindLabel="{{inputValue.paymentDate}}"
+    bindLabel="paymentNumber"
     [trackByFn]="trackValueByFn"
     [minTermLength]="minAccountLengthTerm"
     [loading]="valuesLoading"

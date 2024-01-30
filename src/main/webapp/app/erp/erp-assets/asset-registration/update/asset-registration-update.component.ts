@@ -163,7 +163,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     }
 
     if (this.weAreCreating) {
-      this.loadRelationshipsOptions();
+      // this.loadRelationshipsOptions();
     }
   }
 
@@ -513,64 +513,64 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
-      this.placeholdersSharedCollection,
-      ...(assetRegistration.placeholders ?? [])
-    );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
-      this.paymentInvoicesSharedCollection,
-      ...(assetRegistration.paymentInvoices ?? [])
-    );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-      this.serviceOutletsSharedCollection,
-      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
-      assetRegistration.mainServiceOutlet
-    );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
-      this.settlementsSharedCollection,
-      ...(assetRegistration.otherRelatedSettlements ?? [])
-    );
-    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
-      this.assetCategoriesSharedCollection,
-      assetRegistration.assetCategory
-    );
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
-      this.purchaseOrdersSharedCollection,
-      ...(assetRegistration.purchaseOrders ?? [])
-    );
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
-      this.deliveryNotesSharedCollection,
-      ...(assetRegistration.deliveryNotes ?? [])
-    );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
-      this.jobSheetsSharedCollection,
-      ...(assetRegistration.jobSheets ?? [])
-    );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      assetRegistration.dealer,
-      ...(assetRegistration.designatedUsers ?? [])
-    );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      assetRegistration.settlementCurrency
-    );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-      this.businessDocumentsSharedCollection,
-      ...(assetRegistration.businessDocuments ?? [])
-    );
-    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
-      this.assetWarrantiesSharedCollection,
-      ...(assetRegistration.assetWarranties ?? [])
-    );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(assetRegistration.universallyUniqueMappings ?? [])
-    );
-    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
-      this.assetAccessoriesSharedCollection,
-      ...(assetRegistration.assetAccessories ?? [])
-    );
+    // this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    //   this.placeholdersSharedCollection,
+    //   ...(assetRegistration.placeholders ?? [])
+    // );
+    // this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    //   this.paymentInvoicesSharedCollection,
+    //   ...(assetRegistration.paymentInvoices ?? [])
+    // );
+    // this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    //   this.serviceOutletsSharedCollection,
+    //   ...(assetRegistration.otherRelatedServiceOutlets ?? []),
+    //   assetRegistration.mainServiceOutlet
+    // );
+    // this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    //   this.settlementsSharedCollection,
+    //   ...(assetRegistration.otherRelatedSettlements ?? [])
+    // );
+    // this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+    //   this.assetCategoriesSharedCollection,
+    //   assetRegistration.assetCategory
+    // );
+    // this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    //   this.purchaseOrdersSharedCollection,
+    //   ...(assetRegistration.purchaseOrders ?? [])
+    // );
+    // this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    //   this.deliveryNotesSharedCollection,
+    //   ...(assetRegistration.deliveryNotes ?? [])
+    // );
+    // this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    //   this.jobSheetsSharedCollection,
+    //   ...(assetRegistration.jobSheets ?? [])
+    // );
+    // this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    //   this.dealersSharedCollection,
+    //   assetRegistration.dealer,
+    //   ...(assetRegistration.designatedUsers ?? [])
+    // );
+    // this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+    //   this.settlementCurrenciesSharedCollection,
+    //   assetRegistration.settlementCurrency
+    // );
+    // this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    //   this.businessDocumentsSharedCollection,
+    //   ...(assetRegistration.businessDocuments ?? [])
+    // );
+    // this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+    //   this.assetWarrantiesSharedCollection,
+    //   ...(assetRegistration.assetWarranties ?? [])
+    // );
+    // this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+    //   this.universallyUniqueMappingsSharedCollection,
+    //   ...(assetRegistration.universallyUniqueMappings ?? [])
+    // );
+    // this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+    //   this.assetAccessoriesSharedCollection,
+    //   ...(assetRegistration.assetAccessories ?? [])
+    // );
   }
 
   protected copyForm(assetRegistration: IAssetRegistration): void {
@@ -603,239 +603,239 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
-      this.placeholdersSharedCollection,
-      ...(assetRegistration.placeholders ?? [])
-    );
-    this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
-      this.paymentInvoicesSharedCollection,
-      ...(assetRegistration.paymentInvoices ?? [])
-    );
-    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-      this.serviceOutletsSharedCollection,
-      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
-      assetRegistration.mainServiceOutlet
-    );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
-      this.settlementsSharedCollection,
-      ...(assetRegistration.otherRelatedSettlements ?? [])
-    );
-    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
-      this.assetCategoriesSharedCollection,
-      assetRegistration.assetCategory
-    );
-    this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
-      this.purchaseOrdersSharedCollection,
-      ...(assetRegistration.purchaseOrders ?? [])
-    );
-    this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
-      this.deliveryNotesSharedCollection,
-      ...(assetRegistration.deliveryNotes ?? [])
-    );
-    this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
-      this.jobSheetsSharedCollection,
-      ...(assetRegistration.jobSheets ?? [])
-    );
-    this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
-      this.dealersSharedCollection,
-      assetRegistration.dealer,
-      ...(assetRegistration.designatedUsers ?? [])
-    );
-    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-      this.settlementCurrenciesSharedCollection,
-      assetRegistration.settlementCurrency
-    );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-      this.businessDocumentsSharedCollection,
-      ...(assetRegistration.businessDocuments ?? [])
-    );
-    this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
-      this.assetWarrantiesSharedCollection,
-      ...(assetRegistration.assetWarranties ?? [])
-    );
-    this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-      this.universallyUniqueMappingsSharedCollection,
-      ...(assetRegistration.universallyUniqueMappings ?? [])
-    );
-    this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
-      this.assetAccessoriesSharedCollection,
-      ...(assetRegistration.assetAccessories ?? [])
-    );
+    // this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+    //   this.placeholdersSharedCollection,
+    //   ...(assetRegistration.placeholders ?? [])
+    // );
+    // this.paymentInvoicesSharedCollection = this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+    //   this.paymentInvoicesSharedCollection,
+    //   ...(assetRegistration.paymentInvoices ?? [])
+    // );
+    // this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+    //   this.serviceOutletsSharedCollection,
+    //   ...(assetRegistration.otherRelatedServiceOutlets ?? []),
+    //   assetRegistration.mainServiceOutlet
+    // );
+    // this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
+    //   this.settlementsSharedCollection,
+    //   ...(assetRegistration.otherRelatedSettlements ?? [])
+    // );
+    // this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+    //   this.assetCategoriesSharedCollection,
+    //   assetRegistration.assetCategory
+    // );
+    // this.purchaseOrdersSharedCollection = this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+    //   this.purchaseOrdersSharedCollection,
+    //   ...(assetRegistration.purchaseOrders ?? [])
+    // );
+    // this.deliveryNotesSharedCollection = this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(
+    //   this.deliveryNotesSharedCollection,
+    //   ...(assetRegistration.deliveryNotes ?? [])
+    // );
+    // this.jobSheetsSharedCollection = this.jobSheetService.addJobSheetToCollectionIfMissing(
+    //   this.jobSheetsSharedCollection,
+    //   ...(assetRegistration.jobSheets ?? [])
+    // );
+    // this.dealersSharedCollection = this.dealerService.addDealerToCollectionIfMissing(
+    //   this.dealersSharedCollection,
+    //   assetRegistration.dealer,
+    //   ...(assetRegistration.designatedUsers ?? [])
+    // );
+    // this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+    //   this.settlementCurrenciesSharedCollection,
+    //   assetRegistration.settlementCurrency
+    // );
+    // this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+    //   this.businessDocumentsSharedCollection,
+    //   ...(assetRegistration.businessDocuments ?? [])
+    // );
+    // this.assetWarrantiesSharedCollection = this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+    //   this.assetWarrantiesSharedCollection,
+    //   ...(assetRegistration.assetWarranties ?? [])
+    // );
+    // this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+    //   this.universallyUniqueMappingsSharedCollection,
+    //   ...(assetRegistration.universallyUniqueMappings ?? [])
+    // );
+    // this.assetAccessoriesSharedCollection = this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+    //   this.assetAccessoriesSharedCollection,
+    //   ...(assetRegistration.assetAccessories ?? [])
+    // );
   }
 
-  protected loadRelationshipsOptions(): void {
-    this.placeholderService
-      .query()
-      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
-      .pipe(
-        map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
-        )
-      )
-      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-
-    this.paymentInvoiceService
-      .query()
-      .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
-      .pipe(
-        map((paymentInvoices: IPaymentInvoice[]) =>
-          this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
-            paymentInvoices,
-            ...(this.editForm.get('paymentInvoices')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((paymentInvoices: IPaymentInvoice[]) => (this.paymentInvoicesSharedCollection = paymentInvoices));
-
-    this.serviceOutletService
-      .query()
-      .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
-      .pipe(
-        map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-            serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? []),
-            this.editForm.get('mainServiceOutlet')!.value
-          )
-        )
-      )
-      .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
-
-    this.settlementService
-      .query()
-      .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
-      .pipe(
-        map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
-        )
-      )
-      .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
-
-    this.assetCategoryService
-      .query()
-      .pipe(map((res: HttpResponse<IAssetCategory[]>) => res.body ?? []))
-      .pipe(
-        map((assetCategories: IAssetCategory[]) =>
-          this.assetCategoryService.addAssetCategoryToCollectionIfMissing(assetCategories, this.editForm.get('assetCategory')!.value)
-        )
-      )
-      .subscribe((assetCategories: IAssetCategory[]) => (this.assetCategoriesSharedCollection = assetCategories));
-
-    this.purchaseOrderService
-      .query()
-      .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
-      .pipe(
-        map((purchaseOrders: IPurchaseOrder[]) =>
-          this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
-            purchaseOrders,
-            ...(this.editForm.get('purchaseOrders')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((purchaseOrders: IPurchaseOrder[]) => (this.purchaseOrdersSharedCollection = purchaseOrders));
-
-    this.deliveryNoteService
-      .query()
-      .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
-      .pipe(
-        map((deliveryNotes: IDeliveryNote[]) =>
-          this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
-        )
-      )
-      .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
-
-    this.jobSheetService
-      .query()
-      .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
-      .pipe(
-        map((jobSheets: IJobSheet[]) =>
-          this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
-        )
-      )
-      .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
-
-    this.dealerService
-      .query()
-      .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
-      .pipe(
-        map((dealers: IDealer[]) =>
-          this.dealerService.addDealerToCollectionIfMissing(
-            dealers,
-            this.editForm.get('dealer')!.value,
-            ...(this.editForm.get('designatedUsers')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
-
-    this.settlementCurrencyService
-      .query()
-      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
-      .pipe(
-        map((settlementCurrencies: ISettlementCurrency[]) =>
-          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
-            settlementCurrencies,
-            this.editForm.get('settlementCurrency')!.value
-          )
-        )
-      )
-      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
-
-    this.businessDocumentService
-      .query()
-      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
-      .pipe(
-        map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-            businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-
-    this.assetWarrantyService
-      .query()
-      .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
-      .pipe(
-        map((assetWarranties: IAssetWarranty[]) =>
-          this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
-            assetWarranties,
-            ...(this.editForm.get('assetWarranties')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
-
-    this.universallyUniqueMappingService
-      .query()
-      .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
-      .pipe(
-        map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
-            universallyUniqueMappings,
-            ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
-          )
-        )
-      )
-      .subscribe(
-        (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
-          (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
-      );
-
-    this.assetAccessoryService
-      .query()
-      .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
-      .pipe(
-        map((assetAccessories: IAssetAccessory[]) =>
-          this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
-            assetAccessories,
-            ...(this.editForm.get('assetAccessories')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
-  }
+  // protected loadRelationshipsOptions(): void {
+  //   this.placeholderService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((placeholders: IPlaceholder[]) =>
+  //         this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
+  //       )
+  //     )
+  //     .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+  //
+  //   this.paymentInvoiceService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IPaymentInvoice[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((paymentInvoices: IPaymentInvoice[]) =>
+  //         this.paymentInvoiceService.addPaymentInvoiceToCollectionIfMissing(
+  //           paymentInvoices,
+  //           ...(this.editForm.get('paymentInvoices')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((paymentInvoices: IPaymentInvoice[]) => (this.paymentInvoicesSharedCollection = paymentInvoices));
+  //
+  //   this.serviceOutletService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((serviceOutlets: IServiceOutlet[]) =>
+  //         this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+  //           serviceOutlets,
+  //           ...(this.editForm.get('serviceOutlets')!.value ?? []),
+  //           this.editForm.get('mainServiceOutlet')!.value
+  //         )
+  //       )
+  //     )
+  //     .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
+  //
+  //   this.settlementService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((settlements: ISettlement[]) =>
+  //         this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+  //       )
+  //     )
+  //     .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
+  //
+  //   this.assetCategoryService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IAssetCategory[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((assetCategories: IAssetCategory[]) =>
+  //         this.assetCategoryService.addAssetCategoryToCollectionIfMissing(assetCategories, this.editForm.get('assetCategory')!.value)
+  //       )
+  //     )
+  //     .subscribe((assetCategories: IAssetCategory[]) => (this.assetCategoriesSharedCollection = assetCategories));
+  //
+  //   this.purchaseOrderService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IPurchaseOrder[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((purchaseOrders: IPurchaseOrder[]) =>
+  //         this.purchaseOrderService.addPurchaseOrderToCollectionIfMissing(
+  //           purchaseOrders,
+  //           ...(this.editForm.get('purchaseOrders')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((purchaseOrders: IPurchaseOrder[]) => (this.purchaseOrdersSharedCollection = purchaseOrders));
+  //
+  //   this.deliveryNoteService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IDeliveryNote[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((deliveryNotes: IDeliveryNote[]) =>
+  //         this.deliveryNoteService.addDeliveryNoteToCollectionIfMissing(deliveryNotes, ...(this.editForm.get('deliveryNotes')!.value ?? []))
+  //       )
+  //     )
+  //     .subscribe((deliveryNotes: IDeliveryNote[]) => (this.deliveryNotesSharedCollection = deliveryNotes));
+  //
+  //   this.jobSheetService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IJobSheet[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((jobSheets: IJobSheet[]) =>
+  //         this.jobSheetService.addJobSheetToCollectionIfMissing(jobSheets, ...(this.editForm.get('jobSheets')!.value ?? []))
+  //       )
+  //     )
+  //     .subscribe((jobSheets: IJobSheet[]) => (this.jobSheetsSharedCollection = jobSheets));
+  //
+  //   this.dealerService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IDealer[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((dealers: IDealer[]) =>
+  //         this.dealerService.addDealerToCollectionIfMissing(
+  //           dealers,
+  //           this.editForm.get('dealer')!.value,
+  //           ...(this.editForm.get('designatedUsers')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((dealers: IDealer[]) => (this.dealersSharedCollection = dealers));
+  //
+  //   this.settlementCurrencyService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((settlementCurrencies: ISettlementCurrency[]) =>
+  //         this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+  //           settlementCurrencies,
+  //           this.editForm.get('settlementCurrency')!.value
+  //         )
+  //       )
+  //     )
+  //     .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+  //
+  //   this.businessDocumentService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((businessDocuments: IBusinessDocument[]) =>
+  //         this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+  //           businessDocuments,
+  //           ...(this.editForm.get('businessDocuments')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
+  //
+  //   this.assetWarrantyService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IAssetWarranty[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((assetWarranties: IAssetWarranty[]) =>
+  //         this.assetWarrantyService.addAssetWarrantyToCollectionIfMissing(
+  //           assetWarranties,
+  //           ...(this.editForm.get('assetWarranties')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((assetWarranties: IAssetWarranty[]) => (this.assetWarrantiesSharedCollection = assetWarranties));
+  //
+  //   this.universallyUniqueMappingService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IUniversallyUniqueMapping[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+  //         this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
+  //           universallyUniqueMappings,
+  //           ...(this.editForm.get('universallyUniqueMappings')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe(
+  //       (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
+  //         (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
+  //     );
+  //
+  //   this.assetAccessoryService
+  //     .query()
+  //     .pipe(map((res: HttpResponse<IAssetAccessory[]>) => res.body ?? []))
+  //     .pipe(
+  //       map((assetAccessories: IAssetAccessory[]) =>
+  //         this.assetAccessoryService.addAssetAccessoryToCollectionIfMissing(
+  //           assetAccessories,
+  //           ...(this.editForm.get('assetAccessories')!.value ?? [])
+  //         )
+  //       )
+  //     )
+  //     .subscribe((assetAccessories: IAssetAccessory[]) => (this.assetAccessoriesSharedCollection = assetAccessories));
+  // }
 
   protected createFromForm(): IAssetRegistration {
     return {
