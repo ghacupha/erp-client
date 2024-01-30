@@ -107,8 +107,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     capitalizationDate: [null, [Validators.required]],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlets: [],
-    settlements: [],
+    otherRelatedServiceOutlets: [],
+    otherRelatedSettlements: [],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
     deliveryNotes: [],
@@ -172,7 +172,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   updateOtherServiceOutlets(updated: IServiceOutlet[]): void {
-    this.editForm.patchValue({ serviceOutlets: [...updated] });
+    this.editForm.patchValue({ otherRelatedServiceOutlets: [...updated] });
   }
 
   updateUniversallyUniqueMappings(updated: IUniversallyUniqueMapping[]): void {
@@ -212,7 +212,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   }
 
   updateSettlements(updated: ISettlement[]): void {
-    this.editForm.patchValue({ settlements: [...updated] });
+    this.editForm.patchValue({ otherRelatedSettlements: [...updated] });
   }
 
   updateAssetCategory(updated: IAssetCategory): void {
@@ -496,8 +496,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: assetRegistration.capitalizationDate,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlets: assetRegistration.serviceOutlets,
-      settlements: assetRegistration.settlements,
+      otherRelatedServiceOutlets: assetRegistration.otherRelatedServiceOutlets,
+      otherRelatedSettlements: assetRegistration.otherRelatedSettlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
       deliveryNotes: assetRegistration.deliveryNotes,
@@ -523,12 +523,12 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetRegistration.serviceOutlets ?? []),
+      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
       assetRegistration.mainServiceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
-      ...(assetRegistration.settlements ?? [])
+      ...(assetRegistration.otherRelatedSettlements ?? [])
     );
     this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
       this.assetCategoriesSharedCollection,
@@ -586,8 +586,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: assetRegistration.capitalizationDate,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlets: assetRegistration.serviceOutlets,
-      settlements: assetRegistration.settlements,
+      otherRelatedServiceOutlets: assetRegistration.otherRelatedServiceOutlets,
+      otherRelatedSettlements: assetRegistration.otherRelatedSettlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
       deliveryNotes: assetRegistration.deliveryNotes,
@@ -613,12 +613,12 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetRegistration.serviceOutlets ?? []),
+      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
       assetRegistration.mainServiceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
-      ...(assetRegistration.settlements ?? [])
+      ...(assetRegistration.otherRelatedSettlements ?? [])
     );
     this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
       this.assetCategoriesSharedCollection,
@@ -853,8 +853,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: this.editForm.get(['capitalizationDate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
+      otherRelatedServiceOutlets: this.editForm.get(['otherRelatedServiceOutlets'])!.value,
+      otherRelatedSettlements: this.editForm.get(['otherRelatedSettlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
@@ -886,8 +886,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: this.editForm.get(['capitalizationDate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
+      otherRelatedServiceOutlets: this.editForm.get(['otherRelatedServiceOutlets'])!.value,
+      otherRelatedSettlements: this.editForm.get(['otherRelatedSettlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,

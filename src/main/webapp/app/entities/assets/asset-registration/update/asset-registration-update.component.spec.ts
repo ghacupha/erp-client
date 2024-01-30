@@ -152,14 +152,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const serviceOutlets: IServiceOutlet[] = [{ id: 10495 }];
-      assetRegistration.serviceOutlets = serviceOutlets;
+      const otherRelatedServiceOutlets: IServiceOutlet[] = [{ id: 10495 }];
+      assetRegistration.otherRelatedServiceOutlets = otherRelatedServiceOutlets;
       const mainServiceOutlet: IServiceOutlet = { id: 12055 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 40506 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [...serviceOutlets, mainServiceOutlet];
+      const additionalServiceOutlets = [...otherRelatedServiceOutlets, mainServiceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -176,12 +176,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call Settlement query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const settlements: ISettlement[] = [{ id: 6062 }];
-      assetRegistration.settlements = settlements;
+      const otherRelatedSettlements: ISettlement[] = [{ id: 6062 }];
+      assetRegistration.otherRelatedSettlements = otherRelatedSettlements;
+      const acquiringTransaction: ISettlement = { id: 63020 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
 
-      const settlementCollection: ISettlement[] = [{ id: 63020 }];
+      const settlementCollection: ISettlement[] = [{ id: 26803 }];
       jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
-      const additionalSettlements = [...settlements];
+      const additionalSettlements = [...otherRelatedSettlements, acquiringTransaction];
       const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
       jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -420,12 +422,14 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const serviceOutlets: IServiceOutlet = { id: 53824 };
-      assetRegistration.serviceOutlets = [serviceOutlets];
+      const otherRelatedServiceOutlets: IServiceOutlet = { id: 53824 };
+      assetRegistration.otherRelatedServiceOutlets = [otherRelatedServiceOutlets];
       const mainServiceOutlet: IServiceOutlet = { id: 72754 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const settlements: ISettlement = { id: 26803 };
-      assetRegistration.settlements = [settlements];
+      const otherRelatedSettlements: ISettlement = { id: 3742 };
+      assetRegistration.otherRelatedSettlements = [otherRelatedSettlements];
+      const acquiringTransaction: ISettlement = { id: 83854 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
       const assetCategory: IAssetCategory = { id: 64108 };
       assetRegistration.assetCategory = assetCategory;
       const purchaseOrders: IPurchaseOrder = { id: 76982 };
@@ -455,9 +459,10 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
+      expect(comp.serviceOutletsSharedCollection).toContain(otherRelatedServiceOutlets);
       expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
-      expect(comp.settlementsSharedCollection).toContain(settlements);
+      expect(comp.settlementsSharedCollection).toContain(otherRelatedSettlements);
+      expect(comp.settlementsSharedCollection).toContain(acquiringTransaction);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
       expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);

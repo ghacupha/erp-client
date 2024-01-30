@@ -83,8 +83,8 @@ describe('AssetRegistration e2e test', () => {
             assetRegistrationUpdatePage.setCapitalizationDateInput('2000-12-31'),
             // assetRegistrationUpdatePage.placeholderSelectLastOption(),
             // assetRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
-            // assetRegistrationUpdatePage.serviceOutletSelectLastOption(),
-            // assetRegistrationUpdatePage.settlementSelectLastOption(),
+            // assetRegistrationUpdatePage.otherRelatedServiceOutletsSelectLastOption(),
+            // assetRegistrationUpdatePage.otherRelatedSettlementsSelectLastOption(),
             assetRegistrationUpdatePage.assetCategorySelectLastOption(),
             // assetRegistrationUpdatePage.purchaseOrderSelectLastOption(),
             // assetRegistrationUpdatePage.deliveryNoteSelectLastOption(),
@@ -97,6 +97,7 @@ describe('AssetRegistration e2e test', () => {
             // assetRegistrationUpdatePage.universallyUniqueMappingSelectLastOption(),
             // assetRegistrationUpdatePage.assetAccessorySelectLastOption(),
             assetRegistrationUpdatePage.mainServiceOutletSelectLastOption(),
+            assetRegistrationUpdatePage.acquiringTransactionSelectLastOption(),
         ]);
 
         await assetRegistrationUpdatePage.save();

@@ -82,7 +82,7 @@
           <th scope="col" jhiSortBy="mainServiceOutlet"><span>Outlet</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="acquiringTransaction.paymentNumber">
+          <th scope="col" jhiSortBy="acquiringTransaction.paymentDate">
             <span>Acquiring Transaction</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
@@ -131,6 +131,7 @@
                 assetRegistration.acquiringTransaction?.paymentNumber
                 }}</a>
             </div>
+          </td>
 
           <td class="text-right">
             <div class="btn-group">

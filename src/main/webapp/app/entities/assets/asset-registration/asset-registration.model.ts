@@ -46,8 +46,8 @@ export interface IAssetRegistration {
   capitalizationDate?: dayjs.Dayjs;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[] | null;
-  settlements?: ISettlement[];
+  otherRelatedServiceOutlets?: IServiceOutlet[] | null;
+  otherRelatedSettlements?: ISettlement[] | null;
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
   deliveryNotes?: IDeliveryNote[] | null;
@@ -60,6 +60,7 @@ export interface IAssetRegistration {
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
   mainServiceOutlet?: IServiceOutlet | null;
+  acquiringTransaction?: ISettlement;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -77,8 +78,8 @@ export class AssetRegistration implements IAssetRegistration {
     public capitalizationDate?: dayjs.Dayjs,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[] | null,
-    public settlements?: ISettlement[],
+    public otherRelatedServiceOutlets?: IServiceOutlet[] | null,
+    public otherRelatedSettlements?: ISettlement[] | null,
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,
     public deliveryNotes?: IDeliveryNote[] | null,
@@ -90,7 +91,8 @@ export class AssetRegistration implements IAssetRegistration {
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public mainServiceOutlet?: IServiceOutlet | null
+    public mainServiceOutlet?: IServiceOutlet | null,
+    public acquiringTransaction?: ISettlement
   ) {}
 }
 

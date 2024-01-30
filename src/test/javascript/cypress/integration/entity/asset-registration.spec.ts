@@ -42,9 +42,9 @@ describe('AssetRegistration e2e test', () => {
   };
 
   let assetRegistration: any;
-  //let settlement: any;
   //let assetCategory: any;
   //let dealer: any;
+  //let settlement: any;
 
   before(() => {
     cy.window().then(win => {
@@ -60,14 +60,6 @@ describe('AssetRegistration e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/settlements',
-      body: {"paymentNumber":"North parsing Bahraini","paymentDate":"2022-02-03","paymentAmount":50422,"description":"blockchains Planner United","notes":"Specialist ivory","calculationFile":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","calculationFileContentType":"unknown","fileUploadToken":"Handmade","compilationToken":"cyan payment","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
-    }).then(({ body }) => {
-      settlement = body;
-    });
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
       url: '/api/asset-categories',
       body: {"assetCategoryName":"Lead","description":"deposit Decentralized Gloves","notes":"Account","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","depreciationRateYearly":33289},
     }).then(({ body }) => {
@@ -80,6 +72,14 @@ describe('AssetRegistration e2e test', () => {
       body: {"dealerName":"pink Parkway definition","taxNumber":"Forges alarm Illinois","identificationDocumentNumber":"CSS Architect program","organizationName":"Visionary Dollar Buckinghamshire","department":"Tuna","position":"Village","postalAddress":"Cambridgeshire","physicalAddress":"Paradigm Bike","accountName":"Investment Account","accountNumber":"Account programming Shoes","bankersName":"Avon","bankersBranch":"invoice","bankersSwiftCode":"Metal Shoes","fileUploadToken":"Fresh backing","compilationToken":"Credit Handmade Outdoors","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","otherNames":"input quantify"},
     }).then(({ body }) => {
       dealer = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/settlements',
+      body: {"paymentNumber":"North parsing Bahraini","paymentDate":"2022-02-03","paymentAmount":50422,"description":"blockchains Planner United","notes":"Specialist ivory","calculationFile":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","calculationFileContentType":"unknown","fileUploadToken":"Handmade","compilationToken":"cyan payment","remarks":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ="},
+    }).then(({ body }) => {
+      settlement = body;
     });
   });
    */
@@ -179,14 +179,6 @@ describe('AssetRegistration e2e test', () => {
 
   /* Disabled due to incompatibility
   afterEach(() => {
-    if (settlement) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/settlements/${settlement.id}`,
-      }).then(() => {
-        settlement = undefined;
-      });
-    }
     if (assetCategory) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -201,6 +193,14 @@ describe('AssetRegistration e2e test', () => {
         url: `/api/dealers/${dealer.id}`,
       }).then(() => {
         dealer = undefined;
+      });
+    }
+    if (settlement) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/settlements/${settlement.id}`,
+      }).then(() => {
+        settlement = undefined;
       });
     }
   });
@@ -249,9 +249,9 @@ describe('AssetRegistration e2e test', () => {
   
           body: {
             ...assetRegistrationSample,
-            settlement: settlement,
             assetCategory: assetCategory,
             dealer: dealer,
+            acquiringTransaction: settlement,
           },
         }).then(({ body }) => {
           assetRegistration = body;
@@ -354,9 +354,9 @@ describe('AssetRegistration e2e test', () => {
 
       cy.get(`[data-cy="capitalizationDate"]`).type('2022-04-12').should('have.value', '2022-04-12');
 
-      cy.get(`[data-cy="settlement"]`).select([0]);
       cy.get(`[data-cy="assetCategory"]`).select(1);
       cy.get(`[data-cy="dealer"]`).select(1);
+      cy.get(`[data-cy="acquiringTransaction"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

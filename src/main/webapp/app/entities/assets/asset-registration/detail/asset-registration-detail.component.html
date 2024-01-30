@@ -86,17 +86,17 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Service Outlet</span></dt>
+        <dt><span>Other Related Service Outlets</span></dt>
         <dd>
-          <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
-            <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
+          <span *ngFor="let otherRelatedServiceOutlets of assetRegistration.otherRelatedServiceOutlets; let last = last">
+            <a [routerLink]="['/service-outlet', otherRelatedServiceOutlets?.id, 'view']">{{ otherRelatedServiceOutlets.outletCode }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Settlement</span></dt>
+        <dt><span>Other Related Settlements</span></dt>
         <dd>
-          <span *ngFor="let settlement of assetRegistration.settlements; let last = last">
-            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
+          <span *ngFor="let otherRelatedSettlements of assetRegistration.otherRelatedSettlements; let last = last">
+            <a [routerLink]="['/settlement', otherRelatedSettlements?.id, 'view']">{{ otherRelatedSettlements.paymentNumber }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
@@ -185,6 +185,14 @@
           <div *ngIf="assetRegistration.mainServiceOutlet">
             <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
               assetRegistration.mainServiceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Acquiring Transaction</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.acquiringTransaction">
+            <a [routerLink]="['/settlement', assetRegistration.acquiringTransaction?.id, 'view']">{{
+              assetRegistration.acquiringTransaction?.paymentDate
             }}</a>
           </div>
         </dd>

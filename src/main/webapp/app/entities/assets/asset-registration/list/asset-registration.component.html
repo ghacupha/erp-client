@@ -85,6 +85,9 @@
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="acquiringTransaction.paymentDate">
+            <span>Acquiring Transaction</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -132,6 +135,13 @@
             <div *ngIf="assetRegistration.mainServiceOutlet">
               <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
                 assetRegistration.mainServiceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetRegistration.acquiringTransaction">
+              <a [routerLink]="['/settlement', assetRegistration.acquiringTransaction?.id, 'view']">{{
+                assetRegistration.acquiringTransaction?.paymentDate
               }}</a>
             </div>
           </td>

@@ -93,8 +93,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     capitalizationDate: [null, [Validators.required]],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlets: [],
-    settlements: [null, Validators.required],
+    otherRelatedServiceOutlets: [],
+    otherRelatedSettlements: [],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
     deliveryNotes: [],
@@ -107,6 +107,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     universallyUniqueMappings: [],
     assetAccessories: [],
     mainServiceOutlet: [],
+    acquiringTransaction: [null, Validators.required],
   });
 
   constructor(
@@ -393,8 +394,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: assetRegistration.capitalizationDate,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlets: assetRegistration.serviceOutlets,
-      settlements: assetRegistration.settlements,
+      otherRelatedServiceOutlets: assetRegistration.otherRelatedServiceOutlets,
+      otherRelatedSettlements: assetRegistration.otherRelatedSettlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
       deliveryNotes: assetRegistration.deliveryNotes,
@@ -407,6 +408,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
       mainServiceOutlet: assetRegistration.mainServiceOutlet,
+      acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -419,12 +421,13 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetRegistration.serviceOutlets ?? []),
+      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
       assetRegistration.mainServiceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
-      ...(assetRegistration.settlements ?? [])
+      ...(assetRegistration.otherRelatedSettlements ?? []),
+      assetRegistration.acquiringTransaction
     );
     this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
       this.assetCategoriesSharedCollection,
@@ -500,7 +503,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         map((serviceOutlets: IServiceOutlet[]) =>
           this.serviceOutletService.addServiceOutletToCollectionIfMissing(
             serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? []),
+            ...(this.editForm.get('otherRelatedServiceOutlets')!.value ?? []),
             this.editForm.get('mainServiceOutlet')!.value
           )
         )
@@ -512,7 +515,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+          this.settlementService.addSettlementToCollectionIfMissing(
+            settlements,
+            ...(this.editForm.get('otherRelatedSettlements')!.value ?? []),
+            this.editForm.get('acquiringTransaction')!.value
+          )
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -659,8 +666,8 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       capitalizationDate: this.editForm.get(['capitalizationDate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
+      otherRelatedServiceOutlets: this.editForm.get(['otherRelatedServiceOutlets'])!.value,
+      otherRelatedSettlements: this.editForm.get(['otherRelatedSettlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
@@ -673,6 +680,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
+      acquiringTransaction: this.editForm.get(['acquiringTransaction'])!.value,
     };
   }
 }

@@ -24,6 +24,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
 import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import { assetRegistrationCopyWorkflowInitiatedFromView } from '../../../store/actions/fixed-assets-register-update-status.actions';
+import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
 
 @Component({
   selector: 'jhi-asset-registration-detail',
@@ -31,12 +33,24 @@ import { assetRegistrationCopyWorkflowInitiatedFromView } from '../../../store/a
 })
 export class AssetRegistrationDetailComponent implements OnInit {
   assetRegistration: IAssetRegistration | null = null;
+  assetAcquiringTransaction: ISettlement | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
+  constructor(
+    protected dataUtils: DataUtils,
+    protected activatedRoute: ActivatedRoute,
+    protected settlementService: SettlementService,
+    protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetRegistration }) => {
       this.assetRegistration = assetRegistration;
+
+      if (this.assetRegistration?.acquiringTransaction?.id) {
+        this.settlementService.find(this.assetRegistration.acquiringTransaction.id)
+          .subscribe(settlement => {
+            this.assetAcquiringTransaction = settlement.body
+          });
+      }
     });
   }
 

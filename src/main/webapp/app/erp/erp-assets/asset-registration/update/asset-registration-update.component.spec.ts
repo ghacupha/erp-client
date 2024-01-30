@@ -41,22 +41,22 @@ import { AssetWarrantyService } from '../../asset-warranty/service/asset-warrant
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
-import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPurchaseOrder } from '../../../erp-settlements/purchase-order/purchase-order.model';
 import { IAssetCategory } from '../../asset-category/asset-category.model';
 import { IJobSheet } from '../../../erp-settlements/job-sheet/job-sheet.model';
 import { IDeliveryNote } from '../../../erp-settlements/delivery-note/delivery-note.model';
 import { PurchaseOrderService } from '../../../erp-settlements/purchase-order/service/purchase-order.service';
 import { IPaymentInvoice } from '../../../erp-settlements/payment-invoice/payment-invoice.model';
-import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 import { PaymentInvoiceService } from '../../../erp-settlements/payment-invoice/service/payment-invoice.service';
 import { JobSheetService } from '../../../erp-settlements/job-sheet/service/job-sheet.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
-import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 import { DeliveryNoteService } from '../../../erp-settlements/delivery-note/service/delivery-note.service';
 import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 describe('AssetRegistration Management Update Component', () => {
@@ -153,14 +153,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const mainServiceOutlet: IServiceOutlet = { id: 10495 };
+      const otherRelatedServiceOutlets: IServiceOutlet[] = [{ id: 10495 }];
+      assetRegistration.otherRelatedServiceOutlets = otherRelatedServiceOutlets;
+      const mainServiceOutlet: IServiceOutlet = { id: 12055 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const serviceOutlets: IServiceOutlet[] = [{ id: 12055 }];
-      assetRegistration.serviceOutlets = serviceOutlets;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 40506 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [mainServiceOutlet, ...serviceOutlets];
+      const additionalServiceOutlets = [...otherRelatedServiceOutlets, mainServiceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -177,12 +177,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call Settlement query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const settlements: ISettlement[] = [{ id: 6062 }];
-      assetRegistration.settlements = settlements;
+      const otherRelatedSettlements: ISettlement[] = [{ id: 6062 }];
+      assetRegistration.otherRelatedSettlements = otherRelatedSettlements;
+      const acquiringTransaction: ISettlement = { id: 63020 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
 
-      const settlementCollection: ISettlement[] = [{ id: 63020 }];
+      const settlementCollection: ISettlement[] = [{ id: 26803 }];
       jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
-      const additionalSettlements = [...settlements];
+      const additionalSettlements = [...otherRelatedSettlements, acquiringTransaction];
       const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
       jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -421,12 +423,14 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const mainServiceOutlet: IServiceOutlet = { id: 53824 };
+      const otherRelatedServiceOutlets: IServiceOutlet = { id: 53824 };
+      assetRegistration.otherRelatedServiceOutlets = [otherRelatedServiceOutlets];
+      const mainServiceOutlet: IServiceOutlet = { id: 72754 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const serviceOutlets: IServiceOutlet = { id: 72754 };
-      assetRegistration.serviceOutlets = [serviceOutlets];
-      const settlements: ISettlement = { id: 26803 };
-      assetRegistration.settlements = [settlements];
+      const otherRelatedSettlements: ISettlement = { id: 3742 };
+      assetRegistration.otherRelatedSettlements = [otherRelatedSettlements];
+      const acquiringTransaction: ISettlement = { id: 83854 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
       const assetCategory: IAssetCategory = { id: 64108 };
       assetRegistration.assetCategory = assetCategory;
       const purchaseOrders: IPurchaseOrder = { id: 76982 };
@@ -456,9 +460,10 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
+      expect(comp.serviceOutletsSharedCollection).toContain(otherRelatedServiceOutlets);
       expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
-      expect(comp.settlementsSharedCollection).toContain(settlements);
+      expect(comp.settlementsSharedCollection).toContain(otherRelatedSettlements);
+      expect(comp.settlementsSharedCollection).toContain(acquiringTransaction);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
       expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);

@@ -204,17 +204,17 @@
         </div>
 
         <div class="form-group">
-          <label for="field_serviceOutlets">Service Outlet</label>
+          <label for="field_otherRelatedServiceOutlets">Other Related Service Outlets</label>
           <select
             class="form-control"
-            id="field_serviceOutlets"
-            data-cy="serviceOutlet"
+            id="field_otherRelatedServiceOutlets"
+            data-cy="otherRelatedServiceOutlets"
             multiple
-            name="serviceOutlets"
-            formControlName="serviceOutlets"
+            name="otherRelatedServiceOutlets"
+            formControlName="otherRelatedServiceOutlets"
           >
             <option
-              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('serviceOutlets')!.value)"
+              [ngValue]="getSelectedServiceOutlet(serviceOutletOption, editForm.get('otherRelatedServiceOutlets')!.value)"
               *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
             >
               {{ serviceOutletOption.outletCode }}
@@ -223,27 +223,22 @@
         </div>
 
         <div class="form-group">
-          <label for="field_settlements">Settlement</label>
+          <label for="field_otherRelatedSettlements">Other Related Settlements</label>
           <select
             class="form-control"
-            id="field_settlements"
-            data-cy="settlement"
+            id="field_otherRelatedSettlements"
+            data-cy="otherRelatedSettlements"
             multiple
-            name="settlements"
-            formControlName="settlements"
+            name="otherRelatedSettlements"
+            formControlName="otherRelatedSettlements"
           >
             <option
-              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('settlements')!.value)"
+              [ngValue]="getSelectedSettlement(settlementOption, editForm.get('otherRelatedSettlements')!.value)"
               *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
             >
               {{ settlementOption.paymentNumber }}
             </option>
           </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['settlements'])!.invalid && (editForm.get(['settlements'])!.dirty || editForm.get(['settlements'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlements'])?.errors?.required"> This field is required. </small>
         </div>
 
         <div class="form-group">
@@ -486,6 +481,39 @@
               {{ serviceOutletOption.outletCode }}
             </option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_acquiringTransaction">Acquiring Transaction</label>
+          <select
+            class="form-control"
+            id="field_acquiringTransaction"
+            data-cy="acquiringTransaction"
+            name="acquiringTransaction"
+            formControlName="acquiringTransaction"
+          >
+            <option *ngIf="!editForm.get('acquiringTransaction')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                settlementOption.id === editForm.get('acquiringTransaction')!.value?.id
+                  ? editForm.get('acquiringTransaction')!.value
+                  : settlementOption
+              "
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentDate }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['acquiringTransaction'])!.invalid &&
+            (editForm.get(['acquiringTransaction'])!.dirty || editForm.get(['acquiringTransaction'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['acquiringTransaction'])?.errors?.required">
+            This field is required.
+          </small>
         </div>
       </div>
 

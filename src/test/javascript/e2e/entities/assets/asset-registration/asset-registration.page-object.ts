@@ -60,8 +60,8 @@ export class AssetRegistrationUpdatePage {
 
   placeholderSelect = element(by.id('field_placeholder'));
   paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
-  serviceOutletSelect = element(by.id('field_serviceOutlet'));
-  settlementSelect = element(by.id('field_settlement'));
+  otherRelatedServiceOutletsSelect = element(by.id('field_otherRelatedServiceOutlets'));
+  otherRelatedSettlementsSelect = element(by.id('field_otherRelatedSettlements'));
   assetCategorySelect = element(by.id('field_assetCategory'));
   purchaseOrderSelect = element(by.id('field_purchaseOrder'));
   deliveryNoteSelect = element(by.id('field_deliveryNote'));
@@ -74,6 +74,7 @@ export class AssetRegistrationUpdatePage {
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
   assetAccessorySelect = element(by.id('field_assetAccessory'));
   mainServiceOutletSelect = element(by.id('field_mainServiceOutlet'));
+  acquiringTransactionSelect = element(by.id('field_acquiringTransaction'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -191,36 +192,36 @@ export class AssetRegistrationUpdatePage {
     return await this.paymentInvoicesSelect.element(by.css('option:checked')).getText();
   }
 
-  async serviceOutletSelectLastOption(): Promise<void> {
-    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
+  async otherRelatedServiceOutletsSelectLastOption(): Promise<void> {
+    await this.otherRelatedServiceOutletsSelect.all(by.tagName('option')).last().click();
   }
 
-  async serviceOutletSelectOption(option: string): Promise<void> {
-    await this.serviceOutletSelect.sendKeys(option);
+  async otherRelatedServiceOutletsSelectOption(option: string): Promise<void> {
+    await this.otherRelatedServiceOutletsSelect.sendKeys(option);
   }
 
-  getServiceOutletSelect(): ElementFinder {
-    return this.serviceOutletSelect;
+  getOtherRelatedServiceOutletsSelect(): ElementFinder {
+    return this.otherRelatedServiceOutletsSelect;
   }
 
-  async getServiceOutletSelectedOption(): Promise<string> {
-    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
+  async getOtherRelatedServiceOutletsSelectedOption(): Promise<string> {
+    return await this.otherRelatedServiceOutletsSelect.element(by.css('option:checked')).getText();
   }
 
-  async settlementSelectLastOption(): Promise<void> {
-    await this.settlementSelect.all(by.tagName('option')).last().click();
+  async otherRelatedSettlementsSelectLastOption(): Promise<void> {
+    await this.otherRelatedSettlementsSelect.all(by.tagName('option')).last().click();
   }
 
-  async settlementSelectOption(option: string): Promise<void> {
-    await this.settlementSelect.sendKeys(option);
+  async otherRelatedSettlementsSelectOption(option: string): Promise<void> {
+    await this.otherRelatedSettlementsSelect.sendKeys(option);
   }
 
-  getSettlementSelect(): ElementFinder {
-    return this.settlementSelect;
+  getOtherRelatedSettlementsSelect(): ElementFinder {
+    return this.otherRelatedSettlementsSelect;
   }
 
-  async getSettlementSelectedOption(): Promise<string> {
-    return await this.settlementSelect.element(by.css('option:checked')).getText();
+  async getOtherRelatedSettlementsSelectedOption(): Promise<string> {
+    return await this.otherRelatedSettlementsSelect.element(by.css('option:checked')).getText();
   }
 
   async assetCategorySelectLastOption(): Promise<void> {
@@ -413,6 +414,22 @@ export class AssetRegistrationUpdatePage {
 
   async getMainServiceOutletSelectedOption(): Promise<string> {
     return await this.mainServiceOutletSelect.element(by.css('option:checked')).getText();
+  }
+
+  async acquiringTransactionSelectLastOption(): Promise<void> {
+    await this.acquiringTransactionSelect.all(by.tagName('option')).last().click();
+  }
+
+  async acquiringTransactionSelectOption(option: string): Promise<void> {
+    await this.acquiringTransactionSelect.sendKeys(option);
+  }
+
+  getAcquiringTransactionSelect(): ElementFinder {
+    return this.acquiringTransactionSelect;
+  }
+
+  async getAcquiringTransactionSelectedOption(): Promise<string> {
+    return await this.acquiringTransactionSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
