@@ -268,7 +268,11 @@
       "AutonomousReport",
       "AmortizationPostingReport",
       "DepreciationReport",
-      "AssetAdditionsReport"
+      "AssetAdditionsReport",
+      "NbvCompilationBatch",
+      "NetBookValueEntry",
+      "NbvCompilationJob",
+      "NbvReport"
     ],
     "lastLiquibaseTimestamp": 1703087575000,
     "monorepository": true,

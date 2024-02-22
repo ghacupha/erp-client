@@ -86,6 +86,7 @@
     "swagger-ui-dist": "3.52.5",
     "tslib": "2.3.1",
     "uuid": "^8.3.2",
+    "uuidv7": "^0.6.3",
     "webstomp-client": "1.2.6",
     "zone.js": "0.11.4"
   },

@@ -356,6 +356,20 @@
             <span>Additions Report</span>
           </a>
         </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="nbv-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>NBV Report</span>
+          </a>
+        </li>
+
         <li>
           <a
             class="dropdown-item"

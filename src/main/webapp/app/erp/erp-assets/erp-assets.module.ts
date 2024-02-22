@@ -241,6 +241,58 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./asset-additions-report/asset-additions-report.module').then(m => m.AssetAdditionsReportModule),
       },
+      {
+        path: 'nbv-compilation-batch',
+        data: {
+          pageTitle: 'ERP | NBV Compilation Batch',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./nbv-compilation-batch/nbv-compilation-batch.module').then(m => m.NbvCompilationBatchModule),
+      },
+      {
+        path: 'nbv-compilation-job',
+        data: {
+          pageTitle: 'ERP | NBV Compilation Job',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./nbv-compilation-job/nbv-compilation-job.module').then(m => m.NbvCompilationJobModule),
+      },
+      {
+        path: 'nbv-report',
+        data: {
+          pageTitle: 'ERP | NBV Report',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./nbv-report/nbv-report.module').then(m => m.NbvReportModule),
+      },
+      {
+        path: 'net-book-value-entry',
+        data: {
+          pageTitle: 'ERP | NBV Entry',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./net-book-value-entry/net-book-value-entry.module').then(m => m.NetBookValueEntryModule),
+      },
     ])
   ]
 })
