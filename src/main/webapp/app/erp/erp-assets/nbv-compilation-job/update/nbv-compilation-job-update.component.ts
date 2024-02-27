@@ -98,6 +98,12 @@ export class NbvCompilationJobUpdateComponent implements OnInit {
     }
   }
 
+  updateActivePeriod(update: IDepreciationPeriod): void {
+    this.editForm.patchValue({
+      activePeriod: update
+    })
+  }
+
   trackDepreciationPeriodById(index: number, item: IDepreciationPeriod): number {
     return item.id!;
   }

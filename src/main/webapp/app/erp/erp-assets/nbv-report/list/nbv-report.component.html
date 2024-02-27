@@ -72,13 +72,10 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportName"><span>Report Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfReportRequest"><span>Time Of Report Request</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="filename"><span>Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportParameters">
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationPeriod.periodCode"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
@@ -93,14 +90,8 @@
           </td>
           <td>{{ nbvReport.reportName }}</td>
           <td>{{ nbvReport.timeOfReportRequest | formatMediumDatetime }}</td>
-          <td>{{ nbvReport.fileChecksum }}</td>
           <td>{{ nbvReport.tampered }}</td>
-          <td>{{ nbvReport.filename }}</td>
           <td>{{ nbvReport.reportParameters }}</td>
-          <td>
-            <a *ngIf="nbvReport.reportFile" (click)="openFile(nbvReport.reportFile, nbvReport.reportFileContentType)">open</a>
-            <span *ngIf="nbvReport.reportFile">{{ nbvReport.reportFileContentType }}, {{ byteSize(nbvReport.reportFile) }}</span>
-          </td>
           <td>
             <div *ngIf="nbvReport.requestedBy">
               <a [routerLink]="['/application-user', nbvReport.requestedBy?.id, 'view']">{{

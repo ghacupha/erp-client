@@ -23,9 +23,10 @@ import { NbvCompilationJobDetailComponent } from './detail/nbv-compilation-job-d
 import { NbvCompilationJobUpdateComponent } from './update/nbv-compilation-job-update.component';
 import { NbvCompilationJobDeleteDialogComponent } from './delete/nbv-compilation-job-delete-dialog.component';
 import { NbvCompilationJobRoutingModule } from './route/nbv-compilation-job-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, NbvCompilationJobRoutingModule],
+  imports: [SharedModule, NbvCompilationJobRoutingModule, ErpCommonModule],
   declarations: [
     NbvCompilationJobComponent,
     NbvCompilationJobDetailComponent,

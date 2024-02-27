@@ -69,22 +69,14 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_activePeriod">Active Period</label>
-          <select class="form-control" id="field_activePeriod" data-cy="activePeriod" name="activePeriod" formControlName="activePeriod">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                depreciationPeriodOption.id === editForm.get('activePeriod')!.value?.id
-                  ? editForm.get('activePeriod')!.value
-                  : depreciationPeriodOption
-              "
-              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
-            >
-              {{ depreciationPeriodOption.endDate }}
-            </option>
-          </select>
-        </div>
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='activePeriod'
+          [inputValue]="editForm.get('activePeriod')!.value"
+          (valueSelected)='updateActivePeriod($event)'
+          inputControlLabel='Active Period'
+        >
+        </jhi-depreciation-period-form-control>
 
       </div>
 

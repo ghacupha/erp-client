@@ -93,6 +93,12 @@ export class NbvReportUpdateComponent implements OnInit {
     });
   }
 
+  updateDepreciationPeriod(update: IDepreciationPeriod): void {
+    this.editForm.patchValue({
+      depreciationPeriod: update
+    })
+  }
+
   byteSize(base64String: string): string {
     return this.dataUtils.byteSize(base64String);
   }

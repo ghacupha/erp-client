@@ -23,9 +23,10 @@ import { NbvReportDetailComponent } from './detail/nbv-report-detail.component';
 import { NbvReportUpdateComponent } from './update/nbv-report-update.component';
 import { NbvReportDeleteDialogComponent } from './delete/nbv-report-delete-dialog.component';
 import { NbvReportRoutingModule } from './route/nbv-report-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, NbvReportRoutingModule],
+  imports: [SharedModule, NbvReportRoutingModule, ErpCommonModule],
   declarations: [NbvReportComponent, NbvReportDetailComponent, NbvReportUpdateComponent, NbvReportDeleteDialogComponent],
   entryComponents: [NbvReportDeleteDialogComponent],
 })

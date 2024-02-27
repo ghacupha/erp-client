@@ -41,17 +41,9 @@
         <dd>
           <span>{{ nbvReport.timeOfReportRequest | formatMediumDatetime }}</span>
         </dd>
-        <dt><span>File Checksum</span></dt>
-        <dd>
-          <span>{{ nbvReport.fileChecksum }}</span>
-        </dd>
-        <dt><span>Tampered</span></dt>
-        <dd>
-          <span>{{ nbvReport.tampered }}</span>
-        </dd>
-        <dt><span>Filename</span></dt>
-        <dd>
-          <span>{{ nbvReport.filename }}</span>
+        <dt *ngIf='nbvReport.tampered'><span>Tampered</span></dt>
+        <dd *ngIf='nbvReport.tampered'>
+          <span class='tampered-report'>The report File is Tampered</span>
         </dd>
         <dt><span>Report Parameters</span></dt>
         <dd>

@@ -25,6 +25,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 @Component({
   selector: 'jhi-nbv-report-detail',
   templateUrl: './nbv-report-detail.component.html',
+  styleUrls: ['./nbv-report-detail.component.scss']
 })
 export class NbvReportDetailComponent implements OnInit {
   nbvReport: INbvReport | null = null;
