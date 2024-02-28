@@ -83,7 +83,7 @@ export class NbvReportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ nbvReport }) => {
       if (nbvReport.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         nbvReport.timeOfReportRequest = today;
       }
 

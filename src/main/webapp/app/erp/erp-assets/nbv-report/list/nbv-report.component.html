@@ -72,7 +72,6 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportName"><span>Report Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfReportRequest"><span>Time Of Report Request</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportParameters">
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
@@ -90,7 +89,6 @@
           </td>
           <td>{{ nbvReport.reportName }}</td>
           <td>{{ nbvReport.timeOfReportRequest | formatMediumDatetime }}</td>
-          <td>{{ nbvReport.tampered }}</td>
           <td>{{ nbvReport.reportParameters }}</td>
           <td>
             <div *ngIf="nbvReport.requestedBy">
