@@ -40,17 +40,18 @@ export class AssetRegistrationService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .post<IAssetRegistration>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.put<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
-      assetRegistration,
-      { observe: 'response' }
-    )
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .put<IAssetRegistration>(`${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`, copy, {
+        observe: 'response',
+      })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
