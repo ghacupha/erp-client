@@ -46,7 +46,7 @@ import { TransactionAccountService } from '../../../erp-accounts/transaction-acc
 import { PrepaymentMappingService } from '../../prepayment-mapping/service/prepayment-mapping.service';
 import { SettlementCurrencySuggestionService } from '../../../erp-common/suggestion/settlement-currency-suggestion.service';
 import { SearchWithPagination } from '../../../../core/request/request.model';
-import { v4 as uuidv4 } from 'uuid';
+import { uuidv7 as uuidv4 } from 'uuidv7';
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { select, Store } from '@ngrx/store';
@@ -129,10 +129,18 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        prepaymentGuid: uuidv4(),
+      })
     }
 
     if (this.weAreCopying) {
       this.copyForm(this.selectedItem)
+
+      this.editForm.patchValue({
+        prepaymentGuid: uuidv4(),
+      })
     }
 
     if (this.weAreCreating) {
