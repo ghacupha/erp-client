@@ -23,7 +23,10 @@ import { IAssetRegistration } from '../asset-registration.model';
 import { DataUtils } from 'app/core/util/data-util.service';
 import { Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
-import { assetRegistrationCopyWorkflowInitiatedFromView } from '../../../store/actions/fixed-assets-register-update-status.actions';
+import {
+  assetRegistrationCopyWorkflowInitiatedFromView,
+  assetRegistrationEditWorkflowInitiatedFromView
+} from '../../../store/actions/fixed-assets-register-update-status.actions';
 import { ISettlement } from '../../../erp-settlements/settlement/settlement.model';
 import { SettlementService } from '../../../erp-settlements/settlement/service/settlement.service';
 
@@ -54,8 +57,12 @@ export class AssetRegistrationDetailComponent implements OnInit {
     });
   }
 
-  copy(instance: IAssetRegistration): void {
+  copyButtonEvent(instance: IAssetRegistration): void {
     this.store.dispatch(assetRegistrationCopyWorkflowInitiatedFromView({copiedInstance: instance}));
+  }
+
+  editButtonEvent(instance: IAssetRegistration): void {
+    this.store.dispatch(assetRegistrationEditWorkflowInitiatedFromView({editedInstance: instance}));
   }
 
   byteSize(base64String: string): string {

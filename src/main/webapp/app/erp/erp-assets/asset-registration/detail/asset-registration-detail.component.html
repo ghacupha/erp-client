@@ -196,11 +196,11 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/asset-registration', assetRegistration.id, 'edit']" class="btn btn-primary">
+      <button type="button" (click)='editButtonEvent(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
 
-      <button type="button" (click)='copy(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
+      <button type="button" (click)='copyButtonEvent(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
         <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
