@@ -373,7 +373,7 @@
         <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
           <a
             class="dropdown-item"
-            routerLink="monthly-prepayment-outstanding-report-item"
+            [routerLink]="['/monthly-prepayment-report-requisition/new']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
             (click)="collapseNavbar()"

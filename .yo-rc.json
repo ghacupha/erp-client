@@ -273,9 +273,10 @@
       "NetBookValueEntry",
       "NbvCompilationJob",
       "NbvReport",
-      "MonthlyPrepaymentOutstandingReportItem"
+      "MonthlyPrepaymentOutstandingReportItem",
+      "MonthlyPrepaymentReportRequisition"
     ],
-    "lastLiquibaseTimestamp": 1703087575000,
+    "lastLiquibaseTimestamp": 1709634688000,
     "monorepository": true,
     "skipCommitHook": true
   }

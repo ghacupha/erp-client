@@ -2821,6 +2821,18 @@
               <span>Monthly Prepayment Outstanding Report Item</span>
             </a>
           </li>
+          <li>
+            <a
+              class="dropdown-item"
+              routerLink="monthly-prepayment-report-requisition"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              (click)="collapseNavbar()"
+            >
+              <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+              <span>Monthly Prepayment Report Requisition</span>
+            </a>
+          </li>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
         </ul>
       </li>

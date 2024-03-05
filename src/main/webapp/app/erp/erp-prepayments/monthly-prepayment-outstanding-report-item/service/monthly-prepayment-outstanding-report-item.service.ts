@@ -31,6 +31,7 @@ import {
   IMonthlyPrepaymentOutstandingReportItem,
   getMonthlyPrepaymentOutstandingReportItemIdentifier,
 } from '../monthly-prepayment-outstanding-report-item.model';
+import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
 
 export type EntityResponseType = HttpResponse<IMonthlyPrepaymentOutstandingReportItem>;
 export type EntityArrayResponseType = HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>;
@@ -48,11 +49,30 @@ export class MonthlyPrepaymentOutstandingReportItemService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
-    const options = createRequestOption(req);
+  // query(req?: any): Observable<EntityArrayResponseType> {
+  //   const options = createRequestOption(req);
+  //   return this.http
+  //     .get<IMonthlyPrepaymentOutstandingReportItem[]>(this.resourceUrl + '/periodic', { params: options, observe: 'response' })
+  //     .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  // }
+
+  queryByFiscalPeriod(fiscalStartDate: dayjs.Dayjs | undefined, fiscalEndDate: dayjs.Dayjs | undefined, param?: any): Observable<EntityArrayResponseType> {
+
+    let options = createRequestOption(param);
+    if (fiscalStartDate) {
+      options = options.set('fiscalStartDate', this.convertDateItemFromClient(fiscalStartDate));
+    }
+    if (fiscalEndDate) {
+      options = options.set('fiscalEndDate', this.convertDateItemFromClient(fiscalEndDate))
+    }
+
     return this.http
       .get<IMonthlyPrepaymentOutstandingReportItem[]>(this.resourceUrl + '/periodic', { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  convertDateItemFromClient(dateItem: dayjs.Dayjs): string {
+    return dateItem.isValid() ? dateItem.format(DATE_FORMAT) : dayjs().format(DATE_FORMAT);
   }
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {

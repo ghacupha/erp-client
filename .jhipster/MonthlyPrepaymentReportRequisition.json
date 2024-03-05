@@ -1,0 +1,18 @@
+{
+  "clientRootFolder": "prepayments",
+  "fields": [],
+  "relationships": [
+    {
+      "relationshipName": "fiscalYear",
+      "otherEntityName": "fiscalYear",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "startDate"
+    }
+  ],
+  "readOnly": false,
+  "pagination": "pagination",
+  "entityTableName": "monthly_prepayment_requisition",
+  "name": "MonthlyPrepaymentReportRequisition",
+  "changelogDate": "20240305103128"
+}

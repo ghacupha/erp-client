@@ -25,10 +25,12 @@ import { IMonthlyPrepaymentOutstandingReportItem } from '../monthly-prepayment-o
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { MonthlyPrepaymentOutstandingReportItemService } from '../service/monthly-prepayment-outstanding-report-item.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { IMonthlyPrepaymentReportRequisition } from '../../monthly-prepayment-report-requisition/monthly-prepayment-report-requisition.model';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-monthly-prepayment-outstanding-report-item',
-  templateUrl: './monthly-prepayment-outstanding-report-item.component.html',
+  templateUrl: './monthly-prepayment-outstanding-report-item.component.html'
 })
 export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
   monthlyPrepaymentOutstandingReportItems: IMonthlyPrepaymentOutstandingReportItem[];
@@ -39,6 +41,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
   predicate: string;
   ascending: boolean;
   currentSearch: string;
+  reportParams: IMonthlyPrepaymentReportRequisition;
 
   constructor(
     protected monthlyPrepaymentOutstandingReportItemService: MonthlyPrepaymentOutstandingReportItemService,
@@ -49,11 +52,14 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.page = 0;
     this.links = {
-      last: 0,
+      last: 0
     };
     this.predicate = 'end_date';
     this.ascending = true;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
+
+    this.reportParams = this.activatedRoute.snapshot.queryParams['reportParams'] ?? '';
+
   }
 
   loadAll(): void {
@@ -64,7 +70,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
           query: this.currentSearch,
           page: this.page,
           size: this.itemsPerPage,
-          sort: this.sort(),
+          sort: this.sort()
         })
         .subscribe(
           (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
@@ -79,11 +85,14 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
     }
 
     this.monthlyPrepaymentOutstandingReportItemService
-      .query({
-        page: this.page,
-        size: this.itemsPerPage,
-        sort: this.sort(),
-      })
+      .queryByFiscalPeriod(
+        dayjs().startOf("year"),
+        dayjs().endOf("year"),
+        {
+          page: this.page,
+          size: this.itemsPerPage,
+          sort: this.sort()
+        })
       .subscribe(
         (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
           this.isLoading = false;
@@ -93,6 +102,28 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
           this.isLoading = false;
         }
       );
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (this.reportParams.fiscalYear !== undefined) {
+      this.monthlyPrepaymentOutstandingReportItemService
+        .queryByFiscalPeriod(
+          this.reportParams.fiscalYear.startDate,
+          this.reportParams.fiscalYear.endDate,
+          {
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+          })
+        .subscribe(
+          (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
+            this.isLoading = false;
+            this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
+          },
+          () => {
+            this.isLoading = false;
+          }
+        );
+    }
   }
 
   reset(): void {
@@ -109,7 +140,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
   search(query: string): void {
     this.monthlyPrepaymentOutstandingReportItems = [];
     this.links = {
-      last: 0,
+      last: 0
     };
     this.page = 0;
     this.currentSearch = query;
@@ -141,7 +172,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
       this.links = this.parseLinks.parse(linkHeader);
     } else {
       this.links = {
-        last: 0,
+        last: 0
       };
     }
     if (data) {
