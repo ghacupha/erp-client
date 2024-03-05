@@ -84,31 +84,33 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
       return;
     }
 
-    this.monthlyPrepaymentOutstandingReportItemService
-      .queryByFiscalPeriod(
-        dayjs().startOf("year"),
-        dayjs().endOf("year"),
-        {
-          page: this.page,
-          size: this.itemsPerPage,
-          sort: this.sort()
-        })
-      .subscribe(
-        (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
-          this.isLoading = false;
-          this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
-        },
-        () => {
-          this.isLoading = false;
-        }
-      );
-
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (this.reportParams.fiscalYear !== undefined) {
       this.monthlyPrepaymentOutstandingReportItemService
         .queryByFiscalPeriod(
           this.reportParams.fiscalYear.startDate,
           this.reportParams.fiscalYear.endDate,
+          {
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+          })
+        .subscribe(
+          (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
+            this.isLoading = false;
+            this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
+          },
+          () => {
+            this.isLoading = false;
+          }
+        );
+      
+    } else {
+
+      this.monthlyPrepaymentOutstandingReportItemService
+        .queryByFiscalPeriod(
+          dayjs().startOf("year"),
+          dayjs().endOf("year"),
           {
             page: this.page,
             size: this.itemsPerPage,
