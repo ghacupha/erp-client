@@ -25,8 +25,8 @@ import { IMonthlyPrepaymentOutstandingReportItem } from '../monthly-prepayment-o
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { MonthlyPrepaymentOutstandingReportItemService } from '../service/monthly-prepayment-outstanding-report-item.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
-import { IMonthlyPrepaymentReportRequisition } from '../../monthly-prepayment-report-requisition/monthly-prepayment-report-requisition.model';
 import dayjs from 'dayjs';
+import { FiscalYearService } from '../../../erp-pages/fiscal-year/service/fiscal-year.service';
 
 @Component({
   selector: 'jhi-monthly-prepayment-outstanding-report-item',
@@ -41,10 +41,11 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
   predicate: string;
   ascending: boolean;
   currentSearch: string;
-  reportParams: IMonthlyPrepaymentReportRequisition;
+  fiscalYearId: number;
 
   constructor(
     protected monthlyPrepaymentOutstandingReportItemService: MonthlyPrepaymentOutstandingReportItemService,
+    protected fiscalYearService: FiscalYearService,
     protected parseLinks: ParseLinks,
     protected activatedRoute: ActivatedRoute
   ) {
@@ -58,7 +59,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
     this.ascending = true;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
 
-    this.reportParams = this.activatedRoute.snapshot.queryParams['reportParams'] ?? '';
+    this.fiscalYearId = Number(this.activatedRoute.snapshot.queryParams['fiscalYearId'] ?? '');
 
   }
 
@@ -84,48 +85,55 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (this.reportParams.fiscalYear !== undefined) {
-      this.monthlyPrepaymentOutstandingReportItemService
-        .queryByFiscalPeriod(
-          this.reportParams.fiscalYear.startDate,
-          this.reportParams.fiscalYear.endDate,
-          {
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-          })
-        .subscribe(
-          (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
-            this.isLoading = false;
-            this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
-          },
-          () => {
-            this.isLoading = false;
-          }
-        );
-      
-    } else {
+    this.fiscalYearService.find(Number(this.fiscalYearId)).subscribe(fiscalYear => {
 
-      this.monthlyPrepaymentOutstandingReportItemService
-        .queryByFiscalPeriod(
-          dayjs().startOf("year"),
-          dayjs().endOf("year"),
-          {
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
-          })
-        .subscribe(
-          (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
-            this.isLoading = false;
-            this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
-          },
-          () => {
-            this.isLoading = false;
-          }
-        );
-    }
+      if (fiscalYear.body) {
+        this.monthlyPrepaymentOutstandingReportItemService
+          .queryByFiscalPeriod(
+            fiscalYear.body.startDate,
+            fiscalYear.body.endDate,
+            {
+              page: this.page,
+              size: this.itemsPerPage,
+              sort: this.sort()
+            })
+          .subscribe(
+            (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
+              this.isLoading = false;
+              this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
+            },
+            () => {
+              this.isLoading = false;
+            }
+          );
+
+      } else {
+
+        // Like just in case somehow someone refreshed the view without parameters, may be
+        this.monthlyPrepaymentOutstandingReportItemService
+          .queryByFiscalPeriod(
+            dayjs().startOf('year'),
+            dayjs().endOf('year'),
+            {
+              page: this.page,
+              size: this.itemsPerPage,
+              sort: this.sort()
+            })
+          .subscribe(
+            (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
+              this.isLoading = false;
+              this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
+            },
+            () => {
+              this.isLoading = false;
+            }
+          );
+      }
+    })
+
+
+
+
   }
 
   reset(): void {

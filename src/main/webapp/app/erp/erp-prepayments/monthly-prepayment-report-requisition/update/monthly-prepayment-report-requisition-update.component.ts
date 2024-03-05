@@ -69,12 +69,12 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
 
   save(): void {
 
-    const req = this.createFromForm();
+    const { fiscalYear } = this.createFromForm();
 
     // TODO NAV to "monthly-prepayment-outstanding-report-item"
     this.router.navigate(['/monthly-prepayment-outstanding-report-item'], {
       queryParams: {
-        reportParams: req,
+        fiscalYearId: fiscalYear?.id,
         page: 0,
         size: this.itemsPerPage,
         sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
@@ -88,8 +88,8 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
 
   protected sort(): string[] {
     const result = [this.predicate + ',' + (this.ascending ? ASC : DESC)];
-    if (this.predicate !== 'id') {
-      result.push('id');
+    if (this.predicate !== 'end_date') {
+      result.push('end_date');
     }
     return result;
   }
