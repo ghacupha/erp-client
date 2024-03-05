@@ -87,7 +87,7 @@ import { NgModule } from '@angular/core';
           path: 'prepayment-amortization',
           data: {
             pageTitle: 'ERP | Prepayment Amortization',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -99,7 +99,7 @@ import { NgModule } from '@angular/core';
           path: 'prepayment-compilation-request',
           data: {
             pageTitle: 'ERP | Prepayment Compilation',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -111,7 +111,7 @@ import { NgModule } from '@angular/core';
           path: 'prepayment-report',
           data: {
             pageTitle: 'ERP | Prepayment Report',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -123,7 +123,7 @@ import { NgModule } from '@angular/core';
           path: 'prepayment-account-report',
           data: {
             pageTitle: 'ERP | Prepayment Account Report',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -135,7 +135,7 @@ import { NgModule } from '@angular/core';
           path: 'prepayment-outstanding-overview-report',
           data: {
             pageTitle: 'ERP | Prepayment Overview',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -147,7 +147,7 @@ import { NgModule } from '@angular/core';
           path: 'amortization-posting-report',
           data: {
             pageTitle: 'ERP | Posting Amortization',
-            authorities: [],
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
@@ -155,6 +155,16 @@ import { NgModule } from '@angular/core';
               m => m.AmortizationPostingReportModule
             ),
         },
+        {
+          path: 'monthly-prepayment-outstanding-report-item',
+          data: {
+            pageTitle: 'Prepayments Monthly',
+            authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./monthly-prepayment-outstanding-report-item/monthly-prepayment-outstanding-report-item.module').then(m => m.MonthlyPrepaymentOutstandingReportItemModule),
+      },
       ]
     )
   ]

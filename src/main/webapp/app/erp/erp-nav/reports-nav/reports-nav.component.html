@@ -357,7 +357,7 @@
           </a>
         </li>
 
-        <li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
           <a
             class="dropdown-item"
             routerLink="nbv-report"
@@ -367,6 +367,19 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>NBV Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="monthly-prepayment-outstanding-report-item"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Monthly Prepayment Report Item</span>
           </a>
         </li>
 
