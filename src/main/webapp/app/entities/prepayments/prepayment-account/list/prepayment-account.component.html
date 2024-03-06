@@ -73,6 +73,7 @@
           <th scope="col" jhiSortBy="catalogueNumber">
             <span>Catalogue Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="recognitionDate"><span>Recognition Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAmount"><span>Prepayment Amount</span> <fa-icon icon="sort"></fa-icon></th>
@@ -98,6 +99,7 @@
             <a [routerLink]="['/prepayment-account', prepaymentAccount.id, 'view']">{{ prepaymentAccount.id }}</a>
           </td>
           <td>{{ prepaymentAccount.catalogueNumber }}</td>
+          <td>{{ prepaymentAccount.recognitionDate | formatMediumDate }}</td>
           <td>{{ prepaymentAccount.particulars }}</td>
           <td>{{ prepaymentAccount.notes }}</td>
           <td>{{ prepaymentAccount.prepaymentAmount }}</td>

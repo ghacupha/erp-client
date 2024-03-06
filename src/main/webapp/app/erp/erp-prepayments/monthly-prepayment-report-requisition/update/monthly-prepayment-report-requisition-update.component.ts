@@ -82,6 +82,12 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
     });
   }
 
+  updateFiscalYear(update: IFiscalYear): void {
+    this.editForm.patchValue({
+      fiscalYear: update
+    });
+  }
+
   trackFiscalYearById(index: number, item: IFiscalYear): number {
     return item.id!;
   }

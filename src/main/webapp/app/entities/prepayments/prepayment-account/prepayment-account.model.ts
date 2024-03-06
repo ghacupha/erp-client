@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import * as dayjs from 'dayjs';
 import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
@@ -29,6 +30,7 @@ import { IBusinessDocument } from 'app/entities/documentation/business-document/
 export interface IPrepaymentAccount {
   id?: number;
   catalogueNumber?: string;
+  recognitionDate?: dayjs.Dayjs;
   particulars?: string;
   notes?: string | null;
   prepaymentAmount?: number | null;
@@ -49,6 +51,7 @@ export class PrepaymentAccount implements IPrepaymentAccount {
   constructor(
     public id?: number,
     public catalogueNumber?: string,
+    public recognitionDate?: dayjs.Dayjs,
     public particulars?: string,
     public notes?: string | null,
     public prepaymentAmount?: number | null,

@@ -67,6 +67,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     catalogueNumber: [null, [Validators.required]],
+    recognitionDate: [null, [Validators.required]],
     particulars: [null, [Validators.required]],
     notes: [],
     prepaymentAmount: [],
@@ -243,6 +244,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: prepaymentAccount.id,
       catalogueNumber: prepaymentAccount.catalogueNumber,
+      recognitionDate: prepaymentAccount.recognitionDate,
       particulars: prepaymentAccount.particulars,
       notes: prepaymentAccount.notes,
       prepaymentAmount: prepaymentAccount.prepaymentAmount,
@@ -410,6 +412,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       ...new PrepaymentAccount(),
       id: this.editForm.get(['id'])!.value,
       catalogueNumber: this.editForm.get(['catalogueNumber'])!.value,
+      recognitionDate: this.editForm.get(['recognitionDate'])!.value,
       particulars: this.editForm.get(['particulars'])!.value,
       notes: this.editForm.get(['notes'])!.value,
       prepaymentAmount: this.editForm.get(['prepaymentAmount'])!.value,

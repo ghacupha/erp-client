@@ -71,10 +71,11 @@ describe('AmortizationRecurrence e2e test', () => {
       url: '/api/prepayment-accounts',
       body: {
         catalogueNumber: 'synthesizing Cambridgeshire turquoise',
-        particulars: 'overriding Account',
+        recognitionDate: '2022-04-30',
+        particulars: 'Profit-focused payment bypass',
         notes: 'Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=',
-        prepaymentAmount: 67614,
-        prepaymentGuid: 'c14a15bf-5acc-40e6-85e4-5c1c715bad5b',
+        prepaymentAmount: 66512,
+        prepaymentGuid: '15bf5acc-0e6c-45e4-9c1c-715bad5b9169',
       },
     }).then(({ body }) => {
       prepaymentAccount = body;

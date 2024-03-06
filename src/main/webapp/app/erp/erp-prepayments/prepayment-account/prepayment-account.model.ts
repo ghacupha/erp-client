@@ -25,10 +25,12 @@ import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import * as dayjs from 'dayjs';
 
 export interface IPrepaymentAccount {
   id?: number;
   catalogueNumber?: string;
+  recognitionDate?: dayjs.Dayjs;
   particulars?: string;
   notes?: string | null;
   prepaymentAmount?: number | null;
@@ -49,6 +51,7 @@ export class PrepaymentAccount implements IPrepaymentAccount {
   constructor(
     public id?: number,
     public catalogueNumber?: string,
+    public recognitionDate?: dayjs.Dayjs,
     public particulars?: string,
     public notes?: string | null,
     public prepaymentAmount?: number | null,

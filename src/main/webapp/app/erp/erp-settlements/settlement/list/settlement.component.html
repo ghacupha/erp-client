@@ -110,7 +110,7 @@
           </td>
           <td>{{ settlement.paymentNumber }}</td>
           <td>{{ settlement.paymentDate | formatMediumDate }}</td>
-          <td>{{ settlement.paymentAmount }}</td>
+          <td>{{ settlement.paymentAmount | currency }}</td>
           <td>{{ settlement.description }}</td>
           <!--<td>{{ settlement.notes }}</td>-->
           <!--<td>{{ settlement.fileUploadToken }}</td>

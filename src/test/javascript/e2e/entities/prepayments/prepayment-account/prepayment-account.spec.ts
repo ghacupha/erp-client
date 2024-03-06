@@ -69,6 +69,7 @@ describe('PrepaymentAccount e2e test', () => {
 
     await promise.all([
       prepaymentAccountUpdatePage.setCatalogueNumberInput('catalogueNumber'),
+      prepaymentAccountUpdatePage.setRecognitionDateInput('2000-12-31'),
       prepaymentAccountUpdatePage.setParticularsInput('particulars'),
       prepaymentAccountUpdatePage.setNotesInput('notes'),
       prepaymentAccountUpdatePage.setPrepaymentAmountInput('5'),

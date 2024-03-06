@@ -23,9 +23,10 @@ import { MonthlyPrepaymentReportRequisitionDetailComponent } from './detail/mont
 import { MonthlyPrepaymentReportRequisitionUpdateComponent } from './update/monthly-prepayment-report-requisition-update.component';
 import { MonthlyPrepaymentReportRequisitionDeleteDialogComponent } from './delete/monthly-prepayment-report-requisition-delete-dialog.component';
 import { MonthlyPrepaymentReportRequisitionRoutingModule } from './route/monthly-prepayment-report-requisition-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, MonthlyPrepaymentReportRequisitionRoutingModule],
+  imports: [SharedModule, MonthlyPrepaymentReportRequisitionRoutingModule, ErpCommonModule],
   declarations: [
     MonthlyPrepaymentReportRequisitionComponent,
     MonthlyPrepaymentReportRequisitionDetailComponent,

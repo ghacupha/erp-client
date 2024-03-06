@@ -85,6 +85,28 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
       return;
     }
 
+    if (!this.fiscalYearId) {
+      // Like just in case somehow someone refreshed the view without parameters, may be
+      this.monthlyPrepaymentOutstandingReportItemService
+        .queryByFiscalPeriod(
+          dayjs().startOf('year'),
+          dayjs().endOf('year'),
+          {
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+          })
+        .subscribe(
+          (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
+            this.isLoading = false;
+            this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
+          },
+          () => {
+            this.isLoading = false;
+          }
+        );
+    }
+
     this.fiscalYearService.find(Number(this.fiscalYearId)).subscribe(fiscalYear => {
 
       if (fiscalYear.body) {
@@ -109,25 +131,7 @@ export class MonthlyPrepaymentOutstandingReportItemComponent implements OnInit {
 
       } else {
 
-        // Like just in case somehow someone refreshed the view without parameters, may be
-        this.monthlyPrepaymentOutstandingReportItemService
-          .queryByFiscalPeriod(
-            dayjs().startOf('year'),
-            dayjs().endOf('year'),
-            {
-              page: this.page,
-              size: this.itemsPerPage,
-              sort: this.sort()
-            })
-          .subscribe(
-            (res: HttpResponse<IMonthlyPrepaymentOutstandingReportItem[]>) => {
-              this.isLoading = false;
-              this.paginateMonthlyPrepaymentOutstandingReportItems(res.body, res.headers);
-            },
-            () => {
-              this.isLoading = false;
-            }
-          );
+        // TODO
       }
     })
 

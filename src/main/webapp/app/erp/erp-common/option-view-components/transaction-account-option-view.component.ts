@@ -23,8 +23,7 @@ import { ITransactionAccount } from '../../erp-accounts/transaction-account/tran
   selector: 'jhi-transaction-account-option-view',
   template: `
     <span class="ng-value-label">
-      #{{item!.accountNumber }} account id: {{item!.accountNumber }}
-      #{{item!.id}}
+      id #{{item!.id }}| No.: {{ item!.accountNumber }}| account: {{item!.accountName }}
     </span>
   `
 })

@@ -55,7 +55,7 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-accounts',
-      body: {"catalogueNumber":"Chicken","particulars":"Fully-configurable utilisation","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":47673,"prepaymentGuid":"c8a9da64-56e5-4591-8d07-b24137561029"},
+      body: {"catalogueNumber":"Chicken","recognitionDate":"2022-05-01","particulars":"neural-net","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":97856,"prepaymentGuid":"e7c8a9da-6456-4e55-91cd-07b241375610"},
     }).then(({ body }) => {
       prepaymentAccount = body;
     });

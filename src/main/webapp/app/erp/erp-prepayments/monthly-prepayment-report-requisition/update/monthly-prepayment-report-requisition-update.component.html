@@ -21,7 +21,7 @@
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-monthly-prepayment-report-requisition-heading" data-cy="MonthlyPrepaymentReportRequisitionCreateUpdateHeading">
-        Create or edit a Monthly Prepayment Report Requisition
+        Select year for Monthly Prepayment OutstandingReport
       </h2>
 
       <div>
@@ -32,7 +32,7 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
           <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
             <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
@@ -45,7 +45,16 @@
               {{ fiscalYearOption.startDate }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m21-fiscal-year-form-control
+          ngDefaultControl
+          formControlName='fiscalYear'
+          [inputValue]="editForm.get('fiscalYear')!.value"
+          (valueSelected)='updateFiscalYear($event)'
+          inputControlLabel="Fiscal Year"
+        >
+          <option [ngValue]="editForm.get('fiscalYear')!.value"></option>
+        </jhi-m21-fiscal-year-form-control>
         <div
           *ngIf="editForm.get(['fiscalYear'])!.invalid && (editForm.get(['fiscalYear'])!.dirty || editForm.get(['fiscalYear'])!.touched)"
         >

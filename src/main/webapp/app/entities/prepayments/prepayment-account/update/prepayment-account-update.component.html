@@ -51,6 +51,35 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_recognitionDate">Recognition Date</label>
+          <div class="input-group">
+            <input
+              id="field_recognitionDate"
+              data-cy="recognitionDate"
+              type="text"
+              class="form-control"
+              name="recognitionDate"
+              ngbDatepicker
+              #recognitionDateDp="ngbDatepicker"
+              formControlName="recognitionDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="recognitionDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('recognitionDate')!.invalid &&
+              (editForm.get('recognitionDate')!.dirty || editForm.get('recognitionDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('recognitionDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_particulars">Particulars</label>
           <input
             type="text"
