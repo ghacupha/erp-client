@@ -47,7 +47,7 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseModelMetadataModule
             ),
         },
-      {
+        {
           path: 'lease-liability-schedule-item',
           data: {
             pageTitle: 'ERP | Schedule',
@@ -57,6 +57,30 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           loadChildren: () =>
             import('./lease-liability-schedule-item/lease-liability-schedule-item.module').then(
               m => m.LeaseLiabilityScheduleItemModule
+            ),
+        },
+        {
+          path: 'ifrs-16-lease-contract',
+          data: {
+            pageTitle: 'ERP | Lease Contract',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./ifrs-16-lease-contract/ifrs-16-lease-contract.module').then(
+              m => m.IFRS16LeaseContractModule
+            ),
+        },
+        {
+          path: 'rou-model-metadata',
+          data: {
+            pageTitle: 'ERP | ROU Metadata',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-model-metadata/rou-model-metadata.module').then(
+              m => m.RouModelMetadataModule
             ),
         },
       ]

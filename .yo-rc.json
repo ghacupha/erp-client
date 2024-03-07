@@ -274,7 +274,9 @@
       "NbvCompilationJob",
       "NbvReport",
       "MonthlyPrepaymentOutstandingReportItem",
-      "MonthlyPrepaymentReportRequisition"
+      "MonthlyPrepaymentReportRequisition",
+      "RouModelMetadata",
+      "IFRS16LeaseContract"
     ],
     "lastLiquibaseTimestamp": 1709634688000,
     "monorepository": true,
