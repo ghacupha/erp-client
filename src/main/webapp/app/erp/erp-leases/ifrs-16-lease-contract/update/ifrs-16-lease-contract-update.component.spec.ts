@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { IFRS16LeaseContractService } from '../service/ifrs-16-lease-contract.service';
 import { IIFRS16LeaseContract, IFRS16LeaseContract } from '../ifrs-16-lease-contract.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 
 import { IFRS16LeaseContractUpdateComponent } from './ifrs-16-lease-contract-update.component';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 
 describe('IFRS16LeaseContract Management Update Component', () => {
   let comp: IFRS16LeaseContractUpdateComponent;

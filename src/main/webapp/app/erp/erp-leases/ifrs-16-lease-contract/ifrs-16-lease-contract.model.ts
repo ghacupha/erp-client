@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 
 export interface IIFRS16LeaseContract {
   id?: number;

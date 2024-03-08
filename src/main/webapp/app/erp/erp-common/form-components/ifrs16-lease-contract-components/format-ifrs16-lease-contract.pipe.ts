@@ -22,7 +22,7 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 @Pipe({
   name: 'formatIFRS16LeaseContract',
 })
-export class FormatIfrs16LeaseContractPeriodPipe implements PipeTransform {
+export class FormatIfrs16LeaseContractPipe implements PipeTransform {
 
   transform(value: IIFRS16LeaseContract): string {
 

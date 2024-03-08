@@ -150,28 +150,15 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_superintendentServiceOutlet">Superintendent Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_superintendentServiceOutlet"
-            data-cy="superintendentServiceOutlet"
-            name="superintendentServiceOutlet"
-            formControlName="superintendentServiceOutlet"
-          >
-            <option *ngIf="!editForm.get('superintendentServiceOutlet')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                serviceOutletOption.id === editForm.get('superintendentServiceOutlet')!.value?.id
-                  ? editForm.get('superintendentServiceOutlet')!.value
-                  : serviceOutletOption
-              "
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='superintendentServiceOutlet'
+          [inputValue]="editForm.get(['superintendentServiceOutlet'])!.value"
+          (valueSelected)='updateSuperintendentServiceOutlet($event)'
+          inputControlLabel='Superintendent Service Outlet'
+        >
+         <option [ngValue]="editForm.get(['superintendentServiceOutlet'])!.value"></option>
+        </jhi-m21-service-outlet-form-control>
         <div
           *ngIf="
             editForm.get(['superintendentServiceOutlet'])!.invalid &&
@@ -183,46 +170,30 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_mainDealer">Main Dealer</label>
-          <select class="form-control" id="field_mainDealer" data-cy="mainDealer" name="mainDealer" formControlName="mainDealer">
-            <option *ngIf="!editForm.get('mainDealer')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('mainDealer')!.value?.id ? editForm.get('mainDealer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='mainDealer'
+          [inputValue]="editForm.get(['mainDealer'])!.value"
+          (valueSelected)='updateMainDealer($event)'
+          inputControlLabel='Main Dealer'
+        >
+          <option [ngValue]="editForm.get(['mainDealer'])!.value"></option>
+        </jhi-m21-dealer-form-control>
         <div
           *ngIf="editForm.get(['mainDealer'])!.invalid && (editForm.get(['mainDealer'])!.dirty || editForm.get(['mainDealer'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['mainDealer'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_firstReportingPeriod">First Reporting Period</label>
-          <select
-            class="form-control"
-            id="field_firstReportingPeriod"
-            data-cy="firstReportingPeriod"
-            name="firstReportingPeriod"
-            formControlName="firstReportingPeriod"
-          >
-            <option *ngIf="!editForm.get('firstReportingPeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('firstReportingPeriod')!.value?.id
-                  ? editForm.get('firstReportingPeriod')!.value
-                  : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.fiscalMonthCode }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          formControlName='firstReportingPeriod'
+          [inputValue]="editForm.get(['firstReportingPeriod'])!.value"
+          (valueSelected)='updateFirstReportingPeriod($event)'
+          inputControlLabel='First Reporting Period'
+        >
+          <option [ngValue]="editForm.get(['firstReportingPeriod'])!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
         <div
           *ngIf="
             editForm.get(['firstReportingPeriod'])!.invalid &&
@@ -234,28 +205,15 @@
           </small>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastReportingPeriod">Last Reporting Period</label>
-          <select
-            class="form-control"
-            id="field_lastReportingPeriod"
-            data-cy="lastReportingPeriod"
-            name="lastReportingPeriod"
-            formControlName="lastReportingPeriod"
-          >
-            <option *ngIf="!editForm.get('lastReportingPeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('lastReportingPeriod')!.value?.id
-                  ? editForm.get('lastReportingPeriod')!.value
-                  : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.fiscalMonthCode }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          formControlName='lastReportingPeriod'
+          [inputValue]="editForm.get(['lastReportingPeriod'])!.value"
+          (valueSelected)='updateLastReportingPeriod($event)'
+          inputControlLabel='Last Reporting Period'
+        >
+          <option [ngValue]="editForm.get(['lastReportingPeriod'])!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
         <div
           *ngIf="
             editForm.get(['lastReportingPeriod'])!.invalid &&

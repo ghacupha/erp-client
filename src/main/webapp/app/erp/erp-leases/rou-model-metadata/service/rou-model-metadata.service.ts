@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<IRouModelMetadata[]>;
 
 @Injectable({ providedIn: 'root' })
 export class RouModelMetadataService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/rou-model-metadata');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/rou-model-metadata');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/rou-model-metadata');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/rou-model-metadata');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

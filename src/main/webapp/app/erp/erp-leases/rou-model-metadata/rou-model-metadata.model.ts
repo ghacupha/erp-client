@@ -16,10 +16,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
+
+import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IAssetCategory } from '../../erp-assets/asset-category/asset-category.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
 
 export interface IRouModelMetadata {
   id?: number;

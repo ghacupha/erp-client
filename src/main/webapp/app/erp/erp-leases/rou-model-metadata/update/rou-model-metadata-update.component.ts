@@ -25,15 +25,15 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IRouModelMetadata, RouModelMetadata } from '../rou-model-metadata.model';
 import { RouModelMetadataService } from '../service/rou-model-metadata.service';
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
-import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
-import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 import { uuidv7 as uuidv4 } from 'uuidv7';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IAssetCategory } from '../../../erp-assets/asset-category/asset-category.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { AssetCategoryService } from '../../../erp-assets/asset-category/service/asset-category.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',

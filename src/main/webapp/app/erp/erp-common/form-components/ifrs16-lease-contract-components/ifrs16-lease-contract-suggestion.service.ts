@@ -27,7 +27,7 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 @Injectable({ providedIn: 'root' })
 export class Ifrs16LeaseContractSuggestionService {
 
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('/api/leases/_search/ifrs-16-lease-contracts');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/ifrs-16-lease-contracts');
 
   constructor(
     protected http: HttpClient,

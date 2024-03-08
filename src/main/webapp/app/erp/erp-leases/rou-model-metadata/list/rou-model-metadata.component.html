@@ -19,7 +19,7 @@
 -->
 <div>
   <h2 id="page-heading" data-cy="RouModelMetadataHeading">
-    <span>Rou Model Metadata</span>
+    <span>ROU Model Metadata</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
@@ -99,7 +99,7 @@
           <td>{{ rouModelMetadata.modelVersion }}</td>
           <td>{{ rouModelMetadata.description }}</td>
           <td>{{ rouModelMetadata.leaseTermPeriods }}</td>
-          <td>{{ rouModelMetadata.leaseAmount }}</td>
+          <td>{{ rouModelMetadata.leaseAmount | currency }}</td>
           <td>{{ rouModelMetadata.rouModelReference }}</td>
           <td>
             <div *ngIf="rouModelMetadata.ifrs16LeaseContract">

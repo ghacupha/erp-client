@@ -143,39 +143,6 @@
           </div>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_ifrs16LeaseContract">Ifrs 16 Lease Contract</label>
-          <select
-            class="form-control"
-            id="field_ifrs16LeaseContract"
-            data-cy="ifrs16LeaseContract"
-            name="ifrs16LeaseContract"
-            formControlName="ifrs16LeaseContract"
-          >
-            <option *ngIf="!editForm.get('ifrs16LeaseContract')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                iFRS16LeaseContractOption.id === editForm.get('ifrs16LeaseContract')!.value?.id
-                  ? editForm.get('ifrs16LeaseContract')!.value
-                  : iFRS16LeaseContractOption
-              "
-              *ngFor="let iFRS16LeaseContractOption of iFRS16LeaseContractsSharedCollection; trackBy: trackIFRS16LeaseContractById"
-            >
-              {{ iFRS16LeaseContractOption.shortTitle }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['ifrs16LeaseContract'])!.invalid &&
-            (editForm.get(['ifrs16LeaseContract'])!.dirty || editForm.get(['ifrs16LeaseContract'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['ifrs16LeaseContract'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>-->
-
         <jhi-m21-ifrs16-lease-form-control
           ngDefaultControl
           formControlName='ifrs16LeaseContract'
@@ -186,23 +153,6 @@
           <option [ngValue]="editForm.get(['ifrs16LeaseContract'])!.value"></option>
         </jhi-m21-ifrs16-lease-form-control>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_assetAccount">Asset Account</label>
-          <select class="form-control" id="field_assetAccount" data-cy="assetAccount" name="assetAccount" formControlName="assetAccount">
-            <option *ngIf="!editForm.get('assetAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('assetAccount')!.value?.id
-                  ? editForm.get('assetAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>-->
-        <!--jhi-m21-transaction-account-form-control-->
         <jhi-m21-transaction-account-form-control
           ngDefaultControl
           formControlName='assetAccount'
@@ -220,28 +170,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['assetAccount'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_depreciationAccount">Depreciation Account</label>
-          <select
-            class="form-control"
-            id="field_depreciationAccount"
-            data-cy="depreciationAccount"
-            name="depreciationAccount"
-            formControlName="depreciationAccount"
-          >
-            <option *ngIf="!editForm.get('depreciationAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('depreciationAccount')!.value?.id
-                  ? editForm.get('depreciationAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>-->
         <jhi-m21-transaction-account-form-control
           ngDefaultControl
           formControlName='depreciationAccount'
@@ -262,28 +190,6 @@
           </small>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
-          <select
-            class="form-control"
-            id="field_accruedDepreciationAccount"
-            data-cy="accruedDepreciationAccount"
-            name="accruedDepreciationAccount"
-            formControlName="accruedDepreciationAccount"
-          >
-            <option *ngIf="!editForm.get('accruedDepreciationAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('accruedDepreciationAccount')!.value?.id
-                  ? editForm.get('accruedDepreciationAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>-->
         <jhi-m21-transaction-account-form-control
           ngDefaultControl
           formControlName='accruedDepreciationAccount'
@@ -304,28 +210,6 @@
           </small>
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_assetCategory">Asset Category</label>
-          <select
-            class="form-control"
-            id="field_assetCategory"
-            data-cy="assetCategory"
-            name="assetCategory"
-            formControlName="assetCategory"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                assetCategoryOption.id === editForm.get('assetCategory')!.value?.id
-                  ? editForm.get('assetCategory')!.value
-                  : assetCategoryOption
-              "
-              *ngFor="let assetCategoryOption of assetCategoriesSharedCollection; trackBy: trackAssetCategoryById"
-            >
-              {{ assetCategoryOption.assetCategoryName }}
-            </option>
-          </select>
-        </div>-->
         <jhi-m21-asset-category-form-control
           ngDefaultControl
           formControlName='assetCategory'
@@ -336,24 +220,6 @@
           <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
         </jhi-m21-asset-category-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_documentAttachments">Document Attachments</label>
-          <select
-            class="form-control"
-            id="field_documentAttachments"
-            data-cy="documentAttachments"
-            multiple
-            name="documentAttachments"
-            formControlName="documentAttachments"
-          >
-            <option
-              [ngValue]="getSelectedBusinessDocument(businessDocumentOption, editForm.get('documentAttachments')!.value)"
-              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
-            >
-              {{ businessDocumentOption.documentTitle }}
-            </option>
-          </select>
-        </div>-->
         <jhi-m2m-business-document-form-control
           ngDefaultControl
           formControlName='documentAttachments'

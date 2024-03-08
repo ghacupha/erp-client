@@ -25,13 +25,13 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IIFRS16LeaseContract, IFRS16LeaseContract } from '../ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../service/ifrs-16-lease-contract.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
-import { uuidv7 as uuidv4 } from 'uuidv7';
+import { uuidv7 } from 'uuidv7';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-update',
@@ -73,11 +73,27 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
       this.updateForm(iFRS16LeaseContract);
 
       this.editForm.patchValue({
-        serialNumber: uuidv4(),
+        serialNumber: uuidv7(),
       })
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateSuperintendentServiceOutlet(updated: IServiceOutlet): void {
+    this.editForm.patchValue({ superintendentServiceOutlet: updated });
+  }
+
+  updateMainDealer(updated: IDealer): void {
+    this.editForm.patchValue({ mainDealer: updated });
+  }
+
+  updateFirstReportingPeriod(updated: IFiscalMonth): void {
+    this.editForm.patchValue({ firstReportingPeriod: updated });
+  }
+
+  updateLastReportingPeriod(updated: IFiscalMonth): void {
+    this.editForm.patchValue({ lastReportingPeriod: updated });
   }
 
   previousState(): void {

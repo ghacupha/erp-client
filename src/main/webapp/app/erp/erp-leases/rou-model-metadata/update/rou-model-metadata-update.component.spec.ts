@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,16 +29,15 @@ import { of, Subject } from 'rxjs';
 
 import { RouModelMetadataService } from '../service/rou-model-metadata.service';
 import { IRouModelMetadata, RouModelMetadata } from '../rou-model-metadata.model';
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
-import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
-import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
-import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
-import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 
 import { RouModelMetadataUpdateComponent } from './rou-model-metadata-update.component';
+import { IAssetCategory } from '../../../erp-assets/asset-category/asset-category.model';
+import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { AssetCategoryService } from '../../../erp-assets/asset-category/service/asset-category.service';
+import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 
 describe('RouModelMetadata Management Update Component', () => {
   let comp: RouModelMetadataUpdateComponent;
