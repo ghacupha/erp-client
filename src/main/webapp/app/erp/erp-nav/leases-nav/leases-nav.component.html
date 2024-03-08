@@ -17,53 +17,77 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div  [ngSwitch]="isAuthenticated()">
-  <ul  class="navbar-nav ml-auto">
-    <li *ngSwitchCase="true" ngbDropdown class="nav-item dropdown pointer" display="dynamic"
-        routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="registry-menu">
+<div [ngSwitch]='isAuthenticated()'>
+  <ul class='navbar-nav ml-auto'>
+    <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
+        routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
+      <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='registry-menu'>
           <span>
-              <fa-icon icon="book-open"></fa-icon>
+              <fa-icon icon='book-open'></fa-icon>
               <span>
                  Leases
               </span>
           </span>
       </a>
-      <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="registry-menu">
-        <li>
+      <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='registry-menu'>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
-            class="dropdown-item"
-            routerLink="lease-contract"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            class='dropdown-item'
+            routerLink='lease-contract'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
           >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
             <span>Lease Contract</span>
           </a>
         </li>
-        <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
-            class="dropdown-item"
-            routerLink="lease-model-metadata"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            class='dropdown-item'
+            routerLink='lease-model-metadata'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
           >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
             <span>Lease Model Metadata</span>
           </a>
         </li>
-      <li>
+        <li *jhiHasAnyAuthority="'ROLE_DEV'">
           <a
-            class="dropdown-item"
-            routerLink="lease-liability-schedule-item"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            class='dropdown-item'
+            routerLink='lease-liability-schedule-item'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
           >
-            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
             <span>Lease Liability Schedule Item</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='ifrs-16-lease-contract'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>IFRS16 Lease</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='rou-model-metadata'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>ROU metadata</span>
           </a>
         </li>
       </ul>

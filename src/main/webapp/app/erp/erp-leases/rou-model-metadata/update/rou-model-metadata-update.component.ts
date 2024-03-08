@@ -33,6 +33,7 @@ import { IAssetCategory } from 'app/entities/assets/asset-category/asset-categor
 import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
+import { uuidv7 as uuidv4 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',
@@ -74,10 +75,50 @@ export class RouModelMetadataUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rouModelMetadata }) => {
+
       this.updateForm(rouModelMetadata);
+
+      this.editForm.patchValue({
+        rouModelReference: uuidv4(),
+      })
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateContractMetadata(update: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      ifrs16LeaseContract: update
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateAssetAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      assetAccount: update,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateDepreciationAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      depreciationAccount: update,
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  updateAccruedDepreciationAccount(update: ITransactionAccount): void {
+    this.editForm.patchValue({
+      accruedDepreciationAccount: update,
+    });
+  }
+
+  updateAssetCategory(updated: IAssetCategory): void {
+    this.editForm.patchValue({ assetCategory: updated });
+  }
+
+  updateDocumentAttachments(updated: IBusinessDocument[]): void {
+    this.editForm.patchValue({ documentAttachments: [...updated] });
   }
 
   previousState(): void {

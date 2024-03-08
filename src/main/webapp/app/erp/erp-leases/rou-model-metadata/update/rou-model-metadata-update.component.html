@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_ifrs16LeaseContract">Ifrs 16 Lease Contract</label>
           <select
             class="form-control"
@@ -174,9 +174,19 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['ifrs16LeaseContract'])?.errors?.required">
             This field is required.
           </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='ifrs16LeaseContract'
+          [inputValue]="editForm.get(['ifrs16LeaseContract'])!.value"
+          (valueSelected)='updateContractMetadata($event)'
+          inputControlLabel='IFRS16 Lease Contract'
+        >
+          <option [ngValue]="editForm.get(['ifrs16LeaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_assetAccount">Asset Account</label>
           <select class="form-control" id="field_assetAccount" data-cy="assetAccount" name="assetAccount" formControlName="assetAccount">
             <option *ngIf="!editForm.get('assetAccount')!.value" [ngValue]="null" selected></option>
@@ -191,7 +201,17 @@
               {{ transactionAccountOption.accountName }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <!--jhi-m21-transaction-account-form-control-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='assetAccount'
+          [inputValue]="editForm.get('assetAccount')!.value"
+          (valueSelected)='updateAssetAccount($event)'
+          inputControlLabel="Asset Account (for tracking ROU value)"
+        >
+          <option [ngValue]="editForm.get('assetAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
         <div
           *ngIf="
             editForm.get(['assetAccount'])!.invalid && (editForm.get(['assetAccount'])!.dirty || editForm.get(['assetAccount'])!.touched)
@@ -200,7 +220,7 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['assetAccount'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_depreciationAccount">Depreciation Account</label>
           <select
             class="form-control"
@@ -221,7 +241,16 @@
               {{ transactionAccountOption.accountName }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='depreciationAccount'
+          [inputValue]="editForm.get('depreciationAccount')!.value"
+          (valueSelected)='updateDepreciationAccount($event)'
+          inputControlLabel="Depreciation Account (for tracking Depreciation entries)"
+        >
+          <option [ngValue]="editForm.get('depreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
         <div
           *ngIf="
             editForm.get(['depreciationAccount'])!.invalid &&
@@ -233,7 +262,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_accruedDepreciationAccount">Accrued Depreciation Account</label>
           <select
             class="form-control"
@@ -254,7 +283,16 @@
               {{ transactionAccountOption.accountName }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='accruedDepreciationAccount'
+          [inputValue]="editForm.get('accruedDepreciationAccount')!.value"
+          (valueSelected)='updateAccruedDepreciationAccount($event)'
+          inputControlLabel="Accrued Depreciation Account (for tracking Asset W & T)"
+        >
+          <option [ngValue]="editForm.get('accruedDepreciationAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
         <div
           *ngIf="
             editForm.get(['accruedDepreciationAccount'])!.invalid &&
@@ -266,7 +304,7 @@
           </small>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_assetCategory">Asset Category</label>
           <select
             class="form-control"
@@ -287,9 +325,18 @@
               {{ assetCategoryOption.assetCategoryName }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m21-asset-category-form-control
+          ngDefaultControl
+          formControlName='assetCategory'
+          [inputValue]="editForm.get(['assetCategory'])!.value"
+          (valueSelected)='updateAssetCategory($event)'
+          inputControlLabel='Asset Category'
+        >
+          <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
+        </jhi-m21-asset-category-form-control>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label for="field_documentAttachments">Document Attachments</label>
           <select
             class="form-control"
@@ -306,7 +353,16 @@
               {{ businessDocumentOption.documentTitle }}
             </option>
           </select>
-        </div>
+        </div>-->
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='documentAttachments'
+          [inputValues]="editForm.get(['documentAttachments'])!.value"
+          (selectedValues)='updateDocumentAttachments($event)'
+          inputControlLabel='Document Attachments(s)'
+        >
+        </jhi-m2m-business-document-form-control>
+
       </div>
 
       <div>

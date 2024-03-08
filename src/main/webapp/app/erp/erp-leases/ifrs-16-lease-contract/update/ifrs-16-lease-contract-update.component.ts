@@ -31,6 +31,7 @@ import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { uuidv7 as uuidv4 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-update',
@@ -70,6 +71,10 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ iFRS16LeaseContract }) => {
       this.updateForm(iFRS16LeaseContract);
+
+      this.editForm.patchValue({
+        serialNumber: uuidv4(),
+      })
 
       this.loadRelationshipsOptions();
     });
