@@ -27,6 +27,16 @@ import { IRouModelMetadata } from '../rou-model-metadata.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { RouModelMetadataService } from '../service/rou-model-metadata.service';
 import { RouModelMetadataDeleteDialogComponent } from '../delete/rou-model-metadata-delete-dialog.component';
+import {
+  rouMetadataCopyWorkflowInitiatedFromList,
+  rouMetadataCopyWorkflowInitiatedFromView,
+  rouMetadataCreationInitiatedFromList, rouMetadataCreationWorkflowInitiatedFromList,
+  rouMetadataEditWorkflowInitiatedFromList,
+  rouMetadataEditWorkflowInitiatedFromView
+} from '../../../store/actions/rou-model-metadata-update-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { prepaymentMarshallingCreationWorkflowInitiatedFromList } from '../../../store/actions/prepayment-marshalling-update-status.actions';
 
 @Component({
   selector: 'jhi-rou-model-metadata',
@@ -47,7 +57,8 @@ export class RouModelMetadataComponent implements OnInit {
     protected rouModelMetadataService: RouModelMetadataService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -106,6 +117,18 @@ export class RouModelMetadataComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(rouMetadataCreationWorkflowInitiatedFromList())
+  }
+
+  editButtonEvent(instance: IRouModelMetadata): void {
+    this.store.dispatch(rouMetadataEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IRouModelMetadata): void {
+    this.store.dispatch(rouMetadataCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   trackId(index: number, item: IRouModelMetadata): number {

@@ -20,12 +20,31 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-rou-model-metadata-heading" data-cy="RouModelMetadataCreateUpdateHeading">Create or edit a Rou Model Metadata</h2>
+      <h2
+        id="jhi-rou-model-metadata-heading-new"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Rou Model Metadata
+      </h2>
+
+      <h2
+        id="jhi-rou-model-metadata-heading-copy"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copy Rou Metadata # {{ selectedItem.id }} | {{ selectedItem.modelTitle }}
+      </h2>
+
+      <h2
+        id="jhi-rou-model-metadata-heading-edit"
+        data-cy="RouModelMetadataCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Edit Rou Metadata # {{ selectedItem.id }} Entitled: {{ selectedItem.modelTitle }}
+      </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
           <label class="form-control-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
@@ -236,7 +255,7 @@
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
-        <button
+        <!--<button
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
@@ -244,7 +263,45 @@
           class="btn btn-primary"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>-->
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+
+
       </div>
     </form>
   </div>

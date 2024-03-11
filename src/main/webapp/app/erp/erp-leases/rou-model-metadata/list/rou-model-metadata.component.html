@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-rou-model-metadata"
         [routerLink]="['/rou-model-metadata/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Rou Model Metadata </span>
@@ -138,7 +139,7 @@
           </td>
           <td class="text-right">
             <div class="btn-group">
-              <button
+              <!--<button
                 type="submit"
                 [routerLink]="['/rou-model-metadata', rouModelMetadata.id, 'view']"
                 class="btn btn-info btn-sm"
@@ -156,11 +157,40 @@
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>-->
+
+              <button
+                type="submit"
+                [routerLink]="['/rou-model-metadata',  rouModelMetadata.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/rou-model-metadata',  rouModelMetadata.id, 'edit']"
+                (click)='editButtonEvent(rouModelMetadata)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/rou-model-metadata',  rouModelMetadata.id, 'copy']"
+                (click)='copyButtonEvent(rouModelMetadata)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
               </button>
 
               <button type="submit" (click)="delete(rouModelMetadata)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

@@ -24,9 +24,14 @@ import { RouModelMetadataUpdateComponent } from './update/rou-model-metadata-upd
 import { RouModelMetadataDeleteDialogComponent } from './delete/rou-model-metadata-delete-dialog.component';
 import { RouModelMetadataRoutingModule } from './route/rou-model-metadata-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { RouModelCustomRoutingModule } from './route/rou-model-custom-routing.module';
 
 @NgModule({
-  imports: [SharedModule, RouModelMetadataRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    RouModelMetadataRoutingModule,
+    RouModelCustomRoutingModule,
+    ErpCommonModule],
   declarations: [
     RouModelMetadataComponent,
     RouModelMetadataDetailComponent,

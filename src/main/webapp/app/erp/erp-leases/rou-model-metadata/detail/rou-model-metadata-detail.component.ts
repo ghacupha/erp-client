@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IRouModelMetadata } from '../rou-model-metadata.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  rouMetadataCopyWorkflowInitiatedFromView,
+  rouMetadataEditWorkflowInitiatedFromView
+} from '../../../store/actions/rou-model-metadata-update-status.actions';
 
 @Component({
   selector: 'jhi-rou-model-metadata-detail',
@@ -28,12 +34,20 @@ import { IRouModelMetadata } from '../rou-model-metadata.model';
 export class RouModelMetadataDetailComponent implements OnInit {
   rouModelMetadata: IRouModelMetadata | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rouModelMetadata }) => {
       this.rouModelMetadata = rouModelMetadata;
     });
+  }
+
+  editButtonEvent(instance: IRouModelMetadata): void {
+    this.store.dispatch(rouMetadataEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IRouModelMetadata): void {
+    this.store.dispatch(rouMetadataCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

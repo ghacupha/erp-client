@@ -34,6 +34,16 @@ import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service
 import { AssetCategoryService } from '../../../erp-assets/asset-category/service/asset-category.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { select, Store } from '@ngrx/store';
+import {
+  copyingPrepaymentMarshallingStatus, creatingPrepaymentMarshallingStatus,
+  editingPrepaymentMarshallingStatus, prepaymentMarshallingUpdateSelectedInstance
+} from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingRouModelMetadataStatus, creatingRouModelMetadataStatus,
+  editingRouModelMetadataStatus, rouModelMetadataUpdateSelectedInstance
+} from '../../../store/selectors/rou-model-metadata-workflows-status.selector';
 
 @Component({
   selector: 'jhi-rou-model-metadata-update',
@@ -41,6 +51,12 @@ import { TransactionAccountService } from '../../../erp-accounts/transaction-acc
 })
 export class RouModelMetadataUpdateComponent implements OnInit {
   isSaving = false;
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new RouModelMetadata()}
 
   iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
@@ -70,20 +86,41 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     protected assetCategoryService: AssetCategoryService,
     protected businessDocumentService: BusinessDocumentService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingRouModelMetadataStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingRouModelMetadataStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingRouModelMetadataStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(rouModelMetadataUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ rouModelMetadata }) => {
 
-      this.updateForm(rouModelMetadata);
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        rouModelReference: uuidv4(),
+      })
+    }
+
+    if (this.weAreCopying) {
+      this.copyForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        rouModelReference: uuidv4(),
+      })
+    }
+
+    if (this.weAreCreating) {
 
       this.editForm.patchValue({
         rouModelReference: uuidv4(),
       })
 
       this.loadRelationshipsOptions();
-    });
+    }
   }
 
   updateContractMetadata(update: IIFRS16LeaseContract): void {
@@ -127,12 +164,17 @@ export class RouModelMetadataUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const rouModelMetadata = this.createFromForm();
-    if (rouModelMetadata.id !== undefined) {
-      this.subscribeToSaveResponse(this.rouModelMetadataService.update(rouModelMetadata));
-    } else {
-      this.subscribeToSaveResponse(this.rouModelMetadataService.create(rouModelMetadata));
-    }
+    this.subscribeToSaveResponse(this.rouModelMetadataService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.rouModelMetadataService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.rouModelMetadataService.create(this.copyFromForm()));
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -182,6 +224,43 @@ export class RouModelMetadataUpdateComponent implements OnInit {
   }
 
   protected updateForm(rouModelMetadata: IRouModelMetadata): void {
+    this.editForm.patchValue({
+      id: rouModelMetadata.id,
+      modelTitle: rouModelMetadata.modelTitle,
+      modelVersion: rouModelMetadata.modelVersion,
+      description: rouModelMetadata.description,
+      leaseTermPeriods: rouModelMetadata.leaseTermPeriods,
+      leaseAmount: rouModelMetadata.leaseAmount,
+      rouModelReference: rouModelMetadata.rouModelReference,
+      ifrs16LeaseContract: rouModelMetadata.ifrs16LeaseContract,
+      assetAccount: rouModelMetadata.assetAccount,
+      depreciationAccount: rouModelMetadata.depreciationAccount,
+      accruedDepreciationAccount: rouModelMetadata.accruedDepreciationAccount,
+      assetCategory: rouModelMetadata.assetCategory,
+      documentAttachments: rouModelMetadata.documentAttachments,
+    });
+
+    this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.iFRS16LeaseContractsSharedCollection,
+      rouModelMetadata.ifrs16LeaseContract
+    );
+    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
+      this.transactionAccountsSharedCollection,
+      rouModelMetadata.assetAccount,
+      rouModelMetadata.depreciationAccount,
+      rouModelMetadata.accruedDepreciationAccount
+    );
+    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
+      this.assetCategoriesSharedCollection,
+      rouModelMetadata.assetCategory
+    );
+    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
+      this.businessDocumentsSharedCollection,
+      ...(rouModelMetadata.documentAttachments ?? [])
+    );
+  }
+
+  protected copyForm(rouModelMetadata: IRouModelMetadata): void {
     this.editForm.patchValue({
       id: rouModelMetadata.id,
       modelTitle: rouModelMetadata.modelTitle,
@@ -275,6 +354,24 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     return {
       ...new RouModelMetadata(),
       id: this.editForm.get(['id'])!.value,
+      modelTitle: this.editForm.get(['modelTitle'])!.value,
+      modelVersion: this.editForm.get(['modelVersion'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      leaseTermPeriods: this.editForm.get(['leaseTermPeriods'])!.value,
+      leaseAmount: this.editForm.get(['leaseAmount'])!.value,
+      rouModelReference: this.editForm.get(['rouModelReference'])!.value,
+      ifrs16LeaseContract: this.editForm.get(['ifrs16LeaseContract'])!.value,
+      assetAccount: this.editForm.get(['assetAccount'])!.value,
+      depreciationAccount: this.editForm.get(['depreciationAccount'])!.value,
+      accruedDepreciationAccount: this.editForm.get(['accruedDepreciationAccount'])!.value,
+      assetCategory: this.editForm.get(['assetCategory'])!.value,
+      documentAttachments: this.editForm.get(['documentAttachments'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IRouModelMetadata {
+    return {
+      ...new RouModelMetadata(),
       modelTitle: this.editForm.get(['modelTitle'])!.value,
       modelVersion: this.editForm.get(['modelVersion'])!.value,
       description: this.editForm.get(['description'])!.value,
