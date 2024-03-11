@@ -29,6 +29,8 @@ import { PaymentInvoiceFormState } from './reducers/payment-invoice-workflow-sta
 import { ReportNavigationProfileState } from './reducers/report-navigation-profile-status.reducer';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../config/input.constants';
+import { IFRS16LeaseModelFormState } from './reducers/ifrs16-lease-model-workflow-status.reducer';
+import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -42,6 +44,8 @@ export interface State {
   prepaymentMarshallingFormState: PrepaymentMarshallingFormState,
   paymentInvoiceFormState: PaymentInvoiceFormState,
   reportNavigationProfileState: ReportNavigationProfileState
+  ifrs16LeaseModelFormState: IFRS16LeaseModelFormState,
+  rouModelMetadataFormState: RouModelMetadataFormState,
 }
 
 export const initialState: State = {
@@ -84,6 +88,22 @@ export const initialState: State = {
     weAreCreating: false,
   },
   prepaymentMarshallingFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  ifrs16LeaseModelFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  rouModelMetadataFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

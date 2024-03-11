@@ -28,7 +28,7 @@ import {
 } from '../actions/prepayment-marshalling-update-status.actions';
 
 @Injectable()
-export class PrepaymentAccountWorkflowEffects {
+export class PrepaymentMarshallingWorkflowEffects {
 
   copiedPrepaymentMarshallingEffect$ = createEffect(() =>
     this.actions$.pipe(

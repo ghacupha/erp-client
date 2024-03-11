@@ -36,6 +36,11 @@ import * as fromPrepaymentAccountUpdates from "./reducers/prepayment-account-wor
 import * as fromPrepaymentMarshallingUpdates from "./reducers/prepayment-marshalling-workflow-status.reducer";
 import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
 import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
+import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
+import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
+import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
+import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-workflow-status.reducer";
+import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
 
 @NgModule({
   imports: [
@@ -43,6 +48,9 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
       SettlementUpdatesEffects,
       PrepaymentAccountWorkflowEffects,
       DealerInvoiceWorkflowEffects,
+      PrepaymentMarshallingWorkflowEffects,
+      Ifrs16LeaseModelWorkflowEffects,
+      RouModelMetadataWorkflowEffects,
       DealerPaymentsEffects]),
     EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
@@ -68,6 +76,8 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
     StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
     StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
+    StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseContractUpdateStateReducer),
+    StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
   ],
   exports: [
     EffectsModule,
