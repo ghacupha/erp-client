@@ -32,6 +32,12 @@ import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingIFRS16LeaseContractStatus, creatingIFRS16LeaseContractStatus,
+  editingIFRS16LeaseContractStatus, ifrs16LeaseContractUpdateSelectedInstance
+} from '../../../store/selectors/ifrs16-lease-model-workflows-status.selector';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-update',
@@ -39,6 +45,12 @@ import { ServiceOutletService } from '../../../erp-granular/service-outlet/servi
 })
 export class IFRS16LeaseContractUpdateComponent implements OnInit {
   isSaving = false;
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new IFRS16LeaseContract()}
 
   serviceOutletsSharedCollection: IServiceOutlet[] = [];
   dealersSharedCollection: IDealer[] = [];
@@ -65,19 +77,41 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
     protected dealerService: DealerService,
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingIFRS16LeaseContractStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingIFRS16LeaseContractStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingIFRS16LeaseContractStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(ifrs16LeaseContractUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ iFRS16LeaseContract }) => {
-      this.updateForm(iFRS16LeaseContract);
+
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        serialNumber: uuidv7(),
+      })
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        serialNumber: uuidv7(),
+      })
+    }
+
+    if (this.weAreCreating) {
 
       this.editForm.patchValue({
         serialNumber: uuidv7(),
       })
 
       this.loadRelationshipsOptions();
-    });
+    }
   }
 
   updateSuperintendentServiceOutlet(updated: IServiceOutlet): void {
@@ -102,12 +136,17 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const iFRS16LeaseContract = this.createFromForm();
-    if (iFRS16LeaseContract.id !== undefined) {
-      this.subscribeToSaveResponse(this.iFRS16LeaseContractService.update(iFRS16LeaseContract));
-    } else {
-      this.subscribeToSaveResponse(this.iFRS16LeaseContractService.create(iFRS16LeaseContract));
-    }
+    this.subscribeToSaveResponse(this.iFRS16LeaseContractService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.iFRS16LeaseContractService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.iFRS16LeaseContractService.create(this.copyFromForm()));
   }
 
   trackServiceOutletById(index: number, item: IServiceOutlet): number {
@@ -211,6 +250,23 @@ export class IFRS16LeaseContractUpdateComponent implements OnInit {
     return {
       ...new IFRS16LeaseContract(),
       id: this.editForm.get(['id'])!.value,
+      bookingId: this.editForm.get(['bookingId'])!.value,
+      leaseTitle: this.editForm.get(['leaseTitle'])!.value,
+      shortTitle: this.editForm.get(['shortTitle'])!.value,
+      description: this.editForm.get(['description'])!.value,
+      inceptionDate: this.editForm.get(['inceptionDate'])!.value,
+      commencementDate: this.editForm.get(['commencementDate'])!.value,
+      serialNumber: this.editForm.get(['serialNumber'])!.value,
+      superintendentServiceOutlet: this.editForm.get(['superintendentServiceOutlet'])!.value,
+      mainDealer: this.editForm.get(['mainDealer'])!.value,
+      firstReportingPeriod: this.editForm.get(['firstReportingPeriod'])!.value,
+      lastReportingPeriod: this.editForm.get(['lastReportingPeriod'])!.value,
+    };
+  }
+
+  protected copyFromForm(): IIFRS16LeaseContract {
+    return {
+      ...new IFRS16LeaseContract(),
       bookingId: this.editForm.get(['bookingId'])!.value,
       leaseTitle: this.editForm.get(['leaseTitle'])!.value,
       shortTitle: this.editForm.get(['shortTitle'])!.value,

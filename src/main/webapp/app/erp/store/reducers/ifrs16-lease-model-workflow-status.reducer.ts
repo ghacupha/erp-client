@@ -15,7 +15,7 @@ import {
   ifrs16LeaseContractUpdateFormHasBeenDestroyed
 } from '../actions/ifrs16-lease-model-update-status.actions';
 
-export const ifrs16LeaseContractUpdateFormStateSelector = 'ifrs16LeaseContractUpdateForm';
+export const ifrs16LeaseModelUpdateFormStateSelector = 'ifrs16LeaseModelUpdateForm';
 
 export interface IFRS16LeaseModelFormState {
   backEndFetchComplete: boolean;
@@ -26,13 +26,13 @@ export interface IFRS16LeaseModelFormState {
   weAreCreating: boolean;
 }
 
-const _ifrs16LeaseContractUpdateStateReducer = createReducer(
+const _ifrs16LeaseModelUpdateStateReducer = createReducer(
   initialState,
 
   // workflows for creation
   on(ifrs16LeaseContractCreationWorkflowInitiatedFromList, (state) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       weAreCopying: false,
       weAreEditing: false,
@@ -43,7 +43,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
   //    workflows for copy
   on(ifrs16LeaseContractCopyWorkflowInitiatedEnRoute, (state, {copiedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: copiedInstance,
       weAreCopying: true,
@@ -54,7 +54,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractCopyWorkflowInitiatedFromView, (state, {copiedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: copiedInstance,
       weAreCopying: true,
@@ -65,7 +65,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractCopyWorkflowInitiatedFromList, (state, {copiedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: copiedInstance,
       weAreCopying: true,
@@ -78,7 +78,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
   //    workflows for edit workflows
   on(ifrs16LeaseContractEditWorkflowInitiatedEnRoute, (state, {editedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: editedInstance,
       weAreCopying: false,
@@ -89,7 +89,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractEditWorkflowInitiatedFromView, (state, {editedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: editedInstance,
       weAreCopying: false,
@@ -100,7 +100,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractEditWorkflowInitiatedFromList, (state, {editedInstance}) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: editedInstance,
       weAreCopying: false,
@@ -111,7 +111,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractUpdateFormHasBeenDestroyed, (state) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: {},
       weAreCopying: false,
@@ -122,7 +122,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractDataHasMutated, (state) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: {},
       weAreCopying: false,
@@ -133,7 +133,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractCreationInitiatedFromList, (state) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: {},
       weAreCopying: false,
@@ -144,7 +144,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
 
   on(ifrs16LeaseContractCreationInitiatedEnRoute, (state) => ({
     ...state,
-    ifrs16LeaseContractFormState: {
+    ifrs16LeaseModelFormState: {
       ...state.ifrs16LeaseModelFormState,
       selectedInstance: {},
       weAreCopying: false,
@@ -154,7 +154,7 @@ const _ifrs16LeaseContractUpdateStateReducer = createReducer(
   })),
 );
 
-export function ifrs16LeaseContractUpdateStateReducer(state: State = initialState, action: Action): State {
+export function ifrs16LeaseModelUpdateStateReducer(state: State = initialState, action: Action): State {
 
-  return _ifrs16LeaseContractUpdateStateReducer(state, action);
+  return _ifrs16LeaseModelUpdateStateReducer(state, action);
 }

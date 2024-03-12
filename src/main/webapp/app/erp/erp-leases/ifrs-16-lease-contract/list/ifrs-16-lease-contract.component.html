@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-ifrs-16-lease-contract"
         [routerLink]="['/ifrs-16-lease-contract/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new IFRS 16 Lease Contract </span>
@@ -76,7 +77,7 @@
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="inceptionDate"><span>Inception Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <!--<th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>-->
           <th scope="col" jhiSortBy="superintendentServiceOutlet.outletCode">
             <span>Superintendent Service Outlet</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -101,7 +102,7 @@
           <td>{{ iFRS16LeaseContract.description }}</td>
           <td>{{ iFRS16LeaseContract.inceptionDate | formatMediumDate }}</td>
           <td>{{ iFRS16LeaseContract.commencementDate | formatMediumDate }}</td>
-          <td>{{ iFRS16LeaseContract.serialNumber }}</td>
+          <!--<td>{{ iFRS16LeaseContract.serialNumber }}</td>-->
           <td>
             <div *ngIf="iFRS16LeaseContract.superintendentServiceOutlet">
               <a [routerLink]="['/service-outlet', iFRS16LeaseContract.superintendentServiceOutlet?.id, 'view']">{{
@@ -137,22 +138,37 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
+              &nbsp;
               <button
                 type="submit"
                 [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'edit']"
+                (click)='editButtonEvent(iFRS16LeaseContract)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
+              &nbsp;
+              <button
+                type="submit"
+                [routerLink]="['/ifrs-16-lease-contract', iFRS16LeaseContract.id, 'copy']"
+                (click)='copyButtonEvent(iFRS16LeaseContract)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              &nbsp;
               <button type="submit" (click)="delete(iFRS16LeaseContract)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

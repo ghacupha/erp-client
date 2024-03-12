@@ -18,26 +18,26 @@
 
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { State } from '../global-store.definition';
-import { ifrs16LeaseContractUpdateFormStateSelector } from '../reducers/ifrs16-lease-model-workflow-status.reducer';
+import { ifrs16LeaseModelUpdateFormStateSelector } from '../reducers/ifrs16-lease-model-workflow-status.reducer';
 
-export const ifrs16LeaseContractUpdateFormState = createFeatureSelector<State>(ifrs16LeaseContractUpdateFormStateSelector);
+export const ifrs16LeaseModelUpdateFormState = createFeatureSelector<State>(ifrs16LeaseModelUpdateFormStateSelector);
 
 export const ifrs16LeaseContractUpdateSelectedInstance = createSelector(
-  ifrs16LeaseContractUpdateFormState,
+  ifrs16LeaseModelUpdateFormState,
   state => state.ifrs16LeaseModelFormState.selectedInstance
 );
 
 export const editingIFRS16LeaseContractStatus = createSelector(
-  ifrs16LeaseContractUpdateFormState,
+  ifrs16LeaseModelUpdateFormState,
   state => state.ifrs16LeaseModelFormState.weAreEditing
 );
 
 export const creatingIFRS16LeaseContractStatus = createSelector(
-  ifrs16LeaseContractUpdateFormState,
+  ifrs16LeaseModelUpdateFormState,
   state => state.ifrs16LeaseModelFormState.weAreCreating
 );
 
 export const copyingIFRS16LeaseContractStatus = createSelector(
-  ifrs16LeaseContractUpdateFormState,
+  ifrs16LeaseModelUpdateFormState,
   state => state.ifrs16LeaseModelFormState.weAreCopying
 );

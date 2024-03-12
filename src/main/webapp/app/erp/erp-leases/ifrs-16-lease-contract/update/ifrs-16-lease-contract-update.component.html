@@ -20,8 +20,26 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-ifrs-16-lease-contract-heading" data-cy="IFRS16LeaseContractCreateUpdateHeading">
-        Create or edit a IFRS 16 Lease Contract
+
+      <h2
+        id="jhi-ifrs-16-lease-contract-heading-new"
+        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New IFRS 16 Lease Contract
+      </h2>
+
+      <h2
+        id="jhi-ifrs-16-lease-contract-heading-copy"
+        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying Lease # {{ selectedItem.bookingId }} | {{ selectedItem.leaseTitle }}
+      </h2>
+
+      <h2
+        id="jhi-ifrs-16-lease-contract-heading-edit"
+        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+          Editing Lease # {{ selectedItem.bookingId }} | {{ selectedItem.leaseTitle }}
       </h2>
 
       <div>
@@ -231,7 +249,7 @@
           <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
-        <button
+        <!--<button
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
@@ -239,7 +257,44 @@
           class="btn btn-primary"
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>-->
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
+
       </div>
     </form>
   </div>

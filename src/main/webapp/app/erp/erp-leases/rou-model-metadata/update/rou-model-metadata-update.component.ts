@@ -35,10 +35,6 @@ import { AssetCategoryService } from '../../../erp-assets/asset-category/service
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 import { select, Store } from '@ngrx/store';
-import {
-  copyingPrepaymentMarshallingStatus, creatingPrepaymentMarshallingStatus,
-  editingPrepaymentMarshallingStatus, prepaymentMarshallingUpdateSelectedInstance
-} from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
 import { State } from '../../../store/global-store.definition';
 import {
   copyingRouModelMetadataStatus, creatingRouModelMetadataStatus,

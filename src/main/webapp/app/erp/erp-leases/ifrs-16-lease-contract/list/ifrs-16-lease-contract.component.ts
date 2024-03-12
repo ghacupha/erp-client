@@ -27,6 +27,15 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { IFRS16LeaseContractService } from '../service/ifrs-16-lease-contract.service';
 import { IFRS16LeaseContractDeleteDialogComponent } from '../delete/ifrs-16-lease-contract-delete-dialog.component';
+import {
+  ifrs16LeaseContractCopyWorkflowInitiatedFromList,
+  ifrs16LeaseContractCopyWorkflowInitiatedFromView,
+  ifrs16LeaseContractCreationWorkflowInitiatedFromList,
+  ifrs16LeaseContractEditWorkflowInitiatedFromList,
+  ifrs16LeaseContractEditWorkflowInitiatedFromView
+} from '../../../store/actions/ifrs16-lease-model-update-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract',
@@ -47,7 +56,8 @@ export class IFRS16LeaseContractComponent implements OnInit {
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -103,6 +113,19 @@ export class IFRS16LeaseContractComponent implements OnInit {
     this.currentSearch = query;
     this.loadPage(1);
   }
+
+  createButtonEvent(): void {
+    this.store.dispatch(ifrs16LeaseContractCreationWorkflowInitiatedFromList())
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(ifrs16LeaseContractEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(ifrs16LeaseContractCopyWorkflowInitiatedFromList({copiedInstance: instance}))
+  }
+
 
   ngOnInit(): void {
     this.handleNavigation();

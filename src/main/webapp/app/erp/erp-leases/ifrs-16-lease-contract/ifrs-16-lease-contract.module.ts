@@ -24,9 +24,14 @@ import { IFRS16LeaseContractUpdateComponent } from './update/ifrs-16-lease-contr
 import { IFRS16LeaseContractDeleteDialogComponent } from './delete/ifrs-16-lease-contract-delete-dialog.component';
 import { IFRS16LeaseContractRoutingModule } from './route/ifrs-16-lease-contract-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { Ifrs16LeaseContractRoutingCustomModule } from './route/ifrs-16-lease-contract-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, IFRS16LeaseContractRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    IFRS16LeaseContractRoutingModule,
+    Ifrs16LeaseContractRoutingCustomModule,
+    ErpCommonModule],
   declarations: [
     IFRS16LeaseContractComponent,
     IFRS16LeaseContractDetailComponent,

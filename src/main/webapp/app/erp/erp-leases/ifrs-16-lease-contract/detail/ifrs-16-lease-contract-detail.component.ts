@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  ifrs16LeaseContractCopyWorkflowInitiatedFromView,
+  ifrs16LeaseContractEditWorkflowInitiatedFromView
+} from '../../../store/actions/ifrs16-lease-model-update-status.actions';
 
 @Component({
   selector: 'jhi-ifrs-16-lease-contract-detail',
@@ -28,12 +34,20 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract.model';
 export class IFRS16LeaseContractDetailComponent implements OnInit {
   iFRS16LeaseContract: IIFRS16LeaseContract | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ iFRS16LeaseContract }) => {
       this.iFRS16LeaseContract = iFRS16LeaseContract;
     });
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(ifrs16LeaseContractEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(ifrs16LeaseContractCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

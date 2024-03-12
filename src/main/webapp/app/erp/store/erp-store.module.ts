@@ -76,7 +76,7 @@ import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marsh
     StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
     StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
-    StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseContractUpdateStateReducer),
+    StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
     StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
   ],
   exports: [
