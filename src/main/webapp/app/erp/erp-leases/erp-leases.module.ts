@@ -131,6 +131,30 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.RouAssetListReportItemModule
             ),
         },
+        {
+          path: 'rou-asset-nbv-report',
+          data: {
+            pageTitle: 'ERP | ROU Asset NBV Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-asset-nbv-report/rou-asset-nbv-report.module').then(
+              m => m.RouAssetNBVReportModule
+            ),
+        },
+        {
+          path: 'rou-asset-nbv-report-item',
+          data: {
+            pageTitle: 'ERP | ROU Asset NBV Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-asset-nbv-report-item/rou-asset-nbv-report-item.module').then(
+              m => m.RouAssetNBVReportItemModule
+            ),
+        },
       ]
     )
   ]
