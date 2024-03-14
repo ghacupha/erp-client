@@ -155,6 +155,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.RouAssetNBVReportItemModule
             ),
         },
+        {
+          path: 'rou-depreciation-entry-report',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Entries Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-entry-report/rou-depreciation-entry-report.module').then(
+              m => m.RouDepreciationEntryReportModule
+            ),
+        },
       ]
     )
   ]
