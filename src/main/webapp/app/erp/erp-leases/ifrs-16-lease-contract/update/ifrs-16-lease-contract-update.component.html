@@ -242,6 +242,27 @@
             This field is required.
           </small>
         </div>
+
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='leaseContractDocument'
+          [inputValues]="editForm.get(['leaseContractDocument'])!.value"
+          (selectedValues)='updateLeaseContractAttachment($event)'
+          inputControlLabel='Lease Contract Document Attachment(s)'
+        >
+        </jhi-m2m-business-document-form-control>
+
+
+        <jhi-m2m-business-document-form-control
+          ngDefaultControl
+          formControlName='leaseContractCalculations'
+          [inputValues]="editForm.get(['leaseContractCalculations'])!.value"
+          (selectedValues)='updateLeaseContractCalculations($event)'
+          inputControlLabel='Lease Contract Calculation Attachments'
+        >
+        </jhi-m2m-business-document-form-control>
+
       </div>
 
       <div>

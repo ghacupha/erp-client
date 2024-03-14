@@ -91,6 +91,22 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Lease Contract Document</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.leaseContractDocument">
+            <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractDocument?.id, 'view']">{{
+              iFRS16LeaseContract.leaseContractDocument?.documentTitle
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract Calculations</span></dt>
+        <dd>
+          <div *ngIf="iFRS16LeaseContract.leaseContractCalculations">
+            <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractCalculations?.id, 'view']">{{
+              iFRS16LeaseContract.leaseContractCalculations?.documentTitle
+              }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button

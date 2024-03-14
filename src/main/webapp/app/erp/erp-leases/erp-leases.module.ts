@@ -83,6 +83,54 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.RouModelMetadataModule
             ),
         },
+        {
+          path: 'rou-account-balance-report',
+          data: {
+            pageTitle: 'ERP | ROU A/C Balance',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-account-balance-report/rou-account-balance-report.module').then(
+              m => m.RouAccountBalanceReportModule
+            ),
+        },
+        {
+          path: 'rou-account-balance-report-item',
+          data: {
+            pageTitle: 'ERP | ROU A/C Balance',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-account-balance-report-item/rou-account-balance-report-item.module').then(
+              m => m.RouAccountBalanceReportItemModule
+            ),
+        },
+        {
+          path: 'rou-asset-list-report',
+          data: {
+            pageTitle: 'ERP | ROU Asset List Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-asset-list-report/rou-asset-list-report.module').then(
+              m => m.RouAssetListReportModule
+            ),
+        },
+        {
+          path: 'rou-asset-list-report-item',
+          data: {
+            pageTitle: 'ERP | ROU Asset Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-asset-list-report-item/rou-asset-list-report-item.module').then(
+              m => m.RouAssetListReportItemModule
+            ),
+        },
       ]
     )
   ]

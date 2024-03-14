@@ -16,26 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { RouterModule, Routes } from '@angular/router';
-import { UserRouteAccessService } from '../../../../core/auth/user-route-access.service';
-import { IFRS16LeaseContractRoutingResolveService } from './ifrs-16-lease-contract-routing-resolve.service';
-import { IFRS16LeaseContractUpdateComponent } from '../update/ifrs-16-lease-contract-update.component';
 import { NgModule } from '@angular/core';
-
-const iFRS16LeaseContractCopyRoute: Routes = [
-  {
-    path: ':id/copy',
-    component: IFRS16LeaseContractUpdateComponent,
-    resolve: {
-      iFRS16LeaseContract: IFRS16LeaseContractRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-];
+import { SharedModule } from 'app/shared/shared.module';
+import { RouAccountBalanceReportItemComponent } from './list/rou-account-balance-report-item.component';
+import { RouAccountBalanceReportItemDetailComponent } from './detail/rou-account-balance-report-item-detail.component';
+import { RouAccountBalanceReportItemRoutingModule } from './route/rou-account-balance-report-item-routing.module';
 
 @NgModule({
-  imports: [RouterModule.forChild(iFRS16LeaseContractCopyRoute)],
-  exports: [RouterModule],
+  imports: [SharedModule, RouAccountBalanceReportItemRoutingModule],
+  declarations: [RouAccountBalanceReportItemComponent, RouAccountBalanceReportItemDetailComponent],
 })
-export class Ifrs16LeaseContractRoutingCustomModule {
-}
+export class RouAccountBalanceReportItemModule {}

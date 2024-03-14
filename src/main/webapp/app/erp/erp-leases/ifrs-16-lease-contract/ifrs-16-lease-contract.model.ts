@@ -20,11 +20,12 @@ import * as dayjs from 'dayjs';
 import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 
 export interface IIFRS16LeaseContract {
   id?: number;
   bookingId?: string;
-  leaseTitle?: string | null;
+  leaseTitle?: string;
   shortTitle?: string | null;
   description?: string | null;
   inceptionDate?: dayjs.Dayjs;
@@ -34,13 +35,15 @@ export interface IIFRS16LeaseContract {
   mainDealer?: IDealer;
   firstReportingPeriod?: IFiscalMonth;
   lastReportingPeriod?: IFiscalMonth;
+  leaseContractDocument?: IBusinessDocument | null;
+  leaseContractCalculations?: IBusinessDocument | null;
 }
 
 export class IFRS16LeaseContract implements IIFRS16LeaseContract {
   constructor(
     public id?: number,
     public bookingId?: string,
-    public leaseTitle?: string | null,
+    public leaseTitle?: string,
     public shortTitle?: string | null,
     public description?: string | null,
     public inceptionDate?: dayjs.Dayjs,
@@ -49,7 +52,9 @@ export class IFRS16LeaseContract implements IIFRS16LeaseContract {
     public superintendentServiceOutlet?: IServiceOutlet,
     public mainDealer?: IDealer,
     public firstReportingPeriod?: IFiscalMonth,
-    public lastReportingPeriod?: IFiscalMonth
+    public lastReportingPeriod?: IFiscalMonth,
+    public leaseContractDocument?: IBusinessDocument | null,
+    public leaseContractCalculations?: IBusinessDocument | null
   ) {}
 }
 
