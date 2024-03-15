@@ -203,6 +203,30 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.RouDepreciationRequestModule
             ),
         },
+        {
+          path: 'rou-monthly-depreciation-report',
+          data: {
+            pageTitle: 'ERP | ROU Monthly Depreciation',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-monthly-depreciation-report/rou-monthly-depreciation-report.module').then(
+              m => m.RouMonthlyDepreciationReportModule
+            ),
+        },
+        {
+          path: 'rou-monthly-depreciation-report-item',
+          data: {
+            pageTitle: 'ERP | ROU Monthly Depreciation',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-monthly-depreciation-report-item/rou-monthly-depreciation-report-item.module').then(
+              m => m.RouMonthlyDepreciationReportItemModule
+            ),
+        },
       ]
     )
   ]
