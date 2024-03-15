@@ -90,6 +90,18 @@
             <span>ROU metadata</span>
           </a>
         </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='rou-depreciation-request'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>ROU Depreciation Request</span>
+          </a>
+        </li>
       </ul>
     </li>
 
