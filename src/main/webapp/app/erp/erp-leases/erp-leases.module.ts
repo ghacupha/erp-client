@@ -167,6 +167,42 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.RouDepreciationEntryReportModule
             ),
         },
+        {
+          path: 'rou-depreciation-posting-report',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Posting Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-posting-report/rou-depreciation-posting-report.module').then(
+              m => m.RouDepreciationPostingReportModule
+            ),
+        },
+        {
+          path: 'rou-depreciation-posting-report-item',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Posting Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-posting-report-item/rou-depreciation-posting-report-item.module').then(
+              m => m.RouDepreciationPostingReportItemModule
+            ),
+        },
+        {
+          path: 'rou-depreciation-request',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Request',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-request/rou-depreciation-request.module').then(
+              m => m.RouDepreciationRequestModule
+            ),
+        },
       ]
     )
   ]
