@@ -21,6 +21,7 @@ import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-co
 import { IAssetCategory } from '../../erp-assets/asset-category/asset-category.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
 import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import * as dayjs from 'dayjs';
 
 export interface IRouModelMetadata {
   id?: number;
@@ -36,6 +37,10 @@ export interface IRouModelMetadata {
   accruedDepreciationAccount?: ITransactionAccount;
   assetCategory?: IAssetCategory | null;
   documentAttachments?: IBusinessDocument[] | null;
+  commencementDate?: dayjs.Dayjs | null;
+  expirationDate?: dayjs.Dayjs | null;
+  hasBeenFullyAmortised?: boolean | null;
+  hasBeenDecommissioned?: boolean | null;
 }
 
 export class RouModelMetadata implements IRouModelMetadata {
@@ -52,7 +57,11 @@ export class RouModelMetadata implements IRouModelMetadata {
     public depreciationAccount?: ITransactionAccount,
     public accruedDepreciationAccount?: ITransactionAccount,
     public assetCategory?: IAssetCategory | null,
-    public documentAttachments?: IBusinessDocument[] | null
+    public documentAttachments?: IBusinessDocument[] | null,
+    public commencementDate?: dayjs.Dayjs | null,
+    public expirationDate?: dayjs.Dayjs | null,
+    public hasBeenFullyAmortised?: boolean | null,
+    public hasBeenDecommissioned?: boolean | null,
   ) {}
 }
 

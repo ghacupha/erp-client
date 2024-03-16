@@ -73,6 +73,10 @@ export class RouModelMetadataUpdateComponent implements OnInit {
     accruedDepreciationAccount: [null, Validators.required],
     assetCategory: [],
     documentAttachments: [],
+    commencementDate: [],
+    expirationDate: [],
+    hasBeenFullyAmortised: [],
+    hasBeenDecommissioned: [],
   });
 
   constructor(
@@ -234,6 +238,10 @@ export class RouModelMetadataUpdateComponent implements OnInit {
       accruedDepreciationAccount: rouModelMetadata.accruedDepreciationAccount,
       assetCategory: rouModelMetadata.assetCategory,
       documentAttachments: rouModelMetadata.documentAttachments,
+      commencementDate: rouModelMetadata.commencementDate,
+      expirationDate: rouModelMetadata.expirationDate,
+      hasBeenFullyAmortised: rouModelMetadata.hasBeenFullyAmortised,
+      hasBeenDecommissioned: rouModelMetadata.hasBeenDecommissioned,
     });
 
     this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
@@ -271,6 +279,10 @@ export class RouModelMetadataUpdateComponent implements OnInit {
       accruedDepreciationAccount: rouModelMetadata.accruedDepreciationAccount,
       assetCategory: rouModelMetadata.assetCategory,
       documentAttachments: rouModelMetadata.documentAttachments,
+      commencementDate: rouModelMetadata.commencementDate,
+      expirationDate: rouModelMetadata.expirationDate,
+      hasBeenFullyAmortised: rouModelMetadata.hasBeenFullyAmortised,
+      hasBeenDecommissioned: rouModelMetadata.hasBeenDecommissioned,
     });
 
     this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
@@ -362,6 +374,10 @@ export class RouModelMetadataUpdateComponent implements OnInit {
       accruedDepreciationAccount: this.editForm.get(['accruedDepreciationAccount'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       documentAttachments: this.editForm.get(['documentAttachments'])!.value,
+      commencementDate: this.editForm.get(['commencementDate'])!.value,
+      expirationDate: this.editForm.get(['expirationDate'])!.value,
+      hasBeenFullyAmortised: this.editForm.get(['hasBeenFullyAmortised'])!.value,
+      hasBeenDecommissioned: this.editForm.get(['hasBeenDecommissioned'])!.value,
     };
   }
 
@@ -380,6 +396,10 @@ export class RouModelMetadataUpdateComponent implements OnInit {
       accruedDepreciationAccount: this.editForm.get(['accruedDepreciationAccount'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       documentAttachments: this.editForm.get(['documentAttachments'])!.value,
+      commencementDate: this.editForm.get(['commencementDate'])!.value,
+      expirationDate: this.editForm.get(['expirationDate'])!.value,
+      hasBeenFullyAmortised: this.editForm.get(['hasBeenFullyAmortised'])!.value,
+      hasBeenDecommissioned: this.editForm.get(['hasBeenDecommissioned'])!.value,
     };
   }
 }

@@ -25,6 +25,9 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IRouModelMetadata, getRouModelMetadataIdentifier } from '../rou-model-metadata.model';
+import { map } from 'rxjs/operators';
+import { DATE_FORMAT } from '../../../../config/input.constants';
+import * as dayjs from 'dayjs';
 
 export type EntityResponseType = HttpResponse<IRouModelMetadata>;
 export type EntityArrayResponseType = HttpResponse<IRouModelMetadata[]>;
@@ -37,32 +40,41 @@ export class RouModelMetadataService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(rouModelMetadata: IRouModelMetadata): Observable<EntityResponseType> {
-    return this.http.post<IRouModelMetadata>(this.resourceUrl, rouModelMetadata, { observe: 'response' });
+    const copy = this.convertDateFromClient(rouModelMetadata);
+    return this.http
+      .post<IRouModelMetadata>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(rouModelMetadata: IRouModelMetadata): Observable<EntityResponseType> {
-    return this.http.put<IRouModelMetadata>(
-      `${this.resourceUrl}/${getRouModelMetadataIdentifier(rouModelMetadata) as number}`,
-      rouModelMetadata,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(rouModelMetadata);
+    return this.http
+      .put<IRouModelMetadata>(`${this.resourceUrl}/${getRouModelMetadataIdentifier(rouModelMetadata) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(rouModelMetadata: IRouModelMetadata): Observable<EntityResponseType> {
-    return this.http.patch<IRouModelMetadata>(
-      `${this.resourceUrl}/${getRouModelMetadataIdentifier(rouModelMetadata) as number}`,
-      rouModelMetadata,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(rouModelMetadata);
+    return this.http
+      .patch<IRouModelMetadata>(`${this.resourceUrl}/${getRouModelMetadataIdentifier(rouModelMetadata) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IRouModelMetadata>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<IRouModelMetadata>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IRouModelMetadata[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IRouModelMetadata[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -71,7 +83,9 @@ export class RouModelMetadataService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IRouModelMetadata[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IRouModelMetadata[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addRouModelMetadataToCollectionIfMissing(
@@ -94,5 +108,30 @@ export class RouModelMetadataService {
       return [...rouModelMetadataToAdd, ...rouModelMetadataCollection];
     }
     return rouModelMetadataCollection;
+  }
+
+  protected convertDateFromClient(rouModelMetadata: IRouModelMetadata): IRouModelMetadata {
+    return Object.assign({}, rouModelMetadata, {
+      commencementDate: rouModelMetadata.commencementDate?.isValid() ? rouModelMetadata.commencementDate.format(DATE_FORMAT) : undefined,
+      expirationDate: rouModelMetadata.expirationDate?.isValid() ? rouModelMetadata.expirationDate.format(DATE_FORMAT) : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.commencementDate = res.body.commencementDate ? dayjs(res.body.commencementDate) : undefined;
+      res.body.expirationDate = res.body.expirationDate ? dayjs(res.body.expirationDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((rouModelMetadata: IRouModelMetadata) => {
+        rouModelMetadata.commencementDate = rouModelMetadata.commencementDate ? dayjs(rouModelMetadata.commencementDate) : undefined;
+        rouModelMetadata.expirationDate = rouModelMetadata.expirationDate ? dayjs(rouModelMetadata.expirationDate) : undefined;
+      });
+    }
+    return res;
   }
 }

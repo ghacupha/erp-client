@@ -88,6 +88,10 @@
             <span>Accrued Depreciation Account</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="expirationDate"><span>Expiration Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenFullyAmortised"><span>Has Been Fully Amortised</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenDecommissioned"><span>Has Been Decommissioned</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -137,6 +141,10 @@
               }}</a>
             </div>
           </td>
+          <td>{{ rouModelMetadata.commencementDate | formatMediumDate }}</td>
+          <td>{{ rouModelMetadata.expirationDate | formatMediumDate }}</td>
+          <td>{{ rouModelMetadata.hasBeenFullyAmortised }}</td>
+          <td>{{ rouModelMetadata.hasBeenDecommissioned }}</td>
           <td class="text-right">
             <div class="btn-group">
               <!--<button
