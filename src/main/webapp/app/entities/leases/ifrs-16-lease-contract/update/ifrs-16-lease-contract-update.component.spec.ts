@@ -33,6 +33,8 @@ import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
+import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 
 import { IFRS16LeaseContractUpdateComponent } from './ifrs-16-lease-contract-update.component';
 
@@ -44,6 +46,7 @@ describe('IFRS16LeaseContract Management Update Component', () => {
   let serviceOutletService: ServiceOutletService;
   let dealerService: DealerService;
   let fiscalMonthService: FiscalMonthService;
+  let businessDocumentService: BusinessDocumentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -60,6 +63,7 @@ describe('IFRS16LeaseContract Management Update Component', () => {
     serviceOutletService = TestBed.inject(ServiceOutletService);
     dealerService = TestBed.inject(DealerService);
     fiscalMonthService = TestBed.inject(FiscalMonthService);
+    businessDocumentService = TestBed.inject(BusinessDocumentService);
 
     comp = fixture.componentInstance;
   });
@@ -127,6 +131,30 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call BusinessDocument query and add missing value', () => {
+      const iFRS16LeaseContract: IIFRS16LeaseContract = { id: 456 };
+      const leaseContractDocument: IBusinessDocument = { id: 51552 };
+      iFRS16LeaseContract.leaseContractDocument = leaseContractDocument;
+      const leaseContractCalculations: IBusinessDocument = { id: 69686 };
+      iFRS16LeaseContract.leaseContractCalculations = leaseContractCalculations;
+
+      const businessDocumentCollection: IBusinessDocument[] = [{ id: 50636 }];
+      jest.spyOn(businessDocumentService, 'query').mockReturnValue(of(new HttpResponse({ body: businessDocumentCollection })));
+      const additionalBusinessDocuments = [leaseContractDocument, leaseContractCalculations];
+      const expectedCollection: IBusinessDocument[] = [...additionalBusinessDocuments, ...businessDocumentCollection];
+      jest.spyOn(businessDocumentService, 'addBusinessDocumentToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ iFRS16LeaseContract });
+      comp.ngOnInit();
+
+      expect(businessDocumentService.query).toHaveBeenCalled();
+      expect(businessDocumentService.addBusinessDocumentToCollectionIfMissing).toHaveBeenCalledWith(
+        businessDocumentCollection,
+        ...additionalBusinessDocuments
+      );
+      expect(comp.businessDocumentsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const iFRS16LeaseContract: IIFRS16LeaseContract = { id: 456 };
       const superintendentServiceOutlet: IServiceOutlet = { id: 76435 };
@@ -137,6 +165,10 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       iFRS16LeaseContract.firstReportingPeriod = firstReportingPeriod;
       const lastReportingPeriod: IFiscalMonth = { id: 615 };
       iFRS16LeaseContract.lastReportingPeriod = lastReportingPeriod;
+      const leaseContractDocument: IBusinessDocument = { id: 26031 };
+      iFRS16LeaseContract.leaseContractDocument = leaseContractDocument;
+      const leaseContractCalculations: IBusinessDocument = { id: 32620 };
+      iFRS16LeaseContract.leaseContractCalculations = leaseContractCalculations;
 
       activatedRoute.data = of({ iFRS16LeaseContract });
       comp.ngOnInit();
@@ -146,6 +178,8 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       expect(comp.dealersSharedCollection).toContain(mainDealer);
       expect(comp.fiscalMonthsSharedCollection).toContain(firstReportingPeriod);
       expect(comp.fiscalMonthsSharedCollection).toContain(lastReportingPeriod);
+      expect(comp.businessDocumentsSharedCollection).toContain(leaseContractDocument);
+      expect(comp.businessDocumentsSharedCollection).toContain(leaseContractCalculations);
     });
   });
 
@@ -234,6 +268,14 @@ describe('IFRS16LeaseContract Management Update Component', () => {
       it('Should return tracked FiscalMonth primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackFiscalMonthById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackBusinessDocumentById', () => {
+      it('Should return tracked BusinessDocument primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackBusinessDocumentById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

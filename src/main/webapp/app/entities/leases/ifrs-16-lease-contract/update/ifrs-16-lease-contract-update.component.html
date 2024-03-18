@@ -50,9 +50,9 @@
             data-cy="leaseTitle"
             formControlName="leaseTitle"
           />
-          <div
-            *ngIf="editForm.get('leaseTitle')!.invalid && (editForm.get('leaseTitle')!.dirty || editForm.get('leaseTitle')!.touched)"
-          ></div>
+          <div *ngIf="editForm.get('leaseTitle')!.invalid && (editForm.get('leaseTitle')!.dirty || editForm.get('leaseTitle')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('leaseTitle')?.errors?.required"> This field is required. </small>
+          </div>
         </div>
 
         <div class="form-group">
@@ -65,6 +65,9 @@
             data-cy="shortTitle"
             formControlName="shortTitle"
           />
+          <div
+            *ngIf="editForm.get('shortTitle')!.invalid && (editForm.get('shortTitle')!.dirty || editForm.get('shortTitle')!.touched)"
+          ></div>
         </div>
 
         <div class="form-group">
@@ -265,6 +268,52 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['lastReportingPeriod'])?.errors?.required">
             This field is required.
           </small>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseContractDocument">Lease Contract Document</label>
+          <select
+            class="form-control"
+            id="field_leaseContractDocument"
+            data-cy="leaseContractDocument"
+            name="leaseContractDocument"
+            formControlName="leaseContractDocument"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                businessDocumentOption.id === editForm.get('leaseContractDocument')!.value?.id
+                  ? editForm.get('leaseContractDocument')!.value
+                  : businessDocumentOption
+              "
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseContractCalculations">Lease Contract Calculations</label>
+          <select
+            class="form-control"
+            id="field_leaseContractCalculations"
+            data-cy="leaseContractCalculations"
+            name="leaseContractCalculations"
+            formControlName="leaseContractCalculations"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                businessDocumentOption.id === editForm.get('leaseContractCalculations')!.value?.id
+                  ? editForm.get('leaseContractCalculations')!.value
+                  : businessDocumentOption
+              "
+              *ngFor="let businessDocumentOption of businessDocumentsSharedCollection; trackBy: trackBusinessDocumentById"
+            >
+              {{ businessDocumentOption.documentTitle }}
+            </option>
+          </select>
         </div>
       </div>
 

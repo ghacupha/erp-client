@@ -54,6 +54,10 @@ export class RouModelMetadataUpdatePage {
   leaseTermPeriodsInput = element(by.id('field_leaseTermPeriods'));
   leaseAmountInput = element(by.id('field_leaseAmount'));
   rouModelReferenceInput = element(by.id('field_rouModelReference'));
+  commencementDateInput = element(by.id('field_commencementDate'));
+  expirationDateInput = element(by.id('field_expirationDate'));
+  hasBeenFullyAmortisedInput = element(by.id('field_hasBeenFullyAmortised'));
+  hasBeenDecommissionedInput = element(by.id('field_hasBeenDecommissioned'));
 
   ifrs16LeaseContractSelect = element(by.id('field_ifrs16LeaseContract'));
   assetAccountSelect = element(by.id('field_assetAccount'));
@@ -120,6 +124,30 @@ export class RouModelMetadataUpdatePage {
 
   async getRouModelReferenceInput(): Promise<string> {
     return await this.rouModelReferenceInput.getAttribute('value');
+  }
+
+  async setCommencementDateInput(commencementDate: string): Promise<void> {
+    await this.commencementDateInput.sendKeys(commencementDate);
+  }
+
+  async getCommencementDateInput(): Promise<string> {
+    return await this.commencementDateInput.getAttribute('value');
+  }
+
+  async setExpirationDateInput(expirationDate: string): Promise<void> {
+    await this.expirationDateInput.sendKeys(expirationDate);
+  }
+
+  async getExpirationDateInput(): Promise<string> {
+    return await this.expirationDateInput.getAttribute('value');
+  }
+
+  getHasBeenFullyAmortisedInput(): ElementFinder {
+    return this.hasBeenFullyAmortisedInput;
+  }
+
+  getHasBeenDecommissionedInput(): ElementFinder {
+    return this.hasBeenDecommissionedInput;
   }
 
   async ifrs16LeaseContractSelectLastOption(): Promise<void> {

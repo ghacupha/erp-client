@@ -60,6 +60,8 @@ export class IFRS16LeaseContractUpdatePage {
   mainDealerSelect = element(by.id('field_mainDealer'));
   firstReportingPeriodSelect = element(by.id('field_firstReportingPeriod'));
   lastReportingPeriodSelect = element(by.id('field_lastReportingPeriod'));
+  leaseContractDocumentSelect = element(by.id('field_leaseContractDocument'));
+  leaseContractCalculationsSelect = element(by.id('field_leaseContractCalculations'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -191,6 +193,38 @@ export class IFRS16LeaseContractUpdatePage {
 
   async getLastReportingPeriodSelectedOption(): Promise<string> {
     return await this.lastReportingPeriodSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseContractDocumentSelectLastOption(): Promise<void> {
+    await this.leaseContractDocumentSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseContractDocumentSelectOption(option: string): Promise<void> {
+    await this.leaseContractDocumentSelect.sendKeys(option);
+  }
+
+  getLeaseContractDocumentSelect(): ElementFinder {
+    return this.leaseContractDocumentSelect;
+  }
+
+  async getLeaseContractDocumentSelectedOption(): Promise<string> {
+    return await this.leaseContractDocumentSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseContractCalculationsSelectLastOption(): Promise<void> {
+    await this.leaseContractCalculationsSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseContractCalculationsSelectOption(option: string): Promise<void> {
+    await this.leaseContractCalculationsSelect.sendKeys(option);
+  }
+
+  getLeaseContractCalculationsSelect(): ElementFinder {
+    return this.leaseContractCalculationsSelect;
+  }
+
+  async getLeaseContractCalculationsSelectedOption(): Promise<string> {
+    return await this.leaseContractCalculationsSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

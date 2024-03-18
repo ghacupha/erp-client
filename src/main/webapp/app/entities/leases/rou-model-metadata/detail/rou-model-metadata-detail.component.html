@@ -57,6 +57,22 @@
         <dd>
           <span>{{ rouModelMetadata.rouModelReference }}</span>
         </dd>
+        <dt><span>Commencement Date</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.commencementDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Expiration Date</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.expirationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Has Been Fully Amortised</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.hasBeenFullyAmortised }}</span>
+        </dd>
+        <dt><span>Has Been Decommissioned</span></dt>
+        <dd>
+          <span>{{ rouModelMetadata.hasBeenDecommissioned }}</span>
+        </dd>
         <dt><span>Ifrs 16 Lease Contract</span></dt>
         <dd>
           <div *ngIf="rouModelMetadata.ifrs16LeaseContract">

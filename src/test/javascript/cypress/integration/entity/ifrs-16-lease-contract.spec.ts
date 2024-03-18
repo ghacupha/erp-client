@@ -34,7 +34,12 @@ describe('IFRS16LeaseContract e2e test', () => {
   const iFRS16LeaseContractPageUrlPattern = new RegExp('/ifrs-16-lease-contract(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const iFRS16LeaseContractSample = { bookingId: 'SSL Uganda Metal', inceptionDate: '2024-03-07', commencementDate: '2024-03-06' };
+  const iFRS16LeaseContractSample = {
+    bookingId: 'SSL Uganda Metal',
+    leaseTitle: 'incentivize',
+    inceptionDate: '2024-03-06',
+    commencementDate: '2024-03-06',
+  };
 
   let iFRS16LeaseContract: any;
   //let serviceOutlet: any;
@@ -101,6 +106,11 @@ describe('IFRS16LeaseContract e2e test', () => {
     cy.intercept('GET', '/api/fiscal-months', {
       statusCode: 200,
       body: [fiscalMonth],
+    });
+
+    cy.intercept('GET', '/api/business-documents', {
+      statusCode: 200,
+      body: [],
     });
 
   });

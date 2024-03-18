@@ -35,11 +35,11 @@ describe('RouModelMetadata e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const rouModelMetadataSample = {
-    modelTitle: 'calculate Grove quantify',
-    modelVersion: 12153,
-    leaseTermPeriods: 48721,
-    leaseAmount: 99244,
-    rouModelReference: '2306c430-6078-472a-b759-aedc168392b4',
+    modelTitle: 'strategy Money',
+    modelVersion: 48721,
+    leaseTermPeriods: 99244,
+    leaseAmount: 16313,
+    rouModelReference: '306c4306-0787-42a3-b59a-edc168392b46',
   };
 
   let rouModelMetadata: any;
@@ -280,6 +280,16 @@ describe('RouModelMetadata e2e test', () => {
         .type('dba8087c-189b-4dc5-b268-94098486093e')
         .invoke('val')
         .should('match', new RegExp('dba8087c-189b-4dc5-b268-94098486093e'));
+
+      cy.get(`[data-cy="commencementDate"]`).type('2024-03-06').should('have.value', '2024-03-06');
+
+      cy.get(`[data-cy="expirationDate"]`).type('2024-03-06').should('have.value', '2024-03-06');
+
+      cy.get(`[data-cy="hasBeenFullyAmortised"]`).should('not.be.checked');
+      cy.get(`[data-cy="hasBeenFullyAmortised"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="hasBeenDecommissioned"]`).should('not.be.checked');
+      cy.get(`[data-cy="hasBeenDecommissioned"]`).click().should('be.checked');
 
       cy.get(`[data-cy="ifrs16LeaseContract"]`).select(1);
       cy.get(`[data-cy="assetAccount"]`).select(1);

@@ -79,6 +79,8 @@ describe('IFRS16LeaseContract e2e test', () => {
             iFRS16LeaseContractUpdatePage.mainDealerSelectLastOption(),
             iFRS16LeaseContractUpdatePage.firstReportingPeriodSelectLastOption(),
             iFRS16LeaseContractUpdatePage.lastReportingPeriodSelectLastOption(),
+            iFRS16LeaseContractUpdatePage.leaseContractDocumentSelectLastOption(),
+            iFRS16LeaseContractUpdatePage.leaseContractCalculationsSelectLastOption(),
         ]);
 
         await iFRS16LeaseContractUpdatePage.save();

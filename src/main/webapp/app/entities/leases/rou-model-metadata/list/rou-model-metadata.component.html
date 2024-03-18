@@ -78,6 +78,10 @@
           <th scope="col" jhiSortBy="rouModelReference">
             <span>Rou Model Reference</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="commencementDate"><span>Commencement Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="expirationDate"><span>Expiration Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenFullyAmortised"><span>Has Been Fully Amortised</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="hasBeenDecommissioned"><span>Has Been Decommissioned</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="ifrs16LeaseContract.shortTitle">
             <span>Ifrs 16 Lease Contract</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -101,6 +105,10 @@
           <td>{{ rouModelMetadata.leaseTermPeriods }}</td>
           <td>{{ rouModelMetadata.leaseAmount }}</td>
           <td>{{ rouModelMetadata.rouModelReference }}</td>
+          <td>{{ rouModelMetadata.commencementDate | formatMediumDate }}</td>
+          <td>{{ rouModelMetadata.expirationDate | formatMediumDate }}</td>
+          <td>{{ rouModelMetadata.hasBeenFullyAmortised }}</td>
+          <td>{{ rouModelMetadata.hasBeenDecommissioned }}</td>
           <td>
             <div *ngIf="rouModelMetadata.ifrs16LeaseContract">
               <a [routerLink]="['/ifrs-16-lease-contract', rouModelMetadata.ifrs16LeaseContract?.id, 'view']">{{

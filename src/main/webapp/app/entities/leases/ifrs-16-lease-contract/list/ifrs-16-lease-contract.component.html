@@ -87,6 +87,12 @@
           <th scope="col" jhiSortBy="lastReportingPeriod.fiscalMonthCode">
             <span>Last Reporting Period</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="leaseContractDocument.documentTitle">
+            <span>Lease Contract Document</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="leaseContractCalculations.documentTitle">
+            <span>Lease Contract Calculations</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -125,6 +131,20 @@
             <div *ngIf="iFRS16LeaseContract.lastReportingPeriod">
               <a [routerLink]="['/fiscal-month', iFRS16LeaseContract.lastReportingPeriod?.id, 'view']">{{
                 iFRS16LeaseContract.lastReportingPeriod?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.leaseContractDocument">
+              <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractDocument?.id, 'view']">{{
+                iFRS16LeaseContract.leaseContractDocument?.documentTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="iFRS16LeaseContract.leaseContractCalculations">
+              <a [routerLink]="['/business-document', iFRS16LeaseContract.leaseContractCalculations?.id, 'view']">{{
+                iFRS16LeaseContract.leaseContractCalculations?.documentTitle
               }}</a>
             </div>
           </td>

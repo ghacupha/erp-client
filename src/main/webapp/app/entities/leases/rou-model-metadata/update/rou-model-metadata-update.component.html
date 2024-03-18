@@ -144,6 +144,72 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_commencementDate">Commencement Date</label>
+          <div class="input-group">
+            <input
+              id="field_commencementDate"
+              data-cy="commencementDate"
+              type="text"
+              class="form-control"
+              name="commencementDate"
+              ngbDatepicker
+              #commencementDateDp="ngbDatepicker"
+              formControlName="commencementDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="commencementDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_expirationDate">Expiration Date</label>
+          <div class="input-group">
+            <input
+              id="field_expirationDate"
+              data-cy="expirationDate"
+              type="text"
+              class="form-control"
+              name="expirationDate"
+              ngbDatepicker
+              #expirationDateDp="ngbDatepicker"
+              formControlName="expirationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="expirationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenFullyAmortised">Has Been Fully Amortised</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenFullyAmortised"
+            id="field_hasBeenFullyAmortised"
+            data-cy="hasBeenFullyAmortised"
+            formControlName="hasBeenFullyAmortised"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_hasBeenDecommissioned">Has Been Decommissioned</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="hasBeenDecommissioned"
+            id="field_hasBeenDecommissioned"
+            data-cy="hasBeenDecommissioned"
+            formControlName="hasBeenDecommissioned"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_ifrs16LeaseContract">Ifrs 16 Lease Contract</label>
           <select
             class="form-control"
