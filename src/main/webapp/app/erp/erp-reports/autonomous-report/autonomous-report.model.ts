@@ -17,9 +17,9 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAutonomousReport {
   id?: number;
