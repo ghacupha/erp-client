@@ -72,6 +72,14 @@
         <dd>
           <span>{{ assetRegistration.capitalizationDate | formatMediumDate }}</span>
         </dd>
+        <dt><span>Historical Cost</span></dt>
+        <dd>
+          <span>{{ assetRegistration.historicalCost }}</span>
+        </dd>
+        <dt><span>Registration Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.registrationDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of assetRegistration.placeholders; let last = last">

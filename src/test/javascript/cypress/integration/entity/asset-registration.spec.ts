@@ -35,10 +35,12 @@ describe('AssetRegistration e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const assetRegistrationSample = {
-    assetNumber: 'Assistant Operative Communications',
-    assetTag: 'Mountains',
-    assetCost: 10995,
-    capitalizationDate: '2022-04-13',
+    assetNumber: 'compress Kingdom virtual',
+    assetTag: 'deposit Aruba',
+    assetCost: 61548,
+    capitalizationDate: '2022-04-12',
+    historicalCost: 86795,
+    registrationDate: '2022-04-12',
   };
 
   let assetRegistration: any;
@@ -353,6 +355,10 @@ describe('AssetRegistration e2e test', () => {
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
       cy.get(`[data-cy="capitalizationDate"]`).type('2022-04-12').should('have.value', '2022-04-12');
+
+      cy.get(`[data-cy="historicalCost"]`).type('98367').should('have.value', '98367');
+
+      cy.get(`[data-cy="registrationDate"]`).type('2022-04-12').should('have.value', '2022-04-12');
 
       cy.get(`[data-cy="assetCategory"]`).select(1);
       cy.get(`[data-cy="dealer"]`).select(1);

@@ -112,12 +112,14 @@ export class AssetRegistrationService {
       capitalizationDate: assetRegistration.capitalizationDate?.isValid()
         ? assetRegistration.capitalizationDate.format(DATE_FORMAT)
         : undefined,
+      registrationDate: assetRegistration.registrationDate?.isValid() ? assetRegistration.registrationDate.format(DATE_FORMAT) : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.capitalizationDate = res.body.capitalizationDate ? dayjs(res.body.capitalizationDate) : undefined;
+      res.body.registrationDate = res.body.registrationDate ? dayjs(res.body.registrationDate) : undefined;
     }
     return res;
   }
@@ -128,6 +130,7 @@ export class AssetRegistrationService {
         assetRegistration.capitalizationDate = assetRegistration.capitalizationDate
           ? dayjs(assetRegistration.capitalizationDate)
           : undefined;
+        assetRegistration.registrationDate = assetRegistration.registrationDate ? dayjs(assetRegistration.registrationDate) : undefined;
       });
     }
     return res;

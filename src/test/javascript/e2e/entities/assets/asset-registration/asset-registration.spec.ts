@@ -81,6 +81,8 @@ describe('AssetRegistration e2e test', () => {
             assetRegistrationUpdatePage.setSerialNumberInput('serialNumber'),
             assetRegistrationUpdatePage.setRemarksInput('remarks'),
             assetRegistrationUpdatePage.setCapitalizationDateInput('2000-12-31'),
+            assetRegistrationUpdatePage.setHistoricalCostInput('5'),
+            assetRegistrationUpdatePage.setRegistrationDateInput('2000-12-31'),
             // assetRegistrationUpdatePage.placeholderSelectLastOption(),
             // assetRegistrationUpdatePage.paymentInvoicesSelectLastOption(),
             // assetRegistrationUpdatePage.otherRelatedServiceOutletsSelectLastOption(),

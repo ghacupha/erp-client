@@ -53,6 +53,8 @@ describe('AssetRegistration Service', () => {
       serialNumber: 'AAAAAAA',
       remarks: 'AAAAAAA',
       capitalizationDate: currentDate,
+      historicalCost: 0,
+      registrationDate: currentDate,
     };
   });
 
@@ -61,6 +63,7 @@ describe('AssetRegistration Service', () => {
       const returnedFromService = Object.assign(
         {
           capitalizationDate: currentDate.format(DATE_FORMAT),
+          registrationDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -77,6 +80,7 @@ describe('AssetRegistration Service', () => {
         {
           id: 0,
           capitalizationDate: currentDate.format(DATE_FORMAT),
+          registrationDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -84,6 +88,7 @@ describe('AssetRegistration Service', () => {
       const expected = Object.assign(
         {
           capitalizationDate: currentDate,
+          registrationDate: currentDate,
         },
         returnedFromService
       );
@@ -108,6 +113,8 @@ describe('AssetRegistration Service', () => {
           serialNumber: 'BBBBBB',
           remarks: 'BBBBBB',
           capitalizationDate: currentDate.format(DATE_FORMAT),
+          historicalCost: 1,
+          registrationDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -115,6 +122,7 @@ describe('AssetRegistration Service', () => {
       const expected = Object.assign(
         {
           capitalizationDate: currentDate,
+          registrationDate: currentDate,
         },
         returnedFromService
       );
@@ -132,6 +140,8 @@ describe('AssetRegistration Service', () => {
           assetNumber: 'BBBBBB',
           assetCost: 1,
           serialNumber: 'BBBBBB',
+          historicalCost: 1,
+          registrationDate: currentDate.format(DATE_FORMAT),
         },
         new AssetRegistration()
       );
@@ -141,6 +151,7 @@ describe('AssetRegistration Service', () => {
       const expected = Object.assign(
         {
           capitalizationDate: currentDate,
+          registrationDate: currentDate,
         },
         returnedFromService
       );
@@ -165,6 +176,8 @@ describe('AssetRegistration Service', () => {
           serialNumber: 'BBBBBB',
           remarks: 'BBBBBB',
           capitalizationDate: currentDate.format(DATE_FORMAT),
+          historicalCost: 1,
+          registrationDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -172,6 +185,7 @@ describe('AssetRegistration Service', () => {
       const expected = Object.assign(
         {
           capitalizationDate: currentDate,
+          registrationDate: currentDate,
         },
         returnedFromService
       );
@@ -221,7 +235,7 @@ describe('AssetRegistration Service', () => {
       });
 
       it('should add only unique AssetRegistration to an array', () => {
-        const assetRegistrationArray: IAssetRegistration[] = [{ id: 123 }, { id: 456 }, { id: 90779 }];
+        const assetRegistrationArray: IAssetRegistration[] = [{ id: 123 }, { id: 456 }, { id: 92082 }];
         const assetRegistrationCollection: IAssetRegistration[] = [{ id: 123 }];
         expectedResult = service.addAssetRegistrationToCollectionIfMissing(assetRegistrationCollection, ...assetRegistrationArray);
         expect(expectedResult).toHaveLength(3);

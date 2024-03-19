@@ -57,6 +57,8 @@ export class AssetRegistrationUpdatePage {
   serialNumberInput = element(by.id('field_serialNumber'));
   remarksInput = element(by.id('field_remarks'));
   capitalizationDateInput = element(by.id('field_capitalizationDate'));
+  historicalCostInput = element(by.id('field_historicalCost'));
+  registrationDateInput = element(by.id('field_registrationDate'));
 
   placeholderSelect = element(by.id('field_placeholder'));
   paymentInvoicesSelect = element(by.id('field_paymentInvoices'));
@@ -158,6 +160,22 @@ export class AssetRegistrationUpdatePage {
 
   async getCapitalizationDateInput(): Promise<string> {
     return await this.capitalizationDateInput.getAttribute('value');
+  }
+
+  async setHistoricalCostInput(historicalCost: string): Promise<void> {
+    await this.historicalCostInput.sendKeys(historicalCost);
+  }
+
+  async getHistoricalCostInput(): Promise<string> {
+    return await this.historicalCostInput.getAttribute('value');
+  }
+
+  async setRegistrationDateInput(registrationDate: string): Promise<void> {
+    await this.registrationDateInput.sendKeys(registrationDate);
+  }
+
+  async getRegistrationDateInput(): Promise<string> {
+    return await this.registrationDateInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {

@@ -44,6 +44,16 @@
       "fieldName": "capitalizationDate",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "historicalCost",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "registrationDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
     }
   ],
   "incrementalChangelog": false,

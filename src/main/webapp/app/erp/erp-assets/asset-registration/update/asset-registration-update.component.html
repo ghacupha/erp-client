@@ -159,6 +159,59 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-control-label" for="field_historicalCost">Historical Cost</label>
+          <input
+            type="number"
+            class="form-control"
+            name="historicalCost"
+            id="field_historicalCost"
+            data-cy="historicalCost"
+            formControlName="historicalCost"
+          />
+          <div
+            *ngIf="
+              editForm.get('historicalCost')!.invalid && (editForm.get('historicalCost')!.dirty || editForm.get('historicalCost')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('historicalCost')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('historicalCost')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_registrationDate">Registration Date</label>
+          <div class="input-group">
+            <input
+              id="field_registrationDate"
+              data-cy="registrationDate"
+              type="text"
+              class="form-control"
+              name="registrationDate"
+              ngbDatepicker
+              #registrationDateDp="ngbDatepicker"
+              formControlName="registrationDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="registrationDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('registrationDate')!.invalid &&
+              (editForm.get('registrationDate')!.dirty || editForm.get('registrationDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('registrationDate')?.errors?.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
         <jhi-m2m-payment-invoice-form-control
           ngDefaultControl
           formControlName='paymentInvoices'

@@ -44,6 +44,8 @@ export interface IAssetRegistration {
   serialNumber?: string | null;
   remarks?: string | null;
   capitalizationDate?: dayjs.Dayjs;
+  historicalCost?: number;
+  registrationDate?: dayjs.Dayjs;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
   otherRelatedServiceOutlets?: IServiceOutlet[] | null;
@@ -76,6 +78,8 @@ export class AssetRegistration implements IAssetRegistration {
     public serialNumber?: string | null,
     public remarks?: string | null,
     public capitalizationDate?: dayjs.Dayjs,
+    public historicalCost?: number,
+    public registrationDate?: dayjs.Dayjs,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
     public otherRelatedServiceOutlets?: IServiceOutlet[] | null,
