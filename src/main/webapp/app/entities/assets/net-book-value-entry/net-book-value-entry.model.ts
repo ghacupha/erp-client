@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';

@@ -17,13 +17,13 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/prepayment-mapping.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 

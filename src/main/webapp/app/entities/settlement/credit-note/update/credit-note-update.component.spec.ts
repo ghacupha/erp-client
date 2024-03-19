@@ -35,8 +35,8 @@ import { IPaymentLabel } from 'app/entities/settlement/payment-label/payment-lab
 import { PaymentLabelService } from 'app/entities/settlement/payment-label/service/payment-label.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 
 import { CreditNoteUpdateComponent } from './credit-note-update.component';
 

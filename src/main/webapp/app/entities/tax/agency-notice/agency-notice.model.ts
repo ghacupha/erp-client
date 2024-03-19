@@ -18,7 +18,7 @@
 
 import * as dayjs from 'dayjs';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { AgencyStatusType } from 'app/entities/enumerations/agency-status-type.model';

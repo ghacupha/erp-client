@@ -60,6 +60,51 @@
             formControlName="mappedValue"
           />
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_parentMapping">Parent Mapping</label>
+          <select
+            class="form-control"
+            id="field_parentMapping"
+            data-cy="parentMapping"
+            name="parentMapping"
+            formControlName="parentMapping"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                universallyUniqueMappingOption.id === editForm.get('parentMapping')!.value?.id
+                  ? editForm.get('parentMapping')!.value
+                  : universallyUniqueMappingOption
+              "
+              *ngFor="
+                let universallyUniqueMappingOption of universallyUniqueMappingsSharedCollection;
+                trackBy: trackUniversallyUniqueMappingById
+              "
+            >
+              {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="field_placeholders">Placeholder</label>
+          <select
+            class="form-control"
+            id="field_placeholders"
+            data-cy="placeholder"
+            multiple
+            name="placeholders"
+            formControlName="placeholders"
+          >
+            <option
+              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
+              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
+            >
+              {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

@@ -29,8 +29,8 @@ import { ExcelReportExportService } from '../service/excel-report-export.service
 import { IExcelReportExport, ExcelReportExport } from '../excel-report-export.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IReportStatus } from 'app/entities/reports/report-status/report-status.model';
 import { ReportStatusService } from 'app/entities/reports/report-status/service/report-status.service';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';

@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { DepreciationEntryService } from '../service/depreciation-entry.service';
 import { IDepreciationEntry, DepreciationEntry } from '../depreciation-entry.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
 import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';

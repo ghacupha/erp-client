@@ -19,7 +19,7 @@
 import * as dayjs from 'dayjs';
 import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IFiscalQuarter {
   id?: number;

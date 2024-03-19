@@ -21,7 +21,7 @@ import { IPurchaseOrder } from 'app/entities/settlement/purchase-order/purchase-
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { IPaymentLabel } from 'app/entities/settlement/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 
 export interface ICreditNote {
   id?: number;

@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { NetBookValueEntryService } from '../service/net-book-value-entry.service';
 import { INetBookValueEntry, NetBookValueEntry } from '../net-book-value-entry.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
 import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';

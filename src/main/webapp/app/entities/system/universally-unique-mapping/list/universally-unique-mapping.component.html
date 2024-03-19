@@ -72,6 +72,7 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="universalKey"><span>Universal Key</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="mappedValue"><span>Mapped Value</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="parentMapping.universalKey"><span>Parent Mapping</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -82,6 +83,13 @@
           </td>
           <td>{{ universallyUniqueMapping.universalKey }}</td>
           <td>{{ universallyUniqueMapping.mappedValue }}</td>
+          <td>
+            <div *ngIf="universallyUniqueMapping.parentMapping">
+              <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping.parentMapping?.id, 'view']">{{
+                universallyUniqueMapping.parentMapping?.universalKey
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

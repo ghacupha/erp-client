@@ -27,6 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { UniversallyUniqueMappingService } from '../service/universally-unique-mapping.service';
 import { IUniversallyUniqueMapping, UniversallyUniqueMapping } from '../universally-unique-mapping.model';
+import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { UniversallyUniqueMappingUpdateComponent } from './universally-unique-mapping-update.component';
 
@@ -35,6 +37,7 @@ describe('UniversallyUniqueMapping Management Update Component', () => {
   let fixture: ComponentFixture<UniversallyUniqueMappingUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let placeholderService: PlaceholderService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,18 +51,71 @@ describe('UniversallyUniqueMapping Management Update Component', () => {
     fixture = TestBed.createComponent(UniversallyUniqueMappingUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    placeholderService = TestBed.inject(PlaceholderService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call UniversallyUniqueMapping query and add missing value', () => {
+      const universallyUniqueMapping: IUniversallyUniqueMapping = { id: 456 };
+      const parentMapping: IUniversallyUniqueMapping = { id: 74863 };
+      universallyUniqueMapping.parentMapping = parentMapping;
+
+      const universallyUniqueMappingCollection: IUniversallyUniqueMapping[] = [{ id: 8460 }];
+      jest
+        .spyOn(universallyUniqueMappingService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: universallyUniqueMappingCollection })));
+      const additionalUniversallyUniqueMappings = [parentMapping];
+      const expectedCollection: IUniversallyUniqueMapping[] = [
+        ...additionalUniversallyUniqueMappings,
+        ...universallyUniqueMappingCollection,
+      ];
+      jest.spyOn(universallyUniqueMappingService, 'addUniversallyUniqueMappingToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ universallyUniqueMapping });
+      comp.ngOnInit();
+
+      expect(universallyUniqueMappingService.query).toHaveBeenCalled();
+      expect(universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing).toHaveBeenCalledWith(
+        universallyUniqueMappingCollection,
+        ...additionalUniversallyUniqueMappings
+      );
+      expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call Placeholder query and add missing value', () => {
+      const universallyUniqueMapping: IUniversallyUniqueMapping = { id: 456 };
+      const placeholders: IPlaceholder[] = [{ id: 18993 }];
+      universallyUniqueMapping.placeholders = placeholders;
+
+      const placeholderCollection: IPlaceholder[] = [{ id: 27906 }];
+      jest.spyOn(placeholderService, 'query').mockReturnValue(of(new HttpResponse({ body: placeholderCollection })));
+      const additionalPlaceholders = [...placeholders];
+      const expectedCollection: IPlaceholder[] = [...additionalPlaceholders, ...placeholderCollection];
+      jest.spyOn(placeholderService, 'addPlaceholderToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ universallyUniqueMapping });
+      comp.ngOnInit();
+
+      expect(placeholderService.query).toHaveBeenCalled();
+      expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
+      expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const universallyUniqueMapping: IUniversallyUniqueMapping = { id: 456 };
+      const parentMapping: IUniversallyUniqueMapping = { id: 59051 };
+      universallyUniqueMapping.parentMapping = parentMapping;
+      const placeholders: IPlaceholder = { id: 34374 };
+      universallyUniqueMapping.placeholders = [placeholders];
 
       activatedRoute.data = of({ universallyUniqueMapping });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(universallyUniqueMapping));
+      expect(comp.universallyUniqueMappingsSharedCollection).toContain(parentMapping);
+      expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
   });
 
@@ -124,6 +180,52 @@ describe('UniversallyUniqueMapping Management Update Component', () => {
       expect(universallyUniqueMappingService.update).toHaveBeenCalledWith(universallyUniqueMapping);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Tracking relationships identifiers', () => {
+    describe('trackUniversallyUniqueMappingById', () => {
+      it('Should return tracked UniversallyUniqueMapping primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackPlaceholderById', () => {
+      it('Should return tracked Placeholder primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+  });
+
+  describe('Getting selected relationships', () => {
+    describe('getSelectedPlaceholder', () => {
+      it('Should return option if no Placeholder is selected', () => {
+        const option = { id: 123 };
+        const result = comp.getSelectedPlaceholder(option);
+        expect(result === option).toEqual(true);
+      });
+
+      it('Should return selected Placeholder for according option', () => {
+        const option = { id: 123 };
+        const selected = { id: 123 };
+        const selected2 = { id: 456 };
+        const result = comp.getSelectedPlaceholder(option, [selected2, selected]);
+        expect(result === selected).toEqual(true);
+        expect(result === selected2).toEqual(false);
+        expect(result === option).toEqual(false);
+      });
+
+      it('Should return option if this Placeholder is not selected', () => {
+        const option = { id: 123 };
+        const selected = { id: 456 };
+        const result = comp.getSelectedPlaceholder(option, [selected]);
+        expect(result === option).toEqual(true);
+        expect(result === selected).toEqual(false);
+      });
     });
   });
 });

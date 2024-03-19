@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { PurchaseOrderService } from '../service/purchase-order.service';
 import { IPurchaseOrder, PurchaseOrder } from '../purchase-order.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';

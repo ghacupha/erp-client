@@ -18,7 +18,7 @@
 
 import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { IReportStatus } from 'app/entities/reports/report-status/report-status.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';

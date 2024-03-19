@@ -18,7 +18,7 @@
 
 import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 

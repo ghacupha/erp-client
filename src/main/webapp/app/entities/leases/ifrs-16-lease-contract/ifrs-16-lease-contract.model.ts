@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';

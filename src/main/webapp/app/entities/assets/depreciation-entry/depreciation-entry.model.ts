@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';
 import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';

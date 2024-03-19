@@ -19,7 +19,7 @@
 import * as dayjs from 'dayjs';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 
 export interface INbvReport {

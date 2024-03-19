@@ -17,13 +17,13 @@
 ///
 
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { IWorkProjectRegister } from 'app/entities/assets/work-project-register/work-project-register.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { IAssetAccessory } from 'app/entities/assets/asset-accessory/asset-accessory.model';
 import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warranty.model';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { IPurchaseOrder } from 'app/entities/settlement/purchase-order/purchase-order.model';
 import { IDeliveryNote } from 'app/entities/settlement/delivery-note/delivery-note.model';

@@ -21,7 +21,7 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 import { IWorkInProgressRegistration } from 'app/entities/assets/work-in-progress-registration/work-in-progress-registration.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { IWorkProjectRegister } from 'app/entities/assets/work-project-register/work-project-register.model';
 import { WorkInProgressTransferType } from 'app/entities/enumerations/work-in-progress-transfer-type.model';

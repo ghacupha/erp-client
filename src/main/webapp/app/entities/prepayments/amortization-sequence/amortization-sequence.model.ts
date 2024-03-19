@@ -21,7 +21,7 @@ import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/
 import { IAmortizationRecurrence } from 'app/entities/prepayments/amortization-recurrence/amortization-recurrence.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/prepayment-mapping.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IAmortizationSequence {
   id?: number;

@@ -73,6 +73,8 @@ describe('UniversallyUniqueMapping e2e test', () => {
     await promise.all([
       universallyUniqueMappingUpdatePage.setUniversalKeyInput('universalKey'),
       universallyUniqueMappingUpdatePage.setMappedValueInput('mappedValue'),
+      universallyUniqueMappingUpdatePage.parentMappingSelectLastOption(),
+      // universallyUniqueMappingUpdatePage.placeholderSelectLastOption(),
     ]);
 
     await universallyUniqueMappingUpdatePage.save();

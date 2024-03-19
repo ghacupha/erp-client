@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { ISecurityClearance } from 'app/entities/people/security-clearance/security-clearance.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';

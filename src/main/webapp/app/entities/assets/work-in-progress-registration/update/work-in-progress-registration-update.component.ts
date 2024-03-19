@@ -30,8 +30,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { IWorkProjectRegister } from 'app/entities/assets/work-project-register/work-project-register.model';
 import { WorkProjectRegisterService } from 'app/entities/assets/work-project-register/service/work-project-register.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
@@ -42,8 +42,8 @@ import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warrant
 import { AssetWarrantyService } from 'app/entities/assets/asset-warranty/service/asset-warranty.service';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { PaymentInvoiceService } from 'app/entities/settlement/payment-invoice/service/payment-invoice.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
 import { IPurchaseOrder } from 'app/entities/settlement/purchase-order/purchase-order.model';

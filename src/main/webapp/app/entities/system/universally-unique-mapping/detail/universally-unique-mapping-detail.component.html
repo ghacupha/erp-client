@@ -41,6 +41,21 @@
         <dd>
           <span>{{ universallyUniqueMapping.mappedValue }}</span>
         </dd>
+        <dt><span>Parent Mapping</span></dt>
+        <dd>
+          <div *ngIf="universallyUniqueMapping.parentMapping">
+            <a [routerLink]="['/universally-unique-mapping', universallyUniqueMapping.parentMapping?.id, 'view']">{{
+              universallyUniqueMapping.parentMapping?.universalKey
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of universallyUniqueMapping.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
