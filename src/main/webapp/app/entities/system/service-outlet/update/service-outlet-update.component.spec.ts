@@ -29,14 +29,14 @@ import { ServiceOutletService } from '../service/service-outlet.service';
 import { IServiceOutlet, ServiceOutlet } from '../service-outlet.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
-import { IOutletType } from 'app/entities/gdi/outlet-type/outlet-type.model';
-import { OutletTypeService } from 'app/entities/gdi/outlet-type/service/outlet-type.service';
-import { IOutletStatus } from 'app/entities/gdi/outlet-status/outlet-status.model';
-import { OutletStatusService } from 'app/entities/gdi/outlet-status/service/outlet-status.service';
-import { ICountyCode } from 'app/entities/gdi/county-code/county-code.model';
-import { CountyCodeService } from 'app/entities/gdi/county-code/service/county-code.service';
+import { IBankBranchCode } from 'app/entities/system/bank-branch-code/bank-branch-code.model';
+import { BankBranchCodeService } from 'app/entities/system/bank-branch-code/service/bank-branch-code.service';
+import { IOutletType } from 'app/entities/system/outlet-type/outlet-type.model';
+import { OutletTypeService } from 'app/entities/system/outlet-type/service/outlet-type.service';
+import { IOutletStatus } from 'app/entities/system/outlet-status/outlet-status.model';
+import { OutletStatusService } from 'app/entities/system/outlet-status/service/outlet-status.service';
+import { ICountyCode } from 'app/entities/system/county-code/county-code.model';
+import { CountyCodeService } from 'app/entities/system/county-code/service/county-code.service';
 
 import { ServiceOutletUpdateComponent } from './service-outlet-update.component';
 

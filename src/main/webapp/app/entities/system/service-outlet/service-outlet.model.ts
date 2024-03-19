@@ -18,10 +18,10 @@
 
 import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { IOutletType } from 'app/entities/gdi/outlet-type/outlet-type.model';
-import { IOutletStatus } from 'app/entities/gdi/outlet-status/outlet-status.model';
-import { ICountyCode } from 'app/entities/gdi/county-code/county-code.model';
+import { IBankBranchCode } from 'app/entities/system/bank-branch-code/bank-branch-code.model';
+import { IOutletType } from 'app/entities/system/outlet-type/outlet-type.model';
+import { IOutletStatus } from 'app/entities/system/outlet-status/outlet-status.model';
+import { ICountyCode } from 'app/entities/system/county-code/county-code.model';
 
 export interface IServiceOutlet {
   id?: number;
