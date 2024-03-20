@@ -172,3 +172,4 @@ stats.html
 .env
 /src/main/webapp/app/entities/gdi/
 /src/main/webapp/app/entities/gdi-data/
+/src/test/javascript/e2e/entities/
