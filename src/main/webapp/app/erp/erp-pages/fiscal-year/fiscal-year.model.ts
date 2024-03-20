@@ -17,10 +17,10 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { FiscalYearStatusType } from 'app/entities/enumerations/fiscal-year-status-type.model';
+import { IPlaceholder } from '../placeholder/placeholder.model';
+import { IApplicationUser } from '../application-user/application-user.model';
+import { FiscalYearStatusType } from '../../erp-common/enumerations/fiscal-year-status-type.model';
+import { IUniversallyUniqueMapping } from '../universally-unique-mapping/universally-unique-mapping.model';
 
 export interface IFiscalYear {
   id?: number;

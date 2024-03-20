@@ -27,14 +27,14 @@ import { of, Subject } from 'rxjs';
 
 import { FiscalYearService } from '../service/fiscal-year.service';
 import { IFiscalYear, FiscalYear } from '../fiscal-year.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { FiscalYearUpdateComponent } from './fiscal-year-update.component';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { IApplicationUser } from '../../application-user/application-user.model';
+import { ApplicationUserService } from '../../application-user/service/application-user.service';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
 
 describe('FiscalYear Management Update Component', () => {
   let comp: FiscalYearUpdateComponent;

@@ -25,9 +25,9 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IMonthlyPrepaymentReportRequisition, MonthlyPrepaymentReportRequisition } from '../monthly-prepayment-report-requisition.model';
 import { MonthlyPrepaymentReportRequisitionService } from '../service/monthly-prepayment-report-requisition.service';
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
 import { ASC, DESC, ITEMS_PER_PAGE } from '../../../../config/pagination.constants';
+import { FiscalYearService } from '../../../erp-pages/fiscal-year/service/fiscal-year.service';
+import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
 
 @Component({
   selector: 'jhi-monthly-prepayment-report-requisition-update',

@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
+import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
 
 export interface IMonthlyPrepaymentReportRequisition {
   id?: number;

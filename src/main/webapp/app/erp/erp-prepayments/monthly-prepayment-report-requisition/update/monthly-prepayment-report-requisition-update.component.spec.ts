@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { FiscalYearService } from '../../../erp-pages/fiscal-year/service/fiscal-year.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,10 +29,9 @@ import { of, Subject } from 'rxjs';
 
 import { MonthlyPrepaymentReportRequisitionService } from '../service/monthly-prepayment-report-requisition.service';
 import { IMonthlyPrepaymentReportRequisition, MonthlyPrepaymentReportRequisition } from '../monthly-prepayment-report-requisition.model';
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
 
 import { MonthlyPrepaymentReportRequisitionUpdateComponent } from './monthly-prepayment-report-requisition-update.component';
+import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
 
 describe('MonthlyPrepaymentReportRequisition Management Update Component', () => {
   let comp: MonthlyPrepaymentReportRequisitionUpdateComponent;

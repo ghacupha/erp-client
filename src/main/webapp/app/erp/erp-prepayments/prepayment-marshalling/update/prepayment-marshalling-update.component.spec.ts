@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
 import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-marshalling.model';
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 
 import { PrepaymentMarshallingUpdateComponent } from './prepayment-marshalling-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
 
 describe('PrepaymentMarshalling Management Update Component', () => {
   let comp: PrepaymentMarshallingUpdateComponent;

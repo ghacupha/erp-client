@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,12 +29,11 @@ import { of, Subject } from 'rxjs';
 
 import { RouAssetNBVReportService } from '../service/rou-asset-nbv-report.service';
 import { IRouAssetNBVReport, RouAssetNBVReport } from '../rou-asset-nbv-report.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { RouAssetNBVReportUpdateComponent } from './rou-asset-nbv-report-update.component';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 
 describe('RouAssetNBVReport Management Update Component', () => {
   let comp: RouAssetNBVReportUpdateComponent;

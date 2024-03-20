@@ -21,10 +21,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { FiscalYearStatusType } from 'app/entities/enumerations/fiscal-year-status-type.model';
 import { IFiscalYear, FiscalYear } from '../fiscal-year.model';
 
 import { FiscalYearService } from './fiscal-year.service';
+import { FiscalYearStatusType } from '../../../erp-common/enumerations/fiscal-year-status-type.model';
 
 describe('FiscalYear Service', () => {
   let service: FiscalYearService;

@@ -20,8 +20,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { MonthlyPrepaymentReportRequisitionComponent } from '../list/monthly-prepayment-report-requisition.component';
-import { MonthlyPrepaymentReportRequisitionDetailComponent } from '../detail/monthly-prepayment-report-requisition-detail.component';
 import { MonthlyPrepaymentReportRequisitionUpdateComponent } from '../update/monthly-prepayment-report-requisition-update.component';
 import { MonthlyPrepaymentReportRequisitionRoutingResolveService } from './monthly-prepayment-report-requisition-routing-resolve.service';
 

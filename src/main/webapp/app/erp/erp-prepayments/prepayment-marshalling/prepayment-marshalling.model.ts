@@ -16,9 +16,9 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 
 export interface IPrepaymentMarshalling {
   id?: number;

@@ -25,13 +25,13 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IFiscalYear, FiscalYear } from '../fiscal-year.model';
 import { FiscalYearService } from '../service/fiscal-year.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { FiscalYearStatusType } from 'app/entities/enumerations/fiscal-year-status-type.model';
+import { IPlaceholder } from '../../placeholder/placeholder.model';
+import { IApplicationUser } from '../../application-user/application-user.model';
+import { UniversallyUniqueMappingService } from '../../universally-unique-mapping/service/universally-unique-mapping.service';
+import { FiscalYearStatusType } from '../../../erp-common/enumerations/fiscal-year-status-type.model';
+import { ApplicationUserService } from '../../application-user/service/application-user.service';
+import { IUniversallyUniqueMapping } from '../../universally-unique-mapping/universally-unique-mapping.model';
+import { PlaceholderService } from '../../placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-fiscal-year-update',
