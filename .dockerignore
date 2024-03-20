@@ -4,3 +4,6 @@
 /.github
 /node_modules
 stats.html
+/src/main/webapp/app/entities/
+/src/main/webapp/app/entities/gdi/
+/src/main/webapp/app/entities/gdi-data/

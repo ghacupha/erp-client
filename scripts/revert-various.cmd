@@ -28,6 +28,4 @@
 
 @echo off
 git checkout HEAD~1 src/main/webapp/app/entities/people/
-git checkout HEAD~1 src/main/webapp/app/entities/gdi/
-git checkout HEAD~1 src/main/webapp/app/entities/gdi-data/
 git checkout HEAD~1 src/main/webapp/app/entities/entity-routing.module.ts
