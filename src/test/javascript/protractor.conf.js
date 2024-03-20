@@ -1,5 +1,5 @@
 /*
- * Erp System - Mark X No 5 (Jehoiada Series) Client 1.7.3
+ * Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
  * Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
  *
  * This program is free software: you can redistribute it and/or modify
