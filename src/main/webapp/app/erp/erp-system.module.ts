@@ -33,7 +33,6 @@ import { ErpGranularModule } from './erp-granular/erp-granular.module';
 import { ErpPrepaymentsAccountingModule } from './erp-prepayments/erp-prepayments-accounting.module';
 import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-account.module';
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
-import { EntityRoutingModule } from '../entities/entity-routing.module';
 import { ErpLeasesModule } from './erp-leases/erp-leases.module';
 import { ErpGDIModule } from "./erp-gdi/erp-gdi.module";
 
@@ -72,7 +71,6 @@ export const routes: Routes = [];
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
-    EntityRoutingModule,
     ErpGDIModule,
   ]
 })
