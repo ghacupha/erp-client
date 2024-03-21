@@ -293,6 +293,32 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./net-book-value-entry/net-book-value-entry.module').then(m => m.NetBookValueEntryModule),
       },
+      {
+        path: 'asset-disposal',
+        data: {
+          pageTitle: 'ERP | Asset Disposal',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-disposal/asset-disposal.module').then(m => m.AssetDisposalModule),
+      },
+      {
+        path: 'asset-write-off',
+        data: {
+          pageTitle: 'ERP | Asset Write Off',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-write-off/asset-write-off.module').then(m => m.AssetWriteOffModule),
+      },
     ])
   ]
 })

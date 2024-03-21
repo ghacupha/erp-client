@@ -91,6 +91,30 @@
             <span>Asset Warranty</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-disposal"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Disposal</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-write-off"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Write Off</span>
+          </a>
+        </li>
       </ul>
     </li>
 
