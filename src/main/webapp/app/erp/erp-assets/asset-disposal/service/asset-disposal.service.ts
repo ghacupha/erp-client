@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IAssetDisposal[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AssetDisposalService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/asset-disposals');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/asset-disposals');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/asset-disposals');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/asset-disposals');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

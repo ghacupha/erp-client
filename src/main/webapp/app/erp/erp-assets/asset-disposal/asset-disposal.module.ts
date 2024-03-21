@@ -5,9 +5,10 @@ import { AssetDisposalDetailComponent } from './detail/asset-disposal-detail.com
 import { AssetDisposalUpdateComponent } from './update/asset-disposal-update.component';
 import { AssetDisposalDeleteDialogComponent } from './delete/asset-disposal-delete-dialog.component';
 import { AssetDisposalRoutingModule } from './route/asset-disposal-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetDisposalRoutingModule],
+  imports: [SharedModule, AssetDisposalRoutingModule, ErpCommonModule],
   declarations: [AssetDisposalComponent, AssetDisposalDetailComponent, AssetDisposalUpdateComponent, AssetDisposalDeleteDialogComponent],
   entryComponents: [AssetDisposalDeleteDialogComponent],
 })

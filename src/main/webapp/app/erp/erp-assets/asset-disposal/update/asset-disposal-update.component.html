@@ -23,6 +23,22 @@
           />
         </div>
 
+        <jhi-m21-asset-registration-form-control
+          ngDefaultControl
+          formControlName='assetDisposed'
+          [inputValue]="editForm.get('assetDisposed')!.value"
+          (valueSelected)='updateAssetDisposed($event)'
+          inputControlLabel='Asset Disposed'
+        >
+        </jhi-m21-asset-registration-form-control>
+        <div
+          *ngIf="
+            editForm.get(['assetDisposed'])!.invalid && (editForm.get(['assetDisposed'])!.dirty || editForm.get(['assetDisposed'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['assetDisposed'])?.errors?.required"> This field is required. </small>
+        </div>
+
         <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
@@ -155,83 +171,14 @@
           <input type="checkbox" class="form-check" name="dormant" id="field_dormant" data-cy="dormant" formControlName="dormant" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_modifiedBy">Modified By</label>
-          <select class="form-control" id="field_modifiedBy" data-cy="modifiedBy" name="modifiedBy" formControlName="modifiedBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('modifiedBy')!.value?.id
-                  ? editForm.get('modifiedBy')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastAccessedBy">Last Accessed By</label>
-          <select
-            class="form-control"
-            id="field_lastAccessedBy"
-            data-cy="lastAccessedBy"
-            name="lastAccessedBy"
-            formControlName="lastAccessedBy"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('lastAccessedBy')!.value?.id
-                  ? editForm.get('lastAccessedBy')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_effectivePeriod">Effective Period</label>
-          <select
-            class="form-control"
-            id="field_effectivePeriod"
-            data-cy="effectivePeriod"
-            name="effectivePeriod"
-            formControlName="effectivePeriod"
-          >
-            <option *ngIf="!editForm.get('effectivePeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                depreciationPeriodOption.id === editForm.get('effectivePeriod')!.value?.id
-                  ? editForm.get('effectivePeriod')!.value
-                  : depreciationPeriodOption
-              "
-              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
-            >
-              {{ depreciationPeriodOption.startDate }}
-            </option>
-          </select>
-        </div>
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='effectivePeriod'
+          [inputValue]="editForm.get('effectivePeriod')!.value"
+          (valueSelected)='updateEffectivePeriod($event)'
+          inputControlLabel='Effective Period'
+        >
+        </jhi-depreciation-period-form-control>
         <div
           *ngIf="
             editForm.get(['effectivePeriod'])!.invalid &&
@@ -241,54 +188,6 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['effectivePeriod'])?.errors?.required"> This field is required. </small>
         </div>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_assetDisposed">Asset Disposed</label>
-          <select
-            class="form-control"
-            id="field_assetDisposed"
-            data-cy="assetDisposed"
-            name="assetDisposed"
-            formControlName="assetDisposed"
-          >
-            <option *ngIf="editForm.get(['assetDisposed'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                assetRegistrationOption.id === editForm.get('assetDisposed')!.value?.id
-                  ? editForm.get('assetDisposed')!.value
-                  : assetRegistrationOption
-              "
-              *ngFor="let assetRegistrationOption of assetDisposedsCollection; trackBy: trackAssetRegistrationById"
-            >
-              {{ assetRegistrationOption.assetNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['assetDisposed'])!.invalid && (editForm.get(['assetDisposed'])!.dirty || editForm.get(['assetDisposed'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['assetDisposed'])?.errors?.required"> This field is required. </small>
-        </div>
       </div>
 
       <div>

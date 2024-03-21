@@ -5,9 +5,10 @@ import { AssetWriteOffDetailComponent } from './detail/asset-write-off-detail.co
 import { AssetWriteOffUpdateComponent } from './update/asset-write-off-update.component';
 import { AssetWriteOffDeleteDialogComponent } from './delete/asset-write-off-delete-dialog.component';
 import { AssetWriteOffRoutingModule } from './route/asset-write-off-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetWriteOffRoutingModule],
+  imports: [SharedModule, AssetWriteOffRoutingModule, ErpCommonModule],
   declarations: [AssetWriteOffComponent, AssetWriteOffDetailComponent, AssetWriteOffUpdateComponent, AssetWriteOffDeleteDialogComponent],
   entryComponents: [AssetWriteOffDeleteDialogComponent],
 })

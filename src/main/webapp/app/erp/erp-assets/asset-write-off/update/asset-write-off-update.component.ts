@@ -7,14 +7,15 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IAssetWriteOff, AssetWriteOff } from '../asset-write-off.model';
 import { AssetWriteOffService } from '../service/asset-write-off.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { AssetRegistrationService } from 'app/entities/assets/asset-registration/service/asset-registration.service';
+import { uuidv7 } from 'uuidv7';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { IAssetRegistration } from '../../asset-registration/asset-registration.model';
+import { AssetRegistrationService } from '../../asset-registration/service/asset-registration.service';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-asset-write-off-update',
@@ -54,10 +55,27 @@ export class AssetWriteOffUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetWriteOff }) => {
+
+      assetWriteOff.writeOffReferenceId = uuidv7();
+
       this.updateForm(assetWriteOff);
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateEffectivePeriod(update: IDepreciationPeriod): void {
+    this.editForm.patchValue({
+      effectivePeriod: update
+    })
+  }
+
+  updatePlaceholders(updated: IPlaceholder[]): void {
+    this.editForm.patchValue({ placeholders: [...updated] });
+  }
+
+  updateAssetWrittenOff(updated: IAssetRegistration): void {
+    this.editForm.patchValue({ assetWrittenOff: updated });
   }
 
   previousState(): void {

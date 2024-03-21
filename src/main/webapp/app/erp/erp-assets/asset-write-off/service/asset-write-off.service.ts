@@ -16,8 +16,8 @@ export type EntityArrayResponseType = HttpResponse<IAssetWriteOff[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AssetWriteOffService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/asset-write-offs');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/asset-write-offs');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/asset-write-offs');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/asset-write-offs');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
