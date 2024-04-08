@@ -30,6 +30,9 @@ const workInProgressRegistrationRoute: Routes = [
     path: '',
     component: WorkInProgressRegistrationComponent,
     canActivate: [UserRouteAccessService],
+    data: {
+      defaultSort: 'id,desc',
+    },
   },
   {
     path: ':id/view',
