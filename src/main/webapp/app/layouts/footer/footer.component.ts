@@ -38,7 +38,7 @@ export class FooterComponent implements OnInit {
 
   clientVersion = '1.7.4';
 
-  serverVersion = '1.7.3';
+  serverVersion = '1.7.6';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }

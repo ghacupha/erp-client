@@ -30,7 +30,7 @@ const depreciationBatchSequenceRoute: Routes = [
     path: '',
     component: DepreciationBatchSequenceComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
