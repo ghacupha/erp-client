@@ -71,7 +71,7 @@
             <a [routerLink]="['/asset-write-off', assetWriteOff.id, 'view']">{{ assetWriteOff.id }}</a>
           </td>
           <td>{{ assetWriteOff.description }}</td>
-          <td>{{ assetWriteOff.writeOffAmount }}</td>
+          <td>{{ assetWriteOff.writeOffAmount | currency }}</td>
           <td>{{ assetWriteOff.writeOffDate | formatMediumDate }}</td>
           <td>{{ assetWriteOff.writeOffReferenceId }}</td>
           <td>
