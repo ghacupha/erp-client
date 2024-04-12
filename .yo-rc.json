@@ -292,7 +292,8 @@
       "RouMonthlyDepreciationReportItem",
       "RouMonthlyDepreciationReport",
       "AssetDisposal",
-      "AssetWriteOff"
+      "AssetWriteOff",
+      "AssetRevaluation"
     ],
     "lastLiquibaseTimestamp": 1709634688000,
     "monorepository": true,
