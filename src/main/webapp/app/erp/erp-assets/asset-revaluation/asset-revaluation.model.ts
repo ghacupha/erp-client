@@ -17,11 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IAssetRegistration } from '../asset-registration/asset-registration.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IDepreciationPeriod } from '../depreciation-period/depreciation-period.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 export interface IAssetRevaluation {
   id?: number;

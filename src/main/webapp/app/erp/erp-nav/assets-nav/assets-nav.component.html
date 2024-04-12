@@ -115,6 +115,30 @@
             <span>Asset Write Off</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-revaluation"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset Revaluation</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="asset-general-adjustment"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Asset General Adjustment</span>
+          </a>
+        </li>
       </ul>
     </li>
 

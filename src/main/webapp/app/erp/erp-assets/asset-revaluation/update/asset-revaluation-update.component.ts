@@ -28,16 +28,16 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { IAssetRevaluation, AssetRevaluation } from '../asset-revaluation.model';
 import { AssetRevaluationService } from '../service/asset-revaluation.service';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { AssetRegistrationService } from 'app/entities/assets/asset-registration/service/asset-registration.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IAssetRegistration } from '../../asset-registration/asset-registration.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { AssetRegistrationService } from '../../asset-registration/service/asset-registration.service';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 @Component({
   selector: 'jhi-asset-revaluation-update',

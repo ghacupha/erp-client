@@ -319,6 +319,19 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./asset-write-off/asset-write-off.module').then(m => m.AssetWriteOffModule),
       },
+      {
+        path: 'asset-revaluation',
+        data: {
+          pageTitle: 'ERP | Asset Revaluation',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-revaluation/asset-revaluation.module').then(m => m.AssetRevaluationModule),
+      },
     ])
   ]
 })

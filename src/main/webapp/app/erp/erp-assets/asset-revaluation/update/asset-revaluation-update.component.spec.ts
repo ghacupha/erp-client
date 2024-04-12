@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IAssetRegistration } from '../../asset-registration/asset-registration.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,18 +29,17 @@ import { of, Subject } from 'rxjs';
 
 import { AssetRevaluationService } from '../service/asset-revaluation.service';
 import { IAssetRevaluation, AssetRevaluation } from '../asset-revaluation.model';
-import { IDealer } from 'app/entities/people/dealer/dealer.model';
-import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
-import { DepreciationPeriodService } from 'app/entities/assets/depreciation-period/service/depreciation-period.service';
-import { IAssetRegistration } from 'app/entities/assets/asset-registration/asset-registration.model';
-import { AssetRegistrationService } from 'app/entities/assets/asset-registration/service/asset-registration.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { AssetRevaluationUpdateComponent } from './asset-revaluation-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { AssetRegistrationService } from '../../asset-registration/service/asset-registration.service';
+import { DepreciationPeriodService } from '../../depreciation-period/service/depreciation-period.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
+import { IDepreciationPeriod } from '../../depreciation-period/depreciation-period.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 describe('AssetRevaluation Management Update Component', () => {
   let comp: AssetRevaluationUpdateComponent;
