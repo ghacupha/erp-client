@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
+    Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -92,7 +92,7 @@
             <a [routerLink]="['/asset-revaluation', assetRevaluation.id, 'view']">{{ assetRevaluation.id }}</a>
           </td>
           <td>{{ assetRevaluation.description }}</td>
-          <td>{{ assetRevaluation.devaluationAmount }}</td>
+          <td>{{ assetRevaluation.devaluationAmount | currency }}</td>
           <td>{{ assetRevaluation.revaluationDate | formatMediumDate }}</td>
           <td>{{ assetRevaluation.revaluationReferenceId }}</td>
           <td>{{ assetRevaluation.timeOfCreation | formatMediumDatetime }}</td>

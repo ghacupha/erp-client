@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
+/// Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@ import { IApplicationUser } from '../../../erp-pages/application-user/applicatio
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-asset-revaluation-update',
@@ -82,14 +83,29 @@ export class AssetRevaluationUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ assetRevaluation }) => {
       if (assetRevaluation.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         assetRevaluation.timeOfCreation = today;
+        assetRevaluation.revaluationReferenceId = uuidv7();
       }
 
       this.updateForm(assetRevaluation);
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateEffectivePeriod(update: IDepreciationPeriod): void {
+    this.editForm.patchValue({
+      effectivePeriod: update
+    })
+  }
+
+  updateRevaluedAsset(updated: IAssetRegistration): void {
+    this.editForm.patchValue({ revaluedAsset: updated });
+  }
+
+  updateRevaluer(updated: IDealer): void {
+    this.editForm.patchValue( { revaluer: updated });
   }
 
   previousState(): void {

@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
+/// Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -23,9 +23,10 @@ import { AssetRevaluationDetailComponent } from './detail/asset-revaluation-deta
 import { AssetRevaluationUpdateComponent } from './update/asset-revaluation-update.component';
 import { AssetRevaluationDeleteDialogComponent } from './delete/asset-revaluation-delete-dialog.component';
 import { AssetRevaluationRoutingModule } from './route/asset-revaluation-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, AssetRevaluationRoutingModule],
+  imports: [SharedModule, AssetRevaluationRoutingModule, ErpCommonModule],
   declarations: [
     AssetRevaluationComponent,
     AssetRevaluationDetailComponent,

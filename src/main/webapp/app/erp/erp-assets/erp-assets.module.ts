@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
+/// Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -332,9 +332,21 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./asset-revaluation/asset-revaluation.module').then(m => m.AssetRevaluationModule),
       },
+      {
+        path: 'asset-general-adjustment',
+        data: {
+          pageTitle: 'ERP | Asset Adjustment',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./asset-general-adjustment/asset-general-adjustment.module').then(m => m.AssetGeneralAdjustmentModule),
+      },
     ])
   ]
 })
 export class ErpAssetsModule {
-
 }

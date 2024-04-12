@@ -1,6 +1,6 @@
 <!--
 
-    Erp System - Mark X No 6 (Jehoiada Series) Client 1.7.4
+    Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
     Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
@@ -123,159 +123,34 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_revaluer">Revaluer</label>
-          <select class="form-control" id="field_revaluer" data-cy="revaluer" name="revaluer" formControlName="revaluer">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="dealerOption.id === editForm.get('revaluer')!.value?.id ? editForm.get('revaluer')!.value : dealerOption"
-              *ngFor="let dealerOption of dealersSharedCollection; trackBy: trackDealerById"
-            >
-              {{ dealerOption.dealerName }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastModifiedBy">Last Modified By</label>
-          <select
-            class="form-control"
-            id="field_lastModifiedBy"
-            data-cy="lastModifiedBy"
-            name="lastModifiedBy"
-            formControlName="lastModifiedBy"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('lastModifiedBy')!.value?.id
-                  ? editForm.get('lastModifiedBy')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastAccessedBy">Last Accessed By</label>
-          <select
-            class="form-control"
-            id="field_lastAccessedBy"
-            data-cy="lastAccessedBy"
-            name="lastAccessedBy"
-            formControlName="lastAccessedBy"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('lastAccessedBy')!.value?.id
-                  ? editForm.get('lastAccessedBy')!.value
-                  : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_effectivePeriod">Effective Period</label>
-          <select
-            class="form-control"
-            id="field_effectivePeriod"
-            data-cy="effectivePeriod"
-            name="effectivePeriod"
-            formControlName="effectivePeriod"
-          >
-            <option *ngIf="!editForm.get('effectivePeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                depreciationPeriodOption.id === editForm.get('effectivePeriod')!.value?.id
-                  ? editForm.get('effectivePeriod')!.value
-                  : depreciationPeriodOption
-              "
-              *ngFor="let depreciationPeriodOption of depreciationPeriodsSharedCollection; trackBy: trackDepreciationPeriodById"
-            >
-              {{ depreciationPeriodOption.periodCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['effectivePeriod'])!.invalid &&
-            (editForm.get(['effectivePeriod'])!.dirty || editForm.get(['effectivePeriod'])!.touched)
-          "
+        <jhi-m21-dealer-form-control
+          ngDefaultControl
+          formControlName='revaluer'
+          [inputValue]="editForm.get(['revaluer'])!.value"
+          (valueSelected)='updateRevaluer($event)'
+          inputControlLabel='Valuer'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['effectivePeriod'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get(['revaluer'])!.value"></option>
+        </jhi-m21-dealer-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_revaluedAsset">Revalued Asset</label>
-          <select
-            class="form-control"
-            id="field_revaluedAsset"
-            data-cy="revaluedAsset"
-            name="revaluedAsset"
-            formControlName="revaluedAsset"
-          >
-            <option *ngIf="!editForm.get('revaluedAsset')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                assetRegistrationOption.id === editForm.get('revaluedAsset')!.value?.id
-                  ? editForm.get('revaluedAsset')!.value
-                  : assetRegistrationOption
-              "
-              *ngFor="let assetRegistrationOption of assetRegistrationsSharedCollection; trackBy: trackAssetRegistrationById"
-            >
-              {{ assetRegistrationOption.assetNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['revaluedAsset'])!.invalid && (editForm.get(['revaluedAsset'])!.dirty || editForm.get(['revaluedAsset'])!.touched)
-          "
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='effectivePeriod'
+          [inputValue]="editForm.get('effectivePeriod')!.value"
+          (valueSelected)='updateEffectivePeriod($event)'
+          inputControlLabel='Effective Period'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['revaluedAsset'])?.errors?.required"> This field is required. </small>
-        </div>
+        </jhi-depreciation-period-form-control>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-asset-registration-form-control
+          ngDefaultControl
+          formControlName='revaluedAsset'
+          [inputValue]="editForm.get('revaluedAsset')!.value"
+          (valueSelected)='updateRevaluedAsset($event)'
+          inputControlLabel='Revalued Asset'
+        >
+        </jhi-m21-asset-registration-form-control>
+
       </div>
 
       <div>
