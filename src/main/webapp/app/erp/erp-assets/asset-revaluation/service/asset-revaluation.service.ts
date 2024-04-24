@@ -34,8 +34,8 @@ export type EntityArrayResponseType = HttpResponse<IAssetRevaluation[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AssetRevaluationService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/asset-revaluations');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/asset-revaluations');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/asset-revaluations');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/fixed-asset/_search/asset-revaluations');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
