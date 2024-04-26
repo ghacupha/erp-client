@@ -30,7 +30,7 @@ const businessDocumentRoute: Routes = [
     path: '',
     component: BusinessDocumentComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

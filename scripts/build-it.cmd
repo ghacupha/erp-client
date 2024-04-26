@@ -16,4 +16,4 @@
 @REM along with this program. If not, see <http://www.gnu.org/licenses/>.
 @REM
 
-docker build . -t ghacupha/erp-client:1.7.4
+docker build . -t ghacupha/erp-client:1.7.6
