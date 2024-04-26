@@ -150,6 +150,12 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         prepaymentGuid: uuidv4(),
       })
 
+      this.prepaymentAccountService.getNextCatalogueNumber().subscribe(nextValue => {
+        this.editForm.patchValue({
+          catalogueNumber: nextValue,
+        })
+      });
+
       this.updatePreferredCurrency();
 
       this.loadRelationshipsOptions();

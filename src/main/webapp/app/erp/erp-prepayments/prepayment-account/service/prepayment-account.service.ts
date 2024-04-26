@@ -70,6 +70,11 @@ export class PrepaymentAccountService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  getNextCatalogueNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/catalogue-number`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
