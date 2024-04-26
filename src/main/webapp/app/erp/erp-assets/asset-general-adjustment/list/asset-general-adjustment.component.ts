@@ -37,7 +37,7 @@ export class AssetGeneralAdjustmentComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 100;
   page?: number;
   predicate!: string;
   ascending!: boolean;

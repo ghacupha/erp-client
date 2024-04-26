@@ -30,7 +30,7 @@ const assetGeneralAdjustmentRoute: Routes = [
     path: '',
     component: AssetGeneralAdjustmentComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
