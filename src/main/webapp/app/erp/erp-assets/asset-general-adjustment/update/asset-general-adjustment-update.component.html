@@ -32,6 +32,24 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
+        <jhi-m21-asset-registration-form-control
+          ngDefaultControl
+          formControlName='assetRegistration'
+          [inputValue]="editForm.get('assetRegistration')!.value"
+          (valueSelected)='updateAssetRegistration($event)'
+          inputControlLabel='Asset Registration'
+        >
+        </jhi-m21-asset-registration-form-control>
+
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='effectivePeriod'
+          [inputValue]="editForm.get('effectivePeriod')!.value"
+          (valueSelected)='updateEffectivePeriod($event)'
+          inputControlLabel='Effective Period'
+        >
+        </jhi-depreciation-period-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
@@ -144,31 +162,6 @@
           </div>
         </div>
 
-        <jhi-depreciation-period-form-control
-          ngDefaultControl
-          formControlName='effectivePeriod'
-          [inputValue]="editForm.get('effectivePeriod')!.value"
-          (valueSelected)='updateEffectivePeriod($event)'
-          inputControlLabel='Effective Period'
-        >
-        </jhi-depreciation-period-form-control>
-        <div
-          *ngIf="
-            editForm.get(['effectivePeriod'])!.invalid &&
-            (editForm.get(['effectivePeriod'])!.dirty || editForm.get(['effectivePeriod'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['effectivePeriod'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <jhi-m21-asset-registration-form-control
-          ngDefaultControl
-          formControlName='assetRegistration'
-          [inputValue]="editForm.get('assetRegistration')!.value"
-          (valueSelected)='updateAssetRegistration($event)'
-          inputControlLabel='Asset Registration'
-        >
-        </jhi-m21-asset-registration-form-control>
         <div
           *ngIf="
             editForm.get(['assetRegistration'])!.invalid &&
