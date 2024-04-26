@@ -166,6 +166,13 @@ export class AssetRegistrationUpdateComponent implements OnInit {
 
     if (this.weAreCreating) {
       // this.loadRelationshipsOptions();
+      this.assetRegistrationService.getNextAssetNumber().subscribe(nextValue => {
+        if (nextValue.body) {
+          this.editForm.patchValue({
+            assetNumber: nextValue.body,
+          })
+        }
+      });
     }
   }
 

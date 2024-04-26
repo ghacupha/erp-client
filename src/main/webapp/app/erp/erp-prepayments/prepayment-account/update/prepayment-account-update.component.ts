@@ -151,9 +151,11 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
       })
 
       this.prepaymentAccountService.getNextCatalogueNumber().subscribe(nextValue => {
-        this.editForm.patchValue({
-          catalogueNumber: nextValue,
-        })
+        if (nextValue.body) {
+          this.editForm.patchValue({
+            catalogueNumber: nextValue.body,
+          })
+        }
       });
 
       this.updatePreferredCurrency();

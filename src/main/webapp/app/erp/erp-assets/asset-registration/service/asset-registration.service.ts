@@ -46,6 +46,11 @@ export class AssetRegistrationService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  getNextAssetNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/asset-number`, { observe: 'response' });
+  }
+
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(assetRegistration);
     return this.http
