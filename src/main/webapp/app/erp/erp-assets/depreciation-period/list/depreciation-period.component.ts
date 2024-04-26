@@ -37,7 +37,7 @@ export class DepreciationPeriodComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 20;
   page?: number;
   predicate!: string;
   ascending!: boolean;
