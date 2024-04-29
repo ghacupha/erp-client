@@ -75,6 +75,7 @@
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="periodCode"><span>Period Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fiscalMonth.fiscalMonthCode"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="amortizationPeriod.periodCode"><span>Amortization Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -91,6 +92,13 @@
             <div *ngIf="amortizationPeriod.fiscalMonth">
               <a [routerLink]="['/fiscal-month', amortizationPeriod.fiscalMonth?.id, 'view']">{{
                 amortizationPeriod.fiscalMonth?.fiscalMonthCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="amortizationPeriod.amortizationPeriod">
+              <a [routerLink]="['/amortization-period', amortizationPeriod.amortizationPeriod?.id, 'view']">{{
+                amortizationPeriod.amortizationPeriod?.periodCode
               }}</a>
             </div>
           </td>

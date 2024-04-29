@@ -104,6 +104,14 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.amortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentAmortization.amortizationPeriod?.id, 'view']">{{
+              prepaymentAmortization.amortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

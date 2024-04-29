@@ -23,6 +23,7 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
+import { IAmortizationPeriod } from 'app/entities/prepayments/amortization-period/amortization-period.model';
 
 export interface IPrepaymentAmortization {
   id?: number;
@@ -37,6 +38,7 @@ export interface IPrepaymentAmortization {
   placeholders?: IPlaceholder[] | null;
   fiscalMonth?: IFiscalMonth;
   prepaymentCompilationRequest?: IPrepaymentCompilationRequest;
+  amortizationPeriod?: IAmortizationPeriod;
 }
 
 export class PrepaymentAmortization implements IPrepaymentAmortization {
@@ -52,7 +54,8 @@ export class PrepaymentAmortization implements IPrepaymentAmortization {
     public creditAccount?: ITransactionAccount | null,
     public placeholders?: IPlaceholder[] | null,
     public fiscalMonth?: IFiscalMonth,
-    public prepaymentCompilationRequest?: IPrepaymentCompilationRequest
+    public prepaymentCompilationRequest?: IPrepaymentCompilationRequest,
+    public amortizationPeriod?: IAmortizationPeriod
   ) {
     this.inactive = this.inactive ?? false;
   }

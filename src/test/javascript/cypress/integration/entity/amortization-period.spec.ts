@@ -34,7 +34,7 @@ describe('AmortizationPeriod e2e test', () => {
   const amortizationPeriodPageUrlPattern = new RegExp('/amortization-period(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const amortizationPeriodSample = { sequenceNumber: 30238, startDate: '2024-04-27', endDate: '2024-04-27', periodCode: 'lavender' };
+  const amortizationPeriodSample = { sequenceNumber: 71147, periodCode: 'mobile open-source' };
 
   let amortizationPeriod: any;
   //let fiscalMonth: any;
@@ -73,6 +73,11 @@ describe('AmortizationPeriod e2e test', () => {
     cy.intercept('GET', '/api/fiscal-months', {
       statusCode: 200,
       body: [fiscalMonth],
+    });
+
+    cy.intercept('GET', '/api/amortization-periods', {
+      statusCode: 200,
+      body: [],
     });
 
   });
@@ -229,9 +234,7 @@ describe('AmortizationPeriod e2e test', () => {
 
       cy.get(`[data-cy="startDate"]`).type('2024-04-26').should('have.value', '2024-04-26');
 
-      cy.get(`[data-cy="endDate"]`).type('2024-04-26').should('have.value', '2024-04-26');
-
-      cy.get(`[data-cy="periodCode"]`).type('Data Direct').should('have.value', 'Data Direct');
+      cy.get(`[data-cy="periodCode"]`).type('Plastic').should('have.value', 'Plastic');
 
       cy.get(`[data-cy="fiscalMonth"]`).select(1);
 

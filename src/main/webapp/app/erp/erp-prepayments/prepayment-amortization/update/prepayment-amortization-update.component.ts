@@ -37,6 +37,8 @@ import { TransactionAccountService } from '../../../erp-accounts/transaction-acc
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
 import { IPrepaymentCompilationRequest } from '../../prepayment-compilation-request/prepayment-compilation-request.model';
+import { IAmortizationPeriod } from '../../amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from '../../amortization-period/service/amortization-period.service';
 
 @Component({
   selector: 'jhi-prepayment-amortization-update',
@@ -51,6 +53,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
   prepaymentCompilationRequestsSharedCollection: IPrepaymentCompilationRequest[] = [];
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -65,6 +68,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     placeholders: [],
     fiscalMonth: [null, Validators.required],
     prepaymentCompilationRequest: [null, Validators.required],
+    amortizationPeriod: [null, Validators.required],
   });
 
   constructor(
@@ -75,6 +79,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
     protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
+    protected amortizationPeriodService: AmortizationPeriodService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -85,6 +90,22 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      fiscalMonth: update,
+    });
+  }
+
+  updateFirstAmortizationPeriod(update: IAmortizationPeriod): void {
+    this.editForm.patchValue({
+      amortizationPeriod: update,
+    });
+  }
+
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
+    return item.id!;
   }
 
   previousState(): void {
@@ -169,6 +190,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       placeholders: prepaymentAmortization.placeholders,
       fiscalMonth: prepaymentAmortization.fiscalMonth,
       prepaymentCompilationRequest: prepaymentAmortization.prepaymentCompilationRequest,
+      amortizationPeriod: prepaymentAmortization.amortizationPeriod,
     });
 
     this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
@@ -196,7 +218,11 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       this.prepaymentCompilationRequestService.addPrepaymentCompilationRequestToCollectionIfMissing(
         this.prepaymentCompilationRequestsSharedCollection,
         prepaymentAmortization.prepaymentCompilationRequest
-      );
+    );
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentAmortization.amortizationPeriod
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -275,6 +301,19 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
         (prepaymentCompilationRequests: IPrepaymentCompilationRequest[]) =>
           (this.prepaymentCompilationRequestsSharedCollection = prepaymentCompilationRequests)
       );
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('amortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
+
   }
 
   protected createFromForm(): IPrepaymentAmortization {
@@ -291,6 +330,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       creditAccount: this.editForm.get(['creditAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
+      amortizationPeriod: this.editForm.get(['amortizationPeriod'])!.value,
       prepaymentCompilationRequest: this.editForm.get(['prepaymentCompilationRequest'])!.value,
     };
   }

@@ -27,6 +27,8 @@ import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-mar
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
+import { IAmortizationPeriod } from 'app/entities/prepayments/amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from 'app/entities/prepayments/amortization-period/service/amortization-period.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
@@ -40,6 +42,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   isSaving = false;
 
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
 
@@ -49,6 +52,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     amortizationPeriods: [],
     processed: [],
     prepaymentAccount: [null, Validators.required],
+    firstAmortizationPeriod: [null, Validators.required],
     placeholders: [],
     firstFiscalMonth: [null, Validators.required],
     lastFiscalMonth: [null, Validators.required],
@@ -57,6 +61,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected prepaymentAccountService: PrepaymentAccountService,
+    protected amortizationPeriodService: AmortizationPeriodService,
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
@@ -86,6 +91,10 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   }
 
   trackPrepaymentAccountById(index: number, item: IPrepaymentAccount): number {
+    return item.id!;
+  }
+
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
     return item.id!;
   }
 
@@ -134,6 +143,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       amortizationPeriods: prepaymentMarshalling.amortizationPeriods,
       processed: prepaymentMarshalling.processed,
       prepaymentAccount: prepaymentMarshalling.prepaymentAccount,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod,
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
@@ -142,6 +152,10 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
       this.prepaymentAccountsSharedCollection,
       prepaymentMarshalling.prepaymentAccount
+    );
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentMarshalling.firstAmortizationPeriod
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -167,6 +181,19 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
         )
       )
       .subscribe((prepaymentAccounts: IPrepaymentAccount[]) => (this.prepaymentAccountsSharedCollection = prepaymentAccounts));
+
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('firstAmortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
 
     this.placeholderService
       .query()
@@ -201,6 +228,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
       processed: this.editForm.get(['processed'])!.value,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,

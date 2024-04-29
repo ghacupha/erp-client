@@ -39,6 +39,7 @@ describe('PrepaymentAmortization e2e test', () => {
   let prepaymentAmortization: any;
   //let fiscalMonth: any;
   //let prepaymentCompilationRequest: any;
+  //let amortizationPeriod: any;
 
   before(() => {
     cy.window().then(win => {
@@ -66,6 +67,14 @@ describe('PrepaymentAmortization e2e test', () => {
       body: {"timeOfRequest":"2023-11-20T12:26:49.792Z","compilationStatus":"STARTED","itemsProcessed":95347,"compilationToken":"399be39b-ee13-402e-8ea0-16d01454acbd"},
     }).then(({ body }) => {
       prepaymentCompilationRequest = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/amortization-periods',
+      body: {"sequenceNumber":82102,"startDate":"2024-04-27","endDate":"2024-04-26","periodCode":"Metal bus Towels"},
+    }).then(({ body }) => {
+      amortizationPeriod = body;
     });
   });
    */
@@ -109,6 +118,11 @@ describe('PrepaymentAmortization e2e test', () => {
       body: [prepaymentCompilationRequest],
     });
 
+    cy.intercept('GET', '/api/amortization-periods', {
+      statusCode: 200,
+      body: [amortizationPeriod],
+    });
+
   });
    */
 
@@ -139,6 +153,14 @@ describe('PrepaymentAmortization e2e test', () => {
         url: `/api/prepayment-compilation-requests/${prepaymentCompilationRequest.id}`,
       }).then(() => {
         prepaymentCompilationRequest = undefined;
+      });
+    }
+    if (amortizationPeriod) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/amortization-periods/${amortizationPeriod.id}`,
+      }).then(() => {
+        amortizationPeriod = undefined;
       });
     }
   });
@@ -189,6 +211,7 @@ describe('PrepaymentAmortization e2e test', () => {
             ...prepaymentAmortizationSample,
             fiscalMonth: fiscalMonth,
             prepaymentCompilationRequest: prepaymentCompilationRequest,
+            amortizationPeriod: amortizationPeriod,
           },
         }).then(({ body }) => {
           prepaymentAmortization = body;
@@ -279,6 +302,7 @@ describe('PrepaymentAmortization e2e test', () => {
 
       cy.get(`[data-cy="fiscalMonth"]`).select(1);
       cy.get(`[data-cy="prepaymentCompilationRequest"]`).select(1);
+      cy.get(`[data-cy="amortizationPeriod"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

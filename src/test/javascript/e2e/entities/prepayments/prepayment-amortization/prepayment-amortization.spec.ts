@@ -79,6 +79,7 @@ describe('PrepaymentAmortization e2e test', () => {
             // prepaymentAmortizationUpdatePage.placeholderSelectLastOption(),
             prepaymentAmortizationUpdatePage.fiscalMonthSelectLastOption(),
             prepaymentAmortizationUpdatePage.prepaymentCompilationRequestSelectLastOption(),
+            prepaymentAmortizationUpdatePage.amortizationPeriodSelectLastOption(),
         ]);
 
         await prepaymentAmortizationUpdatePage.save();

@@ -53,12 +53,13 @@
             }}</a>
           </div>
         </dd>
-        <dt><span>Placeholder</span></dt>
+        <dt><span>First Amortization Period</span></dt>
         <dd>
-          <span *ngFor="let placeholder of prepaymentMarshalling.placeholders; let last = last">
-            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
+          <div *ngIf="prepaymentMarshalling.firstAmortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentMarshalling.firstAmortizationPeriod?.id, 'view']">{{
+              prepaymentMarshalling.firstAmortizationPeriod?.periodCode
+              }}</a>
+          </div>
         </dd>
         <dt><span>First Fiscal Month</span></dt>
         <dd>
@@ -75,6 +76,13 @@
               prepaymentMarshalling.lastFiscalMonth?.endDate
             }}</a>
           </div>
+        </dd>
+        <dt><span>Placeholder</span></dt>
+        <dd>
+          <span *ngFor="let placeholder of prepaymentMarshalling.placeholders; let last = last">
+            <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
         </dd>
       </dl>
 

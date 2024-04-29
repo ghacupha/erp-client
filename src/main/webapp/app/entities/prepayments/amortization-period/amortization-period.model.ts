@@ -26,6 +26,7 @@ export interface IAmortizationPeriod {
   endDate?: dayjs.Dayjs;
   periodCode?: string;
   fiscalMonth?: IFiscalMonth;
+  amortizationPeriod?: IAmortizationPeriod;
 }
 
 export class AmortizationPeriod implements IAmortizationPeriod {
@@ -35,7 +36,8 @@ export class AmortizationPeriod implements IAmortizationPeriod {
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
     public periodCode?: string,
-    public fiscalMonth?: IFiscalMonth
+    public fiscalMonth?: IFiscalMonth,
+    public amortizationPeriod?: IAmortizationPeriod
   ) {}
 }
 

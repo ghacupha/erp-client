@@ -27,5 +27,5 @@
 @REM ----------------------------------------------------------------------------
 
 @echo off
-git checkout HEAD~1 src/main/webapp/app/entities/
+@REM git checkout HEAD~1 src/main/webapp/app/entities/
 git checkout HEAD~1 src/main/webapp/app/entities/entity-routing.module.ts

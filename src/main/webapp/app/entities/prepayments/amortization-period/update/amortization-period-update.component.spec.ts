@@ -76,16 +76,41 @@ describe('AmortizationPeriod Management Update Component', () => {
       expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call AmortizationPeriod query and add missing value', () => {
+      const amortizationPeriod: IAmortizationPeriod = { id: 456 };
+      const amortizationPeriod: IAmortizationPeriod = { id: 80278 };
+      amortizationPeriod.amortizationPeriod = amortizationPeriod;
+
+      const amortizationPeriodCollection: IAmortizationPeriod[] = [{ id: 45822 }];
+      jest.spyOn(amortizationPeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: amortizationPeriodCollection })));
+      const additionalAmortizationPeriods = [amortizationPeriod];
+      const expectedCollection: IAmortizationPeriod[] = [...additionalAmortizationPeriods, ...amortizationPeriodCollection];
+      jest.spyOn(amortizationPeriodService, 'addAmortizationPeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ amortizationPeriod });
+      comp.ngOnInit();
+
+      expect(amortizationPeriodService.query).toHaveBeenCalled();
+      expect(amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing).toHaveBeenCalledWith(
+        amortizationPeriodCollection,
+        ...additionalAmortizationPeriods
+      );
+      expect(comp.amortizationPeriodsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const amortizationPeriod: IAmortizationPeriod = { id: 456 };
       const fiscalMonth: IFiscalMonth = { id: 67395 };
       amortizationPeriod.fiscalMonth = fiscalMonth;
+      const amortizationPeriod: IAmortizationPeriod = { id: 36232 };
+      amortizationPeriod.amortizationPeriod = amortizationPeriod;
 
       activatedRoute.data = of({ amortizationPeriod });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(amortizationPeriod));
       expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
+      expect(comp.amortizationPeriodsSharedCollection).toContain(amortizationPeriod);
     });
   });
 
@@ -158,6 +183,14 @@ describe('AmortizationPeriod Management Update Component', () => {
       it('Should return tracked FiscalMonth primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackFiscalMonthById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAmortizationPeriodById', () => {
+      it('Should return tracked AmortizationPeriod primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAmortizationPeriodById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

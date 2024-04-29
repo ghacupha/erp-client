@@ -45,6 +45,14 @@
         <dd>
           <span>{{ prepaymentAmortization.prepaymentAmount | currency }}</span>
         </dd>
+        <dt><span>Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="prepaymentAmortization.amortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentAmortization.amortizationPeriod?.id, 'view']">{{
+              prepaymentAmortization.amortizationPeriod?.periodCode
+              }}</a>
+          </div>
+        </dd>
         <dt><span>Inactive</span></dt>
         <dd>
           <span>{{ prepaymentAmortization.inactive }}</span>

@@ -53,6 +53,14 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>First Amortization Period</span></dt>
+        <dd>
+          <div *ngIf="prepaymentMarshalling.firstAmortizationPeriod">
+            <a [routerLink]="['/amortization-period', prepaymentMarshalling.firstAmortizationPeriod?.id, 'view']">{{
+              prepaymentMarshalling.firstAmortizationPeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
           <span *ngFor="let placeholder of prepaymentMarshalling.placeholders; let last = last">

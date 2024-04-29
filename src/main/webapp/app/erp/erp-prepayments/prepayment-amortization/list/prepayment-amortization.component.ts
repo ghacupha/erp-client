@@ -37,7 +37,7 @@ export class PrepaymentAmortizationComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 50;
   page?: number;
   predicate!: string;
   ascending!: boolean;

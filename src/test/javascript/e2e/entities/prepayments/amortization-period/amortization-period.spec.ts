@@ -73,6 +73,7 @@ describe('AmortizationPeriod e2e test', () => {
             amortizationPeriodUpdatePage.setEndDateInput('2000-12-31'),
             amortizationPeriodUpdatePage.setPeriodCodeInput('periodCode'),
             amortizationPeriodUpdatePage.fiscalMonthSelectLastOption(),
+            amortizationPeriodUpdatePage.amortizationPeriodSelectLastOption(),
         ]);
 
         await amortizationPeriodUpdatePage.save();

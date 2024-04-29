@@ -74,6 +74,9 @@
           <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="processed"><span>Processed</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber"><span>Prepayment Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="firstAmortizationPeriod.periodCode">
+            <span>First Amortization Period</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="firstFiscalMonth.startDate"><span>First Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastFiscalMonth.endDate"><span>Last Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -91,6 +94,13 @@
             <div *ngIf="prepaymentMarshalling.prepaymentAccount">
               <a [routerLink]="['/prepayment-account', prepaymentMarshalling.prepaymentAccount?.id, 'view']">{{
                 prepaymentMarshalling.prepaymentAccount?.catalogueNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="prepaymentMarshalling.firstAmortizationPeriod">
+              <a [routerLink]="['/amortization-period', prepaymentMarshalling.firstAmortizationPeriod?.id, 'view']">{{
+                prepaymentMarshalling.firstAmortizationPeriod?.periodCode
               }}</a>
             </div>
           </td>

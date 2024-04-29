@@ -187,26 +187,6 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
-          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
-            <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.endDate }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
-        </div>
-
         <jhi-m21-fiscal-month-form-control
           ngDefaultControl
           [disabledInput]=false

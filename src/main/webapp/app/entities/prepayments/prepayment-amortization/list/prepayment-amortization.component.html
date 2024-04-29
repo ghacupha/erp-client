@@ -84,6 +84,7 @@
           <th scope="col" jhiSortBy="prepaymentCompilationRequest.id">
             <span>Prepayment Compilation Request</span> <fa-icon icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="amortizationPeriod.periodCode"><span>Amortization Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -135,6 +136,13 @@
             <div *ngIf="prepaymentAmortization.prepaymentCompilationRequest">
               <a [routerLink]="['/prepayment-compilation-request', prepaymentAmortization.prepaymentCompilationRequest?.id, 'view']">{{
                 prepaymentAmortization.prepaymentCompilationRequest?.id
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="prepaymentAmortization.amortizationPeriod">
+              <a [routerLink]="['/amortization-period', prepaymentAmortization.amortizationPeriod?.id, 'view']">{{
+                prepaymentAmortization.amortizationPeriod?.periodCode
               }}</a>
             </div>
           </td>

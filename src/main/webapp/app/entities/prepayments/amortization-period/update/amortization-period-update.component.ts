@@ -36,6 +36,7 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
   isSaving = false;
 
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -44,6 +45,7 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
     endDate: [null, [Validators.required]],
     periodCode: [null, [Validators.required]],
     fiscalMonth: [null, Validators.required],
+    amortizationPeriod: [],
   });
 
   constructor(
@@ -79,6 +81,10 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IAmortizationPeriod>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -106,11 +112,16 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
       endDate: amortizationPeriod.endDate,
       periodCode: amortizationPeriod.periodCode,
       fiscalMonth: amortizationPeriod.fiscalMonth,
+      amortizationPeriod: amortizationPeriod.amortizationPeriod,
     });
 
     this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
       this.fiscalMonthsSharedCollection,
       amortizationPeriod.fiscalMonth
+    );
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      amortizationPeriod.amortizationPeriod
     );
   }
 
@@ -124,6 +135,19 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
         )
       )
       .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
+
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('amortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
   }
 
   protected createFromForm(): IAmortizationPeriod {
@@ -135,6 +159,7 @@ export class AmortizationPeriodUpdateComponent implements OnInit {
       endDate: this.editForm.get(['endDate'])!.value,
       periodCode: this.editForm.get(['periodCode'])!.value,
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
+      amortizationPeriod: this.editForm.get(['amortizationPeriod'])!.value,
     };
   }
 }

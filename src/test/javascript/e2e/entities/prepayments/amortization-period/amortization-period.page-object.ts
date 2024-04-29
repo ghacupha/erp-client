@@ -54,6 +54,7 @@ export class AmortizationPeriodUpdatePage {
   periodCodeInput = element(by.id('field_periodCode'));
 
   fiscalMonthSelect = element(by.id('field_fiscalMonth'));
+  amortizationPeriodSelect = element(by.id('field_amortizationPeriod'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -113,6 +114,22 @@ export class AmortizationPeriodUpdatePage {
 
   async getFiscalMonthSelectedOption(): Promise<string> {
     return await this.fiscalMonthSelect.element(by.css('option:checked')).getText();
+  }
+
+  async amortizationPeriodSelectLastOption(): Promise<void> {
+    await this.amortizationPeriodSelect.all(by.tagName('option')).last().click();
+  }
+
+  async amortizationPeriodSelectOption(option: string): Promise<void> {
+    await this.amortizationPeriodSelect.sendKeys(option);
+  }
+
+  getAmortizationPeriodSelect(): ElementFinder {
+    return this.amortizationPeriodSelect;
+  }
+
+  async getAmortizationPeriodSelectedOption(): Promise<string> {
+    return await this.amortizationPeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
