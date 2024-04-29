@@ -30,7 +30,7 @@ const assetWriteOffRoute: Routes = [
     path: '',
     component: AssetWriteOffComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
