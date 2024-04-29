@@ -29,16 +29,14 @@ import {
   entityConfirmDeleteButtonSelector,
 } from '../../support/entity';
 
-describe('PrepaymentMarshalling e2e test', () => {
-  const prepaymentMarshallingPageUrl = '/prepayment-marshalling';
-  const prepaymentMarshallingPageUrlPattern = new RegExp('/prepayment-marshalling(\\?.*)?$');
+describe('AmortizationPeriod e2e test', () => {
+  const amortizationPeriodPageUrl = '/amortization-period';
+  const amortizationPeriodPageUrlPattern = new RegExp('/amortization-period(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentMarshallingSample = { inactive: false };
+  const amortizationPeriodSample = { sequenceNumber: 30238, startDate: '2024-04-27', endDate: '2024-04-27', periodCode: 'lavender' };
 
-  let prepaymentMarshalling: any;
-  //let prepaymentAccount: any;
-  //let amortizationPeriod: any;
+  let amortizationPeriod: any;
   //let fiscalMonth: any;
 
   before(() => {
@@ -55,24 +53,8 @@ describe('PrepaymentMarshalling e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/prepayment-accounts',
-      body: {"catalogueNumber":"Chicken","recognitionDate":"2022-05-01","particulars":"neural-net","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":97856,"prepaymentGuid":"e7c8a9da-6456-4e55-91cd-07b241375610"},
-    }).then(({ body }) => {
-      prepaymentAccount = body;
-    });
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/amortization-periods',
-      body: {"sequenceNumber":20285,"periodCode":"Alabama pink Generic"},
-    }).then(({ body }) => {
-      amortizationPeriod = body;
-    });
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
       url: '/api/fiscal-months',
-      body: {"monthNumber":63703,"startDate":"2023-08-16","endDate":"2023-08-16","fiscalMonthCode":"deposit throughput"},
+      body: {"monthNumber":57522,"startDate":"2023-08-16","endDate":"2023-08-16","fiscalMonthCode":"Manager"},
     }).then(({ body }) => {
       fiscalMonth = body;
     });
@@ -80,29 +62,14 @@ describe('PrepaymentMarshalling e2e test', () => {
    */
 
   beforeEach(() => {
-    cy.intercept('GET', '/api/prepayment-marshallings+(?*|)').as('entitiesRequest');
-    cy.intercept('POST', '/api/prepayment-marshallings').as('postEntityRequest');
-    cy.intercept('DELETE', '/api/prepayment-marshallings/*').as('deleteEntityRequest');
+    cy.intercept('GET', '/api/amortization-periods+(?*|)').as('entitiesRequest');
+    cy.intercept('POST', '/api/amortization-periods').as('postEntityRequest');
+    cy.intercept('DELETE', '/api/amortization-periods/*').as('deleteEntityRequest');
   });
 
   /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/prepayment-accounts', {
-      statusCode: 200,
-      body: [prepaymentAccount],
-    });
-
-    cy.intercept('GET', '/api/amortization-periods', {
-      statusCode: 200,
-      body: [amortizationPeriod],
-    });
-
-    cy.intercept('GET', '/api/placeholders', {
-      statusCode: 200,
-      body: [],
-    });
-
     cy.intercept('GET', '/api/fiscal-months', {
       statusCode: 200,
       body: [fiscalMonth],
@@ -112,26 +79,6 @@ describe('PrepaymentMarshalling e2e test', () => {
    */
 
   afterEach(() => {
-    if (prepaymentMarshalling) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/prepayment-marshallings/${prepaymentMarshalling.id}`,
-      }).then(() => {
-        prepaymentMarshalling = undefined;
-      });
-    }
-  });
-
-  /* Disabled due to incompatibility
-  afterEach(() => {
-    if (prepaymentAccount) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/prepayment-accounts/${prepaymentAccount.id}`,
-      }).then(() => {
-        prepaymentAccount = undefined;
-      });
-    }
     if (amortizationPeriod) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -140,6 +87,10 @@ describe('PrepaymentMarshalling e2e test', () => {
         amortizationPeriod = undefined;
       });
     }
+  });
+
+  /* Disabled due to incompatibility
+  afterEach(() => {
     if (fiscalMonth) {
       cy.authenticatedRequest({
         method: 'DELETE',
@@ -151,9 +102,9 @@ describe('PrepaymentMarshalling e2e test', () => {
   });
    */
 
-  it('PrepaymentMarshallings menu should load PrepaymentMarshallings page', () => {
+  it('AmortizationPeriods menu should load AmortizationPeriods page', () => {
     cy.visit('/');
-    cy.clickOnEntityMenuItem('prepayment-marshalling');
+    cy.clickOnEntityMenuItem('amortization-period');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response!.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -161,27 +112,27 @@ describe('PrepaymentMarshalling e2e test', () => {
         cy.get(entityTableSelector).should('exist');
       }
     });
-    cy.getEntityHeading('PrepaymentMarshalling').should('exist');
-    cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+    cy.getEntityHeading('AmortizationPeriod').should('exist');
+    cy.url().should('match', amortizationPeriodPageUrlPattern);
   });
 
-  describe('PrepaymentMarshalling page', () => {
+  describe('AmortizationPeriod page', () => {
     describe('create button click', () => {
       beforeEach(() => {
-        cy.visit(prepaymentMarshallingPageUrl);
+        cy.visit(amortizationPeriodPageUrl);
         cy.wait('@entitiesRequest');
       });
 
-      it('should load create PrepaymentMarshalling page', () => {
+      it('should load create AmortizationPeriod page', () => {
         cy.get(entityCreateButtonSelector).click({ force: true });
-        cy.url().should('match', new RegExp('/prepayment-marshalling/new$'));
-        cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+        cy.url().should('match', new RegExp('/amortization-period/new$'));
+        cy.getEntityCreateUpdateHeading('AmortizationPeriod');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click({ force: true });
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+        cy.url().should('match', amortizationPeriodPageUrlPattern);
       });
     });
 
@@ -190,39 +141,36 @@ describe('PrepaymentMarshalling e2e test', () => {
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
-          url: '/api/prepayment-marshallings',
+          url: '/api/amortization-periods',
   
           body: {
-            ...prepaymentMarshallingSample,
-            prepaymentAccount: prepaymentAccount,
-            firstAmortizationPeriod: amortizationPeriod,
-            firstFiscalMonth: fiscalMonth,
-            lastFiscalMonth: fiscalMonth,
+            ...amortizationPeriodSample,
+            fiscalMonth: fiscalMonth,
           },
         }).then(({ body }) => {
-          prepaymentMarshalling = body;
+          amortizationPeriod = body;
 
           cy.intercept(
             {
               method: 'GET',
-              url: '/api/prepayment-marshallings+(?*|)',
+              url: '/api/amortization-periods+(?*|)',
               times: 1,
             },
             {
               statusCode: 200,
-              body: [prepaymentMarshalling],
+              body: [amortizationPeriod],
             }
           ).as('entitiesRequestInternal');
         });
 
-        cy.visit(prepaymentMarshallingPageUrl);
+        cy.visit(amortizationPeriodPageUrl);
 
         cy.wait('@entitiesRequestInternal');
       });
        */
 
       beforeEach(function () {
-        cy.visit(prepaymentMarshallingPageUrl);
+        cy.visit(amortizationPeriodPageUrl);
 
         cy.wait('@entitiesRequest').then(({ response }) => {
           if (response!.body.length === 0) {
@@ -231,30 +179,30 @@ describe('PrepaymentMarshalling e2e test', () => {
         });
       });
 
-      it('detail button click should load details PrepaymentMarshalling page', () => {
+      it('detail button click should load details AmortizationPeriod page', () => {
         cy.get(entityDetailsButtonSelector).first().click();
-        cy.getEntityDetailsHeading('prepaymentMarshalling');
+        cy.getEntityDetailsHeading('amortizationPeriod');
         cy.get(entityDetailsBackButtonSelector).click({ force: true });
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+        cy.url().should('match', amortizationPeriodPageUrlPattern);
       });
 
-      it('edit button click should load edit PrepaymentMarshalling page', () => {
+      it('edit button click should load edit AmortizationPeriod page', () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+        cy.getEntityCreateUpdateHeading('AmortizationPeriod');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click({ force: true });
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+        cy.url().should('match', amortizationPeriodPageUrlPattern);
       });
 
-      it.skip('last delete button click should delete instance of PrepaymentMarshalling', () => {
+      it.skip('last delete button click should delete instance of AmortizationPeriod', () => {
         cy.get(entityDeleteButtonSelector).last().click();
-        cy.getEntityDeleteDialogHeading('prepaymentMarshalling').should('exist');
+        cy.getEntityDeleteDialogHeading('amortizationPeriod').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
         cy.wait('@deleteEntityRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(204);
@@ -262,44 +210,41 @@ describe('PrepaymentMarshalling e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response!.statusCode).to.equal(200);
         });
-        cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+        cy.url().should('match', amortizationPeriodPageUrlPattern);
 
-        prepaymentMarshalling = undefined;
+        amortizationPeriod = undefined;
       });
     });
   });
 
-  describe('new PrepaymentMarshalling page', () => {
+  describe('new AmortizationPeriod page', () => {
     beforeEach(() => {
-      cy.visit(`${prepaymentMarshallingPageUrl}`);
+      cy.visit(`${amortizationPeriodPageUrl}`);
       cy.get(entityCreateButtonSelector).click({ force: true });
-      cy.getEntityCreateUpdateHeading('PrepaymentMarshalling');
+      cy.getEntityCreateUpdateHeading('AmortizationPeriod');
     });
 
-    it.skip('should create an instance of PrepaymentMarshalling', () => {
-      cy.get(`[data-cy="inactive"]`).should('not.be.checked');
-      cy.get(`[data-cy="inactive"]`).click().should('be.checked');
+    it.skip('should create an instance of AmortizationPeriod', () => {
+      cy.get(`[data-cy="sequenceNumber"]`).type('22477').should('have.value', '22477');
 
-      cy.get(`[data-cy="amortizationPeriods"]`).type('7531').should('have.value', '7531');
+      cy.get(`[data-cy="startDate"]`).type('2024-04-26').should('have.value', '2024-04-26');
 
-      cy.get(`[data-cy="processed"]`).should('not.be.checked');
-      cy.get(`[data-cy="processed"]`).click().should('be.checked');
+      cy.get(`[data-cy="endDate"]`).type('2024-04-26').should('have.value', '2024-04-26');
 
-      cy.get(`[data-cy="prepaymentAccount"]`).select(1);
-      cy.get(`[data-cy="firstAmortizationPeriod"]`).select(1);
-      cy.get(`[data-cy="firstFiscalMonth"]`).select(1);
-      cy.get(`[data-cy="lastFiscalMonth"]`).select(1);
+      cy.get(`[data-cy="periodCode"]`).type('Data Direct').should('have.value', 'Data Direct');
+
+      cy.get(`[data-cy="fiscalMonth"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
         expect(response!.statusCode).to.equal(201);
-        prepaymentMarshalling = response!.body;
+        amortizationPeriod = response!.body;
       });
       cy.wait('@entitiesRequest').then(({ response }) => {
         expect(response!.statusCode).to.equal(200);
       });
-      cy.url().should('match', prepaymentMarshallingPageUrlPattern);
+      cy.url().should('match', amortizationPeriodPageUrlPattern);
     });
   });
 });

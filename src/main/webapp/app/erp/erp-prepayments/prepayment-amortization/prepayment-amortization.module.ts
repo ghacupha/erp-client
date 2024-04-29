@@ -23,9 +23,10 @@ import { PrepaymentAmortizationDetailComponent } from './detail/prepayment-amort
 import { PrepaymentAmortizationUpdateComponent } from './update/prepayment-amortization-update.component';
 import { PrepaymentAmortizationDeleteDialogComponent } from './delete/prepayment-amortization-delete-dialog.component';
 import { PrepaymentAmortizationRoutingModule } from './route/prepayment-amortization-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, PrepaymentAmortizationRoutingModule],
+  imports: [SharedModule, PrepaymentAmortizationRoutingModule, ErpCommonModule],
   declarations: [
     PrepaymentAmortizationComponent,
     PrepaymentAmortizationDetailComponent,

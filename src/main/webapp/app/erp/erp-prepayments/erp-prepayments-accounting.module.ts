@@ -175,6 +175,16 @@ import { NgModule } from '@angular/core';
             loadChildren: () =>
               import('./monthly-prepayment-report-requisition/monthly-prepayment-report-requisition.module').then(m => m.MonthlyPrepaymentReportRequisitionModule),
         },
+        {
+            path: 'amortization-period',
+            data: {
+              pageTitle: 'Amortization Period',
+              authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+            },
+            canActivate: [UserRouteAccessService],
+            loadChildren: () =>
+              import('./amortization-period/amortization-period.module').then(m => m.AmortizationPeriodModule),
+        },
       ]
     )
   ]

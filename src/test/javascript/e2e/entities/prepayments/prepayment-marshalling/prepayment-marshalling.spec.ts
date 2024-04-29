@@ -72,6 +72,7 @@ describe('PrepaymentMarshalling e2e test', () => {
             prepaymentMarshallingUpdatePage.setAmortizationPeriodsInput('5'),
             prepaymentMarshallingUpdatePage.getProcessedInput().click(),
             prepaymentMarshallingUpdatePage.prepaymentAccountSelectLastOption(),
+            prepaymentMarshallingUpdatePage.firstAmortizationPeriodSelectLastOption(),
             // prepaymentMarshallingUpdatePage.placeholderSelectLastOption(),
             prepaymentMarshallingUpdatePage.firstFiscalMonthSelectLastOption(),
             prepaymentMarshallingUpdatePage.lastFiscalMonthSelectLastOption(),

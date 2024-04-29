@@ -76,6 +76,7 @@ import { FormatDepreciationJobPipe } from './depreciation-job/format-depreciatio
 import { DepreciationPeriodFormComponentsModule } from './depreciation-period/depreciation-period-form-components.module';
 import { Ifrs16LeaseContractComponentsModule } from './ifrs16-lease-contract-components/ifrs-16-lease-contract-components.module';
 import { AssetRegistrationFormComponentsModule } from './asset-registration-form-components/asset-registration-form-components.module';
+import { AmortizationPeriodFormComponentsModule } from './amortization-period/amortization-period-form-components.module';
 
 @NgModule({
   declarations: [
@@ -194,6 +195,7 @@ import { AssetRegistrationFormComponentsModule } from './asset-registration-form
     DepreciationPeriodFormComponentsModule,
     Ifrs16LeaseContractComponentsModule,
     AssetRegistrationFormComponentsModule,
+    AmortizationPeriodFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

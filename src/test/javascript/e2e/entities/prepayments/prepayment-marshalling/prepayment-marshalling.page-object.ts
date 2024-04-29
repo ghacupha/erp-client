@@ -53,6 +53,7 @@ export class PrepaymentMarshallingUpdatePage {
   processedInput = element(by.id('field_processed'));
 
   prepaymentAccountSelect = element(by.id('field_prepaymentAccount'));
+  firstAmortizationPeriodSelect = element(by.id('field_firstAmortizationPeriod'));
   placeholderSelect = element(by.id('field_placeholder'));
   firstFiscalMonthSelect = element(by.id('field_firstFiscalMonth'));
   lastFiscalMonthSelect = element(by.id('field_lastFiscalMonth'));
@@ -99,6 +100,22 @@ export class PrepaymentMarshallingUpdatePage {
 
   async getPrepaymentAccountSelectedOption(): Promise<string> {
     return await this.prepaymentAccountSelect.element(by.css('option:checked')).getText();
+  }
+
+  async firstAmortizationPeriodSelectLastOption(): Promise<void> {
+    await this.firstAmortizationPeriodSelect.all(by.tagName('option')).last().click();
+  }
+
+  async firstAmortizationPeriodSelectOption(option: string): Promise<void> {
+    await this.firstAmortizationPeriodSelect.sendKeys(option);
+  }
+
+  getFirstAmortizationPeriodSelect(): ElementFinder {
+    return this.firstAmortizationPeriodSelect;
+  }
+
+  async getFirstAmortizationPeriodSelectedOption(): Promise<string> {
+    return await this.firstAmortizationPeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {

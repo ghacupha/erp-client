@@ -294,7 +294,8 @@
       "AssetDisposal",
       "AssetWriteOff",
       "AssetRevaluation",
-      "AssetGeneralAdjustment"
+      "AssetGeneralAdjustment",
+      "AmortizationPeriod"
     ],
     "lastLiquibaseTimestamp": 1709634688000,
     "monorepository": true,

@@ -19,6 +19,7 @@
 import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IAmortizationPeriod } from '../amortization-period/amortization-period.model';
 
 export interface IPrepaymentMarshalling {
   id?: number;
@@ -29,6 +30,7 @@ export interface IPrepaymentMarshalling {
   placeholders?: IPlaceholder[] | null;
   firstFiscalMonth?: IFiscalMonth;
   lastFiscalMonth?: IFiscalMonth;
+  firstAmortizationPeriod?: IAmortizationPeriod;
 }
 
 export class PrepaymentMarshalling implements IPrepaymentMarshalling {
@@ -40,7 +42,8 @@ export class PrepaymentMarshalling implements IPrepaymentMarshalling {
     public prepaymentAccount?: IPrepaymentAccount,
     public placeholders?: IPlaceholder[] | null,
     public firstFiscalMonth?: IFiscalMonth,
-    public lastFiscalMonth?: IFiscalMonth
+    public lastFiscalMonth?: IFiscalMonth,
+    public firstAmortizationPeriod?: IAmortizationPeriod,
   ) {
     this.inactive = this.inactive ?? false;
     this.processed = this.processed ?? false;

@@ -207,6 +207,29 @@
           <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
         </div>
 
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]=false
+          formControlName='fiscalMonth'
+          [inputValue]="editForm.get('fiscalMonth')!.value"
+          (valueSelected)='updateFiscalMonth($event)'
+          inputControlLabel='Fiscal Month'
+        >
+          <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
+
+        <!--// TODO firstAmortizationPeriod -->
+        <jhi-m21-amortization-period-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('amortizationPeriod')!.value"
+          formControlName='amortizationPeriod'
+          [inputValue]="editForm.get('amortizationPeriod')!.value"
+          (valueSelected)='updateFirstAmortizationPeriod($event)'
+          inputControlLabel='Amortization Period'
+        >
+          <option [ngValue]="editForm.get('amortizationPeriod')!.value"></option>
+        </jhi-m21-amortization-period-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_prepaymentCompilationRequest">Prepayment Compilation Request</label>
           <select

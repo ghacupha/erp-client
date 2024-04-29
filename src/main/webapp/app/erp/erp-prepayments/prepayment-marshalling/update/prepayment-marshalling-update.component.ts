@@ -39,6 +39,8 @@ import {
   editingPrepaymentMarshallingStatus,
   prepaymentMarshallingUpdateSelectedInstance
 } from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
+import { IAmortizationPeriod } from '../../amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from '../../amortization-period/service/amortization-period.service';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
@@ -47,6 +49,7 @@ import {
 export class PrepaymentMarshallingUpdateComponent implements OnInit {
   isSaving = false;
 
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
@@ -63,6 +66,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     amortizationPeriods: [],
     processed: [],
     prepaymentAccount: [null, Validators.required],
+    firstAmortizationPeriod: [null, Validators.required],
     placeholders: [],
     firstFiscalMonth: [null, Validators.required],
     lastFiscalMonth: [null, Validators.required],
@@ -71,6 +75,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected prepaymentAccountService: PrepaymentAccountService,
+    protected amortizationPeriodService: AmortizationPeriodService,
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
@@ -101,6 +106,12 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   updatePrepaymentAccount(update: IPrepaymentAccount): void {
     this.editForm.patchValue({
       prepaymentAccount: update,
+    });
+  }
+
+  updateFirstAmortizationPeriod(update: IAmortizationPeriod): void {
+    this.editForm.patchValue({
+      firstAmortizationPeriod: update,
     });
   }
 
@@ -139,6 +150,10 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   copy(): void {
     this.isSaving = true;
     this.subscribeToSaveResponse(this.prepaymentMarshallingService.create(this.copyFromForm()));
+  }
+
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
+    return item.id!;
   }
 
   trackPrepaymentAccountById(index: number, item: IPrepaymentAccount): number {
@@ -193,8 +208,13 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod,
     });
 
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentMarshalling.firstAmortizationPeriod
+    );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(prepaymentMarshalling.placeholders ?? [])
@@ -216,8 +236,13 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod,
     });
 
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentMarshalling.firstAmortizationPeriod
+    );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(prepaymentMarshalling.placeholders ?? [])
@@ -242,6 +267,19 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
         )
       )
       .subscribe((prepaymentAccounts: IPrepaymentAccount[]) => (this.prepaymentAccountsSharedCollection = prepaymentAccounts));
+
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('firstAmortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
 
     this.placeholderService
       .query()
@@ -279,6 +317,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value,
     };
   }
 
@@ -293,6 +332,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value,
     };
   }
 }
