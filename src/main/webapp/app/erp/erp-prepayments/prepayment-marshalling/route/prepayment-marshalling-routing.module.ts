@@ -30,7 +30,7 @@ const prepaymentMarshallingRoute: Routes = [
     path: '',
     component: PrepaymentMarshallingComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

@@ -30,7 +30,7 @@ const prepaymentAmortizationRoute: Routes = [
     path: '',
     component: PrepaymentAmortizationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

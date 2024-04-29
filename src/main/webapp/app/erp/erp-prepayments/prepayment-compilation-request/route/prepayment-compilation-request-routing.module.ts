@@ -30,7 +30,7 @@ const prepaymentCompilationRequestRoute: Routes = [
     path: '',
     component: PrepaymentCompilationRequestComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
