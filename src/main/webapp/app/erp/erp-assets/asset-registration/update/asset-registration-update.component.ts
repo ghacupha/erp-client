@@ -157,15 +157,14 @@ export class AssetRegistrationUpdateComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.weAreEditing) {
+
       this.updateForm(this.selectedItem);
     }
 
     if (this.weAreCopying) {
-      this.copyForm(this.selectedItem)
-    }
 
-    if (this.weAreCreating) {
-      // this.loadRelationshipsOptions();
+      this.copyForm(this.selectedItem);
+
       this.assetRegistrationService.getNextAssetNumber().subscribe(nextValue => {
         if (nextValue.body) {
           this.editForm.patchValue({
@@ -174,6 +173,18 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         }
       });
     }
+
+    if (this.weAreCreating) {
+
+      this.assetRegistrationService.getNextAssetNumber().subscribe(nextValue => {
+        if (nextValue.body) {
+          this.editForm.patchValue({
+            assetNumber: nextValue.body,
+          })
+        }
+      });
+    }
+    
   }
 
   updateAssetAccessories(updated: IAssetAccessory[]): void  {
