@@ -27,6 +27,7 @@ import { IMonthlyPrepaymentReportRequisition } from '../monthly-prepayment-repor
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { MonthlyPrepaymentReportRequisitionService } from '../service/monthly-prepayment-report-requisition.service';
 import { MonthlyPrepaymentReportRequisitionDeleteDialogComponent } from '../delete/monthly-prepayment-report-requisition-delete-dialog.component';
+import { DataUtils } from 'app/core/util/data-util.service';
 
 @Component({
   selector: 'jhi-monthly-prepayment-report-requisition',
@@ -46,6 +47,7 @@ export class MonthlyPrepaymentReportRequisitionComponent implements OnInit {
   constructor(
     protected monthlyPrepaymentReportRequisitionService: MonthlyPrepaymentReportRequisitionService,
     protected activatedRoute: ActivatedRoute,
+    protected dataUtils: DataUtils,
     protected router: Router,
     protected modalService: NgbModal
   ) {
@@ -96,6 +98,10 @@ export class MonthlyPrepaymentReportRequisitionComponent implements OnInit {
   }
 
   search(query: string): void {
+    if (query && ['requestId', 'fileChecksum', 'filename', 'reportParameters', 'reportFile'].includes(this.predicate)) {
+      this.predicate = 'id';
+      this.ascending = true;
+    }
     this.currentSearch = query;
     this.loadPage(1);
   }
@@ -106,6 +112,14 @@ export class MonthlyPrepaymentReportRequisitionComponent implements OnInit {
 
   trackId(index: number, item: IMonthlyPrepaymentReportRequisition): number {
     return item.id!;
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    return this.dataUtils.openFile(base64String, contentType);
   }
 
   delete(monthlyPrepaymentReportRequisition: IMonthlyPrepaymentReportRequisition): void {

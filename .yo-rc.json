@@ -295,9 +295,12 @@
       "AssetWriteOff",
       "AssetRevaluation",
       "AssetGeneralAdjustment",
-      "AmortizationPeriod"
+      "AmortizationPeriod",
+      "PrepaymentReportRequisition",
+      "AmortizationPostingReportRequisition",
+      "PrepaymentByAccountReportRequisition"
     ],
-    "lastLiquibaseTimestamp": 1709634688000,
+    "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,
     "skipCommitHook": true
   }

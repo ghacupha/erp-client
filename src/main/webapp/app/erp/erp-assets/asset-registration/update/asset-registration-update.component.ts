@@ -184,7 +184,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         }
       });
     }
-    
+
   }
 
   updateAssetAccessories(updated: IAssetAccessory[]): void  {

@@ -1,6 +1,37 @@
 {
   "clientRootFolder": "prepayments",
-  "fields": [],
+  "fields": [
+    {
+      "fieldName": "requestId",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "timeOfRequisition",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileChecksum",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "filename",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "reportParameters",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any"
+    },
+    {
+      "fieldName": "tampered",
+      "fieldType": "Boolean"
+    }
+  ],
   "relationships": [
     {
       "relationshipName": "fiscalYear",

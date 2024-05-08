@@ -22,24 +22,35 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { MonthlyPrepaymentReportRequisitionUpdateComponent } from '../update/monthly-prepayment-report-requisition-update.component';
 import { MonthlyPrepaymentReportRequisitionRoutingResolveService } from './monthly-prepayment-report-requisition-routing-resolve.service';
+import { MonthlyPrepaymentReportRequisitionComponent } from '../list/monthly-prepayment-report-requisition.component';
+import { MonthlyPrepaymentReportRequisitionDetailComponent } from '../detail/monthly-prepayment-report-requisition-detail.component';
+import { MonthlyPrepaymentReportRequisitionExportComponent } from '../export/monthly-prepayment-report-requisition-export.component';
 
 const monthlyPrepaymentReportRequisitionRoute: Routes = [
-  // {
-  //   path: '',
-  //   component: MonthlyPrepaymentReportRequisitionComponent,
-  //   data: {
-  //     defaultSort: 'id,asc',
-  //   },
-  //   canActivate: [UserRouteAccessService],
-  // },
-  // {
-  //   path: ':id/view',
-  //   component: MonthlyPrepaymentReportRequisitionDetailComponent,
-  //   resolve: {
-  //     monthlyPrepaymentReportRequisition: MonthlyPrepaymentReportRequisitionRoutingResolveService,
-  //   },
-  //   canActivate: [UserRouteAccessService],
-  // },
+  {
+    path: '',
+    component: MonthlyPrepaymentReportRequisitionComponent,
+    data: {
+      defaultSort: 'id,asc',
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/view',
+    component: MonthlyPrepaymentReportRequisitionDetailComponent,
+    resolve: {
+      monthlyPrepaymentReportRequisition: MonthlyPrepaymentReportRequisitionRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'export',
+    component: MonthlyPrepaymentReportRequisitionExportComponent,
+    resolve: {
+      monthlyPrepaymentReportRequisition: MonthlyPrepaymentReportRequisitionRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
   {
     path: 'new',
     component: MonthlyPrepaymentReportRequisitionUpdateComponent,
@@ -48,14 +59,6 @@ const monthlyPrepaymentReportRequisitionRoute: Routes = [
     },
     canActivate: [UserRouteAccessService],
   },
-  // {
-  //   path: ':id/edit',
-  //   component: MonthlyPrepaymentReportRequisitionUpdateComponent,
-  //   resolve: {
-  //     monthlyPrepaymentReportRequisition: MonthlyPrepaymentReportRequisitionRoutingResolveService,
-  //   },
-  //   canActivate: [UserRouteAccessService],
-  // },
 ];
 
 @NgModule({

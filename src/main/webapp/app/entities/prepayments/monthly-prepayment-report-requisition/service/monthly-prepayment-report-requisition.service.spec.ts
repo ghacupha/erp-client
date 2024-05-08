@@ -18,7 +18,9 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import * as dayjs from 'dayjs';
 
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IMonthlyPrepaymentReportRequisition, MonthlyPrepaymentReportRequisition } from '../monthly-prepayment-report-requisition.model';
 
 import { MonthlyPrepaymentReportRequisitionService } from './monthly-prepayment-report-requisition.service';
@@ -28,6 +30,7 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: IMonthlyPrepaymentReportRequisition;
   let expectedResult: IMonthlyPrepaymentReportRequisition | IMonthlyPrepaymentReportRequisition[] | boolean | null;
+  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,15 +39,29 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
     expectedResult = null;
     service = TestBed.inject(MonthlyPrepaymentReportRequisitionService);
     httpMock = TestBed.inject(HttpTestingController);
+    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
+      requestId: 'AAAAAAA',
+      timeOfRequisition: currentDate,
+      fileChecksum: 'AAAAAAA',
+      filename: 'AAAAAAA',
+      reportParameters: 'AAAAAAA',
+      reportFileContentType: 'image/png',
+      reportFile: 'AAAAAAA',
+      tampered: false,
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign({}, elemDefault);
+      const returnedFromService = Object.assign(
+        {
+          timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+        },
+        elemDefault
+      );
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -57,11 +74,17 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
+          timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          timeOfRequisition: currentDate,
+        },
+        returnedFromService
+      );
 
       service.create(new MonthlyPrepaymentReportRequisition()).subscribe(resp => (expectedResult = resp.body));
 
@@ -74,11 +97,23 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          requestId: 'BBBBBB',
+          timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+          fileChecksum: 'BBBBBB',
+          filename: 'BBBBBB',
+          reportParameters: 'BBBBBB',
+          reportFile: 'BBBBBB',
+          tampered: true,
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          timeOfRequisition: currentDate,
+        },
+        returnedFromService
+      );
 
       service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -88,11 +123,25 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
     });
 
     it('should partial update a MonthlyPrepaymentReportRequisition', () => {
-      const patchObject = Object.assign({}, new MonthlyPrepaymentReportRequisition());
+      const patchObject = Object.assign(
+        {
+          timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+          filename: 'BBBBBB',
+          reportParameters: 'BBBBBB',
+          reportFile: 'BBBBBB',
+          tampered: true,
+        },
+        new MonthlyPrepaymentReportRequisition()
+      );
 
       const returnedFromService = Object.assign(patchObject, elemDefault);
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          timeOfRequisition: currentDate,
+        },
+        returnedFromService
+      );
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -105,11 +154,23 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
+          requestId: 'BBBBBB',
+          timeOfRequisition: currentDate.format(DATE_TIME_FORMAT),
+          fileChecksum: 'BBBBBB',
+          filename: 'BBBBBB',
+          reportParameters: 'BBBBBB',
+          reportFile: 'BBBBBB',
+          tampered: true,
         },
         elemDefault
       );
 
-      const expected = Object.assign({}, returnedFromService);
+      const expected = Object.assign(
+        {
+          timeOfRequisition: currentDate,
+        },
+        returnedFromService
+      );
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -162,7 +223,7 @@ describe('MonthlyPrepaymentReportRequisition Service', () => {
       });
 
       it('should add only unique MonthlyPrepaymentReportRequisition to an array', () => {
-        const monthlyPrepaymentReportRequisitionArray: IMonthlyPrepaymentReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 43320 }];
+        const monthlyPrepaymentReportRequisitionArray: IMonthlyPrepaymentReportRequisition[] = [{ id: 123 }, { id: 456 }, { id: 7947 }];
         const monthlyPrepaymentReportRequisitionCollection: IMonthlyPrepaymentReportRequisition[] = [{ id: 123 }];
         expectedResult = service.addMonthlyPrepaymentReportRequisitionToCollectionIfMissing(
           monthlyPrepaymentReportRequisitionCollection,

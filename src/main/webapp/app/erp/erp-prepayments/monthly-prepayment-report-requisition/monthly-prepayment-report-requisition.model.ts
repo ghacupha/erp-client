@@ -17,14 +17,33 @@
 ///
 
 import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
+import * as dayjs from 'dayjs';
 
 export interface IMonthlyPrepaymentReportRequisition {
   id?: number;
+  requestId?: string | null;
+  timeOfRequisition?: dayjs.Dayjs;
+  fileChecksum?: string | null;
+  filename?: string | null;
+  reportParameters?: string | null;
+  reportFileContentType?: string | null;
+  reportFile?: string | null;
+  tampered?: boolean | null;
   fiscalYear?: IFiscalYear;
 }
 
 export class MonthlyPrepaymentReportRequisition implements IMonthlyPrepaymentReportRequisition {
-  constructor(public id?: number, public fiscalYear?: IFiscalYear) {}
+  constructor(
+    public id?: number,
+    public requestId?: string | null,
+    public timeOfRequisition?: dayjs.Dayjs,
+    public fileChecksum?: string | null,
+    public filename?: string | null,
+    public reportParameters?: string | null,
+    public reportFileContentType?: string | null,
+    public reportFile?: string | null,
+    public tampered?: boolean | null,
+    public fiscalYear?: IFiscalYear) {}
 }
 
 export function getMonthlyPrepaymentReportRequisitionIdentifier(

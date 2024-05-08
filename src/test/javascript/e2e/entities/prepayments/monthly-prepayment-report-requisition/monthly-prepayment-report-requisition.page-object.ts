@@ -48,6 +48,13 @@ export class MonthlyPrepaymentReportRequisitionUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
+  requestIdInput = element(by.id('field_requestId'));
+  timeOfRequisitionInput = element(by.id('field_timeOfRequisition'));
+  fileChecksumInput = element(by.id('field_fileChecksum'));
+  filenameInput = element(by.id('field_filename'));
+  reportParametersInput = element(by.id('field_reportParameters'));
+  reportFileInput = element(by.id('file_reportFile'));
+  tamperedInput = element(by.id('field_tampered'));
 
   fiscalYearSelect = element(by.id('field_fiscalYear'));
 
@@ -61,6 +68,58 @@ export class MonthlyPrepaymentReportRequisitionUpdatePage {
 
   async getIdInput(): Promise<string> {
     return await this.idInput.getAttribute('value');
+  }
+
+  async setRequestIdInput(requestId: string): Promise<void> {
+    await this.requestIdInput.sendKeys(requestId);
+  }
+
+  async getRequestIdInput(): Promise<string> {
+    return await this.requestIdInput.getAttribute('value');
+  }
+
+  async setTimeOfRequisitionInput(timeOfRequisition: string): Promise<void> {
+    await this.timeOfRequisitionInput.sendKeys(timeOfRequisition);
+  }
+
+  async getTimeOfRequisitionInput(): Promise<string> {
+    return await this.timeOfRequisitionInput.getAttribute('value');
+  }
+
+  async setFileChecksumInput(fileChecksum: string): Promise<void> {
+    await this.fileChecksumInput.sendKeys(fileChecksum);
+  }
+
+  async getFileChecksumInput(): Promise<string> {
+    return await this.fileChecksumInput.getAttribute('value');
+  }
+
+  async setFilenameInput(filename: string): Promise<void> {
+    await this.filenameInput.sendKeys(filename);
+  }
+
+  async getFilenameInput(): Promise<string> {
+    return await this.filenameInput.getAttribute('value');
+  }
+
+  async setReportParametersInput(reportParameters: string): Promise<void> {
+    await this.reportParametersInput.sendKeys(reportParameters);
+  }
+
+  async getReportParametersInput(): Promise<string> {
+    return await this.reportParametersInput.getAttribute('value');
+  }
+
+  async setReportFileInput(reportFile: string): Promise<void> {
+    await this.reportFileInput.sendKeys(reportFile);
+  }
+
+  async getReportFileInput(): Promise<string> {
+    return await this.reportFileInput.getAttribute('value');
+  }
+
+  getTamperedInput(): ElementFinder {
+    return this.tamperedInput;
   }
 
   async fiscalYearSelectLastOption(): Promise<void> {

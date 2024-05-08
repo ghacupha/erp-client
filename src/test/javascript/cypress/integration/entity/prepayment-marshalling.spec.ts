@@ -64,7 +64,7 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/amortization-periods',
-      body: {"sequenceNumber":20285,"endDate":"2024-04-27","periodCode":"platforms and Outdoors"},
+      body: {"sequenceNumber":20285,"startDate":"2024-04-27","endDate":"2024-04-27","periodCode":"monitor Cambridgeshire Cheese"},
     }).then(({ body }) => {
       amortizationPeriod = body;
     });

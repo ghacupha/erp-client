@@ -34,7 +34,7 @@ describe('AmortizationPeriod e2e test', () => {
   const amortizationPeriodPageUrlPattern = new RegExp('/amortization-period(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const amortizationPeriodSample = { sequenceNumber: 71147, periodCode: 'mobile open-source' };
+  const amortizationPeriodSample = { sequenceNumber: 68580, periodCode: 'Towels' };
 
   let amortizationPeriod: any;
   //let fiscalMonth: any;
@@ -232,9 +232,7 @@ describe('AmortizationPeriod e2e test', () => {
     it.skip('should create an instance of AmortizationPeriod', () => {
       cy.get(`[data-cy="sequenceNumber"]`).type('22477').should('have.value', '22477');
 
-      cy.get(`[data-cy="startDate"]`).type('2024-04-26').should('have.value', '2024-04-26');
-
-      cy.get(`[data-cy="periodCode"]`).type('Plastic').should('have.value', 'Plastic');
+      cy.get(`[data-cy="periodCode"]`).type('lavender').should('have.value', 'lavender');
 
       cy.get(`[data-cy="fiscalMonth"]`).select(1);
 

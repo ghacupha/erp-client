@@ -72,7 +72,7 @@ describe('PrepaymentAmortization e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/amortization-periods',
-      body: {"sequenceNumber":82102,"startDate":"2024-04-27","endDate":"2024-04-26","periodCode":"Metal bus Towels"},
+      body: {"sequenceNumber":82102,"startDate":"2024-04-26","endDate":"2024-04-26","periodCode":"driver"},
     }).then(({ body }) => {
       amortizationPeriod = body;
     });

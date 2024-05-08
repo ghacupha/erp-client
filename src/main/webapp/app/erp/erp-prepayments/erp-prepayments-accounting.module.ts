@@ -158,7 +158,7 @@ import { NgModule } from '@angular/core';
           {
             path: 'monthly-prepayment-outstanding-report-item',
             data: {
-              pageTitle: 'Prepayments Monthly',
+              pageTitle: 'ERP | Prepayments Monthly',
               authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
             },
             canActivate: [UserRouteAccessService],
@@ -168,7 +168,7 @@ import { NgModule } from '@angular/core';
         {
             path: 'monthly-prepayment-report-requisition',
             data: {
-              pageTitle: 'Prepayments Monthly Requisition',
+              pageTitle: 'ERP | Prepayments Monthly Requisition',
               authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
             },
             canActivate: [UserRouteAccessService],
@@ -178,12 +178,42 @@ import { NgModule } from '@angular/core';
         {
             path: 'amortization-period',
             data: {
-              pageTitle: 'Amortization Period',
+              pageTitle: 'ERP | Amortization Period',
               authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
             },
             canActivate: [UserRouteAccessService],
             loadChildren: () =>
               import('./amortization-period/amortization-period.module').then(m => m.AmortizationPeriodModule),
+        },
+        {
+            path: 'prepayment-report-requisition',
+            data: {
+              pageTitle: 'ERP | Prepayment Report',
+              authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+            },
+            canActivate: [UserRouteAccessService],
+            loadChildren: () =>
+              import('./prepayment-report-requisition/prepayment-report-requisition.module').then(m => m.PrepaymentReportRequisitionModule),
+        },
+        {
+            path: 'amortization-posting-report-requisition',
+            data: {
+              pageTitle: 'ERP | Posting Amortization',
+              authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+            },
+            canActivate: [UserRouteAccessService],
+            loadChildren: () =>
+              import('./amortization-posting-report-requisition/amortization-posting-report-requisition.module').then(m => m.AmortizationPostingReportRequisitionModule),
+        },
+        {
+            path: 'prepayment-by-account-report-requisition',
+            data: {
+              pageTitle: 'ERP | Prepayment Accounts',
+              authorities: ['ROLE_PREPAYMENTS_MODULE_USER'],
+            },
+            canActivate: [UserRouteAccessService],
+            loadChildren: () =>
+              import('./prepayment-by-account-report-requisition/prepayment-by-account-report-requisition.module').then(m => m.PrepaymentByAccountReportRequisitionModule),
         },
       ]
     )

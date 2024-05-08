@@ -70,6 +70,15 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="requestId"><span>Request Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="timeOfRequisition"><span>Time Of Requisition</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="filename"><span>Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportParameters">
+            <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fiscalYear.startDate"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -81,6 +90,23 @@
               monthlyPrepaymentReportRequisition.id
             }}</a>
           </td>
+          <td>{{ monthlyPrepaymentReportRequisition.requestId }}</td>
+          <td>{{ monthlyPrepaymentReportRequisition.timeOfRequisition | formatMediumDatetime }}</td>
+          <td>{{ monthlyPrepaymentReportRequisition.fileChecksum }}</td>
+          <td>{{ monthlyPrepaymentReportRequisition.filename }}</td>
+          <td>{{ monthlyPrepaymentReportRequisition.reportParameters }}</td>
+          <td>
+            <a
+              *ngIf="monthlyPrepaymentReportRequisition.reportFile"
+              (click)="openFile(monthlyPrepaymentReportRequisition.reportFile, monthlyPrepaymentReportRequisition.reportFileContentType)"
+              >open</a
+            >
+            <span *ngIf="monthlyPrepaymentReportRequisition.reportFile"
+              >{{ monthlyPrepaymentReportRequisition.reportFileContentType }},
+              {{ byteSize(monthlyPrepaymentReportRequisition.reportFile) }}</span
+            >
+          </td>
+          <td>{{ monthlyPrepaymentReportRequisition.tampered }}</td>
           <td>
             <div *ngIf="monthlyPrepaymentReportRequisition.fiscalYear">
               <a [routerLink]="['/fiscal-year', monthlyPrepaymentReportRequisition.fiscalYear?.id, 'view']">{{

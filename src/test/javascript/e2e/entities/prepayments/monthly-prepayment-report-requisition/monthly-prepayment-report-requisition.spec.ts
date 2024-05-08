@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
+import { browser, ExpectedConditions as ec /* , protractor, promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
@@ -24,6 +24,7 @@ import {
   /* MonthlyPrepaymentReportRequisitionDeleteDialog, */
   MonthlyPrepaymentReportRequisitionUpdatePage,
 } from './monthly-prepayment-report-requisition.page-object';
+import * as path from 'path';
 
 const expect = chai.expect;
 
@@ -33,6 +34,9 @@ describe('MonthlyPrepaymentReportRequisition e2e test', () => {
   let monthlyPrepaymentReportRequisitionComponentsPage: MonthlyPrepaymentReportRequisitionComponentsPage;
   let monthlyPrepaymentReportRequisitionUpdatePage: MonthlyPrepaymentReportRequisitionUpdatePage;
   /* let monthlyPrepaymentReportRequisitionDeleteDialog: MonthlyPrepaymentReportRequisitionDeleteDialog; */
+  const fileNameToUpload = 'logo-jhipster.png';
+  const fileToUpload = '../../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
+  const absolutePath = path.resolve(__dirname, fileToUpload);
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -73,6 +77,13 @@ describe('MonthlyPrepaymentReportRequisition e2e test', () => {
         await monthlyPrepaymentReportRequisitionComponentsPage.clickOnCreateButton();
 
         await promise.all([
+            monthlyPrepaymentReportRequisitionUpdatePage.setRequestIdInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+            monthlyPrepaymentReportRequisitionUpdatePage.setTimeOfRequisitionInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            monthlyPrepaymentReportRequisitionUpdatePage.setFileChecksumInput('fileChecksum'),
+            monthlyPrepaymentReportRequisitionUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+            monthlyPrepaymentReportRequisitionUpdatePage.setReportParametersInput('reportParameters'),
+            monthlyPrepaymentReportRequisitionUpdatePage.setReportFileInput(absolutePath),
+            monthlyPrepaymentReportRequisitionUpdatePage.getTamperedInput().click(),
             monthlyPrepaymentReportRequisitionUpdatePage.fiscalYearSelectLastOption(),
         ]);
 

@@ -23,11 +23,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import { IMonthlyPrepaymentReportRequisition, MonthlyPrepaymentReportRequisition } from '../monthly-prepayment-report-requisition.model';
+import {
+  IMonthlyPrepaymentReportRequisition,
+  MonthlyPrepaymentReportRequisition
+} from '../monthly-prepayment-report-requisition.model';
 import { MonthlyPrepaymentReportRequisitionService } from '../service/monthly-prepayment-report-requisition.service';
 import { ASC, DESC, ITEMS_PER_PAGE } from '../../../../config/pagination.constants';
 import { FiscalYearService } from '../../../erp-pages/fiscal-year/service/fiscal-year.service';
 import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
+import * as dayjs from 'dayjs';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-monthly-prepayment-report-requisition-update',
@@ -44,6 +49,14 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
 
   editForm = this.fb.group({
     id: [],
+    requestId: [],
+    timeOfRequisition: [null, [Validators.required]],
+    fileChecksum: [],
+    filename: [],
+    reportParameters: [],
+    reportFile: [],
+    reportFileContentType: [],
+    tampered: [],
     fiscalYear: [null, Validators.required],
   });
 
@@ -57,6 +70,10 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ monthlyPrepaymentReportRequisition }) => {
+
+      monthlyPrepaymentReportRequisition.timeOfRequisition = dayjs();
+      monthlyPrepaymentReportRequisition.requestId = uuidv7();
+
       this.updateForm(monthlyPrepaymentReportRequisition);
 
       this.loadRelationshipsOptions();
@@ -71,7 +88,7 @@ export class MonthlyPrepaymentReportRequisitionUpdateComponent implements OnInit
 
     const { fiscalYear } = this.createFromForm();
 
-    // TODO NAV to "monthly-prepayment-outstanding-report-item"
+    // NAV to "monthly-prepayment-outstanding-report-item"
     this.router.navigate(['/monthly-prepayment-outstanding-report-item'], {
       queryParams: {
         fiscalYearId: fiscalYear?.id,

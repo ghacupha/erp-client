@@ -34,7 +34,7 @@ describe('MonthlyPrepaymentReportRequisition e2e test', () => {
   const monthlyPrepaymentReportRequisitionPageUrlPattern = new RegExp('/monthly-prepayment-report-requisition(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const monthlyPrepaymentReportRequisitionSample = {};
+  const monthlyPrepaymentReportRequisitionSample = { timeOfRequisition: '2024-03-05T03:21:46.024Z' };
 
   let monthlyPrepaymentReportRequisition: any;
   let fiscalYear: any;
@@ -206,8 +206,31 @@ describe('MonthlyPrepaymentReportRequisition e2e test', () => {
     });
 
     it('should create an instance of MonthlyPrepaymentReportRequisition', () => {
+      cy.get(`[data-cy="requestId"]`)
+        .type('1a9b4d4f-cb82-4bd3-99f5-b9c2667566f7')
+        .invoke('val')
+        .should('match', new RegExp('1a9b4d4f-cb82-4bd3-99f5-b9c2667566f7'));
+
+      cy.get(`[data-cy="timeOfRequisition"]`).type('2024-03-05T03:00').should('have.value', '2024-03-05T03:00');
+
+      cy.get(`[data-cy="fileChecksum"]`).type('UIC-Franc syndicate').should('have.value', 'UIC-Franc syndicate');
+
+      cy.get(`[data-cy="filename"]`)
+        .type('1a91880d-cb73-4fa1-88b1-9cece1510683')
+        .invoke('val')
+        .should('match', new RegExp('1a91880d-cb73-4fa1-88b1-9cece1510683'));
+
+      cy.get(`[data-cy="reportParameters"]`).type('Handcrafted Tasty').should('have.value', 'Handcrafted Tasty');
+
+      cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
+
+      cy.get(`[data-cy="tampered"]`).should('not.be.checked');
+      cy.get(`[data-cy="tampered"]`).click().should('be.checked');
+
       cy.get(`[data-cy="fiscalYear"]`).select(1);
 
+      // since cypress clicks submit too fast before the blob fields are validated
+      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
       cy.get(entityCreateSaveButtonSelector).click();
 
       cy.wait('@postEntityRequest').then(({ response }) => {
