@@ -1,5 +1,5 @@
 ///
-/// Erp System - Mark X No 7 (Jehoiada Series) Client 1.7.5
+/// Erp System - Mark X No 8 (Jehoiada Series) Client 1.7.6
 /// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
@@ -32,9 +32,9 @@ export class FooterComponent implements OnInit {
 
   serverHash = '';
 
-  clientVersion = '1.7.5';
+  clientVersion = '1.7.6';
 
-  serverVersion = '1.7.7';
+  serverVersion = '1.8.0';
 
   constructor(protected serverInformationService: ApplicationStatusService) {
   }
