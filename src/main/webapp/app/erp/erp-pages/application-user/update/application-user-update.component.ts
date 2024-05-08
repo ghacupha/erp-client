@@ -104,6 +104,12 @@ export class ApplicationUserUpdateComponent implements OnInit {
     })
   }
 
+  updateSystemIdentity(update: IUser): void {
+    this.editForm.patchValue({
+      systemIdentity: update
+    })
+  }
+
   updateParameters(update: IUniversallyUniqueMapping[]): void {
     this.editForm.patchValue({
       parameters: [...update]

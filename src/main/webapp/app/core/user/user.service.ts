@@ -23,12 +23,15 @@ import { Observable } from 'rxjs';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { isPresent } from 'app/core/util/operators';
-import { Pagination } from 'app/core/request/request.model';
+import { Pagination, SearchWithPagination } from 'app/core/request/request.model';
 import { IUser, getUserIdentifier } from './user.model';
+import { IApplicationUser } from '../../erp/erp-pages/application-user/application-user.model';
+import { EntityArrayResponseType } from '../../erp/erp-pages/application-user/service/application-user.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private resourceUrl = this.applicationConfigService.getEndpointFor('api/users');
+  private resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/admin/app/_search/users');
 
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
@@ -52,5 +55,10 @@ export class UserService {
       return [...usersToAdd, ...userCollection];
     }
     return userCollection;
+  }
+
+  search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IUser[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 }
