@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
 
 export interface IPrepaymentReportRequisition {
   id?: number;
