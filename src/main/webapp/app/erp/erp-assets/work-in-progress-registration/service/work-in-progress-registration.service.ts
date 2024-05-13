@@ -98,4 +98,9 @@ export class WorkInProgressRegistrationService {
     }
     return workInProgressRegistrationCollection;
   }
+
+  getNextAssetNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/catalogue-number`, { observe: 'response' });
+  }
 }

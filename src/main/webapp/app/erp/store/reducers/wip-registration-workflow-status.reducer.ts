@@ -29,7 +29,8 @@ import {
   wipRegistrationDataHasMutated,
   wipRegistrationEditWorkflowInitiatedEnRoute,
   wipRegistrationEditWorkflowInitiatedFromList,
-  wipRegistrationEditWorkflowInitiatedFromView, wipRegistrationUpdateFormHasBeenDestroyed
+  wipRegistrationEditWorkflowInitiatedFromView,
+  wipRegistrationUpdateFormHasBeenDestroyed
 } from '../actions/wip-registration-update-status.actions';
 
 export const wipRegistrationUpdateFormStateSelector = 'wipRegistrationUpdateForm';

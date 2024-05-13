@@ -33,7 +33,7 @@ import { State } from '../../../store/global-store.definition';
 import {
   wipRegistrationCopyWorkflowInitiatedFromList,
   wipRegistrationCreationWorkflowInitiatedFromList,
-  wipRegistrationEditWorkflowInitiatedFromList
+  wipRegistrationEditWorkflowInitiatedFromList, wipRegistrationEditWorkflowInitiatedFromView
 } from '../../../store/actions/wip-registration-update-status.actions';
 
 @Component({

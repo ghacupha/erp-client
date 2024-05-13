@@ -169,10 +169,28 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     }
 
     if (this.weAreCopying) {
-      this.copyForm(this.selectedItem)
+
+      this.copyForm(this.selectedItem);
+
+      this.workInProgressRegistrationService.getNextAssetNumber().subscribe(nextValue => {
+        if (nextValue.body) {
+          this.editForm.patchValue({
+            sequenceNumber: nextValue.body,
+          })
+        }
+      });
     }
 
     if (this.weAreCreating) {
+
+      this.workInProgressRegistrationService.getNextAssetNumber().subscribe(nextValue => {
+        if (nextValue.body) {
+          this.editForm.patchValue({
+            sequenceNumber: nextValue.body,
+          })
+        }
+      });
+
       this.loadRelationshipsOptions();
     }
   }
