@@ -52,7 +52,9 @@ import { AssetWarrantyService } from '../../asset-warranty/service/asset-warrant
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import {
-  copyingWIPRegistrationStatus, creatingWIPRegistrationStatus, editingWIPRegistrationStatus,
+  copyingWIPRegistrationStatus,
+  creatingWIPRegistrationStatus,
+  editingWIPRegistrationStatus,
   wipRegistrationUpdateSelectedInstance
 } from '../../../store/selectors/wip-registration-workflow-status.selector';
 import { wipRegistrationDataHasMutated } from '../../../store/actions/wip-registration-update-status.actions';

@@ -31,9 +31,9 @@ import { PrepaymentReportRequisitionService } from '../service/prepayment-report
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { UUID, uuidv7 } from 'uuidv7';
+import {  uuidv7 } from 'uuidv7';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 
 @Component({
   selector: 'jhi-prepayment-report-requisition-update',
