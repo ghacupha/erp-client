@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -30,10 +32,9 @@ import {
   IPrepaymentByAccountReportRequisition,
   PrepaymentByAccountReportRequisition,
 } from '../prepayment-by-account-report-requisition.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { PrepaymentByAccountReportRequisitionUpdateComponent } from './prepayment-by-account-report-requisition-update.component';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 
 describe('PrepaymentByAccountReportRequisition Management Update Component', () => {
   let comp: PrepaymentByAccountReportRequisitionUpdateComponent;
