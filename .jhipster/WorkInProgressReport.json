@@ -1,4 +1,5 @@
 {
+  "clientRootFolder": "wip",
   "fields": [
     {
       "fieldName": "projectTitle",
@@ -28,7 +29,6 @@
   "relationships": [],
   "service": "no",
   "readOnly": true,
-  "clientRootFolder": "assets",
   "pagination": "infinite-scroll",
   "name": "WorkInProgressReport",
   "changelogDate": "20231107053508",

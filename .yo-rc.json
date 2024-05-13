@@ -298,7 +298,8 @@
       "AmortizationPeriod",
       "PrepaymentReportRequisition",
       "AmortizationPostingReportRequisition",
-      "PrepaymentByAccountReportRequisition"
+      "PrepaymentByAccountReportRequisition",
+      "WorkInProgressOutstandingReportRequisition"
     ],
     "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,

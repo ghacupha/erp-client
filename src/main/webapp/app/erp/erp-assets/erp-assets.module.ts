@@ -345,6 +345,19 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./asset-general-adjustment/asset-general-adjustment.module').then(m => m.AssetGeneralAdjustmentModule),
       },
+      {
+        path: 'work-in-progress-outstanding-report-requisition',
+        data: {
+          pageTitle: 'ERP | WIP outstanding',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./work-in-progress-outstanding-report-requisition/work-in-progress-outstanding-report-requisition.module').then(m => m.WorkInProgressOutstandingReportRequisitionModule),
+      },
     ])
   ]
 })

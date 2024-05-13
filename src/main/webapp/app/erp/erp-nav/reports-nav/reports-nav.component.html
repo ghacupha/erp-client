@@ -213,6 +213,18 @@
             <span>WIP Summary</span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-outstanding-report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Report Request</span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
           <a
             class="dropdown-item"
