@@ -31,9 +31,9 @@ import { MonthlyPrepaymentReportRequisitionService } from '../service/monthly-pr
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
-import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
 import { uuidv7 } from 'uuidv7';
+import { FiscalYearService } from '../../../erp-pages/fiscal-year/service/fiscal-year.service';
+import { IFiscalYear } from '../../../erp-pages/fiscal-year/fiscal-year.model';
 
 @Component({
   selector: 'jhi-monthly-prepayment-report-requisition-export',
