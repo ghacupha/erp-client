@@ -76,6 +76,7 @@
             <span>Depreciation Process Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="numberOfEnumeratedItems"><span>Number Of Enumerated Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="invalidated"><span>Invalidated</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="initiatedBy.applicationIdentity"><span>Initiated By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -89,6 +90,7 @@
           <td>{{ rouDepreciationRequest.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ rouDepreciationRequest.depreciationProcessStatus }}</td>
           <td>{{ rouDepreciationRequest.numberOfEnumeratedItems }}</td>
+          <td>{{ rouDepreciationRequest.invalidated }}</td>
           <td>
             <div *ngIf="rouDepreciationRequest.initiatedBy">
               <a [routerLink]="['/application-user', rouDepreciationRequest.initiatedBy?.id, 'view']">{{

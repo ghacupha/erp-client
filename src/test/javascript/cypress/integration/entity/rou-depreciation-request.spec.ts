@@ -34,7 +34,7 @@ describe('RouDepreciationRequest e2e test', () => {
   const rouDepreciationRequestPageUrlPattern = new RegExp('/rou-depreciation-request(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const rouDepreciationRequestSample = { requisitionId: '018c05ea-bf95-4eb3-be08-4d31a1b77ea6' };
+  const rouDepreciationRequestSample = { requisitionId: '18c05eab-f95e-4b33-a084-d31a1b77ea6a' };
 
   let rouDepreciationRequest: any;
 
@@ -181,6 +181,9 @@ describe('RouDepreciationRequest e2e test', () => {
       cy.get(`[data-cy="depreciationProcessStatus"]`).select('ERRORED');
 
       cy.get(`[data-cy="numberOfEnumeratedItems"]`).type('4062').should('have.value', '4062');
+
+      cy.get(`[data-cy="invalidated"]`).should('not.be.checked');
+      cy.get(`[data-cy="invalidated"]`).click().should('be.checked');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

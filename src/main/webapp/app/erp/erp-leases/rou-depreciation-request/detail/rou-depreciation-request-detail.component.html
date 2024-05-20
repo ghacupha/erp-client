@@ -32,6 +32,8 @@
         <dt><span>ID</span></dt>
         <dd>
           <span>{{ rouDepreciationRequest.id }}</span>
+          <span *ngIf="!rouDepreciationRequest.invalidated" class="badge badge-success">Activated</span>
+          <span *ngIf="rouDepreciationRequest.invalidated" class="badge badge-danger">Deactivated</span>
         </dd>
         <dt><span>Requisition Id</span></dt>
         <dd>

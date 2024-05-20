@@ -74,6 +74,7 @@ describe('RouDepreciationEntry e2e test', () => {
             rouDepreciationEntryUpdatePage.setRouAssetIdentifierInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             rouDepreciationEntryUpdatePage.setRouDepreciationIdentifierInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             rouDepreciationEntryUpdatePage.setSequenceNumberInput('5'),
+            rouDepreciationEntryUpdatePage.getInvalidatedInput().click(),
             rouDepreciationEntryUpdatePage.debitAccountSelectLastOption(),
             rouDepreciationEntryUpdatePage.creditAccountSelectLastOption(),
             rouDepreciationEntryUpdatePage.assetCategorySelectLastOption(),

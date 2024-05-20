@@ -29,6 +29,7 @@ export interface IRouDepreciationEntry {
   rouAssetIdentifier?: string | null;
   rouDepreciationIdentifier?: string;
   sequenceNumber?: number | null;
+  invalidated?: boolean | null;
   debitAccount?: ITransactionAccount;
   creditAccount?: ITransactionAccount;
   assetCategory?: IAssetCategory;
@@ -45,12 +46,15 @@ export class RouDepreciationEntry implements IRouDepreciationEntry {
     public rouAssetIdentifier?: string | null,
     public rouDepreciationIdentifier?: string,
     public sequenceNumber?: number | null,
+    public invalidated?: boolean | null,
     public debitAccount?: ITransactionAccount,
     public creditAccount?: ITransactionAccount,
     public assetCategory?: IAssetCategory,
     public leaseContract?: IIFRS16LeaseContract,
     public rouMetadata?: IRouModelMetadata
-  ) {}
+  ) {
+    this.invalidated = this.invalidated ?? false;
+  }
 }
 
 export function getRouDepreciationEntryIdentifier(rouDepreciationEntry: IRouDepreciationEntry): number | undefined {

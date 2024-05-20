@@ -18,6 +18,10 @@
     {
       "fieldName": "numberOfEnumeratedItems",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

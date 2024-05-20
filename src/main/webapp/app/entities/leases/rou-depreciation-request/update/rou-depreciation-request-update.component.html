@@ -98,6 +98,18 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_invalidated">Invalidated</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="invalidated"
+            id="field_invalidated"
+            data-cy="invalidated"
+            formControlName="invalidated"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_initiatedBy">Initiated By</label>
           <select class="form-control" id="field_initiatedBy" data-cy="initiatedBy" name="initiatedBy" formControlName="initiatedBy">
             <option [ngValue]="null"></option>

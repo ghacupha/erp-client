@@ -75,6 +75,7 @@
           <th scope="col" jhiSortBy="depreciationProcessStatus">
             <span>Depreciation Process Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col"></th>
           <th scope="col" jhiSortBy="numberOfEnumeratedItems"><span>Number Of Enumerated Items</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="initiatedBy.applicationIdentity"><span>Initiated By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -88,6 +89,16 @@
           <td>{{ rouDepreciationRequest.requisitionId }}</td>
           <td>{{ rouDepreciationRequest.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ rouDepreciationRequest.depreciationProcessStatus }}</td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="setInvalidated(rouDepreciationRequest, false)" *ngIf="rouDepreciationRequest.invalidated">Invalidated</button>
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setInvalidated(rouDepreciationRequest, true)"
+              *ngIf="!rouDepreciationRequest.invalidated"
+            >
+              Activated
+            </button>
+          </td>
           <td>{{ rouDepreciationRequest.numberOfEnumeratedItems }}</td>
           <td>
             <div *ngIf="rouDepreciationRequest.initiatedBy">

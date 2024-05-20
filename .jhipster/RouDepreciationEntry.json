@@ -29,6 +29,10 @@
     {
       "fieldName": "sequenceNumber",
       "fieldType": "Integer"
+    },
+    {
+      "fieldName": "invalidated",
+      "fieldType": "Boolean"
     }
   ],
   "relationships": [

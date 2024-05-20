@@ -80,6 +80,7 @@
             <span>Rou Depreciation Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="invalidated"><span>Invalidated</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="debitAccount.accountName"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="creditAccount.accountName"><span>Credit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
@@ -99,6 +100,7 @@
           <td>{{ rouDepreciationEntry.rouAssetIdentifier }}</td>
           <td>{{ rouDepreciationEntry.rouDepreciationIdentifier }}</td>
           <td>{{ rouDepreciationEntry.sequenceNumber }}</td>
+          <td>{{ rouDepreciationEntry.invalidated }}</td>
           <td>
             <div *ngIf="rouDepreciationEntry.debitAccount">
               <a [routerLink]="['/transaction-account', rouDepreciationEntry.debitAccount?.id, 'view']">{{

@@ -30,7 +30,7 @@ const rouDepreciationRequestRoute: Routes = [
     path: '',
     component: RouDepreciationRequestComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

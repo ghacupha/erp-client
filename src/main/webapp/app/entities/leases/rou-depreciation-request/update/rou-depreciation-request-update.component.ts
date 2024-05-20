@@ -48,6 +48,7 @@ export class RouDepreciationRequestUpdateComponent implements OnInit {
     timeOfRequest: [],
     depreciationProcessStatus: [],
     numberOfEnumeratedItems: [],
+    invalidated: [],
     initiatedBy: [],
   });
 
@@ -115,6 +116,7 @@ export class RouDepreciationRequestUpdateComponent implements OnInit {
       timeOfRequest: rouDepreciationRequest.timeOfRequest ? rouDepreciationRequest.timeOfRequest.format(DATE_TIME_FORMAT) : null,
       depreciationProcessStatus: rouDepreciationRequest.depreciationProcessStatus,
       numberOfEnumeratedItems: rouDepreciationRequest.numberOfEnumeratedItems,
+      invalidated: rouDepreciationRequest.invalidated,
       initiatedBy: rouDepreciationRequest.initiatedBy,
     });
 
@@ -146,6 +148,7 @@ export class RouDepreciationRequestUpdateComponent implements OnInit {
         : undefined,
       depreciationProcessStatus: this.editForm.get(['depreciationProcessStatus'])!.value,
       numberOfEnumeratedItems: this.editForm.get(['numberOfEnumeratedItems'])!.value,
+      invalidated: this.editForm.get(['invalidated'])!.value,
       initiatedBy: this.editForm.get(['initiatedBy'])!.value,
     };
   }

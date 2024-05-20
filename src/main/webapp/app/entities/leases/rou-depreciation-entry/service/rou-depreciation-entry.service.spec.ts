@@ -45,6 +45,7 @@ describe('RouDepreciationEntry Service', () => {
       rouAssetIdentifier: 'AAAAAAA',
       rouDepreciationIdentifier: 'AAAAAAA',
       sequenceNumber: 0,
+      invalidated: false,
     };
   });
 
@@ -86,6 +87,7 @@ describe('RouDepreciationEntry Service', () => {
           rouAssetIdentifier: 'BBBBBB',
           rouDepreciationIdentifier: 'BBBBBB',
           sequenceNumber: 1,
+          invalidated: true,
         },
         elemDefault
       );
@@ -130,6 +132,7 @@ describe('RouDepreciationEntry Service', () => {
           rouAssetIdentifier: 'BBBBBB',
           rouDepreciationIdentifier: 'BBBBBB',
           sequenceNumber: 1,
+          invalidated: true,
         },
         elemDefault
       );
@@ -181,7 +184,7 @@ describe('RouDepreciationEntry Service', () => {
       });
 
       it('should add only unique RouDepreciationEntry to an array', () => {
-        const rouDepreciationEntryArray: IRouDepreciationEntry[] = [{ id: 123 }, { id: 456 }, { id: 18872 }];
+        const rouDepreciationEntryArray: IRouDepreciationEntry[] = [{ id: 123 }, { id: 456 }, { id: 40901 }];
         const rouDepreciationEntryCollection: IRouDepreciationEntry[] = [{ id: 123 }];
         expectedResult = service.addRouDepreciationEntryToCollectionIfMissing(rouDepreciationEntryCollection, ...rouDepreciationEntryArray);
         expect(expectedResult).toHaveLength(3);

@@ -72,6 +72,7 @@ describe('RouDepreciationRequest e2e test', () => {
       rouDepreciationRequestUpdatePage.setTimeOfRequestInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       rouDepreciationRequestUpdatePage.depreciationProcessStatusSelectLastOption(),
       rouDepreciationRequestUpdatePage.setNumberOfEnumeratedItemsInput('5'),
+      rouDepreciationRequestUpdatePage.getInvalidatedInput().click(),
       rouDepreciationRequestUpdatePage.initiatedBySelectLastOption(),
     ]);
 

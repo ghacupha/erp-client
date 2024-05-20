@@ -48,6 +48,7 @@ describe('RouDepreciationRequest Service', () => {
       timeOfRequest: currentDate,
       depreciationProcessStatus: depreciationProcessStatusTypes.STARTED,
       numberOfEnumeratedItems: 0,
+      invalidated: false,
     };
   });
 
@@ -98,6 +99,7 @@ describe('RouDepreciationRequest Service', () => {
           timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
           depreciationProcessStatus: 'BBBBBB',
           numberOfEnumeratedItems: 1,
+          invalidated: true,
         },
         elemDefault
       );
@@ -121,6 +123,7 @@ describe('RouDepreciationRequest Service', () => {
         {
           requisitionId: 'BBBBBB',
           numberOfEnumeratedItems: 1,
+          invalidated: true,
         },
         new RouDepreciationRequest()
       );
@@ -149,6 +152,7 @@ describe('RouDepreciationRequest Service', () => {
           timeOfRequest: currentDate.format(DATE_TIME_FORMAT),
           depreciationProcessStatus: 'BBBBBB',
           numberOfEnumeratedItems: 1,
+          invalidated: true,
         },
         elemDefault
       );
@@ -205,7 +209,7 @@ describe('RouDepreciationRequest Service', () => {
       });
 
       it('should add only unique RouDepreciationRequest to an array', () => {
-        const rouDepreciationRequestArray: IRouDepreciationRequest[] = [{ id: 123 }, { id: 456 }, { id: 96332 }];
+        const rouDepreciationRequestArray: IRouDepreciationRequest[] = [{ id: 123 }, { id: 456 }, { id: 78083 }];
         const rouDepreciationRequestCollection: IRouDepreciationRequest[] = [{ id: 123 }];
         expectedResult = service.addRouDepreciationRequestToCollectionIfMissing(
           rouDepreciationRequestCollection,

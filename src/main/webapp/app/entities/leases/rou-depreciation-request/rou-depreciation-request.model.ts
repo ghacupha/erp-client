@@ -26,6 +26,7 @@ export interface IRouDepreciationRequest {
   timeOfRequest?: dayjs.Dayjs | null;
   depreciationProcessStatus?: depreciationProcessStatusTypes | null;
   numberOfEnumeratedItems?: number | null;
+  invalidated?: boolean | null;
   initiatedBy?: IApplicationUser | null;
 }
 
@@ -36,8 +37,11 @@ export class RouDepreciationRequest implements IRouDepreciationRequest {
     public timeOfRequest?: dayjs.Dayjs | null,
     public depreciationProcessStatus?: depreciationProcessStatusTypes | null,
     public numberOfEnumeratedItems?: number | null,
+    public invalidated?: boolean | null,
     public initiatedBy?: IApplicationUser | null
-  ) {}
+  ) {
+    this.invalidated = this.invalidated ?? false;
+  }
 }
 
 export function getRouDepreciationRequestIdentifier(rouDepreciationRequest: IRouDepreciationRequest): number | undefined {

@@ -54,6 +54,7 @@ export class RouDepreciationEntryUpdatePage {
   rouAssetIdentifierInput = element(by.id('field_rouAssetIdentifier'));
   rouDepreciationIdentifierInput = element(by.id('field_rouDepreciationIdentifier'));
   sequenceNumberInput = element(by.id('field_sequenceNumber'));
+  invalidatedInput = element(by.id('field_invalidated'));
 
   debitAccountSelect = element(by.id('field_debitAccount'));
   creditAccountSelect = element(by.id('field_creditAccount'));
@@ -119,6 +120,10 @@ export class RouDepreciationEntryUpdatePage {
 
   async getSequenceNumberInput(): Promise<string> {
     return await this.sequenceNumberInput.getAttribute('value');
+  }
+
+  getInvalidatedInput(): ElementFinder {
+    return this.invalidatedInput;
   }
 
   async debitAccountSelectLastOption(): Promise<void> {

@@ -35,9 +35,9 @@ describe('RouDepreciationEntry e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const rouDepreciationEntrySample = {
-    depreciationAmount: 51111,
-    outstandingAmount: 67536,
-    rouDepreciationIdentifier: '0b2c4403-747a-4f36-9e7f-607f801b6ba0',
+    depreciationAmount: 67536,
+    outstandingAmount: 5663,
+    rouDepreciationIdentifier: 'b2c44037-47af-4365-a7f6-07f801b6ba03',
   };
 
   let rouDepreciationEntry: any;
@@ -316,6 +316,9 @@ describe('RouDepreciationEntry e2e test', () => {
         .should('match', new RegExp('d49fbe99-53c7-4615-8c05-0f3bf80be840'));
 
       cy.get(`[data-cy="sequenceNumber"]`).type('70969').should('have.value', '70969');
+
+      cy.get(`[data-cy="invalidated"]`).should('not.be.checked');
+      cy.get(`[data-cy="invalidated"]`).click().should('be.checked');
 
       cy.get(`[data-cy="debitAccount"]`).select(1);
       cy.get(`[data-cy="creditAccount"]`).select(1);

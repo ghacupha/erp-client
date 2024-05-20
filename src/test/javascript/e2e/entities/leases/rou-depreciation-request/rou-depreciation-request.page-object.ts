@@ -52,6 +52,7 @@ export class RouDepreciationRequestUpdatePage {
   timeOfRequestInput = element(by.id('field_timeOfRequest'));
   depreciationProcessStatusSelect = element(by.id('field_depreciationProcessStatus'));
   numberOfEnumeratedItemsInput = element(by.id('field_numberOfEnumeratedItems'));
+  invalidatedInput = element(by.id('field_invalidated'));
 
   initiatedBySelect = element(by.id('field_initiatedBy'));
 
@@ -101,6 +102,10 @@ export class RouDepreciationRequestUpdatePage {
 
   async getNumberOfEnumeratedItemsInput(): Promise<string> {
     return await this.numberOfEnumeratedItemsInput.getAttribute('value');
+  }
+
+  getInvalidatedInput(): ElementFinder {
+    return this.invalidatedInput;
   }
 
   async initiatedBySelectLastOption(): Promise<void> {
