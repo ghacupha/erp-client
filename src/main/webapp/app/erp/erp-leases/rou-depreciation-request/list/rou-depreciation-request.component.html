@@ -90,13 +90,13 @@
           <td>{{ rouDepreciationRequest.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ rouDepreciationRequest.depreciationProcessStatus }}</td>
           <td>
-            <button class="btn btn-danger btn-sm" (click)="setInvalidated(rouDepreciationRequest, false)" *ngIf="rouDepreciationRequest.invalidated">Invalidated</button>
+            <button class="btn btn-success btn-sm" (click)="setRevalidated(rouDepreciationRequest, false)" *ngIf="rouDepreciationRequest.invalidated">Revalidate</button>
             <button
-              class="btn btn-success btn-sm"
+              class="btn btn-danger btn-sm"
               (click)="setInvalidated(rouDepreciationRequest, true)"
               *ngIf="!rouDepreciationRequest.invalidated"
             >
-              Activated
+              Invalidate
             </button>
           </td>
           <td>{{ rouDepreciationRequest.numberOfEnumeratedItems }}</td>

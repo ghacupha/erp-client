@@ -54,6 +54,24 @@ export class RouDepreciationRequestService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  invalidate(rouDepreciationRequest: IRouDepreciationRequest): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(rouDepreciationRequest);
+    return this.http
+      .put<IRouDepreciationRequest>(`${this.resourceUrl}/invalidate/${getRouDepreciationRequestIdentifier(rouDepreciationRequest) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  revalidate(rouDepreciationRequest: IRouDepreciationRequest): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(rouDepreciationRequest);
+    return this.http
+      .put<IRouDepreciationRequest>(`${this.resourceUrl}/revalidate/${getRouDepreciationRequestIdentifier(rouDepreciationRequest) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   partialUpdate(rouDepreciationRequest: IRouDepreciationRequest): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(rouDepreciationRequest);
     return this.http

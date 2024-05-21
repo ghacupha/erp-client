@@ -13,7 +13,7 @@
     {
       "fieldName": "depreciationProcessStatus",
       "fieldType": "depreciationProcessStatusTypes",
-      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE"
+      "fieldValues": "STARTED,RUNNING,ERRORED,COMPLETE,INVALIDATED"
     },
     {
       "fieldName": "numberOfEnumeratedItems",

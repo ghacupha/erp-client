@@ -24,4 +24,6 @@ export enum depreciationProcessStatusTypes {
   ERRORED = 'ERRORED',
 
   COMPLETE = 'COMPLETE',
+
+  INVALIDATED = 'INVALIDATED',
 }

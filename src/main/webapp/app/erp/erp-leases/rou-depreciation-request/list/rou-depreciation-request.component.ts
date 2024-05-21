@@ -105,7 +105,11 @@ export class RouDepreciationRequestComponent implements OnInit {
   }
 
   setInvalidated(rouDepreciationRequest: IRouDepreciationRequest, isInvalidated: boolean): void {
-    this.rouDepreciationRequestService.update({ ...rouDepreciationRequest, invalidated: isInvalidated }).subscribe(() => this.loadPage());
+    this.rouDepreciationRequestService.invalidate({ ...rouDepreciationRequest, invalidated: isInvalidated }).subscribe(() => this.loadPage());
+  }
+
+  setRevalidated(rouDepreciationRequest: IRouDepreciationRequest, isInvalidated: boolean): void {
+    this.rouDepreciationRequestService.revalidate({ ...rouDepreciationRequest, invalidated: isInvalidated }).subscribe(() => this.loadPage());
   }
 
   ngOnInit(): void {
