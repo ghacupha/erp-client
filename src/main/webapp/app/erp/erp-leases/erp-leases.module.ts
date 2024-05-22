@@ -19,6 +19,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
+import { RouDepreciationEntryReportItemModule } from './rou-depreciation-entry-report-item/rou-depreciation-entry-report-item.module';
 
 @NgModule({
   imports: [
@@ -225,6 +226,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           loadChildren: () =>
             import('./rou-monthly-depreciation-report-item/rou-monthly-depreciation-report-item.module').then(
               m => m.RouMonthlyDepreciationReportItemModule
+            ),
+        },
+        {
+          path: 'rou-depreciation-report-item',
+          data: {
+            pageTitle: 'ERP | ROU Depreciation Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-depreciation-entry-report-item/rou-depreciation-entry-report-item.module').then(
+              m => m.RouDepreciationEntryReportItemModule
             ),
         },
       ]
