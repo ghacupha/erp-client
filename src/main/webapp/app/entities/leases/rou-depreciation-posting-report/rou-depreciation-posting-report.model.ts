@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { ILeasePeriod } from 'app/entities/lease-period/lease-period.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 
 export interface IRouDepreciationPostingReport {
@@ -31,7 +31,7 @@ export interface IRouDepreciationPostingReport {
   reportParameters?: string | null;
   reportFileContentType?: string | null;
   reportFile?: string | null;
-  fiscalMonth?: IFiscalMonth;
+  leasePeriod?: ILeasePeriod;
   requestedBy?: IApplicationUser | null;
 }
 
@@ -47,7 +47,7 @@ export class RouDepreciationPostingReport implements IRouDepreciationPostingRepo
     public reportParameters?: string | null,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,
-    public fiscalMonth?: IFiscalMonth,
+    public leasePeriod?: ILeasePeriod,
     public requestedBy?: IApplicationUser | null
   ) {
     this.reportIsCompiled = this.reportIsCompiled ?? false;

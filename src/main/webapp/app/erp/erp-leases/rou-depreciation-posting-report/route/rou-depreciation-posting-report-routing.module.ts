@@ -30,7 +30,7 @@ const rouDepreciationPostingReportRoute: Routes = [
     path: '',
     component: RouDepreciationPostingReportComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

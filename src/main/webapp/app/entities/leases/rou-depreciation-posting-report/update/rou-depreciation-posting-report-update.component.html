@@ -140,23 +140,23 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
-          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
-            <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
+          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
+          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
+            <option *ngIf="!editForm.get('leasePeriod')!.value" [ngValue]="null" selected></option>
             <option
               [ngValue]="
-                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
+                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
               "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
             >
-              {{ fiscalMonthOption.fiscalMonthCode }}
+              {{ leasePeriodOption.periodCode }}
             </option>
           </select>
         </div>
         <div
-          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
+          *ngIf="editForm.get(['leasePeriod'])!.invalid && (editForm.get(['leasePeriod'])!.dirty || editForm.get(['leasePeriod'])!.touched)"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
+          <small class="form-text text-danger" *ngIf="editForm.get(['leasePeriod'])?.errors?.required"> This field is required. </small>
         </div>
 
         <div class="form-group">

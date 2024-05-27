@@ -83,7 +83,7 @@ describe('RouDepreciationPostingReport e2e test', () => {
             rouDepreciationPostingReportUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             rouDepreciationPostingReportUpdatePage.setReportParametersInput('reportParameters'),
             rouDepreciationPostingReportUpdatePage.setReportFileInput(absolutePath),
-            rouDepreciationPostingReportUpdatePage.fiscalMonthSelectLastOption(),
+            rouDepreciationPostingReportUpdatePage.leasePeriodSelectLastOption(),
             rouDepreciationPostingReportUpdatePage.requestedBySelectLastOption(),
         ]);
 

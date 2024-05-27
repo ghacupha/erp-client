@@ -33,29 +33,13 @@
         <dd>
           <span>{{ rouDepreciationPostingReport.id }}</span>
         </dd>
-        <dt><span>Request Id</span></dt>
-        <dd>
-          <span>{{ rouDepreciationPostingReport.requestId }}</span>
-        </dd>
         <dt><span>Time Of Request</span></dt>
         <dd>
           <span>{{ rouDepreciationPostingReport.timeOfRequest | formatMediumDatetime }}</span>
         </dd>
-        <dt><span>Report Is Compiled</span></dt>
+        <dt><span *ngIf='rouDepreciationPostingReport.tampered'>Tampered</span></dt>
         <dd>
-          <span>{{ rouDepreciationPostingReport.reportIsCompiled }}</span>
-        </dd>
-        <dt><span>File Checksum</span></dt>
-        <dd>
-          <span>{{ rouDepreciationPostingReport.fileChecksum }}</span>
-        </dd>
-        <dt><span>Tampered</span></dt>
-        <dd>
-          <span>{{ rouDepreciationPostingReport.tampered }}</span>
-        </dd>
-        <dt><span>Filename</span></dt>
-        <dd>
-          <span>{{ rouDepreciationPostingReport.filename }}</span>
+          <span *ngIf='rouDepreciationPostingReport.tampered'>{{ rouDepreciationPostingReport.tampered }}</span>
         </dd>
         <dt><span>Report Parameters</span></dt>
         <dd>
@@ -68,11 +52,11 @@
             {{ rouDepreciationPostingReport.reportFileContentType }}, {{ byteSize(rouDepreciationPostingReport.reportFile) }}
           </div>
         </dd>
-        <dt><span>Fiscal Month</span></dt>
+        <dt><span>Lease Period</span></dt>
         <dd>
-          <div *ngIf="rouDepreciationPostingReport.fiscalMonth">
-            <a [routerLink]="['/fiscal-month', rouDepreciationPostingReport.fiscalMonth?.id, 'view']">{{
-              rouDepreciationPostingReport.fiscalMonth?.fiscalMonthCode
+          <div *ngIf="rouDepreciationPostingReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouDepreciationPostingReport.leasePeriod?.id, 'view']">{{
+              rouDepreciationPostingReport.leasePeriod?.periodCode
             }}</a>
           </div>
         </dd>

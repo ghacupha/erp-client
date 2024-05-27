@@ -240,6 +240,18 @@ import { RouDepreciationEntryReportItemModule } from './rou-depreciation-entry-r
               m => m.RouDepreciationEntryReportItemModule
             ),
         },
+        {
+          path: 'lease-period',
+          data: {
+            pageTitle: 'ERP | Lease Period',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-period/lease-period.module').then(
+              m => m.LeasePeriodModule
+            ),
+        },
       ]
     )
   ]

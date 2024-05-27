@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
 
 jest.mock('@angular/router');
 
@@ -31,16 +31,16 @@ import { RouDepreciationPostingReportService } from '../service/rou-depreciation
 import { IRouDepreciationPostingReport, RouDepreciationPostingReport } from '../rou-depreciation-posting-report.model';
 
 import { RouDepreciationPostingReportUpdateComponent } from './rou-depreciation-posting-report-update.component';
-import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { ILeasePeriod } from '../../lease-period/lease-period.model';
 
 describe('RouDepreciationPostingReport Management Update Component', () => {
   let comp: RouDepreciationPostingReportUpdateComponent;
   let fixture: ComponentFixture<RouDepreciationPostingReportUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let rouDepreciationPostingReportService: RouDepreciationPostingReportService;
-  let fiscalMonthService: FiscalMonthService;
+  let leasePeriodService: LeasePeriodService;
   let applicationUserService: ApplicationUserService;
 
   beforeEach(() => {
@@ -55,30 +55,30 @@ describe('RouDepreciationPostingReport Management Update Component', () => {
     fixture = TestBed.createComponent(RouDepreciationPostingReportUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     rouDepreciationPostingReportService = TestBed.inject(RouDepreciationPostingReportService);
-    fiscalMonthService = TestBed.inject(FiscalMonthService);
+    leasePeriodService = TestBed.inject(LeasePeriodService);
     applicationUserService = TestBed.inject(ApplicationUserService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call FiscalMonth query and add missing value', () => {
+    it('Should call LeasePeriod query and add missing value', () => {
       const rouDepreciationPostingReport: IRouDepreciationPostingReport = { id: 456 };
-      const fiscalMonth: IFiscalMonth = { id: 18637 };
-      rouDepreciationPostingReport.fiscalMonth = fiscalMonth;
+      const leasePeriod: ILeasePeriod = { id: 15323 };
+      rouDepreciationPostingReport.leasePeriod = leasePeriod;
 
-      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 41193 }];
-      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
-      const additionalFiscalMonths = [fiscalMonth];
-      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
-      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const leasePeriodCollection: ILeasePeriod[] = [{ id: 57370 }];
+      jest.spyOn(leasePeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: leasePeriodCollection })));
+      const additionalLeasePeriods = [leasePeriod];
+      const expectedCollection: ILeasePeriod[] = [...additionalLeasePeriods, ...leasePeriodCollection];
+      jest.spyOn(leasePeriodService, 'addLeasePeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ rouDepreciationPostingReport });
       comp.ngOnInit();
 
-      expect(fiscalMonthService.query).toHaveBeenCalled();
-      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
-      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
+      expect(leasePeriodService.query).toHaveBeenCalled();
+      expect(leasePeriodService.addLeasePeriodToCollectionIfMissing).toHaveBeenCalledWith(leasePeriodCollection, ...additionalLeasePeriods);
+      expect(comp.leasePeriodsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call ApplicationUser query and add missing value', () => {
@@ -105,8 +105,8 @@ describe('RouDepreciationPostingReport Management Update Component', () => {
 
     it('Should update editForm', () => {
       const rouDepreciationPostingReport: IRouDepreciationPostingReport = { id: 456 };
-      const fiscalMonth: IFiscalMonth = { id: 97129 };
-      rouDepreciationPostingReport.fiscalMonth = fiscalMonth;
+      const leasePeriod: ILeasePeriod = { id: 11415 };
+      rouDepreciationPostingReport.leasePeriod = leasePeriod;
       const requestedBy: IApplicationUser = { id: 61651 };
       rouDepreciationPostingReport.requestedBy = requestedBy;
 
@@ -114,7 +114,7 @@ describe('RouDepreciationPostingReport Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(rouDepreciationPostingReport));
-      expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
+      expect(comp.leasePeriodsSharedCollection).toContain(leasePeriod);
       expect(comp.applicationUsersSharedCollection).toContain(requestedBy);
     });
   });
@@ -184,10 +184,10 @@ describe('RouDepreciationPostingReport Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackFiscalMonthById', () => {
-      it('Should return tracked FiscalMonth primary key', () => {
+    describe('trackLeasePeriodById', () => {
+      it('Should return tracked LeasePeriod primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackFiscalMonthById(0, entity);
+        const trackResult = comp.trackLeasePeriodById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

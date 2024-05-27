@@ -299,7 +299,8 @@
       "PrepaymentReportRequisition",
       "AmortizationPostingReportRequisition",
       "PrepaymentByAccountReportRequisition",
-      "WorkInProgressOutstandingReportRequisition"
+      "WorkInProgressOutstandingReportRequisition",
+      "LeasePeriod"
     ],
     "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,

@@ -70,17 +70,13 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="requestId"><span>Request Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfRequest"><span>Time Of Request</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportIsCompiled"><span>Report Is Compiled</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="filename"><span>Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportParameters">
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fiscalMonth.fiscalMonthCode"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leasePeriod.periodCode"><span>Lease Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -92,27 +88,14 @@
               rouDepreciationPostingReport.id
             }}</a>
           </td>
-          <td>{{ rouDepreciationPostingReport.requestId }}</td>
           <td>{{ rouDepreciationPostingReport.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ rouDepreciationPostingReport.reportIsCompiled }}</td>
-          <td>{{ rouDepreciationPostingReport.fileChecksum }}</td>
           <td>{{ rouDepreciationPostingReport.tampered }}</td>
-          <td>{{ rouDepreciationPostingReport.filename }}</td>
           <td>{{ rouDepreciationPostingReport.reportParameters }}</td>
           <td>
-            <a
-              *ngIf="rouDepreciationPostingReport.reportFile"
-              (click)="openFile(rouDepreciationPostingReport.reportFile, rouDepreciationPostingReport.reportFileContentType)"
-              >open</a
-            >
-            <span *ngIf="rouDepreciationPostingReport.reportFile"
-              >{{ rouDepreciationPostingReport.reportFileContentType }}, {{ byteSize(rouDepreciationPostingReport.reportFile) }}</span
-            >
-          </td>
-          <td>
-            <div *ngIf="rouDepreciationPostingReport.fiscalMonth">
-              <a [routerLink]="['/fiscal-month', rouDepreciationPostingReport.fiscalMonth?.id, 'view']">{{
-                rouDepreciationPostingReport.fiscalMonth?.fiscalMonthCode
+            <div *ngIf="rouDepreciationPostingReport.leasePeriod">
+              <a [routerLink]="['/lease-period', rouDepreciationPostingReport.leasePeriod?.id, 'view']">{{
+                rouDepreciationPostingReport.leasePeriod?.periodCode
               }}</a>
             </div>
           </td>

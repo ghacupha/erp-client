@@ -55,19 +55,24 @@
           </div>
         </div>
 
-        <jhi-m21-fiscal-month-form-control
-          ngDefaultControl
-          formControlName='fiscalMonth'
-          [inputValue]="editForm.get('fiscalMonth')!.value"
-          (valueSelected)='updateReportingMonth($event)'
-          inputControlLabel="Fiscal Reporting Month"
-        >
-          <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
-        </jhi-m21-fiscal-month-form-control>
+        <div class="form-group">
+          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
+          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
+            <option *ngIf="!editForm.get('leasePeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
+              "
+              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
+            >
+              {{ leasePeriodOption.periodCode }}
+            </option>
+          </select>
+        </div>
         <div
-          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
+          *ngIf="editForm.get(['leasePeriod'])!.invalid && (editForm.get(['leasePeriod'])!.dirty || editForm.get(['leasePeriod'])!.touched)"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
+          <small class="form-text text-danger" *ngIf="editForm.get(['leasePeriod'])?.errors?.required"> This field is required. </small>
         </div>
 
       </div>

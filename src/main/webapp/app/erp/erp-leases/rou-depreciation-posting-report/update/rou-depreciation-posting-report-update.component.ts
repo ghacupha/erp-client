@@ -31,11 +31,10 @@ import { RouDepreciationPostingReportService } from '../service/rou-depreciation
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
-import { uuidv7 } from 'uuidv7';
+import { ILeasePeriod } from '../../lease-period/lease-period.model';
 
 @Component({
   selector: 'jhi-rou-depreciation-posting-report-update',
@@ -44,7 +43,7 @@ import { uuidv7 } from 'uuidv7';
 export class RouDepreciationPostingReportUpdateComponent implements OnInit {
   isSaving = false;
 
-  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+  leasePeriodsSharedCollection: ILeasePeriod[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
 
   editForm = this.fb.group({
@@ -58,7 +57,7 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
     reportParameters: [],
     reportFile: [],
     reportFileContentType: [],
-    fiscalMonth: [null, Validators.required],
+    leasePeriod: [null, Validators.required],
     requestedBy: [],
   });
 
@@ -66,7 +65,7 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected rouDepreciationPostingReportService: RouDepreciationPostingReportService,
-    protected fiscalMonthService: FiscalMonthService,
+    protected leasePeriodService: LeasePeriodService,
     protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -75,23 +74,13 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rouDepreciationPostingReport }) => {
       if (rouDepreciationPostingReport.id === undefined) {
-        const today = dayjs();
+        const today = dayjs().startOf('day');
         rouDepreciationPostingReport.timeOfRequest = today;
-
-        rouDepreciationPostingReport.requestId = uuidv7();
-
-        rouDepreciationPostingReport.filename = uuidv7();
       }
 
       this.updateForm(rouDepreciationPostingReport);
 
       this.loadRelationshipsOptions();
-    });
-  }
-
-  updateReportingMonth(update: IFiscalMonth): void {
-    this.editForm.patchValue({
-      fiscalMonth: update
     });
   }
 
@@ -124,7 +113,7 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
     }
   }
 
-  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
+  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
     return item.id!;
   }
 
@@ -165,13 +154,13 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
       reportParameters: rouDepreciationPostingReport.reportParameters,
       reportFile: rouDepreciationPostingReport.reportFile,
       reportFileContentType: rouDepreciationPostingReport.reportFileContentType,
-      fiscalMonth: rouDepreciationPostingReport.fiscalMonth,
+      leasePeriod: rouDepreciationPostingReport.leasePeriod,
       requestedBy: rouDepreciationPostingReport.requestedBy,
     });
 
-    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
-      this.fiscalMonthsSharedCollection,
-      rouDepreciationPostingReport.fiscalMonth
+    this.leasePeriodsSharedCollection = this.leasePeriodService.addLeasePeriodToCollectionIfMissing(
+      this.leasePeriodsSharedCollection,
+      rouDepreciationPostingReport.leasePeriod
     );
     this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
       this.applicationUsersSharedCollection,
@@ -180,15 +169,15 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.fiscalMonthService
+    this.leasePeriodService
       .query()
-      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => res.body ?? []))
       .pipe(
-        map((fiscalMonths: IFiscalMonth[]) =>
-          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(fiscalMonths, this.editForm.get('fiscalMonth')!.value)
+        map((leasePeriods: ILeasePeriod[]) =>
+          this.leasePeriodService.addLeasePeriodToCollectionIfMissing(leasePeriods, this.editForm.get('leasePeriod')!.value)
         )
       )
-      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
+      .subscribe((leasePeriods: ILeasePeriod[]) => (this.leasePeriodsSharedCollection = leasePeriods));
 
     this.applicationUserService
       .query()
@@ -216,7 +205,7 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
       reportParameters: this.editForm.get(['reportParameters'])!.value,
       reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
       reportFile: this.editForm.get(['reportFile'])!.value,
-      fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
+      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
       requestedBy: this.editForm.get(['requestedBy'])!.value,
     };
   }

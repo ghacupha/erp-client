@@ -39,11 +39,11 @@
   ],
   "relationships": [
     {
-      "relationshipName": "fiscalMonth",
-      "otherEntityName": "fiscalMonth",
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
-      "otherEntityField": "fiscalMonthCode"
+      "otherEntityField": "periodCode"
     },
     {
       "relationshipName": "requestedBy",

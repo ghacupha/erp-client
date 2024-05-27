@@ -37,7 +37,7 @@ describe('RouDepreciationPostingReport e2e test', () => {
   const rouDepreciationPostingReportSample = { requestId: '0ba4c111-59d1-4b99-a7a9-789331e44d74' };
 
   let rouDepreciationPostingReport: any;
-  //let fiscalMonth: any;
+  //let leasePeriod: any;
 
   before(() => {
     cy.window().then(win => {
@@ -53,10 +53,10 @@ describe('RouDepreciationPostingReport e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/fiscal-months',
-      body: {"monthNumber":27046,"startDate":"2023-08-15","endDate":"2023-08-15","fiscalMonthCode":"Inverse"},
+      url: '/api/lease-periods',
+      body: {"sequenceNumber":32951,"startDate":"2024-05-13","endDate":"2024-05-13","periodCode":"synergize"},
     }).then(({ body }) => {
-      fiscalMonth = body;
+      leasePeriod = body;
     });
   });
    */
@@ -70,9 +70,9 @@ describe('RouDepreciationPostingReport e2e test', () => {
   /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/fiscal-months', {
+    cy.intercept('GET', '/api/lease-periods', {
       statusCode: 200,
-      body: [fiscalMonth],
+      body: [leasePeriod],
     });
 
     cy.intercept('GET', '/api/application-users', {
@@ -96,12 +96,12 @@ describe('RouDepreciationPostingReport e2e test', () => {
 
   /* Disabled due to incompatibility
   afterEach(() => {
-    if (fiscalMonth) {
+    if (leasePeriod) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/fiscal-months/${fiscalMonth.id}`,
+        url: `/api/lease-periods/${leasePeriod.id}`,
       }).then(() => {
-        fiscalMonth = undefined;
+        leasePeriod = undefined;
       });
     }
   });
@@ -150,7 +150,7 @@ describe('RouDepreciationPostingReport e2e test', () => {
   
           body: {
             ...rouDepreciationPostingReportSample,
-            fiscalMonth: fiscalMonth,
+            leasePeriod: leasePeriod,
           },
         }).then(({ body }) => {
           rouDepreciationPostingReport = body;
@@ -254,7 +254,7 @@ describe('RouDepreciationPostingReport e2e test', () => {
 
       cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
 
-      cy.get(`[data-cy="fiscalMonth"]`).select(1);
+      cy.get(`[data-cy="leasePeriod"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
