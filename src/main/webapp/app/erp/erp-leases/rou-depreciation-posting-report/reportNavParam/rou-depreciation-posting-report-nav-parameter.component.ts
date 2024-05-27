@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
@@ -36,6 +36,10 @@ import { IApplicationUser } from '../../../erp-pages/application-user/applicatio
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 import { ILeasePeriod } from '../../lease-period/lease-period.model';
 import { uuidv7 } from 'uuidv7';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { assetRegistrationDataHasMutated } from '../../../store/actions/fixed-assets-register-update-status.actions';
+import { leasePeriodSelected } from '../../../store/actions/lease-id-report-view-update.action';
 
 @Component({
   selector: 'jhi-rou-depreciation-posting-report-nav-parameter-update',
@@ -49,7 +53,7 @@ export class RouDepreciationPostingReportNavParameterComponent implements OnInit
 
   editForm = this.fb.group({
     id: [],
-    requestId: [null, [Validators.required]],
+    requestId: [],
     timeOfRequest: [],
     reportIsCompiled: [],
     fileChecksum: [],
@@ -69,7 +73,9 @@ export class RouDepreciationPostingReportNavParameterComponent implements OnInit
     protected leasePeriodService: LeasePeriodService,
     protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected router: Router,
+    protected store: Store<State>,
   ) {}
 
   ngOnInit(): void {
@@ -115,7 +121,14 @@ export class RouDepreciationPostingReportNavParameterComponent implements OnInit
     this.isSaving = true;
     const rouDepreciationPostingReport = this.createFromForm();
 
-    // TODO navigate to report item list with the lease-period id
+    const leasePeriodId: number| undefined = rouDepreciationPostingReport.leasePeriod?.id;
+
+    this.store.dispatch(leasePeriodSelected({selectedLeasePeriodId: leasePeriodId}));
+
+    this.router.navigate(['rou-depreciation-posting-report-item'])
+    // TODO Navigate to list view
+    // TODO on the view pick the lease-period-id
+    // TODO fetch data using the lease period id
   }
 
   trackLeasePeriodById(index: number, item: ILeasePeriod): number {

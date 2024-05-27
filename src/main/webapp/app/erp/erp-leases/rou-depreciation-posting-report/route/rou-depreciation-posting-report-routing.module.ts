@@ -24,6 +24,7 @@ import { RouDepreciationPostingReportComponent } from '../list/rou-depreciation-
 import { RouDepreciationPostingReportDetailComponent } from '../detail/rou-depreciation-posting-report-detail.component';
 import { RouDepreciationPostingReportUpdateComponent } from '../update/rou-depreciation-posting-report-update.component';
 import { RouDepreciationPostingReportRoutingResolveService } from './rou-depreciation-posting-report-routing-resolve.service';
+import { RouDepreciationPostingReportNavParameterComponent } from '../reportNavParam/rou-depreciation-posting-report-nav-parameter.component';
 
 const rouDepreciationPostingReportRoute: Routes = [
   {
@@ -48,6 +49,11 @@ const rouDepreciationPostingReportRoute: Routes = [
     resolve: {
       rouDepreciationPostingReport: RouDepreciationPostingReportRoutingResolveService,
     },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'list',
+    component: RouDepreciationPostingReportNavParameterComponent,
     canActivate: [UserRouteAccessService],
   },
   {

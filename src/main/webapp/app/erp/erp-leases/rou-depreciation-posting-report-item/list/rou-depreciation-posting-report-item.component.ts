@@ -25,10 +25,13 @@ import { IRouDepreciationPostingReportItem } from '../rou-depreciation-posting-r
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { RouDepreciationPostingReportItemService } from '../service/rou-depreciation-posting-report-item.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { leasePeriodSelectedId } from '../../../store/selectors/lease-period-selection-status.selector';
 
 @Component({
   selector: 'jhi-rou-depreciation-posting-report-item',
-  templateUrl: './rou-depreciation-posting-report-item.component.html',
+  templateUrl: './rou-depreciation-posting-report-item.component.html'
 })
 export class RouDepreciationPostingReportItemComponent implements OnInit {
   rouDepreciationPostingReportItems: IRouDepreciationPostingReportItem[];
@@ -40,16 +43,27 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
   ascending: boolean;
   currentSearch: string;
 
+  leasePeriodId!: number;
+
   constructor(
     protected rouDepreciationPostingReportItemService: RouDepreciationPostingReportItemService,
     protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected store: Store<State>
   ) {
+
+    // Assign  the lease-period-id from store
+    this.store.pipe(select(leasePeriodSelectedId)).subscribe(selectedId => {
+      if (typeof selectedId === 'number') {
+        this.leasePeriodId = selectedId;
+      }
+    });
+
     this.rouDepreciationPostingReportItems = [];
-    this.itemsPerPage = ITEMS_PER_PAGE;
+    this.itemsPerPage = 50;
     this.page = 0;
     this.links = {
-      last: 0,
+      last: 0
     };
     this.predicate = 'id';
     this.ascending = true;
@@ -64,7 +78,7 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
           query: this.currentSearch,
           page: this.page,
           size: this.itemsPerPage,
-          sort: this.sort(),
+          sort: this.sort()
         })
         .subscribe(
           (res: HttpResponse<IRouDepreciationPostingReportItem[]>) => {
@@ -79,10 +93,10 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
     }
 
     this.rouDepreciationPostingReportItemService
-      .query({
+      .query(this.leasePeriodId, {
         page: this.page,
         size: this.itemsPerPage,
-        sort: this.sort(),
+        sort: this.sort()
       })
       .subscribe(
         (res: HttpResponse<IRouDepreciationPostingReportItem[]>) => {
@@ -109,7 +123,7 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
   search(query: string): void {
     this.rouDepreciationPostingReportItems = [];
     this.links = {
-      last: 0,
+      last: 0
     };
     this.page = 0;
     if (
@@ -145,7 +159,7 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
       this.links = this.parseLinks.parse(linkHeader);
     } else {
       this.links = {
-        last: 0,
+        last: 0
       };
     }
     if (data) {

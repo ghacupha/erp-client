@@ -43,9 +43,9 @@ export class RouDepreciationPostingReportItemService {
     return this.http.get<IRouDepreciationPostingReportItem>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(leasePeriodId: number, req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IRouDepreciationPostingReportItem[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IRouDepreciationPostingReportItem[]>(`${this.resourceUrl}/reports/${leasePeriodId}`, { params: options, observe: 'response' });
   }
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {

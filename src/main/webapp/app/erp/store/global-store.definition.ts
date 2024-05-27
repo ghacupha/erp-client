@@ -31,6 +31,7 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../config/input.constants';
 import { IFRS16LeaseModelFormState } from './reducers/ifrs16-lease-model-workflow-status.reducer';
 import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflow-status.reducer';
+import { LeasePeriodSelectionFormState } from './reducers/lease-period-selection-workflow-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -46,6 +47,7 @@ export interface State {
   reportNavigationProfileState: ReportNavigationProfileState
   ifrs16LeaseModelFormState: IFRS16LeaseModelFormState,
   rouModelMetadataFormState: RouModelMetadataFormState,
+  leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
 }
 
 export const initialState: State = {
@@ -147,5 +149,11 @@ export const initialState: State = {
     reportPath: '',
     reportTitle: 'ERP Reports',
     reportDate: dayjs().format(DATE_FORMAT)
-  }
+  },
+  leasePeriodSelectionIdFormState: {
+    selectedLeasePeriodId: undefined,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
 }
