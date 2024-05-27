@@ -60,7 +60,7 @@ export class RouDepreciationPostingReportItemComponent implements OnInit {
     });
 
     this.rouDepreciationPostingReportItems = [];
-    this.itemsPerPage = 50;
+    this.itemsPerPage = ITEMS_PER_PAGE;
     this.page = 0;
     this.links = {
       last: 0
