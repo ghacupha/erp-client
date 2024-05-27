@@ -24,6 +24,7 @@ import { RouDepreciationPostingReportUpdateComponent } from './update/rou-deprec
 import { RouDepreciationPostingReportDeleteDialogComponent } from './delete/rou-depreciation-posting-report-delete-dialog.component';
 import { RouDepreciationPostingReportRoutingModule } from './route/rou-depreciation-posting-report-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { RouDepreciationPostingReportNavParameterComponent } from './reportNavParam/rou-depreciation-posting-report-nav-parameter.component';
 
 @NgModule({
   imports: [SharedModule, RouDepreciationPostingReportRoutingModule, ErpCommonModule],
@@ -32,6 +33,7 @@ import { ErpCommonModule } from '../../erp-common/erp-common.module';
     RouDepreciationPostingReportDetailComponent,
     RouDepreciationPostingReportUpdateComponent,
     RouDepreciationPostingReportDeleteDialogComponent,
+    RouDepreciationPostingReportNavParameterComponent,
   ],
   entryComponents: [RouDepreciationPostingReportDeleteDialogComponent],
 })
