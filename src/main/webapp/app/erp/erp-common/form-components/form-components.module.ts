@@ -78,6 +78,7 @@ import { Ifrs16LeaseContractComponentsModule } from './ifrs16-lease-contract-com
 import { AssetRegistrationFormComponentsModule } from './asset-registration-form-components/asset-registration-form-components.module';
 import { AmortizationPeriodFormComponentsModule } from './amortization-period/amortization-period-form-components.module';
 import { UserComponentsModule } from './user-form-components/user-components.module';
+import { LeasePeriodFormComponentsModule } from './lease-period-components/lease-period-form-components.module';
 
 @NgModule({
   declarations: [
@@ -198,6 +199,7 @@ import { UserComponentsModule } from './user-form-components/user-components.mod
     AssetRegistrationFormComponentsModule,
     AmortizationPeriodFormComponentsModule,
     UserComponentsModule,
+    LeasePeriodFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

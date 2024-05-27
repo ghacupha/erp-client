@@ -35,6 +35,8 @@ import { LeasePeriodService } from '../../lease-period/service/lease-period.serv
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 import { ILeasePeriod } from '../../lease-period/lease-period.model';
+import { ILeaseContract } from '../../lease-contract/lease-contract.model';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-rou-depreciation-posting-report-update',
@@ -74,8 +76,9 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ rouDepreciationPostingReport }) => {
       if (rouDepreciationPostingReport.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         rouDepreciationPostingReport.timeOfRequest = today;
+        rouDepreciationPostingReport.requestId = uuidv7();
       }
 
       this.updateForm(rouDepreciationPostingReport);
@@ -101,6 +104,12 @@ export class RouDepreciationPostingReportUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  updateLeasePeriod(update: ILeasePeriod): void {
+    this.editForm.patchValue({
+      leasePeriod: update
+    });
   }
 
   save(): void {

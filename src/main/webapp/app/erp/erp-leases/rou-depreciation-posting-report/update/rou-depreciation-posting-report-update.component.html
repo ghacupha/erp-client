@@ -55,20 +55,15 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
-          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
-            <option *ngIf="!editForm.get('leasePeriod')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
-              "
-              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
-            >
-              {{ leasePeriodOption.periodCode }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-lease-period-form-control
+          ngDefaultControl
+          formControlName='leasePeriod'
+          [inputValue]="editForm.get(['leasePeriod'])!.value"
+          (valueSelected)='updateLeasePeriod($event)'
+          inputControlLabel='Lease Period (Required)'
+        >
+          <option [ngValue]="editForm.get(['leasePeriod'])!.value"></option>
+        </jhi-m21-lease-period-form-control>
         <div
           *ngIf="editForm.get(['leasePeriod'])!.invalid && (editForm.get(['leasePeriod'])!.dirty || editForm.get(['leasePeriod'])!.touched)"
         >
