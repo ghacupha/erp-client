@@ -24,6 +24,7 @@ import { RouAccountBalanceReportUpdateComponent } from './update/rou-account-bal
 import { RouAccountBalanceReportDeleteDialogComponent } from './delete/rou-account-balance-report-delete-dialog.component';
 import { RouAccountBalanceReportRoutingModule } from './route/rou-account-balance-report-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { RouAccountBalanceReportNavParameterComponent } from './reportNavParam/rou-account-balance-report-nav-parameter.component';
 
 @NgModule({
   imports: [SharedModule, RouAccountBalanceReportRoutingModule, ErpCommonModule],
@@ -32,6 +33,7 @@ import { ErpCommonModule } from '../../erp-common/erp-common.module';
     RouAccountBalanceReportDetailComponent,
     RouAccountBalanceReportUpdateComponent,
     RouAccountBalanceReportDeleteDialogComponent,
+    RouAccountBalanceReportNavParameterComponent,
   ],
   entryComponents: [RouAccountBalanceReportDeleteDialogComponent],
 })

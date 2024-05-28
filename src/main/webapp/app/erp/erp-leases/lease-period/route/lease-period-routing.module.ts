@@ -24,6 +24,7 @@ import { LeasePeriodComponent } from '../list/lease-period.component';
 import { LeasePeriodDetailComponent } from '../detail/lease-period-detail.component';
 import { LeasePeriodUpdateComponent } from '../update/lease-period-update.component';
 import { LeasePeriodRoutingResolveService } from './lease-period-routing-resolve.service';
+import { ReportNavParameterComponent } from '../reportNavParam/report-nav-parameter.component';
 
 const leasePeriodRoute: Routes = [
   {
@@ -32,6 +33,11 @@ const leasePeriodRoute: Routes = [
     data: {
       defaultSort: 'id,asc',
     },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'report-nav',
+    component: ReportNavParameterComponent,
     canActivate: [UserRouteAccessService],
   },
   {

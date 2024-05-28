@@ -23,10 +23,17 @@ import { LeasePeriodDetailComponent } from './detail/lease-period-detail.compone
 import { LeasePeriodUpdateComponent } from './update/lease-period-update.component';
 import { LeasePeriodDeleteDialogComponent } from './delete/lease-period-delete-dialog.component';
 import { LeasePeriodRoutingModule } from './route/lease-period-routing.module';
+import { ReportNavParameterComponent } from './reportNavParam/report-nav-parameter.component';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeasePeriodRoutingModule],
-  declarations: [LeasePeriodComponent, LeasePeriodDetailComponent, LeasePeriodUpdateComponent, LeasePeriodDeleteDialogComponent],
+  imports: [SharedModule, LeasePeriodRoutingModule, ErpCommonModule],
+  declarations: [
+    LeasePeriodComponent,
+    LeasePeriodDetailComponent,
+    LeasePeriodUpdateComponent,
+    ReportNavParameterComponent,
+    LeasePeriodDeleteDialogComponent],
   entryComponents: [LeasePeriodDeleteDialogComponent],
 })
 export class LeasePeriodModule {}

@@ -126,9 +126,6 @@ export class RouDepreciationPostingReportNavParameterComponent implements OnInit
     this.store.dispatch(leasePeriodSelected({selectedLeasePeriodId: leasePeriodId}));
 
     this.router.navigate(['rou-depreciation-posting-report-item'])
-    // TODO Navigate to list view
-    // TODO on the view pick the lease-period-id
-    // TODO fetch data using the lease period id
   }
 
   trackLeasePeriodById(index: number, item: ILeasePeriod): number {
