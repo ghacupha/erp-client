@@ -93,7 +93,7 @@ export class RouAccountBalanceReportItemComponent implements OnInit {
     }
 
     this.rouAccountBalanceReportItemService
-      .query({
+      .query(this.leasePeriodId, {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.sort(),

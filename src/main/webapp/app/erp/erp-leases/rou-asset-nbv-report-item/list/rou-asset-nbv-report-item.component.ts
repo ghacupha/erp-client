@@ -93,7 +93,7 @@ export class RouAssetNBVReportItemComponent implements OnInit {
     }
 
     this.rouAssetNBVReportItemService
-      .query({
+      .query(this.leasePeriodId, {
         page: this.page,
         size: this.itemsPerPage,
         sort: this.sort(),

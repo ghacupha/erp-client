@@ -48,10 +48,10 @@ export class RouAccountBalanceReportItemService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(leasePeriodId:number, req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
-      .get<IRouAccountBalanceReportItem[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .get<IRouAccountBalanceReportItem[]>(`${this.resourceUrl}/reports/${leasePeriodId}`, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
