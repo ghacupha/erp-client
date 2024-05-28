@@ -23,6 +23,18 @@ export const leasePeriodReportPathUpdated = createAction(
   props<{ leasePeriodReportPathUpdate: string }>()
 );
 
+export const leasePeriodParamForRouAccountBalanceReportItem = createAction(
+  '[ReportNavComponent] Report view initiated on the path rou-account-balance-report-item',
+);
+
+export const leasePeriodParamForRouAssetNBVReportItem = createAction(
+  '[ReportNavComponent] Report view initiated on the path rou-asset-nbv-report-item',
+);
+
+export const leasePeriodParamForRouDepreciationPostingReportItem = createAction(
+  '[ReportNavComponent] Report view initiated on the path rou-depreciation-posting-report-item',
+);
+
 export const leasePeriodReportPathReset = createAction(
   '[Generic lease period report path] Report path reset triggered',
 );

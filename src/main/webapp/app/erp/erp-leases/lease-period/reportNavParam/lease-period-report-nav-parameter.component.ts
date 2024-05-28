@@ -24,7 +24,10 @@ import { leasePeriodSelected } from '../../../store/actions/lease-id-report-view
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
 import { ILeasePeriod } from '../lease-period.model';
-import { leasePeriodReportPath } from 'app/erp/store/selectors/lease-period-report-path.selector';
+import {
+  leasePeriodReportPath,
+  leasePeriodReportTitle
+} from 'app/erp/store/selectors/lease-period-report-path.selector';
 
 @Component({
   selector: 'jhi-lease-period-report-nav-parameter',
@@ -33,6 +36,7 @@ import { leasePeriodReportPath } from 'app/erp/store/selectors/lease-period-repo
 export class LeasePeriodReportNavParameterComponent {
 
   leasePeriodReportPath!: string;
+  leasePeriodReportTitle!: string;
 
   editForm = this.fb.group({
     leasePeriod: [null, Validators.required],
@@ -44,6 +48,7 @@ export class LeasePeriodReportNavParameterComponent {
     protected router: Router
   ) {
     this.store.pipe(select(leasePeriodReportPath)).subscribe(reportPath => this.leasePeriodReportPath = reportPath);
+    this.store.pipe(select(leasePeriodReportTitle)).subscribe(reportTitle => this.leasePeriodReportTitle = reportTitle);
   }
 
   updateLeasePeriod(update: ILeasePeriod): void {

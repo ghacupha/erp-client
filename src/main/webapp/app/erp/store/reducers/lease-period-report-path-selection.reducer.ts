@@ -18,23 +18,56 @@
 
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, State } from '../global-store.definition';
-import {leasePeriodReportPathReset,  leasePeriodReportPathUpdated} from '../actions/lease-period-report-path-status.action';
+import {
+  leasePeriodParamForRouAccountBalanceReportItem,
+  leasePeriodParamForRouAssetNBVReportItem,
+  leasePeriodParamForRouDepreciationPostingReportItem,
+  leasePeriodReportPathReset,
+  leasePeriodReportPathUpdated
+} from '../actions/lease-period-report-path-status.action';
 
 export const leasePeriodReportPathSelectionStateSelector = 'leasePeriodReportPath';
 
 export interface LeasePeriodReportPathSelectionState {
   leasePeriodReportPath: string;
+  leasePeriodReportTitle: string;
 }
 
 const _leasePeriodReportPathSelectionStateReducer = createReducer(
   initialState,
 
-  // workflows for creation
   on(leasePeriodReportPathUpdated, (state, { leasePeriodReportPathUpdate }) => ({
     ...state,
     leasePeriodReportPathSelectionState: {
       ...state.leasePeriodReportPathSelectionState,
       leasePeriodReportPath: leasePeriodReportPathUpdate,
+    }
+  })),
+
+  on(leasePeriodParamForRouAccountBalanceReportItem, (state) => ({
+    ...state,
+    leasePeriodReportPathSelectionState: {
+      ...state.leasePeriodReportPathSelectionState,
+      leasePeriodReportPath: 'rou-account-balance-report-item',
+      leasePeriodReportTitle: 'Lease Period Parameter For Account Balance Report',
+    }
+  })),
+
+  on(leasePeriodParamForRouAssetNBVReportItem, (state) => ({
+    ...state,
+    leasePeriodReportPathSelectionState: {
+      ...state.leasePeriodReportPathSelectionState,
+      leasePeriodReportPath: 'rou-asset-nbv-report-item',
+      leasePeriodReportTitle: 'Lease Period Parameter For Asset NBV Report',
+    }
+  })),
+
+  on(leasePeriodParamForRouDepreciationPostingReportItem, (state) => ({
+    ...state,
+    leasePeriodReportPathSelectionState: {
+      ...state.leasePeriodReportPathSelectionState,
+      leasePeriodReportPath: 'rou-depreciation-posting-report-item',
+      leasePeriodReportTitle: 'Lease Period Parameter For Depreciation Posting Report',
     }
   })),
 

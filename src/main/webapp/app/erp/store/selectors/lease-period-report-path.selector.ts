@@ -26,3 +26,8 @@ export const leasePeriodReportPath = createSelector(
   leasePeriodReportPathSelectionState,
   state => state.leasePeriodReportPathSelectionState.leasePeriodReportPath
 );
+
+export const leasePeriodReportTitle = createSelector(
+  leasePeriodReportPathSelectionState,
+  state => state.leasePeriodReportPathSelectionState.leasePeriodReportTitle
+);

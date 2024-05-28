@@ -160,5 +160,6 @@ export const initialState: State = {
   },
   leasePeriodReportPathSelectionState: {
     leasePeriodReportPath: '',
+    leasePeriodReportTitle: '',
   },
 }
