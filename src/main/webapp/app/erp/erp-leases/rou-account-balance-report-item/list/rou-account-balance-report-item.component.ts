@@ -25,6 +25,9 @@ import { IRouAccountBalanceReportItem } from '../rou-account-balance-report-item
 import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { RouAccountBalanceReportItemService } from '../service/rou-account-balance-report-item.service';
 import { ParseLinks } from 'app/core/util/parse-links.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { leasePeriodSelectedId } from '../../../store/selectors/lease-period-selection-status.selector';
 
 @Component({
   selector: 'jhi-rou-account-balance-report-item',
@@ -40,11 +43,22 @@ export class RouAccountBalanceReportItemComponent implements OnInit {
   ascending: boolean;
   currentSearch: string;
 
+  leasePeriodId!: number;
+
   constructor(
     protected rouAccountBalanceReportItemService: RouAccountBalanceReportItemService,
     protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected store: Store<State>
   ) {
+
+    // Assign  the lease-period-id from store
+    this.store.pipe(select(leasePeriodSelectedId)).subscribe(selectedId => {
+      if (typeof selectedId === 'number') {
+        this.leasePeriodId = selectedId;
+      }
+    });
+
     this.rouAccountBalanceReportItems = [];
     this.itemsPerPage = ITEMS_PER_PAGE;
     this.page = 0;
