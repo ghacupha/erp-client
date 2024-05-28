@@ -542,10 +542,10 @@
         <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
           <a
             class="dropdown-item"
-            [routerLink]="['/rou-depreciation-posting-report/list']"
+            [routerLink]="['/lease-period/report-nav']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            (click)="leasePeriodReportPathToRouDepreciationPostingReportItem()"
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>ROU Depreciation Posting Items</span>

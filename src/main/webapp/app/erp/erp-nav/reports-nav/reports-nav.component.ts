@@ -110,6 +110,9 @@ export class ReportsNavComponent implements OnInit{
     // this.loadAll();
   }
 
+  /**
+   * Updates on the store router-path for report to rou-account-balance-report-item
+   */
   leasePeriodReportPathToRouAccountBalanceReportItem(): void {
 
     this.store.dispatch(leasePeriodReportPathUpdated({leasePeriodReportPathUpdate: 'rou-account-balance-report-item'}));
@@ -117,9 +120,22 @@ export class ReportsNavComponent implements OnInit{
     this.isNavbarCollapsed = true;
   }
 
+  /**
+   * Updates on the store router-path for report to rou-asset-nbv-report-item
+   */
   leasePeriodReportPathToRouAssetNBVReportItem(): void {
 
     this.store.dispatch(leasePeriodReportPathUpdated({leasePeriodReportPathUpdate: 'rou-asset-nbv-report-item'}));
+
+    this.isNavbarCollapsed = true;
+  }
+
+  /**
+   * Updates on the store router-path for report to rou-depreciation-posting-report-item
+   */
+  leasePeriodReportPathToRouDepreciationPostingReportItem(): void {
+
+    this.store.dispatch(leasePeriodReportPathUpdated({leasePeriodReportPathUpdate: 'rou-depreciation-posting-report-item'}));
 
     this.isNavbarCollapsed = true;
   }
