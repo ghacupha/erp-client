@@ -24,7 +24,6 @@ import { RouAccountBalanceReportComponent } from '../list/rou-account-balance-re
 import { RouAccountBalanceReportDetailComponent } from '../detail/rou-account-balance-report-detail.component';
 import { RouAccountBalanceReportUpdateComponent } from '../update/rou-account-balance-report-update.component';
 import { RouAccountBalanceReportRoutingResolveService } from './rou-account-balance-report-routing-resolve.service';
-import { RouAccountBalanceReportNavParameterComponent } from '../reportNavParam/rou-account-balance-report-nav-parameter.component';
 
 const rouAccountBalanceReportRoute: Routes = [
   {
@@ -33,11 +32,6 @@ const rouAccountBalanceReportRoute: Routes = [
     data: {
       defaultSort: 'id,asc',
     },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: 'list',
-    component: RouAccountBalanceReportNavParameterComponent,
     canActivate: [UserRouteAccessService],
   },
   {

@@ -32,6 +32,7 @@ import { DATE_FORMAT } from '../../config/input.constants';
 import { IFRS16LeaseModelFormState } from './reducers/ifrs16-lease-model-workflow-status.reducer';
 import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflow-status.reducer';
 import { LeasePeriodSelectionFormState } from './reducers/lease-period-selection-workflow-status.reducer';
+import { LeasePeriodReportPathSelectionState } from './reducers/lease-period-report-path-selection.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -48,6 +49,7 @@ export interface State {
   ifrs16LeaseModelFormState: IFRS16LeaseModelFormState,
   rouModelMetadataFormState: RouModelMetadataFormState,
   leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
+  leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
 }
 
 export const initialState: State = {
@@ -155,5 +157,8 @@ export const initialState: State = {
     weAreCopying: false,
     weAreEditing: false,
     weAreCreating: false,
+  },
+  leasePeriodReportPathSelectionState: {
+    leasePeriodReportPath: '',
   },
 }

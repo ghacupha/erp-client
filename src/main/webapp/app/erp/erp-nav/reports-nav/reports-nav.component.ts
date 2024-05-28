@@ -30,6 +30,7 @@ import {
 } from '../../store/actions/report-navigation-profile-status.actions';
 import { Store } from '@ngrx/store';
 import { State } from '../../store/global-store.definition';
+import { leasePeriodReportPathUpdated } from '../../store/actions/lease-period-report-path-status.action';
 
 @Component({
   selector: "jhi-reports-nav",
@@ -107,5 +108,19 @@ export class ReportsNavComponent implements OnInit{
   reset(): void {
     // this.page = 0;
     // this.loadAll();
+  }
+
+  leasePeriodReportPathToRouAccountBalanceReportItem(): void {
+
+    this.store.dispatch(leasePeriodReportPathUpdated({leasePeriodReportPathUpdate: 'rou-account-balance-report-item'}));
+
+    this.isNavbarCollapsed = true;
+  }
+
+  leasePeriodReportPathToRouAssetNBVReportItem(): void {
+
+    this.store.dispatch(leasePeriodReportPathUpdated({leasePeriodReportPathUpdate: 'rou-asset-nbv-report-item'}));
+
+    this.isNavbarCollapsed = true;
   }
 }

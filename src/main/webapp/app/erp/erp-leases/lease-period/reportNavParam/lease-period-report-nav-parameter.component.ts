@@ -20,16 +20,19 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { ILeasePeriod } from '../../lease-period/lease-period.model';
 import { leasePeriodSelected } from '../../../store/actions/lease-id-report-view-update.action';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
+import { ILeasePeriod } from '../lease-period.model';
+import { leasePeriodReportPath } from 'app/erp/store/selectors/lease-period-report-path.selector';
 
 @Component({
-  selector: 'jhi-rou-account-balance-report-nav-parameter',
-  templateUrl: './rou-account-balance-report-nav-parameter.component.html',
+  selector: 'jhi-lease-period-report-nav-parameter',
+  templateUrl: './lease-period-report-nav-parameter.component.html',
 })
-export class RouAccountBalanceReportNavParameterComponent  {
+export class LeasePeriodReportNavParameterComponent {
+
+  leasePeriodReportPath!: string;
 
   editForm = this.fb.group({
     leasePeriod: [null, Validators.required],
@@ -39,7 +42,9 @@ export class RouAccountBalanceReportNavParameterComponent  {
     protected fb: FormBuilder,
     protected store: Store<State>,
     protected router: Router
-  ) {}
+  ) {
+    this.store.pipe(select(leasePeriodReportPath)).subscribe(reportPath => this.leasePeriodReportPath = reportPath);
+  }
 
   updateLeasePeriod(update: ILeasePeriod): void {
     this.editForm.patchValue({
@@ -55,8 +60,10 @@ export class RouAccountBalanceReportNavParameterComponent  {
 
     const leasePeriodId: number| undefined = this.editForm.get(['leasePeriod'])!.value.id;
 
+    // TODO pick this period from the actual report component
     this.store.dispatch(leasePeriodSelected({selectedLeasePeriodId: leasePeriodId}));
 
-    this.router.navigate(['rou-account-balance-report-item'])
+    // navigate to actual report-path
+    this.router.navigate([this.leasePeriodReportPath])
   }
 }

@@ -464,10 +464,10 @@
         <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
           <a
             class="dropdown-item"
-            [routerLink]="['/rou-account-balance-report/list']"
+            [routerLink]="['/lease-period/report-nav']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            (click)="leasePeriodReportPathToRouAccountBalanceReportItem()"
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>ROU Account Balances Items</span>
@@ -503,10 +503,10 @@
         <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
           <a
             class="dropdown-item"
-            [routerLink]="['/rou-asset-nbv-report-item']"
+            [routerLink]="['/lease-period/report-nav']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            (click)="leasePeriodReportPathToRouAssetNBVReportItem()"
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>ROU Asset NBV Items</span>
