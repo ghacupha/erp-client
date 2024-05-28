@@ -31,10 +31,10 @@ import { RouAccountBalanceReportService } from '../service/rou-account-balance-r
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { ILeasePeriod } from '../../lease-period/lease-period.model';
+import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
 import { uuidv7 } from 'uuidv7';
 
 @Component({
@@ -44,8 +44,8 @@ import { uuidv7 } from 'uuidv7';
 export class RouAccountBalanceReportUpdateComponent implements OnInit {
   isSaving = false;
 
+  leasePeriodsSharedCollection: ILeasePeriod[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
-  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -58,16 +58,16 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
     reportParameters: [],
     reportFile: [],
     reportFileContentType: [],
+    leasePeriod: [null, Validators.required],
     requestedBy: [],
-    reportingMonth: [null, [Validators.required]],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected rouAccountBalanceReportService: RouAccountBalanceReportService,
+    protected leasePeriodService: LeasePeriodService,
     protected applicationUserService: ApplicationUserService,
-    protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -80,7 +80,6 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
 
         rouAccountBalanceReport.requestId = uuidv7();
 
-        rouAccountBalanceReport.filename = uuidv7();
       }
 
       this.updateForm(rouAccountBalanceReport);
@@ -89,9 +88,9 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
     });
   }
 
-  updateReportingMonth(update: IFiscalMonth): void {
+  updateLeasePeriod(update: ILeasePeriod): void {
     this.editForm.patchValue({
-      reportingMonth: update
+      leasePeriod: update
     });
   }
 
@@ -124,11 +123,11 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
     }
   }
 
-  trackApplicationUserById(index: number, item: IApplicationUser): number {
+  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
     return item.id!;
   }
 
-  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
+  trackApplicationUserById(index: number, item: IApplicationUser): number {
     return item.id!;
   }
 
@@ -163,21 +162,31 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
       reportParameters: rouAccountBalanceReport.reportParameters,
       reportFile: rouAccountBalanceReport.reportFile,
       reportFileContentType: rouAccountBalanceReport.reportFileContentType,
+      leasePeriod: rouAccountBalanceReport.leasePeriod,
       requestedBy: rouAccountBalanceReport.requestedBy,
-      reportingMonth: rouAccountBalanceReport.reportingMonth,
     });
 
+    this.leasePeriodsSharedCollection = this.leasePeriodService.addLeasePeriodToCollectionIfMissing(
+      this.leasePeriodsSharedCollection,
+      rouAccountBalanceReport.leasePeriod
+    );
     this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
       this.applicationUsersSharedCollection,
       rouAccountBalanceReport.requestedBy
     );
-    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
-      this.fiscalMonthsSharedCollection,
-      rouAccountBalanceReport.reportingMonth
-    );
   }
 
   protected loadRelationshipsOptions(): void {
+    this.leasePeriodService
+      .query()
+      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => res.body ?? []))
+      .pipe(
+        map((leasePeriods: ILeasePeriod[]) =>
+          this.leasePeriodService.addLeasePeriodToCollectionIfMissing(leasePeriods, this.editForm.get('leasePeriod')!.value)
+        )
+      )
+      .subscribe((leasePeriods: ILeasePeriod[]) => (this.leasePeriodsSharedCollection = leasePeriods));
+
     this.applicationUserService
       .query()
       .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
@@ -187,16 +196,6 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
         )
       )
       .subscribe((applicationUsers: IApplicationUser[]) => (this.applicationUsersSharedCollection = applicationUsers));
-
-    this.fiscalMonthService
-      .query()
-      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
-      .pipe(
-        map((fiscalMonths: IFiscalMonth[]) =>
-          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(fiscalMonths, this.editForm.get('reportingMonth')!.value)
-        )
-      )
-      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
   }
 
   protected createFromForm(): IRouAccountBalanceReport {
@@ -214,8 +213,8 @@ export class RouAccountBalanceReportUpdateComponent implements OnInit {
       reportParameters: this.editForm.get(['reportParameters'])!.value,
       reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
       reportFile: this.editForm.get(['reportFile'])!.value,
+      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
       requestedBy: this.editForm.get(['requestedBy'])!.value,
-      reportingMonth: this.editForm.get(['reportingMonth'])!.value,
     };
   }
 }

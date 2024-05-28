@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 
 export interface IRouAssetNBVReport {
@@ -31,7 +31,7 @@ export interface IRouAssetNBVReport {
   reportParameters?: string | null;
   reportFileContentType?: string | null;
   reportFile?: string | null;
-  fiscalReportingMonth?: IFiscalMonth;
+  leasePeriod?: ILeasePeriod;
   requestedBy?: IApplicationUser | null;
 }
 
@@ -47,7 +47,7 @@ export class RouAssetNBVReport implements IRouAssetNBVReport {
     public reportParameters?: string | null,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,
-    public fiscalReportingMonth?: IFiscalMonth,
+    public leasePeriod?: ILeasePeriod,
     public requestedBy?: IApplicationUser | null
   ) {
     this.reportIsCompiled = this.reportIsCompiled ?? false;

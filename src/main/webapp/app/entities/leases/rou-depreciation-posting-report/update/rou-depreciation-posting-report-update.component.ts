@@ -31,8 +31,8 @@ import { RouDepreciationPostingReportService } from '../service/rou-depreciation
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { ILeasePeriod } from 'app/entities/lease-period/lease-period.model';
-import { LeasePeriodService } from 'app/entities/lease-period/service/lease-period.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 

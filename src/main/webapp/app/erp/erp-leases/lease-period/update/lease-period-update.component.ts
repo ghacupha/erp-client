@@ -25,8 +25,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ILeasePeriod, LeasePeriod } from '../lease-period.model';
 import { LeasePeriodService } from '../service/lease-period.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 
 @Component({
   selector: 'jhi-lease-period-update',

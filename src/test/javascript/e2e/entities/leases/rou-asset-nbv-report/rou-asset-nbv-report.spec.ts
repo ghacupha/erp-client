@@ -80,7 +80,7 @@ describe('RouAssetNBVReport e2e test', () => {
             rouAssetNBVReportUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             rouAssetNBVReportUpdatePage.setReportParametersInput('reportParameters'),
             rouAssetNBVReportUpdatePage.setReportFileInput(absolutePath),
-            rouAssetNBVReportUpdatePage.fiscalReportingMonthSelectLastOption(),
+            rouAssetNBVReportUpdatePage.leasePeriodSelectLastOption(),
             rouAssetNBVReportUpdatePage.requestedBySelectLastOption(),
         ]);
 

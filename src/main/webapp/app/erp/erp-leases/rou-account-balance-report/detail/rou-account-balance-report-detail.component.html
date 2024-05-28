@@ -35,37 +35,26 @@
         </dd>
         <dt><span>Request Id</span></dt>
         <dd>
-          <span>{{ rouAccountBalanceReport.requestId }}</span>
+          <span>{{ rouAccountBalanceReport.requestId | slice:0:8}}</span>
         </dd>
         <dt><span>Time Of Request</span></dt>
         <dd>
           <span>{{ rouAccountBalanceReport.timeOfRequest | formatMediumDatetime }}</span>
         </dd>
-        <dt><span>Report Is Compiled</span></dt>
+        <dt><span *ngIf='rouAccountBalanceReport.tampered'>Tampered</span></dt>
         <dd>
-          <span>{{ rouAccountBalanceReport.reportIsCompiled }}</span>
-        </dd>
-        <dt><span>File Checksum</span></dt>
-        <dd>
-          <span>{{ rouAccountBalanceReport.fileChecksum }}</span>
-        </dd>
-        <dt><span>Tampered</span></dt>
-        <dd>
-          <span>{{ rouAccountBalanceReport.tampered }}</span>
-        </dd>
-        <dt><span>Filename</span></dt>
-        <dd>
-          <span>{{ rouAccountBalanceReport.filename }}</span>
+          <span *ngIf='rouAccountBalanceReport.tampered'>The report has been tampered</span>
         </dd>
         <dt><span>Report Parameters</span></dt>
         <dd>
           <span>{{ rouAccountBalanceReport.reportParameters }}</span>
         </dd>
-        <dt><span>Report File</span></dt>
+        <dt><span>Lease Period</span></dt>
         <dd>
-          <div *ngIf="rouAccountBalanceReport.reportFile">
-            <a (click)="openFile(rouAccountBalanceReport.reportFile, rouAccountBalanceReport.reportFileContentType)">open</a>
-            {{ rouAccountBalanceReport.reportFileContentType }}, {{ byteSize(rouAccountBalanceReport.reportFile) }}
+          <div *ngIf="rouAccountBalanceReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouAccountBalanceReport.leasePeriod?.id, 'view']">{{
+              rouAccountBalanceReport.leasePeriod?.periodCode
+            }}</a>
           </div>
         </dd>
         <dt><span>Requested By</span></dt>
@@ -73,14 +62,6 @@
           <div *ngIf="rouAccountBalanceReport.requestedBy">
             <a [routerLink]="['/application-user', rouAccountBalanceReport.requestedBy?.id, 'view']">{{
               rouAccountBalanceReport.requestedBy?.applicationIdentity
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Reporting Month</span></dt>
-        <dd>
-          <div *ngIf="rouAccountBalanceReport.reportingMonth">
-            <a [routerLink]="['/fiscal-month', rouAccountBalanceReport.reportingMonth?.id, 'view']">{{
-              rouAccountBalanceReport.reportingMonth?.fiscalMonthCode
             }}</a>
           </div>
         </dd>

@@ -53,25 +53,15 @@
           </div>
         </div>
 
-        <jhi-m21-fiscal-month-form-control
+        <jhi-m21-lease-period-form-control
           ngDefaultControl
-          formControlName='fiscalReportingMonth'
-          [inputValue]="editForm.get('fiscalReportingMonth')!.value"
-          (valueSelected)='updateReportingMonth($event)'
-          inputControlLabel="Fiscal Reporting Month"
+          formControlName='leasePeriod'
+          [inputValue]="editForm.get(['leasePeriod'])!.value"
+          (valueSelected)='updateLeasePeriod($event)'
+          inputControlLabel='Lease Period (Required)'
         >
-          <option [ngValue]="editForm.get('fiscalReportingMonth')!.value"></option>
-        </jhi-m21-fiscal-month-form-control>
-        <div
-          *ngIf="
-            editForm.get(['fiscalReportingMonth'])!.invalid &&
-            (editForm.get(['fiscalReportingMonth'])!.dirty || editForm.get(['fiscalReportingMonth'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalReportingMonth'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get(['leasePeriod'])!.value"></option>
+        </jhi-m21-lease-period-form-control>
 
       </div>
 

@@ -57,7 +57,7 @@ export class RouAssetNBVReportUpdatePage {
   reportParametersInput = element(by.id('field_reportParameters'));
   reportFileInput = element(by.id('file_reportFile'));
 
-  fiscalReportingMonthSelect = element(by.id('field_fiscalReportingMonth'));
+  leasePeriodSelect = element(by.id('field_leasePeriod'));
   requestedBySelect = element(by.id('field_requestedBy'));
 
   async getPageTitle(): Promise<string> {
@@ -128,20 +128,20 @@ export class RouAssetNBVReportUpdatePage {
     return await this.reportFileInput.getAttribute('value');
   }
 
-  async fiscalReportingMonthSelectLastOption(): Promise<void> {
-    await this.fiscalReportingMonthSelect.all(by.tagName('option')).last().click();
+  async leasePeriodSelectLastOption(): Promise<void> {
+    await this.leasePeriodSelect.all(by.tagName('option')).last().click();
   }
 
-  async fiscalReportingMonthSelectOption(option: string): Promise<void> {
-    await this.fiscalReportingMonthSelect.sendKeys(option);
+  async leasePeriodSelectOption(option: string): Promise<void> {
+    await this.leasePeriodSelect.sendKeys(option);
   }
 
-  getFiscalReportingMonthSelect(): ElementFinder {
-    return this.fiscalReportingMonthSelect;
+  getLeasePeriodSelect(): ElementFinder {
+    return this.leasePeriodSelect;
   }
 
-  async getFiscalReportingMonthSelectedOption(): Promise<string> {
-    return await this.fiscalReportingMonthSelect.element(by.css('option:checked')).getText();
+  async getLeasePeriodSelectedOption(): Promise<string> {
+    return await this.leasePeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async requestedBySelectLastOption(): Promise<void> {

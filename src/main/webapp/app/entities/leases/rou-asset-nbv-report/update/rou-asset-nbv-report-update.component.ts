@@ -31,8 +31,8 @@ import { RouAssetNBVReportService } from '../service/rou-asset-nbv-report.servic
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
@@ -43,7 +43,7 @@ import { ApplicationUserService } from 'app/entities/people/application-user/ser
 export class RouAssetNBVReportUpdateComponent implements OnInit {
   isSaving = false;
 
-  fiscalMonthsSharedCollection: IFiscalMonth[] = [];
+  leasePeriodsSharedCollection: ILeasePeriod[] = [];
   applicationUsersSharedCollection: IApplicationUser[] = [];
 
   editForm = this.fb.group({
@@ -57,7 +57,7 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
     reportParameters: [],
     reportFile: [],
     reportFileContentType: [],
-    fiscalReportingMonth: [null, Validators.required],
+    leasePeriod: [null, Validators.required],
     requestedBy: [],
   });
 
@@ -65,7 +65,7 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected rouAssetNBVReportService: RouAssetNBVReportService,
-    protected fiscalMonthService: FiscalMonthService,
+    protected leasePeriodService: LeasePeriodService,
     protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -113,7 +113,7 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
     }
   }
 
-  trackFiscalMonthById(index: number, item: IFiscalMonth): number {
+  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
     return item.id!;
   }
 
@@ -152,13 +152,13 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
       reportParameters: rouAssetNBVReport.reportParameters,
       reportFile: rouAssetNBVReport.reportFile,
       reportFileContentType: rouAssetNBVReport.reportFileContentType,
-      fiscalReportingMonth: rouAssetNBVReport.fiscalReportingMonth,
+      leasePeriod: rouAssetNBVReport.leasePeriod,
       requestedBy: rouAssetNBVReport.requestedBy,
     });
 
-    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
-      this.fiscalMonthsSharedCollection,
-      rouAssetNBVReport.fiscalReportingMonth
+    this.leasePeriodsSharedCollection = this.leasePeriodService.addLeasePeriodToCollectionIfMissing(
+      this.leasePeriodsSharedCollection,
+      rouAssetNBVReport.leasePeriod
     );
     this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
       this.applicationUsersSharedCollection,
@@ -167,15 +167,15 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.fiscalMonthService
+    this.leasePeriodService
       .query()
-      .pipe(map((res: HttpResponse<IFiscalMonth[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => res.body ?? []))
       .pipe(
-        map((fiscalMonths: IFiscalMonth[]) =>
-          this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(fiscalMonths, this.editForm.get('fiscalReportingMonth')!.value)
+        map((leasePeriods: ILeasePeriod[]) =>
+          this.leasePeriodService.addLeasePeriodToCollectionIfMissing(leasePeriods, this.editForm.get('leasePeriod')!.value)
         )
       )
-      .subscribe((fiscalMonths: IFiscalMonth[]) => (this.fiscalMonthsSharedCollection = fiscalMonths));
+      .subscribe((leasePeriods: ILeasePeriod[]) => (this.leasePeriodsSharedCollection = leasePeriods));
 
     this.applicationUserService
       .query()
@@ -203,7 +203,7 @@ export class RouAssetNBVReportUpdateComponent implements OnInit {
       reportParameters: this.editForm.get(['reportParameters'])!.value,
       reportFileContentType: this.editForm.get(['reportFileContentType'])!.value,
       reportFile: this.editForm.get(['reportFile'])!.value,
-      fiscalReportingMonth: this.editForm.get(['fiscalReportingMonth'])!.value,
+      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
       requestedBy: this.editForm.get(['requestedBy'])!.value,
     };
   }

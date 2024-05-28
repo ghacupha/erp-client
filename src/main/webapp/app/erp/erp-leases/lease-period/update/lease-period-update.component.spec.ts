@@ -27,10 +27,10 @@ import { of, Subject } from 'rxjs';
 
 import { LeasePeriodService } from '../service/lease-period.service';
 import { ILeasePeriod, LeasePeriod } from '../lease-period.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 
 import { LeasePeriodUpdateComponent } from './lease-period-update.component';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 
 describe('LeasePeriod Management Update Component', () => {
   let comp: LeasePeriodUpdateComponent;

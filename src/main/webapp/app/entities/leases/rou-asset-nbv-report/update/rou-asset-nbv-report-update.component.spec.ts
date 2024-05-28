@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { RouAssetNBVReportService } from '../service/rou-asset-nbv-report.service';
 import { IRouAssetNBVReport, RouAssetNBVReport } from '../rou-asset-nbv-report.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
@@ -39,7 +39,7 @@ describe('RouAssetNBVReport Management Update Component', () => {
   let fixture: ComponentFixture<RouAssetNBVReportUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let rouAssetNBVReportService: RouAssetNBVReportService;
-  let fiscalMonthService: FiscalMonthService;
+  let leasePeriodService: LeasePeriodService;
   let applicationUserService: ApplicationUserService;
 
   beforeEach(() => {
@@ -54,30 +54,30 @@ describe('RouAssetNBVReport Management Update Component', () => {
     fixture = TestBed.createComponent(RouAssetNBVReportUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     rouAssetNBVReportService = TestBed.inject(RouAssetNBVReportService);
-    fiscalMonthService = TestBed.inject(FiscalMonthService);
+    leasePeriodService = TestBed.inject(LeasePeriodService);
     applicationUserService = TestBed.inject(ApplicationUserService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call FiscalMonth query and add missing value', () => {
+    it('Should call LeasePeriod query and add missing value', () => {
       const rouAssetNBVReport: IRouAssetNBVReport = { id: 456 };
-      const fiscalReportingMonth: IFiscalMonth = { id: 25337 };
-      rouAssetNBVReport.fiscalReportingMonth = fiscalReportingMonth;
+      const leasePeriod: ILeasePeriod = { id: 29294 };
+      rouAssetNBVReport.leasePeriod = leasePeriod;
 
-      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 51804 }];
-      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
-      const additionalFiscalMonths = [fiscalReportingMonth];
-      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
-      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const leasePeriodCollection: ILeasePeriod[] = [{ id: 66611 }];
+      jest.spyOn(leasePeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: leasePeriodCollection })));
+      const additionalLeasePeriods = [leasePeriod];
+      const expectedCollection: ILeasePeriod[] = [...additionalLeasePeriods, ...leasePeriodCollection];
+      jest.spyOn(leasePeriodService, 'addLeasePeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ rouAssetNBVReport });
       comp.ngOnInit();
 
-      expect(fiscalMonthService.query).toHaveBeenCalled();
-      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
-      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
+      expect(leasePeriodService.query).toHaveBeenCalled();
+      expect(leasePeriodService.addLeasePeriodToCollectionIfMissing).toHaveBeenCalledWith(leasePeriodCollection, ...additionalLeasePeriods);
+      expect(comp.leasePeriodsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call ApplicationUser query and add missing value', () => {
@@ -104,8 +104,8 @@ describe('RouAssetNBVReport Management Update Component', () => {
 
     it('Should update editForm', () => {
       const rouAssetNBVReport: IRouAssetNBVReport = { id: 456 };
-      const fiscalReportingMonth: IFiscalMonth = { id: 63636 };
-      rouAssetNBVReport.fiscalReportingMonth = fiscalReportingMonth;
+      const leasePeriod: ILeasePeriod = { id: 23195 };
+      rouAssetNBVReport.leasePeriod = leasePeriod;
       const requestedBy: IApplicationUser = { id: 64913 };
       rouAssetNBVReport.requestedBy = requestedBy;
 
@@ -113,7 +113,7 @@ describe('RouAssetNBVReport Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(rouAssetNBVReport));
-      expect(comp.fiscalMonthsSharedCollection).toContain(fiscalReportingMonth);
+      expect(comp.leasePeriodsSharedCollection).toContain(leasePeriod);
       expect(comp.applicationUsersSharedCollection).toContain(requestedBy);
     });
   });
@@ -183,10 +183,10 @@ describe('RouAssetNBVReport Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackFiscalMonthById', () => {
-      it('Should return tracked FiscalMonth primary key', () => {
+    describe('trackLeasePeriodById', () => {
+      it('Should return tracked LeasePeriod primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackFiscalMonthById(0, entity);
+        const trackResult = comp.trackLeasePeriodById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

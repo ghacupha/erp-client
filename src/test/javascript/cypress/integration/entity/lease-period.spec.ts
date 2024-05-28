@@ -34,7 +34,7 @@ describe('LeasePeriod e2e test', () => {
   const leasePeriodPageUrlPattern = new RegExp('/lease-period(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const leasePeriodSample = { sequenceNumber: 99114, periodCode: 'circuit' };
+  const leasePeriodSample = { sequenceNumber: 93505, periodCode: 'Computer best-of-breed' };
 
   let leasePeriod: any;
   //let fiscalMonth: any;
@@ -227,11 +227,7 @@ describe('LeasePeriod e2e test', () => {
     it.skip('should create an instance of LeasePeriod', () => {
       cy.get(`[data-cy="sequenceNumber"]`).type('905').should('have.value', '905');
 
-      cy.get(`[data-cy="startDate"]`).type('2024-05-14').should('have.value', '2024-05-14');
-
-      cy.get(`[data-cy="endDate"]`).type('2024-05-14').should('have.value', '2024-05-14');
-
-      cy.get(`[data-cy="periodCode"]`).type('Digitized').should('have.value', 'Digitized');
+      cy.get(`[data-cy="periodCode"]`).type('Implementation Market Account').should('have.value', 'Implementation Market Account');
 
       cy.get(`[data-cy="fiscalMonth"]`).select(1);
 

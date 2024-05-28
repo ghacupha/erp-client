@@ -72,17 +72,11 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestId"><span>Request Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfRequest"><span>Time Of Request</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="reportIsCompiled"><span>Report Is Compiled</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="filename"><span>Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportParameters">
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fiscalReportingMonth.fiscalMonthCode">
-            <span>Fiscal Reporting Month</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="leasePeriod.periodCode"><span>Lease Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -94,10 +88,6 @@
           </td>
           <td>{{ rouAssetNBVReport.requestId }}</td>
           <td>{{ rouAssetNBVReport.timeOfRequest | formatMediumDatetime }}</td>
-          <td>{{ rouAssetNBVReport.reportIsCompiled }}</td>
-          <td>{{ rouAssetNBVReport.fileChecksum }}</td>
-          <td>{{ rouAssetNBVReport.tampered }}</td>
-          <td>{{ rouAssetNBVReport.filename }}</td>
           <td>{{ rouAssetNBVReport.reportParameters }}</td>
           <td>
             <a
@@ -110,9 +100,9 @@
             >
           </td>
           <td>
-            <div *ngIf="rouAssetNBVReport.fiscalReportingMonth">
-              <a [routerLink]="['/fiscal-month', rouAssetNBVReport.fiscalReportingMonth?.id, 'view']">{{
-                rouAssetNBVReport.fiscalReportingMonth?.fiscalMonthCode
+            <div *ngIf="rouAssetNBVReport.leasePeriod">
+              <a [routerLink]="['/lease-period', rouAssetNBVReport.leasePeriod?.id, 'view']">{{
+                rouAssetNBVReport.leasePeriod?.periodCode
               }}</a>
             </div>
           </td>

@@ -80,9 +80,7 @@
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fiscalReportingMonth.fiscalMonthCode">
-            <span>Fiscal Reporting Month</span> <fa-icon icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="leasePeriod.periodCode"><span>Lease Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -110,9 +108,9 @@
             >
           </td>
           <td>
-            <div *ngIf="rouAssetNBVReport.fiscalReportingMonth">
-              <a [routerLink]="['/fiscal-month', rouAssetNBVReport.fiscalReportingMonth?.id, 'view']">{{
-                rouAssetNBVReport.fiscalReportingMonth?.fiscalMonthCode
+            <div *ngIf="rouAssetNBVReport.leasePeriod">
+              <a [routerLink]="['/lease-period', rouAssetNBVReport.leasePeriod?.id, 'view']">{{
+                rouAssetNBVReport.leasePeriod?.periodCode
               }}</a>
             </div>
           </td>

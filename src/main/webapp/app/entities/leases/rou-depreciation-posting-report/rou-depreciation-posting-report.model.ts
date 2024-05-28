@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ILeasePeriod } from 'app/entities/lease-period/lease-period.model';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 
 export interface IRouDepreciationPostingReport {

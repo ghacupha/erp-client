@@ -33,46 +33,23 @@
         <dd>
           <span>{{ rouAssetNBVReport.id }}</span>
         </dd>
-        <dt><span>Request Id</span></dt>
-        <dd>
-          <span>{{ rouAssetNBVReport.requestId }}</span>
-        </dd>
         <dt><span>Time Of Request</span></dt>
         <dd>
           <span>{{ rouAssetNBVReport.timeOfRequest | formatMediumDatetime }}</span>
         </dd>
-        <dt><span>Report Is Compiled</span></dt>
+        <dt><span *ngIf='rouAssetNBVReport.tampered'>Tampered</span></dt>
         <dd>
-          <span>{{ rouAssetNBVReport.reportIsCompiled }}</span>
-        </dd>
-        <dt><span>File Checksum</span></dt>
-        <dd>
-          <span>{{ rouAssetNBVReport.fileChecksum }}</span>
-        </dd>
-        <dt><span>Tampered</span></dt>
-        <dd>
-          <span>{{ rouAssetNBVReport.tampered }}</span>
-        </dd>
-        <dt><span>Filename</span></dt>
-        <dd>
-          <span>{{ rouAssetNBVReport.filename }}</span>
+          <span *ngIf='rouAssetNBVReport.tampered'>{{ rouAssetNBVReport.tampered }}</span>
         </dd>
         <dt><span>Report Parameters</span></dt>
         <dd>
           <span>{{ rouAssetNBVReport.reportParameters }}</span>
         </dd>
-        <dt><span>Report File</span></dt>
+        <dt><span>Lease Period</span></dt>
         <dd>
-          <div *ngIf="rouAssetNBVReport.reportFile">
-            <a (click)="openFile(rouAssetNBVReport.reportFile, rouAssetNBVReport.reportFileContentType)">open</a>
-            {{ rouAssetNBVReport.reportFileContentType }}, {{ byteSize(rouAssetNBVReport.reportFile) }}
-          </div>
-        </dd>
-        <dt><span>Fiscal Reporting Month</span></dt>
-        <dd>
-          <div *ngIf="rouAssetNBVReport.fiscalReportingMonth">
-            <a [routerLink]="['/fiscal-month', rouAssetNBVReport.fiscalReportingMonth?.id, 'view']">{{
-              rouAssetNBVReport.fiscalReportingMonth?.fiscalMonthCode
+          <div *ngIf="rouAssetNBVReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouAssetNBVReport.leasePeriod?.id, 'view']">{{
+              rouAssetNBVReport.leasePeriod?.periodCode
             }}</a>
           </div>
         </dd>

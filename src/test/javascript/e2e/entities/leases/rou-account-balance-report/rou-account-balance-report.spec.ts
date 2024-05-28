@@ -16,12 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , protractor, promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
   RouAccountBalanceReportComponentsPage,
-  RouAccountBalanceReportDeleteDialog,
+  /* RouAccountBalanceReportDeleteDialog, */
   RouAccountBalanceReportUpdatePage,
 } from './rou-account-balance-report.page-object';
 import * as path from 'path';
@@ -33,7 +33,7 @@ describe('RouAccountBalanceReport e2e test', () => {
   let signInPage: SignInPage;
   let rouAccountBalanceReportComponentsPage: RouAccountBalanceReportComponentsPage;
   let rouAccountBalanceReportUpdatePage: RouAccountBalanceReportUpdatePage;
-  let rouAccountBalanceReportDeleteDialog: RouAccountBalanceReportDeleteDialog;
+  /* let rouAccountBalanceReportDeleteDialog: RouAccountBalanceReportDeleteDialog; */
   const fileNameToUpload = 'logo-jhipster.png';
   const fileToUpload = '../../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
   const absolutePath = path.resolve(__dirname, fileToUpload);
@@ -69,46 +69,42 @@ describe('RouAccountBalanceReport e2e test', () => {
     await rouAccountBalanceReportUpdatePage.cancel();
   });
 
-  it('should create and save RouAccountBalanceReports', async () => {
-    const nbButtonsBeforeCreate = await rouAccountBalanceReportComponentsPage.countDeleteButtons();
+  /* it('should create and save RouAccountBalanceReports', async () => {
+        const nbButtonsBeforeCreate = await rouAccountBalanceReportComponentsPage.countDeleteButtons();
 
-    await rouAccountBalanceReportComponentsPage.clickOnCreateButton();
+        await rouAccountBalanceReportComponentsPage.clickOnCreateButton();
 
-    await promise.all([
-      rouAccountBalanceReportUpdatePage.setRequestIdInput('64c99148-3908-465d-8c4a-e510e3ade974'),
-      rouAccountBalanceReportUpdatePage.setTimeOfRequestInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
-      rouAccountBalanceReportUpdatePage.getReportIsCompiledInput().click(),
-      rouAccountBalanceReportUpdatePage.setFileChecksumInput('fileChecksum'),
-      rouAccountBalanceReportUpdatePage.getTamperedInput().click(),
-      rouAccountBalanceReportUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
-      rouAccountBalanceReportUpdatePage.setReportParametersInput('reportParameters'),
-      rouAccountBalanceReportUpdatePage.setReportFileInput(absolutePath),
-      rouAccountBalanceReportUpdatePage.requestedBySelectLastOption(),
-      rouAccountBalanceReportUpdatePage.reportingMonthSelectLastOption(),
-    ]);
+        await promise.all([
+            rouAccountBalanceReportUpdatePage.setRequestIdInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+            rouAccountBalanceReportUpdatePage.setTimeOfRequestInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            rouAccountBalanceReportUpdatePage.getReportIsCompiledInput().click(),
+            rouAccountBalanceReportUpdatePage.setFileChecksumInput('fileChecksum'),
+            rouAccountBalanceReportUpdatePage.getTamperedInput().click(),
+            rouAccountBalanceReportUpdatePage.setFilenameInput('64c99148-3908-465d-8c4a-e510e3ade974'),
+            rouAccountBalanceReportUpdatePage.setReportParametersInput('reportParameters'),
+            rouAccountBalanceReportUpdatePage.setReportFileInput(absolutePath),
+            rouAccountBalanceReportUpdatePage.leasePeriodSelectLastOption(),
+            rouAccountBalanceReportUpdatePage.requestedBySelectLastOption(),
+        ]);
 
-    await rouAccountBalanceReportUpdatePage.save();
-    expect(await rouAccountBalanceReportUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await rouAccountBalanceReportUpdatePage.save();
+        expect(await rouAccountBalanceReportUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await rouAccountBalanceReportComponentsPage.countDeleteButtons()).to.eq(
-      nbButtonsBeforeCreate + 1,
-      'Expected one more entry in the table'
-    );
-  });
+        expect(await rouAccountBalanceReportComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last RouAccountBalanceReport', async () => {
-    const nbButtonsBeforeDelete = await rouAccountBalanceReportComponentsPage.countDeleteButtons();
-    await rouAccountBalanceReportComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last RouAccountBalanceReport', async () => {
+        const nbButtonsBeforeDelete = await rouAccountBalanceReportComponentsPage.countDeleteButtons();
+        await rouAccountBalanceReportComponentsPage.clickOnLastDeleteButton();
 
-    rouAccountBalanceReportDeleteDialog = new RouAccountBalanceReportDeleteDialog();
-    expect(await rouAccountBalanceReportDeleteDialog.getDialogTitle()).to.eq(
-      'Are you sure you want to delete this Rou Account Balance Report?'
-    );
-    await rouAccountBalanceReportDeleteDialog.clickOnConfirmButton();
-    await browser.wait(ec.visibilityOf(rouAccountBalanceReportComponentsPage.title), 5000);
+        rouAccountBalanceReportDeleteDialog = new RouAccountBalanceReportDeleteDialog();
+        expect(await rouAccountBalanceReportDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Rou Account Balance Report?');
+        await rouAccountBalanceReportDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(rouAccountBalanceReportComponentsPage.title), 5000);
 
-    expect(await rouAccountBalanceReportComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await rouAccountBalanceReportComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

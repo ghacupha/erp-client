@@ -55,15 +55,15 @@
           </div>
         </div>
 
-        <jhi-m21-fiscal-month-form-control
+        <jhi-m21-lease-period-form-control
           ngDefaultControl
-          formControlName='reportingMonth'
-          [inputValue]="editForm.get('reportingMonth')!.value"
-          (valueSelected)='updateReportingMonth($event)'
-          inputControlLabel="Reporting Month"
+          formControlName='leasePeriod'
+          [inputValue]="editForm.get(['leasePeriod'])!.value"
+          (valueSelected)='updateLeasePeriod($event)'
+          inputControlLabel='Lease Period (Required)'
         >
-          <option [ngValue]="editForm.get('reportingMonth')!.value"></option>
-        </jhi-m21-fiscal-month-form-control>
+          <option [ngValue]="editForm.get(['leasePeriod'])!.value"></option>
+        </jhi-m21-lease-period-form-control>
 
       </div>
 

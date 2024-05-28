@@ -17,7 +17,7 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 
 export interface ILeasePeriod {
   id?: number;

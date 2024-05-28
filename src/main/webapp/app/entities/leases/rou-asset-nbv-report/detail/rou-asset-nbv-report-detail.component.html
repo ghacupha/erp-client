@@ -68,11 +68,11 @@
             {{ rouAssetNBVReport.reportFileContentType }}, {{ byteSize(rouAssetNBVReport.reportFile) }}
           </div>
         </dd>
-        <dt><span>Fiscal Reporting Month</span></dt>
+        <dt><span>Lease Period</span></dt>
         <dd>
-          <div *ngIf="rouAssetNBVReport.fiscalReportingMonth">
-            <a [routerLink]="['/fiscal-month', rouAssetNBVReport.fiscalReportingMonth?.id, 'view']">{{
-              rouAssetNBVReport.fiscalReportingMonth?.fiscalMonthCode
+          <div *ngIf="rouAssetNBVReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouAssetNBVReport.leasePeriod?.id, 'view']">{{
+              rouAssetNBVReport.leasePeriod?.periodCode
             }}</a>
           </div>
         </dd>

@@ -70,18 +70,13 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="requestId"><span>Request Id</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="timeOfRequest"><span>Time Of Request</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportIsCompiled"><span>Report Is Compiled</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="fileChecksum"><span>File Checksum</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="tampered"><span>Tampered</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="filename"><span>Filename</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="reportParameters">
             <span>Report Parameters</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="reportFile"><span>Report File</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leasePeriod.periodCode"><span>Lease Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="requestedBy.applicationIdentity"><span>Requested By</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="reportingMonth.fiscalMonthCode"><span>Reporting Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -90,34 +85,20 @@
           <td>
             <a [routerLink]="['/rou-account-balance-report', rouAccountBalanceReport.id, 'view']">{{ rouAccountBalanceReport.id }}</a>
           </td>
-          <td>{{ rouAccountBalanceReport.requestId }}</td>
           <td>{{ rouAccountBalanceReport.timeOfRequest | formatMediumDatetime }}</td>
           <td>{{ rouAccountBalanceReport.reportIsCompiled }}</td>
-          <td>{{ rouAccountBalanceReport.fileChecksum }}</td>
-          <td>{{ rouAccountBalanceReport.tampered }}</td>
-          <td>{{ rouAccountBalanceReport.filename }}</td>
           <td>{{ rouAccountBalanceReport.reportParameters }}</td>
           <td>
-            <a
-              *ngIf="rouAccountBalanceReport.reportFile"
-              (click)="openFile(rouAccountBalanceReport.reportFile, rouAccountBalanceReport.reportFileContentType)"
-              >open</a
-            >
-            <span *ngIf="rouAccountBalanceReport.reportFile"
-              >{{ rouAccountBalanceReport.reportFileContentType }}, {{ byteSize(rouAccountBalanceReport.reportFile) }}</span
-            >
+            <div *ngIf="rouAccountBalanceReport.leasePeriod">
+              <a [routerLink]="['/lease-period', rouAccountBalanceReport.leasePeriod?.id, 'view']">{{
+                rouAccountBalanceReport.leasePeriod?.periodCode
+              }}</a>
+            </div>
           </td>
           <td>
             <div *ngIf="rouAccountBalanceReport.requestedBy">
               <a [routerLink]="['/application-user', rouAccountBalanceReport.requestedBy?.id, 'view']">{{
                 rouAccountBalanceReport.requestedBy?.applicationIdentity
-              }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="rouAccountBalanceReport.reportingMonth">
-              <a [routerLink]="['/fiscal-month', rouAccountBalanceReport.reportingMonth?.id, 'view']">{{
-                rouAccountBalanceReport.reportingMonth?.fiscalMonthCode
               }}</a>
             </div>
           </td>

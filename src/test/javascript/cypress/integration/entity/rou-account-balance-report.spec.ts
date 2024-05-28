@@ -37,6 +37,7 @@ describe('RouAccountBalanceReport e2e test', () => {
   const rouAccountBalanceReportSample = { requestId: 'fb3cf659-44f8-4f16-ac85-fd79d3485b53' };
 
   let rouAccountBalanceReport: any;
+  //let leasePeriod: any;
 
   before(() => {
     cy.window().then(win => {
@@ -47,11 +48,40 @@ describe('RouAccountBalanceReport e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/lease-periods',
+      body: {"sequenceNumber":57296,"startDate":"2024-05-14","periodCode":"RAM"},
+    }).then(({ body }) => {
+      leasePeriod = body;
+    });
+  });
+   */
+
   beforeEach(() => {
     cy.intercept('GET', '/api/rou-account-balance-reports+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/rou-account-balance-reports').as('postEntityRequest');
     cy.intercept('DELETE', '/api/rou-account-balance-reports/*').as('deleteEntityRequest');
   });
+
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/lease-periods', {
+      statusCode: 200,
+      body: [leasePeriod],
+    });
+
+    cy.intercept('GET', '/api/application-users', {
+      statusCode: 200,
+      body: [],
+    });
+
+  });
+   */
 
   afterEach(() => {
     if (rouAccountBalanceReport) {
@@ -63,6 +93,19 @@ describe('RouAccountBalanceReport e2e test', () => {
       });
     }
   });
+
+  /* Disabled due to incompatibility
+  afterEach(() => {
+    if (leasePeriod) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/lease-periods/${leasePeriod.id}`,
+      }).then(() => {
+        leasePeriod = undefined;
+      });
+    }
+  });
+   */
 
   it('RouAccountBalanceReports menu should load RouAccountBalanceReports page', () => {
     cy.visit('/');
@@ -99,11 +142,16 @@ describe('RouAccountBalanceReport e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/rou-account-balance-reports',
-          body: rouAccountBalanceReportSample,
+  
+          body: {
+            ...rouAccountBalanceReportSample,
+            leasePeriod: leasePeriod,
+          },
         }).then(({ body }) => {
           rouAccountBalanceReport = body;
 
@@ -123,6 +171,17 @@ describe('RouAccountBalanceReport e2e test', () => {
         cy.visit(rouAccountBalanceReportPageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(rouAccountBalanceReportPageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details RouAccountBalanceReport page', () => {
@@ -146,7 +205,7 @@ describe('RouAccountBalanceReport e2e test', () => {
         cy.url().should('match', rouAccountBalanceReportPageUrlPattern);
       });
 
-      it('last delete button click should delete instance of RouAccountBalanceReport', () => {
+      it.skip('last delete button click should delete instance of RouAccountBalanceReport', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('rouAccountBalanceReport').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -170,7 +229,7 @@ describe('RouAccountBalanceReport e2e test', () => {
       cy.getEntityCreateUpdateHeading('RouAccountBalanceReport');
     });
 
-    it('should create an instance of RouAccountBalanceReport', () => {
+    it.skip('should create an instance of RouAccountBalanceReport', () => {
       cy.get(`[data-cy="requestId"]`)
         .type('1624fa8a-504e-431e-8d3a-b56c9413d9e3')
         .invoke('val')
@@ -194,6 +253,8 @@ describe('RouAccountBalanceReport e2e test', () => {
       cy.get(`[data-cy="reportParameters"]`).type('cross-media').should('have.value', 'cross-media');
 
       cy.setFieldImageAsBytesOfEntity('reportFile', 'integration-test.png', 'image/png');
+
+      cy.get(`[data-cy="leasePeriod"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

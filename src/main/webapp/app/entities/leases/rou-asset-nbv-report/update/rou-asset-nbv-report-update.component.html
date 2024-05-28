@@ -138,36 +138,23 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_fiscalReportingMonth">Fiscal Reporting Month</label>
-          <select
-            class="form-control"
-            id="field_fiscalReportingMonth"
-            data-cy="fiscalReportingMonth"
-            name="fiscalReportingMonth"
-            formControlName="fiscalReportingMonth"
-          >
-            <option *ngIf="!editForm.get('fiscalReportingMonth')!.value" [ngValue]="null" selected></option>
+          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
+          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
+            <option *ngIf="!editForm.get('leasePeriod')!.value" [ngValue]="null" selected></option>
             <option
               [ngValue]="
-                fiscalMonthOption.id === editForm.get('fiscalReportingMonth')!.value?.id
-                  ? editForm.get('fiscalReportingMonth')!.value
-                  : fiscalMonthOption
+                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
               "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
+              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
             >
-              {{ fiscalMonthOption.fiscalMonthCode }}
+              {{ leasePeriodOption.periodCode }}
             </option>
           </select>
         </div>
         <div
-          *ngIf="
-            editForm.get(['fiscalReportingMonth'])!.invalid &&
-            (editForm.get(['fiscalReportingMonth'])!.dirty || editForm.get(['fiscalReportingMonth'])!.touched)
-          "
+          *ngIf="editForm.get(['leasePeriod'])!.invalid && (editForm.get(['leasePeriod'])!.dirty || editForm.get(['leasePeriod'])!.touched)"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalReportingMonth'])?.errors?.required">
-            This field is required.
-          </small>
+          <small class="form-text text-danger" *ngIf="editForm.get(['leasePeriod'])?.errors?.required"> This field is required. </small>
         </div>
 
         <div class="form-group">

@@ -26,7 +26,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
-import { getRouAccountBalanceReportIdentifier, IRouAccountBalanceReport } from '../rou-account-balance-report.model';
+import { IRouAccountBalanceReport, getRouAccountBalanceReportIdentifier } from '../rou-account-balance-report.model';
 
 export type EntityResponseType = HttpResponse<IRouAccountBalanceReport>;
 export type EntityArrayResponseType = HttpResponse<IRouAccountBalanceReport[]>;

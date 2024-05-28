@@ -16,7 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+
+jest.mock('@angular/router');
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -28,19 +31,17 @@ import { RouAccountBalanceReportService } from '../service/rou-account-balance-r
 import { IRouAccountBalanceReport, RouAccountBalanceReport } from '../rou-account-balance-report.model';
 
 import { RouAccountBalanceReportUpdateComponent } from './rou-account-balance-report-update.component';
-import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
-import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
-
-jest.mock('@angular/router');
+import { ILeasePeriod } from '../../lease-period/lease-period.model';
+import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
 
 describe('RouAccountBalanceReport Management Update Component', () => {
   let comp: RouAccountBalanceReportUpdateComponent;
   let fixture: ComponentFixture<RouAccountBalanceReportUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let rouAccountBalanceReportService: RouAccountBalanceReportService;
+  let leasePeriodService: LeasePeriodService;
   let applicationUserService: ApplicationUserService;
-  let fiscalMonthService: FiscalMonthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -54,13 +55,32 @@ describe('RouAccountBalanceReport Management Update Component', () => {
     fixture = TestBed.createComponent(RouAccountBalanceReportUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     rouAccountBalanceReportService = TestBed.inject(RouAccountBalanceReportService);
+    leasePeriodService = TestBed.inject(LeasePeriodService);
     applicationUserService = TestBed.inject(ApplicationUserService);
-    fiscalMonthService = TestBed.inject(FiscalMonthService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call LeasePeriod query and add missing value', () => {
+      const rouAccountBalanceReport: IRouAccountBalanceReport = { id: 456 };
+      const leasePeriod: ILeasePeriod = { id: 22064 };
+      rouAccountBalanceReport.leasePeriod = leasePeriod;
+
+      const leasePeriodCollection: ILeasePeriod[] = [{ id: 88188 }];
+      jest.spyOn(leasePeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: leasePeriodCollection })));
+      const additionalLeasePeriods = [leasePeriod];
+      const expectedCollection: ILeasePeriod[] = [...additionalLeasePeriods, ...leasePeriodCollection];
+      jest.spyOn(leasePeriodService, 'addLeasePeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ rouAccountBalanceReport });
+      comp.ngOnInit();
+
+      expect(leasePeriodService.query).toHaveBeenCalled();
+      expect(leasePeriodService.addLeasePeriodToCollectionIfMissing).toHaveBeenCalledWith(leasePeriodCollection, ...additionalLeasePeriods);
+      expect(comp.leasePeriodsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should call ApplicationUser query and add missing value', () => {
       const rouAccountBalanceReport: IRouAccountBalanceReport = { id: 456 };
       const requestedBy: IApplicationUser = { id: 35202 };
@@ -83,38 +103,19 @@ describe('RouAccountBalanceReport Management Update Component', () => {
       expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
     });
 
-    it('Should call FiscalMonth query and add missing value', () => {
-      const rouAccountBalanceReport: IRouAccountBalanceReport = { id: 456 };
-      const reportingMonth: IFiscalMonth = { id: 45703 };
-      rouAccountBalanceReport.reportingMonth = reportingMonth;
-
-      const fiscalMonthCollection: IFiscalMonth[] = [{ id: 98952 }];
-      jest.spyOn(fiscalMonthService, 'query').mockReturnValue(of(new HttpResponse({ body: fiscalMonthCollection })));
-      const additionalFiscalMonths = [reportingMonth];
-      const expectedCollection: IFiscalMonth[] = [...additionalFiscalMonths, ...fiscalMonthCollection];
-      jest.spyOn(fiscalMonthService, 'addFiscalMonthToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ rouAccountBalanceReport });
-      comp.ngOnInit();
-
-      expect(fiscalMonthService.query).toHaveBeenCalled();
-      expect(fiscalMonthService.addFiscalMonthToCollectionIfMissing).toHaveBeenCalledWith(fiscalMonthCollection, ...additionalFiscalMonths);
-      expect(comp.fiscalMonthsSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should update editForm', () => {
       const rouAccountBalanceReport: IRouAccountBalanceReport = { id: 456 };
+      const leasePeriod: ILeasePeriod = { id: 85849 };
+      rouAccountBalanceReport.leasePeriod = leasePeriod;
       const requestedBy: IApplicationUser = { id: 10321 };
       rouAccountBalanceReport.requestedBy = requestedBy;
-      const reportingMonth: IFiscalMonth = { id: 93035 };
-      rouAccountBalanceReport.reportingMonth = reportingMonth;
 
       activatedRoute.data = of({ rouAccountBalanceReport });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(rouAccountBalanceReport));
+      expect(comp.leasePeriodsSharedCollection).toContain(leasePeriod);
       expect(comp.applicationUsersSharedCollection).toContain(requestedBy);
-      expect(comp.fiscalMonthsSharedCollection).toContain(reportingMonth);
     });
   });
 
@@ -183,18 +184,18 @@ describe('RouAccountBalanceReport Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackApplicationUserById', () => {
-      it('Should return tracked ApplicationUser primary key', () => {
+    describe('trackLeasePeriodById', () => {
+      it('Should return tracked LeasePeriod primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackApplicationUserById(0, entity);
+        const trackResult = comp.trackLeasePeriodById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });
 
-    describe('trackFiscalMonthById', () => {
-      it('Should return tracked FiscalMonth primary key', () => {
+    describe('trackApplicationUserById', () => {
+      it('Should return tracked ApplicationUser primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackFiscalMonthById(0, entity);
+        const trackResult = comp.trackApplicationUserById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

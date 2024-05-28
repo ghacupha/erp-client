@@ -68,19 +68,19 @@
             {{ rouAccountBalanceReport.reportFileContentType }}, {{ byteSize(rouAccountBalanceReport.reportFile) }}
           </div>
         </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="rouAccountBalanceReport.leasePeriod">
+            <a [routerLink]="['/lease-period', rouAccountBalanceReport.leasePeriod?.id, 'view']">{{
+              rouAccountBalanceReport.leasePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
         <dt><span>Requested By</span></dt>
         <dd>
           <div *ngIf="rouAccountBalanceReport.requestedBy">
             <a [routerLink]="['/application-user', rouAccountBalanceReport.requestedBy?.id, 'view']">{{
               rouAccountBalanceReport.requestedBy?.applicationIdentity
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Reporting Month</span></dt>
-        <dd>
-          <div *ngIf="rouAccountBalanceReport.reportingMonth">
-            <a [routerLink]="['/fiscal-month', rouAccountBalanceReport.reportingMonth?.id, 'view']">{{
-              rouAccountBalanceReport.reportingMonth?.fiscalMonthCode
             }}</a>
           </div>
         </dd>

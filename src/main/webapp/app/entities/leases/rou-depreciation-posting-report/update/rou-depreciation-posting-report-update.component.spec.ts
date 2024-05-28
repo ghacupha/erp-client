@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { RouDepreciationPostingReportService } from '../service/rou-depreciation-posting-report.service';
 import { IRouDepreciationPostingReport, RouDepreciationPostingReport } from '../rou-depreciation-posting-report.model';
-import { ILeasePeriod } from 'app/entities/lease-period/lease-period.model';
-import { LeasePeriodService } from 'app/entities/lease-period/service/lease-period.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 

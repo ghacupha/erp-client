@@ -140,6 +140,26 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
+          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
+            <option *ngIf="!editForm.get('leasePeriod')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
+              "
+              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
+            >
+              {{ leasePeriodOption.periodCode }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="editForm.get(['leasePeriod'])!.invalid && (editForm.get(['leasePeriod'])!.dirty || editForm.get(['leasePeriod'])!.touched)"
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['leasePeriod'])?.errors?.required"> This field is required. </small>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_requestedBy">Requested By</label>
           <select class="form-control" id="field_requestedBy" data-cy="requestedBy" name="requestedBy" formControlName="requestedBy">
             <option [ngValue]="null"></option>
@@ -152,29 +172,6 @@
               *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
             >
               {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_reportingMonth">Reporting Month</label>
-          <select
-            class="form-control"
-            id="field_reportingMonth"
-            data-cy="reportingMonth"
-            name="reportingMonth"
-            formControlName="reportingMonth"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('reportingMonth')!.value?.id
-                  ? editForm.get('reportingMonth')!.value
-                  : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.fiscalMonthCode }}
             </option>
           </select>
         </div>

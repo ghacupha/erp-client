@@ -17,8 +17,8 @@
 ///
 
 import * as dayjs from 'dayjs';
+import { ILeasePeriod } from '../lease-period/lease-period.model';
 import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
-import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 
 export interface IRouAccountBalanceReport {
   id?: number;
@@ -31,8 +31,8 @@ export interface IRouAccountBalanceReport {
   reportParameters?: string | null;
   reportFileContentType?: string | null;
   reportFile?: string | null;
+  leasePeriod?: ILeasePeriod;
   requestedBy?: IApplicationUser | null;
-  reportingMonth?: IFiscalMonth;
 }
 
 export class RouAccountBalanceReport implements IRouAccountBalanceReport {
@@ -47,8 +47,8 @@ export class RouAccountBalanceReport implements IRouAccountBalanceReport {
     public reportParameters?: string | null,
     public reportFileContentType?: string | null,
     public reportFile?: string | null,
-    public requestedBy?: IApplicationUser | null,
-    public reportingMonth?: IFiscalMonth
+    public leasePeriod?: ILeasePeriod,
+    public requestedBy?: IApplicationUser | null
   ) {
     this.reportIsCompiled = this.reportIsCompiled ?? false;
     this.tampered = this.tampered ?? false;
