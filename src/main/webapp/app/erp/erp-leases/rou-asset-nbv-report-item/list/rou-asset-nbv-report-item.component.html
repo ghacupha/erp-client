@@ -86,7 +86,7 @@
       <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
         <tr *ngFor="let rouAssetNBVReportItem of rouAssetNBVReportItems; trackBy: trackId" data-cy="entityTable">
           <td>
-            <a [routerLink]="['/rou-asset-nbv-report-item', rouAssetNBVReportItem.id, 'view']">{{ rouAssetNBVReportItem.id }}</a>
+            <a [routerLink]="['/rou-model-metadata', rouAssetNBVReportItem.id, 'view']">{{ rouAssetNBVReportItem.id }}</a>
           </td>
           <td>{{ rouAssetNBVReportItem.modelTitle }}</td>
           <td>{{ rouAssetNBVReportItem.modelVersion }}</td>
@@ -98,8 +98,8 @@
           <td>{{ rouAssetNBVReportItem.assetAccountNumber }}</td>
           <td>{{ rouAssetNBVReportItem.depreciationAccountNumber }}</td>
           <td>{{ rouAssetNBVReportItem.fiscalPeriodEndDate | formatMediumDate }}</td>
-          <td>{{ rouAssetNBVReportItem.leaseAmount }}</td>
-          <td>{{ rouAssetNBVReportItem.netBookValue }}</td>
+          <td>{{ rouAssetNBVReportItem.leaseAmount | currency }}</td>
+          <td>{{ rouAssetNBVReportItem.netBookValue | currency }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
