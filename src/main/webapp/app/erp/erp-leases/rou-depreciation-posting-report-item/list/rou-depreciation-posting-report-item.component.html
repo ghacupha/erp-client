@@ -61,21 +61,21 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseContractNumber">
-            <span>Lease Contract Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <span>Contract</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="leaseDescription">
-            <span>Lease Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="fiscalMonthCode">
-            <span>Fiscal Month Code</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <span>Month</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="accountForCredit">
-            <span>Account For Credit</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <span>Credit</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="accountForDebit">
-            <span>Account For Debit</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+            <span>Debit</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="depreciationAmount"><span>Depreciation Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationAmount"><span>Depreciation</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
