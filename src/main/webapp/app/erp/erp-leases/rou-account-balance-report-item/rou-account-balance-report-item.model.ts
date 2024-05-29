@@ -23,8 +23,11 @@ export interface IRouAccountBalanceReportItem {
   assetAccountName?: string | null;
   assetAccountNumber?: string | null;
   depreciationAccountNumber?: string | null;
+  totalLeaseAmount?: number | null;
+  accruedDepreciationAmount?: number | null;
+  currentPeriodDepreciationAmount?: number | null;
   netBookValue?: number | null;
-  fiscalMonthEndDate?: dayjs.Dayjs | null;
+  fiscalPeriodEndDate?: dayjs.Dayjs | null;
 }
 
 export class RouAccountBalanceReportItem implements IRouAccountBalanceReportItem {
@@ -33,8 +36,11 @@ export class RouAccountBalanceReportItem implements IRouAccountBalanceReportItem
     public assetAccountName?: string | null,
     public assetAccountNumber?: string | null,
     public depreciationAccountNumber?: string | null,
+    public totalLeaseAmount?: number | null,
+    public accruedDepreciationAmount?: number | null,
+    public currentPeriodDepreciationAmount?: number | null,
     public netBookValue?: number | null,
-    public fiscalMonthEndDate?: dayjs.Dayjs | null
+    public fiscalPeriodEndDate?: dayjs.Dayjs | null
   ) {}
 }
 

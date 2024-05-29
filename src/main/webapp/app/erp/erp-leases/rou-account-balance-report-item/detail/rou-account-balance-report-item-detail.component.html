@@ -45,13 +45,25 @@
         <dd>
           <span>{{ rouAccountBalanceReportItem.depreciationAccountNumber }}</span>
         </dd>
+        <dt><span>Total Lease Amount</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReportItem.totalLeaseAmount | currency }}</span>
+        </dd>
+        <dt><span>Accrued Depreciation Amount</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReportItem.accruedDepreciationAmount | currency }}</span>
+        </dd>
+        <dt><span>Current Period Depreciation Amount</span></dt>
+        <dd>
+          <span>{{ rouAccountBalanceReportItem.currentPeriodDepreciationAmount | currency }}</span>
+        </dd>
         <dt><span>Net Book Value</span></dt>
         <dd>
-          <span>{{ rouAccountBalanceReportItem.netBookValue }}</span>
+          <span>{{ rouAccountBalanceReportItem.netBookValue | currency }}</span>
         </dd>
-        <dt><span>Fiscal Month End Date</span></dt>
+        <dt><span>Fiscal Period End Date</span></dt>
         <dd>
-          <span>{{ rouAccountBalanceReportItem.fiscalMonthEndDate | formatMediumDate }}</span>
+          <span>{{ rouAccountBalanceReportItem.fiscalPeriodEndDate | formatMediumDate }}</span>
         </dd>
       </dl>
 

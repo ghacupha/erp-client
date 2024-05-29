@@ -46,8 +46,11 @@ describe('RouAccountBalanceReportItem Service', () => {
       assetAccountName: 'AAAAAAA',
       assetAccountNumber: 'AAAAAAA',
       depreciationAccountNumber: 'AAAAAAA',
+      totalLeaseAmount: 0,
+      accruedDepreciationAmount: 0,
+      currentPeriodDepreciationAmount: 0,
       netBookValue: 0,
-      fiscalMonthEndDate: currentDate,
+      fiscalPeriodEndDate: currentDate,
     };
   });
 
@@ -55,7 +58,7 @@ describe('RouAccountBalanceReportItem Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign(
         {
-          fiscalMonthEndDate: currentDate.format(DATE_FORMAT),
+          fiscalPeriodEndDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -74,15 +77,18 @@ describe('RouAccountBalanceReportItem Service', () => {
           assetAccountName: 'BBBBBB',
           assetAccountNumber: 'BBBBBB',
           depreciationAccountNumber: 'BBBBBB',
+          totalLeaseAmount: 1,
+          accruedDepreciationAmount: 1,
+          currentPeriodDepreciationAmount: 1,
           netBookValue: 1,
-          fiscalMonthEndDate: currentDate.format(DATE_FORMAT),
+          fiscalPeriodEndDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
 
       const expected = Object.assign(
         {
-          fiscalMonthEndDate: currentDate,
+          fiscalPeriodEndDate: currentDate,
         },
         returnedFromService
       );

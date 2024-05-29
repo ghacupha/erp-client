@@ -86,15 +86,15 @@ export class RouAccountBalanceReportItemService {
 
   protected convertDateFromClient(rouAccountBalanceReportItem: IRouAccountBalanceReportItem): IRouAccountBalanceReportItem {
     return Object.assign({}, rouAccountBalanceReportItem, {
-      fiscalMonthEndDate: rouAccountBalanceReportItem.fiscalMonthEndDate?.isValid()
-        ? rouAccountBalanceReportItem.fiscalMonthEndDate.format(DATE_FORMAT)
+      fiscalPeriodEndDate: rouAccountBalanceReportItem.fiscalPeriodEndDate?.isValid()
+        ? rouAccountBalanceReportItem.fiscalPeriodEndDate.format(DATE_FORMAT)
         : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
-      res.body.fiscalMonthEndDate = res.body.fiscalMonthEndDate ? dayjs(res.body.fiscalMonthEndDate) : undefined;
+      res.body.fiscalPeriodEndDate = res.body.fiscalPeriodEndDate ? dayjs(res.body.fiscalPeriodEndDate) : undefined;
     }
     return res;
   }
@@ -102,8 +102,8 @@ export class RouAccountBalanceReportItemService {
   protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
     if (res.body) {
       res.body.forEach((rouAccountBalanceReportItem: IRouAccountBalanceReportItem) => {
-        rouAccountBalanceReportItem.fiscalMonthEndDate = rouAccountBalanceReportItem.fiscalMonthEndDate
-          ? dayjs(rouAccountBalanceReportItem.fiscalMonthEndDate)
+        rouAccountBalanceReportItem.fiscalPeriodEndDate = rouAccountBalanceReportItem.fiscalPeriodEndDate
+          ? dayjs(rouAccountBalanceReportItem.fiscalPeriodEndDate)
           : undefined;
       });
     }
