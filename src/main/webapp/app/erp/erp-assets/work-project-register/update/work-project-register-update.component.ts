@@ -81,6 +81,17 @@ export class WorkProjectRegisterUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ workProjectRegister }) => {
       this.updateForm(workProjectRegister);
 
+      if (workProjectRegister.id === undefined) {
+        // Update catalogue number
+        this.workProjectRegisterService.getNextCatalogueNumber().subscribe(nextValue => {
+          if (nextValue.body) {
+            this.editForm.patchValue({
+              catalogueNumber: nextValue.body,
+            })
+          }
+        });
+      }
+
       this.loadRelationshipsOptions();
     });
   }

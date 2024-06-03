@@ -74,6 +74,11 @@ export class WorkProjectRegisterService {
     return this.http.get<IWorkProjectRegister[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
   }
 
+  getNextCatalogueNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/catalogue-number`, { observe: 'response' });
+  }
+
   addWorkProjectRegisterToCollectionIfMissing(
     workProjectRegisterCollection: IWorkProjectRegister[],
     ...workProjectRegistersToCheck: (IWorkProjectRegister | null | undefined)[]
