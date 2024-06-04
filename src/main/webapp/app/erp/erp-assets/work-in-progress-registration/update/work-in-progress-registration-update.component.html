@@ -146,14 +146,6 @@
         >
           <option [ngValue]="editForm.get(['outletCode'])!.value"></option>
         </jhi-m21-service-outlet-form-control>
-        <div
-          *ngIf="
-            editForm.get(['outletCode'])!.invalid &&
-            (editForm.get(['outletCode'])!.dirty || editForm.get(['outletCode'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['outletCode'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m21-settlement-form-control
           ngDefaultControl
@@ -163,14 +155,6 @@
           inputControlLabel='Settlement'
         >
         </jhi-m21-settlement-form-control>
-        <div
-          *ngIf="
-            editForm.get(['settlementTransaction'])!.invalid &&
-            (editForm.get(['settlementTransaction'])!.dirty || editForm.get(['settlementTransaction'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementTransaction'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m21-purchase-order-form-control
           ngDefaultControl
@@ -207,9 +191,6 @@
           inputControlLabel='Dealer'
         >
         </jhi-m21-dealer-form-control>
-        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m2m-asset-accessory-form-control
           ngDefaultControl
@@ -254,7 +235,7 @@
           formControlName='businessDocuments'
           [inputValues]="editForm.get(['businessDocuments'])!.value"
           (selectedValues)='updateBusinessDocuments($event)'
-          inputControlLabel='Attachment'
+          inputControlLabel='Business Documents'
         >
         </jhi-m2m-business-document-form-control>
 
