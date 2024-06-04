@@ -41,6 +41,10 @@
         <dd>
           <span>{{ workInProgressRegistration.particulars }}</span>
         </dd>
+        <dt><span>Instalment Date</span></dt>
+        <dd>
+          <span>{{ workInProgressRegistration.instalmentDate | formatMediumDate }}</span>
+        </dd>
         <dt><span>Instalment Amount</span></dt>
         <dd>
           <span>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</span>

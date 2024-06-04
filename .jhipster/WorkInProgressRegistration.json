@@ -13,6 +13,11 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "instalmentDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "instalmentAmount",
       "fieldType": "BigDecimal"
     },

@@ -50,6 +50,7 @@ export class WorkInProgressRegistrationUpdatePage {
   idInput = element(by.id('field_id'));
   sequenceNumberInput = element(by.id('field_sequenceNumber'));
   particularsInput = element(by.id('field_particulars'));
+  instalmentDateInput = element(by.id('field_instalmentDate'));
   instalmentAmountInput = element(by.id('field_instalmentAmount'));
   commentsInput = element(by.id('file_comments'));
   levelOfCompletionInput = element(by.id('field_levelOfCompletion'));
@@ -96,6 +97,14 @@ export class WorkInProgressRegistrationUpdatePage {
 
   async getParticularsInput(): Promise<string> {
     return await this.particularsInput.getAttribute('value');
+  }
+
+  async setInstalmentDateInput(instalmentDate: string): Promise<void> {
+    await this.instalmentDateInput.sendKeys(instalmentDate);
+  }
+
+  async getInstalmentDateInput(): Promise<string> {
+    return await this.instalmentDateInput.getAttribute('value');
   }
 
   async setInstalmentAmountInput(instalmentAmount: string): Promise<void> {

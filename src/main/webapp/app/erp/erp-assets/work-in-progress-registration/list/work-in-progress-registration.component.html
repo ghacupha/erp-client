@@ -76,6 +76,7 @@
             <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="instalmentDate"><span>Instalment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
@@ -97,6 +98,7 @@
             </td>
             <td>{{ workInProgressRegistration.sequenceNumber }}</td>
             <td>{{ workInProgressRegistration.particulars }}</td>
+            <td>{{ workInProgressRegistration.instalmentDate | formatMediumDate }}</td>
             <td>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
             <td>
               <div *ngIf="workInProgressRegistration.settlementCurrency">

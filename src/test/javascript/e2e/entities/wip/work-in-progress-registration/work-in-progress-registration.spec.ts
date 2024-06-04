@@ -77,6 +77,7 @@ describe('WorkInProgressRegistration e2e test', () => {
     await promise.all([
       workInProgressRegistrationUpdatePage.setSequenceNumberInput('sequenceNumber'),
       workInProgressRegistrationUpdatePage.setParticularsInput('particulars'),
+      workInProgressRegistrationUpdatePage.setInstalmentDateInput('2000-12-31'),
       workInProgressRegistrationUpdatePage.setInstalmentAmountInput('5'),
       workInProgressRegistrationUpdatePage.setCommentsInput(absolutePath),
       workInProgressRegistrationUpdatePage.setLevelOfCompletionInput('5'),

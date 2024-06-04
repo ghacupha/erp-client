@@ -29,11 +29,13 @@ import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IWorkProjectRegister } from '../work-project-register/work-project-register.model';
+import * as dayjs from 'dayjs';
 
 export interface IWorkInProgressRegistration {
   id?: number;
   sequenceNumber?: string;
   particulars?: string | null;
+  instalmentDate?: dayjs.Dayjs;
   instalmentAmount?: number | null;
   commentsContentType?: string | null;
   comments?: string | null;
@@ -60,6 +62,7 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public id?: number,
     public sequenceNumber?: string,
     public particulars?: string | null,
+    public instalmentDate?: dayjs.Dayjs,
     public instalmentAmount?: number | null,
     public commentsContentType?: string | null,
     public comments?: string | null,

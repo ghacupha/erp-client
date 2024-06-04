@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { IWorkProjectRegister } from 'app/entities/wip/work-project-register/work-project-register.model';
@@ -34,6 +35,7 @@ export interface IWorkInProgressRegistration {
   id?: number;
   sequenceNumber?: string;
   particulars?: string | null;
+  instalmentDate?: dayjs.Dayjs;
   instalmentAmount?: number | null;
   commentsContentType?: string | null;
   comments?: string | null;
@@ -60,6 +62,7 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public id?: number,
     public sequenceNumber?: string,
     public particulars?: string | null,
+    public instalmentDate?: dayjs.Dayjs,
     public instalmentAmount?: number | null,
     public commentsContentType?: string | null,
     public comments?: string | null,

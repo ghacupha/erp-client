@@ -34,7 +34,7 @@ describe('WorkInProgressRegistration e2e test', () => {
   const workInProgressRegistrationPageUrlPattern = new RegExp('/work-in-progress-registration(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const workInProgressRegistrationSample = { sequenceNumber: 'sensor Functionality matrix' };
+  const workInProgressRegistrationSample = { sequenceNumber: 'Village web-enabled Consultant', instalmentDate: '2022-04-13' };
 
   let workInProgressRegistration: any;
 
@@ -175,11 +175,13 @@ describe('WorkInProgressRegistration e2e test', () => {
 
       cy.get(`[data-cy="particulars"]`).type('San Plastic').should('have.value', 'San Plastic');
 
-      cy.get(`[data-cy="instalmentAmount"]`).type('42556').should('have.value', '42556');
+      cy.get(`[data-cy="instalmentDate"]`).type('2022-04-13').should('have.value', '2022-04-13');
+
+      cy.get(`[data-cy="instalmentAmount"]`).type('52173').should('have.value', '52173');
 
       cy.setFieldImageAsBytesOfEntity('comments', 'integration-test.png', 'image/png');
 
-      cy.get(`[data-cy="levelOfCompletion"]`).type('52173').should('have.value', '52173');
+      cy.get(`[data-cy="levelOfCompletion"]`).type('18794').should('have.value', '18794');
 
       cy.get(`[data-cy="completed"]`).should('not.be.checked');
       cy.get(`[data-cy="completed"]`).click().should('be.checked');
