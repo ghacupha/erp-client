@@ -69,7 +69,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     assetCategory: [],
     workInProgressRegistration: [],
     serviceOutlet: [],
-    settlement: [],
+    transferSettlement: [],
+    originalSettlement: [],
     workProjectRegister: [],
   });
 
@@ -89,8 +90,6 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ workInProgressTransfer }) => {
       this.updateForm(workInProgressTransfer);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -231,123 +230,11 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       assetCategory: workInProgressTransfer.assetCategory,
       workInProgressRegistration: workInProgressTransfer.workInProgressRegistration,
       serviceOutlet: workInProgressTransfer.serviceOutlet,
-      settlement: workInProgressTransfer.settlement,
+      transferSettlement: workInProgressTransfer.transferSettlement,
+      originalSettlement: workInProgressTransfer.originalSettlement,
       workProjectRegister: workInProgressTransfer.workProjectRegister,
     });
 
-    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
-      this.placeholdersSharedCollection,
-      ...(workInProgressTransfer.placeholders ?? [])
-    );
-    this.businessDocumentsSharedCollection = this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-      this.businessDocumentsSharedCollection,
-      ...(workInProgressTransfer.businessDocuments ?? [])
-    );
-    this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
-      this.assetCategoriesSharedCollection,
-      workInProgressTransfer.assetCategory
-    );
-    // this.workInProgressRegistrationsSharedCollection =
-    //   this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
-    //     this.workInProgressRegistrationsSharedCollection,
-    //     workInProgressTransfer.workInProgressRegistration
-    //   );
-    // this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
-    //   this.serviceOutletsSharedCollection,
-    //   workInProgressTransfer.serviceOutlet
-    // );
-    this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
-      this.settlementsSharedCollection,
-      workInProgressTransfer.settlement
-    );
-    this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
-      this.workProjectRegistersSharedCollection,
-      workInProgressTransfer.workProjectRegister
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.placeholderService
-      .query()
-      .pipe(map((res: HttpResponse<IPlaceholder[]>) => res.body ?? []))
-      .pipe(
-        map((placeholders: IPlaceholder[]) =>
-          this.placeholderService.addPlaceholderToCollectionIfMissing(placeholders, ...(this.editForm.get('placeholders')!.value ?? []))
-        )
-      )
-      .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-
-    this.businessDocumentService
-      .query()
-      .pipe(map((res: HttpResponse<IBusinessDocument[]>) => res.body ?? []))
-      .pipe(
-        map((businessDocuments: IBusinessDocument[]) =>
-          this.businessDocumentService.addBusinessDocumentToCollectionIfMissing(
-            businessDocuments,
-            ...(this.editForm.get('businessDocuments')!.value ?? [])
-          )
-        )
-      )
-      .subscribe((businessDocuments: IBusinessDocument[]) => (this.businessDocumentsSharedCollection = businessDocuments));
-
-    this.assetCategoryService
-      .query()
-      .pipe(map((res: HttpResponse<IAssetCategory[]>) => res.body ?? []))
-      .pipe(
-        map((assetCategories: IAssetCategory[]) =>
-          this.assetCategoryService.addAssetCategoryToCollectionIfMissing(assetCategories, this.editForm.get('assetCategory')!.value)
-        )
-      )
-      .subscribe((assetCategories: IAssetCategory[]) => (this.assetCategoriesSharedCollection = assetCategories));
-
-    this.workInProgressRegistrationService
-      .query()
-      .pipe(map((res: HttpResponse<IWorkInProgressRegistration[]>) => res.body ?? []))
-      .pipe(
-        map((workInProgressRegistrations: IWorkInProgressRegistration[]) =>
-          this.workInProgressRegistrationService.addWorkInProgressRegistrationToCollectionIfMissing(
-            workInProgressRegistrations,
-            this.editForm.get('workInProgressRegistration')!.value
-          )
-        )
-      )
-      .subscribe(
-        (workInProgressRegistrations: IWorkInProgressRegistration[]) =>
-          (this.workInProgressRegistrationsSharedCollection = workInProgressRegistrations)
-      );
-
-    this.serviceOutletService
-      .query()
-      .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
-      .pipe(
-        map((serviceOutlets: IServiceOutlet[]) =>
-          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
-        )
-      )
-      .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
-
-    this.settlementService
-      .query()
-      .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
-      .pipe(
-        map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, this.editForm.get('settlement')!.value)
-        )
-      )
-      .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
-
-    this.workProjectRegisterService
-      .query()
-      .pipe(map((res: HttpResponse<IWorkProjectRegister[]>) => res.body ?? []))
-      .pipe(
-        map((workProjectRegisters: IWorkProjectRegister[]) =>
-          this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
-            workProjectRegisters,
-            this.editForm.get('workProjectRegister')!.value
-          )
-        )
-      )
-      .subscribe((workProjectRegisters: IWorkProjectRegister[]) => (this.workProjectRegistersSharedCollection = workProjectRegisters));
   }
 
   protected createFromForm(): IWorkInProgressTransfer {
@@ -364,7 +251,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       workInProgressRegistration: this.editForm.get(['workInProgressRegistration'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
-      settlement: this.editForm.get(['settlement'])!.value,
+      transferSettlement: this.editForm.get(['transferSettlement'])!.value,
+      originalSettlement: this.editForm.get(['originalSettlement'])!.value,
       workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
     };
   }

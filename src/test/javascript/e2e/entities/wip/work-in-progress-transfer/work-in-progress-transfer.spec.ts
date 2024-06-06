@@ -78,7 +78,8 @@ describe('WorkInProgressTransfer e2e test', () => {
       workInProgressTransferUpdatePage.assetCategorySelectLastOption(),
       workInProgressTransferUpdatePage.workInProgressRegistrationSelectLastOption(),
       workInProgressTransferUpdatePage.serviceOutletSelectLastOption(),
-      workInProgressTransferUpdatePage.settlementSelectLastOption(),
+      workInProgressTransferUpdatePage.transferSettlementSelectLastOption(),
+      workInProgressTransferUpdatePage.originalSettlementSelectLastOption(),
       workInProgressTransferUpdatePage.workProjectRegisterSelectLastOption(),
     ]);
 

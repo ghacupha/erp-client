@@ -86,8 +86,8 @@
                 {{ transferItem.transferDate | formatMediumDate }} |
                 {{ transferItem.description }} |
               </a>
-              <a [routerLink]="['/settlement', transferItem?.settlement?.id, 'view']">
-                {{ transferItem.settlement?.paymentNumber }}
+              <a [routerLink]="['/settlement', transferItem?.transferSettlement?.id, 'view']">
+                {{ transferItem.transferSettlement?.paymentNumber }}
               </a>
               {{ last ? '' : ', ' }}
             </li>

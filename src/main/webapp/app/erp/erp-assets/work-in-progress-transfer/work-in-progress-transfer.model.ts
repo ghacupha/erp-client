@@ -38,7 +38,8 @@ export interface IWorkInProgressTransfer {
   assetCategory?: IAssetCategory | null;
   workInProgressRegistration?: IWorkInProgressRegistration | null;
   serviceOutlet?: IServiceOutlet | null;
-  settlement?: ISettlement | null;
+  transferSettlement?: ISettlement | null;
+  originalSettlement?: ISettlement | null;
   workProjectRegister?: IWorkProjectRegister | null;
 }
 
@@ -55,7 +56,8 @@ export class WorkInProgressTransfer implements IWorkInProgressTransfer {
     public assetCategory?: IAssetCategory | null,
     public workInProgressRegistration?: IWorkInProgressRegistration | null,
     public serviceOutlet?: IServiceOutlet | null,
-    public settlement?: ISettlement | null,
+    public transferSettlement?: ISettlement | null,
+    public originalSettlement?: ISettlement | null,
     public workProjectRegister?: IWorkProjectRegister | null
   ) {}
 }

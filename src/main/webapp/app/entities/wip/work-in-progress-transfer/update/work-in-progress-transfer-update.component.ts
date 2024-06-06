@@ -69,7 +69,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     assetCategory: [],
     workInProgressRegistration: [],
     serviceOutlet: [],
-    settlement: [],
+    transferSettlement: [],
+    originalSettlement: [],
     workProjectRegister: [],
   });
 
@@ -190,7 +191,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       assetCategory: workInProgressTransfer.assetCategory,
       workInProgressRegistration: workInProgressTransfer.workInProgressRegistration,
       serviceOutlet: workInProgressTransfer.serviceOutlet,
-      settlement: workInProgressTransfer.settlement,
+      transferSettlement: workInProgressTransfer.transferSettlement,
+      originalSettlement: workInProgressTransfer.originalSettlement,
       workProjectRegister: workInProgressTransfer.workProjectRegister,
     });
 
@@ -217,7 +219,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
-      workInProgressTransfer.settlement
+      workInProgressTransfer.transferSettlement,
+      workInProgressTransfer.originalSettlement
     );
     this.workProjectRegistersSharedCollection = this.workProjectRegisterService.addWorkProjectRegisterToCollectionIfMissing(
       this.workProjectRegistersSharedCollection,
@@ -290,7 +293,11 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, this.editForm.get('settlement')!.value)
+          this.settlementService.addSettlementToCollectionIfMissing(
+            settlements,
+            this.editForm.get('transferSettlement')!.value,
+            this.editForm.get('originalSettlement')!.value
+          )
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -323,7 +330,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       workInProgressRegistration: this.editForm.get(['workInProgressRegistration'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
-      settlement: this.editForm.get(['settlement'])!.value,
+      transferSettlement: this.editForm.get(['transferSettlement'])!.value,
+      originalSettlement: this.editForm.get(['originalSettlement'])!.value,
       workProjectRegister: this.editForm.get(['workProjectRegister'])!.value,
     };
   }

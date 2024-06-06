@@ -91,11 +91,19 @@
             }}</a>
           </div>
         </dd>
-        <dt><span>Settlement</span></dt>
+        <dt><span>Transfer Settlement</span></dt>
         <dd>
-          <div *ngIf="workInProgressTransfer.settlement">
-            <a [routerLink]="['/settlement', workInProgressTransfer.settlement?.id, 'view']">{{
-              workInProgressTransfer.settlement?.paymentNumber
+          <div *ngIf="workInProgressTransfer.transferSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.transferSettlement?.id, 'view']">{{
+              workInProgressTransfer.transferSettlement?.paymentNumber
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Original Settlement</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.originalSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.originalSettlement?.id, 'view']">{{
+              workInProgressTransfer.originalSettlement?.paymentNumber
             }}</a>
           </div>
         </dd>

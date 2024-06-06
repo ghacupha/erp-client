@@ -59,7 +59,8 @@ export class WorkInProgressTransferUpdatePage {
   assetCategorySelect = element(by.id('field_assetCategory'));
   workInProgressRegistrationSelect = element(by.id('field_workInProgressRegistration'));
   serviceOutletSelect = element(by.id('field_serviceOutlet'));
-  settlementSelect = element(by.id('field_settlement'));
+  transferSettlementSelect = element(by.id('field_transferSettlement'));
+  originalSettlementSelect = element(by.id('field_originalSettlement'));
   workProjectRegisterSelect = element(by.id('field_workProjectRegister'));
 
   async getPageTitle(): Promise<string> {
@@ -198,20 +199,36 @@ export class WorkInProgressTransferUpdatePage {
     return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
   }
 
-  async settlementSelectLastOption(): Promise<void> {
-    await this.settlementSelect.all(by.tagName('option')).last().click();
+  async transferSettlementSelectLastOption(): Promise<void> {
+    await this.transferSettlementSelect.all(by.tagName('option')).last().click();
   }
 
-  async settlementSelectOption(option: string): Promise<void> {
-    await this.settlementSelect.sendKeys(option);
+  async transferSettlementSelectOption(option: string): Promise<void> {
+    await this.transferSettlementSelect.sendKeys(option);
   }
 
-  getSettlementSelect(): ElementFinder {
-    return this.settlementSelect;
+  getTransferSettlementSelect(): ElementFinder {
+    return this.transferSettlementSelect;
   }
 
-  async getSettlementSelectedOption(): Promise<string> {
-    return await this.settlementSelect.element(by.css('option:checked')).getText();
+  async getTransferSettlementSelectedOption(): Promise<string> {
+    return await this.transferSettlementSelect.element(by.css('option:checked')).getText();
+  }
+
+  async originalSettlementSelectLastOption(): Promise<void> {
+    await this.originalSettlementSelect.all(by.tagName('option')).last().click();
+  }
+
+  async originalSettlementSelectOption(option: string): Promise<void> {
+    await this.originalSettlementSelect.sendKeys(option);
+  }
+
+  getOriginalSettlementSelect(): ElementFinder {
+    return this.originalSettlementSelect;
+  }
+
+  async getOriginalSettlementSelectedOption(): Promise<string> {
+    return await this.originalSettlementSelect.element(by.css('option:checked')).getText();
   }
 
   async workProjectRegisterSelectLastOption(): Promise<void> {

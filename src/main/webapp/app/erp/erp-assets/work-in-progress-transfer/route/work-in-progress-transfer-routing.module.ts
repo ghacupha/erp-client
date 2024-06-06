@@ -30,6 +30,9 @@ const workInProgressTransferRoute: Routes = [
     path: '',
     component: WorkInProgressTransferComponent,
     canActivate: [UserRouteAccessService],
+    data: {
+      defaultSort: 'id,asc'
+    }
   },
   {
     path: ':id/view',

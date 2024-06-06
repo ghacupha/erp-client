@@ -197,12 +197,14 @@ describe('WorkInProgressTransfer Management Update Component', () => {
 
     it('Should call Settlement query and add missing value', () => {
       const workInProgressTransfer: IWorkInProgressTransfer = { id: 456 };
-      const settlement: ISettlement = { id: 35118 };
-      workInProgressTransfer.settlement = settlement;
+      const transferSettlement: ISettlement = { id: 35118 };
+      workInProgressTransfer.transferSettlement = transferSettlement;
+      const originalSettlement: ISettlement = { id: 99864 };
+      workInProgressTransfer.originalSettlement = originalSettlement;
 
-      const settlementCollection: ISettlement[] = [{ id: 99864 }];
+      const settlementCollection: ISettlement[] = [{ id: 55604 }];
       jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
-      const additionalSettlements = [settlement];
+      const additionalSettlements = [transferSettlement, originalSettlement];
       const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
       jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -248,8 +250,10 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       workInProgressTransfer.workInProgressRegistration = workInProgressRegistration;
       const serviceOutlet: IServiceOutlet = { id: 62154 };
       workInProgressTransfer.serviceOutlet = serviceOutlet;
-      const settlement: ISettlement = { id: 55604 };
-      workInProgressTransfer.settlement = settlement;
+      const transferSettlement: ISettlement = { id: 32459 };
+      workInProgressTransfer.transferSettlement = transferSettlement;
+      const originalSettlement: ISettlement = { id: 25102 };
+      workInProgressTransfer.originalSettlement = originalSettlement;
       const workProjectRegister: IWorkProjectRegister = { id: 30830 };
       workInProgressTransfer.workProjectRegister = workProjectRegister;
 
@@ -262,7 +266,8 @@ describe('WorkInProgressTransfer Management Update Component', () => {
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.workInProgressRegistrationsSharedCollection).toContain(workInProgressRegistration);
       expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlet);
-      expect(comp.settlementsSharedCollection).toContain(settlement);
+      expect(comp.settlementsSharedCollection).toContain(transferSettlement);
+      expect(comp.settlementsSharedCollection).toContain(originalSettlement);
       expect(comp.workProjectRegistersSharedCollection).toContain(workProjectRegister);
     });
   });

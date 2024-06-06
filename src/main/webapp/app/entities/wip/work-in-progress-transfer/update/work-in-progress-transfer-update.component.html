@@ -230,12 +230,43 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_settlement">Settlement</label>
-          <select class="form-control" id="field_settlement" data-cy="settlement" name="settlement" formControlName="settlement">
+          <label class="form-control-label" for="field_transferSettlement">Transfer Settlement</label>
+          <select
+            class="form-control"
+            id="field_transferSettlement"
+            data-cy="transferSettlement"
+            name="transferSettlement"
+            formControlName="transferSettlement"
+          >
             <option [ngValue]="null"></option>
             <option
               [ngValue]="
-                settlementOption.id === editForm.get('settlement')!.value?.id ? editForm.get('settlement')!.value : settlementOption
+                settlementOption.id === editForm.get('transferSettlement')!.value?.id
+                  ? editForm.get('transferSettlement')!.value
+                  : settlementOption
+              "
+              *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
+            >
+              {{ settlementOption.paymentNumber }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_originalSettlement">Original Settlement</label>
+          <select
+            class="form-control"
+            id="field_originalSettlement"
+            data-cy="originalSettlement"
+            name="originalSettlement"
+            formControlName="originalSettlement"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                settlementOption.id === editForm.get('originalSettlement')!.value?.id
+                  ? editForm.get('originalSettlement')!.value
+                  : settlementOption
               "
               *ngFor="let settlementOption of settlementsSharedCollection; trackBy: trackSettlementById"
             >
