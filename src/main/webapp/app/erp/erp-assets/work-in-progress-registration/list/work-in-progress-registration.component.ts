@@ -65,8 +65,8 @@ export class WorkInProgressRegistrationComponent implements OnInit {
     this.links = {
       last: 0,
     };
-    this.predicate = 'id';
-    this.ascending = true;
+    this.predicate = 'instalmentDate';
+    this.ascending = false;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 

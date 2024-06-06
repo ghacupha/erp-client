@@ -70,13 +70,11 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="targetAssetNumber">
-            <span>Target Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="transferSettlement.paymentNumber"><span>Transfer Settlement</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="transferDate"><span>Transfer Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferType"><span>Transfer Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferSettlement.paymentNumber"><span>Transfer Settlement</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferAmount"><span>Transfer Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transferDate"><span>Transfer Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="originalSettlement.paymentNumber"><span>Original Settlement</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="workInProgressRegistration.sequenceNumber">
@@ -94,6 +92,7 @@
           <td>
             <a [routerLink]="['/work-in-progress-transfer', workInProgressTransfer.id, 'view']">{{ workInProgressTransfer.id }}</a>
           </td>
+          <td>{{ workInProgressTransfer.transferType }}</td>
           <td>{{ workInProgressTransfer.description }}</td>
           <td>
             <div *ngIf="workInProgressTransfer.transferSettlement">
@@ -104,7 +103,6 @@
           </td>
           <td>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
           <td>{{ workInProgressTransfer.transferDate | formatMediumDate }}</td>
-          <td>{{ workInProgressTransfer.transferType }}</td>
           <td>
             <div *ngIf="workInProgressTransfer.assetCategory">
               <a [routerLink]="['/asset-category', workInProgressTransfer.assetCategory?.id, 'view']">{{
