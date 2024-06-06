@@ -35,7 +35,7 @@ export interface IWorkInProgressRegistration {
   id?: number;
   sequenceNumber?: string;
   particulars?: string | null;
-  instalmentDate?: dayjs.Dayjs;
+  instalmentDate?: dayjs.Dayjs | null;
   instalmentAmount?: number | null;
   commentsContentType?: string | null;
   comments?: string | null;
@@ -62,7 +62,7 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public id?: number,
     public sequenceNumber?: string,
     public particulars?: string | null,
-    public instalmentDate?: dayjs.Dayjs,
+    public instalmentDate?: dayjs.Dayjs | null,
     public instalmentAmount?: number | null,
     public commentsContentType?: string | null,
     public comments?: string | null,

@@ -81,7 +81,7 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
     id: [],
     sequenceNumber: [null, [Validators.required]],
     particulars: [],
-    instalmentDate: [null, [Validators.required]],
+    instalmentDate: [],
     instalmentAmount: [],
     comments: [],
     commentsContentType: [],

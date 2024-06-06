@@ -34,7 +34,7 @@ describe('WorkInProgressRegistration e2e test', () => {
   const workInProgressRegistrationPageUrlPattern = new RegExp('/work-in-progress-registration(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const workInProgressRegistrationSample = { sequenceNumber: 'Village web-enabled Consultant', instalmentDate: '2022-04-13' };
+  const workInProgressRegistrationSample = { sequenceNumber: 'Village web-enabled Consultant' };
 
   let workInProgressRegistration: any;
 
