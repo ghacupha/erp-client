@@ -97,6 +97,36 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     });
 
     this.loadRelationshipsOptions();
+
+    this.updateDetailsGivenWIPRegistration();
+    this.updateDetailsGivenTransferSettlement();
+  }
+
+  updateDetailsGivenWIPRegistration(): void {
+    this.editForm.get(['workInProgressRegistration'])?.valueChanges.subscribe((registration) => {
+      this.settlementService.find(registration.settlementTransaction.id).subscribe((settlementTransactionResponse) => {
+        this.editForm.patchValue({
+          originalSettlement: settlementTransactionResponse.body
+        });
+      });
+    });
+  }
+
+  updateDetailsGivenTransferSettlement(): void {
+    this.editForm.get(['transferSettlement'])?.valueChanges.subscribe((trfSettlement) => {
+      this.settlementService.find(trfSettlement.id).subscribe((settlementTransactionResponse) => {
+        if (settlementTransactionResponse.body) {
+          const transferredSettlement = settlementTransactionResponse.body;
+
+          this.editForm.patchValue({
+            transferDate: transferredSettlement.paymentDate,
+            transferAmount: transferredSettlement.paymentAmount,
+            description: transferredSettlement.description,
+            businessDocuments: transferredSettlement.businessDocuments
+          });
+        }
+      });
+    });
   }
 
   updateAssetCategory(update: IAssetCategory): void {

@@ -32,6 +32,26 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
+        <jhi-m21-wip-registration-form-control
+          ngDefaultControl
+          formControlName='workInProgressRegistration'
+          [inputValue]="editForm.get('workInProgressRegistration')!.value"
+          (valueSelected)='updateWIPRegistration($event)'
+          inputControlLabel='WIP Registration'
+        >
+          <option [ngValue]="editForm.get('workInProgressRegistration')!.value"></option>
+        </jhi-m21-wip-registration-form-control>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='paymentNumber'
+          [inputValue]="editForm.get(['transferSettlement'])!.value"
+          (valueSelected)='updateTransferSettlement($event)'
+          inputControlLabel='Transfer Settlement'
+        >
+          <option [ngValue]="editForm.get(['transferSettlement'])!.value"></option>
+        </jhi-m21-settlement-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
@@ -41,18 +61,6 @@
             id="field_description"
             data-cy="description"
             formControlName="description"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_targetAssetNumber">Target Asset Number</label>
-          <input
-            type="text"
-            class="form-control"
-            name="targetAssetNumber"
-            id="field_targetAssetNumber"
-            data-cy="targetAssetNumber"
-            formControlName="targetAssetNumber"
           />
         </div>
 
@@ -139,16 +147,6 @@
           <option [ngValue]="editForm.get(['originalSettlement'])!.value"></option>
         </jhi-m21-settlement-form-control>
 
-        <jhi-m21-wip-registration-form-control
-          ngDefaultControl
-          formControlName='workInProgressRegistration'
-          [inputValue]="editForm.get('workInProgressRegistration')!.value"
-          (valueSelected)='updateWIPRegistration($event)'
-          inputControlLabel='WIP Registration'
-        >
-          <option [ngValue]="editForm.get('workInProgressRegistration')!.value"></option>
-        </jhi-m21-wip-registration-form-control>
-
         <jhi-m21-service-outlet-form-control
           ngDefaultControl
           formControlName='serviceOutlet'
@@ -158,16 +156,6 @@
         >
           <option [ngValue]="editForm.get(['serviceOutlet'])!.value"></option>
         </jhi-m21-service-outlet-form-control>
-
-        <jhi-m21-settlement-form-control
-          ngDefaultControl
-          formControlName='paymentNumber'
-          [inputValue]="editForm.get(['transferSettlement'])!.value"
-          (valueSelected)='updateTransferSettlement($event)'
-          inputControlLabel='Transfer Settlement'
-        >
-          <option [ngValue]="editForm.get(['transferSettlement'])!.value"></option>
-        </jhi-m21-settlement-form-control>
 
         <jhi-m21-work-project-register-form-control
           ngDefaultControl
@@ -196,7 +184,6 @@
           inputControlLabel='Placeholders)'
         >
         </jhi-m2m-placeholder-form-control>
-
       </div>
 
       <div>
