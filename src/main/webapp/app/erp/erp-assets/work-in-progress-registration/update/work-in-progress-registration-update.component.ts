@@ -192,8 +192,30 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
         }
       });
 
-      // this.loadRelationshipsOptions();
     }
+
+    this.updateDetailsGivenTransferSettlement();
+  }
+
+  updateDetailsGivenTransferSettlement(): void {
+    this.editForm.get(['settlementTransaction'])?.valueChanges.subscribe((trfSettlement) => {
+      this.settlementService.find(trfSettlement.id).subscribe((settlementTransactionResponse) => {
+        if (settlementTransactionResponse.body) {
+          const transferredSettlement = settlementTransactionResponse.body;
+
+          this.editForm.patchValue({
+            instalmentDate: transferredSettlement.paymentDate,
+            instalmentAmount: transferredSettlement.paymentAmount,
+            particulars: transferredSettlement.description,
+            businessDocuments: transferredSettlement.businessDocuments,
+            dealer: transferredSettlement.biller,
+            placeholder: transferredSettlement.placeholders,
+            settlementCurrency: transferredSettlement.settlementCurrency
+
+          });
+        }
+      });
+    });
   }
 
   updatePlaceholders(updated: IPlaceholder[]): void {
@@ -477,7 +499,7 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       id: workInProgressRegistration.id,
       sequenceNumber: workInProgressRegistration.sequenceNumber,
       particulars: workInProgressRegistration.particulars,
-      // instalmentDate: workInProgressRegistration.instalmentDate,
+      instalmentDate: workInProgressRegistration.instalmentDate,
       instalmentAmount: workInProgressRegistration.instalmentAmount,
       comments: workInProgressRegistration.comments,
       commentsContentType: workInProgressRegistration.commentsContentType,
@@ -506,7 +528,7 @@ export class WorkInProgressRegistrationUpdateComponent implements OnInit {
       id: workInProgressRegistration.id,
       sequenceNumber: workInProgressRegistration.sequenceNumber,
       particulars: workInProgressRegistration.particulars,
-      // instalmentDate: workInProgressRegistration.instalmentDate,
+      instalmentDate: workInProgressRegistration.instalmentDate,
       instalmentAmount: workInProgressRegistration.instalmentAmount,
       comments: workInProgressRegistration.comments,
       commentsContentType: workInProgressRegistration.commentsContentType,
