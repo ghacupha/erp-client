@@ -129,6 +129,16 @@
           <option [ngValue]="editForm.get(['assetCategory'])!.value"></option>
         </jhi-m21-asset-category-form-control>
 
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='paymentNumber'
+          [inputValue]="editForm.get(['originalSettlement'])!.value"
+          (valueSelected)='updateOriginalSettlement($event)'
+          inputControlLabel='Original Settlement'
+        >
+          <option [ngValue]="editForm.get(['originalSettlement'])!.value"></option>
+        </jhi-m21-settlement-form-control>
+
         <jhi-m21-wip-registration-form-control
           ngDefaultControl
           formControlName='workInProgressRegistration'
@@ -152,11 +162,11 @@
         <jhi-m21-settlement-form-control
           ngDefaultControl
           formControlName='paymentNumber'
-          [inputValue]="editForm.get(['settlement'])!.value"
-          (valueSelected)='updateSettlement($event)'
-          inputControlLabel='Settlement'
+          [inputValue]="editForm.get(['transferSettlement'])!.value"
+          (valueSelected)='updateTransferSettlement($event)'
+          inputControlLabel='Transfer Settlement'
         >
-          <option [ngValue]="editForm.get(['settlement'])!.value"></option>
+          <option [ngValue]="editForm.get(['transferSettlement'])!.value"></option>
         </jhi-m21-settlement-form-control>
 
         <jhi-m21-work-project-register-form-control
