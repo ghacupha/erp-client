@@ -20,7 +20,7 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="prepaymentAccountReport">
-      <h2 data-cy="prepaymentAccountReportDetailsHeading"><span>Outstanding on {{ prepaymentAccountReport.prepaymentAccount }} Account</span>
+      <h2 data-cy="prepaymentAccountReportDetailsHeading"><span>Outstanding on {{ prepaymentAccountReport.accountName }} Account</span>
         <span *ngIf='reportDate'>As at {{ reportDate }}</span>
       </h2>
 
@@ -35,9 +35,13 @@
         <dd>
           <span>{{ prepaymentAccountReport.id }}</span>
         </dd>
-        <dt><span>Prepayment Account</span></dt>
+        <dt><span>Account Name</span></dt>
         <dd>
-          <span>{{ prepaymentAccountReport.prepaymentAccount }}</span>
+          <span>{{ prepaymentAccountReport.accountName }}</span>
+        </dd>
+        <dt><span>Account Number</span></dt>
+        <dd>
+          <span>{{ prepaymentAccountReport.accountNumber }}</span>
         </dd>
         <dt><span>Prepayment Amount</span></dt>
         <dd>
