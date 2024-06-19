@@ -57,7 +57,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_leaseLiability">Lease Liability</label>
           <select
             class="form-control"
@@ -86,7 +86,19 @@
           "
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['leaseLiability'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
+
+        <jhi-m21-lease-liability-form-control
+          ngDefaultControl
+          formControlName='leaseLiability'
+          [inputValue]="editForm.get(['leaseLiability'])!.value"
+          (valueSelected)='updateLeaseLiability($event)'
+          inputControlLabel='Lease Liability'
+        >
+          <option [ngValue]="editForm.get(['leaseLiability'])!.value"></option>
+        </jhi-m21-lease-liability-form-control>
+
+
       </div>
 
       <div>

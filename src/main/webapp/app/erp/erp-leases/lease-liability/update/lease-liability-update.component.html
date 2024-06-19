@@ -120,7 +120,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_leaseAmortizationCalculation">Lease Amortization Calculation</label>
           <select
             class="form-control"
@@ -144,7 +144,19 @@
               {{ leaseAmortizationCalculationOption.id }}
             </option>
           </select>
-        </div>
+        </div>-->
+
+        <jhi-m21-lease-amortization-calculation-form-control
+          ngDefaultControl
+          formControlName='leaseAmortizationCalculation'
+          [inputValue]="editForm.get(['leaseAmortizationCalculation'])!.value"
+          (valueSelected)='updateLeaseAmortizationCalculation($event)'
+          inputControlLabel='Lease Amortization Calculation'
+        >
+          <option [ngValue]="editForm.get(['leaseAmortizationCalculation'])!.value"></option>
+        </jhi-m21-lease-amortization-calculation-form-control>
+
+
       </div>
 
       <div>

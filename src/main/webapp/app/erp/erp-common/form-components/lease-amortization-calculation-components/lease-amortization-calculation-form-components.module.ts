@@ -39,5 +39,5 @@ import { LeaseAmortizationCalculationOptionViewComponent } from './lease-amortiz
     FormatLeaseAmortizationCalculationPipe
   ]
 })
-export class LeaseLiabilityFormComponentsModule {
+export class LeaseAmortizationCalculationFormComponentsModule {
 }

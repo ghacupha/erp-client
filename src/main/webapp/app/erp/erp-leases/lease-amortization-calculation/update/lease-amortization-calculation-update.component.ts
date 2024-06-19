@@ -61,6 +61,12 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     });
   }
 
+  updateIFRS16LeaseContract(value: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      IFRS16LeaseContract: value
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

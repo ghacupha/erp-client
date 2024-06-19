@@ -30,6 +30,7 @@ import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 @Component({
   selector: 'jhi-lease-payment-update',
@@ -65,6 +66,12 @@ export class LeasePaymentUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+  }
+
+  updateLeaseLiability(value: ILeaseLiability): void {
+    this.editForm.patchValue({
+      leaseLiability: value
+    })
   }
 
   previousState(): void {

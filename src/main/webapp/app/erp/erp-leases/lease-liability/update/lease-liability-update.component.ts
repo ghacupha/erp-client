@@ -70,6 +70,12 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     });
   }
 
+  updateLeaseAmortizationCalculation(value: ILeaseAmortizationCalculation): void {
+    this.editForm.patchValue({
+      leaseAmortizationCalculation: value
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

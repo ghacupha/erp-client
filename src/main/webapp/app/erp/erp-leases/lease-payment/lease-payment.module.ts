@@ -23,9 +23,10 @@ import { LeasePaymentDetailComponent } from './detail/lease-payment-detail.compo
 import { LeasePaymentUpdateComponent } from './update/lease-payment-update.component';
 import { LeasePaymentDeleteDialogComponent } from './delete/lease-payment-delete-dialog.component';
 import { LeasePaymentRoutingModule } from './route/lease-payment-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeasePaymentRoutingModule],
+  imports: [SharedModule, LeasePaymentRoutingModule, ErpCommonModule],
   declarations: [LeasePaymentComponent, LeasePaymentDetailComponent, LeasePaymentUpdateComponent, LeasePaymentDeleteDialogComponent],
   entryComponents: [LeasePaymentDeleteDialogComponent],
 })

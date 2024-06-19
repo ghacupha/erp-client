@@ -23,9 +23,14 @@ import { LeaseLiabilityDetailComponent } from './detail/lease-liability-detail.c
 import { LeaseLiabilityUpdateComponent } from './update/lease-liability-update.component';
 import { LeaseLiabilityDeleteDialogComponent } from './delete/lease-liability-delete-dialog.component';
 import { LeaseLiabilityRoutingModule } from './route/lease-liability-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseLiabilityRoutingModule],
+  imports: [
+    SharedModule,
+    LeaseLiabilityRoutingModule,
+    ErpCommonModule
+  ],
   declarations: [
     LeaseLiabilityComponent,
     LeaseLiabilityDetailComponent,

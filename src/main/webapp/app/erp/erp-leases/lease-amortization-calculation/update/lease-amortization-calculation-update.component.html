@@ -80,7 +80,7 @@
           />
         </div>
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_IFRS16LeaseContract">IFRS 16 Lease Contract</label>
           <select
             class="form-control"
@@ -101,17 +101,18 @@
               {{ IFRS16LeaseContractOption.bookingId }}
             </option>
           </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['IFRS16LeaseContract'])!.invalid &&
-            (editForm.get(['IFRS16LeaseContract'])!.dirty || editForm.get(['IFRS16LeaseContract'])!.touched)
-          "
+        </div>-->
+
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='IFRS16LeaseContract'
+          [inputValue]="editForm.get(['IFRS16LeaseContract'])!.value"
+          (valueSelected)='updateIFRS16LeaseContract($event)'
+          inputControlLabel='IFRS16 Lease Contract'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['IFRS16LeaseContract'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get(['IFRS16LeaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
       </div>
 
       <div>
