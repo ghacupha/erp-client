@@ -39,7 +39,8 @@ describe('PrepaymentAccountReport Service', () => {
 
     elemDefault = {
       id: 0,
-      prepaymentAccount: 'AAAAAAA',
+      accountName: 'AAAAAAA',
+      accountNumber: 'AAAAAAA',
       prepaymentAmount: 0,
       amortisedAmount: 0,
       outstandingAmount: 0,
@@ -63,7 +64,8 @@ describe('PrepaymentAccountReport Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          prepaymentAccount: 'BBBBBB',
+          accountName: 'BBBBBB',
+          accountNumber: 'BBBBBB',
           prepaymentAmount: 1,
           amortisedAmount: 1,
           outstandingAmount: 1,

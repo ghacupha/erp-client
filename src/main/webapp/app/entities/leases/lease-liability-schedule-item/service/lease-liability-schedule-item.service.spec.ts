@@ -18,9 +18,7 @@
 
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import * as dayjs from 'dayjs';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
 import { ILeaseLiabilityScheduleItem, LeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 
 import { LeaseLiabilityScheduleItemService } from './lease-liability-schedule-item.service';
@@ -30,7 +28,6 @@ describe('LeaseLiabilityScheduleItem Service', () => {
   let httpMock: HttpTestingController;
   let elemDefault: ILeaseLiabilityScheduleItem;
   let expectedResult: ILeaseLiabilityScheduleItem | ILeaseLiabilityScheduleItem[] | boolean | null;
-  let currentDate: dayjs.Dayjs;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,34 +36,24 @@ describe('LeaseLiabilityScheduleItem Service', () => {
     expectedResult = null;
     service = TestBed.inject(LeaseLiabilityScheduleItemService);
     httpMock = TestBed.inject(HttpTestingController);
-    currentDate = dayjs();
 
     elemDefault = {
       id: 0,
       sequenceNumber: 0,
-      periodIncluded: false,
-      periodStartDate: currentDate,
-      periodEndDate: currentDate,
       openingBalance: 0,
       cashPayment: 0,
       principalPayment: 0,
       interestPayment: 0,
       outstandingBalance: 0,
       interestPayableOpening: 0,
-      interestExpenseAccrued: 0,
-      interestPayableBalance: 0,
+      interestAccrued: 0,
+      interestPayableClosing: 0,
     };
   });
 
   describe('Service methods', () => {
     it('should find an element', () => {
-      const returnedFromService = Object.assign(
-        {
-          periodStartDate: currentDate.format(DATE_FORMAT),
-          periodEndDate: currentDate.format(DATE_FORMAT),
-        },
-        elemDefault
-      );
+      const returnedFromService = Object.assign({}, elemDefault);
 
       service.find(123).subscribe(resp => (expectedResult = resp.body));
 
@@ -79,19 +66,11 @@ describe('LeaseLiabilityScheduleItem Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
-          periodStartDate: currentDate.format(DATE_FORMAT),
-          periodEndDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          periodStartDate: currentDate,
-          periodEndDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.create(new LeaseLiabilityScheduleItem()).subscribe(resp => (expectedResult = resp.body));
 
@@ -105,28 +84,19 @@ describe('LeaseLiabilityScheduleItem Service', () => {
         {
           id: 1,
           sequenceNumber: 1,
-          periodIncluded: true,
-          periodStartDate: currentDate.format(DATE_FORMAT),
-          periodEndDate: currentDate.format(DATE_FORMAT),
           openingBalance: 1,
           cashPayment: 1,
           principalPayment: 1,
           interestPayment: 1,
           outstandingBalance: 1,
           interestPayableOpening: 1,
-          interestExpenseAccrued: 1,
-          interestPayableBalance: 1,
+          interestAccrued: 1,
+          interestPayableClosing: 1,
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          periodStartDate: currentDate,
-          periodEndDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.update(expected).subscribe(resp => (expectedResult = resp.body));
 
@@ -139,22 +109,15 @@ describe('LeaseLiabilityScheduleItem Service', () => {
       const patchObject = Object.assign(
         {
           sequenceNumber: 1,
-          cashPayment: 1,
           outstandingBalance: 1,
-          interestExpenseAccrued: 1,
+          interestPayableClosing: 1,
         },
         new LeaseLiabilityScheduleItem()
       );
 
       const returnedFromService = Object.assign(patchObject, elemDefault);
 
-      const expected = Object.assign(
-        {
-          periodStartDate: currentDate,
-          periodEndDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.partialUpdate(patchObject).subscribe(resp => (expectedResult = resp.body));
 
@@ -168,28 +131,19 @@ describe('LeaseLiabilityScheduleItem Service', () => {
         {
           id: 1,
           sequenceNumber: 1,
-          periodIncluded: true,
-          periodStartDate: currentDate.format(DATE_FORMAT),
-          periodEndDate: currentDate.format(DATE_FORMAT),
           openingBalance: 1,
           cashPayment: 1,
           principalPayment: 1,
           interestPayment: 1,
           outstandingBalance: 1,
           interestPayableOpening: 1,
-          interestExpenseAccrued: 1,
-          interestPayableBalance: 1,
+          interestAccrued: 1,
+          interestPayableClosing: 1,
         },
         elemDefault
       );
 
-      const expected = Object.assign(
-        {
-          periodStartDate: currentDate,
-          periodEndDate: currentDate,
-        },
-        returnedFromService
-      );
+      const expected = Object.assign({}, returnedFromService);
 
       service.query().subscribe(resp => (expectedResult = resp.body));
 
@@ -242,7 +196,7 @@ describe('LeaseLiabilityScheduleItem Service', () => {
       });
 
       it('should add only unique LeaseLiabilityScheduleItem to an array', () => {
-        const leaseLiabilityScheduleItemArray: ILeaseLiabilityScheduleItem[] = [{ id: 123 }, { id: 456 }, { id: 36464 }];
+        const leaseLiabilityScheduleItemArray: ILeaseLiabilityScheduleItem[] = [{ id: 123 }, { id: 456 }, { id: 22193 }];
         const leaseLiabilityScheduleItemCollection: ILeaseLiabilityScheduleItem[] = [{ id: 123 }];
         expectedResult = service.addLeaseLiabilityScheduleItemToCollectionIfMissing(
           leaseLiabilityScheduleItemCollection,

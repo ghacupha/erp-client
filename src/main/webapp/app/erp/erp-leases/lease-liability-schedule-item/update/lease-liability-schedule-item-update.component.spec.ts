@@ -34,9 +34,14 @@ import { LeaseLiabilityScheduleItemUpdateComponent } from './lease-liability-sch
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ILeaseModelMetadata } from '../../lease-model-metadata/lease-model-metadata.model';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
+import { LeaseAmortizationScheduleService } from '../../lease-amortization-schedule/service/lease-amortization-schedule.service';
 import { LeaseContractService } from '../../lease-contract/service/lease-contract.service';
+import { ILeasePeriod } from '../../lease-period/lease-period.model';
 import { LeaseModelMetadataService } from '../../lease-model-metadata/service/lease-model-metadata.service';
+import { ILeaseContract } from '../../lease-contract/lease-contract.model';
+import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ILeaseAmortizationSchedule } from '../../lease-amortization-schedule/lease-amortization-schedule.model';
 
 describe('LeaseLiabilityScheduleItem Management Update Component', () => {
   let comp: LeaseLiabilityScheduleItemUpdateComponent;
@@ -47,6 +52,8 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
   let leaseContractService: LeaseContractService;
   let leaseModelMetadataService: LeaseModelMetadataService;
   let universallyUniqueMappingService: UniversallyUniqueMappingService;
+  let leasePeriodService: LeasePeriodService;
+  let leaseAmortizationScheduleService: LeaseAmortizationScheduleService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -64,6 +71,8 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
     leaseContractService = TestBed.inject(LeaseContractService);
     leaseModelMetadataService = TestBed.inject(LeaseModelMetadataService);
     universallyUniqueMappingService = TestBed.inject(UniversallyUniqueMappingService);
+    leasePeriodService = TestBed.inject(LeasePeriodService);
+    leaseAmortizationScheduleService = TestBed.inject(LeaseAmortizationScheduleService);
 
     comp = fixture.componentInstance;
   });
@@ -159,6 +168,52 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(comp.universallyUniqueMappingsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call LeasePeriod query and add missing value', () => {
+      const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
+      const leasePeriod: ILeasePeriod = { id: 19833 };
+      leaseLiabilityScheduleItem.leasePeriod = leasePeriod;
+
+      const leasePeriodCollection: ILeasePeriod[] = [{ id: 3256 }];
+      jest.spyOn(leasePeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: leasePeriodCollection })));
+      const additionalLeasePeriods = [leasePeriod];
+      const expectedCollection: ILeasePeriod[] = [...additionalLeasePeriods, ...leasePeriodCollection];
+      jest.spyOn(leasePeriodService, 'addLeasePeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ leaseLiabilityScheduleItem });
+      comp.ngOnInit();
+
+      expect(leasePeriodService.query).toHaveBeenCalled();
+      expect(leasePeriodService.addLeasePeriodToCollectionIfMissing).toHaveBeenCalledWith(leasePeriodCollection, ...additionalLeasePeriods);
+      expect(comp.leasePeriodsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call LeaseAmortizationSchedule query and add missing value', () => {
+      const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
+      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 95924 };
+      leaseLiabilityScheduleItem.leaseAmortizationSchedule = leaseAmortizationSchedule;
+
+      const leaseAmortizationScheduleCollection: ILeaseAmortizationSchedule[] = [{ id: 59618 }];
+      jest
+        .spyOn(leaseAmortizationScheduleService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: leaseAmortizationScheduleCollection })));
+      const additionalLeaseAmortizationSchedules = [leaseAmortizationSchedule];
+      const expectedCollection: ILeaseAmortizationSchedule[] = [
+        ...additionalLeaseAmortizationSchedules,
+        ...leaseAmortizationScheduleCollection,
+      ];
+      jest.spyOn(leaseAmortizationScheduleService, 'addLeaseAmortizationScheduleToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ leaseLiabilityScheduleItem });
+      comp.ngOnInit();
+
+      expect(leaseAmortizationScheduleService.query).toHaveBeenCalled();
+      expect(leaseAmortizationScheduleService.addLeaseAmortizationScheduleToCollectionIfMissing).toHaveBeenCalledWith(
+        leaseAmortizationScheduleCollection,
+        ...additionalLeaseAmortizationSchedules
+      );
+      expect(comp.leaseAmortizationSchedulesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem = { id: 456 };
       const placeholders: IPlaceholder = { id: 79718 };
@@ -169,6 +224,10 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       leaseLiabilityScheduleItem.leaseModelMetadata = leaseModelMetadata;
       const universallyUniqueMappings: IUniversallyUniqueMapping = { id: 69682 };
       leaseLiabilityScheduleItem.universallyUniqueMappings = [universallyUniqueMappings];
+      const leasePeriod: ILeasePeriod = { id: 97304 };
+      leaseLiabilityScheduleItem.leasePeriod = leasePeriod;
+      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 74255 };
+      leaseLiabilityScheduleItem.leaseAmortizationSchedule = leaseAmortizationSchedule;
 
       activatedRoute.data = of({ leaseLiabilityScheduleItem });
       comp.ngOnInit();
@@ -178,6 +237,8 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       expect(comp.leaseContractsSharedCollection).toContain(leaseContract);
       expect(comp.leaseModelMetadataSharedCollection).toContain(leaseModelMetadata);
       expect(comp.universallyUniqueMappingsSharedCollection).toContain(universallyUniqueMappings);
+      expect(comp.leasePeriodsSharedCollection).toContain(leasePeriod);
+      expect(comp.leaseAmortizationSchedulesSharedCollection).toContain(leaseAmortizationSchedule);
     });
   });
 
@@ -274,6 +335,22 @@ describe('LeaseLiabilityScheduleItem Management Update Component', () => {
       it('Should return tracked UniversallyUniqueMapping primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackUniversallyUniqueMappingById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackLeasePeriodById', () => {
+      it('Should return tracked LeasePeriod primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackLeasePeriodById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackLeaseAmortizationScheduleById', () => {
+      it('Should return tracked LeaseAmortizationSchedule primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackLeaseAmortizationScheduleById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

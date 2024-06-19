@@ -60,9 +60,8 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="prepaymentAccount">
-            <span>Prepayment Account</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="accountName"><span>Account Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountNumber"><span>Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAmount"><span>Prepayment Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="amortisedAmount"><span>Amortised Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="outstandingAmount"><span>Outstanding Amount</span> <fa-icon icon="sort"></fa-icon></th>
@@ -78,7 +77,8 @@
           <td>
             <a [routerLink]="['/prepayment-account-report', prepaymentAccountReport.id, 'view']">{{ prepaymentAccountReport.id }}</a>
           </td>
-          <td>{{ prepaymentAccountReport.prepaymentAccount }}</td>
+          <td>{{ prepaymentAccountReport.accountName }}</td>
+          <td>{{ prepaymentAccountReport.accountNumber }}</td>
           <td>{{ prepaymentAccountReport.prepaymentAmount }}</td>
           <td>{{ prepaymentAccountReport.amortisedAmount }}</td>
           <td>{{ prepaymentAccountReport.outstandingAmount }}</td>

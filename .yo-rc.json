@@ -300,7 +300,12 @@
       "AmortizationPostingReportRequisition",
       "PrepaymentByAccountReportRequisition",
       "WorkInProgressOutstandingReportRequisition",
-      "LeasePeriod"
+      "LeasePeriod",
+      "LeaseLiabilityCompilation",
+      "LeaseAmortizationCalculation",
+      "LeasePayment",
+      "LeaseLiability",
+      "LeaseAmortizationSchedule"
     ],
     "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,

@@ -93,6 +93,16 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
       statusCode: 200,
       body: [],
     });
+
+    cy.intercept('GET', '/api/lease-periods', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/lease-amortization-schedules', {
+      statusCode: 200,
+      body: [],
+    });
   });
 
   afterEach(() => {
@@ -230,28 +240,21 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
     it('should create an instance of LeaseLiabilityScheduleItem', () => {
       cy.get(`[data-cy="sequenceNumber"]`).type('97481').should('have.value', '97481');
 
-      cy.get(`[data-cy="periodIncluded"]`).should('not.be.checked');
-      cy.get(`[data-cy="periodIncluded"]`).click().should('be.checked');
+      cy.get(`[data-cy="openingBalance"]`).type('29117').should('have.value', '29117');
 
-      cy.get(`[data-cy="periodStartDate"]`).type('2023-03-28').should('have.value', '2023-03-28');
+      cy.get(`[data-cy="cashPayment"]`).type('20173').should('have.value', '20173');
 
-      cy.get(`[data-cy="periodEndDate"]`).type('2023-03-28').should('have.value', '2023-03-28');
+      cy.get(`[data-cy="principalPayment"]`).type('36960').should('have.value', '36960');
 
-      cy.get(`[data-cy="openingBalance"]`).type('2512').should('have.value', '2512');
+      cy.get(`[data-cy="interestPayment"]`).type('2512').should('have.value', '2512');
 
-      cy.get(`[data-cy="cashPayment"]`).type('57989').should('have.value', '57989');
+      cy.get(`[data-cy="outstandingBalance"]`).type('57989').should('have.value', '57989');
 
-      cy.get(`[data-cy="principalPayment"]`).type('1472').should('have.value', '1472');
+      cy.get(`[data-cy="interestPayableOpening"]`).type('1472').should('have.value', '1472');
 
-      cy.get(`[data-cy="interestPayment"]`).type('17465').should('have.value', '17465');
+      cy.get(`[data-cy="interestAccrued"]`).type('17465').should('have.value', '17465');
 
-      cy.get(`[data-cy="outstandingBalance"]`).type('60769').should('have.value', '60769');
-
-      cy.get(`[data-cy="interestPayableOpening"]`).type('31988').should('have.value', '31988');
-
-      cy.get(`[data-cy="interestExpenseAccrued"]`).type('15834').should('have.value', '15834');
-
-      cy.get(`[data-cy="interestPayableBalance"]`).type('33962').should('have.value', '33962');
+      cy.get(`[data-cy="interestPayableClosing"]`).type('60769').should('have.value', '60769');
 
       cy.get(`[data-cy="leaseContract"]`).select(1);
 

@@ -33,6 +33,10 @@ import { ILeaseModelMetadata } from 'app/entities/leases/lease-model-metadata/le
 import { LeaseModelMetadataService } from 'app/entities/leases/lease-model-metadata/service/lease-model-metadata.service';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
+import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
+import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
+import { ILeaseAmortizationSchedule } from 'app/entities/leases/lease-amortization-schedule/lease-amortization-schedule.model';
+import { LeaseAmortizationScheduleService } from 'app/entities/leases/lease-amortization-schedule/service/lease-amortization-schedule.service';
 
 @Component({
   selector: 'jhi-lease-liability-schedule-item-update',
@@ -45,25 +49,26 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   leaseContractsSharedCollection: ILeaseContract[] = [];
   leaseModelMetadataSharedCollection: ILeaseModelMetadata[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
+  leasePeriodsSharedCollection: ILeasePeriod[] = [];
+  leaseAmortizationSchedulesSharedCollection: ILeaseAmortizationSchedule[] = [];
 
   editForm = this.fb.group({
     id: [],
     sequenceNumber: [],
-    periodIncluded: [],
-    periodStartDate: [],
-    periodEndDate: [],
     openingBalance: [],
     cashPayment: [],
     principalPayment: [],
     interestPayment: [],
     outstandingBalance: [],
     interestPayableOpening: [],
-    interestExpenseAccrued: [],
-    interestPayableBalance: [],
+    interestAccrued: [],
+    interestPayableClosing: [],
     placeholders: [],
     leaseContract: [null, Validators.required],
     leaseModelMetadata: [],
     universallyUniqueMappings: [],
+    leasePeriod: [],
+    leaseAmortizationSchedule: [],
   });
 
   constructor(
@@ -72,6 +77,8 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     protected leaseContractService: LeaseContractService,
     protected leaseModelMetadataService: LeaseModelMetadataService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
+    protected leasePeriodService: LeasePeriodService,
+    protected leaseAmortizationScheduleService: LeaseAmortizationScheduleService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -111,6 +118,14 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   }
 
   trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
+    return item.id!;
+  }
+
+  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
+    return item.id!;
+  }
+
+  trackLeaseAmortizationScheduleById(index: number, item: ILeaseAmortizationSchedule): number {
     return item.id!;
   }
 
@@ -162,21 +177,20 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: leaseLiabilityScheduleItem.id,
       sequenceNumber: leaseLiabilityScheduleItem.sequenceNumber,
-      periodIncluded: leaseLiabilityScheduleItem.periodIncluded,
-      periodStartDate: leaseLiabilityScheduleItem.periodStartDate,
-      periodEndDate: leaseLiabilityScheduleItem.periodEndDate,
       openingBalance: leaseLiabilityScheduleItem.openingBalance,
       cashPayment: leaseLiabilityScheduleItem.cashPayment,
       principalPayment: leaseLiabilityScheduleItem.principalPayment,
       interestPayment: leaseLiabilityScheduleItem.interestPayment,
       outstandingBalance: leaseLiabilityScheduleItem.outstandingBalance,
       interestPayableOpening: leaseLiabilityScheduleItem.interestPayableOpening,
-      interestExpenseAccrued: leaseLiabilityScheduleItem.interestExpenseAccrued,
-      interestPayableBalance: leaseLiabilityScheduleItem.interestPayableBalance,
+      interestAccrued: leaseLiabilityScheduleItem.interestAccrued,
+      interestPayableClosing: leaseLiabilityScheduleItem.interestPayableClosing,
       placeholders: leaseLiabilityScheduleItem.placeholders,
       leaseContract: leaseLiabilityScheduleItem.leaseContract,
       leaseModelMetadata: leaseLiabilityScheduleItem.leaseModelMetadata,
       universallyUniqueMappings: leaseLiabilityScheduleItem.universallyUniqueMappings,
+      leasePeriod: leaseLiabilityScheduleItem.leasePeriod,
+      leaseAmortizationSchedule: leaseLiabilityScheduleItem.leaseAmortizationSchedule,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -195,6 +209,15 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       this.universallyUniqueMappingsSharedCollection,
       ...(leaseLiabilityScheduleItem.universallyUniqueMappings ?? [])
     );
+    this.leasePeriodsSharedCollection = this.leasePeriodService.addLeasePeriodToCollectionIfMissing(
+      this.leasePeriodsSharedCollection,
+      leaseLiabilityScheduleItem.leasePeriod
+    );
+    this.leaseAmortizationSchedulesSharedCollection =
+      this.leaseAmortizationScheduleService.addLeaseAmortizationScheduleToCollectionIfMissing(
+        this.leaseAmortizationSchedulesSharedCollection,
+        leaseLiabilityScheduleItem.leaseAmortizationSchedule
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -246,6 +269,32 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
+
+    this.leasePeriodService
+      .query()
+      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => res.body ?? []))
+      .pipe(
+        map((leasePeriods: ILeasePeriod[]) =>
+          this.leasePeriodService.addLeasePeriodToCollectionIfMissing(leasePeriods, this.editForm.get('leasePeriod')!.value)
+        )
+      )
+      .subscribe((leasePeriods: ILeasePeriod[]) => (this.leasePeriodsSharedCollection = leasePeriods));
+
+    this.leaseAmortizationScheduleService
+      .query()
+      .pipe(map((res: HttpResponse<ILeaseAmortizationSchedule[]>) => res.body ?? []))
+      .pipe(
+        map((leaseAmortizationSchedules: ILeaseAmortizationSchedule[]) =>
+          this.leaseAmortizationScheduleService.addLeaseAmortizationScheduleToCollectionIfMissing(
+            leaseAmortizationSchedules,
+            this.editForm.get('leaseAmortizationSchedule')!.value
+          )
+        )
+      )
+      .subscribe(
+        (leaseAmortizationSchedules: ILeaseAmortizationSchedule[]) =>
+          (this.leaseAmortizationSchedulesSharedCollection = leaseAmortizationSchedules)
+      );
   }
 
   protected createFromForm(): ILeaseLiabilityScheduleItem {
@@ -253,21 +302,20 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       ...new LeaseLiabilityScheduleItem(),
       id: this.editForm.get(['id'])!.value,
       sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
-      periodIncluded: this.editForm.get(['periodIncluded'])!.value,
-      periodStartDate: this.editForm.get(['periodStartDate'])!.value,
-      periodEndDate: this.editForm.get(['periodEndDate'])!.value,
       openingBalance: this.editForm.get(['openingBalance'])!.value,
       cashPayment: this.editForm.get(['cashPayment'])!.value,
       principalPayment: this.editForm.get(['principalPayment'])!.value,
       interestPayment: this.editForm.get(['interestPayment'])!.value,
       outstandingBalance: this.editForm.get(['outstandingBalance'])!.value,
       interestPayableOpening: this.editForm.get(['interestPayableOpening'])!.value,
-      interestExpenseAccrued: this.editForm.get(['interestExpenseAccrued'])!.value,
-      interestPayableBalance: this.editForm.get(['interestPayableBalance'])!.value,
+      interestAccrued: this.editForm.get(['interestAccrued'])!.value,
+      interestPayableClosing: this.editForm.get(['interestPayableClosing'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
       leaseModelMetadata: this.editForm.get(['leaseModelMetadata'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
+      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
+      leaseAmortizationSchedule: this.editForm.get(['leaseAmortizationSchedule'])!.value,
     };
   }
 }

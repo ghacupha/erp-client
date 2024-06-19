@@ -72,21 +72,20 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
 
         await promise.all([
             leaseLiabilityScheduleItemUpdatePage.setSequenceNumberInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.getPeriodIncludedInput().click(),
-            leaseLiabilityScheduleItemUpdatePage.setPeriodStartDateInput('2000-12-31'),
-            leaseLiabilityScheduleItemUpdatePage.setPeriodEndDateInput('2000-12-31'),
             leaseLiabilityScheduleItemUpdatePage.setOpeningBalanceInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setCashPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setPrincipalPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setInterestPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setOutstandingBalanceInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setInterestPayableOpeningInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.setInterestExpenseAccruedInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.setInterestPayableBalanceInput('5'),
+            leaseLiabilityScheduleItemUpdatePage.setInterestAccruedInput('5'),
+            leaseLiabilityScheduleItemUpdatePage.setInterestPayableClosingInput('5'),
             // leaseLiabilityScheduleItemUpdatePage.placeholderSelectLastOption(),
             leaseLiabilityScheduleItemUpdatePage.leaseContractSelectLastOption(),
             leaseLiabilityScheduleItemUpdatePage.leaseModelMetadataSelectLastOption(),
             // leaseLiabilityScheduleItemUpdatePage.universallyUniqueMappingSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leasePeriodSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseAmortizationScheduleSelectLastOption(),
         ]);
 
         await leaseLiabilityScheduleItemUpdatePage.save();

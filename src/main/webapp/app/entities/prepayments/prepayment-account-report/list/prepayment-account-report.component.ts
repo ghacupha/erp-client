@@ -112,7 +112,7 @@ export class PrepaymentAccountReportComponent implements OnInit {
       last: 0,
     };
     this.page = 0;
-    if (query && ['prepaymentAccount'].includes(this.predicate)) {
+    if (query && ['accountName', 'accountNumber'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

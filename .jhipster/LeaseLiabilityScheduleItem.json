@@ -1,23 +1,9 @@
 {
-  "changelogDate": "20230328143440",
   "clientRootFolder": "leases",
-  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "sequenceNumber",
       "fieldType": "Integer"
-    },
-    {
-      "fieldName": "periodIncluded",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "periodStartDate",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "periodEndDate",
-      "fieldType": "LocalDate"
     },
     {
       "fieldName": "openingBalance",
@@ -44,49 +30,63 @@
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestExpenseAccrued",
+      "fieldName": "interestAccrued",
       "fieldType": "BigDecimal"
     },
     {
-      "fieldName": "interestPayableBalance",
+      "fieldName": "interestPayableClosing",
       "fieldType": "BigDecimal"
     }
   ],
-  "incrementalChangelog": false,
-  "jpaMetamodelFiltering": true,
-  "name": "LeaseLiabilityScheduleItem",
-  "pagination": "pagination",
-  "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
-      "ownerSide": true,
       "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
-    },
-    {
-      "otherEntityField": "bookingId",
-      "otherEntityName": "leaseContract",
-      "relationshipName": "leaseContract",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
-    },
-    {
-      "otherEntityField": "modelTitle",
-      "otherEntityName": "leaseModelMetadata",
-      "relationshipName": "leaseModelMetadata",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityField": "universalKey",
-      "otherEntityName": "universallyUniqueMapping",
-      "otherEntityRelationshipName": "leaseLiabilityScheduleItem",
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
       "ownerSide": true,
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "leaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
+      "relationshipName": "leaseModelMetadata",
+      "otherEntityName": "leaseModelMetadata",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "modelTitle"
+    },
+    {
       "relationshipName": "universallyUniqueMapping",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leasePeriod",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "periodCode"
+    },
+    {
+      "relationshipName": "leaseAmortizationSchedule",
+      "otherEntityName": "leaseAmortizationSchedule",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseLiabilityScheduleItem",
+  "changelogDate": "20230328143440",
+  "incrementalChangelog": false
 }

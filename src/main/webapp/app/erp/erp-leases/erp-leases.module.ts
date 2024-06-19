@@ -19,7 +19,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
-import { RouDepreciationEntryReportItemModule } from './rou-depreciation-entry-report-item/rou-depreciation-entry-report-item.module';
 
 @NgModule({
   imports: [
@@ -250,6 +249,66 @@ import { RouDepreciationEntryReportItemModule } from './rou-depreciation-entry-r
           loadChildren: () =>
             import('./lease-period/lease-period.module').then(
               m => m.LeasePeriodModule
+            ),
+        },
+        {
+          path: 'lease-liability',
+          data: {
+            pageTitle: 'ERP | Lease Liability',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability/lease-liability.module').then(
+              m => m.LeaseLiabilityModule
+            ),
+        },
+        {
+          path: 'lease-payment',
+          data: {
+            pageTitle: 'ERP | Lease Payment',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-payment/lease-payment.module').then(
+              m => m.LeasePaymentModule
+            ),
+        },
+        {
+          path: 'lease-liability-compilation',
+          data: {
+            pageTitle: 'ERP | Lease Compilation',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-compilation/lease-liability-compilation.module').then(
+              m => m.LeaseLiabilityCompilationModule
+            ),
+        },
+        {
+          path: 'lease-amortization-calculation',
+          data: {
+            pageTitle: 'ERP | Lease Calculation',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-amortization-calculation/lease-amortization-calculation.module').then(
+              m => m.LeaseAmortizationCalculationModule
+            ),
+        },
+        {
+          path: 'lease-amortization-schedule',
+          data: {
+            pageTitle: 'ERP | Lease Schedule',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-amortization-schedule/lease-amortization-schedule.module').then(
+              m => m.LeaseAmortizationScheduleModule
             ),
         },
       ]

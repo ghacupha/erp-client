@@ -19,13 +19,92 @@
 -->
 <div [ngSwitch]='isAuthenticated()'>
   <ul class='navbar-nav ml-auto'>
+
+    <!--// Lease menu-->
+    <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
+        routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
+      <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='leases-registry-menu'>
+          <span>
+              <fa-icon icon='book-open'></fa-icon>
+              <span>
+                 Leases
+              </span>
+          </span>
+      </a>
+      <ul class='dropdown-menu' ngbDropdownMenu aria-labelledby='registry-menu'>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-liability'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Liability</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-payment'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Payment</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-amortization-calculation'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Amortization Calculation</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-amortization-schedule'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Amortization Schedules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
+            routerLink='lease-liability-compilation'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>Lease Amortization Compilation</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+
+
+    <!--// ROU Menu-->
     <li *ngSwitchCase='true' ngbDropdown class='nav-item dropdown pointer' display='dynamic'
         routerLinkActive='active' [routerLinkActiveOptions]='{ exact: true }'>
       <a class='nav-link dropdown-toggle' ngbDropdownToggle href='javascript:void(0);' id='registry-menu'>
           <span>
               <fa-icon icon='book-open'></fa-icon>
               <span>
-                 Leases
+                 ROU
               </span>
           </span>
       </a>

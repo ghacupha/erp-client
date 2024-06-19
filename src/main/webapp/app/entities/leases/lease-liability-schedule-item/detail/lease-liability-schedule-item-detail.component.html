@@ -37,18 +37,6 @@
         <dd>
           <span>{{ leaseLiabilityScheduleItem.sequenceNumber }}</span>
         </dd>
-        <dt><span>Period Included</span></dt>
-        <dd>
-          <span>{{ leaseLiabilityScheduleItem.periodIncluded }}</span>
-        </dd>
-        <dt><span>Period Start Date</span></dt>
-        <dd>
-          <span>{{ leaseLiabilityScheduleItem.periodStartDate | formatMediumDate }}</span>
-        </dd>
-        <dt><span>Period End Date</span></dt>
-        <dd>
-          <span>{{ leaseLiabilityScheduleItem.periodEndDate | formatMediumDate }}</span>
-        </dd>
         <dt><span>Opening Balance</span></dt>
         <dd>
           <span>{{ leaseLiabilityScheduleItem.openingBalance }}</span>
@@ -73,13 +61,13 @@
         <dd>
           <span>{{ leaseLiabilityScheduleItem.interestPayableOpening }}</span>
         </dd>
-        <dt><span>Interest Expense Accrued</span></dt>
+        <dt><span>Interest Accrued</span></dt>
         <dd>
-          <span>{{ leaseLiabilityScheduleItem.interestExpenseAccrued }}</span>
+          <span>{{ leaseLiabilityScheduleItem.interestAccrued }}</span>
         </dd>
-        <dt><span>Interest Payable Balance</span></dt>
+        <dt><span>Interest Payable Closing</span></dt>
         <dd>
-          <span>{{ leaseLiabilityScheduleItem.interestPayableBalance }}</span>
+          <span>{{ leaseLiabilityScheduleItem.interestPayableClosing }}</span>
         </dd>
         <dt><span>Placeholder</span></dt>
         <dd>
@@ -112,6 +100,22 @@
             }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leasePeriod">
+            <a [routerLink]="['/lease-period', leaseLiabilityScheduleItem.leasePeriod?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leasePeriod?.periodCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Amortization Schedule</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
+            <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id
+            }}</a>
+          </div>
         </dd>
       </dl>
 

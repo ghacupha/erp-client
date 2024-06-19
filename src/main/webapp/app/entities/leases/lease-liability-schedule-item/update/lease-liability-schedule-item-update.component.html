@@ -45,60 +45,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_periodIncluded">Period Included</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="periodIncluded"
-            id="field_periodIncluded"
-            data-cy="periodIncluded"
-            formControlName="periodIncluded"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodStartDate">Period Start Date</label>
-          <div class="input-group">
-            <input
-              id="field_periodStartDate"
-              data-cy="periodStartDate"
-              type="text"
-              class="form-control"
-              name="periodStartDate"
-              ngbDatepicker
-              #periodStartDateDp="ngbDatepicker"
-              formControlName="periodStartDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodStartDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_periodEndDate">Period End Date</label>
-          <div class="input-group">
-            <input
-              id="field_periodEndDate"
-              data-cy="periodEndDate"
-              type="text"
-              class="form-control"
-              name="periodEndDate"
-              ngbDatepicker
-              #periodEndDateDp="ngbDatepicker"
-              formControlName="periodEndDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="periodEndDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
-              </button>
-            </span>
-          </div>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_openingBalance">Opening Balance</label>
           <input
             type="number"
@@ -171,26 +117,26 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_interestExpenseAccrued">Interest Expense Accrued</label>
+          <label class="form-control-label" for="field_interestAccrued">Interest Accrued</label>
           <input
             type="number"
             class="form-control"
-            name="interestExpenseAccrued"
-            id="field_interestExpenseAccrued"
-            data-cy="interestExpenseAccrued"
-            formControlName="interestExpenseAccrued"
+            name="interestAccrued"
+            id="field_interestAccrued"
+            data-cy="interestAccrued"
+            formControlName="interestAccrued"
           />
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_interestPayableBalance">Interest Payable Balance</label>
+          <label class="form-control-label" for="field_interestPayableClosing">Interest Payable Closing</label>
           <input
             type="number"
             class="form-control"
-            name="interestPayableBalance"
-            id="field_interestPayableBalance"
-            data-cy="interestPayableBalance"
-            formControlName="interestPayableBalance"
+            name="interestPayableClosing"
+            id="field_interestPayableClosing"
+            data-cy="interestPayableClosing"
+            formControlName="interestPayableClosing"
           />
         </div>
 
@@ -286,6 +232,47 @@
               "
             >
               {{ universallyUniqueMappingOption.universalKey }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leasePeriod">Lease Period</label>
+          <select class="form-control" id="field_leasePeriod" data-cy="leasePeriod" name="leasePeriod" formControlName="leasePeriod">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                leasePeriodOption.id === editForm.get('leasePeriod')!.value?.id ? editForm.get('leasePeriod')!.value : leasePeriodOption
+              "
+              *ngFor="let leasePeriodOption of leasePeriodsSharedCollection; trackBy: trackLeasePeriodById"
+            >
+              {{ leasePeriodOption.periodCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_leaseAmortizationSchedule">Lease Amortization Schedule</label>
+          <select
+            class="form-control"
+            id="field_leaseAmortizationSchedule"
+            data-cy="leaseAmortizationSchedule"
+            name="leaseAmortizationSchedule"
+            formControlName="leaseAmortizationSchedule"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                leaseAmortizationScheduleOption.id === editForm.get('leaseAmortizationSchedule')!.value?.id
+                  ? editForm.get('leaseAmortizationSchedule')!.value
+                  : leaseAmortizationScheduleOption
+              "
+              *ngFor="
+                let leaseAmortizationScheduleOption of leaseAmortizationSchedulesSharedCollection;
+                trackBy: trackLeaseAmortizationScheduleById
+              "
+            >
+              {{ leaseAmortizationScheduleOption.id }}
             </option>
           </select>
         </div>

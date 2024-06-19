@@ -71,19 +71,20 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="sequenceNumber"><span>Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodIncluded"><span>Period Included</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodStartDate"><span>Period Start Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="periodEndDate"><span>Period End Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="openingBalance"><span>Opening Balance</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="cashPayment"><span>Cash Payment</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="principalPayment"><span>Principal Payment</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestPayment"><span>Interest Payment</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="outstandingBalance"><span>Outstanding Balance</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="interestPayableOpening"><span>Interest Payable Opening</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestExpenseAccrued"><span>Interest Expense Accrued</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="interestPayableBalance"><span>Interest Payable Balance</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="interestAccrued"><span>Interest Accrued</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="interestPayableClosing"><span>Interest Payable Closing</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseModelMetadata.modelTitle"><span>Lease Model Metadata</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leasePeriod.periodCode"><span>Lease Period</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseAmortizationSchedule.id">
+            <span>Lease Amortization Schedule</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -95,17 +96,14 @@
             }}</a>
           </td>
           <td>{{ leaseLiabilityScheduleItem.sequenceNumber }}</td>
-          <td>{{ leaseLiabilityScheduleItem.periodIncluded }}</td>
-          <td>{{ leaseLiabilityScheduleItem.periodStartDate | formatMediumDate }}</td>
-          <td>{{ leaseLiabilityScheduleItem.periodEndDate | formatMediumDate }}</td>
           <td>{{ leaseLiabilityScheduleItem.openingBalance }}</td>
           <td>{{ leaseLiabilityScheduleItem.cashPayment }}</td>
           <td>{{ leaseLiabilityScheduleItem.principalPayment }}</td>
           <td>{{ leaseLiabilityScheduleItem.interestPayment }}</td>
           <td>{{ leaseLiabilityScheduleItem.outstandingBalance }}</td>
           <td>{{ leaseLiabilityScheduleItem.interestPayableOpening }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestExpenseAccrued }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestPayableBalance }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestAccrued }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestPayableClosing }}</td>
           <td>
             <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
               <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
@@ -117,6 +115,20 @@
             <div *ngIf="leaseLiabilityScheduleItem.leaseModelMetadata">
               <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata?.id, 'view']">{{
                 leaseLiabilityScheduleItem.leaseModelMetadata?.modelTitle
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseLiabilityScheduleItem.leasePeriod">
+              <a [routerLink]="['/lease-period', leaseLiabilityScheduleItem.leasePeriod?.id, 'view']">{{
+                leaseLiabilityScheduleItem.leasePeriod?.periodCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
+              <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id, 'view']">{{
+                leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id
               }}</a>
             </div>
           </td>

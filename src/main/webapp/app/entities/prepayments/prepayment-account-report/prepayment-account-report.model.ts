@@ -18,7 +18,8 @@
 
 export interface IPrepaymentAccountReport {
   id?: number;
-  prepaymentAccount?: string | null;
+  accountName?: string | null;
+  accountNumber?: string | null;
   prepaymentAmount?: number | null;
   amortisedAmount?: number | null;
   outstandingAmount?: number | null;
@@ -29,7 +30,8 @@ export interface IPrepaymentAccountReport {
 export class PrepaymentAccountReport implements IPrepaymentAccountReport {
   constructor(
     public id?: number,
-    public prepaymentAccount?: string | null,
+    public accountName?: string | null,
+    public accountNumber?: string | null,
     public prepaymentAmount?: number | null,
     public amortisedAmount?: number | null,
     public outstandingAmount?: number | null,
