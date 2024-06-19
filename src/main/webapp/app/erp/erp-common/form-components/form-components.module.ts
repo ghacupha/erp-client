@@ -79,6 +79,7 @@ import { AssetRegistrationFormComponentsModule } from './asset-registration-form
 import { AmortizationPeriodFormComponentsModule } from './amortization-period/amortization-period-form-components.module';
 import { UserComponentsModule } from './user-form-components/user-components.module';
 import { LeasePeriodFormComponentsModule } from './lease-period-components/lease-period-form-components.module';
+import { LeaseLiabilityFormComponentsModule } from './lease-liability-components/lease-liability-form-components.module';
 
 @NgModule({
   declarations: [
@@ -200,6 +201,8 @@ import { LeasePeriodFormComponentsModule } from './lease-period-components/lease
     AmortizationPeriodFormComponentsModule,
     UserComponentsModule,
     LeasePeriodFormComponentsModule,
+    LeaseLiabilityFormComponentsModule,
+    LeaseLiabilityFormComponentsModule,
   ]
 })
 export class FormComponentsModule {
