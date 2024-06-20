@@ -37,7 +37,6 @@ describe('LeaseAmortizationCalculation e2e test', () => {
   const leaseAmortizationCalculationSample = {};
 
   let leaseAmortizationCalculation: any;
-  //let iFRS16LeaseContract: any;
 
   before(() => {
     cy.window().then(win => {
@@ -48,40 +47,11 @@ describe('LeaseAmortizationCalculation e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
-  /* Disabled due to incompatibility
-  beforeEach(() => {
-    // create an instance at the required relationship entity:
-    cy.authenticatedRequest({
-      method: 'POST',
-      url: '/api/ifrs-16-lease-contracts',
-      body: {"bookingId":"withdrawal","leaseTitle":"matrix","shortTitle":"deliver Beauty Credit","description":"Swiss","inceptionDate":"2024-03-06","commencementDate":"2024-03-06","serialNumber":"b47a683d-6fca-4f30-a1bc-51016ab4f019"},
-    }).then(({ body }) => {
-      iFRS16LeaseContract = body;
-    });
-  });
-   */
-
   beforeEach(() => {
     cy.intercept('GET', '/api/lease-amortization-calculations+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/lease-amortization-calculations').as('postEntityRequest');
     cy.intercept('DELETE', '/api/lease-amortization-calculations/*').as('deleteEntityRequest');
   });
-
-  /* Disabled due to incompatibility
-  beforeEach(() => {
-    // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/ifrs-16-lease-contracts', {
-      statusCode: 200,
-      body: [iFRS16LeaseContract],
-    });
-
-    cy.intercept('GET', '/api/lease-liabilities', {
-      statusCode: 200,
-      body: [],
-    });
-
-  });
-   */
 
   afterEach(() => {
     if (leaseAmortizationCalculation) {
@@ -93,19 +63,6 @@ describe('LeaseAmortizationCalculation e2e test', () => {
       });
     }
   });
-
-  /* Disabled due to incompatibility
-  afterEach(() => {
-    if (iFRS16LeaseContract) {
-      cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/ifrs-16-lease-contracts/${iFRS16LeaseContract.id}`,
-      }).then(() => {
-        iFRS16LeaseContract = undefined;
-      });
-    }
-  });
-   */
 
   it('LeaseAmortizationCalculations menu should load LeaseAmortizationCalculations page', () => {
     cy.visit('/');
@@ -142,16 +99,11 @@ describe('LeaseAmortizationCalculation e2e test', () => {
     });
 
     describe('with existing value', () => {
-      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/lease-amortization-calculations',
-  
-          body: {
-            ...leaseAmortizationCalculationSample,
-            IFRS16LeaseContract: iFRS16LeaseContract,
-          },
+          body: leaseAmortizationCalculationSample,
         }).then(({ body }) => {
           leaseAmortizationCalculation = body;
 
@@ -171,17 +123,6 @@ describe('LeaseAmortizationCalculation e2e test', () => {
         cy.visit(leaseAmortizationCalculationPageUrl);
 
         cy.wait('@entitiesRequestInternal');
-      });
-       */
-
-      beforeEach(function () {
-        cy.visit(leaseAmortizationCalculationPageUrl);
-
-        cy.wait('@entitiesRequest').then(({ response }) => {
-          if (response!.body.length === 0) {
-            this.skip();
-          }
-        });
       });
 
       it('detail button click should load details LeaseAmortizationCalculation page', () => {
@@ -205,7 +146,7 @@ describe('LeaseAmortizationCalculation e2e test', () => {
         cy.url().should('match', leaseAmortizationCalculationPageUrlPattern);
       });
 
-      it.skip('last delete button click should delete instance of LeaseAmortizationCalculation', () => {
+      it('last delete button click should delete instance of LeaseAmortizationCalculation', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('leaseAmortizationCalculation').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -229,7 +170,7 @@ describe('LeaseAmortizationCalculation e2e test', () => {
       cy.getEntityCreateUpdateHeading('LeaseAmortizationCalculation');
     });
 
-    it.skip('should create an instance of LeaseAmortizationCalculation', () => {
+    it('should create an instance of LeaseAmortizationCalculation', () => {
       cy.get(`[data-cy="interestRate"]`).type('1982').should('have.value', '1982');
 
       cy.get(`[data-cy="periodicity"]`).type('Account Wooden Integrated').should('have.value', 'Account Wooden Integrated');
@@ -237,8 +178,6 @@ describe('LeaseAmortizationCalculation e2e test', () => {
       cy.get(`[data-cy="leaseAmount"]`).type('41590').should('have.value', '41590');
 
       cy.get(`[data-cy="numberOfPeriods"]`).type('36133').should('have.value', '36133');
-
-      cy.get(`[data-cy="iFRS16LeaseContract"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

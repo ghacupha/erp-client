@@ -27,8 +27,6 @@ import { of, Subject } from 'rxjs';
 
 import { LeaseAmortizationCalculationService } from '../service/lease-amortization-calculation.service';
 import { ILeaseAmortizationCalculation, LeaseAmortizationCalculation } from '../lease-amortization-calculation.model';
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 import { LeaseAmortizationCalculationUpdateComponent } from './lease-amortization-calculation-update.component';
 
@@ -37,7 +35,6 @@ describe('LeaseAmortizationCalculation Management Update Component', () => {
   let fixture: ComponentFixture<LeaseAmortizationCalculationUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let leaseAmortizationCalculationService: LeaseAmortizationCalculationService;
-  let iFRS16LeaseContractService: IFRS16LeaseContractService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,43 +48,18 @@ describe('LeaseAmortizationCalculation Management Update Component', () => {
     fixture = TestBed.createComponent(LeaseAmortizationCalculationUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     leaseAmortizationCalculationService = TestBed.inject(LeaseAmortizationCalculationService);
-    iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call IFRS16LeaseContract query and add missing value', () => {
-      const leaseAmortizationCalculation: ILeaseAmortizationCalculation = { id: 456 };
-      const IFRS16LeaseContract: IIFRS16LeaseContract = { id: 93095 };
-      leaseAmortizationCalculation.IFRS16LeaseContract = IFRS16LeaseContract;
-
-      const IFRS16LeaseContractCollection: IIFRS16LeaseContract[] = [{ id: 408 }];
-      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: IFRS16LeaseContractCollection })));
-      const expectedCollection: IIFRS16LeaseContract[] = [IFRS16LeaseContract, ...IFRS16LeaseContractCollection];
-      jest.spyOn(iFRS16LeaseContractService, 'addIFRS16LeaseContractToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ leaseAmortizationCalculation });
-      comp.ngOnInit();
-
-      expect(iFRS16LeaseContractService.query).toHaveBeenCalled();
-      expect(iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing).toHaveBeenCalledWith(
-        IFRS16LeaseContractCollection,
-        IFRS16LeaseContract
-      );
-      expect(comp.iFRS16LeaseContractsCollection).toEqual(expectedCollection);
-    });
-
     it('Should update editForm', () => {
       const leaseAmortizationCalculation: ILeaseAmortizationCalculation = { id: 456 };
-      const IFRS16LeaseContract: IIFRS16LeaseContract = { id: 77160 };
-      leaseAmortizationCalculation.IFRS16LeaseContract = IFRS16LeaseContract;
 
       activatedRoute.data = of({ leaseAmortizationCalculation });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(leaseAmortizationCalculation));
-      expect(comp.iFRS16LeaseContractsCollection).toContain(IFRS16LeaseContract);
     });
   });
 
@@ -152,16 +124,6 @@ describe('LeaseAmortizationCalculation Management Update Component', () => {
       expect(leaseAmortizationCalculationService.update).toHaveBeenCalledWith(leaseAmortizationCalculation);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Tracking relationships identifiers', () => {
-    describe('trackIFRS16LeaseContractById', () => {
-      it('Should return tracked IFRS16LeaseContract primary key', () => {
-        const entity = { id: 123 };
-        const trackResult = comp.trackIFRS16LeaseContractById(0, entity);
-        expect(trackResult).toEqual(entity.id);
-      });
     });
   });
 });

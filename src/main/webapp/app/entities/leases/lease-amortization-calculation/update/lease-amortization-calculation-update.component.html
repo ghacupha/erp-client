@@ -79,39 +79,6 @@
             formControlName="numberOfPeriods"
           />
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_IFRS16LeaseContract">IFRS 16 Lease Contract</label>
-          <select
-            class="form-control"
-            id="field_IFRS16LeaseContract"
-            data-cy="iFRS16LeaseContract"
-            name="IFRS16LeaseContract"
-            formControlName="IFRS16LeaseContract"
-          >
-            <option *ngIf="editForm.get(['IFRS16LeaseContract'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                IFRS16LeaseContractOption.id === editForm.get('iFRS16LeaseContract')!.value?.id
-                  ? editForm.get('iFRS16LeaseContract')!.value
-                  : IFRS16LeaseContractOption
-              "
-              *ngFor="let IFRS16LeaseContractOption of iFRS16LeaseContractsCollection; trackBy: trackIFRS16LeaseContractById"
-            >
-              {{ IFRS16LeaseContractOption.bookingId }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['IFRS16LeaseContract'])!.invalid &&
-            (editForm.get(['IFRS16LeaseContract'])!.dirty || editForm.get(['IFRS16LeaseContract'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['IFRS16LeaseContract'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
       </div>
 
       <div>

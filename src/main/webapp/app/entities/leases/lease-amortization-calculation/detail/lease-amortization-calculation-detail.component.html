@@ -49,14 +49,6 @@
         <dd>
           <span>{{ leaseAmortizationCalculation.numberOfPeriods }}</span>
         </dd>
-        <dt><span>IFRS 16 Lease Contract</span></dt>
-        <dd>
-          <div *ngIf="leaseAmortizationCalculation.iFRS16LeaseContract">
-            <a [routerLink]="['/ifrs-16-lease-contract', leaseAmortizationCalculation.iFRS16LeaseContract?.id, 'view']">{{
-              leaseAmortizationCalculation.iFRS16LeaseContract?.bookingId
-            }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

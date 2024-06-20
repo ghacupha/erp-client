@@ -20,16 +20,6 @@
   ],
   "relationships": [
     {
-      "relationshipName": "IFRS16LeaseContract",
-      "otherEntityName": "IFRS16LeaseContract",
-      "relationshipType": "one-to-one",
-      "relationshipValidateRules": ["required"],
-      "otherEntityField": "bookingId",
-      "ownerSide": true,
-      "id": false,
-      "otherEntityRelationshipName": "leaseAmortizationCalculation"
-    },
-    {
       "relationshipName": "leaseLiability",
       "otherEntityName": "leaseLiability",
       "relationshipType": "one-to-one",

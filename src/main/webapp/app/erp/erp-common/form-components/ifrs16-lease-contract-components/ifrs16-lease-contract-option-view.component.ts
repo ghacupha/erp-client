@@ -22,7 +22,7 @@ import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract
 @Component({
   selector: 'jhi-ifrs16-lease-contract-option-view',
   template: `
-    # {{ item.id }} Booking id: {{ item.bookingId }} <span *ngIf='item.leaseTitle'> Month: {{ item.leaseTitle }} </span>
+    # {{ item.id }} Booking id: {{ item.bookingId }} <span *ngIf='item.leaseTitle'> Designation: {{ item.leaseTitle }} </span>
   `
 })
 export class Ifrs16LeaseContractOptionViewComponent {

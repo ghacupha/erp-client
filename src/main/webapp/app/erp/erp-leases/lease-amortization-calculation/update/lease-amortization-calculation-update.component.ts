@@ -18,10 +18,10 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { ILeaseAmortizationCalculation, LeaseAmortizationCalculation } from '../lease-amortization-calculation.model';
 import { LeaseAmortizationCalculationService } from '../service/lease-amortization-calculation.service';
@@ -43,7 +43,6 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     periodicity: [],
     leaseAmount: [],
     numberOfPeriods: [],
-    IFRS16LeaseContract: [null, Validators.required],
   });
 
   constructor(
@@ -56,8 +55,6 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseAmortizationCalculation }) => {
       this.updateForm(leaseAmortizationCalculation);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -111,27 +108,8 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: leaseAmortizationCalculation.periodicity,
       leaseAmount: leaseAmortizationCalculation.leaseAmount,
       numberOfPeriods: leaseAmortizationCalculation.numberOfPeriods,
-      IFRS16LeaseContract: leaseAmortizationCalculation.iFRS16LeaseContract,
     });
 
-    this.iFRS16LeaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
-      this.iFRS16LeaseContractsCollection,
-      leaseAmortizationCalculation.iFRS16LeaseContract
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.iFRS16LeaseContractService.query({ 'leaseAmortizationCalculationId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
-      .pipe(
-        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
-          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
-            iFRS16LeaseContracts,
-            this.editForm.get('IFRS16LeaseContract')!.value
-          )
-        )
-      )
-      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.iFRS16LeaseContractsCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeaseAmortizationCalculation {
@@ -142,7 +120,6 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: this.editForm.get(['periodicity'])!.value,
       leaseAmount: this.editForm.get(['leaseAmount'])!.value,
       numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
-      iFRS16LeaseContract: this.editForm.get(['IFRS16LeaseContract'])!.value,
     };
   }
 }

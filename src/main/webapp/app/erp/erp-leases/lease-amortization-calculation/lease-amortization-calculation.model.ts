@@ -17,7 +17,6 @@
 ///
 
 
-import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { ILeaseLiability } from '../lease-liability/lease-liability.model';
 
 export interface ILeaseAmortizationCalculation {
@@ -26,7 +25,6 @@ export interface ILeaseAmortizationCalculation {
   periodicity?: string | null;
   leaseAmount?: number | null;
   numberOfPeriods?: number | null;
-  iFRS16LeaseContract?: IIFRS16LeaseContract;
   leaseLiability?: ILeaseLiability | null;
 }
 
@@ -37,7 +35,6 @@ export class LeaseAmortizationCalculation implements ILeaseAmortizationCalculati
     public periodicity?: string | null,
     public leaseAmount?: number | null,
     public numberOfPeriods?: number | null,
-    public iFRS16LeaseContract?: IIFRS16LeaseContract,
     public leaseLiability?: ILeaseLiability | null
   ) {}
 }

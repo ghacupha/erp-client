@@ -74,7 +74,6 @@
           <th scope="col" jhiSortBy="periodicity"><span>Periodicity</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseAmount"><span>Lease Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="numberOfPeriods"><span>Number Of Periods</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="IFRS16LeaseContract.bookingId"><span>IFRS 16 Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -89,13 +88,6 @@
           <td>{{ leaseAmortizationCalculation.periodicity }}</td>
           <td>{{ leaseAmortizationCalculation.leaseAmount }}</td>
           <td>{{ leaseAmortizationCalculation.numberOfPeriods }}</td>
-          <td>
-            <div *ngIf="leaseAmortizationCalculation.iFRS16LeaseContract">
-              <a [routerLink]="['/ifrs-16-lease-contract', leaseAmortizationCalculation.iFRS16LeaseContract?.id, 'view']">{{
-                leaseAmortizationCalculation.iFRS16LeaseContract?.bookingId
-              }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -53,8 +53,6 @@ export class LeaseAmortizationCalculationUpdatePage {
   leaseAmountInput = element(by.id('field_leaseAmount'));
   numberOfPeriodsInput = element(by.id('field_numberOfPeriods'));
 
-  IFRS16LeaseContractSelect = element(by.id('field_IFRS16LeaseContract'));
-
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
@@ -97,22 +95,6 @@ export class LeaseAmortizationCalculationUpdatePage {
 
   async getNumberOfPeriodsInput(): Promise<string> {
     return await this.numberOfPeriodsInput.getAttribute('value');
-  }
-
-  async IFRS16LeaseContractSelectLastOption(): Promise<void> {
-    await this.IFRS16LeaseContractSelect.all(by.tagName('option')).last().click();
-  }
-
-  async IFRS16LeaseContractSelectOption(option: string): Promise<void> {
-    await this.IFRS16LeaseContractSelect.sendKeys(option);
-  }
-
-  getIFRS16LeaseContractSelect(): ElementFinder {
-    return this.IFRS16LeaseContractSelect;
-  }
-
-  async getIFRS16LeaseContractSelectedOption(): Promise<string> {
-    return await this.IFRS16LeaseContractSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
