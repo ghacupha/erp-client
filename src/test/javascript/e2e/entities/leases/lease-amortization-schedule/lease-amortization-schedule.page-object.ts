@@ -51,6 +51,7 @@ export class LeaseAmortizationScheduleUpdatePage {
   identifierInput = element(by.id('field_identifier'));
 
   leaseLiabilitySelect = element(by.id('field_leaseLiability'));
+  leaseContractSelect = element(by.id('field_leaseContract'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -86,6 +87,22 @@ export class LeaseAmortizationScheduleUpdatePage {
 
   async getLeaseLiabilitySelectedOption(): Promise<string> {
     return await this.leaseLiabilitySelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseContractSelectLastOption(): Promise<void> {
+    await this.leaseContractSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseContractSelectOption(option: string): Promise<void> {
+    await this.leaseContractSelect.sendKeys(option);
+  }
+
+  getLeaseContractSelect(): ElementFinder {
+    return this.leaseContractSelect;
+  }
+
+  async getLeaseContractSelectedOption(): Promise<string> {
+    return await this.leaseContractSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

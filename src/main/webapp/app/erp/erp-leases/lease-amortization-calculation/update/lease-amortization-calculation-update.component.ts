@@ -18,7 +18,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -43,6 +43,7 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     periodicity: [],
     leaseAmount: [],
     numberOfPeriods: [],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
@@ -60,7 +61,7 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
 
   updateIFRS16LeaseContract(value: IIFRS16LeaseContract): void {
     this.editForm.patchValue({
-      IFRS16LeaseContract: value
+      leaseContract: value
     });
   }
 
@@ -108,18 +109,20 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: leaseAmortizationCalculation.periodicity,
       leaseAmount: leaseAmortizationCalculation.leaseAmount,
       numberOfPeriods: leaseAmortizationCalculation.numberOfPeriods,
+      leaseContract: leaseAmortizationCalculation.leaseContract,
     });
 
   }
 
   protected createFromForm(): ILeaseAmortizationCalculation {
     return {
-      ...new LeaseAmortizationCalculation(),
-      id: this.editForm.get(['id'])!.value,
-      interestRate: this.editForm.get(['interestRate'])!.value,
-      periodicity: this.editForm.get(['periodicity'])!.value,
-      leaseAmount: this.editForm.get(['leaseAmount'])!.value,
-      numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+    ...new LeaseAmortizationCalculation(),
+        id: this.editForm.get(['id'])!.value,
+        interestRate: this.editForm.get(['interestRate'])!.value,
+        periodicity: this.editForm.get(['periodicity'])!.value,
+        leaseAmount: this.editForm.get(['leaseAmount'])!.value,
+        numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+        leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

@@ -73,6 +73,7 @@ describe('LeaseAmortizationSchedule e2e test', () => {
         await promise.all([
             leaseAmortizationScheduleUpdatePage.setIdentifierInput('64c99148-3908-465d-8c4a-e510e3ade974'),
             leaseAmortizationScheduleUpdatePage.leaseLiabilitySelectLastOption(),
+            leaseAmortizationScheduleUpdatePage.leaseContractSelectLastOption(),
         ]);
 
         await leaseAmortizationScheduleUpdatePage.save();

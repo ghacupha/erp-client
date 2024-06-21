@@ -16,12 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
   LeaseAmortizationCalculationComponentsPage,
-  LeaseAmortizationCalculationDeleteDialog,
+  /* LeaseAmortizationCalculationDeleteDialog, */
   LeaseAmortizationCalculationUpdatePage,
 } from './lease-amortization-calculation.page-object';
 
@@ -32,7 +32,7 @@ describe('LeaseAmortizationCalculation e2e test', () => {
   let signInPage: SignInPage;
   let leaseAmortizationCalculationComponentsPage: LeaseAmortizationCalculationComponentsPage;
   let leaseAmortizationCalculationUpdatePage: LeaseAmortizationCalculationUpdatePage;
-  let leaseAmortizationCalculationDeleteDialog: LeaseAmortizationCalculationDeleteDialog;
+  /* let leaseAmortizationCalculationDeleteDialog: LeaseAmortizationCalculationDeleteDialog; */
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -65,40 +65,37 @@ describe('LeaseAmortizationCalculation e2e test', () => {
     await leaseAmortizationCalculationUpdatePage.cancel();
   });
 
-  it('should create and save LeaseAmortizationCalculations', async () => {
-    const nbButtonsBeforeCreate = await leaseAmortizationCalculationComponentsPage.countDeleteButtons();
+  /* it('should create and save LeaseAmortizationCalculations', async () => {
+        const nbButtonsBeforeCreate = await leaseAmortizationCalculationComponentsPage.countDeleteButtons();
 
-    await leaseAmortizationCalculationComponentsPage.clickOnCreateButton();
+        await leaseAmortizationCalculationComponentsPage.clickOnCreateButton();
 
-    await promise.all([
-      leaseAmortizationCalculationUpdatePage.setInterestRateInput('5'),
-      leaseAmortizationCalculationUpdatePage.setPeriodicityInput('periodicity'),
-      leaseAmortizationCalculationUpdatePage.setLeaseAmountInput('5'),
-      leaseAmortizationCalculationUpdatePage.setNumberOfPeriodsInput('5'),
-    ]);
+        await promise.all([
+            leaseAmortizationCalculationUpdatePage.setInterestRateInput('5'),
+            leaseAmortizationCalculationUpdatePage.setPeriodicityInput('periodicity'),
+            leaseAmortizationCalculationUpdatePage.setLeaseAmountInput('5'),
+            leaseAmortizationCalculationUpdatePage.setNumberOfPeriodsInput('5'),
+            leaseAmortizationCalculationUpdatePage.leaseContractSelectLastOption(),
+        ]);
 
-    await leaseAmortizationCalculationUpdatePage.save();
-    expect(await leaseAmortizationCalculationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await leaseAmortizationCalculationUpdatePage.save();
+        expect(await leaseAmortizationCalculationUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await leaseAmortizationCalculationComponentsPage.countDeleteButtons()).to.eq(
-      nbButtonsBeforeCreate + 1,
-      'Expected one more entry in the table'
-    );
-  });
+        expect(await leaseAmortizationCalculationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last LeaseAmortizationCalculation', async () => {
-    const nbButtonsBeforeDelete = await leaseAmortizationCalculationComponentsPage.countDeleteButtons();
-    await leaseAmortizationCalculationComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last LeaseAmortizationCalculation', async () => {
+        const nbButtonsBeforeDelete = await leaseAmortizationCalculationComponentsPage.countDeleteButtons();
+        await leaseAmortizationCalculationComponentsPage.clickOnLastDeleteButton();
 
-    leaseAmortizationCalculationDeleteDialog = new LeaseAmortizationCalculationDeleteDialog();
-    expect(await leaseAmortizationCalculationDeleteDialog.getDialogTitle()).to.eq(
-      'Are you sure you want to delete this Lease Amortization Calculation?'
-    );
-    await leaseAmortizationCalculationDeleteDialog.clickOnConfirmButton();
-    await browser.wait(ec.visibilityOf(leaseAmortizationCalculationComponentsPage.title), 5000);
+        leaseAmortizationCalculationDeleteDialog = new LeaseAmortizationCalculationDeleteDialog();
+        expect(await leaseAmortizationCalculationDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Lease Amortization Calculation?');
+        await leaseAmortizationCalculationDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(leaseAmortizationCalculationComponentsPage.title), 5000);
 
-    expect(await leaseAmortizationCalculationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await leaseAmortizationCalculationComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

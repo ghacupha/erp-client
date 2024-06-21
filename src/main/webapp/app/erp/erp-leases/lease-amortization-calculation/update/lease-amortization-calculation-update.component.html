@@ -80,37 +80,14 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_IFRS16LeaseContract">IFRS 16 Lease Contract</label>
-          <select
-            class="form-control"
-            id="field_IFRS16LeaseContract"
-            data-cy="iFRS16LeaseContract"
-            name="IFRS16LeaseContract"
-            formControlName="IFRS16LeaseContract"
-          >
-            <option *ngIf="editForm.get(['IFRS16LeaseContract'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                IFRS16LeaseContractOption.id === editForm.get('iFRS16LeaseContract')!.value?.id
-                  ? editForm.get('iFRS16LeaseContract')!.value
-                  : IFRS16LeaseContractOption
-              "
-              *ngFor="let IFRS16LeaseContractOption of iFRS16LeaseContractsCollection; trackBy: trackIFRS16LeaseContractById"
-            >
-              {{ IFRS16LeaseContractOption.bookingId }}
-            </option>
-          </select>
-        </div>-->
-
         <jhi-m21-ifrs16-lease-form-control
           ngDefaultControl
-          formControlName='IFRS16LeaseContract'
-          [inputValue]="editForm.get(['IFRS16LeaseContract'])!.value"
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
           (valueSelected)='updateIFRS16LeaseContract($event)'
-          inputControlLabel='IFRS16 Lease Contract'
+          inputControlLabel='leaseContract'
         >
-          <option [ngValue]="editForm.get(['IFRS16LeaseContract'])!.value"></option>
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
         </jhi-m21-ifrs16-lease-form-control>
 
       </div>

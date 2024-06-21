@@ -59,11 +59,11 @@ export class LeaseLiabilityScheduleItemUpdatePage {
   interestPayableClosingInput = element(by.id('field_interestPayableClosing'));
 
   placeholderSelect = element(by.id('field_placeholder'));
-  leaseContractSelect = element(by.id('field_leaseContract'));
-  leaseModelMetadataSelect = element(by.id('field_leaseModelMetadata'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
   leasePeriodSelect = element(by.id('field_leasePeriod'));
   leaseAmortizationScheduleSelect = element(by.id('field_leaseAmortizationSchedule'));
+  leaseContractSelect = element(by.id('field_leaseContract'));
+  leaseLiabilitySelect = element(by.id('field_leaseLiability'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -165,38 +165,6 @@ export class LeaseLiabilityScheduleItemUpdatePage {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
-  async leaseContractSelectLastOption(): Promise<void> {
-    await this.leaseContractSelect.all(by.tagName('option')).last().click();
-  }
-
-  async leaseContractSelectOption(option: string): Promise<void> {
-    await this.leaseContractSelect.sendKeys(option);
-  }
-
-  getLeaseContractSelect(): ElementFinder {
-    return this.leaseContractSelect;
-  }
-
-  async getLeaseContractSelectedOption(): Promise<string> {
-    return await this.leaseContractSelect.element(by.css('option:checked')).getText();
-  }
-
-  async leaseModelMetadataSelectLastOption(): Promise<void> {
-    await this.leaseModelMetadataSelect.all(by.tagName('option')).last().click();
-  }
-
-  async leaseModelMetadataSelectOption(option: string): Promise<void> {
-    await this.leaseModelMetadataSelect.sendKeys(option);
-  }
-
-  getLeaseModelMetadataSelect(): ElementFinder {
-    return this.leaseModelMetadataSelect;
-  }
-
-  async getLeaseModelMetadataSelectedOption(): Promise<string> {
-    return await this.leaseModelMetadataSelect.element(by.css('option:checked')).getText();
-  }
-
   async universallyUniqueMappingSelectLastOption(): Promise<void> {
     await this.universallyUniqueMappingSelect.all(by.tagName('option')).last().click();
   }
@@ -243,6 +211,38 @@ export class LeaseLiabilityScheduleItemUpdatePage {
 
   async getLeaseAmortizationScheduleSelectedOption(): Promise<string> {
     return await this.leaseAmortizationScheduleSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseContractSelectLastOption(): Promise<void> {
+    await this.leaseContractSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseContractSelectOption(option: string): Promise<void> {
+    await this.leaseContractSelect.sendKeys(option);
+  }
+
+  getLeaseContractSelect(): ElementFinder {
+    return this.leaseContractSelect;
+  }
+
+  async getLeaseContractSelectedOption(): Promise<string> {
+    return await this.leaseContractSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseLiabilitySelectLastOption(): Promise<void> {
+    await this.leaseLiabilitySelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseLiabilitySelectOption(option: string): Promise<void> {
+    await this.leaseLiabilitySelect.sendKeys(option);
+  }
+
+  getLeaseLiabilitySelect(): ElementFinder {
+    return this.leaseLiabilitySelect;
+  }
+
+  async getLeaseLiabilitySelectedOption(): Promise<string> {
+    return await this.leaseLiabilitySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -20,7 +20,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ILeaseLiability, LeaseLiability } from '../lease-liability.model';
 
 import { LeaseLiabilityService } from './lease-liability.service';
@@ -47,7 +47,7 @@ describe('LeaseLiability Service', () => {
       liabilityAmount: 0,
       interestRate: 0,
       startDate: currentDate,
-      endDate: 0,
+      endDate: currentDate,
     };
   });
 
@@ -55,7 +55,8 @@ describe('LeaseLiability Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign(
         {
-          startDate: currentDate.format(DATE_TIME_FORMAT),
+          startDate: currentDate.format(DATE_FORMAT),
+          endDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -71,7 +72,8 @@ describe('LeaseLiability Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
-          startDate: currentDate.format(DATE_TIME_FORMAT),
+          startDate: currentDate.format(DATE_FORMAT),
+          endDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -79,6 +81,7 @@ describe('LeaseLiability Service', () => {
       const expected = Object.assign(
         {
           startDate: currentDate,
+          endDate: currentDate,
         },
         returnedFromService
       );
@@ -97,8 +100,8 @@ describe('LeaseLiability Service', () => {
           leaseId: 'BBBBBB',
           liabilityAmount: 1,
           interestRate: 1,
-          startDate: currentDate.format(DATE_TIME_FORMAT),
-          endDate: 1,
+          startDate: currentDate.format(DATE_FORMAT),
+          endDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -106,6 +109,7 @@ describe('LeaseLiability Service', () => {
       const expected = Object.assign(
         {
           startDate: currentDate,
+          endDate: currentDate,
         },
         returnedFromService
       );
@@ -122,7 +126,7 @@ describe('LeaseLiability Service', () => {
         {
           leaseId: 'BBBBBB',
           interestRate: 1,
-          startDate: currentDate.format(DATE_TIME_FORMAT),
+          startDate: currentDate.format(DATE_FORMAT),
         },
         new LeaseLiability()
       );
@@ -132,6 +136,7 @@ describe('LeaseLiability Service', () => {
       const expected = Object.assign(
         {
           startDate: currentDate,
+          endDate: currentDate,
         },
         returnedFromService
       );
@@ -150,8 +155,8 @@ describe('LeaseLiability Service', () => {
           leaseId: 'BBBBBB',
           liabilityAmount: 1,
           interestRate: 1,
-          startDate: currentDate.format(DATE_TIME_FORMAT),
-          endDate: 1,
+          startDate: currentDate.format(DATE_FORMAT),
+          endDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -159,6 +164,7 @@ describe('LeaseLiability Service', () => {
       const expected = Object.assign(
         {
           startDate: currentDate,
+          endDate: currentDate,
         },
         returnedFromService
       );

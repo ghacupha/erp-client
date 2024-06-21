@@ -81,11 +81,11 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
             leaseLiabilityScheduleItemUpdatePage.setInterestAccruedInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setInterestPayableClosingInput('5'),
             // leaseLiabilityScheduleItemUpdatePage.placeholderSelectLastOption(),
-            leaseLiabilityScheduleItemUpdatePage.leaseContractSelectLastOption(),
-            leaseLiabilityScheduleItemUpdatePage.leaseModelMetadataSelectLastOption(),
             // leaseLiabilityScheduleItemUpdatePage.universallyUniqueMappingSelectLastOption(),
             leaseLiabilityScheduleItemUpdatePage.leasePeriodSelectLastOption(),
             leaseLiabilityScheduleItemUpdatePage.leaseAmortizationScheduleSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseContractSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseLiabilitySelectLastOption(),
         ]);
 
         await leaseLiabilityScheduleItemUpdatePage.save();

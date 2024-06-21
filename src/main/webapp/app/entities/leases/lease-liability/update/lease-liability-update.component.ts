@@ -23,13 +23,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
 import { ILeaseLiability, LeaseLiability } from '../lease-liability.model';
 import { LeaseLiabilityService } from '../service/lease-liability.service';
 import { ILeaseAmortizationCalculation } from 'app/entities/leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import { LeaseAmortizationCalculationService } from 'app/entities/leases/lease-amortization-calculation/service/lease-amortization-calculation.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 @Component({
   selector: 'jhi-lease-liability-update',
@@ -39,6 +38,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
   isSaving = false;
 
   leaseAmortizationCalculationsCollection: ILeaseAmortizationCalculation[] = [];
+  leaseContractsCollection: IIFRS16LeaseContract[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -46,24 +46,21 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     liabilityAmount: [null, [Validators.required, Validators.min(0)]],
     interestRate: [null, [Validators.required, Validators.min(0)]],
     startDate: [null, [Validators.required]],
-    endDate: [null, [Validators.required, Validators.min(0)]],
+    endDate: [null, [Validators.required]],
     leaseAmortizationCalculation: [],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
     protected leaseLiabilityService: LeaseLiabilityService,
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseLiability }) => {
-      if (leaseLiability.id === undefined) {
-        const today = dayjs().startOf('day');
-        leaseLiability.startDate = today;
-      }
-
       this.updateForm(leaseLiability);
 
       this.loadRelationshipsOptions();
@@ -85,6 +82,10 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
   }
 
   trackLeaseAmortizationCalculationById(index: number, item: ILeaseAmortizationCalculation): number {
+    return item.id!;
+  }
+
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
     return item.id!;
   }
 
@@ -113,9 +114,10 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       leaseId: leaseLiability.leaseId,
       liabilityAmount: leaseLiability.liabilityAmount,
       interestRate: leaseLiability.interestRate,
-      startDate: leaseLiability.startDate ? leaseLiability.startDate.format(DATE_TIME_FORMAT) : null,
+      startDate: leaseLiability.startDate,
       endDate: leaseLiability.endDate,
       leaseAmortizationCalculation: leaseLiability.leaseAmortizationCalculation,
+      leaseContract: leaseLiability.leaseContract,
     });
 
     this.leaseAmortizationCalculationsCollection =
@@ -123,6 +125,10 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
         this.leaseAmortizationCalculationsCollection,
         leaseLiability.leaseAmortizationCalculation
       );
+    this.leaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.leaseContractsCollection,
+      leaseLiability.leaseContract
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -141,6 +147,19 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
         (leaseAmortizationCalculations: ILeaseAmortizationCalculation[]) =>
           (this.leaseAmortizationCalculationsCollection = leaseAmortizationCalculations)
       );
+
+    this.iFRS16LeaseContractService
+      .query({ 'leaseLiabilityId.specified': 'false' })
+      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
+      .pipe(
+        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
+          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+            iFRS16LeaseContracts,
+            this.editForm.get('leaseContract')!.value
+          )
+        )
+      )
+      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.leaseContractsCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeaseLiability {
@@ -150,9 +169,10 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       leaseId: this.editForm.get(['leaseId'])!.value,
       liabilityAmount: this.editForm.get(['liabilityAmount'])!.value,
       interestRate: this.editForm.get(['interestRate'])!.value,
-      startDate: this.editForm.get(['startDate'])!.value ? dayjs(this.editForm.get(['startDate'])!.value, DATE_TIME_FORMAT) : undefined,
+      startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

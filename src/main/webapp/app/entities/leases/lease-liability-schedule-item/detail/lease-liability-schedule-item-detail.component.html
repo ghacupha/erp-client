@@ -76,22 +76,6 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Lease Contract</span></dt>
-        <dd>
-          <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
-            <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
-              leaseLiabilityScheduleItem.leaseContract?.bookingId
-            }}</a>
-          </div>
-        </dd>
-        <dt><span>Lease Model Metadata</span></dt>
-        <dd>
-          <div *ngIf="leaseLiabilityScheduleItem.leaseModelMetadata">
-            <a [routerLink]="['/lease-model-metadata', leaseLiabilityScheduleItem.leaseModelMetadata?.id, 'view']">{{
-              leaseLiabilityScheduleItem.leaseModelMetadata?.modelTitle
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Universally Unique Mapping</span></dt>
         <dd>
           <span *ngFor="let universallyUniqueMapping of leaseLiabilityScheduleItem.universallyUniqueMappings; let last = last">
@@ -114,6 +98,22 @@
           <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
             <a [routerLink]="['/lease-amortization-schedule', leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id, 'view']">{{
               leaseLiabilityScheduleItem.leaseAmortizationSchedule?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Liability</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leaseLiability">
+            <a [routerLink]="['/lease-liability', leaseLiabilityScheduleItem.leaseLiability?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leaseLiability?.id
             }}</a>
           </div>
         </dd>

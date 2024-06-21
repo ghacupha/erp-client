@@ -17,11 +17,11 @@
 ///
 
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { ILeaseContract } from 'app/entities/leases/lease-contract/lease-contract.model';
-import { ILeaseModelMetadata } from 'app/entities/leases/lease-model-metadata/lease-model-metadata.model';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
 import { ILeaseAmortizationSchedule } from 'app/entities/leases/lease-amortization-schedule/lease-amortization-schedule.model';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 
 export interface ILeaseLiabilityScheduleItem {
   id?: number;
@@ -35,11 +35,11 @@ export interface ILeaseLiabilityScheduleItem {
   interestAccrued?: number | null;
   interestPayableClosing?: number | null;
   placeholders?: IPlaceholder[] | null;
-  leaseContract?: ILeaseContract;
-  leaseModelMetadata?: ILeaseModelMetadata | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   leasePeriod?: ILeasePeriod | null;
   leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null;
+  leaseContract?: IIFRS16LeaseContract;
+  leaseLiability?: ILeaseLiability;
 }
 
 export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
@@ -55,11 +55,11 @@ export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
     public interestAccrued?: number | null,
     public interestPayableClosing?: number | null,
     public placeholders?: IPlaceholder[] | null,
-    public leaseContract?: ILeaseContract,
-    public leaseModelMetadata?: ILeaseModelMetadata | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public leasePeriod?: ILeasePeriod | null,
-    public leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null
+    public leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null,
+    public leaseContract?: IIFRS16LeaseContract,
+    public leaseLiability?: ILeaseLiability
   ) {}
 }
 

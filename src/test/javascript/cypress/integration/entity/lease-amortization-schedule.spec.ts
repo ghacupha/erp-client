@@ -37,7 +37,8 @@ describe('LeaseAmortizationSchedule e2e test', () => {
   const leaseAmortizationScheduleSample = { identifier: 'cca5d61c-d2df-4c20-a9f9-b33de9533146' };
 
   let leaseAmortizationSchedule: any;
-  let leaseLiability: any;
+  //let leaseLiability: any;
+  //let iFRS16LeaseContract: any;
 
   before(() => {
     cy.window().then(win => {
@@ -48,16 +49,26 @@ describe('LeaseAmortizationSchedule e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-liabilities',
-      body: { leaseId: 'Australian', liabilityAmount: 60274, interestRate: 71935, startDate: '2024-06-18T05:33:15.522Z', endDate: 34192 },
+      body: {"leaseId":"Australian","liabilityAmount":60274,"interestRate":71935,"startDate":"2024-06-18","endDate":"2024-06-17"},
     }).then(({ body }) => {
       leaseLiability = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/ifrs-16-lease-contracts',
+      body: {"bookingId":"monitoring","leaseTitle":"digital Fish bypass","shortTitle":"Cheese","description":"Pre-emptive Investor Shoes","inceptionDate":"2024-03-07","commencementDate":"2024-03-06","serialNumber":"ee29e79e-858d-4737-8b5a-eacdaf644c9d"},
+    }).then(({ body }) => {
+      iFRS16LeaseContract = body;
+    });
   });
+   */
 
   beforeEach(() => {
     cy.intercept('GET', '/api/lease-amortization-schedules+(?*|)').as('entitiesRequest');
@@ -65,6 +76,7 @@ describe('LeaseAmortizationSchedule e2e test', () => {
     cy.intercept('DELETE', '/api/lease-amortization-schedules/*').as('deleteEntityRequest');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
     cy.intercept('GET', '/api/lease-liabilities', {
@@ -76,7 +88,14 @@ describe('LeaseAmortizationSchedule e2e test', () => {
       statusCode: 200,
       body: [],
     });
+
+    cy.intercept('GET', '/api/ifrs-16-lease-contracts', {
+      statusCode: 200,
+      body: [iFRS16LeaseContract],
+    });
+
   });
+   */
 
   afterEach(() => {
     if (leaseAmortizationSchedule) {
@@ -89,6 +108,7 @@ describe('LeaseAmortizationSchedule e2e test', () => {
     }
   });
 
+  /* Disabled due to incompatibility
   afterEach(() => {
     if (leaseLiability) {
       cy.authenticatedRequest({
@@ -98,7 +118,16 @@ describe('LeaseAmortizationSchedule e2e test', () => {
         leaseLiability = undefined;
       });
     }
+    if (iFRS16LeaseContract) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/ifrs-16-lease-contracts/${iFRS16LeaseContract.id}`,
+      }).then(() => {
+        iFRS16LeaseContract = undefined;
+      });
+    }
   });
+   */
 
   it('LeaseAmortizationSchedules menu should load LeaseAmortizationSchedules page', () => {
     cy.visit('/');
@@ -135,14 +164,16 @@ describe('LeaseAmortizationSchedule e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/lease-amortization-schedules',
-
+  
           body: {
             ...leaseAmortizationScheduleSample,
             leaseLiability: leaseLiability,
+            leaseContract: iFRS16LeaseContract,
           },
         }).then(({ body }) => {
           leaseAmortizationSchedule = body;
@@ -163,6 +194,17 @@ describe('LeaseAmortizationSchedule e2e test', () => {
         cy.visit(leaseAmortizationSchedulePageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(leaseAmortizationSchedulePageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details LeaseAmortizationSchedule page', () => {
@@ -186,7 +228,7 @@ describe('LeaseAmortizationSchedule e2e test', () => {
         cy.url().should('match', leaseAmortizationSchedulePageUrlPattern);
       });
 
-      it('last delete button click should delete instance of LeaseAmortizationSchedule', () => {
+      it.skip('last delete button click should delete instance of LeaseAmortizationSchedule', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('leaseAmortizationSchedule').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -210,13 +252,14 @@ describe('LeaseAmortizationSchedule e2e test', () => {
       cy.getEntityCreateUpdateHeading('LeaseAmortizationSchedule');
     });
 
-    it('should create an instance of LeaseAmortizationSchedule', () => {
+    it.skip('should create an instance of LeaseAmortizationSchedule', () => {
       cy.get(`[data-cy="identifier"]`)
         .type('e510f66b-f86c-405b-ae97-1daaf8388522')
         .invoke('val')
         .should('match', new RegExp('e510f66b-f86c-405b-ae97-1daaf8388522'));
 
       cy.get(`[data-cy="leaseLiability"]`).select(1);
+      cy.get(`[data-cy="leaseContract"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

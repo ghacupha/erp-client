@@ -47,17 +47,25 @@
         </dd>
         <dt><span>Start Date</span></dt>
         <dd>
-          <span>{{ leaseLiability.startDate | formatMediumDatetime }}</span>
+          <span>{{ leaseLiability.startDate | formatMediumDate }}</span>
         </dd>
         <dt><span>End Date</span></dt>
         <dd>
-          <span>{{ leaseLiability.endDate }}</span>
+          <span>{{ leaseLiability.endDate | formatMediumDate }}</span>
         </dd>
         <dt><span>Lease Amortization Calculation</span></dt>
         <dd>
           <div *ngIf="leaseLiability.leaseAmortizationCalculation">
             <a [routerLink]="['/lease-amortization-calculation', leaseLiability.leaseAmortizationCalculation?.id, 'view']">{{
               leaseLiability.leaseAmortizationCalculation?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseLiability.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leaseLiability.leaseContract?.id, 'view']">{{
+              leaseLiability.leaseContract?.bookingId
             }}</a>
           </div>
         </dd>

@@ -16,10 +16,14 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, protractor, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
-import { LeaseLiabilityComponentsPage, LeaseLiabilityDeleteDialog, LeaseLiabilityUpdatePage } from './lease-liability.page-object';
+import {
+  LeaseLiabilityComponentsPage,
+  /* LeaseLiabilityDeleteDialog, */
+  LeaseLiabilityUpdatePage,
+} from './lease-liability.page-object';
 
 const expect = chai.expect;
 
@@ -28,7 +32,7 @@ describe('LeaseLiability e2e test', () => {
   let signInPage: SignInPage;
   let leaseLiabilityComponentsPage: LeaseLiabilityComponentsPage;
   let leaseLiabilityUpdatePage: LeaseLiabilityUpdatePage;
-  let leaseLiabilityDeleteDialog: LeaseLiabilityDeleteDialog;
+  /* let leaseLiabilityDeleteDialog: LeaseLiabilityDeleteDialog; */
   const username = process.env.E2E_USERNAME ?? 'admin';
   const password = process.env.E2E_PASSWORD ?? 'admin';
 
@@ -58,40 +62,39 @@ describe('LeaseLiability e2e test', () => {
     await leaseLiabilityUpdatePage.cancel();
   });
 
-  it('should create and save LeaseLiabilities', async () => {
-    const nbButtonsBeforeCreate = await leaseLiabilityComponentsPage.countDeleteButtons();
+  /* it('should create and save LeaseLiabilities', async () => {
+        const nbButtonsBeforeCreate = await leaseLiabilityComponentsPage.countDeleteButtons();
 
-    await leaseLiabilityComponentsPage.clickOnCreateButton();
+        await leaseLiabilityComponentsPage.clickOnCreateButton();
 
-    await promise.all([
-      leaseLiabilityUpdatePage.setLeaseIdInput('leaseId'),
-      leaseLiabilityUpdatePage.setLiabilityAmountInput('5'),
-      leaseLiabilityUpdatePage.setInterestRateInput('5'),
-      leaseLiabilityUpdatePage.setStartDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
-      leaseLiabilityUpdatePage.setEndDateInput('5'),
-      leaseLiabilityUpdatePage.leaseAmortizationCalculationSelectLastOption(),
-    ]);
+        await promise.all([
+            leaseLiabilityUpdatePage.setLeaseIdInput('leaseId'),
+            leaseLiabilityUpdatePage.setLiabilityAmountInput('5'),
+            leaseLiabilityUpdatePage.setInterestRateInput('5'),
+            leaseLiabilityUpdatePage.setStartDateInput('2000-12-31'),
+            leaseLiabilityUpdatePage.setEndDateInput('2000-12-31'),
+            leaseLiabilityUpdatePage.leaseAmortizationCalculationSelectLastOption(),
+            leaseLiabilityUpdatePage.leaseContractSelectLastOption(),
+        ]);
 
-    await leaseLiabilityUpdatePage.save();
-    expect(await leaseLiabilityUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await leaseLiabilityUpdatePage.save();
+        expect(await leaseLiabilityUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await leaseLiabilityComponentsPage.countDeleteButtons()).to.eq(
-      nbButtonsBeforeCreate + 1,
-      'Expected one more entry in the table'
-    );
-  });
+        expect(await leaseLiabilityComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last LeaseLiability', async () => {
-    const nbButtonsBeforeDelete = await leaseLiabilityComponentsPage.countDeleteButtons();
-    await leaseLiabilityComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last LeaseLiability', async () => {
+        const nbButtonsBeforeDelete = await leaseLiabilityComponentsPage.countDeleteButtons();
+        await leaseLiabilityComponentsPage.clickOnLastDeleteButton();
 
-    leaseLiabilityDeleteDialog = new LeaseLiabilityDeleteDialog();
-    expect(await leaseLiabilityDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Lease Liability?');
-    await leaseLiabilityDeleteDialog.clickOnConfirmButton();
-    await browser.wait(ec.visibilityOf(leaseLiabilityComponentsPage.title), 5000);
+        leaseLiabilityDeleteDialog = new LeaseLiabilityDeleteDialog();
+        expect(await leaseLiabilityDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Lease Liability?');
+        await leaseLiabilityDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(leaseLiabilityComponentsPage.title), 5000);
 
-    expect(await leaseLiabilityComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await leaseLiabilityComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

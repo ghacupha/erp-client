@@ -45,6 +45,14 @@
             }}</a>
           </div>
         </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leaseAmortizationSchedule.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leaseAmortizationSchedule.leaseContract?.id, 'view']">{{
+              leaseAmortizationSchedule.leaseContract?.bookingId
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

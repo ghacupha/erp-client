@@ -18,13 +18,15 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { ILeaseAmortizationCalculation, LeaseAmortizationCalculation } from '../lease-amortization-calculation.model';
 import { LeaseAmortizationCalculationService } from '../service/lease-amortization-calculation.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-update',
@@ -33,16 +35,20 @@ import { LeaseAmortizationCalculationService } from '../service/lease-amortizati
 export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
   isSaving = false;
 
+  leaseContractsCollection: IIFRS16LeaseContract[] = [];
+
   editForm = this.fb.group({
     id: [],
     interestRate: [],
     periodicity: [],
     leaseAmount: [],
     numberOfPeriods: [],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -50,6 +56,8 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseAmortizationCalculation }) => {
       this.updateForm(leaseAmortizationCalculation);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -65,6 +73,10 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.create(leaseAmortizationCalculation));
     }
+  }
+
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
+    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ILeaseAmortizationCalculation>>): void {
@@ -93,7 +105,28 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: leaseAmortizationCalculation.periodicity,
       leaseAmount: leaseAmortizationCalculation.leaseAmount,
       numberOfPeriods: leaseAmortizationCalculation.numberOfPeriods,
+      leaseContract: leaseAmortizationCalculation.leaseContract,
     });
+
+    this.leaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.leaseContractsCollection,
+      leaseAmortizationCalculation.leaseContract
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.iFRS16LeaseContractService
+      .query({ 'leaseAmortizationCalculationId.specified': 'false' })
+      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
+      .pipe(
+        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
+          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+            iFRS16LeaseContracts,
+            this.editForm.get('leaseContract')!.value
+          )
+        )
+      )
+      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.leaseContractsCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeaseAmortizationCalculation {
@@ -104,6 +137,7 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: this.editForm.get(['periodicity'])!.value,
       leaseAmount: this.editForm.get(['leaseAmount'])!.value,
       numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

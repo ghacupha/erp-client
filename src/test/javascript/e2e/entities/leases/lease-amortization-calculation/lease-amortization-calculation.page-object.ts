@@ -53,6 +53,8 @@ export class LeaseAmortizationCalculationUpdatePage {
   leaseAmountInput = element(by.id('field_leaseAmount'));
   numberOfPeriodsInput = element(by.id('field_numberOfPeriods'));
 
+  leaseContractSelect = element(by.id('field_leaseContract'));
+
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
@@ -95,6 +97,22 @@ export class LeaseAmortizationCalculationUpdatePage {
 
   async getNumberOfPeriodsInput(): Promise<string> {
     return await this.numberOfPeriodsInput.getAttribute('value');
+  }
+
+  async leaseContractSelectLastOption(): Promise<void> {
+    await this.leaseContractSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseContractSelectOption(option: string): Promise<void> {
+    await this.leaseContractSelect.sendKeys(option);
+  }
+
+  getLeaseContractSelect(): ElementFinder {
+    return this.leaseContractSelect;
+  }
+
+  async getLeaseContractSelectedOption(): Promise<string> {
+    return await this.leaseContractSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

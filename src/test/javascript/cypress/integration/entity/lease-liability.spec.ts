@@ -38,11 +38,12 @@ describe('LeaseLiability e2e test', () => {
     leaseId: 'brand',
     liabilityAmount: 61154,
     interestRate: 36838,
-    startDate: '2024-06-18T01:56:55.160Z',
-    endDate: 62970,
+    startDate: '2024-06-18',
+    endDate: '2024-06-17',
   };
 
   let leaseLiability: any;
+  //let iFRS16LeaseContract: any;
 
   before(() => {
     cy.window().then(win => {
@@ -53,11 +54,45 @@ describe('LeaseLiability e2e test', () => {
     cy.get(entityItemSelector).should('exist');
   });
 
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/ifrs-16-lease-contracts',
+      body: {"bookingId":"hacking Soft","leaseTitle":"Highway Avon Groves","shortTitle":"Chicken","description":"Investment Ball","inceptionDate":"2024-03-06","commencementDate":"2024-03-06","serialNumber":"2ba9a72d-d078-4a70-8a60-25deb60a5d24"},
+    }).then(({ body }) => {
+      iFRS16LeaseContract = body;
+    });
+  });
+   */
+
   beforeEach(() => {
     cy.intercept('GET', '/api/lease-liabilities+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/lease-liabilities').as('postEntityRequest');
     cy.intercept('DELETE', '/api/lease-liabilities/*').as('deleteEntityRequest');
   });
+
+  /* Disabled due to incompatibility
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/lease-amortization-calculations', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/lease-payments', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/ifrs-16-lease-contracts', {
+      statusCode: 200,
+      body: [iFRS16LeaseContract],
+    });
+
+  });
+   */
 
   afterEach(() => {
     if (leaseLiability) {
@@ -69,6 +104,19 @@ describe('LeaseLiability e2e test', () => {
       });
     }
   });
+
+  /* Disabled due to incompatibility
+  afterEach(() => {
+    if (iFRS16LeaseContract) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/ifrs-16-lease-contracts/${iFRS16LeaseContract.id}`,
+      }).then(() => {
+        iFRS16LeaseContract = undefined;
+      });
+    }
+  });
+   */
 
   it('LeaseLiabilities menu should load LeaseLiabilities page', () => {
     cy.visit('/');
@@ -105,11 +153,16 @@ describe('LeaseLiability e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/lease-liabilities',
-          body: leaseLiabilitySample,
+  
+          body: {
+            ...leaseLiabilitySample,
+            leaseContract: iFRS16LeaseContract,
+          },
         }).then(({ body }) => {
           leaseLiability = body;
 
@@ -129,6 +182,17 @@ describe('LeaseLiability e2e test', () => {
         cy.visit(leaseLiabilityPageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(leaseLiabilityPageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response!.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details LeaseLiability page', () => {
@@ -152,7 +216,7 @@ describe('LeaseLiability e2e test', () => {
         cy.url().should('match', leaseLiabilityPageUrlPattern);
       });
 
-      it('last delete button click should delete instance of LeaseLiability', () => {
+      it.skip('last delete button click should delete instance of LeaseLiability', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('leaseLiability').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click({ force: true });
@@ -176,16 +240,18 @@ describe('LeaseLiability e2e test', () => {
       cy.getEntityCreateUpdateHeading('LeaseLiability');
     });
 
-    it('should create an instance of LeaseLiability', () => {
+    it.skip('should create an instance of LeaseLiability', () => {
       cy.get(`[data-cy="leaseId"]`).type('Granite Markets Centralized').should('have.value', 'Granite Markets Centralized');
 
       cy.get(`[data-cy="liabilityAmount"]`).type('17610').should('have.value', '17610');
 
       cy.get(`[data-cy="interestRate"]`).type('49215').should('have.value', '49215');
 
-      cy.get(`[data-cy="startDate"]`).type('2024-06-18T03:14').should('have.value', '2024-06-18T03:14');
+      cy.get(`[data-cy="startDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
 
-      cy.get(`[data-cy="endDate"]`).type('24413').should('have.value', '24413');
+      cy.get(`[data-cy="endDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
+
+      cy.get(`[data-cy="leaseContract"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

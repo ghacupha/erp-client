@@ -27,6 +27,8 @@ import { ILeaseAmortizationSchedule, LeaseAmortizationSchedule } from '../lease-
 import { LeaseAmortizationScheduleService } from '../service/lease-amortization-schedule.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 @Component({
   selector: 'jhi-lease-amortization-schedule-update',
@@ -36,16 +38,19 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
   isSaving = false;
 
   leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
+  leaseContractsCollection: IIFRS16LeaseContract[] = [];
 
   editForm = this.fb.group({
     id: [],
     identifier: [null, [Validators.required]],
     leaseLiability: [null, Validators.required],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
     protected leaseAmortizationScheduleService: LeaseAmortizationScheduleService,
     protected leaseLiabilityService: LeaseLiabilityService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -76,6 +81,10 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ILeaseAmortizationSchedule>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -100,11 +109,16 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
       id: leaseAmortizationSchedule.id,
       identifier: leaseAmortizationSchedule.identifier,
       leaseLiability: leaseAmortizationSchedule.leaseLiability,
+      leaseContract: leaseAmortizationSchedule.leaseContract,
     });
 
     this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
       this.leaseLiabilitiesSharedCollection,
       leaseAmortizationSchedule.leaseLiability
+    );
+    this.leaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.leaseContractsCollection,
+      leaseAmortizationSchedule.leaseContract
     );
   }
 
@@ -118,6 +132,19 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
         )
       )
       .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
+
+    this.iFRS16LeaseContractService
+      .query({ 'leaseAmortizationScheduleId.specified': 'false' })
+      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
+      .pipe(
+        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
+          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+            iFRS16LeaseContracts,
+            this.editForm.get('leaseContract')!.value
+          )
+        )
+      )
+      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.leaseContractsCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeaseAmortizationSchedule {
@@ -126,6 +153,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

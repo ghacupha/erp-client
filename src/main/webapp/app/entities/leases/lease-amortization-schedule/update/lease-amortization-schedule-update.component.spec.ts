@@ -29,6 +29,8 @@ import { LeaseAmortizationScheduleService } from '../service/lease-amortization-
 import { ILeaseAmortizationSchedule, LeaseAmortizationSchedule } from '../lease-amortization-schedule.model';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 import { LeaseAmortizationScheduleUpdateComponent } from './lease-amortization-schedule-update.component';
 
@@ -38,6 +40,7 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let leaseAmortizationScheduleService: LeaseAmortizationScheduleService;
   let leaseLiabilityService: LeaseLiabilityService;
+  let iFRS16LeaseContractService: IFRS16LeaseContractService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -52,6 +55,7 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     leaseAmortizationScheduleService = TestBed.inject(LeaseAmortizationScheduleService);
     leaseLiabilityService = TestBed.inject(LeaseLiabilityService);
+    iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
 
     comp = fixture.componentInstance;
   });
@@ -79,16 +83,40 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
       expect(comp.leaseLiabilitiesSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call leaseContract query and add missing value', () => {
+      const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456 };
+      const leaseContract: IIFRS16LeaseContract = { id: 18590 };
+      leaseAmortizationSchedule.leaseContract = leaseContract;
+
+      const leaseContractCollection: IIFRS16LeaseContract[] = [{ id: 19041 }];
+      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: leaseContractCollection })));
+      const expectedCollection: IIFRS16LeaseContract[] = [leaseContract, ...leaseContractCollection];
+      jest.spyOn(iFRS16LeaseContractService, 'addIFRS16LeaseContractToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ leaseAmortizationSchedule });
+      comp.ngOnInit();
+
+      expect(iFRS16LeaseContractService.query).toHaveBeenCalled();
+      expect(iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing).toHaveBeenCalledWith(
+        leaseContractCollection,
+        leaseContract
+      );
+      expect(comp.leaseContractsCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const leaseAmortizationSchedule: ILeaseAmortizationSchedule = { id: 456 };
       const leaseLiability: ILeaseLiability = { id: 94172 };
       leaseAmortizationSchedule.leaseLiability = leaseLiability;
+      const leaseContract: IIFRS16LeaseContract = { id: 32019 };
+      leaseAmortizationSchedule.leaseContract = leaseContract;
 
       activatedRoute.data = of({ leaseAmortizationSchedule });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(leaseAmortizationSchedule));
       expect(comp.leaseLiabilitiesSharedCollection).toContain(leaseLiability);
+      expect(comp.leaseContractsCollection).toContain(leaseContract);
     });
   });
 
@@ -161,6 +189,14 @@ describe('LeaseAmortizationSchedule Management Update Component', () => {
       it('Should return tracked LeaseLiability primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackLeaseLiabilityById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackIFRS16LeaseContractById', () => {
+      it('Should return tracked IFRS16LeaseContract primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackIFRS16LeaseContractById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

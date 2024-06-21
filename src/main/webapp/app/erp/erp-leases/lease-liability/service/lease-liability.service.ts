@@ -23,6 +23,7 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
@@ -107,13 +108,15 @@ export class LeaseLiabilityService {
 
   protected convertDateFromClient(leaseLiability: ILeaseLiability): ILeaseLiability {
     return Object.assign({}, leaseLiability, {
-      startDate: leaseLiability.startDate?.isValid() ? leaseLiability.startDate.toJSON() : undefined,
+      startDate: leaseLiability.startDate?.isValid() ? leaseLiability.startDate.format(DATE_FORMAT) : undefined,
+      endDate: leaseLiability.endDate?.isValid() ? leaseLiability.endDate.format(DATE_FORMAT) : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.startDate = res.body.startDate ? dayjs(res.body.startDate) : undefined;
+      res.body.endDate = res.body.endDate ? dayjs(res.body.endDate) : undefined;
     }
     return res;
   }
@@ -122,6 +125,7 @@ export class LeaseLiabilityService {
     if (res.body) {
       res.body.forEach((leaseLiability: ILeaseLiability) => {
         leaseLiability.startDate = leaseLiability.startDate ? dayjs(leaseLiability.startDate) : undefined;
+        leaseLiability.endDate = leaseLiability.endDate ? dayjs(leaseLiability.endDate) : undefined;
       });
     }
     return res;
