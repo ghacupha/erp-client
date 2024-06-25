@@ -23,9 +23,10 @@ import { LeaseAmortizationScheduleDetailComponent } from './detail/lease-amortiz
 import { LeaseAmortizationScheduleUpdateComponent } from './update/lease-amortization-schedule-update.component';
 import { LeaseAmortizationScheduleDeleteDialogComponent } from './delete/lease-amortization-schedule-delete-dialog.component';
 import { LeaseAmortizationScheduleRoutingModule } from './route/lease-amortization-schedule-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseAmortizationScheduleRoutingModule],
+  imports: [SharedModule, LeaseAmortizationScheduleRoutingModule, ErpCommonModule],
   declarations: [
     LeaseAmortizationScheduleComponent,
     LeaseAmortizationScheduleDetailComponent,

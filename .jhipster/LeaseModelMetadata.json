@@ -1,7 +1,5 @@
 {
-  "changelogDate": "20230328100320",
   "clientRootFolder": "leases",
-  "dto": "mapstruct",
   "fields": [
     {
       "fieldName": "modelTitle",
@@ -62,106 +60,108 @@
       "fieldType": "Double"
     }
   ],
-  "incrementalChangelog": false,
-  "jpaMetamodelFiltering": true,
-  "name": "LeaseModelMetadata",
-  "pagination": "pagination",
-  "readOnly": false,
   "relationships": [
     {
-      "otherEntityField": "description",
-      "otherEntityName": "placeholder",
-      "otherEntityRelationshipName": "leaseModelMetadata",
-      "ownerSide": true,
       "relationshipName": "placeholder",
-      "relationshipType": "many-to-many"
+      "otherEntityName": "placeholder",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "description",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "leaseModelMetadata"
     },
     {
-      "otherEntityField": "universalKey",
-      "otherEntityName": "universallyUniqueMapping",
-      "otherEntityRelationshipName": "leaseModelMetadata",
-      "ownerSide": true,
       "relationshipName": "leaseMapping",
-      "relationshipType": "many-to-many"
-    },
-    {
-      "otherEntityField": "bookingId",
-      "otherEntityName": "leaseContract",
-      "relationshipName": "leaseContract",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
-    },
-    {
-      "id": false,
-      "otherEntityField": "modelTitle",
-      "otherEntityName": "leaseModelMetadata",
-      "otherEntityRelationshipName": "successor",
+      "otherEntityName": "universallyUniqueMapping",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "universalKey",
       "ownerSide": true,
+      "otherEntityRelationshipName": "leaseModelMetadata"
+    },
+    {
+      "relationshipName": "leaseContract",
+      "otherEntityName": "leaseContract",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "bookingId"
+    },
+    {
       "relationshipName": "predecessor",
-      "relationshipType": "one-to-one"
+      "otherEntityName": "leaseModelMetadata",
+      "relationshipType": "one-to-one",
+      "otherEntityField": "modelTitle",
+      "ownerSide": true,
+      "id": false,
+      "otherEntityRelationshipName": "successor"
     },
     {
-      "otherEntityField": "iso4217CurrencyCode",
-      "otherEntityName": "settlementCurrency",
       "relationshipName": "liabilityCurrency",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
-    },
-    {
-      "otherEntityField": "iso4217CurrencyCode",
       "otherEntityName": "settlementCurrency",
-      "relationshipName": "rouAssetCurrency",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
     },
     {
-      "otherEntityField": "documentTitle",
-      "otherEntityName": "businessDocument",
+      "relationshipName": "rouAssetCurrency",
+      "otherEntityName": "settlementCurrency",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "iso4217CurrencyCode"
+    },
+    {
       "relationshipName": "modelAttachments",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "businessDocument",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "documentTitle"
     },
     {
-      "otherEntityField": "clearanceLevel",
-      "otherEntityName": "securityClearance",
       "relationshipName": "securityClearance",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "securityClearance",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "clearanceLevel"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "leaseLiabilityAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "interestPayableAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "interestExpenseAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "rouAssetAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "rouDepreciationAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     },
     {
-      "otherEntityField": "accountNumber",
-      "otherEntityName": "transactionAccount",
       "relationshipName": "accruedDepreciationAccount",
-      "relationshipType": "many-to-one"
+      "otherEntityName": "transactionAccount",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "accountNumber"
     }
   ],
-  "service": "serviceImpl"
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
+  "readOnly": false,
+  "pagination": "pagination",
+  "name": "LeaseModelMetadata",
+  "changelogDate": "20230328100320",
+  "incrementalChangelog": false
 }

@@ -27,6 +27,8 @@ import { ILeaseAmortizationSchedule, LeaseAmortizationSchedule } from '../lease-
 import { LeaseAmortizationScheduleService } from '../service/lease-amortization-schedule.service';
 import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
+import * as dayjs from 'dayjs';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-lease-amortization-schedule-update',
@@ -52,9 +54,20 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseAmortizationSchedule }) => {
+
+      if (leaseAmortizationSchedule.id === undefined) {
+        leaseAmortizationSchedule.identifier = uuidv7();
+      }
+
       this.updateForm(leaseAmortizationSchedule);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateLeaseLiability(value: ILeaseLiability): void {
+    this.editForm.patchValue({
+      leaseLiability: value
     });
   }
 

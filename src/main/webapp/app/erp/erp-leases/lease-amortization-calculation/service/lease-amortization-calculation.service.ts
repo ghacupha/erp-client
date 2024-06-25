@@ -31,6 +31,7 @@ export type EntityArrayResponseType = HttpResponse<ILeaseAmortizationCalculation
 
 @Injectable({ providedIn: 'root' })
 export class LeaseAmortizationCalculationService {
+  protected resourceUrlByLeaseContractId = this.applicationConfigService.getEndpointFor('api/leases/lease-amortization-calculations/by-lease-contract-id');
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/lease-amortization-calculations');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-amortization-calculations');
 
@@ -63,6 +64,10 @@ export class LeaseAmortizationCalculationService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ILeaseAmortizationCalculation[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  queryByLeaseContractId(leaseContractId: number): Observable<EntityResponseType> {
+    return this.http.get<ILeaseAmortizationCalculation>(`${this.resourceUrlByLeaseContractId}/${leaseContractId}`, { observe: 'response' });
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

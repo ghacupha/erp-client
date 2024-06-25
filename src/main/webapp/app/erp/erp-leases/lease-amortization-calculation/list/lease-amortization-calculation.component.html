@@ -87,7 +87,7 @@
           </td>
           <td>{{ leaseAmortizationCalculation.interestRate }}</td>
           <td>{{ leaseAmortizationCalculation.periodicity }}</td>
-          <td>{{ leaseAmortizationCalculation.leaseAmount }}</td>
+          <td>{{ leaseAmortizationCalculation.leaseAmount | currency }}</td>
           <td>{{ leaseAmortizationCalculation.numberOfPeriods }}</td>
           <td>
             <div *ngIf="leaseAmortizationCalculation.leaseContract">

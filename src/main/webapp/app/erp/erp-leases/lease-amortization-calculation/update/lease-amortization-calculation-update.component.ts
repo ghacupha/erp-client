@@ -57,6 +57,22 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ leaseAmortizationCalculation }) => {
       this.updateForm(leaseAmortizationCalculation);
     });
+
+    this.updateDetailsGivenTransferSettlement();
+  }
+
+  updateDetailsGivenTransferSettlement(): void {
+    this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
+      this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
+        if (ifrs16Response.body) {
+          const ifrs16 = ifrs16Response.body;
+
+          this.editForm.patchValue({
+
+          });
+        }
+      });
+    });
   }
 
   updateIFRS16LeaseContract(value: IIFRS16LeaseContract): void {

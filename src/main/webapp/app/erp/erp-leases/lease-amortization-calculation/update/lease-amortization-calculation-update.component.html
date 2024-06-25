@@ -32,6 +32,16 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateIFRS16LeaseContract($event)'
+          inputControlLabel='Lease Contract'
+        >
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_interestRate">Interest Rate</label>
           <input
@@ -79,16 +89,6 @@
             formControlName="numberOfPeriods"
           />
         </div>
-
-        <jhi-m21-ifrs16-lease-form-control
-          ngDefaultControl
-          formControlName='leaseContract'
-          [inputValue]="editForm.get(['leaseContract'])!.value"
-          (valueSelected)='updateIFRS16LeaseContract($event)'
-          inputControlLabel='leaseContract'
-        >
-          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
-        </jhi-m21-ifrs16-lease-form-control>
 
       </div>
 

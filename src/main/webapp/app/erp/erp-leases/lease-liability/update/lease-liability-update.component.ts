@@ -27,9 +27,9 @@ import { ILeaseLiability, LeaseLiability } from '../lease-liability.model';
 import { LeaseLiabilityService } from '../service/lease-liability.service';
 import { LeaseAmortizationCalculationService } from '../../lease-amortization-calculation/service/lease-amortization-calculation.service';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import dayjs from 'dayjs';
 import { ILeaseAmortizationCalculation } from '../../lease-amortization-calculation/lease-amortization-calculation.model';
 import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
 
 @Component({
   selector: 'jhi-lease-liability-update',
@@ -56,20 +56,72 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     protected leaseLiabilityService: LeaseLiabilityService,
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
+    protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseLiability }) => {
-      if (leaseLiability.id === undefined) {
-        const today = dayjs();
-        leaseLiability.startDate = today;
-      }
-
       this.updateForm(leaseLiability);
+    });
 
-      this.loadRelationshipsOptions();
+    this.updateDetailsGivenLeaseContract();
+
+    this.updateCalculationsGivenLeaseContract();
+  }
+
+  updateDetailsGivenLeaseContract(): void {
+    this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
+      this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
+        if (ifrs16Response.body) {
+          const ifrs16 = ifrs16Response.body;
+
+          this.editForm.patchValue({
+            leaseId: ifrs16.bookingId,
+            startDate: ifrs16.commencementDate,
+          });
+
+          if (ifrs16.lastReportingPeriod) {
+            this.fiscalMonthService.find(<number>ifrs16.lastReportingPeriod.id).subscribe(periodResponse => {
+              if (periodResponse.body) {
+                this.editForm.patchValue({
+                  endDate: periodResponse.body.endDate
+                });
+              }
+            });
+          }
+
+
+
+        }
+      });
+    });
+  }
+
+  updateCalculationsGivenLeaseContract(): void {
+    this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
+      this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
+        if (ifrs16Response.body) {
+          const ifrs16 = ifrs16Response.body;
+
+          if (ifrs16.id) {
+            this.leaseAmortizationCalculationService.queryByLeaseContractId(ifrs16.id).subscribe(calcResponse => {
+              if (calcResponse.body) {
+
+                const calculation = calcResponse.body;
+
+                this.editForm.patchValue({
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                  leaseAmortizationCalculation: calculation,
+                  liabilityAmount: calculation.leaseAmount,
+                  interestRate: calculation.interestRate
+                });
+              }
+            });
+          }
+        }
+      });
     });
   }
 

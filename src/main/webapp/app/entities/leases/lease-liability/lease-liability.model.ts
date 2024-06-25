@@ -16,8 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ILeaseAmortizationCalculation } from 'app/erp/erp-leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import * as dayjs from 'dayjs';
+import { ILeaseAmortizationCalculation } from 'app/entities/leases/lease-amortization-calculation/lease-amortization-calculation.model';
+import { ILeasePayment } from 'app/entities/leases/lease-payment/lease-payment.model';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 export interface ILeaseLiability {
   id?: number;
