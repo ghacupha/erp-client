@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-lease-amortization-calculation"
         [routerLink]="['/lease-amortization-calculation/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Lease Amortization Calculation </span>
@@ -111,11 +112,23 @@
               <button
                 type="submit"
                 [routerLink]="['/lease-amortization-calculation', leaseAmortizationCalculation.id, 'edit']"
+                (click)='editButtonEvent(leaseAmortizationCalculation)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/lease-amortization-calculation', leaseAmortizationCalculation.id, 'copy']"
+                (click)='copyButtonEvent(leaseAmortizationCalculation)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline">Copy</span>
               </button>
 
               <button

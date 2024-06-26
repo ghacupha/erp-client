@@ -25,8 +25,19 @@ import { finalize } from 'rxjs/operators';
 
 import { ILeaseAmortizationCalculation, LeaseAmortizationCalculation } from '../lease-amortization-calculation.model';
 import { LeaseAmortizationCalculationService } from '../service/lease-amortization-calculation.service';
-import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContract, IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { select, Store } from '@ngrx/store';
+import {
+  copyingIFRS16LeaseContractStatus, creatingIFRS16LeaseContractStatus,
+  editingIFRS16LeaseContractStatus, ifrs16LeaseContractUpdateSelectedInstance
+} from '../../../store/selectors/ifrs16-lease-model-workflows-status.selector';
+import {
+  copyingLeaseAmortizationCalculationStatus, creatingLeaseAmortizationCalculationStatus,
+  editingLeaseAmortizationCalculationStatus, leaseAmortizationCalculationSelectedInstance
+} from '../../../store/selectors/lease-amortization-calculation-workflows-status.selector';
+import { State } from '../../../store/global-store.definition';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-update',
@@ -46,29 +57,58 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     leaseContract: [null, Validators.required],
   });
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new LeaseAmortizationCalculation()}
+  selectedLeaseContract = {...new IFRS16LeaseContract()}
+
   constructor(
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
-
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ leaseAmortizationCalculation }) => {
-      this.updateForm(leaseAmortizationCalculation);
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(leaseAmortizationCalculationSelectedInstance)).subscribe(copied => {
+      this.selectedItem = copied;
+      this.iFRS16LeaseContractService.find(<number>this.selectedItem.leaseContract?.id).subscribe(leaseContractResponse => {
+        if (leaseContractResponse.body) {
+          this.selectedLeaseContract = leaseContractResponse.body
+        }
+      });
     });
-
-    this.updateDetailsGivenTransferSettlement();
   }
 
-  updateDetailsGivenTransferSettlement(): void {
+  ngOnInit(): void {
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+
+      this.updateDetailsGivenLeaseContract();
+    }
+
+    if (this.weAreCreating) {
+
+      this.updateDetailsGivenLeaseContract();
+    }
+  }
+
+  updateDetailsGivenLeaseContract(): void {
     this.editForm.get(['leaseContract'])?.valueChanges.subscribe((leaseContractChange) => {
       this.iFRS16LeaseContractService.find(leaseContractChange.id).subscribe((ifrs16Response) => {
         if (ifrs16Response.body) {
           const ifrs16 = ifrs16Response.body;
 
           this.editForm.patchValue({
-
+             // TODO
           });
         }
       });
@@ -87,12 +127,17 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const leaseAmortizationCalculation = this.createFromForm();
-    if (leaseAmortizationCalculation.id !== undefined) {
-      this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.update(leaseAmortizationCalculation));
-    } else {
-      this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.create(leaseAmortizationCalculation));
-    }
+    this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leaseAmortizationCalculationService.create(this.copyFromForm()));
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -134,6 +179,17 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     return {
     ...new LeaseAmortizationCalculation(),
         id: this.editForm.get(['id'])!.value,
+        interestRate: this.editForm.get(['interestRate'])!.value,
+        periodicity: this.editForm.get(['periodicity'])!.value,
+        leaseAmount: this.editForm.get(['leaseAmount'])!.value,
+        numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+        leaseContract: this.editForm.get(['leaseContract'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ILeaseAmortizationCalculation {
+    return {
+    ...new LeaseAmortizationCalculation(),
         interestRate: this.editForm.get(['interestRate'])!.value,
         periodicity: this.editForm.get(['periodicity'])!.value,
         leaseAmount: this.editForm.get(['leaseAmount'])!.value,

@@ -24,9 +24,15 @@ import { LeaseAmortizationCalculationUpdateComponent } from './update/lease-amor
 import { LeaseAmortizationCalculationDeleteDialogComponent } from './delete/lease-amortization-calculation-delete-dialog.component';
 import { LeaseAmortizationCalculationRoutingModule } from './route/lease-amortization-calculation-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { LeaseAmortizationCalculationRoutingCustomModule } from './route/lease-amortization-calculation-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseAmortizationCalculationRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    LeaseAmortizationCalculationRoutingModule,
+    LeaseAmortizationCalculationRoutingCustomModule,
+    ErpCommonModule
+  ],
   declarations: [
     LeaseAmortizationCalculationComponent,
     LeaseAmortizationCalculationDetailComponent,

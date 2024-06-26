@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ILeaseAmortizationCalculation } from '../lease-amortization-calculation.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  leaseAmortizationCalculationCopyWorkflowInitiatedFromView,
+  leaseAmortizationCalculationEditWorkflowInitiatedFromView
+} from '../../../store/actions/lease-amortization-calculation.actions';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-detail',
@@ -28,12 +34,20 @@ import { ILeaseAmortizationCalculation } from '../lease-amortization-calculation
 export class LeaseAmortizationCalculationDetailComponent implements OnInit {
   leaseAmortizationCalculation: ILeaseAmortizationCalculation | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseAmortizationCalculation }) => {
       this.leaseAmortizationCalculation = leaseAmortizationCalculation;
     });
+  }
+
+  editButtonEvent(instance: ILeaseAmortizationCalculation): void {
+    this.store.dispatch(leaseAmortizationCalculationEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ILeaseAmortizationCalculation): void {
+    this.store.dispatch(leaseAmortizationCalculationCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

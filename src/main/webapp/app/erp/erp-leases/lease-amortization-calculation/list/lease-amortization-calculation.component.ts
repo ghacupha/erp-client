@@ -27,6 +27,14 @@ import { ILeaseAmortizationCalculation } from '../lease-amortization-calculation
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { LeaseAmortizationCalculationService } from '../service/lease-amortization-calculation.service';
 import { LeaseAmortizationCalculationDeleteDialogComponent } from '../delete/lease-amortization-calculation-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import {
+  leaseAmortizationCalculationCopyWorkflowInitiatedFromList,
+  leaseAmortizationCalculationCreationInitiatedFromList,
+  leaseAmortizationCalculationEditWorkflowInitiatedFromList
+} from '../../../store/actions/lease-amortization-calculation.actions';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation',
@@ -47,7 +55,8 @@ export class LeaseAmortizationCalculationComponent implements OnInit {
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +111,18 @@ export class LeaseAmortizationCalculationComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(leaseAmortizationCalculationCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(leaseAmortizationCalculationEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(leaseAmortizationCalculationCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   ngOnInit(): void {

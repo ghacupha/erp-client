@@ -65,11 +65,20 @@
 
       <button
         type="button"
+        (click)='editButtonEvent(leaseAmortizationCalculation)'
         [routerLink]="['/lease-amortization-calculation', leaseAmortizationCalculation.id, 'edit']"
-        class="btn btn-primary"
-      >
+        class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
+
+      <button
+        type="button"
+        (click)='copyButtonEvent(leaseAmortizationCalculation)'
+        [routerLink]="['/lease-amortization-calculation', leaseAmortizationCalculation.id, 'copy']"
+        class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
+      </button>
+
     </div>
   </div>
 </div>
