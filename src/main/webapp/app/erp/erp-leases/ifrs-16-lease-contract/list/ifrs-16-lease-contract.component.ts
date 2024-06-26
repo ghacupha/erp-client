@@ -126,7 +126,6 @@ export class IFRS16LeaseContractComponent implements OnInit {
     this.store.dispatch(ifrs16LeaseContractCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
-
   ngOnInit(): void {
     this.handleNavigation();
   }
