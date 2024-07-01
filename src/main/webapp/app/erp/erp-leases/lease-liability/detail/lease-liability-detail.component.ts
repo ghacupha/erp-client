@@ -20,6 +20,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ILeaseLiability } from '../lease-liability.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import { leaseLiabilityCopyWorkflowInitiatedFromView, leaseLiabilityEditWorkflowInitiatedFromView } from '../../../store/actions/lease-liability.actions';
 
 @Component({
   selector: 'jhi-lease-liability-detail',
@@ -28,12 +31,20 @@ import { ILeaseLiability } from '../lease-liability.model';
 export class LeaseLiabilityDetailComponent implements OnInit {
   leaseLiability: ILeaseLiability | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseLiability }) => {
       this.leaseLiability = leaseLiability;
     });
+  }
+
+  editButtonEvent(instance: ILeaseLiability): void {
+    this.store.dispatch(leaseLiabilityEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ILeaseLiability): void {
+    this.store.dispatch(leaseLiabilityCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

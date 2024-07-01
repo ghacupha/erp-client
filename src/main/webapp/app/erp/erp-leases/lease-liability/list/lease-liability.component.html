@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-lease-liability"
         [routerLink]="['/lease-liability/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Lease Liability </span>
@@ -76,9 +77,9 @@
           <th scope="col" jhiSortBy="startDate"><span>Start Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="endDate"><span>End Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseAmortizationCalculation.id">
-            <span>Lease Amortization Calculation</span> <fa-icon icon="sort"></fa-icon>
+            <span>Calculation</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -88,8 +89,8 @@
             <a [routerLink]="['/lease-liability', leaseLiability.id, 'view']">{{ leaseLiability.id }}</a>
           </td>
           <td>{{ leaseLiability.leaseId }}</td>
-          <td>{{ leaseLiability.liabilityAmount }}</td>
-          <td>{{ leaseLiability.interestRate }}</td>
+          <td>{{ leaseLiability.liabilityAmount | currency }}</td>
+          <td>{{ leaseLiability.interestRate | number:'1.10-10' }}</td>
           <td>{{ leaseLiability.startDate | formatMediumDate }}</td>
           <td>{{ leaseLiability.endDate | formatMediumDate }}</td>
           <td>
@@ -115,22 +116,34 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button
                 type="submit"
                 [routerLink]="['/lease-liability', leaseLiability.id, 'edit']"
+                (click)='editButtonEvent(leaseLiability)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/lease-liability', leaseLiability.id, 'copy']"
+                (click)='copyButtonEvent(leaseLiability)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button type="submit" (click)="delete(leaseLiability)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

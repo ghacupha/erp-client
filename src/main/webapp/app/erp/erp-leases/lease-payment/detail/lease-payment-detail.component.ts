@@ -20,6 +20,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ILeasePayment } from '../lease-payment.model';
+import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
+import {
+  leaseLiabilityCopyWorkflowInitiatedFromView,
+  leaseLiabilityEditWorkflowInitiatedFromView
+} from '../../../store/actions/lease-liability.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  leasePaymentCopyWorkflowInitiatedFromView,
+  leasePaymentEditWorkflowInitiatedFromView
+} from '../../../store/actions/lease-payment.actions';
 
 @Component({
   selector: 'jhi-lease-payment-detail',
@@ -28,7 +39,7 @@ import { ILeasePayment } from '../lease-payment.model';
 export class LeasePaymentDetailComponent implements OnInit {
   leasePayment: ILeasePayment | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leasePayment }) => {
@@ -38,5 +49,13 @@ export class LeasePaymentDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  editButtonEvent(instance: ILeasePayment): void {
+    this.store.dispatch(leasePaymentEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ILeasePayment): void {
+    this.store.dispatch(leasePaymentCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 }

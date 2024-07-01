@@ -39,6 +39,9 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
 import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
 import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
 import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
+import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortization-calculation.reducer";
+import * as fromLeaseLiabilityState from "./reducers/lease-liability.reducer";
+import * as fromLeasePaymentState from "./reducers/lease-payment.reducer";
 import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-workflow-status.reducer";
 import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-selection-workflow-status.reducer";
 import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
@@ -79,6 +82,9 @@ import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marsh
     StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
     StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
+    StoreModule.forFeature('leaseAmortizationCalculationForm', fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer),
+    StoreModule.forFeature('leaseLiabilityForm', fromLeaseLiabilityState.leaseLiabilityStateReducer),
+    StoreModule.forFeature('leasePaymentForm', fromLeasePaymentState.leasePaymentStateReducer),
     StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
     StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
     StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),

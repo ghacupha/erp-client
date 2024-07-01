@@ -24,11 +24,13 @@ import { LeaseLiabilityUpdateComponent } from './update/lease-liability-update.c
 import { LeaseLiabilityDeleteDialogComponent } from './delete/lease-liability-delete-dialog.component';
 import { LeaseLiabilityRoutingModule } from './route/lease-liability-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { LeaseLiabilityRoutingCustomModule } from './route/lease-liability-routing-custom.module';
 
 @NgModule({
   imports: [
     SharedModule,
     LeaseLiabilityRoutingModule,
+    LeaseLiabilityRoutingCustomModule,
     ErpCommonModule
   ],
   declarations: [

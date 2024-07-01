@@ -27,6 +27,13 @@ import { ILeaseLiability } from '../lease-liability.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { LeaseLiabilityService } from '../service/lease-liability.service';
 import { LeaseLiabilityDeleteDialogComponent } from '../delete/lease-liability-delete-dialog.component';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  leaseLiabilityCopyWorkflowInitiatedFromList,
+  leaseLiabilityCreationInitiatedFromList, leaseLiabilityEditWorkflowInitiatedFromList
+} from '../../../store/actions/lease-liability.actions';
 
 @Component({
   selector: 'jhi-lease-liability',
@@ -47,7 +54,8 @@ export class LeaseLiabilityComponent implements OnInit {
     protected leaseLiabilityService: LeaseLiabilityService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class LeaseLiabilityComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(leaseLiabilityCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: ILeaseLiability): void {
+    this.store.dispatch(leaseLiabilityEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ILeaseLiability): void {
+    this.store.dispatch(leaseLiabilityCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   ngOnInit(): void {

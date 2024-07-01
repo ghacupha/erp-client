@@ -27,9 +27,18 @@ import { ILeaseLiability, LeaseLiability } from '../lease-liability.model';
 import { LeaseLiabilityService } from '../service/lease-liability.service';
 import { LeaseAmortizationCalculationService } from '../../lease-amortization-calculation/service/lease-amortization-calculation.service';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import { ILeaseAmortizationCalculation } from '../../lease-amortization-calculation/lease-amortization-calculation.model';
-import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import {
+  ILeaseAmortizationCalculation,
+  LeaseAmortizationCalculation
+} from '../../lease-amortization-calculation/lease-amortization-calculation.model';
+import { IFRS16LeaseContract, IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingLeaseLiabilityStatus, creatingLeaseLiabilityStatus,
+  editingLeaseLiabilityStatus, leaseLiabilitySelectedInstance
+} from '../../../store/selectors/lease-liability-workflows-status.selector';
 
 @Component({
   selector: 'jhi-lease-liability-update',
@@ -52,23 +61,62 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     leaseContract: [null, Validators.required],
   });
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new LeaseLiability()}
+  selectedLeaseContract = {...new IFRS16LeaseContract()}
+  selectedLeaseCalculation = {...new LeaseAmortizationCalculation()}
+
   constructor(
     protected leaseLiabilityService: LeaseLiabilityService,
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingLeaseLiabilityStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingLeaseLiabilityStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingLeaseLiabilityStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(leaseLiabilitySelectedInstance)).subscribe(copied => {
+      this.selectedItem = copied;
+      this.iFRS16LeaseContractService.find(<number>this.selectedItem.leaseContract?.id).subscribe(leaseContractResponse => {
+        if (leaseContractResponse.body) {
+          this.selectedLeaseContract = leaseContractResponse.body
+        }
+      });
+      this.leaseAmortizationCalculationService.find(<number>this.selectedItem.leaseAmortizationCalculation?.id).subscribe(calculationResponse => {
+        if (calculationResponse.body) {
+          this.selectedLeaseCalculation = calculationResponse.body
+        }
+      });
+    });
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ leaseLiability }) => {
-      this.updateForm(leaseLiability);
-    });
 
-    this.updateDetailsGivenLeaseContract();
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
 
-    this.updateCalculationsGivenLeaseContract();
+      this.updateDetailsGivenLeaseContract();
+      this.updateCalculationsGivenLeaseContract();
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+
+      this.updateDetailsGivenLeaseContract();
+      this.updateCalculationsGivenLeaseContract();
+    }
+
+    if (this.weAreCreating) {
+
+      this.updateDetailsGivenLeaseContract();
+      this.updateCalculationsGivenLeaseContract();
+    }
   }
 
   updateDetailsGivenLeaseContract(): void {
@@ -91,9 +139,6 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
               }
             });
           }
-
-
-
         }
       });
     });
@@ -143,12 +188,17 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const leaseLiability = this.createFromForm();
-    if (leaseLiability.id !== undefined) {
-      this.subscribeToSaveResponse(this.leaseLiabilityService.update(leaseLiability));
-    } else {
-      this.subscribeToSaveResponse(this.leaseLiabilityService.create(leaseLiability));
-    }
+    this.subscribeToSaveResponse(this.leaseLiabilityService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leaseLiabilityService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leaseLiabilityService.create(this.copyFromForm()));
   }
 
   trackLeaseAmortizationCalculationById(index: number, item: ILeaseAmortizationCalculation): number {
@@ -236,6 +286,19 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     return {
       ...new LeaseLiability(),
       id: this.editForm.get(['id'])!.value,
+      leaseId: this.editForm.get(['leaseId'])!.value,
+      liabilityAmount: this.editForm.get(['liabilityAmount'])!.value,
+      interestRate: this.editForm.get(['interestRate'])!.value,
+      startDate: this.editForm.get(['startDate'])!.value,
+      endDate: this.editForm.get(['endDate'])!.value,
+      leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ILeaseLiability {
+    return {
+      ...new LeaseLiability(),
       leaseId: this.editForm.get(['leaseId'])!.value,
       liabilityAmount: this.editForm.get(['liabilityAmount'])!.value,
       interestRate: this.editForm.get(['interestRate'])!.value,

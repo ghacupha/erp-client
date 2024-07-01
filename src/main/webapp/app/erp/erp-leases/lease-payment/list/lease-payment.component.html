@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-lease-payment"
         [routerLink]="['/lease-payment/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Lease Payment </span>
@@ -82,7 +83,7 @@
             <a [routerLink]="['/lease-payment', leasePayment.id, 'view']">{{ leasePayment.id }}</a>
           </td>
           <td>{{ leasePayment.paymentDate | formatMediumDatetime }}</td>
-          <td>{{ leasePayment.paymentAmount }}</td>
+          <td>{{ leasePayment.paymentAmount | currency}}</td>
           <td>
             <div *ngIf="leasePayment.leaseLiability">
               <a [routerLink]="['/lease-liability', leasePayment.leaseLiability?.id, 'view']">{{ leasePayment.leaseLiability?.leaseId }}</a>
@@ -90,6 +91,7 @@
           </td>
           <td class="text-right">
             <div class="btn-group">
+
               <button
                 type="submit"
                 [routerLink]="['/lease-payment', leasePayment.id, 'view']"
@@ -97,22 +99,34 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button
                 type="submit"
                 [routerLink]="['/lease-payment', leasePayment.id, 'edit']"
+                (click)='editButtonEvent(leasePayment)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/lease-payment', leasePayment.id, 'copy']"
+                (click)='copyButtonEvent(leasePayment)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button type="submit" (click)="delete(leasePayment)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

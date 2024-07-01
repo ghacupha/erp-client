@@ -21,7 +21,7 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
@@ -30,7 +30,16 @@ import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
-import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingLeasePaymentStatus,
+  creatingLeasePaymentStatus,
+  editingLeasePaymentStatus,
+  leasePaymentSelectedInstance
+} from '../../../store/selectors/lease-payment-workflows-status.selector';
 
 @Component({
   selector: 'jhi-lease-payment-update',
@@ -48,24 +57,50 @@ export class LeasePaymentUpdateComponent implements OnInit {
     leaseLiability: [null, Validators.required],
   });
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new LeasePayment()}
+  selectedLeaseContract = {...new IFRS16LeaseContract()}
+
   constructor(
     protected leasePaymentService: LeasePaymentService,
     protected leaseLiabilityService: LeaseLiabilityService,
+    protected ifrs16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingLeasePaymentStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingLeasePaymentStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingLeasePaymentStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(leasePaymentSelectedInstance)).subscribe(copied => {
+      this.selectedItem = copied;
+      this.ifrs16LeaseContractService.find(<number>this.selectedItem.leaseLiability?.leaseContract?.id).subscribe(leaseContractResponse => {
+        if (leaseContractResponse.body) {
+          this.selectedLeaseContract = leaseContractResponse.body
+        }
+      });
+    });
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ leasePayment }) => {
-      if (leasePayment.id === undefined) {
-        const today = dayjs().startOf('day');
-        leasePayment.paymentDate = today;
-      }
 
-      this.updateForm(leasePayment);
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
 
-      this.loadRelationshipsOptions();
-    });
+    if (this.weAreCopying) {
+
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCreating) {
+      this.editForm.patchValue({
+        paymentDate: dayjs()
+      })
+    }
   }
 
   updateLeaseLiability(value: ILeaseLiability): void {
@@ -80,12 +115,17 @@ export class LeasePaymentUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const leasePayment = this.createFromForm();
-    if (leasePayment.id !== undefined) {
-      this.subscribeToSaveResponse(this.leasePaymentService.update(leasePayment));
-    } else {
-      this.subscribeToSaveResponse(this.leasePaymentService.create(leasePayment));
-    }
+    this.subscribeToSaveResponse(this.leasePaymentService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leasePaymentService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.leasePaymentService.create(this.copyFromForm()));
   }
 
   trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
@@ -125,22 +165,21 @@ export class LeasePaymentUpdateComponent implements OnInit {
     );
   }
 
-  protected loadRelationshipsOptions(): void {
-    this.leaseLiabilityService
-      .query()
-      .pipe(map((res: HttpResponse<ILeaseLiability[]>) => res.body ?? []))
-      .pipe(
-        map((leaseLiabilities: ILeaseLiability[]) =>
-          this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(leaseLiabilities, this.editForm.get('leaseLiability')!.value)
-        )
-      )
-      .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
-  }
-
   protected createFromForm(): ILeasePayment {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
+      paymentDate: this.editForm.get(['paymentDate'])!.value
+        ? dayjs(this.editForm.get(['paymentDate'])!.value, DATE_TIME_FORMAT)
+        : undefined,
+      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
+      leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ILeasePayment {
+    return {
+      ...new LeasePayment(),
       paymentDate: this.editForm.get(['paymentDate'])!.value
         ? dayjs(this.editForm.get(['paymentDate'])!.value, DATE_TIME_FORMAT)
         : undefined,

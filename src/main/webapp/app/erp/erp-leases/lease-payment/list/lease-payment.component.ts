@@ -27,6 +27,13 @@ import { ILeasePayment } from '../lease-payment.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { LeasePaymentDeleteDialogComponent } from '../delete/lease-payment-delete-dialog.component';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  leasePaymentCopyWorkflowInitiatedFromList,
+  leasePaymentCreationInitiatedFromList,
+  leasePaymentEditWorkflowInitiatedFromList
+} from '../../../store/actions/lease-payment.actions';
 
 @Component({
   selector: 'jhi-lease-payment',
@@ -47,7 +54,8 @@ export class LeasePaymentComponent implements OnInit {
     protected leasePaymentService: LeasePaymentService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +110,18 @@ export class LeasePaymentComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(leasePaymentCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: ILeasePayment): void {
+    this.store.dispatch(leasePaymentEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ILeasePayment): void {
+    this.store.dispatch(leasePaymentCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   trackId(index: number, item: ILeasePayment): number {

@@ -33,6 +33,9 @@ import { IFRS16LeaseModelFormState } from './reducers/ifrs16-lease-model-workflo
 import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflow-status.reducer';
 import { LeasePeriodSelectionFormState } from './reducers/lease-period-selection-workflow-status.reducer';
 import { LeasePeriodReportPathSelectionState } from './reducers/lease-period-report-path-selection.reducer';
+import { LeaseAmortizationCalculationFormState } from './reducers/lease-amortization-calculation.reducer';
+import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';
+import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -47,6 +50,9 @@ export interface State {
   paymentInvoiceFormState: PaymentInvoiceFormState,
   reportNavigationProfileState: ReportNavigationProfileState
   ifrs16LeaseModelFormState: IFRS16LeaseModelFormState,
+  leaseAmortizationCalculationFormState: LeaseAmortizationCalculationFormState,
+  leaseLiabilityFormState: LeaseLiabilityFormState,
+  leasePaymentFormState: LeasePaymentFormState,
   rouModelMetadataFormState: RouModelMetadataFormState,
   leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
   leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
@@ -100,6 +106,30 @@ export const initialState: State = {
     weAreCreating: false,
   },
   ifrs16LeaseModelFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leaseAmortizationCalculationFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leaseLiabilityFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leasePaymentFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,
