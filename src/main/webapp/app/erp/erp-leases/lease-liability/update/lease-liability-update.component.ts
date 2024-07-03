@@ -42,7 +42,7 @@ import {
 
 @Component({
   selector: 'jhi-lease-liability-update',
-  templateUrl: './lease-liability-update.component.html',
+  templateUrl: './lease-liability-update.component.html'
 })
 export class LeaseLiabilityUpdateComponent implements OnInit {
   isSaving = false;
@@ -58,16 +58,16 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     startDate: [null, [Validators.required]],
     endDate: [null, [Validators.required]],
     leaseAmortizationCalculation: [],
-    leaseContract: [null, Validators.required],
+    leaseContract: [null, Validators.required]
   });
 
   // Setting up default form states
   weAreCopying = false;
   weAreEditing = false;
   weAreCreating = false;
-  selectedItem = {...new LeaseLiability()}
-  selectedLeaseContract = {...new IFRS16LeaseContract()}
-  selectedLeaseCalculation = {...new LeaseAmortizationCalculation()}
+  selectedItem = { ...new LeaseLiability() };
+  selectedLeaseContract = { ...new IFRS16LeaseContract() };
+  selectedLeaseCalculation = { ...new LeaseAmortizationCalculation() };
 
   constructor(
     protected leaseLiabilityService: LeaseLiabilityService,
@@ -76,23 +76,35 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>,
+    protected store: Store<State>
   ) {
     this.store.pipe(select(copyingLeaseLiabilityStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingLeaseLiabilityStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingLeaseLiabilityStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(leaseLiabilitySelectedInstance)).subscribe(copied => {
+
       this.selectedItem = copied;
-      this.iFRS16LeaseContractService.find(<number>this.selectedItem.leaseContract?.id).subscribe(leaseContractResponse => {
-        if (leaseContractResponse.body) {
-          this.selectedLeaseContract = leaseContractResponse.body
-        }
-      });
-      this.leaseAmortizationCalculationService.find(<number>this.selectedItem.leaseAmortizationCalculation?.id).subscribe(calculationResponse => {
-        if (calculationResponse.body) {
-          this.selectedLeaseCalculation = calculationResponse.body
-        }
-      });
+
+      if (copied.leaseContract?.id) {
+        this.iFRS16LeaseContractService.find(copied.leaseContract.id).subscribe(leaseContractResponse => {
+          if (leaseContractResponse.body) {
+            this.selectedLeaseContract = leaseContractResponse.body;
+          }
+        });
+      }
+
+      if (copied.leaseAmortizationCalculation?.id) {
+        this.leaseAmortizationCalculationService.find(copied.leaseAmortizationCalculation.id).subscribe(calc => {
+          if (calc.body?.id != null) {
+            this.leaseAmortizationCalculationService.find(calc.body.id).subscribe(calculationResponse => {
+              if (calculationResponse.body) {
+                this.selectedLeaseCalculation = calculationResponse.body;
+              }
+            });
+          }
+        });
+
+      }
     });
   }
 
@@ -127,7 +139,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
 
           this.editForm.patchValue({
             leaseId: ifrs16.bookingId,
-            startDate: ifrs16.commencementDate,
+            startDate: ifrs16.commencementDate
           });
 
           if (ifrs16.lastReportingPeriod) {
@@ -176,7 +188,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
     });
   }
 
-  updateLeaseContractMetadata(value: IIFRS16LeaseContract):void {
+  updateLeaseContractMetadata(value: IIFRS16LeaseContract): void {
     this.editForm.patchValue({
       leaseContract: value
     });
@@ -237,49 +249,9 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: leaseLiability.startDate,
       endDate: leaseLiability.endDate,
       leaseAmortizationCalculation: leaseLiability.leaseAmortizationCalculation,
-      leaseContract: leaseLiability.leaseContract,
+      leaseContract: leaseLiability.leaseContract
     });
 
-    this.leaseAmortizationCalculationsCollection =
-      this.leaseAmortizationCalculationService.addLeaseAmortizationCalculationToCollectionIfMissing(
-        this.leaseAmortizationCalculationsCollection,
-        leaseLiability.leaseAmortizationCalculation
-      );
-    this.leaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
-      this.leaseContractsCollection,
-      leaseLiability.leaseContract
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.leaseAmortizationCalculationService
-      .query({ 'leaseLiabilityId.specified': 'false' })
-      .pipe(map((res: HttpResponse<ILeaseAmortizationCalculation[]>) => res.body ?? []))
-      .pipe(
-        map((leaseAmortizationCalculations: ILeaseAmortizationCalculation[]) =>
-          this.leaseAmortizationCalculationService.addLeaseAmortizationCalculationToCollectionIfMissing(
-            leaseAmortizationCalculations,
-            this.editForm.get('leaseAmortizationCalculation')!.value
-          )
-        )
-      )
-      .subscribe(
-        (leaseAmortizationCalculations: ILeaseAmortizationCalculation[]) =>
-          (this.leaseAmortizationCalculationsCollection = leaseAmortizationCalculations)
-      );
-
-    this.iFRS16LeaseContractService
-      .query({ 'leaseLiabilityId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
-      .pipe(
-        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
-          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
-            iFRS16LeaseContracts,
-            this.editForm.get('leaseContract')!.value
-          )
-        )
-      )
-      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.leaseContractsCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeaseLiability {
@@ -292,7 +264,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
-      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 
@@ -305,7 +277,7 @@ export class LeaseLiabilityUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       leaseAmortizationCalculation: this.editForm.get(['leaseAmortizationCalculation'])!.value,
-      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 }

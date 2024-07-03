@@ -32,16 +32,22 @@
 
         <div class="form-group">
           <label class="form-control-label" for="field_paymentDate">Payment Date</label>
-          <div class="d-flex">
+          <div class="input-group">
             <input
               id="field_paymentDate"
               data-cy="paymentDate"
-              type="datetime-local"
+              type="text"
               class="form-control"
               name="paymentDate"
+              ngbDatepicker
+              #paymentDateDp="ngbDatepicker"
               formControlName="paymentDate"
-              placeholder="YYYY-MM-DD HH:mm"
             />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="paymentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
           </div>
         </div>
 

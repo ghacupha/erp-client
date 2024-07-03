@@ -30,6 +30,7 @@ import { ILeaseLiabilityCompilation, LeaseLiabilityCompilation } from '../lease-
 import { LeaseLiabilityCompilationService } from '../service/lease-liability-compilation.service';
 import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-lease-liability-compilation-update',
@@ -57,8 +58,9 @@ export class LeaseLiabilityCompilationUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leaseLiabilityCompilation }) => {
       if (leaseLiabilityCompilation.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         leaseLiabilityCompilation.timeOfRequest = today;
+        leaseLiabilityCompilation.requestId = uuidv7();
       }
 
       this.updateForm(leaseLiabilityCompilation);

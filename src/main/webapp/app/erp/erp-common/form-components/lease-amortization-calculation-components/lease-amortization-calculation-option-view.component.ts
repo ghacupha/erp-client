@@ -19,29 +19,56 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ILeaseAmortizationCalculation } from '../../../erp-leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import { LeaseLiabilityService } from '../../../erp-leases/lease-liability/service/lease-liability.service';
+import { LeaseAmortizationCalculationService } from '../../../erp-leases/lease-amortization-calculation/service/lease-amortization-calculation.service';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-option-view',
   template: `
-    # {{item.id}} # {{ leaseId }} | No. Of Periods: {{ item.numberOfPeriods }} Periodicity: {{ item.periodicity }} Amount: {{ item.leaseAmount | currency }}
+    # {{item.id}} # {{ leaseId }} | No. Of Periods: {{ numberOfPeriods }} Periodicity: {{ periodicity }} Amount: {{ leaseAmount | currency }}
   `
 })
-export class LeaseAmortizationCalculationOptionViewComponent implements OnInit{
+export class LeaseAmortizationCalculationOptionViewComponent implements OnInit {
 
-  leaseId = "";
+  leaseId = '';
 
   @Input() item: ILeaseAmortizationCalculation = {};
 
-  constructor(protected leaseLiabilityService: LeaseLiabilityService) {
+  numberOfPeriods!: number;
+
+  periodicity!: string;
+
+  leaseAmount!: number;
+
+  constructor(protected leaseLiabilityService: LeaseLiabilityService, protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService) {
   }
 
   ngOnInit(): void {
 
-    this.leaseLiabilityService.find(<number>this.item.leaseLiability?.id).subscribe(lease => {
-      if (lease.body) {
-        this.leaseId = <string>lease.body.leaseId;
-      }
-    });
+    if (this.item.leaseLiability?.id) {
+      this.leaseLiabilityService.find(this.item.leaseLiability.id).subscribe(lease => {
+        if (lease.body?.leaseId) {
+          this.leaseId = lease.body.leaseId;
+        }
+      });
+    }
+
+    if (this.item.id != null) {
+      this.leaseAmortizationCalculationService.find(this.item.id).subscribe(calc => {
+
+        if (calc.body?.numberOfPeriods) {
+          this.numberOfPeriods = calc.body.numberOfPeriods;
+        }
+
+        if (calc.body?.periodicity) {
+          this.periodicity = calc.body.periodicity;
+        }
+
+        if (calc.body?.leaseAmount) {
+          this.leaseAmount = calc.body.leaseAmount;
+        }
+
+      });
+    }
   }
 
 }

@@ -23,6 +23,7 @@ import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 
 import { isPresent } from 'app/core/util/operators';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
@@ -107,7 +108,7 @@ export class LeasePaymentService {
 
   protected convertDateFromClient(leasePayment: ILeasePayment): ILeasePayment {
     return Object.assign({}, leasePayment, {
-      paymentDate: leasePayment.paymentDate?.isValid() ? leasePayment.paymentDate.toJSON() : undefined,
+      paymentDate: leasePayment.paymentDate?.isValid() ? leasePayment.paymentDate.format(DATE_FORMAT) : undefined,
     });
   }
 

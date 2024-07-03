@@ -37,11 +37,10 @@ import {
   editingLeaseAmortizationCalculationStatus, leaseAmortizationCalculationSelectedInstance
 } from '../../../store/selectors/lease-amortization-calculation-workflows-status.selector';
 import { State } from '../../../store/global-store.definition';
-import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-update',
-  templateUrl: './lease-amortization-calculation-update.component.html',
+  templateUrl: './lease-amortization-calculation-update.component.html'
 })
 export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
   isSaving = false;
@@ -54,33 +53,35 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
     periodicity: [],
     leaseAmount: [],
     numberOfPeriods: [],
-    leaseContract: [null, Validators.required],
+    leaseContract: [null, Validators.required]
   });
 
   // Setting up default form states
   weAreCopying = false;
   weAreEditing = false;
   weAreCreating = false;
-  selectedItem = {...new LeaseAmortizationCalculation()}
-  selectedLeaseContract = {...new IFRS16LeaseContract()}
+  selectedItem = { ...new LeaseAmortizationCalculation() };
+  selectedLeaseContract = { ...new IFRS16LeaseContract() };
 
   constructor(
     protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService,
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>,
+    protected store: Store<State>
   ) {
     this.store.pipe(select(copyingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingLeaseAmortizationCalculationStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(leaseAmortizationCalculationSelectedInstance)).subscribe(copied => {
       this.selectedItem = copied;
-      this.iFRS16LeaseContractService.find(<number>this.selectedItem.leaseContract?.id).subscribe(leaseContractResponse => {
-        if (leaseContractResponse.body) {
-          this.selectedLeaseContract = leaseContractResponse.body
-        }
-      });
+      if (this.selectedItem.leaseContract?.id) {
+        this.iFRS16LeaseContractService.find(this.selectedItem.leaseContract.id).subscribe(leaseContractResponse => {
+          if (leaseContractResponse.body) {
+            this.selectedLeaseContract = leaseContractResponse.body;
+          }
+        });
+      }
     });
   }
 
@@ -108,7 +109,7 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
           const ifrs16 = ifrs16Response.body;
 
           this.editForm.patchValue({
-             // TODO
+            // TODO
           });
         }
       });
@@ -170,31 +171,31 @@ export class LeaseAmortizationCalculationUpdateComponent implements OnInit {
       periodicity: leaseAmortizationCalculation.periodicity,
       leaseAmount: leaseAmortizationCalculation.leaseAmount,
       numberOfPeriods: leaseAmortizationCalculation.numberOfPeriods,
-      leaseContract: leaseAmortizationCalculation.leaseContract,
+      leaseContract: leaseAmortizationCalculation.leaseContract
     });
 
   }
 
   protected createFromForm(): ILeaseAmortizationCalculation {
     return {
-    ...new LeaseAmortizationCalculation(),
-        id: this.editForm.get(['id'])!.value,
-        interestRate: this.editForm.get(['interestRate'])!.value,
-        periodicity: this.editForm.get(['periodicity'])!.value,
-        leaseAmount: this.editForm.get(['leaseAmount'])!.value,
-        numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
-        leaseContract: this.editForm.get(['leaseContract'])!.value,
+      ...new LeaseAmortizationCalculation(),
+      id: this.editForm.get(['id'])!.value,
+      interestRate: this.editForm.get(['interestRate'])!.value,
+      periodicity: this.editForm.get(['periodicity'])!.value,
+      leaseAmount: this.editForm.get(['leaseAmount'])!.value,
+      numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 
   protected copyFromForm(): ILeaseAmortizationCalculation {
     return {
-    ...new LeaseAmortizationCalculation(),
-        interestRate: this.editForm.get(['interestRate'])!.value,
-        periodicity: this.editForm.get(['periodicity'])!.value,
-        leaseAmount: this.editForm.get(['leaseAmount'])!.value,
-        numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
-        leaseContract: this.editForm.get(['leaseContract'])!.value,
+      ...new LeaseAmortizationCalculation(),
+      interestRate: this.editForm.get(['interestRate'])!.value,
+      periodicity: this.editForm.get(['periodicity'])!.value,
+      leaseAmount: this.editForm.get(['leaseAmount'])!.value,
+      numberOfPeriods: this.editForm.get(['numberOfPeriods'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 }

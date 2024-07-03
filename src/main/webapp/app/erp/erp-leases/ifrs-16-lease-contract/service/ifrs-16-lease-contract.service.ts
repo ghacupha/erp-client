@@ -65,9 +65,9 @@ export class IFRS16LeaseContractService {
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http
-      .get<IIFRS16LeaseContract>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+      return this.http
+        .get<IIFRS16LeaseContract>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+        .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

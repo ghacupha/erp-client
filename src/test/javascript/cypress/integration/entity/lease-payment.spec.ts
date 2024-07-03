@@ -225,7 +225,7 @@ describe('LeasePayment e2e test', () => {
     });
 
     it.skip('should create an instance of LeasePayment', () => {
-      cy.get(`[data-cy="paymentDate"]`).type('2024-06-17T14:40').should('have.value', '2024-06-17T14:40');
+      cy.get(`[data-cy="paymentDate"]`).type('2024-06-17').should('have.value', '2024-06-17');
 
       cy.get(`[data-cy="paymentAmount"]`).type('99826').should('have.value', '99826');
 

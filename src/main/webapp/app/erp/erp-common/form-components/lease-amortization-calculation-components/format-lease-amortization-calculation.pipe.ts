@@ -21,7 +21,7 @@ import { ILeaseAmortizationCalculation } from '../../../erp-leases/lease-amortiz
 import { LeaseLiabilityService } from '../../../erp-leases/lease-liability/service/lease-liability.service';
 
 @Pipe({
-  name: 'formatLeaseAmortizationCalculation',
+  name: 'formatLeaseAmortizationCalculation'
 })
 export class FormatLeaseAmortizationCalculationPipe implements PipeTransform {
 
@@ -31,14 +31,16 @@ export class FormatLeaseAmortizationCalculationPipe implements PipeTransform {
 
   transform(value: ILeaseAmortizationCalculation): string {
 
-    let leaseId = "";
+    let leaseId = '';
 
-    this.leaseLiabilityService.find(<number>value.leaseLiability?.id).subscribe(leaseLiab => {
-      if (leaseLiab.body) {
-        leaseId = <string>leaseLiab.body.leaseId;
-      }
-    });
+    if (value.leaseLiability?.id) {
+      this.leaseLiabilityService.find(value.leaseLiability.id).subscribe(leaseLiab => {
+        if (leaseLiab.body?.leaseId) {
+          leaseId = leaseLiab.body.leaseId;
+        }
+      });
+    }
 
-    return `Id: ${value.id} | Lease: ${ leaseId } | Amount: ${ value.leaseAmount } | No. of Periods: ${ value.numberOfPeriods } | Periodicity: ${ value.periodicity }`;
+    return `Id: ${value.id} | Lease: ${leaseId} | Amount: ${value.leaseAmount} | No. of Periods: ${value.numberOfPeriods} | Periodicity: ${value.periodicity}`;
   }
 }

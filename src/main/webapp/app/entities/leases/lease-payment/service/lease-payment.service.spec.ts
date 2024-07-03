@@ -20,7 +20,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT } from 'app/config/input.constants';
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 
 import { LeasePaymentService } from './lease-payment.service';
@@ -52,7 +52,7 @@ describe('LeasePayment Service', () => {
     it('should find an element', () => {
       const returnedFromService = Object.assign(
         {
-          paymentDate: currentDate.format(DATE_TIME_FORMAT),
+          paymentDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -68,7 +68,7 @@ describe('LeasePayment Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 0,
-          paymentDate: currentDate.format(DATE_TIME_FORMAT),
+          paymentDate: currentDate.format(DATE_FORMAT),
         },
         elemDefault
       );
@@ -91,7 +91,7 @@ describe('LeasePayment Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          paymentDate: currentDate.format(DATE_TIME_FORMAT),
+          paymentDate: currentDate.format(DATE_FORMAT),
           paymentAmount: 1,
         },
         elemDefault
@@ -114,7 +114,7 @@ describe('LeasePayment Service', () => {
     it('should partial update a LeasePayment', () => {
       const patchObject = Object.assign(
         {
-          paymentDate: currentDate.format(DATE_TIME_FORMAT),
+          paymentDate: currentDate.format(DATE_FORMAT),
           paymentAmount: 1,
         },
         new LeasePayment()
@@ -140,7 +140,7 @@ describe('LeasePayment Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          paymentDate: currentDate.format(DATE_TIME_FORMAT),
+          paymentDate: currentDate.format(DATE_FORMAT),
           paymentAmount: 1,
         },
         elemDefault

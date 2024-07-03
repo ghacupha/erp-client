@@ -82,7 +82,7 @@
           <td>
             <a [routerLink]="['/lease-payment', leasePayment.id, 'view']">{{ leasePayment.id }}</a>
           </td>
-          <td>{{ leasePayment.paymentDate | formatMediumDatetime }}</td>
+          <td>{{ leasePayment.paymentDate | formatMediumDate }}</td>
           <td>{{ leasePayment.paymentAmount | currency}}</td>
           <td>
             <div *ngIf="leasePayment.leaseLiability">

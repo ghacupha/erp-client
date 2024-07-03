@@ -24,13 +24,15 @@ import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
 import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
-import { IFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import {
+  getIFRS16LeaseContractIdentifier,
+  IFRS16LeaseContract, IIFRS16LeaseContract
+} from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
@@ -43,7 +45,7 @@ import {
 
 @Component({
   selector: 'jhi-lease-payment-update',
-  templateUrl: './lease-payment-update.component.html',
+  templateUrl: './lease-payment-update.component.html'
 })
 export class LeasePaymentUpdateComponent implements OnInit {
   isSaving = false;
@@ -54,15 +56,15 @@ export class LeasePaymentUpdateComponent implements OnInit {
     id: [],
     paymentDate: [],
     paymentAmount: [],
-    leaseLiability: [null, Validators.required],
+    leaseLiability: [null, Validators.required]
   });
 
   // Setting up default form states
   weAreCopying = false;
   weAreEditing = false;
   weAreCreating = false;
-  selectedItem = {...new LeasePayment()}
-  selectedLeaseContract = {...new IFRS16LeaseContract()}
+  selectedItem = { ...new LeasePayment() };
+  selectedLeaseContract = { ...new IFRS16LeaseContract() };
 
   constructor(
     protected leasePaymentService: LeasePaymentService,
@@ -70,18 +72,28 @@ export class LeasePaymentUpdateComponent implements OnInit {
     protected ifrs16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>,
+    protected store: Store<State>
   ) {
     this.store.pipe(select(copyingLeasePaymentStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingLeasePaymentStatus)).subscribe(stat => this.weAreEditing = stat);
     this.store.pipe(select(creatingLeasePaymentStatus)).subscribe(stat => this.weAreCreating = stat);
     this.store.pipe(select(leasePaymentSelectedInstance)).subscribe(copied => {
       this.selectedItem = copied;
-      this.ifrs16LeaseContractService.find(<number>this.selectedItem.leaseLiability?.leaseContract?.id).subscribe(leaseContractResponse => {
-        if (leaseContractResponse.body) {
-          this.selectedLeaseContract = leaseContractResponse.body
+
+      if (this.selectedItem.leaseLiability) {
+        const liability: ILeaseLiability = this.selectedItem.leaseLiability;
+        if (liability.leaseContract !== undefined) {
+          const ifrs16Lease: IIFRS16LeaseContract = liability.leaseContract;
+          if (ifrs16Lease.id !== undefined) {
+            this.ifrs16LeaseContractService.find(ifrs16Lease.id).subscribe(leaseContractResponse => {
+              if (leaseContractResponse.body) {
+                this.selectedLeaseContract = leaseContractResponse.body;
+              }
+            });
+          }
         }
-      });
+      }
+
     });
   }
 
@@ -99,14 +111,14 @@ export class LeasePaymentUpdateComponent implements OnInit {
     if (this.weAreCreating) {
       this.editForm.patchValue({
         paymentDate: dayjs()
-      })
+      });
     }
   }
 
   updateLeaseLiability(value: ILeaseLiability): void {
     this.editForm.patchValue({
       leaseLiability: value
-    })
+    });
   }
 
   previousState(): void {
@@ -154,9 +166,9 @@ export class LeasePaymentUpdateComponent implements OnInit {
   protected updateForm(leasePayment: ILeasePayment): void {
     this.editForm.patchValue({
       id: leasePayment.id,
-      paymentDate: leasePayment.paymentDate ? leasePayment.paymentDate.format(DATE_TIME_FORMAT) : null,
+      paymentDate: leasePayment.paymentDate,
       paymentAmount: leasePayment.paymentAmount,
-      leaseLiability: leasePayment.leaseLiability,
+      leaseLiability: leasePayment.leaseLiability
     });
 
     this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
@@ -169,22 +181,18 @@ export class LeasePaymentUpdateComponent implements OnInit {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value
-        ? dayjs(this.editForm.get(['paymentDate'])!.value, DATE_TIME_FORMAT)
-        : undefined,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      leaseLiability: this.editForm.get(['leaseLiability'])!.value
     };
   }
 
   protected copyFromForm(): ILeasePayment {
     return {
       ...new LeasePayment(),
-      paymentDate: this.editForm.get(['paymentDate'])!.value
-        ? dayjs(this.editForm.get(['paymentDate'])!.value, DATE_TIME_FORMAT)
-        : undefined,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      leaseLiability: this.editForm.get(['leaseLiability'])!.value
     };
   }
 }

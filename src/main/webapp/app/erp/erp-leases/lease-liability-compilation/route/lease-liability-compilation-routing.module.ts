@@ -30,7 +30,7 @@ const leaseLiabilityCompilationRoute: Routes = [
     path: '',
     component: LeaseLiabilityCompilationComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },

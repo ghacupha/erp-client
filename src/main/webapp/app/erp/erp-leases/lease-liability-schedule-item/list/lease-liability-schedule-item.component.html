@@ -96,17 +96,17 @@
             }}</a>
           </td>
           <td>{{ leaseLiabilityScheduleItem.sequenceNumber }}</td>
-          <td>{{ leaseLiabilityScheduleItem.openingBalance }}</td>
-          <td>{{ leaseLiabilityScheduleItem.cashPayment }}</td>
-          <td>{{ leaseLiabilityScheduleItem.principalPayment }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestPayment }}</td>
-          <td>{{ leaseLiabilityScheduleItem.outstandingBalance }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestPayableOpening }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestAccrued }}</td>
-          <td>{{ leaseLiabilityScheduleItem.interestPayableClosing }}</td>
+          <td>{{ leaseLiabilityScheduleItem.openingBalance | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.cashPayment | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.principalPayment | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestPayment | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.outstandingBalance | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestPayableOpening | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestAccrued | currency }}</td>
+          <td>{{ leaseLiabilityScheduleItem.interestPayableClosing | currency }}</td>
           <td>
             <div *ngIf="leaseLiabilityScheduleItem.leaseContract">
-              <a [routerLink]="['/lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
+              <a [routerLink]="['/ifrs-16-lease-contract', leaseLiabilityScheduleItem.leaseContract?.id, 'view']">{{
                 leaseLiabilityScheduleItem.leaseContract?.bookingId
               }}</a>
             </div>

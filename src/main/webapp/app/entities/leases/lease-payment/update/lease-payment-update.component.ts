@@ -23,9 +23,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
@@ -56,11 +53,6 @@ export class LeasePaymentUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ leasePayment }) => {
-      if (leasePayment.id === undefined) {
-        const today = dayjs().startOf('day');
-        leasePayment.paymentDate = today;
-      }
-
       this.updateForm(leasePayment);
 
       this.loadRelationshipsOptions();
@@ -107,7 +99,7 @@ export class LeasePaymentUpdateComponent implements OnInit {
   protected updateForm(leasePayment: ILeasePayment): void {
     this.editForm.patchValue({
       id: leasePayment.id,
-      paymentDate: leasePayment.paymentDate ? leasePayment.paymentDate.format(DATE_TIME_FORMAT) : null,
+      paymentDate: leasePayment.paymentDate,
       paymentAmount: leasePayment.paymentAmount,
       leaseLiability: leasePayment.leaseLiability,
     });
@@ -134,9 +126,7 @@ export class LeasePaymentUpdateComponent implements OnInit {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value
-        ? dayjs(this.editForm.get(['paymentDate'])!.value, DATE_TIME_FORMAT)
-        : undefined,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
     };

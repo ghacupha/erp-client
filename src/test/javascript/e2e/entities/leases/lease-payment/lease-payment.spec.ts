@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec /* , protractor, promise */ } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
@@ -68,7 +68,7 @@ describe('LeasePayment e2e test', () => {
         await leasePaymentComponentsPage.clickOnCreateButton();
 
         await promise.all([
-            leasePaymentUpdatePage.setPaymentDateInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            leasePaymentUpdatePage.setPaymentDateInput('2000-12-31'),
             leasePaymentUpdatePage.setPaymentAmountInput('5'),
             leasePaymentUpdatePage.leaseLiabilitySelectLastOption(),
         ]);
