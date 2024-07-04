@@ -57,6 +57,16 @@
           <option [ngValue]="editForm.get(['leaseLiability'])!.value"></option>
         </jhi-m21-lease-liability-form-control>
 
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel='leaseContract'
+        >
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
       </div>
 
       <div>

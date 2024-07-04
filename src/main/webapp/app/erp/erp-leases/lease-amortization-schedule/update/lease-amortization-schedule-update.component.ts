@@ -21,13 +21,13 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { ILeaseAmortizationSchedule, LeaseAmortizationSchedule } from '../lease-amortization-schedule.model';
 import { LeaseAmortizationScheduleService } from '../service/lease-amortization-schedule.service';
 import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
-import * as dayjs from 'dayjs';
 import { uuidv7 } from 'uuidv7';
 
 @Component({
@@ -43,6 +43,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
     id: [],
     identifier: [null, [Validators.required]],
     leaseLiability: [null, Validators.required],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
@@ -61,13 +62,18 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
 
       this.updateForm(leaseAmortizationSchedule);
 
-      this.loadRelationshipsOptions();
     });
   }
 
   updateLeaseLiability(value: ILeaseLiability): void {
     this.editForm.patchValue({
       leaseLiability: value
+    });
+  }
+
+  updateLeaseContract(value: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leaseContract: value
     });
   }
 
@@ -113,24 +119,9 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
       id: leaseAmortizationSchedule.id,
       identifier: leaseAmortizationSchedule.identifier,
       leaseLiability: leaseAmortizationSchedule.leaseLiability,
+      leaseContract: leaseAmortizationSchedule.leaseContract,
     });
 
-    this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
-      this.leaseLiabilitiesSharedCollection,
-      leaseAmortizationSchedule.leaseLiability
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.leaseLiabilityService
-      .query()
-      .pipe(map((res: HttpResponse<ILeaseLiability[]>) => res.body ?? []))
-      .pipe(
-        map((leaseLiabilities: ILeaseLiability[]) =>
-          this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(leaseLiabilities, this.editForm.get('leaseLiability')!.value)
-        )
-      )
-      .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
   }
 
   protected createFromForm(): ILeaseAmortizationSchedule {
@@ -139,6 +130,7 @@ export class LeaseAmortizationScheduleUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

@@ -24,7 +24,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ILeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT } from 'app/config/pagination.constants';
 import { LeaseLiabilityScheduleItemService } from '../service/lease-liability-schedule-item.service';
 import { LeaseLiabilityScheduleItemDeleteDialogComponent } from '../delete/lease-liability-schedule-item-delete-dialog.component';
 

@@ -25,14 +25,14 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ILeaseLiabilityScheduleItem, LeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 import { LeaseLiabilityScheduleItemService } from '../service/lease-liability-schedule-item.service';
-import { ILeaseContract } from '../../lease-contract/lease-contract.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
-import { ILeaseModelMetadata } from '../../lease-model-metadata/lease-model-metadata.model';
+import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
+import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
 import { UniversallyUniqueMappingService } from '../../../erp-pages/universally-unique-mapping/service/universally-unique-mapping.service';
 import { LeaseAmortizationScheduleService } from '../../lease-amortization-schedule/service/lease-amortization-schedule.service';
-import { LeaseContractService } from '../../lease-contract/service/lease-contract.service';
 import { ILeasePeriod } from '../../lease-period/lease-period.model';
-import { LeaseModelMetadataService } from '../../lease-model-metadata/service/lease-model-metadata.service';
+import { IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IUniversallyUniqueMapping } from '../../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 import { LeasePeriodService } from '../../lease-period/service/lease-period.service';
@@ -46,11 +46,11 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   isSaving = false;
 
   placeholdersSharedCollection: IPlaceholder[] = [];
-  leaseContractsSharedCollection: ILeaseContract[] = [];
-  leaseModelMetadataSharedCollection: ILeaseModelMetadata[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
   leasePeriodsSharedCollection: ILeasePeriod[] = [];
   leaseAmortizationSchedulesSharedCollection: ILeaseAmortizationSchedule[] = [];
+  iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
+  leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -64,21 +64,21 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     interestAccrued: [],
     interestPayableClosing: [],
     placeholders: [],
-    leaseContract: [null, Validators.required],
-    leaseModelMetadata: [],
     universallyUniqueMappings: [],
     leasePeriod: [],
     leaseAmortizationSchedule: [],
+    leaseContract: [null, Validators.required],
+    leaseLiability: [null, Validators.required],
   });
 
   constructor(
     protected leaseLiabilityScheduleItemService: LeaseLiabilityScheduleItemService,
     protected placeholderService: PlaceholderService,
-    protected leaseContractService: LeaseContractService,
-    protected leaseModelMetadataService: LeaseModelMetadataService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
     protected leasePeriodService: LeasePeriodService,
     protected leaseAmortizationScheduleService: LeaseAmortizationScheduleService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
+    protected leaseLiabilityService: LeaseLiabilityService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -103,18 +103,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     });
   }
 
-  updateLeaseContract(update: ILeaseContract): void {
-    this.editForm.patchValue({
-      leaseContract: update
-    });
-  }
-
-  updateLeaseModelMetadata(update: ILeaseModelMetadata): void {
-    this.editForm.patchValue({
-      leaseModelMetadata: update
-    });
-  }
-
   previousState(): void {
     window.history.back();
   }
@@ -133,14 +121,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackLeaseContractById(index: number, item: ILeaseContract): number {
-    return item.id!;
-  }
-
-  trackLeaseModelMetadataById(index: number, item: ILeaseModelMetadata): number {
-    return item.id!;
-  }
-
   trackUniversallyUniqueMappingById(index: number, item: IUniversallyUniqueMapping): number {
     return item.id!;
   }
@@ -150,6 +130,14 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   }
 
   trackLeaseAmortizationScheduleById(index: number, item: ILeaseAmortizationSchedule): number {
+    return item.id!;
+  }
+
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
+    return item.id!;
+  }
+
+  trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
     return item.id!;
   }
 
@@ -210,24 +198,16 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       interestAccrued: leaseLiabilityScheduleItem.interestAccrued,
       interestPayableClosing: leaseLiabilityScheduleItem.interestPayableClosing,
       placeholders: leaseLiabilityScheduleItem.placeholders,
-      leaseContract: leaseLiabilityScheduleItem.leaseContract,
-      leaseModelMetadata: leaseLiabilityScheduleItem.leaseModelMetadata,
       universallyUniqueMappings: leaseLiabilityScheduleItem.universallyUniqueMappings,
       leasePeriod: leaseLiabilityScheduleItem.leasePeriod,
       leaseAmortizationSchedule: leaseLiabilityScheduleItem.leaseAmortizationSchedule,
+      leaseContract: leaseLiabilityScheduleItem.leaseContract,
+      leaseLiability: leaseLiabilityScheduleItem.leaseLiability,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(leaseLiabilityScheduleItem.placeholders ?? [])
-    );
-    this.leaseContractsSharedCollection = this.leaseContractService.addLeaseContractToCollectionIfMissing(
-      this.leaseContractsSharedCollection,
-      leaseLiabilityScheduleItem.leaseContract
-    );
-    this.leaseModelMetadataSharedCollection = this.leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing(
-      this.leaseModelMetadataSharedCollection,
-      leaseLiabilityScheduleItem.leaseModelMetadata
     );
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
@@ -242,6 +222,14 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         this.leaseAmortizationSchedulesSharedCollection,
         leaseLiabilityScheduleItem.leaseAmortizationSchedule
       );
+    this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.iFRS16LeaseContractsSharedCollection,
+      leaseLiabilityScheduleItem.leaseContract
+    );
+    this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
+      this.leaseLiabilitiesSharedCollection,
+      leaseLiabilityScheduleItem.leaseLiability
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -254,29 +242,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
-
-    this.leaseContractService
-      .query()
-      .pipe(map((res: HttpResponse<ILeaseContract[]>) => res.body ?? []))
-      .pipe(
-        map((leaseContracts: ILeaseContract[]) =>
-          this.leaseContractService.addLeaseContractToCollectionIfMissing(leaseContracts, this.editForm.get('leaseContract')!.value)
-        )
-      )
-      .subscribe((leaseContracts: ILeaseContract[]) => (this.leaseContractsSharedCollection = leaseContracts));
-
-    this.leaseModelMetadataService
-      .query()
-      .pipe(map((res: HttpResponse<ILeaseModelMetadata[]>) => res.body ?? []))
-      .pipe(
-        map((leaseModelMetadata: ILeaseModelMetadata[]) =>
-          this.leaseModelMetadataService.addLeaseModelMetadataToCollectionIfMissing(
-            leaseModelMetadata,
-            this.editForm.get('leaseModelMetadata')!.value
-          )
-        )
-      )
-      .subscribe((leaseModelMetadata: ILeaseModelMetadata[]) => (this.leaseModelMetadataSharedCollection = leaseModelMetadata));
 
     this.universallyUniqueMappingService
       .query()
@@ -319,6 +284,29 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         (leaseAmortizationSchedules: ILeaseAmortizationSchedule[]) =>
           (this.leaseAmortizationSchedulesSharedCollection = leaseAmortizationSchedules)
       );
+
+    this.iFRS16LeaseContractService
+      .query()
+      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
+      .pipe(
+        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
+          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+            iFRS16LeaseContracts,
+            this.editForm.get('leaseContract')!.value
+          )
+        )
+      )
+      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.iFRS16LeaseContractsSharedCollection = iFRS16LeaseContracts));
+
+    this.leaseLiabilityService
+      .query()
+      .pipe(map((res: HttpResponse<ILeaseLiability[]>) => res.body ?? []))
+      .pipe(
+        map((leaseLiabilities: ILeaseLiability[]) =>
+          this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(leaseLiabilities, this.editForm.get('leaseLiability')!.value)
+        )
+      )
+      .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
   }
 
   protected createFromForm(): ILeaseLiabilityScheduleItem {
@@ -335,11 +323,11 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       interestAccrued: this.editForm.get(['interestAccrued'])!.value,
       interestPayableClosing: this.editForm.get(['interestPayableClosing'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
-      leaseContract: this.editForm.get(['leaseContract'])!.value,
-      leaseModelMetadata: this.editForm.get(['leaseModelMetadata'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       leasePeriod: this.editForm.get(['leasePeriod'])!.value,
       leaseAmortizationSchedule: this.editForm.get(['leaseAmortizationSchedule'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      leaseLiability: this.editForm.get(['leaseLiability'])!.value,
     };
   }
 }

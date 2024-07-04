@@ -72,6 +72,7 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="identifier"><span>Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="leaseLiability.leaseId"><span>Lease Liability</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="leaseContract.bookingId"><span>Lease Contract</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -86,6 +87,13 @@
               <a [routerLink]="['/lease-liability', leaseAmortizationSchedule.leaseLiability?.id, 'view']">{{
                 leaseAmortizationSchedule.leaseLiability?.leaseId
               }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="leaseAmortizationSchedule.leaseContract">
+              <a [routerLink]="['/ifrs-16-lease-contract', leaseAmortizationSchedule.leaseContract?.id, 'view']">{{
+                leaseAmortizationSchedule.leaseContract?.bookingId
+                }}</a>
             </div>
           </td>
           <td class="text-right">
