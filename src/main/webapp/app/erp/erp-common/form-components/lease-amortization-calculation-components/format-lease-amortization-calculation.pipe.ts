@@ -16,9 +16,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Pipe, PipeTransform } from '@angular/core';
+import { OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ILeaseAmortizationCalculation } from '../../../erp-leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import { LeaseLiabilityService } from '../../../erp-leases/lease-liability/service/lease-liability.service';
+import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { formatCurrency } from '@angular/common';
 
 @Pipe({
   name: 'formatLeaseAmortizationCalculation'
@@ -26,21 +28,22 @@ import { LeaseLiabilityService } from '../../../erp-leases/lease-liability/servi
 export class FormatLeaseAmortizationCalculationPipe implements PipeTransform {
 
 
-  constructor(protected leaseLiabilityService: LeaseLiabilityService) {
+  constructor(protected ifrs16LeaseContractService :IFRS16LeaseContractService) {
   }
 
   transform(value: ILeaseAmortizationCalculation): string {
 
-    let leaseId = '';
+    let leaseId = 'lease item';
+    let currencyAmount = '';
 
-    if (value.leaseLiability?.id) {
-      this.leaseLiabilityService.find(value.leaseLiability.id).subscribe(leaseLiab => {
-        if (leaseLiab.body?.leaseId) {
-          leaseId = leaseLiab.body.leaseId;
-        }
-      });
+    if (value.leaseContract?.bookingId) {
+      leaseId = value.leaseContract.bookingId;
     }
 
-    return `Id: ${value.id} | Lease: ${leaseId} | Amount: ${value.leaseAmount} | No. of Periods: ${value.numberOfPeriods} | Periodicity: ${value.periodicity}`;
+    if (value.leaseAmount) {
+      currencyAmount = formatCurrency(value.leaseAmount, 'en','')
+    }
+
+    return `Id: ${value.id} | ${leaseId} | Amount: ${currencyAmount} | No. of Periods: ${value.numberOfPeriods} | Periodicity: ${value.periodicity}`;
   }
 }

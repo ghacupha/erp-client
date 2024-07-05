@@ -20,6 +20,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ILeaseAmortizationCalculation } from '../../../erp-leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import { LeaseLiabilityService } from '../../../erp-leases/lease-liability/service/lease-liability.service';
 import { LeaseAmortizationCalculationService } from '../../../erp-leases/lease-amortization-calculation/service/lease-amortization-calculation.service';
+import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 @Component({
   selector: 'jhi-lease-amortization-calculation-option-view',
@@ -39,15 +40,17 @@ export class LeaseAmortizationCalculationOptionViewComponent implements OnInit {
 
   leaseAmount!: number;
 
-  constructor(protected leaseLiabilityService: LeaseLiabilityService, protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService) {
+  constructor(protected leaseLiabilityService: LeaseLiabilityService,
+              protected ifrs16LeaseContractService: IFRS16LeaseContractService,
+              protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService) {
   }
 
   ngOnInit(): void {
 
-    if (this.item.leaseLiability?.id) {
-      this.leaseLiabilityService.find(this.item.leaseLiability.id).subscribe(lease => {
-        if (lease.body?.leaseId) {
-          this.leaseId = lease.body.leaseId;
+    if (this.item.leaseContract?.id) {
+      this.ifrs16LeaseContractService.find(this.item.leaseContract.id).subscribe(lease => {
+        if (lease.body?.shortTitle) {
+          this.leaseId = lease.body.shortTitle;
         }
       });
     }

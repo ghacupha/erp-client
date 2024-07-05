@@ -22,6 +22,7 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ILeaseAmortizationCalculation } from '../../../erp-leases/lease-amortization-calculation/lease-amortization-calculation.model';
 import { LeaseAmortizationCalculationSuggestionService } from './lease-amortization-calculation-suggestion.service';
+import { LeaseAmortizationCalculationService } from '../../../erp-leases/lease-amortization-calculation/service/lease-amortization-calculation.service';
 
 /**
  * Many-to-one form control component for lease-period
@@ -53,7 +54,8 @@ export class M21LeaseAmortizationCalculationFormControlComponent implements OnIn
   valueLookUps$: Observable<ILeaseAmortizationCalculation[]> = of([]);
 
   constructor(
-    protected valueSuggestionService: LeaseAmortizationCalculationSuggestionService
+    protected valueSuggestionService: LeaseAmortizationCalculationSuggestionService,
+    protected leaseAmortizationCalculationService: LeaseAmortizationCalculationService
   ) {}
 
   onChange: any = () => {
@@ -99,8 +101,12 @@ export class M21LeaseAmortizationCalculationFormControlComponent implements OnIn
 
   writeValue(value: ILeaseAmortizationCalculation): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (value) {
-      this.inputValue = value;
+    if (value.id) {
+      this.leaseAmortizationCalculationService.find(value.id).subscribe(val => {
+        if (val.body) {
+          this.inputValue = val.body;
+        }
+      })
     }
   }
 
