@@ -17,25 +17,43 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
 
 @Pipe({
-  name: 'formatServiceOutlet',
+  name: 'formatServiceOutlet'
 })
 export class FormatServiceOutletPipe implements PipeTransform {
 
+
+  constructor(protected serviceOutletService: ServiceOutletService) {
+  }
+
   transform(value: IServiceOutlet): string {
+
+    let val: IServiceOutlet = value;
+
+    if (value.id) {
+      this.serviceOutletService.find(value.id).subscribe(res => {
+        if (res.body) {
+          val = res.body
+        }
+      });
+    }
 
     let accountDetail = '';
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
-
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      accountDetail = `Id: ${value.id} | Name: ${value.outletName} |${value.outletCode}`;
+      if (val.outletName) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        accountDetail = `Id: ${val.id} | Dept. Name: ${val.outletName} | Outlet Code: ${val.outletCode}`;
+      } else {
+        accountDetail = `Id: ${val.id} | Outlet Code: ${val.outletCode}`;
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return value ? accountDetail :'';
+    return value ? accountDetail : '';
   }
 }

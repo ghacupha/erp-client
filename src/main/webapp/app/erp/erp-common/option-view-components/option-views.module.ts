@@ -30,7 +30,6 @@ import { PaymentInvoiceSelectedOptionViewComponent } from './payment-invoice-sel
 import { JobSheetOptionViewComponent } from './job-sheet-option-view.component';
 import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.component';
 import { TransactionAccountOptionViewComponent } from './transaction-account-option-view.component';
-import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.component';
 import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
 import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
 import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
@@ -61,7 +60,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
     TransactionAccountOptionViewComponent,
-    ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
@@ -94,7 +92,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
     TransactionAccountOptionViewComponent,
-    ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,

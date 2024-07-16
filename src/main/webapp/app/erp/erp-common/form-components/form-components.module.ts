@@ -34,7 +34,6 @@ import { M21PaymentInvoiceFormControlComponent } from './payment-invoice-control
 import { M21PurchaseOrderFormControlComponent } from './purchase-order-form-control-components/m21-purchase-order-form-control.component';
 import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m-job-sheet-form-control.component';
 import { M2MDeliveryNoteFormControlComponent } from './delivery-note-form-components/m2m-delivery-note-form-control.component';
-import { M21ServiceOutletFormControlComponent } from './service-outlet-form-components/m21-service-outlet-form-control.component';
 import { M21TransactionAccountFormControlComponent } from './transaction-account-form-components/m21-transaction-account-form-control.component';
 import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mapping-components/m2m-universally-unique-mapping-form-control.component';
 import { M21SecurityClearanceFormControlComponent } from './security-clearance-form-components/m21-security-clearance-form-control.component';
@@ -55,7 +54,6 @@ import { M2mAssetAccessoryFormComponent } from './asset-accessory-components/m2m
 import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/m2m-asset-warranty-form-component';
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
 import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
-import { M2mServiceOutletFormControlComponent } from './service-outlet-form-components/m2m-service-outlet-form-control.component';
 import { M21WIPTransferFormControlComponent } from './wip-transfer/m21-wip-transfer-form-control.component';
 import { M2mWipTransferFormControlComponent } from './wip-transfer/m2m-wip-transfer-form-control.component';
 import { M21WorkProjectRegisterFormControlComponent } from './work-project-register/m21-work-project-register-form-control.component';
@@ -81,6 +79,7 @@ import { UserComponentsModule } from './user-form-components/user-components.mod
 import { LeasePeriodFormComponentsModule } from './lease-period-components/lease-period-form-components.module';
 import { LeaseLiabilityFormComponentsModule } from './lease-liability-components/lease-liability-form-components.module';
 import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amortization-calculation-components/lease-amortization-calculation-form-components.module';
+import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
 
 @NgModule({
   declarations: [
@@ -97,7 +96,6 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21ServiceOutletFormControlComponent,
     M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
@@ -118,7 +116,6 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
-    M2mServiceOutletFormControlComponent,
     M21WIPTransferFormControlComponent,
     M2mWipTransferFormControlComponent,
     M21WorkProjectRegisterFormControlComponent,
@@ -157,7 +154,6 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21ServiceOutletFormControlComponent,
     M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
@@ -178,7 +174,6 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
-    M2mServiceOutletFormControlComponent,
     M21WIPTransferFormControlComponent,
     M2mWipTransferFormControlComponent,
     M21WorkProjectRegisterFormControlComponent,
@@ -204,6 +199,7 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
     LeasePeriodFormComponentsModule,
     LeaseLiabilityFormComponentsModule,
     LeaseAmortizationCalculationFormComponentsModule,
+    ServiceOutletFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

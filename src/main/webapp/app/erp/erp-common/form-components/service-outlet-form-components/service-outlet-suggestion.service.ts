@@ -18,11 +18,11 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApplicationConfigService } from '../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
-import { createRequestOption } from '../../../core/request/request-util';
-import { ASC, DESC } from '../../../config/pagination.constants';
-import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
+import { ASC, DESC } from '../../../../config/pagination.constants';
+import { createRequestOption } from '../../../../core/request/request-util';
+import { ApplicationConfigService } from '../../../../core/config/application-config.service';
 
 @Injectable({ providedIn: 'root' })
 export class ServiceOutletSuggestionService {

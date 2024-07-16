@@ -18,7 +18,6 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormatServiceOutletPipe } from './format-service-outlet.pipe';
 import { FormatDealerIdPipe } from './format-dealer-id.pipe';
 import { FormatPaymentCategoryPipe } from './format-payment-category.pipe';
 import { TruncatePipe } from './truncate.pipe';
@@ -58,7 +57,6 @@ import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
     FormatTransactionAccountPipe,
-    FormatServiceOutletPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
@@ -89,7 +87,6 @@ import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
     FormatTransactionAccountPipe,
-    FormatServiceOutletPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
