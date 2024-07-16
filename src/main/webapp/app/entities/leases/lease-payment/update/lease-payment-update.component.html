@@ -31,6 +31,18 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            name="paymentAmount"
+            id="field_paymentAmount"
+            data-cy="paymentAmount"
+            formControlName="paymentAmount"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_paymentDate">Payment Date</label>
           <div class="input-group">
             <input
@@ -52,46 +64,33 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_paymentAmount">Payment Amount</label>
-          <input
-            type="number"
-            class="form-control"
-            name="paymentAmount"
-            id="field_paymentAmount"
-            data-cy="paymentAmount"
-            formControlName="paymentAmount"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseLiability">Lease Liability</label>
+          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
           <select
             class="form-control"
-            id="field_leaseLiability"
-            data-cy="leaseLiability"
-            name="leaseLiability"
-            formControlName="leaseLiability"
+            id="field_leaseContract"
+            data-cy="leaseContract"
+            name="leaseContract"
+            formControlName="leaseContract"
           >
-            <option *ngIf="!editForm.get('leaseLiability')!.value" [ngValue]="null" selected></option>
+            <option *ngIf="!editForm.get('leaseContract')!.value" [ngValue]="null" selected></option>
             <option
               [ngValue]="
-                leaseLiabilityOption.id === editForm.get('leaseLiability')!.value?.id
-                  ? editForm.get('leaseLiability')!.value
-                  : leaseLiabilityOption
+                iFRS16LeaseContractOption.id === editForm.get('leaseContract')!.value?.id
+                  ? editForm.get('leaseContract')!.value
+                  : iFRS16LeaseContractOption
               "
-              *ngFor="let leaseLiabilityOption of leaseLiabilitiesSharedCollection; trackBy: trackLeaseLiabilityById"
+              *ngFor="let iFRS16LeaseContractOption of iFRS16LeaseContractsSharedCollection; trackBy: trackIFRS16LeaseContractById"
             >
-              {{ leaseLiabilityOption.leaseId }}
+              {{ iFRS16LeaseContractOption.bookingId }}
             </option>
           </select>
         </div>
         <div
           *ngIf="
-            editForm.get(['leaseLiability'])!.invalid &&
-            (editForm.get(['leaseLiability'])!.dirty || editForm.get(['leaseLiability'])!.touched)
+            editForm.get(['leaseContract'])!.invalid && (editForm.get(['leaseContract'])!.dirty || editForm.get(['leaseContract'])!.touched)
           "
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['leaseLiability'])?.errors?.required"> This field is required. </small>
+          <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
         </div>
       </div>
 

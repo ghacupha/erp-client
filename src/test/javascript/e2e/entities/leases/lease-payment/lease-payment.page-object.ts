@@ -48,10 +48,10 @@ export class LeasePaymentUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  paymentDateInput = element(by.id('field_paymentDate'));
   paymentAmountInput = element(by.id('field_paymentAmount'));
+  paymentDateInput = element(by.id('field_paymentDate'));
 
-  leaseLiabilitySelect = element(by.id('field_leaseLiability'));
+  leaseContractSelect = element(by.id('field_leaseContract'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -65,14 +65,6 @@ export class LeasePaymentUpdatePage {
     return await this.idInput.getAttribute('value');
   }
 
-  async setPaymentDateInput(paymentDate: string): Promise<void> {
-    await this.paymentDateInput.sendKeys(paymentDate);
-  }
-
-  async getPaymentDateInput(): Promise<string> {
-    return await this.paymentDateInput.getAttribute('value');
-  }
-
   async setPaymentAmountInput(paymentAmount: string): Promise<void> {
     await this.paymentAmountInput.sendKeys(paymentAmount);
   }
@@ -81,20 +73,28 @@ export class LeasePaymentUpdatePage {
     return await this.paymentAmountInput.getAttribute('value');
   }
 
-  async leaseLiabilitySelectLastOption(): Promise<void> {
-    await this.leaseLiabilitySelect.all(by.tagName('option')).last().click();
+  async setPaymentDateInput(paymentDate: string): Promise<void> {
+    await this.paymentDateInput.sendKeys(paymentDate);
   }
 
-  async leaseLiabilitySelectOption(option: string): Promise<void> {
-    await this.leaseLiabilitySelect.sendKeys(option);
+  async getPaymentDateInput(): Promise<string> {
+    return await this.paymentDateInput.getAttribute('value');
   }
 
-  getLeaseLiabilitySelect(): ElementFinder {
-    return this.leaseLiabilitySelect;
+  async leaseContractSelectLastOption(): Promise<void> {
+    await this.leaseContractSelect.all(by.tagName('option')).last().click();
   }
 
-  async getLeaseLiabilitySelectedOption(): Promise<string> {
-    return await this.leaseLiabilitySelect.element(by.css('option:checked')).getText();
+  async leaseContractSelectOption(option: string): Promise<void> {
+    await this.leaseContractSelect.sendKeys(option);
+  }
+
+  getLeaseContractSelect(): ElementFinder {
+    return this.leaseContractSelect;
+  }
+
+  async getLeaseContractSelectedOption(): Promise<string> {
+    return await this.leaseContractSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

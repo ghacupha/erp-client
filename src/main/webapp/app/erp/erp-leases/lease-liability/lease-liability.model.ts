@@ -18,18 +18,16 @@
 
 import * as dayjs from 'dayjs';
 import { ILeaseAmortizationCalculation } from '../lease-amortization-calculation/lease-amortization-calculation.model';
-import { ILeasePayment } from '../lease-payment/lease-payment.model';
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 export interface ILeaseLiability {
   id?: number;
   leaseId?: string;
   liabilityAmount?: number;
-  interestRate?: number;
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs;
+  interestRate?: number;
   leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null;
-  leasePayments?: ILeasePayment[] | null;
   leaseContract?: IIFRS16LeaseContract;
 }
 
@@ -38,11 +36,10 @@ export class LeaseLiability implements ILeaseLiability {
     public id?: number,
     public leaseId?: string,
     public liabilityAmount?: number,
-    public interestRate?: number,
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs,
+    public interestRate?: number,
     public leaseAmortizationCalculation?: ILeaseAmortizationCalculation | null,
-    public leasePayments?: ILeasePayment[] | null,
     public leaseContract?: IIFRS16LeaseContract
   ) {}
 }

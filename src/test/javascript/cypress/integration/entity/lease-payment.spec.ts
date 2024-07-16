@@ -37,7 +37,7 @@ describe('LeasePayment e2e test', () => {
   const leasePaymentSample = {};
 
   let leasePayment: any;
-  //let leaseLiability: any;
+  //let iFRS16LeaseContract: any;
 
   before(() => {
     cy.window().then(win => {
@@ -53,10 +53,10 @@ describe('LeasePayment e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/lease-liabilities',
-      body: {"leaseId":"bluetooth","liabilityAmount":11477,"interestRate":57156,"startDate":"2024-06-17","endDate":"2024-06-17"},
+      url: '/api/ifrs-16-lease-contracts',
+      body: {"bookingId":"seamless","leaseTitle":"paradigms holistic","shortTitle":"architecture","description":"driver Card","inceptionDate":"2024-03-07","commencementDate":"2024-03-07","serialNumber":"940c0eac-7d62-402b-88be-4642f9bc3262"},
     }).then(({ body }) => {
-      leaseLiability = body;
+      iFRS16LeaseContract = body;
     });
   });
    */
@@ -70,9 +70,9 @@ describe('LeasePayment e2e test', () => {
   /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/lease-liabilities', {
+    cy.intercept('GET', '/api/ifrs-16-lease-contracts', {
       statusCode: 200,
-      body: [leaseLiability],
+      body: [iFRS16LeaseContract],
     });
 
   });
@@ -91,12 +91,12 @@ describe('LeasePayment e2e test', () => {
 
   /* Disabled due to incompatibility
   afterEach(() => {
-    if (leaseLiability) {
+    if (iFRS16LeaseContract) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/lease-liabilities/${leaseLiability.id}`,
+        url: `/api/ifrs-16-lease-contracts/${iFRS16LeaseContract.id}`,
       }).then(() => {
-        leaseLiability = undefined;
+        iFRS16LeaseContract = undefined;
       });
     }
   });
@@ -145,7 +145,7 @@ describe('LeasePayment e2e test', () => {
   
           body: {
             ...leasePaymentSample,
-            leaseLiability: leaseLiability,
+            leaseContract: iFRS16LeaseContract,
           },
         }).then(({ body }) => {
           leasePayment = body;
@@ -225,11 +225,11 @@ describe('LeasePayment e2e test', () => {
     });
 
     it.skip('should create an instance of LeasePayment', () => {
+      cy.get(`[data-cy="paymentAmount"]`).type('63353').should('have.value', '63353');
+
       cy.get(`[data-cy="paymentDate"]`).type('2024-06-17').should('have.value', '2024-06-17');
 
-      cy.get(`[data-cy="paymentAmount"]`).type('99826').should('have.value', '99826');
-
-      cy.get(`[data-cy="leaseLiability"]`).select(1);
+      cy.get(`[data-cy="leaseContract"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -63,7 +63,7 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-liabilities',
-      body: {"leaseId":"payment extensible","liabilityAmount":30694,"interestRate":50458,"startDate":"2024-06-17","endDate":"2024-06-17"},
+      body: {"leaseId":"payment extensible","liabilityAmount":30694,"startDate":"2024-06-17","endDate":"2024-06-17","interestRate":73782},
     }).then(({ body }) => {
       leaseLiability = body;
     });

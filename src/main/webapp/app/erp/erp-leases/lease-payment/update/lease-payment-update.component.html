@@ -58,15 +58,15 @@
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <jhi-m21-lease-liability-form-control
+        <jhi-m21-ifrs16-lease-form-control
           ngDefaultControl
-          formControlName='leaseLiability'
-          [inputValue]="editForm.get(['leaseLiability'])!.value"
-          (valueSelected)='updateLeaseLiability($event)'
-          inputControlLabel='Lease Liability'
+          formControlName='leaseContract'
+          [inputValue]="editForm.get(['leaseContract'])!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel='Lease Contract'
         >
-          <option [ngValue]="editForm.get(['leaseLiability'])!.value"></option>
-        </jhi-m21-lease-liability-form-control>
+          <option [ngValue]="editForm.get(['leaseContract'])!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_paymentDate">Payment Date</label>

@@ -70,9 +70,9 @@ describe('LeaseLiability e2e test', () => {
         await promise.all([
             leaseLiabilityUpdatePage.setLeaseIdInput('leaseId'),
             leaseLiabilityUpdatePage.setLiabilityAmountInput('5'),
-            leaseLiabilityUpdatePage.setInterestRateInput('5'),
             leaseLiabilityUpdatePage.setStartDateInput('2000-12-31'),
             leaseLiabilityUpdatePage.setEndDateInput('2000-12-31'),
+            leaseLiabilityUpdatePage.setInterestRateInput('5'),
             leaseLiabilityUpdatePage.leaseAmortizationCalculationSelectLastOption(),
             leaseLiabilityUpdatePage.leaseContractSelectLastOption(),
         ]);

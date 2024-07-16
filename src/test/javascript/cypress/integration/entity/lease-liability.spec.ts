@@ -37,9 +37,9 @@ describe('LeaseLiability e2e test', () => {
   const leaseLiabilitySample = {
     leaseId: 'brand',
     liabilityAmount: 61154,
-    interestRate: 36838,
-    startDate: '2024-06-18',
-    endDate: '2024-06-17',
+    startDate: '2024-06-17',
+    endDate: '2024-06-18',
+    interestRate: 62970,
   };
 
   let leaseLiability: any;
@@ -77,11 +77,6 @@ describe('LeaseLiability e2e test', () => {
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
     cy.intercept('GET', '/api/lease-amortization-calculations', {
-      statusCode: 200,
-      body: [],
-    });
-
-    cy.intercept('GET', '/api/lease-payments', {
       statusCode: 200,
       body: [],
     });
@@ -245,11 +240,11 @@ describe('LeaseLiability e2e test', () => {
 
       cy.get(`[data-cy="liabilityAmount"]`).type('17610').should('have.value', '17610');
 
-      cy.get(`[data-cy="interestRate"]`).type('49215').should('have.value', '49215');
-
-      cy.get(`[data-cy="startDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
+      cy.get(`[data-cy="startDate"]`).type('2024-06-17').should('have.value', '2024-06-17');
 
       cy.get(`[data-cy="endDate"]`).type('2024-06-18').should('have.value', '2024-06-18');
+
+      cy.get(`[data-cy="interestRate"]`).type('24413').should('have.value', '24413');
 
       cy.get(`[data-cy="leaseContract"]`).select(1);
 

@@ -27,8 +27,18 @@ import { ErpCommonModule } from '../../erp-common/erp-common.module';
 import { LeasePaymentRoutingCustomModule } from './route/lease-payment-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, LeasePaymentRoutingModule, LeasePaymentRoutingCustomModule, ErpCommonModule],
-  declarations: [LeasePaymentComponent, LeasePaymentDetailComponent, LeasePaymentUpdateComponent, LeasePaymentDeleteDialogComponent],
+  imports: [
+    SharedModule,
+    LeasePaymentRoutingModule,
+    LeasePaymentRoutingCustomModule,
+    ErpCommonModule
+  ],
+  declarations: [
+    LeasePaymentComponent,
+    LeasePaymentDetailComponent,
+    LeasePaymentUpdateComponent,
+    LeasePaymentDeleteDialogComponent
+  ],
   entryComponents: [LeasePaymentDeleteDialogComponent],
 })
 export class LeasePaymentModule {}

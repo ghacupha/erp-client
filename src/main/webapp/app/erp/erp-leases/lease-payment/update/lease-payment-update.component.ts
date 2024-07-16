@@ -27,12 +27,7 @@ import * as dayjs from 'dayjs';
 
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
-import { LeaseLiabilityService } from '../../lease-liability/service/lease-liability.service';
-import { ILeaseLiability } from '../../lease-liability/lease-liability.model';
-import {
-  getIFRS16LeaseContractIdentifier,
-  IFRS16LeaseContract, IIFRS16LeaseContract
-} from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContract, IIFRS16LeaseContract } from '../../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from '../../ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { select, Store } from '@ngrx/store';
 import { State } from '../../../store/global-store.definition';
@@ -50,13 +45,13 @@ import {
 export class LeasePaymentUpdateComponent implements OnInit {
   isSaving = false;
 
-  leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
+  iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
 
   editForm = this.fb.group({
     id: [],
     paymentDate: [],
     paymentAmount: [],
-    leaseLiability: [null, Validators.required]
+    leaseContract: [null, Validators.required]
   });
 
   // Setting up default form states
@@ -68,8 +63,7 @@ export class LeasePaymentUpdateComponent implements OnInit {
 
   constructor(
     protected leasePaymentService: LeasePaymentService,
-    protected leaseLiabilityService: LeaseLiabilityService,
-    protected ifrs16LeaseContractService: IFRS16LeaseContractService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>
@@ -80,20 +74,16 @@ export class LeasePaymentUpdateComponent implements OnInit {
     this.store.pipe(select(leasePaymentSelectedInstance)).subscribe(copied => {
       this.selectedItem = copied;
 
-      if (this.selectedItem.leaseLiability) {
-        const liability: ILeaseLiability = this.selectedItem.leaseLiability;
-        if (liability.leaseContract !== undefined) {
-          const ifrs16Lease: IIFRS16LeaseContract = liability.leaseContract;
-          if (ifrs16Lease.id !== undefined) {
-            this.ifrs16LeaseContractService.find(ifrs16Lease.id).subscribe(leaseContractResponse => {
-              if (leaseContractResponse.body) {
-                this.selectedLeaseContract = leaseContractResponse.body;
-              }
-            });
-          }
+      if (this.selectedItem.leaseContract) {
+        const ifrs16Lease: IIFRS16LeaseContract = this.selectedItem.leaseContract;
+        if (ifrs16Lease.id !== undefined) {
+          this.iFRS16LeaseContractService.find(ifrs16Lease.id).subscribe(leaseContractResponse => {
+            if (leaseContractResponse.body) {
+              this.selectedLeaseContract = leaseContractResponse.body;
+            }
+          });
         }
       }
-
     });
   }
 
@@ -104,7 +94,6 @@ export class LeasePaymentUpdateComponent implements OnInit {
     }
 
     if (this.weAreCopying) {
-
       this.updateForm(this.selectedItem);
     }
 
@@ -115,9 +104,9 @@ export class LeasePaymentUpdateComponent implements OnInit {
     }
   }
 
-  updateLeaseLiability(value: ILeaseLiability): void {
+  updateLeaseContract(value: IIFRS16LeaseContract): void {
     this.editForm.patchValue({
-      leaseLiability: value
+      leaseContract: value
     });
   }
 
@@ -140,7 +129,7 @@ export class LeasePaymentUpdateComponent implements OnInit {
     this.subscribeToSaveResponse(this.leasePaymentService.create(this.copyFromForm()));
   }
 
-  trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
     return item.id!;
   }
 
@@ -166,33 +155,28 @@ export class LeasePaymentUpdateComponent implements OnInit {
   protected updateForm(leasePayment: ILeasePayment): void {
     this.editForm.patchValue({
       id: leasePayment.id,
-      paymentDate: leasePayment.paymentDate,
       paymentAmount: leasePayment.paymentAmount,
-      leaseLiability: leasePayment.leaseLiability
+      paymentDate: leasePayment.paymentDate,
+      leaseContract: leasePayment.leaseContract
     });
-
-    this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
-      this.leaseLiabilitiesSharedCollection,
-      leasePayment.leaseLiability
-    );
   }
 
   protected createFromForm(): ILeasePayment {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      leaseLiability: this.editForm.get(['leaseLiability'])!.value
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 
   protected copyFromForm(): ILeasePayment {
     return {
       ...new LeasePayment(),
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      leaseLiability: this.editForm.get(['leaseLiability'])!.value
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value
     };
   }
 }

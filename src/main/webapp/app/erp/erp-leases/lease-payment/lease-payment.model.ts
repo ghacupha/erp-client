@@ -17,21 +17,21 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { ILeaseLiability } from '../lease-liability/lease-liability.model';
+import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 
 export interface ILeasePayment {
   id?: number;
   paymentDate?: dayjs.Dayjs | null;
   paymentAmount?: number | null;
-  leaseLiability?: ILeaseLiability;
+  leaseContract?: IIFRS16LeaseContract;
 }
 
 export class LeasePayment implements ILeasePayment {
   constructor(
     public id?: number,
-    public paymentDate?: dayjs.Dayjs | null,
     public paymentAmount?: number | null,
-    public leaseLiability?: ILeaseLiability
+    public paymentDate?: dayjs.Dayjs | null,
+    public leaseContract?: IIFRS16LeaseContract
   ) {}
 }
 

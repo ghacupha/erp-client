@@ -45,9 +45,9 @@ describe('LeaseLiability Service', () => {
       id: 0,
       leaseId: 'AAAAAAA',
       liabilityAmount: 0,
-      interestRate: 0,
       startDate: currentDate,
       endDate: currentDate,
+      interestRate: 0,
     };
   });
 
@@ -99,9 +99,9 @@ describe('LeaseLiability Service', () => {
           id: 1,
           leaseId: 'BBBBBB',
           liabilityAmount: 1,
-          interestRate: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          interestRate: 1,
         },
         elemDefault
       );
@@ -125,8 +125,8 @@ describe('LeaseLiability Service', () => {
       const patchObject = Object.assign(
         {
           leaseId: 'BBBBBB',
-          interestRate: 1,
           startDate: currentDate.format(DATE_FORMAT),
+          endDate: currentDate.format(DATE_FORMAT),
         },
         new LeaseLiability()
       );
@@ -154,9 +154,9 @@ describe('LeaseLiability Service', () => {
           id: 1,
           leaseId: 'BBBBBB',
           liabilityAmount: 1,
-          interestRate: 1,
           startDate: currentDate.format(DATE_FORMAT),
           endDate: currentDate.format(DATE_FORMAT),
+          interestRate: 1,
         },
         elemDefault
       );

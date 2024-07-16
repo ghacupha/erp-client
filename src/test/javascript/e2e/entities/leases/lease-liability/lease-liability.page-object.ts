@@ -50,9 +50,9 @@ export class LeaseLiabilityUpdatePage {
   idInput = element(by.id('field_id'));
   leaseIdInput = element(by.id('field_leaseId'));
   liabilityAmountInput = element(by.id('field_liabilityAmount'));
-  interestRateInput = element(by.id('field_interestRate'));
   startDateInput = element(by.id('field_startDate'));
   endDateInput = element(by.id('field_endDate'));
+  interestRateInput = element(by.id('field_interestRate'));
 
   leaseAmortizationCalculationSelect = element(by.id('field_leaseAmortizationCalculation'));
   leaseContractSelect = element(by.id('field_leaseContract'));
@@ -85,14 +85,6 @@ export class LeaseLiabilityUpdatePage {
     return await this.liabilityAmountInput.getAttribute('value');
   }
 
-  async setInterestRateInput(interestRate: string): Promise<void> {
-    await this.interestRateInput.sendKeys(interestRate);
-  }
-
-  async getInterestRateInput(): Promise<string> {
-    return await this.interestRateInput.getAttribute('value');
-  }
-
   async setStartDateInput(startDate: string): Promise<void> {
     await this.startDateInput.sendKeys(startDate);
   }
@@ -107,6 +99,14 @@ export class LeaseLiabilityUpdatePage {
 
   async getEndDateInput(): Promise<string> {
     return await this.endDateInput.getAttribute('value');
+  }
+
+  async setInterestRateInput(interestRate: string): Promise<void> {
+    await this.interestRateInput.sendKeys(interestRate);
+  }
+
+  async getInterestRateInput(): Promise<string> {
+    return await this.interestRateInput.getAttribute('value');
   }
 
   async leaseAmortizationCalculationSelectLastOption(): Promise<void> {

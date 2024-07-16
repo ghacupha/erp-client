@@ -17,10 +17,11 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
-import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { ILeasePayment } from '../lease-payment/lease-payment.model';
+import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
 
 export interface IIFRS16LeaseContract {
   id?: number;
@@ -37,6 +38,7 @@ export interface IIFRS16LeaseContract {
   lastReportingPeriod?: IFiscalMonth;
   leaseContractDocument?: IBusinessDocument | null;
   leaseContractCalculations?: IBusinessDocument | null;
+  leasePayments?: ILeasePayment[] | null;
 }
 
 export class IFRS16LeaseContract implements IIFRS16LeaseContract {
@@ -54,7 +56,8 @@ export class IFRS16LeaseContract implements IIFRS16LeaseContract {
     public firstReportingPeriod?: IFiscalMonth,
     public lastReportingPeriod?: IFiscalMonth,
     public leaseContractDocument?: IBusinessDocument | null,
-    public leaseContractCalculations?: IBusinessDocument | null
+    public leaseContractCalculations?: IBusinessDocument | null,
+    public leasePayments?: ILeasePayment[] | null
   ) {}
 }
 

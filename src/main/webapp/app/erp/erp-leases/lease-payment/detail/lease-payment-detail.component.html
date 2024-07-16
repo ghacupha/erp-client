@@ -33,6 +33,14 @@
         <dd>
           <span>{{ leasePayment.id }}</span>
         </dd>
+        <dt><span>Lease Contract</span></dt>
+        <dd>
+          <div *ngIf="leasePayment.leaseContract">
+            <a [routerLink]="['/ifrs-16-lease-contract', leasePayment.leaseContract?.id, 'view']">{{
+              leasePayment.leaseContract?.bookingId
+              }}</a>
+          </div>
+        </dd>
         <dt><span>Payment Date</span></dt>
         <dd>
           <span>{{ leasePayment.paymentDate | formatMediumDate }}</span>
@@ -40,12 +48,6 @@
         <dt><span>Payment Amount</span></dt>
         <dd>
           <span>{{ leasePayment.paymentAmount | currency }}</span>
-        </dd>
-        <dt><span>Lease Liability</span></dt>
-        <dd>
-          <div *ngIf="leasePayment.leaseLiability">
-            <a [routerLink]="['/lease-liability', leasePayment.leaseLiability?.id, 'view']">{{ leasePayment.leaseLiability?.leaseId }}</a>
-          </div>
         </dd>
       </dl>
 

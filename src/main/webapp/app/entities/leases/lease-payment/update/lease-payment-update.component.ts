@@ -25,8 +25,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
 import { LeasePaymentService } from '../service/lease-payment.service';
-import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
-import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 @Component({
   selector: 'jhi-lease-payment-update',
@@ -35,18 +35,18 @@ import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/servi
 export class LeasePaymentUpdateComponent implements OnInit {
   isSaving = false;
 
-  leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
+  iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
 
   editForm = this.fb.group({
     id: [],
-    paymentDate: [],
     paymentAmount: [],
-    leaseLiability: [null, Validators.required],
+    paymentDate: [],
+    leaseContract: [null, Validators.required],
   });
 
   constructor(
     protected leasePaymentService: LeasePaymentService,
-    protected leaseLiabilityService: LeaseLiabilityService,
+    protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -73,7 +73,7 @@ export class LeasePaymentUpdateComponent implements OnInit {
     }
   }
 
-  trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
+  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
     return item.id!;
   }
 
@@ -99,36 +99,39 @@ export class LeasePaymentUpdateComponent implements OnInit {
   protected updateForm(leasePayment: ILeasePayment): void {
     this.editForm.patchValue({
       id: leasePayment.id,
-      paymentDate: leasePayment.paymentDate,
       paymentAmount: leasePayment.paymentAmount,
-      leaseLiability: leasePayment.leaseLiability,
+      paymentDate: leasePayment.paymentDate,
+      leaseContract: leasePayment.leaseContract,
     });
 
-    this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
-      this.leaseLiabilitiesSharedCollection,
-      leasePayment.leaseLiability
+    this.iFRS16LeaseContractsSharedCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+      this.iFRS16LeaseContractsSharedCollection,
+      leasePayment.leaseContract
     );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.leaseLiabilityService
+    this.iFRS16LeaseContractService
       .query()
-      .pipe(map((res: HttpResponse<ILeaseLiability[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IIFRS16LeaseContract[]>) => res.body ?? []))
       .pipe(
-        map((leaseLiabilities: ILeaseLiability[]) =>
-          this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(leaseLiabilities, this.editForm.get('leaseLiability')!.value)
+        map((iFRS16LeaseContracts: IIFRS16LeaseContract[]) =>
+          this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
+            iFRS16LeaseContracts,
+            this.editForm.get('leaseContract')!.value
+          )
         )
       )
-      .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
+      .subscribe((iFRS16LeaseContracts: IIFRS16LeaseContract[]) => (this.iFRS16LeaseContractsSharedCollection = iFRS16LeaseContracts));
   }
 
   protected createFromForm(): ILeasePayment {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentDate: this.editForm.get(['paymentDate'])!.value,
       paymentAmount: this.editForm.get(['paymentAmount'])!.value,
-      leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      paymentDate: this.editForm.get(['paymentDate'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }
 }

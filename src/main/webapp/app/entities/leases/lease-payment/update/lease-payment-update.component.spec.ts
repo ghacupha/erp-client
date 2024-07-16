@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { LeasePaymentService } from '../service/lease-payment.service';
 import { ILeasePayment, LeasePayment } from '../lease-payment.model';
-import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
-import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 import { LeasePaymentUpdateComponent } from './lease-payment-update.component';
 
@@ -37,7 +37,7 @@ describe('LeasePayment Management Update Component', () => {
   let fixture: ComponentFixture<LeasePaymentUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let leasePaymentService: LeasePaymentService;
-  let leaseLiabilityService: LeaseLiabilityService;
+  let iFRS16LeaseContractService: IFRS16LeaseContractService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,44 +51,44 @@ describe('LeasePayment Management Update Component', () => {
     fixture = TestBed.createComponent(LeasePaymentUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     leasePaymentService = TestBed.inject(LeasePaymentService);
-    leaseLiabilityService = TestBed.inject(LeaseLiabilityService);
+    iFRS16LeaseContractService = TestBed.inject(IFRS16LeaseContractService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call LeaseLiability query and add missing value', () => {
+    it('Should call IFRS16LeaseContract query and add missing value', () => {
       const leasePayment: ILeasePayment = { id: 456 };
-      const leaseLiability: ILeaseLiability = { id: 44093 };
-      leasePayment.leaseLiability = leaseLiability;
+      const leaseContract: IIFRS16LeaseContract = { id: 74388 };
+      leasePayment.leaseContract = leaseContract;
 
-      const leaseLiabilityCollection: ILeaseLiability[] = [{ id: 74496 }];
-      jest.spyOn(leaseLiabilityService, 'query').mockReturnValue(of(new HttpResponse({ body: leaseLiabilityCollection })));
-      const additionalLeaseLiabilities = [leaseLiability];
-      const expectedCollection: ILeaseLiability[] = [...additionalLeaseLiabilities, ...leaseLiabilityCollection];
-      jest.spyOn(leaseLiabilityService, 'addLeaseLiabilityToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const iFRS16LeaseContractCollection: IIFRS16LeaseContract[] = [{ id: 96106 }];
+      jest.spyOn(iFRS16LeaseContractService, 'query').mockReturnValue(of(new HttpResponse({ body: iFRS16LeaseContractCollection })));
+      const additionalIFRS16LeaseContracts = [leaseContract];
+      const expectedCollection: IIFRS16LeaseContract[] = [...additionalIFRS16LeaseContracts, ...iFRS16LeaseContractCollection];
+      jest.spyOn(iFRS16LeaseContractService, 'addIFRS16LeaseContractToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ leasePayment });
       comp.ngOnInit();
 
-      expect(leaseLiabilityService.query).toHaveBeenCalled();
-      expect(leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing).toHaveBeenCalledWith(
-        leaseLiabilityCollection,
-        ...additionalLeaseLiabilities
+      expect(iFRS16LeaseContractService.query).toHaveBeenCalled();
+      expect(iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing).toHaveBeenCalledWith(
+        iFRS16LeaseContractCollection,
+        ...additionalIFRS16LeaseContracts
       );
-      expect(comp.leaseLiabilitiesSharedCollection).toEqual(expectedCollection);
+      expect(comp.iFRS16LeaseContractsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const leasePayment: ILeasePayment = { id: 456 };
-      const leaseLiability: ILeaseLiability = { id: 56735 };
-      leasePayment.leaseLiability = leaseLiability;
+      const leaseContract: IIFRS16LeaseContract = { id: 33887 };
+      leasePayment.leaseContract = leaseContract;
 
       activatedRoute.data = of({ leasePayment });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(leasePayment));
-      expect(comp.leaseLiabilitiesSharedCollection).toContain(leaseLiability);
+      expect(comp.iFRS16LeaseContractsSharedCollection).toContain(leaseContract);
     });
   });
 
@@ -157,10 +157,10 @@ describe('LeasePayment Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackLeaseLiabilityById', () => {
-      it('Should return tracked LeaseLiability primary key', () => {
+    describe('trackIFRS16LeaseContractById', () => {
+      it('Should return tracked IFRS16LeaseContract primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackLeaseLiabilityById(0, entity);
+        const trackResult = comp.trackIFRS16LeaseContractById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

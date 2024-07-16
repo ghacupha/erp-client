@@ -113,6 +113,11 @@ describe('IFRS16LeaseContract e2e test', () => {
       body: [],
     });
 
+    cy.intercept('GET', '/api/lease-payments', {
+      statusCode: 200,
+      body: [],
+    });
+
   });
    */
 
