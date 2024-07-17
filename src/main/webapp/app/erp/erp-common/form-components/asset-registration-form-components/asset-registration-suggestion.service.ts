@@ -19,10 +19,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ApplicationConfigService } from '../../../../core/config/application-config.service';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../../core/request/request-util';
 import { ASC, DESC } from '../../../../config/pagination.constants';
 import { IAssetRegistration } from '../../../erp-assets/asset-registration/asset-registration.model';
+import { AssetRegistrationService } from '../../../erp-assets/asset-registration/service/asset-registration.service';
+import { catchError, map, mergeMap, switchMap, toArray } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AssetRegistrationSuggestionService {
@@ -31,24 +33,33 @@ export class AssetRegistrationSuggestionService {
 
   constructor(
     protected http: HttpClient,
+    protected valueService: AssetRegistrationService,
     protected applicationConfigService: ApplicationConfigService
-  ) {
-  }
-
+  ) {}
 
   search(searchText: string): Observable<IAssetRegistration[]> {
-
-    if (searchText === "") {
-      return of([])
+    if (searchText === '') {
+      return of([]);
     }
 
-    return this.http.get<IAssetRegistration[]>(
-      this.resourceSearchUrl,
-      { params: createRequestOption({
-          query: searchText,
-          page: 0,
-          size: 10,
-          sort: this.sort(),})}
+    return this.http.get<IAssetRegistration[]>(this.resourceSearchUrl, {
+      params: createRequestOption({
+        query: searchText,
+        page: 0,
+        size: 10,
+        sort: this.sort(),
+      })
+    }).pipe(
+      switchMap(searchResults => from(searchResults).pipe(
+        mergeMap(result =>
+          this.valueService.find(<number>result.id).pipe(
+            map(response => response.body as IAssetRegistration),
+            catchError(() => of(null)) // Return null if the item does not exist in the backend
+          )
+        ),
+        toArray(), // Collect the results back into an array
+        map(results => results.filter(result => result !== null) as IAssetRegistration[]) // Filter out null results
+      ))
     );
   }
 
