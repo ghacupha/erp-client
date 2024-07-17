@@ -18,10 +18,21 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { TransactionAccountSuggestionService } from '../../suggestion/transaction-account-suggestion.service';
+import { concat, from, Observable, of, Subject } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  tap,
+  toArray
+} from 'rxjs/operators';
+import { TransactionAccountSuggestionService } from './transaction-account-suggestion.service';
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
 
 @Component({
   selector: 'jhi-m21-transaction-account-form-control',
@@ -48,6 +59,7 @@ export class M21TransactionAccountFormControlComponent implements OnInit, Contro
   valueLookUps$: Observable<ITransactionAccount[]> = of([]);
 
   constructor(
+    protected valueService: TransactionAccountService,
     protected valueSuggestionService: TransactionAccountSuggestionService
   ) {}
 
@@ -59,6 +71,14 @@ export class M21TransactionAccountFormControlComponent implements OnInit, Contro
   onTouched: any = () => {};
 
   ngOnInit(): void {
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
 
     this.loadValues();
   }
@@ -73,17 +93,30 @@ export class M21TransactionAccountFormControlComponent implements OnInit, Contro
     this.valueLookUps$ = concat(
       of([]), // default items
       this.valueControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
+        filter(res => res !== null && res.length >= this.minAccountLengthTerm),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.valuesLoading = true),
         switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
+          switchMap(searchResults => searchResults.length > 0 ?
+            from(searchResults).pipe(
+              mergeMap(result =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                result?.id ? this.valueService.find(result.id).pipe(
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                  map((response: { body: any; }) => response.body), // Assuming response is HttpResponse<IServiceOutlet>
+                  catchError(() => of(null))
+                ) : of(null)
+              ),
+              filter((result): result is ITransactionAccount => result !== null),
+              toArray()
+            ) : of([])
+          ),
           tap(() => this.valuesLoading = false)
         ))
-      ),
+      )
     );
   }
 

@@ -22,6 +22,7 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencySuggestionService } from '../../suggestion/settlement-currency-suggestion.service';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-m21-settlement-currency-form-control',
@@ -48,6 +49,7 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
   valueLookUps$: Observable<ISettlementCurrency[]> = of([]);
 
   constructor(
+    protected valueService: SettlementCurrencyService,
     protected valueSuggestionService: SettlementCurrencySuggestionService
   ) {}
 
@@ -59,6 +61,14 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
   onTouched: any = () => {};
 
   ngOnInit(): void {
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
 
     this.loadValues();
   }

@@ -34,7 +34,6 @@ import { M21PaymentInvoiceFormControlComponent } from './payment-invoice-control
 import { M21PurchaseOrderFormControlComponent } from './purchase-order-form-control-components/m21-purchase-order-form-control.component';
 import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m-job-sheet-form-control.component';
 import { M2MDeliveryNoteFormControlComponent } from './delivery-note-form-components/m2m-delivery-note-form-control.component';
-import { M21TransactionAccountFormControlComponent } from './transaction-account-form-components/m21-transaction-account-form-control.component';
 import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mapping-components/m2m-universally-unique-mapping-form-control.component';
 import { M21SecurityClearanceFormControlComponent } from './security-clearance-form-components/m21-security-clearance-form-control.component';
 import { M21ApplicationUserFormControlComponent } from './application-user-form-components/m21-application-user-form-control.component';
@@ -80,6 +79,7 @@ import { LeasePeriodFormComponentsModule } from './lease-period-components/lease
 import { LeaseLiabilityFormComponentsModule } from './lease-liability-components/lease-liability-form-components.module';
 import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amortization-calculation-components/lease-amortization-calculation-form-components.module';
 import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
+import { TransactionAccountFormComponentsModule } from './transaction-account-form-components/transaction-account-form-components.module';
 
 @NgModule({
   declarations: [
@@ -96,7 +96,6 @@ import { ServiceOutletFormComponentsModule } from './service-outlet-form-compone
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
@@ -154,7 +153,6 @@ import { ServiceOutletFormComponentsModule } from './service-outlet-form-compone
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
@@ -200,6 +198,7 @@ import { ServiceOutletFormComponentsModule } from './service-outlet-form-compone
     LeaseLiabilityFormComponentsModule,
     LeaseAmortizationCalculationFormComponentsModule,
     ServiceOutletFormComponentsModule,
+    TransactionAccountFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

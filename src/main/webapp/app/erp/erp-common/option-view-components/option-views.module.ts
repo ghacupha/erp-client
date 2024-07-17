@@ -29,7 +29,6 @@ import { SettlementSelectedOptionViewComponent } from './settlement-selected-opt
 import { PaymentInvoiceSelectedOptionViewComponent } from './payment-invoice-selected-option-view.component';
 import { JobSheetOptionViewComponent } from './job-sheet-option-view.component';
 import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.component';
-import { TransactionAccountOptionViewComponent } from './transaction-account-option-view.component';
 import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
 import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
 import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
@@ -59,7 +58,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
-    TransactionAccountOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
@@ -91,7 +89,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
-    TransactionAccountOptionViewComponent,
     ApplicationUserOptionViewComponent,
     PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,

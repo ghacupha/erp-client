@@ -17,7 +17,7 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 
 @Component({
   selector: 'jhi-transaction-account-option-view',

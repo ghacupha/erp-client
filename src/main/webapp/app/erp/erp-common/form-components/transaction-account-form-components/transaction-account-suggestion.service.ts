@@ -18,11 +18,11 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApplicationConfigService } from '../../../core/config/application-config.service';
+import { ApplicationConfigService } from '../../../../core/config/application-config.service';
 import { Observable, of } from 'rxjs';
-import { createRequestOption } from '../../../core/request/request-util';
-import { ASC, DESC } from '../../../config/pagination.constants';
-import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import { createRequestOption } from '../../../../core/request/request-util';
+import { ASC, DESC } from '../../../../config/pagination.constants';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 
 @Injectable({ providedIn: 'root' })
 export class TransactionAccountSuggestionService {

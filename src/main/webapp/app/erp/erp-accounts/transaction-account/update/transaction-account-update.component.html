@@ -90,97 +90,25 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_parentAccount">Parent Account</label>
-          <select
-            class="form-control"
-            id="field_parentAccount"
-            data-cy="parentAccount"
-            name="parentAccount"
-            formControlName="parentAccount"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('parentAccount')!.value?.id
-                  ? editForm.get('parentAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountNumber }}
-            </option>
-          </select>
-        </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Parent Account</label>
-          <ng-select
-            [items]="parentAccountLookups$ | async"
-            bindLabel="accountNumber"
-            [trackByFn]="trackTransactionAccountsByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="parentAccountsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="parentAccountsControlInput$"
-            formControlName="parentAccount"
-          >
-            <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <jhi-transaction-account-option-view [item]='item'></jhi-transaction-account-option-view>
-              <span class="ng-value-icon right" (click)="clear(item)">×</span>
-            </ng-template>
-            <option [ngValue]="editForm.get('parentAccount')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-transaction-account-option-view [item]='item'></jhi-transaction-account-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{ editForm.get('parentAccount')!.value|formatTransactionAccount: [35, '...'] }}</div>
-        </div>
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='parentAccount'
+          [inputValue]="editForm.get('parentAccount')!.value"
+          (valueSelected)='updateParentAccount($event)'
+          inputControlLabel="Parent Account"
+        >
+          <option [ngValue]="editForm.get('parentAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Placeholder(s)</label>
-          <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
-            formControlName="placeholders"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
       </div>
 

@@ -20,16 +20,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { TransactionAccountSuggestionService } from '../../../erp-common/suggestion/transaction-account-suggestion.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
@@ -53,16 +51,6 @@ export class TransactionAccountUpdateComponent implements OnInit {
     placeholders: [],
   });
 
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  parentAccountsLoading = false;
-  parentAccountsControlInput$ = new Subject<string>();
-  parentAccountLookups$: Observable<ITransactionAccount[]> = of([]);
-
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -70,8 +58,6 @@ export class TransactionAccountUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
-    protected transactionAccountSuggestionService: TransactionAccountSuggestionService,
   ) {}
 
   ngOnInit(): void {
@@ -80,48 +66,6 @@ export class TransactionAccountUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
-
-    // fire-up typeahead items
-    this.loadParentAccounts();
-    this.loadPlaceholders();
-  }
-
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
-  loadParentAccounts(): void {
-    this.parentAccountLookups$ = concat(
-      of([]), // default items
-      this.parentAccountsControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.parentAccountsLoading = true),
-        switchMap(term => this.transactionAccountSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.parentAccountsLoading = false)
-        ))
-      ),
-      of([...this.transactionAccountsSharedCollection])
-    );
   }
 
   trackPlaceholdersByFn(item: IPlaceholder): number {
@@ -167,6 +111,18 @@ export class TransactionAccountUpdateComponent implements OnInit {
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  updateParentAccount(value: ITransactionAccount): void {
+      this.editForm.patchValue({
+        parentAccount: value
+      });
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+      this.editForm.patchValue({
+        placeholders: [...value]
+      });
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {

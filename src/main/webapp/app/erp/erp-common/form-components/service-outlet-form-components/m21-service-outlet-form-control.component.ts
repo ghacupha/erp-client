@@ -71,6 +71,13 @@ export class M21ServiceOutletFormControlComponent implements OnInit, OnDestroy, 
   onTouched: any = () => {};
 
   ngOnInit(): void {
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
     this.loadValues();
   }
 

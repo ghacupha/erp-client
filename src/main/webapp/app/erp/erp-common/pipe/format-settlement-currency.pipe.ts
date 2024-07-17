@@ -35,15 +35,18 @@ export class FormatSettlementCurrencyPipe implements PipeTransform {
 
       let desc = '';
 
-      if (value.iso4217CurrencyCode.length > limit) {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        desc = value.iso4217CurrencyCode.substring(0, limit) + trail;
-      } else {
-        desc = value.iso4217CurrencyCode;
-      }
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      desc =
+        value.iso4217CurrencyCode.length > limit
+          ? value.numericCode
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          ? `(${value.iso4217CurrencyCode}) ${value.country} | N-Code: ${value.numericCode}`.substring(0, limit) + trail
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          : `(${value.iso4217CurrencyCode}) ${value.country}`.substring(0, limit) + trail
+          : `(${value.iso4217CurrencyCode}) ${value.country}`;
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      detail = `Id: ${value.id} | Name: ${value.currencyName} |${desc}`;
+      detail = `#: ${value.id} | ${value.currencyName} ${desc}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

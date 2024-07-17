@@ -26,7 +26,6 @@ import { FormatSettlementCurrencyPipe } from './format-settlement-currency.pipe'
 import { FormatSettlementPipe } from './format-settlement.pipe';
 import { FormatDepreciationMethodPipe } from './format-depreciation-method.pipe';
 import { FormatPurchaseOrderPipe } from './format-purchase-order.pipe';
-import { FormatTransactionAccountPipe } from './format-transaction-account.pipe';
 import { FormatPaymentInvoicePipe } from './format-payment-invoice.pipe';
 import { FormatSecurityClearancePipe } from './format-security-clearance.pipe';
 import { FormatApplicationUserPipe } from './format-application-user.pipe';
@@ -56,7 +55,6 @@ import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
-    FormatTransactionAccountPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
@@ -86,7 +84,6 @@ import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
-    FormatTransactionAccountPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,

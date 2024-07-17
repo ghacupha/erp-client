@@ -17,7 +17,7 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { ITransactionAccount } from '../../erp-accounts/transaction-account/transaction-account.model';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 
 @Pipe({
   name: 'formatTransactionAccount',
@@ -42,8 +42,12 @@ export class FormatTransactionAccountPipe implements PipeTransform {
         desc = value.accountName;
       }
 
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      detail = `id: ${value.id} | #: ${value.accountNumber} | ${desc}`;
+      if (value.accountNumber) {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        detail = `id: ${value.id} | #: ${value.accountNumber} | ${desc}`;
+      } else {
+        detail = `id: ${value.id} | Account Name ${desc}`;
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
