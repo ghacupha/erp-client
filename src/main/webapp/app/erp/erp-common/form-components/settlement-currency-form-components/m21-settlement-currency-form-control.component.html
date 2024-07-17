@@ -36,6 +36,6 @@
       <jhi-settlement-currency-option-view [item]='item'></jhi-settlement-currency-option-view>
     </ng-template>
   </ng-select>
-  <div>{{inputValue|formatSettlementCurrency: [60, '...']}}</div>
+  <div>{{inputValue|formatSettlementCurrency: [100, '...']}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>

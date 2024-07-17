@@ -28,25 +28,11 @@ export class FormatSettlementCurrencyPipe implements PipeTransform {
 
     let detail = '';
 
-    if (value.iso4217CurrencyCode) {
+    if (value.numericCode) {
 
-      const limit = args.length > 0 ? parseInt(args[0], 10) : 3;
-      const trail = args.length > 1 ? args[1] : '...';
-
-      let desc = '';
-
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      desc =
-        value.iso4217CurrencyCode.length > limit
-          ? value.numericCode
-          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-          ? `(${value.iso4217CurrencyCode}) ${value.country} | N-Code: ${value.numericCode}`.substring(0, limit) + trail
-          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-          : `(${value.iso4217CurrencyCode}) ${value.country}`.substring(0, limit) + trail
-          : `(${value.iso4217CurrencyCode}) ${value.country}`;
-
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      detail = `#: ${value.id} | ${value.currencyName} ${desc}`;
+      detail = `#: ${value.id} | ${value.currencyName} (${value.iso4217CurrencyCode}) ${value.country} | N-Code: ${value.numericCode}`;
+    } else {
+      detail = `#: ${value.id} | ${value.currencyName} (${value.iso4217CurrencyCode}) ${value.country}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
