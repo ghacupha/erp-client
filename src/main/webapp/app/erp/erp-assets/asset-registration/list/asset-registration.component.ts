@@ -45,7 +45,7 @@ export class AssetRegistrationComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = 100;
+  itemsPerPage = 10;
   page?: number;
   predicate!: string;
   ascending!: boolean;
