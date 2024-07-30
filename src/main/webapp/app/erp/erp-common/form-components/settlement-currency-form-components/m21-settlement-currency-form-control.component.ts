@@ -61,6 +61,7 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
   onTouched: any = () => {};
 
   ngOnInit(): void {
+    this.loadValues();
 
     if (this.inputValue.id != null) {
       this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
@@ -69,8 +70,6 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
         }
       })
     }
-
-    this.loadValues();
   }
 
   ngOnDestroy(): void {

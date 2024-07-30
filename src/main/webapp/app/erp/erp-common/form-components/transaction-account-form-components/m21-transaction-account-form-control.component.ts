@@ -72,6 +72,8 @@ export class M21TransactionAccountFormControlComponent implements OnInit, Contro
 
   ngOnInit(): void {
 
+    this.loadValues();
+
     if (this.inputValue.id != null) {
       this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
         if (inputUpdate.body) {
@@ -79,8 +81,6 @@ export class M21TransactionAccountFormControlComponent implements OnInit, Contro
         }
       })
     }
-
-    this.loadValues();
   }
 
   ngOnDestroy(): void {
