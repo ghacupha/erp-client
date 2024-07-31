@@ -323,6 +323,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseLiabilityScheduleItemModule
             ),
         },
+        {
+          path: 'lease-repayment-period',
+          data: {
+            pageTitle: 'ERP | Lease Repayment Period',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-repayment-period/lease-repayment-period.module').then(
+              m => m.LeaseRepaymentPeriodModule
+            ),
+        },
       ]
     )
   ]

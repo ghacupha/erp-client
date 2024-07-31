@@ -56,12 +56,6 @@
       "otherEntityRelationshipName": "leaseLiabilityScheduleItem"
     },
     {
-      "relationshipName": "leasePeriod",
-      "otherEntityName": "leasePeriod",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "periodCode"
-    },
-    {
       "relationshipName": "leaseAmortizationSchedule",
       "otherEntityName": "leaseAmortizationSchedule",
       "relationshipType": "many-to-one",
@@ -80,6 +74,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "leasePeriod",
+      "otherEntityName": "leaseRepaymentPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

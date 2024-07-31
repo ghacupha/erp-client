@@ -305,7 +305,8 @@
       "LeaseAmortizationCalculation",
       "LeasePayment",
       "LeaseLiability",
-      "LeaseAmortizationSchedule"
+      "LeaseAmortizationSchedule",
+      "LeaseRepaymentPeriod"
     ],
     "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,

@@ -29,14 +29,14 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
-import { ILeasePeriod } from 'app/entities/leases/lease-period/lease-period.model';
-import { LeasePeriodService } from 'app/entities/leases/lease-period/service/lease-period.service';
 import { ILeaseAmortizationSchedule } from 'app/entities/leases/lease-amortization-schedule/lease-amortization-schedule.model';
 import { LeaseAmortizationScheduleService } from 'app/entities/leases/lease-amortization-schedule/service/lease-amortization-schedule.service';
 import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
 import { LeaseLiabilityService } from 'app/entities/leases/lease-liability/service/lease-liability.service';
+import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
+import { LeaseRepaymentPeriodService } from 'app/entities/leases/lease-repayment-period/service/lease-repayment-period.service';
 
 @Component({
   selector: 'jhi-lease-liability-schedule-item-update',
@@ -47,10 +47,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
 
   placeholdersSharedCollection: IPlaceholder[] = [];
   universallyUniqueMappingsSharedCollection: IUniversallyUniqueMapping[] = [];
-  leasePeriodsSharedCollection: ILeasePeriod[] = [];
   leaseAmortizationSchedulesSharedCollection: ILeaseAmortizationSchedule[] = [];
   iFRS16LeaseContractsSharedCollection: IIFRS16LeaseContract[] = [];
   leaseLiabilitiesSharedCollection: ILeaseLiability[] = [];
+  leaseRepaymentPeriodsSharedCollection: ILeaseRepaymentPeriod[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -65,20 +65,20 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     interestPayableClosing: [],
     placeholders: [],
     universallyUniqueMappings: [],
-    leasePeriod: [],
     leaseAmortizationSchedule: [],
     leaseContract: [null, Validators.required],
     leaseLiability: [null, Validators.required],
+    leasePeriod: [null, Validators.required],
   });
 
   constructor(
     protected leaseLiabilityScheduleItemService: LeaseLiabilityScheduleItemService,
     protected placeholderService: PlaceholderService,
     protected universallyUniqueMappingService: UniversallyUniqueMappingService,
-    protected leasePeriodService: LeasePeriodService,
     protected leaseAmortizationScheduleService: LeaseAmortizationScheduleService,
     protected iFRS16LeaseContractService: IFRS16LeaseContractService,
     protected leaseLiabilityService: LeaseLiabilityService,
+    protected leaseRepaymentPeriodService: LeaseRepaymentPeriodService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -113,10 +113,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  trackLeasePeriodById(index: number, item: ILeasePeriod): number {
-    return item.id!;
-  }
-
   trackLeaseAmortizationScheduleById(index: number, item: ILeaseAmortizationSchedule): number {
     return item.id!;
   }
@@ -126,6 +122,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
   }
 
   trackLeaseLiabilityById(index: number, item: ILeaseLiability): number {
+    return item.id!;
+  }
+
+  trackLeaseRepaymentPeriodById(index: number, item: ILeaseRepaymentPeriod): number {
     return item.id!;
   }
 
@@ -187,10 +187,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       interestPayableClosing: leaseLiabilityScheduleItem.interestPayableClosing,
       placeholders: leaseLiabilityScheduleItem.placeholders,
       universallyUniqueMappings: leaseLiabilityScheduleItem.universallyUniqueMappings,
-      leasePeriod: leaseLiabilityScheduleItem.leasePeriod,
       leaseAmortizationSchedule: leaseLiabilityScheduleItem.leaseAmortizationSchedule,
       leaseContract: leaseLiabilityScheduleItem.leaseContract,
       leaseLiability: leaseLiabilityScheduleItem.leaseLiability,
+      leasePeriod: leaseLiabilityScheduleItem.leasePeriod,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -200,10 +200,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     this.universallyUniqueMappingsSharedCollection = this.universallyUniqueMappingService.addUniversallyUniqueMappingToCollectionIfMissing(
       this.universallyUniqueMappingsSharedCollection,
       ...(leaseLiabilityScheduleItem.universallyUniqueMappings ?? [])
-    );
-    this.leasePeriodsSharedCollection = this.leasePeriodService.addLeasePeriodToCollectionIfMissing(
-      this.leasePeriodsSharedCollection,
-      leaseLiabilityScheduleItem.leasePeriod
     );
     this.leaseAmortizationSchedulesSharedCollection =
       this.leaseAmortizationScheduleService.addLeaseAmortizationScheduleToCollectionIfMissing(
@@ -217,6 +213,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
     this.leaseLiabilitiesSharedCollection = this.leaseLiabilityService.addLeaseLiabilityToCollectionIfMissing(
       this.leaseLiabilitiesSharedCollection,
       leaseLiabilityScheduleItem.leaseLiability
+    );
+    this.leaseRepaymentPeriodsSharedCollection = this.leaseRepaymentPeriodService.addLeaseRepaymentPeriodToCollectionIfMissing(
+      this.leaseRepaymentPeriodsSharedCollection,
+      leaseLiabilityScheduleItem.leasePeriod
     );
   }
 
@@ -246,16 +246,6 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         (universallyUniqueMappings: IUniversallyUniqueMapping[]) =>
           (this.universallyUniqueMappingsSharedCollection = universallyUniqueMappings)
       );
-
-    this.leasePeriodService
-      .query()
-      .pipe(map((res: HttpResponse<ILeasePeriod[]>) => res.body ?? []))
-      .pipe(
-        map((leasePeriods: ILeasePeriod[]) =>
-          this.leasePeriodService.addLeasePeriodToCollectionIfMissing(leasePeriods, this.editForm.get('leasePeriod')!.value)
-        )
-      )
-      .subscribe((leasePeriods: ILeasePeriod[]) => (this.leasePeriodsSharedCollection = leasePeriods));
 
     this.leaseAmortizationScheduleService
       .query()
@@ -295,6 +285,19 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
         )
       )
       .subscribe((leaseLiabilities: ILeaseLiability[]) => (this.leaseLiabilitiesSharedCollection = leaseLiabilities));
+
+    this.leaseRepaymentPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<ILeaseRepaymentPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((leaseRepaymentPeriods: ILeaseRepaymentPeriod[]) =>
+          this.leaseRepaymentPeriodService.addLeaseRepaymentPeriodToCollectionIfMissing(
+            leaseRepaymentPeriods,
+            this.editForm.get('leasePeriod')!.value
+          )
+        )
+      )
+      .subscribe((leaseRepaymentPeriods: ILeaseRepaymentPeriod[]) => (this.leaseRepaymentPeriodsSharedCollection = leaseRepaymentPeriods));
   }
 
   protected createFromForm(): ILeaseLiabilityScheduleItem {
@@ -312,10 +315,10 @@ export class LeaseLiabilityScheduleItemUpdateComponent implements OnInit {
       interestPayableClosing: this.editForm.get(['interestPayableClosing'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
-      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
       leaseAmortizationSchedule: this.editForm.get(['leaseAmortizationSchedule'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
       leaseLiability: this.editForm.get(['leaseLiability'])!.value,
+      leasePeriod: this.editForm.get(['leasePeriod'])!.value,
     };
   }
 }

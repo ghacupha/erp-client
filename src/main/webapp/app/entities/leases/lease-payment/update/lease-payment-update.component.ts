@@ -39,8 +39,8 @@ export class LeasePaymentUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    paymentAmount: [],
     paymentDate: [],
+    paymentAmount: [],
     leaseContract: [null, Validators.required],
   });
 
@@ -99,8 +99,8 @@ export class LeasePaymentUpdateComponent implements OnInit {
   protected updateForm(leasePayment: ILeasePayment): void {
     this.editForm.patchValue({
       id: leasePayment.id,
-      paymentAmount: leasePayment.paymentAmount,
       paymentDate: leasePayment.paymentDate,
+      paymentAmount: leasePayment.paymentAmount,
       leaseContract: leasePayment.leaseContract,
     });
 
@@ -129,8 +129,8 @@ export class LeasePaymentUpdateComponent implements OnInit {
     return {
       ...new LeasePayment(),
       id: this.editForm.get(['id'])!.value,
-      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       paymentDate: this.editForm.get(['paymentDate'])!.value,
+      paymentAmount: this.editForm.get(['paymentAmount'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,
     };
   }

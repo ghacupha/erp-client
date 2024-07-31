@@ -48,8 +48,8 @@ export class LeasePaymentUpdatePage {
   cancelButton = element(by.id('cancel-save'));
 
   idInput = element(by.id('field_id'));
-  paymentAmountInput = element(by.id('field_paymentAmount'));
   paymentDateInput = element(by.id('field_paymentDate'));
+  paymentAmountInput = element(by.id('field_paymentAmount'));
 
   leaseContractSelect = element(by.id('field_leaseContract'));
 
@@ -65,20 +65,20 @@ export class LeasePaymentUpdatePage {
     return await this.idInput.getAttribute('value');
   }
 
-  async setPaymentAmountInput(paymentAmount: string): Promise<void> {
-    await this.paymentAmountInput.sendKeys(paymentAmount);
-  }
-
-  async getPaymentAmountInput(): Promise<string> {
-    return await this.paymentAmountInput.getAttribute('value');
-  }
-
   async setPaymentDateInput(paymentDate: string): Promise<void> {
     await this.paymentDateInput.sendKeys(paymentDate);
   }
 
   async getPaymentDateInput(): Promise<string> {
     return await this.paymentDateInput.getAttribute('value');
+  }
+
+  async setPaymentAmountInput(paymentAmount: string): Promise<void> {
+    await this.paymentAmountInput.sendKeys(paymentAmount);
+  }
+
+  async getPaymentAmountInput(): Promise<string> {
+    return await this.paymentAmountInput.getAttribute('value');
   }
 
   async leaseContractSelectLastOption(): Promise<void> {

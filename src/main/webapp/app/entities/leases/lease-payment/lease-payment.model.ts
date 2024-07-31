@@ -21,16 +21,16 @@ import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract
 
 export interface ILeasePayment {
   id?: number;
-  paymentAmount?: number | null;
   paymentDate?: dayjs.Dayjs | null;
+  paymentAmount?: number | null;
   leaseContract?: IIFRS16LeaseContract;
 }
 
 export class LeasePayment implements ILeasePayment {
   constructor(
     public id?: number,
-    public paymentAmount?: number | null,
     public paymentDate?: dayjs.Dayjs | null,
+    public paymentAmount?: number | null,
     public leaseContract?: IIFRS16LeaseContract
   ) {}
 }

@@ -68,8 +68,8 @@ describe('LeasePayment e2e test', () => {
         await leasePaymentComponentsPage.clickOnCreateButton();
 
         await promise.all([
-            leasePaymentUpdatePage.setPaymentAmountInput('5'),
             leasePaymentUpdatePage.setPaymentDateInput('2000-12-31'),
+            leasePaymentUpdatePage.setPaymentAmountInput('5'),
             leasePaymentUpdatePage.leaseContractSelectLastOption(),
         ]);
 

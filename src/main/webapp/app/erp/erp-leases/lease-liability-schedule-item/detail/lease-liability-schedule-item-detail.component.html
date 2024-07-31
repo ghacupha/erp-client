@@ -85,14 +85,6 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Lease Period</span></dt>
-        <dd>
-          <div *ngIf="leaseLiabilityScheduleItem.leasePeriod">
-            <a [routerLink]="['/lease-period', leaseLiabilityScheduleItem.leasePeriod?.id, 'view']">{{
-              leaseLiabilityScheduleItem.leasePeriod?.periodCode
-            }}</a>
-          </div>
-        </dd>
         <dt><span>Lease Amortization Schedule</span></dt>
         <dd>
           <div *ngIf="leaseLiabilityScheduleItem.leaseAmortizationSchedule">
@@ -114,6 +106,14 @@
           <div *ngIf="leaseLiabilityScheduleItem.leaseLiability">
             <a [routerLink]="['/lease-liability', leaseLiabilityScheduleItem.leaseLiability?.id, 'view']">{{
               leaseLiabilityScheduleItem.leaseLiability?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Lease Period</span></dt>
+        <dd>
+          <div *ngIf="leaseLiabilityScheduleItem.leasePeriod">
+            <a [routerLink]="['/lease-repayment-period', leaseLiabilityScheduleItem.leasePeriod?.id, 'view']">{{
+              leaseLiabilityScheduleItem.leasePeriod?.periodCode
             }}</a>
           </div>
         </dd>

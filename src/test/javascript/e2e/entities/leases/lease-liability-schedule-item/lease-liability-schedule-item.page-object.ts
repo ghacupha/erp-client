@@ -60,10 +60,10 @@ export class LeaseLiabilityScheduleItemUpdatePage {
 
   placeholderSelect = element(by.id('field_placeholder'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
-  leasePeriodSelect = element(by.id('field_leasePeriod'));
   leaseAmortizationScheduleSelect = element(by.id('field_leaseAmortizationSchedule'));
   leaseContractSelect = element(by.id('field_leaseContract'));
   leaseLiabilitySelect = element(by.id('field_leaseLiability'));
+  leasePeriodSelect = element(by.id('field_leasePeriod'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -181,22 +181,6 @@ export class LeaseLiabilityScheduleItemUpdatePage {
     return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
   }
 
-  async leasePeriodSelectLastOption(): Promise<void> {
-    await this.leasePeriodSelect.all(by.tagName('option')).last().click();
-  }
-
-  async leasePeriodSelectOption(option: string): Promise<void> {
-    await this.leasePeriodSelect.sendKeys(option);
-  }
-
-  getLeasePeriodSelect(): ElementFinder {
-    return this.leasePeriodSelect;
-  }
-
-  async getLeasePeriodSelectedOption(): Promise<string> {
-    return await this.leasePeriodSelect.element(by.css('option:checked')).getText();
-  }
-
   async leaseAmortizationScheduleSelectLastOption(): Promise<void> {
     await this.leaseAmortizationScheduleSelect.all(by.tagName('option')).last().click();
   }
@@ -243,6 +227,22 @@ export class LeaseLiabilityScheduleItemUpdatePage {
 
   async getLeaseLiabilitySelectedOption(): Promise<string> {
     return await this.leaseLiabilitySelect.element(by.css('option:checked')).getText();
+  }
+
+  async leasePeriodSelectLastOption(): Promise<void> {
+    await this.leasePeriodSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leasePeriodSelectOption(option: string): Promise<void> {
+    await this.leasePeriodSelect.sendKeys(option);
+  }
+
+  getLeasePeriodSelect(): ElementFinder {
+    return this.leasePeriodSelect;
+  }
+
+  async getLeasePeriodSelectedOption(): Promise<string> {
+    return await this.leasePeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

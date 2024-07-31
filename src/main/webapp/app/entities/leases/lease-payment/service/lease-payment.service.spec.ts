@@ -43,8 +43,8 @@ describe('LeasePayment Service', () => {
 
     elemDefault = {
       id: 0,
-      paymentAmount: 0,
       paymentDate: currentDate,
+      paymentAmount: 0,
     };
   });
 
@@ -91,8 +91,8 @@ describe('LeasePayment Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          paymentAmount: 1,
           paymentDate: currentDate.format(DATE_FORMAT),
+          paymentAmount: 1,
         },
         elemDefault
       );
@@ -114,8 +114,8 @@ describe('LeasePayment Service', () => {
     it('should partial update a LeasePayment', () => {
       const patchObject = Object.assign(
         {
-          paymentAmount: 1,
           paymentDate: currentDate.format(DATE_FORMAT),
+          paymentAmount: 1,
         },
         new LeasePayment()
       );
@@ -140,8 +140,8 @@ describe('LeasePayment Service', () => {
       const returnedFromService = Object.assign(
         {
           id: 1,
-          paymentAmount: 1,
           paymentDate: currentDate.format(DATE_FORMAT),
+          paymentAmount: 1,
         },
         elemDefault
       );

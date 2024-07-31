@@ -39,6 +39,7 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
   let leaseLiabilityScheduleItem: any;
   //let iFRS16LeaseContract: any;
   //let leaseLiability: any;
+  //let leaseRepaymentPeriod: any;
 
   before(() => {
     cy.window().then(win => {
@@ -67,6 +68,14 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
     }).then(({ body }) => {
       leaseLiability = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/lease-repayment-periods',
+      body: {"sequenceNumber":67157,"periodCode":"Springs Market edge"},
+    }).then(({ body }) => {
+      leaseRepaymentPeriod = body;
+    });
   });
    */
 
@@ -89,11 +98,6 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
       body: [],
     });
 
-    cy.intercept('GET', '/api/lease-periods', {
-      statusCode: 200,
-      body: [],
-    });
-
     cy.intercept('GET', '/api/lease-amortization-schedules', {
       statusCode: 200,
       body: [],
@@ -107,6 +111,11 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
     cy.intercept('GET', '/api/lease-liabilities', {
       statusCode: 200,
       body: [leaseLiability],
+    });
+
+    cy.intercept('GET', '/api/lease-repayment-periods', {
+      statusCode: 200,
+      body: [leaseRepaymentPeriod],
     });
 
   });
@@ -139,6 +148,14 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
         url: `/api/lease-liabilities/${leaseLiability.id}`,
       }).then(() => {
         leaseLiability = undefined;
+      });
+    }
+    if (leaseRepaymentPeriod) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/lease-repayment-periods/${leaseRepaymentPeriod.id}`,
+      }).then(() => {
+        leaseRepaymentPeriod = undefined;
       });
     }
   });
@@ -189,6 +206,7 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
             ...leaseLiabilityScheduleItemSample,
             leaseContract: iFRS16LeaseContract,
             leaseLiability: leaseLiability,
+            leasePeriod: leaseRepaymentPeriod,
           },
         }).then(({ body }) => {
           leaseLiabilityScheduleItem = body;
@@ -288,6 +306,7 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
 
       cy.get(`[data-cy="leaseContract"]`).select(1);
       cy.get(`[data-cy="leaseLiability"]`).select(1);
+      cy.get(`[data-cy="leasePeriod"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

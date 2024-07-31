@@ -17,11 +17,11 @@
 ///
 
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
-import { ILeasePeriod } from '../lease-period/lease-period.model';
-import { ILeaseAmortizationSchedule } from '../lease-amortization-schedule/lease-amortization-schedule.model';
 import { ILeaseLiability } from '../lease-liability/lease-liability.model';
+import { ILeaseRepaymentPeriod } from '../lease-repayment-period/lease-repayment-period.model';
 import { IIFRS16LeaseContract } from '../ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
+import { ILeaseAmortizationSchedule } from '../lease-amortization-schedule/lease-amortization-schedule.model';
 
 export interface ILeaseLiabilityScheduleItem {
   id?: number;
@@ -36,10 +36,10 @@ export interface ILeaseLiabilityScheduleItem {
   interestPayableClosing?: number | null;
   placeholders?: IPlaceholder[] | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
-  leasePeriod?: ILeasePeriod | null;
   leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null;
   leaseContract?: IIFRS16LeaseContract;
   leaseLiability?: ILeaseLiability;
+  leasePeriod?: ILeaseRepaymentPeriod;
 }
 
 export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
@@ -56,10 +56,10 @@ export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
     public interestPayableClosing?: number | null,
     public placeholders?: IPlaceholder[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
-    public leasePeriod?: ILeasePeriod | null,
     public leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null,
     public leaseContract?: IIFRS16LeaseContract,
-    public leaseLiability?: ILeaseLiability
+    public leaseLiability?: ILeaseLiability,
+    public leasePeriod?: ILeaseRepaymentPeriod
   ) {}
 }
 
