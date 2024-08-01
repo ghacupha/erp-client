@@ -41,6 +41,7 @@ import {
 } from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
 import { IAmortizationPeriod } from '../../amortization-period/amortization-period.model';
 import { AmortizationPeriodService } from '../../amortization-period/service/amortization-period.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
@@ -59,6 +60,8 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   weAreEditing = false;
   weAreCreating = false;
   selectedItem = {...new PrepaymentMarshalling()}
+
+  todDate = dayjs();
 
   editForm = this.fb.group({
     id: [],
@@ -101,6 +104,53 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     if (this.weAreCreating) {
       this.loadRelationshipsOptions();
     }
+
+    this.updateFirstPeriod();
+
+    this.updateFirstFiscalMonthGivenFirstPeriod();
+
+    this.updateLastFiscalMonthGivenFirstMonth()
+
+  }
+
+  updateFirstPeriod(): void {
+    this.amortizationPeriodService.findByDate(this.todDate).subscribe(periodResponse => {
+      if (periodResponse.body) {
+        this.editForm.patchValue({
+          firstAmortizationPeriod: periodResponse.body,
+        });
+      }
+    });
+  }
+
+  updateFirstFiscalMonthGivenFirstPeriod(): void {
+    this.editForm.get(['firstAmortizationPeriod'])?.valueChanges.subscribe((amortizationPeriodChange) => {
+
+      this.fiscalMonthService.find(amortizationPeriodChange.fiscalMonth.id).subscribe(fiscalMonthResponse => {
+        if (fiscalMonthResponse.body) {
+          const fiscalMonth = fiscalMonthResponse.body;
+          this.editForm.patchValue({
+            firstFiscalMonth: fiscalMonth
+          })
+        }
+      });
+    });
+  }
+
+  updateLastFiscalMonthGivenFirstMonth(): void {
+    this.editForm.get(['amortizationPeriods'])?.valueChanges.subscribe((amortizationPeriodsChange) => {
+      const firstFiscalMonth = this.editForm.get(['firstFiscalMonth'])!.value;
+      if (firstFiscalMonth) {
+          this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriodsChange).subscribe(fiscalMonthResponse => {
+            if (fiscalMonthResponse.body) {
+              const fiscalMonth = fiscalMonthResponse.body;
+              this.editForm.patchValue({
+                lastFiscalMonth: fiscalMonth
+              });
+            }
+          })
+      }
+    });
   }
 
   updatePrepaymentAccount(update: IPrepaymentAccount): void {

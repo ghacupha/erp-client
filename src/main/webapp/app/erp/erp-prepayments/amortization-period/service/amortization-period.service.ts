@@ -35,6 +35,7 @@ export type EntityArrayResponseType = HttpResponse<IAmortizationPeriod[]>;
 @Injectable({ providedIn: 'root' })
 export class AmortizationPeriodService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/prepayments/amortization-periods');
+  protected resourceByDateUrl = this.applicationConfigService.getEndpointFor('api/prepayments/amortization-periods/by-date');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/prepayments/_search/amortization-periods');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -67,6 +68,15 @@ export class AmortizationPeriodService {
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IAmortizationPeriod>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findByDate(todDate: dayjs.Dayjs): Observable<EntityResponseType> {
+
+    const queryDate = todDate.isValid() ? todDate.format(DATE_FORMAT) : undefined;
+
+    return this.http
+      .get<IAmortizationPeriod>(`${this.resourceByDateUrl}/${queryDate}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

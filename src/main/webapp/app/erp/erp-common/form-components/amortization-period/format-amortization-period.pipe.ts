@@ -18,6 +18,7 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { IAmortizationPeriod } from '../../../erp-prepayments/amortization-period/amortization-period.model';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 @Pipe({
   name: 'formatAmortizationPeriod',
@@ -26,6 +27,17 @@ export class FormatAmortizationPeriodPipe implements PipeTransform {
 
   transform(value: IAmortizationPeriod): string {
 
-    return `Id: ${value.id} | Code: ${ value.periodCode } | Start: ${ value.startDate} | End: ${value.endDate } | Sequence: ${ value.sequenceNumber }`;
+    let startDate: any;
+
+    if(value.startDate) {
+      startDate = value.startDate.format('DD/MM/YY');
+    }
+    let endDate: any;
+
+    if(value.endDate) {
+      endDate = value.endDate.format('DD/MM/YY');
+    }
+
+    return `Id: ${value.id} | Code: ${ value.periodCode } | Start: ${ startDate} | End: ${endDate } | Sequence: ${ value.sequenceNumber }`;
   }
 }

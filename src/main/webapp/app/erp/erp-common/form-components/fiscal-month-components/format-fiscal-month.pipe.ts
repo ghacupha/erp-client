@@ -18,6 +18,7 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 @Pipe({
   name: 'formatFiscalMonth',
@@ -25,6 +26,18 @@ import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model
 export class FormatFiscalMonthPipe implements PipeTransform {
 
   transform(value: IFiscalMonth): string {
-    return `Id: ${value.id} | Start Date: ${value.startDate} | End Date: ${value.endDate} | ${value.fiscalMonthCode}`;
+
+    let startDate: any;
+
+    if(value.startDate) {
+      startDate = value.startDate.format('DD/MM/YY');
+    }
+    let endDate: any;
+
+    if(value.endDate) {
+      endDate = value.endDate.format('DD/MM/YY');
+    }
+
+    return `Id: ${value.id} | Start Date: ${startDate} | End Date: ${endDate} | ${value.fiscalMonthCode}`;
   }
 }
