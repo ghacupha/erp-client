@@ -38,7 +38,6 @@ import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mappin
 import { M21SecurityClearanceFormControlComponent } from './security-clearance-form-components/m21-security-clearance-form-control.component';
 import { M21ApplicationUserFormControlComponent } from './application-user-form-components/m21-application-user-form-control.component';
 import { M2mPrepaymentMappingFormControlComponent } from './prepayment-mapping-components/m2m-prepayment-mapping-form-control.component';
-import { M21PrepaymentAccountFormControlComponent } from './prepayment-account-form-components/m21-prepayment-account-form-control.component';
 import { M21ReportDesignControlComponent } from './report-design-form-components/m21-report-design-control.component';
 import { M21AlgorithmFormControlComponent } from './algorithm-form-components/m21-algorithm-form-control.component';
 import { M21SystemModuleFormControlComponent } from './system-module-form-components/m21-system-module-form-control.component';
@@ -80,6 +79,7 @@ import { LeaseLiabilityFormComponentsModule } from './lease-liability-components
 import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amortization-calculation-components/lease-amortization-calculation-form-components.module';
 import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
 import { TransactionAccountFormComponentsModule } from './transaction-account-form-components/transaction-account-form-components.module';
+import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-components/prepayment-account-form-controls.module';
 
 @NgModule({
   declarations: [
@@ -100,7 +100,6 @@ import { TransactionAccountFormComponentsModule } from './transaction-account-fo
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
-    M21PrepaymentAccountFormControlComponent,
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
@@ -157,7 +156,6 @@ import { TransactionAccountFormComponentsModule } from './transaction-account-fo
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
-    M21PrepaymentAccountFormControlComponent,
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
@@ -199,6 +197,7 @@ import { TransactionAccountFormComponentsModule } from './transaction-account-fo
     LeaseAmortizationCalculationFormComponentsModule,
     ServiceOutletFormComponentsModule,
     TransactionAccountFormComponentsModule,
+    PrepaymentAccountFormControlsModule,
   ]
 })
 export class FormComponentsModule {

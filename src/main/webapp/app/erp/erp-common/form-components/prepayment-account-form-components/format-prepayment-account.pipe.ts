@@ -17,7 +17,9 @@
 ///
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { IPrepaymentAccount } from '../../erp-prepayments/prepayment-account/prepayment-account.model';
+import { IPrepaymentAccount } from '../../../erp-prepayments/prepayment-account/prepayment-account.model';
+import { formatCurrency } from '@angular/common';
+import { IDealer } from '../../../erp-pages/dealers/dealer/dealer.model';
 
 @Pipe({
   name: 'formatPrepaymentAccount',
@@ -31,8 +33,25 @@ export class FormatPrepaymentAccountPipe implements PipeTransform {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
 
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      accountDetail = `Id: ${value.id} | Catalogue: ${value.catalogueNumber} |${value.particulars}`;
+      let prepaidAmount;
+
+      if (typeof value.prepaymentAmount === 'number') {
+        prepaidAmount = formatCurrency(value.prepaymentAmount, 'en', 'CU ');
+      }
+
+      const prepaidDate  = value.recognitionDate?.format('DD/MM/YY');
+
+      accountDetail = `${value.catalogueNumber}-${value.particulars} ${prepaidAmount} On: ${prepaidDate}`;
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const dealerDetails: IDealer = <IDealer>value.dealer
+
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (dealerDetails.dealerName) {
+        const dealerName = dealerDetails.dealerName;
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        accountDetail = `${value.catalogueNumber}-${value.particulars} ${prepaidAmount} On: ${prepaidDate} ${dealerName}`;
+      }
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

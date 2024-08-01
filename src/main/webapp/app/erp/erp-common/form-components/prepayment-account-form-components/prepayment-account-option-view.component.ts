@@ -17,12 +17,12 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { IPrepaymentAccount } from '../../erp-prepayments/prepayment-account/prepayment-account.model';
+import { IPrepaymentAccount } from '../../../erp-prepayments/prepayment-account/prepayment-account.model';
 
 @Component({
   selector: 'jhi-prepayment-account-option-view',
   template: `
-    # {{item.id}} Code: {{ item.catalogueNumber }} Name: {{ item.particulars }}
+    {{ item.catalogueNumber }} {{ item.particulars }} Date: {{ item.recognitionDate }} CUs: {{ item.prepaymentAmount | currency }} | {{ item.dealer!.dealerName }}
   `
 })
 export class PrepaymentAccountOptionViewComponent {
