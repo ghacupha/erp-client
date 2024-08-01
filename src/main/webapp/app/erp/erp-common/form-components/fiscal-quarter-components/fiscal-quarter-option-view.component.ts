@@ -25,7 +25,7 @@ import { IFiscalQuarter } from '../../../erp-pages/fiscal-quarter/fiscal-quarter
     # {{item.id}} Code {{ item.fiscalQuarterCode }} Start Date: {{ item.startDate }} End Date: {{ item.endDate }}
   `
 })
-export class FiscalMonthOptionViewComponent {
+export class FiscalQuarterOptionViewComponent {
 
   @Input() item: IFiscalQuarter = {};
 }

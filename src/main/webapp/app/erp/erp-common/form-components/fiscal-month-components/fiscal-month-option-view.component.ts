@@ -17,7 +17,7 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
 
 @Component({
   selector: 'jhi-fiscal-month-option-view',

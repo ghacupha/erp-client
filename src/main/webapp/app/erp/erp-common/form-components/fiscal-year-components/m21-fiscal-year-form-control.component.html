@@ -34,7 +34,7 @@
     <option [ngValue]="inputValue"></option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <jhi-fiscal-quarter-option-view [item]='item'></jhi-fiscal-quarter-option-view>
+      <jhi-fiscal-year-option-view [item]='item'></jhi-fiscal-year-option-view>
     </ng-template>
   </ng-select>
   <!--// TODO Add entity-specific views-->

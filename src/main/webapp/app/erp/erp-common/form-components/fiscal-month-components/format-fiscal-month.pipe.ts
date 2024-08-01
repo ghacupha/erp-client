@@ -16,24 +16,15 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
-import { SharedModule } from '../../../../shared/shared.module';
-import { M21PrepaymentAccountFormControlComponent } from './m21-prepayment-account-form-control.component';
-import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
-import { FormatPrepaymentAccountPipe } from './format-prepayment-account.pipe';
+import { Pipe, PipeTransform } from '@angular/core';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
 
-@NgModule({
-  declarations: [
-    M21PrepaymentAccountFormControlComponent,
-    PrepaymentAccountOptionViewComponent,
-    FormatPrepaymentAccountPipe,
-  ],
-  imports: [SharedModule],
-  exports: [
-    M21PrepaymentAccountFormControlComponent,
-    PrepaymentAccountOptionViewComponent,
-    FormatPrepaymentAccountPipe,
-  ]
+@Pipe({
+  name: 'formatFiscalMonth',
 })
-export class PrepaymentAccountFormControlsModule {
+export class FormatFiscalMonthPipe implements PipeTransform {
+
+  transform(value: IFiscalMonth): string {
+    return `Id: ${value.id} | Start Date: ${value.startDate} | End Date: ${value.endDate} | ${value.fiscalMonthCode}`;
+  }
 }

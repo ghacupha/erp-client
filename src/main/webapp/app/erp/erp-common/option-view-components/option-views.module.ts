@@ -42,7 +42,6 @@ import { AssetAccessoryOptionViewComponent } from './asset-accessory-option-view
 import { WorkProjectRegisterOptionViewComponent } from './work-project-register-option-view.component';
 import { WipTransferOptionViewComponent } from './wip-transfer-option-view.component';
 import { WipRegistrationOptionViewComponent } from './wip-registration-option-view.component';
-import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +69,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     WorkProjectRegisterOptionViewComponent,
     WipTransferOptionViewComponent,
     WipRegistrationOptionViewComponent,
-    FiscalMonthOptionViewComponent,
   ],
   imports: [
     CommonModule
@@ -100,7 +98,6 @@ import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.compo
     WorkProjectRegisterOptionViewComponent,
     WipTransferOptionViewComponent,
     WipRegistrationOptionViewComponent,
-    FiscalMonthOptionViewComponent,
   ]
 })
 export class OptionViewsModule {

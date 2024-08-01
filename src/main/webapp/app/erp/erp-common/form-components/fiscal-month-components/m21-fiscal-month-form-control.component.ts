@@ -21,7 +21,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
-import { FiscalMonthSuggestionService } from '../../suggestion/fiscal-month-suggestion.service';
+import { FiscalMonthSuggestionService } from './fiscal-month-suggestion.service';
 
 /**
  * Many-to-one form control component for prepayment-account

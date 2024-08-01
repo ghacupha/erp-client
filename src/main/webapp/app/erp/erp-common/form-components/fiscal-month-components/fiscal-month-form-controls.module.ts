@@ -16,15 +16,26 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { NgModule } from '@angular/core';
+import { M21FiscalMonthFormControlComponent } from './m21-fiscal-month-form-control.component';
+import { SharedModule } from '../../../../shared/shared.module';
+import { FormatFiscalMonthPipe } from './format-fiscal-month.pipe';
+import { FiscalMonthOptionViewComponent } from './fiscal-month-option-view.component';
 
-@Pipe({
-  name: 'formatFiscalMonth',
+@NgModule({
+  declarations: [
+    M21FiscalMonthFormControlComponent,
+    FiscalMonthOptionViewComponent,
+    FormatFiscalMonthPipe
+  ],
+  imports: [
+    SharedModule
+  ],
+  exports: [
+    M21FiscalMonthFormControlComponent,
+    FiscalMonthOptionViewComponent,
+    FormatFiscalMonthPipe,
+  ]
 })
-export class FormatFiscalMonthPipe implements PipeTransform {
-
-  transform(value: IFiscalMonth): string {
-    return `Id: ${value.id} | Start Date: ${value.startDate} | End Date: ${value.endDate} | ${value.fiscalMonthCode}`;
-  }
+export class FiscalMonthFormControlsModule {
 }

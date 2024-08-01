@@ -59,10 +59,6 @@ import { M2mWorkProjectRegisterFormControlComponent } from './work-project-regis
 import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
 import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
 import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
-import { M21FiscalMonthFormControlComponent } from './fiscal-month-components/m21-fiscal-month-form-control.component';
-import { FiscalMonthOptionViewComponent } from './fiscal-quarter-components/fiscal-quarter-option-view.component';
-import { FormatFiscalQuarterPipe } from './fiscal-quarter-components/format-fiscal-quarter.pipe';
-import { M21FiscalQuarterFormControlComponent } from './fiscal-quarter-components/m21-fiscal-quarter-form-control.component';
 import { FiscalYearOptionViewComponent } from './fiscal-year-components/fiscal-year-option-view.component';
 import { FormatFiscalYearPipe } from './fiscal-year-components/format-fiscal-year.pipe';
 import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-fiscal-year-form-control.component';
@@ -80,6 +76,8 @@ import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amorti
 import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
 import { TransactionAccountFormComponentsModule } from './transaction-account-form-components/transaction-account-form-components.module';
 import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-components/prepayment-account-form-controls.module';
+import { FiscalMonthFormControlsModule } from './fiscal-month-components/fiscal-month-form-controls.module';
+import { FiscalQuarterComponentsModule } from './fiscal-quarter-components/fiscal-quarter-components.module';
 
 @NgModule({
   declarations: [
@@ -121,10 +119,6 @@ import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-c
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
-    M21FiscalMonthFormControlComponent,
-    FiscalMonthOptionViewComponent,
-    FormatFiscalQuarterPipe,
-    M21FiscalQuarterFormControlComponent,
     FiscalYearOptionViewComponent,
     FormatFiscalYearPipe,
     M21FiscalYearFormControlComponent,
@@ -177,10 +171,6 @@ import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-c
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
-    M21FiscalMonthFormControlComponent,
-    FiscalMonthOptionViewComponent,
-    FormatFiscalQuarterPipe,
-    M21FiscalQuarterFormControlComponent,
     FiscalYearOptionViewComponent,
     FormatFiscalYearPipe,
     M21FiscalYearFormControlComponent,
@@ -198,6 +188,8 @@ import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-c
     ServiceOutletFormComponentsModule,
     TransactionAccountFormComponentsModule,
     PrepaymentAccountFormControlsModule,
+    FiscalMonthFormControlsModule,
+    FiscalQuarterComponentsModule,
   ]
 })
 export class FormComponentsModule {

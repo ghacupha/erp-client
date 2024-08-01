@@ -22,6 +22,7 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IFiscalQuarter } from '../../../erp-pages/fiscal-quarter/fiscal-quarter.model';
 import { FiscalQuarterSuggestionService } from './fiscal-quarter-suggestion.service';
+import { FiscalQuarterService } from '../../../erp-pages/fiscal-quarter/service/fiscal-quarter.service';
 
 /**
  * Many-to-one form control component for prepayment-account
@@ -53,6 +54,7 @@ export class M21FiscalQuarterFormControlComponent implements OnInit, ControlValu
   valueLookUps$: Observable<IFiscalQuarter[]> = of([]);
 
   constructor(
+    protected valueService: FiscalQuarterService,
     protected valueSuggestionService: FiscalQuarterSuggestionService
   ) {}
 
@@ -66,6 +68,14 @@ export class M21FiscalQuarterFormControlComponent implements OnInit, ControlValu
   ngOnInit(): void {
 
     this.loadValues();
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(res => {
+        if (res.body) {
+          this.inputValue = res.body;
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
