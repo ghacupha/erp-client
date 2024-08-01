@@ -45,7 +45,7 @@ import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
-  templateUrl: './prepayment-marshalling-update.component.html',
+  templateUrl: './prepayment-marshalling-update.component.html'
 })
 export class PrepaymentMarshallingUpdateComponent implements OnInit {
   isSaving = false;
@@ -59,7 +59,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   weAreCopying = false;
   weAreEditing = false;
   weAreCreating = false;
-  selectedItem = {...new PrepaymentMarshalling()}
+  selectedItem = { ...new PrepaymentMarshalling() };
 
   todDate = dayjs();
 
@@ -72,8 +72,10 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     firstAmortizationPeriod: [null, Validators.required],
     placeholders: [],
     firstFiscalMonth: [null, Validators.required],
-    lastFiscalMonth: [null, Validators.required],
+    lastFiscalMonth: [null, Validators.required]
   });
+
+  disableAmortizationPeriodControl = false;
 
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
@@ -83,7 +85,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected store: Store<State>,
+    protected store: Store<State>
   ) {
     this.store.pipe(select(copyingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreCopying = stat);
     this.store.pipe(select(editingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreEditing = stat);
@@ -94,11 +96,13 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   ngOnInit(): void {
 
     if (this.weAreEditing) {
+      this.disableAmortizationPeriodControl = true;
       this.updateForm(this.selectedItem);
     }
 
     if (this.weAreCopying) {
-      this.copyForm(this.selectedItem)
+      this.disableAmortizationPeriodControl = true;
+      this.copyForm(this.selectedItem);
     }
 
     if (this.weAreCreating) {
@@ -109,7 +113,9 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
     this.updateFirstFiscalMonthGivenFirstPeriod();
 
-    this.updateLastFiscalMonthGivenFirstMonth()
+    this.updateLastFiscalMonthGivenPeriods();
+
+    this.updateLastFiscalMonthGivenAmortizationPeriod();
 
   }
 
@@ -117,7 +123,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     this.amortizationPeriodService.findByDate(this.todDate).subscribe(periodResponse => {
       if (periodResponse.body) {
         this.editForm.patchValue({
-          firstAmortizationPeriod: periodResponse.body,
+          firstAmortizationPeriod: periodResponse.body
         });
       }
     });
@@ -131,37 +137,64 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
           const fiscalMonth = fiscalMonthResponse.body;
           this.editForm.patchValue({
             firstFiscalMonth: fiscalMonth
-          })
+          });
         }
       });
     });
   }
 
-  updateLastFiscalMonthGivenFirstMonth(): void {
+  updateLastFiscalMonthGivenPeriods(): void {
     this.editForm.get(['amortizationPeriods'])?.valueChanges.subscribe((amortizationPeriodsChange) => {
       const firstFiscalMonth = this.editForm.get(['firstFiscalMonth'])!.value;
       if (firstFiscalMonth) {
-          this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriodsChange).subscribe(fiscalMonthResponse => {
-            if (fiscalMonthResponse.body) {
-              const fiscalMonth = fiscalMonthResponse.body;
-              this.editForm.patchValue({
-                lastFiscalMonth: fiscalMonth
+        this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriodsChange).subscribe(fiscalMonthResponse => {
+          if (fiscalMonthResponse.body) {
+            const fiscalMonth = fiscalMonthResponse.body;
+            this.editForm.patchValue({
+              lastFiscalMonth: fiscalMonth
+            });
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Reacts to changes in firstAmortizationPeriod given the periods are provided
+   */
+  updateLastFiscalMonthGivenAmortizationPeriod(): void {
+    this.editForm.get(['firstAmortizationPeriod'])?.valueChanges.subscribe((amortizationPeriodChange) => {
+
+      const amortizationPeriods = this.editForm.get(['amortizationPeriods'])!.value;
+
+      if(amortizationPeriods) {
+        this.fiscalMonthService.find(amortizationPeriodChange.fiscalMonth.id).subscribe(fiscalMonthProposedChange => {
+          if (fiscalMonthProposedChange.body) {
+            const firstFiscalMonth = fiscalMonthProposedChange.body;
+            if (firstFiscalMonth.id != null) {
+              this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriods).subscribe(lastFiscalMonthResponse => {
+                if (lastFiscalMonthResponse.body) {
+                  this.editForm.patchValue({
+                    lastFiscalMonth: lastFiscalMonthResponse.body
+                  });
+                }
               });
             }
-          })
+          }
+        });
       }
     });
   }
 
   updatePrepaymentAccount(update: IPrepaymentAccount): void {
     this.editForm.patchValue({
-      prepaymentAccount: update,
+      prepaymentAccount: update
     });
   }
 
   updateFirstAmortizationPeriod(update: IAmortizationPeriod): void {
     this.editForm.patchValue({
-      firstAmortizationPeriod: update,
+      firstAmortizationPeriod: update
     });
   }
 
@@ -173,13 +206,13 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
   updateFirstFiscalMonth(update: IFiscalMonth): void {
     this.editForm.patchValue({
-      firstFiscalMonth: update,
+      firstFiscalMonth: update
     });
   }
 
   updateLastFiscalMonth(update: IFiscalMonth): void {
     this.editForm.patchValue({
-      lastFiscalMonth: update,
+      lastFiscalMonth: update
     });
   }
 
@@ -258,7 +291,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
-      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod
     });
 
     this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
@@ -286,7 +319,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
-      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod
     });
 
     this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
@@ -367,7 +400,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
-      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value
     };
   }
 
@@ -382,7 +415,7 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
-      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value
     };
   }
 }

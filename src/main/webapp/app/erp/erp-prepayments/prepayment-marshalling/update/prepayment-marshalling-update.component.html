@@ -77,7 +77,7 @@
         <!--// TODO firstAmortizationPeriod -->
         <jhi-m21-amortization-period-form-control
           ngDefaultControl
-          [disabledInput]="editForm.get('firstAmortizationPeriod')!.value"
+          [disabledInput]="disableAmortizationPeriodControl"
           formControlName='firstAmortizationPeriod'
           [inputValue]="editForm.get('firstAmortizationPeriod')!.value"
           (valueSelected)='updateFirstAmortizationPeriod($event)'
