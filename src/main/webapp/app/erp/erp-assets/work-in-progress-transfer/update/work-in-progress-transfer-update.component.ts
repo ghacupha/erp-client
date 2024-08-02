@@ -33,7 +33,9 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 import { IBusinessDocument } from '../../../erp-pages/business-document/business-document.model';
 import { IWorkInProgressRegistration } from '../../work-in-progress-registration/work-in-progress-registration.model';
 import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
-import { WorkInProgressRegistrationService } from '../../work-in-progress-registration/service/work-in-progress-registration.service';
+import {
+  WorkInProgressRegistrationService
+} from '../../work-in-progress-registration/service/work-in-progress-registration.service';
 import { BusinessDocumentService } from '../../../erp-pages/business-document/service/business-document.service';
 import { WorkProjectRegisterService } from '../../work-project-register/service/work-project-register.service';
 import { IWorkProjectRegister } from '../../work-project-register/work-project-register.model';
@@ -99,6 +101,8 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     this.updateDetailsGivenWIPRegistration();
 
     this.updateDetailsGivenTransferSettlement();
+
+    this.updateTransferAmountGivenWIPRegistration();
   }
 
   updateDetailsGivenWIPRegistration(): void {
@@ -111,6 +115,19 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
     });
   }
 
+  updateTransferAmountGivenWIPRegistration(): void {
+    this.editForm.get(['workInProgressRegistration'])?.valueChanges.subscribe((registration) => {
+      this.workInProgressRegistrationService.find(registration.id).subscribe((registrationResponse) => {
+        if (registrationResponse.body) {
+          this.editForm.patchValue({
+            transferAmount: registrationResponse.body.instalmentAmount,
+            serviceOutlet: registrationResponse.body.outletCode
+          });
+        }
+      });
+    });
+  }
+
   updateDetailsGivenTransferSettlement(): void {
     this.editForm.get(['transferSettlement'])?.valueChanges.subscribe((trfSettlement) => {
       this.settlementService.find(trfSettlement.id).subscribe((settlementTransactionResponse) => {
@@ -119,7 +136,6 @@ export class WorkInProgressTransferUpdateComponent implements OnInit {
 
           this.editForm.patchValue({
             transferDate: transferredSettlement.paymentDate,
-            transferAmount: transferredSettlement.paymentAmount,
             description: transferredSettlement.description,
             businessDocuments: transferredSettlement.businessDocuments
           });
