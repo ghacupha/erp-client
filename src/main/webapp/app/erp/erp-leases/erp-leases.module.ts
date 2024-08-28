@@ -335,6 +335,102 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseRepaymentPeriodModule
             ),
         },
+        {
+          path: 'lease-liability-by-account-report',
+          data: {
+            pageTitle: 'ERP | Liability Account Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-by-account-report/lease-liability-by-account-report.module').then(
+              m => m.LeaseLiabilityByAccountReportModule
+            ),
+        },
+        {
+          path: 'lease-liability-by-account-report-item',
+          data: {
+            pageTitle: 'ERP | Liability Account Report Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-by-account-report-item/lease-liability-by-account-report-item.module').then(
+              m => m.LeaseLiabilityByAccountReportItemModule
+            ),
+        },
+        {
+          path: 'lease-liability-posting-report',
+          data: {
+            pageTitle: 'ERP | Liability Posting Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-posting-report/lease-liability-posting-report.module').then(
+              m => m.LeaseLiabilityPostingReportModule
+            ),
+        },
+        {
+          path: 'lease-liability-posting-report-item',
+          data: {
+            pageTitle: 'ERP | Liability Posting Report Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-posting-report-item/lease-liability-posting-report-item.module').then(
+              m => m.LeaseLiabilityPostingReportItemModule
+            ),
+        },
+        {
+          path: 'lease-liability-report',
+          data: {
+            pageTitle: 'ERP | Liability Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-report/lease-liability-report.module').then(
+              m => m.LeaseLiabilityReportModule
+            ),
+        },
+        {
+          path: 'lease-liability-report-item',
+          data: {
+            pageTitle: 'ERP | Liability Report Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-report-item/lease-liability-report-item.module').then(
+              m => m.LeaseLiabilityReportItemModule
+            ),
+        },
+        {
+          path: 'lease-liability-schedule-report',
+          data: {
+            pageTitle: 'ERP | Liability Schedule Report',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-schedule-report/lease-liability-schedule-report.module').then(
+              m => m.LeaseLiabilityScheduleReportModule
+            ),
+        },
+        {
+          path: 'lease-liability-schedule-report-item',
+          data: {
+            pageTitle: 'ERP | Liability Schedule Report Items',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./lease-liability-schedule-report-item/lease-liability-schedule-report-item.module').then(
+              m => m.LeaseLiabilityScheduleReportItemModule
+            ),
+        },
       ]
     )
   ]

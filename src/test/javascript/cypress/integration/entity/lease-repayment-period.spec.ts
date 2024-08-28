@@ -34,12 +34,7 @@ describe('LeaseRepaymentPeriod e2e test', () => {
   const leaseRepaymentPeriodPageUrlPattern = new RegExp('/lease-repayment-period(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const leaseRepaymentPeriodSample = {
-    sequenceNumber: 86287,
-    startDate: '2024-07-21',
-    endDate: '2024-07-22',
-    periodCode: 'Springs redundant',
-  };
+  const leaseRepaymentPeriodSample = { sequenceNumber: 6350, periodCode: 'online' };
 
   let leaseRepaymentPeriod: any;
   //let fiscalMonth: any;
@@ -232,11 +227,11 @@ describe('LeaseRepaymentPeriod e2e test', () => {
     it.skip('should create an instance of LeaseRepaymentPeriod', () => {
       cy.get(`[data-cy="sequenceNumber"]`).type('68811').should('have.value', '68811');
 
-      cy.get(`[data-cy="startDate"]`).type('2024-07-22').should('have.value', '2024-07-22');
+      cy.get(`[data-cy="startDate"]`).type('2024-07-21').should('have.value', '2024-07-21');
 
       cy.get(`[data-cy="endDate"]`).type('2024-07-21').should('have.value', '2024-07-21');
 
-      cy.get(`[data-cy="periodCode"]`).type('deposit Product Brand').should('have.value', 'deposit Product Brand');
+      cy.get(`[data-cy="periodCode"]`).type('Cheese dedicated').should('have.value', 'Cheese dedicated');
 
       cy.get(`[data-cy="fiscalMonth"]`).select(1);
 

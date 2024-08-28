@@ -72,7 +72,7 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-repayment-periods',
-      body: {"sequenceNumber":67157,"periodCode":"Springs Market edge"},
+      body: {"sequenceNumber":67157,"startDate":"2024-07-22","endDate":"2024-07-22","periodCode":"Chief"},
     }).then(({ body }) => {
       leaseRepaymentPeriod = body;
     });

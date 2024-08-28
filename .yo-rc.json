@@ -306,7 +306,15 @@
       "LeasePayment",
       "LeaseLiability",
       "LeaseAmortizationSchedule",
-      "LeaseRepaymentPeriod"
+      "LeaseRepaymentPeriod",
+      "LeaseLiabilityReport",
+      "LeaseLiabilityReportItem",
+      "LeaseLiabilityScheduleReportItem",
+      "LeaseLiabilityPostingReportItem",
+      "LeaseLiabilityByAccountReportItem",
+      "LeaseLiabilityByAccountReport",
+      "LeaseLiabilityScheduleReport",
+      "LeaseLiabilityPostingReport"
     ],
     "lastLiquibaseTimestamp": 1714638847000,
     "monorepository": true,

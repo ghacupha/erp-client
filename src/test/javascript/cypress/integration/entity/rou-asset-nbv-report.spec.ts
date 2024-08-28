@@ -54,7 +54,7 @@ describe('RouAssetNBVReport e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-periods',
-      body: {"sequenceNumber":60312,"startDate":"2024-05-13","endDate":"2024-05-13","periodCode":"reinvent payment Granite"},
+      body: {"sequenceNumber":60312,"startDate":"2024-05-14","endDate":"2024-05-14","periodCode":"IB Account"},
     }).then(({ body }) => {
       leasePeriod = body;
     });

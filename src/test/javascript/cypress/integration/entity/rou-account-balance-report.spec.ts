@@ -54,7 +54,7 @@ describe('RouAccountBalanceReport e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-periods',
-      body: {"sequenceNumber":57296,"startDate":"2024-05-14","periodCode":"RAM"},
+      body: {"sequenceNumber":57296,"periodCode":"GB efficient"},
     }).then(({ body }) => {
       leasePeriod = body;
     });
