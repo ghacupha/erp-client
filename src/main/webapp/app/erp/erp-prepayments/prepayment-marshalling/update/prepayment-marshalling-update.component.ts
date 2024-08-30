@@ -120,13 +120,15 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
   }
 
   updateFirstPeriod(): void {
-    this.amortizationPeriodService.findByDate(this.todDate).subscribe(periodResponse => {
-      if (periodResponse.body) {
-        this.editForm.patchValue({
-          firstAmortizationPeriod: periodResponse.body
-        });
-      }
-    });
+    if(!this.weAreCopying) {
+      this.amortizationPeriodService.findByDate(this.todDate).subscribe(periodResponse => {
+        if (periodResponse.body) {
+          this.editForm.patchValue({
+            firstAmortizationPeriod: periodResponse.body
+          });
+        }
+      });
+    }
   }
 
   updateFirstFiscalMonthGivenFirstPeriod(): void {
