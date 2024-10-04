@@ -24,9 +24,10 @@ import { LeaseRepaymentPeriodUpdateComponent } from './update/lease-repayment-pe
 import { LeaseRepaymentPeriodDeleteDialogComponent } from './delete/lease-repayment-period-delete-dialog.component';
 import { LeaseRepaymentPeriodRoutingModule } from './route/lease-repayment-period-routing.module';
 import { LeaseRepaymentPeriodReportNavParameterComponent } from './reportNavParam/lease-repayment-period-report-nav-parameter.component';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, LeaseRepaymentPeriodRoutingModule],
+  imports: [SharedModule, LeaseRepaymentPeriodRoutingModule, ErpCommonModule],
   declarations: [
     LeaseRepaymentPeriodComponent,
     LeaseRepaymentPeriodDetailComponent,

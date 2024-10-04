@@ -34,10 +34,10 @@
     <option [ngValue]="inputValue"></option>
     <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
       <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-      <jhi-lease-period-option-view [item]='item'></jhi-lease-period-option-view>
+      <jhi-lease-repayment-period-option-view [item]='item'></jhi-lease-repayment-period-option-view>
     </ng-template>
   </ng-select>
   <!--// TODO Add entity-specific views-->
-  <div>{{inputValue|FormatLeaseRepaymentPeriodPipe}}</div>
+  <div>{{inputValue|formatLeaseRepaymentPeriod}}</div>
   <div *jhiHasAnyAuthority="'ROLE_DEV'">{{inputValue|json }}</div>
 </div>

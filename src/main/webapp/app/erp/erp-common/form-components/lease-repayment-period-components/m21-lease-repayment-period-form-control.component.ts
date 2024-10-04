@@ -20,7 +20,8 @@ import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output }
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { ILeasePeriod } from '../../../erp-leases/lease-period/lease-period.model';
+import { LeaseRepaymentPeriodSuggestionService } from './lease-repayment-period-suggestion.service';
+import { ILeaseRepaymentPeriod } from '../../../erp-leases/lease-repayment-period/lease-repayment-period.model';
 
 /**
  * Many-to-one form control component for lease-period
@@ -38,18 +39,18 @@ import { ILeasePeriod } from '../../../erp-leases/lease-period/lease-period.mode
 })
 export class M21LeaseRepaymentPeriodFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
-  @Input() inputValue: ILeasePeriod = {}
+  @Input() inputValue: ILeaseRepaymentPeriod = {}
 
   @Input() inputControlLabel = '';
 
   @Input() disabledInput = false;
 
-  @Output() valueSelected: EventEmitter<ILeasePeriod> = new EventEmitter<ILeasePeriod>();
+  @Output() valueSelected: EventEmitter<ILeaseRepaymentPeriod> = new EventEmitter<ILeaseRepaymentPeriod>();
 
   minAccountLengthTerm = 3;
   valuesLoading = false;
   valueControlInput$ = new Subject<string>();
-  valueLookUps$: Observable<ILeasePeriod[]> = of([]);
+  valueLookUps$: Observable<ILeaseRepaymentPeriod[]> = of([]);
 
   constructor(
     protected valueSuggestionService: LeaseRepaymentPeriodSuggestionService
@@ -96,7 +97,7 @@ export class M21LeaseRepaymentPeriodFormControlComponent implements OnInit, Cont
     return item.id!;
   }
 
-  writeValue(value: ILeasePeriod): void {
+  writeValue(value: ILeaseRepaymentPeriod): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (value) {
       this.inputValue = value;

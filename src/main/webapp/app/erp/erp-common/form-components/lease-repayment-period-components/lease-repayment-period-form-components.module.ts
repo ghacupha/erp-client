@@ -19,9 +19,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../../shared/shared.module';
-import { LeaseRepaymentPeriodOptionViewComponent } from './lease-period-option-view.component';
-import { M21LeaseRepaymentPeriodFormControlComponent } from './m21-lease-period-form-control.component';
 import { FormatLeaseRepaymentPeriodPipe } from './format-lease-repayment-period.pipe';
+import { LeaseRepaymentPeriodOptionViewComponent } from './lease-repayment-period-option-view.component';
+import { M21LeaseRepaymentPeriodFormControlComponent } from './m21-lease-repayment-period-form-control.component';
 
 @NgModule({
   declarations: [
@@ -40,5 +40,4 @@ import { FormatLeaseRepaymentPeriodPipe } from './format-lease-repayment-period.
   ]
 })
 export class LeaseRepaymentPeriodFormComponentsModule {
-
 }

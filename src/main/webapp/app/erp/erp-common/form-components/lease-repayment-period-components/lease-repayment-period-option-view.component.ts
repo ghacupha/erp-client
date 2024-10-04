@@ -17,15 +17,15 @@
 ///
 
 import { Component, Input } from '@angular/core';
-import { ILeasePeriod } from '../../../erp-leases/lease-period/lease-period.model';
+import { ILeaseRepaymentPeriod } from '../../../erp-leases/lease-repayment-period/lease-repayment-period.model';
 
 @Component({
-  selector: 'jhi-lease-period-option-view',
+  selector: 'jhi-lease-repayment-period-option-view',
   template: `
     # {{item.id}} # {{ item.periodCode }} | Start: {{ item.startDate }} End: {{ item.endDate }}
   `
 })
 export class LeaseRepaymentPeriodOptionViewComponent {
 
-  @Input() item: ILeasePeriod = {};
+  @Input() item: ILeaseRepaymentPeriod = {};
 }

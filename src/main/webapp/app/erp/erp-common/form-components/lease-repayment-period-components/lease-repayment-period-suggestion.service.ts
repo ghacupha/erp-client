@@ -22,12 +22,12 @@ import { ApplicationConfigService } from '../../../../core/config/application-co
 import { Observable, of } from 'rxjs';
 import { createRequestOption } from '../../../../core/request/request-util';
 import { ASC, DESC } from '../../../../config/pagination.constants';
-import { ILeasePeriod } from '../../../erp-leases/lease-period/lease-period.model';
+import { ILeaseRepaymentPeriod } from '../../../erp-leases/lease-repayment-period/lease-repayment-period.model';
 
 @Injectable({ providedIn: 'root' })
 export class LeaseRepaymentPeriodSuggestionService {
 
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-periods');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-repayment-periods');
 
   constructor(
     protected http: HttpClient,
@@ -36,13 +36,13 @@ export class LeaseRepaymentPeriodSuggestionService {
   }
 
 
-  search(searchText: string): Observable<ILeasePeriod[]> {
+  search(searchText: string): Observable<ILeaseRepaymentPeriod[]> {
 
     if (searchText === "") {
       return of([])
     }
 
-    return this.http.get<ILeasePeriod[]>(
+    return this.http.get<ILeaseRepaymentPeriod[]>(
       this.resourceSearchUrl,
       { params: createRequestOption({
           query: searchText,
