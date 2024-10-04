@@ -48,7 +48,13 @@
 
       <!--<jhi-tables-nav></jhi-tables-nav>-->
 
-      <jhi-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">`</jhi-reports-nav>
+      <jhi-rou-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_LEASE_MANAGER']">`</jhi-rou-reports-nav>
+
+      <jhi-lease-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_LEASE_MANAGER']">`</jhi-lease-reports-nav>
+
+      <ng-container *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+        <jhi-reports-nav *jhiHideForRole="'ROLE_LEASE_MANAGER'"></jhi-reports-nav>
+      </ng-container>
 
       <jhi-payments-nav *jhiHasAnyAuthority="'ROLE_PAYMENTS_USER'"></jhi-payments-nav>
 

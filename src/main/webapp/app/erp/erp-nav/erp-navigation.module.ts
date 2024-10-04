@@ -33,22 +33,26 @@ import { TablesNavComponent } from './tables-nav/tables-nav.component';
 import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-nav.component';
 import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
 import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
+import { LeaseReportsNavComponent } from "./lease-reports-nav/lease-reports-nav.component";
+import { ROUReportsNavComponent } from './lease-reports-nav/rou-reports-nav.component';
 
 @NgModule({
   declarations: [
-    ErpFilesNavigationComponent,
-    PaymentsNavComponent,
     AssetsNavComponent,
-    TaxesNavComponent,
-    GranularDataNavComponent,
-    PrepaymentsNavComponent,
-    ReportsNavComponent,
-    SystemAdminNavComponent,
-    LeasesNavComponent,
-    TablesNavComponent,
+    ErpFilesNavigationComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
     GdiDataNavComponent,
+    GranularDataNavComponent,
+    LeaseReportsNavComponent,
+    LeasesNavComponent,
+    PaymentsNavComponent,
+    PrepaymentsNavComponent,
+    ReportsNavComponent,
+    ROUReportsNavComponent,
+    SystemAdminNavComponent,
+    TablesNavComponent,
+    TaxesNavComponent,
   ],
   imports: [
     SharedModule,
@@ -59,6 +63,7 @@ import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
     AssetsNavComponent,
+    LeaseReportsNavComponent,
     TaxesNavComponent,
     GranularDataNavComponent,
     PrepaymentsNavComponent,
@@ -66,6 +71,7 @@ import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
     SystemAdminNavComponent,
     LeasesNavComponent,
     TablesNavComponent,
+    ROUReportsNavComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
     GdiDataNavComponent,
