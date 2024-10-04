@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 9 (Jehoiada Series) Client 1.7.7
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import { LeaseRepaymentPeriodDetailComponent } from './detail/lease-repayment-pe
 import { LeaseRepaymentPeriodUpdateComponent } from './update/lease-repayment-period-update.component';
 import { LeaseRepaymentPeriodDeleteDialogComponent } from './delete/lease-repayment-period-delete-dialog.component';
 import { LeaseRepaymentPeriodRoutingModule } from './route/lease-repayment-period-routing.module';
+import { LeaseRepaymentPeriodReportNavParameterComponent } from './reportNavParam/lease-repayment-period-report-nav-parameter.component';
 
 @NgModule({
   imports: [SharedModule, LeaseRepaymentPeriodRoutingModule],
@@ -31,6 +32,7 @@ import { LeaseRepaymentPeriodRoutingModule } from './route/lease-repayment-perio
     LeaseRepaymentPeriodDetailComponent,
     LeaseRepaymentPeriodUpdateComponent,
     LeaseRepaymentPeriodDeleteDialogComponent,
+    LeaseRepaymentPeriodReportNavParameterComponent
   ],
   entryComponents: [LeaseRepaymentPeriodDeleteDialogComponent],
 })

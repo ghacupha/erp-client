@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark X No 9 (Jehoiada Series) Client 1.7.7
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import { LeaseRepaymentPeriodComponent } from '../list/lease-repayment-period.co
 import { LeaseRepaymentPeriodDetailComponent } from '../detail/lease-repayment-period-detail.component';
 import { LeaseRepaymentPeriodUpdateComponent } from '../update/lease-repayment-period-update.component';
 import { LeaseRepaymentPeriodRoutingResolveService } from './lease-repayment-period-routing-resolve.service';
+import { LeaseRepaymentPeriodReportNavParameterComponent } from '../reportNavParam/lease-repayment-period-report-nav-parameter.component';
 
 const leaseRepaymentPeriodRoute: Routes = [
   {
@@ -32,6 +33,11 @@ const leaseRepaymentPeriodRoute: Routes = [
     data: {
       defaultSort: 'id,asc',
     },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'report-nav',
+    component: LeaseRepaymentPeriodReportNavParameterComponent,
     canActivate: [UserRouteAccessService],
   },
   {
