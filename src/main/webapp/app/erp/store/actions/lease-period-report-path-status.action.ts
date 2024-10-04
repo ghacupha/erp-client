@@ -31,6 +31,10 @@ export const leasePeriodParamForRouAssetNBVReportItem = createAction(
   '[ReportNavComponent] Report view initiated on the path rou-asset-nbv-report-item',
 );
 
+export const leasePeriodParamForLeaseLiabilityReportItem = createAction(
+  '[ReportNavComponent] Report view initiated on the path lease-liability-report-item',
+);
+
 export const leasePeriodParamForRouDepreciationPostingReportItem = createAction(
   '[ReportNavComponent] Report view initiated on the path rou-depreciation-posting-report-item',
 );

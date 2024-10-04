@@ -19,6 +19,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { initialState, State } from '../global-store.definition';
 import {
+  leasePeriodParamForLeaseLiabilityReportItem,
   leasePeriodParamForRouAccountBalanceReportItem,
   leasePeriodParamForRouAssetNBVReportItem,
   leasePeriodParamForRouDepreciationPostingReportItem,
@@ -59,6 +60,15 @@ const _leasePeriodReportPathSelectionStateReducer = createReducer(
       ...state.leasePeriodReportPathSelectionState,
       leasePeriodReportPath: 'rou-asset-nbv-report-item',
       leasePeriodReportTitle: 'Lease Period Parameter For Asset NBV Report',
+    }
+  })),
+
+  on(leasePeriodParamForLeaseLiabilityReportItem, (state) => ({
+    ...state,
+    leasePeriodReportPathSelectionState: {
+      ...state.leasePeriodReportPathSelectionState,
+      leasePeriodReportPath: 'lease-liability-report-item',
+      leasePeriodReportTitle: 'Lease Period Parameter For Lease Liability Report',
     }
   })),
 

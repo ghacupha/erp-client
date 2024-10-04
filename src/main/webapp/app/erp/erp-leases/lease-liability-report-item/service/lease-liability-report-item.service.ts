@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ILeaseLiabilityReportItem[]>;
 
 @Injectable({ providedIn: 'root' })
 export class LeaseLiabilityReportItemService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/lease-liability-report-items');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/lease-liability-report-items');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/lease-liability-report-items');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-liability-report-items');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -43,6 +43,11 @@ export class LeaseLiabilityReportItemService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ILeaseLiabilityReportItem[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  reportQuery(leasePeriodId: number, req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<ILeaseLiabilityReportItem[]>(`${this.resourceUrl}/reports/${leasePeriodId}`, { params: options, observe: 'response' });
   }
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {

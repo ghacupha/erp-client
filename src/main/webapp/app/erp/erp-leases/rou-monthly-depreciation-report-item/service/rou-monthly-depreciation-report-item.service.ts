@@ -37,8 +37,8 @@ export type EntityArrayResponseType = HttpResponse<IRouMonthlyDepreciationReport
 
 @Injectable({ providedIn: 'root' })
 export class RouMonthlyDepreciationReportItemService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/rou-monthly-depreciation-report-items');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/rou-monthly-depreciation-report-items');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/rou-monthly-depreciation-report-items');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/rou-monthly-depreciation-report-items');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

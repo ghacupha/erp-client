@@ -25,6 +25,9 @@ import { ILeaseLiabilityReportItem } from '../lease-liability-report-item.model'
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { LeaseLiabilityReportItemService } from '../service/lease-liability-report-item.service';
+import { select, Store } from '@ngrx/store';
+import { leasePeriodSelectedId } from '../../../store/selectors/lease-period-selection-status.selector';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-lease-liability-report-item',
@@ -41,11 +44,22 @@ export class LeaseLiabilityReportItemComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  leasePeriodId!: number;
+
   constructor(
     protected leaseLiabilityReportItemService: LeaseLiabilityReportItemService,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    protected store: Store<State>
   ) {
+
+    // Assign  the lease-period-id from store
+    this.store.pipe(select(leasePeriodSelectedId)).subscribe(selectedId => {
+      if (typeof selectedId === 'number') {
+        this.leasePeriodId = selectedId;
+      }
+    });
+
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 
@@ -75,7 +89,8 @@ export class LeaseLiabilityReportItemComponent implements OnInit {
     }
 
     this.leaseLiabilityReportItemService
-      .query({
+      .reportQuery(this.leasePeriodId,
+        {
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),

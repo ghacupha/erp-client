@@ -31,6 +31,7 @@ import {
 import { Store } from '@ngrx/store';
 import { State } from '../../store/global-store.definition';
 import {
+  leasePeriodParamForLeaseLiabilityReportItem,
   leasePeriodParamForRouAccountBalanceReportItem,
   leasePeriodParamForRouAssetNBVReportItem,
   leasePeriodParamForRouDepreciationPostingReportItem
@@ -140,6 +141,17 @@ export class LeaseReportsNavComponent implements OnInit{
   leasePeriodReportPathToRouDepreciationPostingReportItem(): void {
 
     this.store.dispatch(leasePeriodParamForRouDepreciationPostingReportItem());
+
+    this.isNavbarCollapsed = true;
+  }
+
+
+  /**
+   * Updates on the store router-path for report to liability-report-item
+   */
+  leasePeriodReportPathToLiabilityReportItem(): void {
+
+    this.store.dispatch(leasePeriodParamForLeaseLiabilityReportItem());
 
     this.isNavbarCollapsed = true;
   }

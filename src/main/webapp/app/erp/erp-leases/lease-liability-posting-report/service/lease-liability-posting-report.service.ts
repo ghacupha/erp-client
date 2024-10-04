@@ -33,8 +33,8 @@ export type EntityArrayResponseType = HttpResponse<ILeaseLiabilityPostingReport[
 
 @Injectable({ providedIn: 'root' })
 export class LeaseLiabilityPostingReportService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/lease-liability-posting-reports');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/lease-liability-posting-reports');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/leases/lease-liability-posting-reports');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/leases/_search/lease-liability-posting-reports');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

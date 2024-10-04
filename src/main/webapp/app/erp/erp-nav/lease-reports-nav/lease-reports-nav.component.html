@@ -100,10 +100,10 @@
         <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
           <a
             class="dropdown-item"
-            [routerLink]="['/lease-liability-report-item']"
+            [routerLink]="['/lease-period/report-nav']"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
-            (click)="collapseNavbar()"
+            (click)="leasePeriodReportPathToLiabilityReportItem()"
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Liability Report Items</span>
