@@ -316,7 +316,8 @@
       "LeaseLiabilityScheduleReport",
       "LeaseLiabilityPostingReport",
       "TransactionAccountCategory",
-      "TransactionAccountPostingProcessType"
+      "TransactionAccountPostingProcessType",
+      "TAAmortizationRule"
     ],
     "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,

@@ -58,6 +58,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             import('./transaction-account-posting-process-type/transaction-account-posting-process-type.module').then(
               m => m.TransactionAccountPostingProcessTypeModule
             )
+        },
+        {
+          path: 'ta-amortization-rule',
+          data: {
+            pageTitle: 'ERP | Amortization Posting Rules',
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER']
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./ta-amortization-rule/ta-amortization-rule.module').then(
+              m => m.TAAmortizationRuleModule
+            )
         }
       ]
     )
