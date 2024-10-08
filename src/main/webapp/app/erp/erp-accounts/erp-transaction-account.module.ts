@@ -27,16 +27,41 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
           path: 'transaction-account',
           data: {
             pageTitle: 'ERP | Transaction Account',
-            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER'],
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER']
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () =>
             import('./transaction-account/transaction-account.module').then(
               m => m.TransactionAccountModule
-            ),
+            )
         },
+        {
+          path: 'transaction-account-category',
+          data: {
+            pageTitle: 'ERP | Account Category',
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER']
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./transaction-account-category/transaction-account-category.module').then(
+              m => m.TransactionAccountCategoryModule
+            )
+        },
+        {
+          path: 'transaction-account-posting-process-type',
+          data: {
+            pageTitle: 'ERP | Account Processing',
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER']
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./transaction-account-posting-process-type/transaction-account-posting-process-type.module').then(
+              m => m.TransactionAccountPostingProcessTypeModule
+            )
+        }
       ]
     )
   ]
 })
-export class ErpTransactionAccountModule {}
+export class ErpTransactionAccountModule {
+}

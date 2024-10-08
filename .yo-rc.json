@@ -314,9 +314,11 @@
       "LeaseLiabilityByAccountReportItem",
       "LeaseLiabilityByAccountReport",
       "LeaseLiabilityScheduleReport",
-      "LeaseLiabilityPostingReport"
+      "LeaseLiabilityPostingReport",
+      "TransactionAccountCategory",
+      "TransactionAccountPostingProcessType"
     ],
-    "lastLiquibaseTimestamp": 1714638847000,
+    "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,
     "skipCommitHook": true
   }

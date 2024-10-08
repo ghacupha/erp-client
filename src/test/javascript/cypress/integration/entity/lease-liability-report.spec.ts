@@ -54,7 +54,7 @@ describe('LeaseLiabilityReport e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-periods',
-      body: {"sequenceNumber":85252,"startDate":"2024-05-13","endDate":"2024-05-13","periodCode":"silver"},
+      body: {"sequenceNumber":85252,"periodCode":"HDD"},
     }).then(({ body }) => {
       leasePeriod = body;
     });

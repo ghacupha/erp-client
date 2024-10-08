@@ -35,6 +35,7 @@ import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
 import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
 import { LeaseReportsNavComponent } from "./lease-reports-nav/lease-reports-nav.component";
 import { ROUReportsNavComponent } from './lease-reports-nav/rou-reports-nav.component';
+import { AccountsNavComponent } from './accounts-nav/accounts-nav.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ROUReportsNavComponent } from './lease-reports-nav/rou-reports-nav.comp
     SystemAdminNavComponent,
     TablesNavComponent,
     TaxesNavComponent,
+    AccountsNavComponent,
   ],
   imports: [
     SharedModule,
@@ -75,6 +77,7 @@ import { ROUReportsNavComponent } from './lease-reports-nav/rou-reports-nav.comp
     ErpMaintenanceNavComponent,
     GdiNavComponent,
     GdiDataNavComponent,
+    AccountsNavComponent,
   ]
 })
 export class ErpNavigationModule {}

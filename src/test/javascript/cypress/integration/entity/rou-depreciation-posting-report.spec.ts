@@ -54,7 +54,7 @@ describe('RouDepreciationPostingReport e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/lease-periods',
-      body: {"sequenceNumber":32951,"periodCode":"Libyan cross-platform"},
+      body: {"sequenceNumber":32951,"endDate":"2024-05-14","periodCode":"Direct"},
     }).then(({ body }) => {
       leasePeriod = body;
     });
