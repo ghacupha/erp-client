@@ -36,6 +36,7 @@ import { LeasePeriodReportPathSelectionState } from './reducers/lease-period-rep
 import { LeaseAmortizationCalculationFormState } from './reducers/lease-amortization-calculation.reducer';
 import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';
 import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
+import { TAAmortizationRuleFormState } from './reducers/ta-amortization-rule-status.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -56,6 +57,7 @@ export interface State {
   rouModelMetadataFormState: RouModelMetadataFormState,
   leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
   leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
+  taAmortizationRuleFormState: TAAmortizationRuleFormState,
 }
 
 export const initialState: State = {
@@ -106,6 +108,14 @@ export const initialState: State = {
     weAreCreating: false,
   },
   ifrs16LeaseModelFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taAmortizationRuleFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,

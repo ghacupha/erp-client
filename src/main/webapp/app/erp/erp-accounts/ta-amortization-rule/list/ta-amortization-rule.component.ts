@@ -27,6 +27,14 @@ import { ITAAmortizationRule } from '../ta-amortization-rule.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TAAmortizationRuleService } from '../service/ta-amortization-rule.service';
 import { TAAmortizationRuleDeleteDialogComponent } from '../delete/ta-amortization-rule-delete-dialog.component';
+import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  taAmortizationRuleCopyWorkflowInitiatedFromList,
+  taAmortizationRuleCreationInitiatedFromList,
+  taAmortizationRuleEditWorkflowInitiatedFromList
+} from '../../../store/actions/ta-amortization-update-status.actions';
 
 @Component({
   selector: 'jhi-ta-amortization-rule',
@@ -47,7 +55,8 @@ export class TAAmortizationRuleComponent implements OnInit {
     protected tAAmortizationRuleService: TAAmortizationRuleService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +111,18 @@ export class TAAmortizationRuleComponent implements OnInit {
     }
     this.currentSearch = query;
     this.loadPage(1);
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(taAmortizationRuleCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(taAmortizationRuleEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(taAmortizationRuleCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   ngOnInit(): void {

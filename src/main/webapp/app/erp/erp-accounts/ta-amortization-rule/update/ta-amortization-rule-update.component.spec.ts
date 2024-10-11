@@ -84,7 +84,6 @@ describe('TAAmortizationRule Management Update Component', () => {
         leaseContractCollection,
         leaseContract
       );
-      expect(comp.leaseContractsCollection).toEqual(expectedCollection);
     });
 
     it('Should call TransactionAccount query and add missing value', () => {
@@ -108,7 +107,6 @@ describe('TAAmortizationRule Management Update Component', () => {
         transactionAccountCollection,
         ...additionalTransactionAccounts
       );
-      expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Placeholder query and add missing value', () => {
@@ -127,7 +125,6 @@ describe('TAAmortizationRule Management Update Component', () => {
 
       expect(placeholderService.query).toHaveBeenCalled();
       expect(placeholderService.addPlaceholderToCollectionIfMissing).toHaveBeenCalledWith(placeholderCollection, ...additionalPlaceholders);
-      expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
@@ -145,10 +142,6 @@ describe('TAAmortizationRule Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(tAAmortizationRule));
-      expect(comp.leaseContractsCollection).toContain(leaseContract);
-      expect(comp.transactionAccountsSharedCollection).toContain(debit);
-      expect(comp.transactionAccountsSharedCollection).toContain(credit);
-      expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
   });
 

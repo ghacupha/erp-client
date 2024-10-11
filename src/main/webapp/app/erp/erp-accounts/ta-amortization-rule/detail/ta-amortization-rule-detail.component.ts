@@ -20,6 +20,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { ITAAmortizationRule } from '../ta-amortization-rule.model';
+import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import {
+  ifrs16LeaseContractCopyWorkflowInitiatedFromView,
+  ifrs16LeaseContractEditWorkflowInitiatedFromView
+} from '../../../store/actions/ifrs16-lease-model-update-status.actions';
+import {
+  taAmortizationRuleCopyWorkflowInitiatedFromView,
+  taAmortizationRuleEditWorkflowInitiatedFromView
+} from '../../../store/actions/ta-amortization-update-status.actions';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-ta-amortization-rule-detail',
@@ -28,12 +39,20 @@ import { ITAAmortizationRule } from '../ta-amortization-rule.model';
 export class TAAmortizationRuleDetailComponent implements OnInit {
   tAAmortizationRule: ITAAmortizationRule | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tAAmortizationRule }) => {
       this.tAAmortizationRule = tAAmortizationRule;
     });
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(taAmortizationRuleEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(taAmortizationRuleCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

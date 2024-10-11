@@ -39,6 +39,7 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
 import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
 import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
 import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
+import * as fromTAAmortizationUpdates from "./reducers/ta-amortization-rule-status.reducer";
 import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortization-calculation.reducer";
 import * as fromLeaseLiabilityState from "./reducers/lease-liability.reducer";
 import * as fromLeasePaymentState from "./reducers/lease-payment.reducer";
@@ -82,6 +83,7 @@ import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marsh
     StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
     StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
     StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
+    StoreModule.forFeature('taAmortizationRuleUpdateForm', fromTAAmortizationUpdates.taAmortizationRuleUpdateStateReducer),
     StoreModule.forFeature('leaseAmortizationCalculationForm', fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer),
     StoreModule.forFeature('leaseLiabilityForm', fromLeaseLiabilityState.leaseLiabilityStateReducer),
     StoreModule.forFeature('leasePaymentForm', fromLeasePaymentState.leasePaymentStateReducer),

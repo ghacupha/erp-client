@@ -34,8 +34,15 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
-import * as dayjs from 'dayjs';
 import { uuidv7 } from 'uuidv7';
+import { select, Store } from '@ngrx/store';
+import {
+  copyingTAAmortizationStatus,
+  creatingTAAmortizationStatus,
+  editingTAAmortizationStatus,
+  taAmortizationUpdateSelectedInstance
+} from '../../../store/selectors/ta-amortization-status.selectors';
+import { State } from '../../../store/global-store.definition';
 
 @Component({
   selector: 'jhi-ta-amortization-rule-update',
@@ -43,6 +50,12 @@ import { uuidv7 } from 'uuidv7';
 })
 export class TAAmortizationRuleUpdateComponent implements OnInit {
   isSaving = false;
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new TAAmortizationRule()}
 
   leaseContractsCollection: IIFRS16LeaseContract[] = [];
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
@@ -64,19 +77,56 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingTAAmortizationStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingTAAmortizationStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingTAAmortizationStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(taAmortizationUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ tAAmortizationRule }) => {
 
-      if (tAAmortizationRule.id === undefined) {
-        tAAmortizationRule.identifier = uuidv7();
-      }
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
 
-      this.updateForm(tAAmortizationRule);
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      })
+    }
+
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      })
+    }
+
+    if (this.weAreCreating) {
+
+      this.editForm.patchValue({
+        identifier: uuidv7(),
+      })
+
       this.loadRelationshipsOptions();
-    });
+    }
+  }
+
+  save(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tAAmortizationRuleService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tAAmortizationRuleService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.tAAmortizationRuleService.create(this.copyFromForm()));
   }
 
   updateDebitAccount(value: ITransactionAccount): void {
@@ -105,16 +155,6 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
-  }
-
-  save(): void {
-    this.isSaving = true;
-    const tAAmortizationRule = this.createFromForm();
-    if (tAAmortizationRule.id !== undefined) {
-      this.subscribeToSaveResponse(this.tAAmortizationRuleService.update(tAAmortizationRule));
-    } else {
-      this.subscribeToSaveResponse(this.tAAmortizationRuleService.create(tAAmortizationRule));
-    }
   }
 
   trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
@@ -228,6 +268,18 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
     return {
       ...new TAAmortizationRule(),
       id: this.editForm.get(['id'])!.value,
+      name: this.editForm.get(['name'])!.value,
+      identifier: this.editForm.get(['identifier'])!.value,
+      leaseContract: this.editForm.get(['leaseContract'])!.value,
+      debit: this.editForm.get(['debit'])!.value,
+      credit: this.editForm.get(['credit'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ITAAmortizationRule {
+    return {
+      ...new TAAmortizationRule(),
       name: this.editForm.get(['name'])!.value,
       identifier: this.editForm.get(['identifier'])!.value,
       leaseContract: this.editForm.get(['leaseContract'])!.value,

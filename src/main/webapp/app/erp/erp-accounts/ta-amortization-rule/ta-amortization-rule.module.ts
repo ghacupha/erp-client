@@ -24,9 +24,15 @@ import { TAAmortizationRuleUpdateComponent } from './update/ta-amortization-rule
 import { TAAmortizationRuleDeleteDialogComponent } from './delete/ta-amortization-rule-delete-dialog.component';
 import { TAAmortizationRuleRoutingModule } from './route/ta-amortization-rule-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TAAmortizationRuleRoutingCustomModule } from './route/ta-amortization-rule-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TAAmortizationRuleRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    TAAmortizationRuleRoutingModule,
+    TAAmortizationRuleRoutingCustomModule,
+    ErpCommonModule
+  ],
   declarations: [
     TAAmortizationRuleComponent,
     TAAmortizationRuleDetailComponent,
