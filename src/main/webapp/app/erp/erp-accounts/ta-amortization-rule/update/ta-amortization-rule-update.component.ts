@@ -25,12 +25,17 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ITAAmortizationRule, TAAmortizationRule } from '../ta-amortization-rule.model';
 import { TAAmortizationRuleService } from '../service/ta-amortization-rule.service';
-import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import {
+  IFRS16LeaseContract,
+  IIFRS16LeaseContract
+} from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { ITransactionAccount } from '../../transaction-account/transaction-account.model';
 import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import * as dayjs from 'dayjs';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ta-amortization-rule-update',
@@ -64,9 +69,37 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tAAmortizationRule }) => {
-      this.updateForm(tAAmortizationRule);
 
+      if (tAAmortizationRule.id === undefined) {
+        tAAmortizationRule.identifier = uuidv7();
+      }
+
+      this.updateForm(tAAmortizationRule);
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateDebitAccount(value: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debit: value
+    });
+  }
+
+  updateCreditAccount(value: ITransactionAccount): void {
+    this.editForm.patchValue({
+      credit: value
+    });
+  }
+
+  updateLeaseContract(value: IFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leaseContract: value
+    });
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...value]
     });
   }
 
