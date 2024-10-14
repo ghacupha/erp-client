@@ -30,7 +30,7 @@ const tAAmortizationRuleRoute: Routes = [
     path: '',
     component: TAAmortizationRuleComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
