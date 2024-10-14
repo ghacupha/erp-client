@@ -16,42 +16,15 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { TransactionAccountComponent } from '../list/transaction-account.component';
-import { TransactionAccountDetailComponent } from '../detail/transaction-account-detail.component';
-import { TransactionAccountUpdateComponent } from '../update/transaction-account-update.component';
+import { UserRouteAccessService } from '../../../../core/auth/user-route-access.service';
+import { NgModule } from '@angular/core';
 import { TransactionAccountRoutingResolveService } from './transaction-account-routing-resolve.service';
+import { TransactionAccountUpdateComponent } from '../update/transaction-account-update.component';
 
-const transactionAccountRoute: Routes = [
+const transactionAccountCopyRoute: Routes = [
   {
-    path: '',
-    component: TransactionAccountComponent,
-    data: {
-      defaultSort: 'id,desc',
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/view',
-    component: TransactionAccountDetailComponent,
-    resolve: {
-      transactionAccount: TransactionAccountRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: 'new',
-    component: TransactionAccountUpdateComponent,
-    resolve: {
-      transactionAccount: TransactionAccountRoutingResolveService,
-    },
-    canActivate: [UserRouteAccessService],
-  },
-  {
-    path: ':id/edit',
+    path: ':id/copy',
     component: TransactionAccountUpdateComponent,
     resolve: {
       transactionAccount: TransactionAccountRoutingResolveService,
@@ -61,7 +34,8 @@ const transactionAccountRoute: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(transactionAccountRoute)],
+  imports: [RouterModule.forChild(transactionAccountCopyRoute)],
   exports: [RouterModule],
 })
-export class TransactionAccountRoutingModule {}
+export class TransactionAccountRoutingCustomModule {
+}

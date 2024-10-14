@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-transaction-account"
         [routerLink]="['/transaction-account/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Transaction Account </span>
@@ -72,7 +73,6 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountNumber"><span>Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountName"><span>Account Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="parentAccount.accountNumber"><span>Parent Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -84,12 +84,6 @@
           </td>
           <td>{{ transactionAccount.accountNumber }}</td>
           <td>{{ transactionAccount.accountName }}</td>
-          <td>
-            <a *ngIf="transactionAccount.notes" (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">open</a>
-            <span *ngIf="transactionAccount.notes"
-              >{{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}</span
-            >
-          </td>
           <td>
             <div *ngIf="transactionAccount.parentAccount">
               <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
@@ -106,22 +100,34 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button
                 type="submit"
+                (click)='editButtonEvent(transactionAccount)'
                 [routerLink]="['/transaction-account', transactionAccount.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
+                <span class="d-none d-md-inline"></span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/transaction-account', transactionAccount.id, 'copy']"
+                (click)='copyButtonEvent(transactionAccount)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+                <span class="d-none d-md-inline"></span>
               </button>
 
               <button type="submit" (click)="delete(transactionAccount)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+                <span class="d-none d-md-inline"></span>
               </button>
             </div>
           </td>

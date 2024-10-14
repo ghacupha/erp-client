@@ -22,24 +22,24 @@
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
 
       <h2
-        id="jhi-ifrs-16-lease-contract-heading-new"
-        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        id="jhi-ta-amortization-rule-heading-new"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
         [hidden]='!weAreCreating'>
         New Amortization Rule
       </h2>
 
       <h2
-        id="jhi-ifrs-16-lease-contract-heading-copy"
-        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        id="jhi-ta-amortization-rule-heading-copy"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
         [hidden]='!weAreCopying'>
-        Copying Rule: {{ selectedItem.name }}
+        Copying Rule Title {{ selectedItem.name }}
       </h2>
 
       <h2
-        id="jhi-ifrs-16-lease-contract-heading-edit"
-        data-cy="IFRS16LeaseContractCreateUpdateHeading"
+        id="jhi-ta-amortization-rule-heading-edit"
+        data-cy="TAAmortizationRuleCreateUpdateHeading"
         [hidden]='!weAreEditing'>
-        Editing Lease: {{ selectedItem.name }}
+        Editing Rule Title {{ selectedItem.name }}
       </h2>
 
       <div>

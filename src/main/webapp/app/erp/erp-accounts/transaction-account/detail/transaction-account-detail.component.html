@@ -65,12 +65,27 @@
         </dd>
       </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/transaction-account', transactionAccount.id, 'edit']" class="btn btn-primary">
+      <button
+        type="button"
+        (click)='editButtonEvent(transactionAccount)'
+        [routerLink]="['/transaction-account', transactionAccount.id, 'edit']"
+        class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+
+      <button
+        (click)='copyButtonEvent(transactionAccount)'
+        type="button"
+        [routerLink]="['/transaction-account', transactionAccount.id, 'copy']"
+        class="btn btn-primary">
+        <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>
   </div>

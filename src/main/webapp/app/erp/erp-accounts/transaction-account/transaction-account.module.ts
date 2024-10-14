@@ -24,9 +24,15 @@ import { TransactionAccountUpdateComponent } from './update/transaction-account-
 import { TransactionAccountDeleteDialogComponent } from './delete/transaction-account-delete-dialog.component';
 import { TransactionAccountRoutingModule } from './route/transaction-account-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TransactionAccountRoutingCustomModule } from './route/transaction-account-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TransactionAccountRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    TransactionAccountRoutingModule,
+    TransactionAccountRoutingCustomModule,
+    ErpCommonModule
+  ],
   declarations: [
     TransactionAccountComponent,
     TransactionAccountDetailComponent,

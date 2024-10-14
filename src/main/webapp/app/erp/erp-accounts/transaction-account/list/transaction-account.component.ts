@@ -24,10 +24,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITransactionAccount } from '../transaction-account.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT } from 'app/config/pagination.constants';
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { TransactionAccountDeleteDialogComponent } from '../delete/transaction-account-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  transactionAccountCopyWorkflowInitiatedFromList,
+  transactionAccountCreationInitiatedFromList, transactionAccountEditWorkflowInitiatedFromList
+} from '../../../store/actions/transaction-account-update-status.actions';
 
 @Component({
   selector: 'jhi-transaction-account',
@@ -38,7 +44,7 @@ export class TransactionAccountComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 20;
   page?: number;
   predicate!: string;
   ascending!: boolean;
@@ -49,7 +55,8 @@ export class TransactionAccountComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected dataUtils: DataUtils,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -95,6 +102,18 @@ export class TransactionAccountComponent implements OnInit {
           this.onError();
         }
       );
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(transactionAccountCreationInitiatedFromList())
+  }
+
+  editButtonEvent(instance: ITransactionAccount): void {
+    this.store.dispatch(transactionAccountEditWorkflowInitiatedFromList({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: ITransactionAccount): void {
+    this.store.dispatch(transactionAccountCopyWorkflowInitiatedFromList({copiedInstance: instance}))
   }
 
   search(query: string): void {

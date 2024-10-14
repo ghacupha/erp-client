@@ -21,6 +21,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ITransactionAccount } from '../transaction-account.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  transactionAccountCopyWorkflowInitiatedFromView,
+  transactionAccountEditWorkflowInitiatedFromView
+} from '../../../store/actions/transaction-account-update-status.actions';
 
 @Component({
   selector: 'jhi-transaction-account-detail',
@@ -29,12 +36,20 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class TransactionAccountDetailComponent implements OnInit {
   transactionAccount: ITransactionAccount | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ transactionAccount }) => {
       this.transactionAccount = transactionAccount;
     });
+  }
+
+  editButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(transactionAccountEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IIFRS16LeaseContract): void {
+    this.store.dispatch(transactionAccountCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   byteSize(base64String: string): string {
