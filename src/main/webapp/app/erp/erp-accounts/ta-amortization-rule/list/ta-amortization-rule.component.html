@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-ta-amortization-rule"
         [routerLink]="['/ta-amortization-rule/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new TA Amortization Rule </span>
@@ -119,6 +120,7 @@
 
               <button
                 type="submit"
+                (click)='editButtonEvent(tAAmortizationRule)'
                 [routerLink]="['/ta-amortization-rule', tAAmortizationRule.id, 'edit']"
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
