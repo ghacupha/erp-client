@@ -42,6 +42,18 @@
             <span>Transaction Accounts</span>
           </a>
         </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="transaction-details"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Transaction Details</span>
+          </a>
+        </li>
 
         <li>
           <a
@@ -77,6 +89,78 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Amortization Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-interest-paid-transfer-rule"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Interest Paid Transfer Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-lease-interest-accrual-rule"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Lease Interest Accrual Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-lease-recognition-rule"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Lease Recognition Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-lease-repayment-rule"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Lease Repayment Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-recognition-rou-rule"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Recognition Rules</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="ta-compilation-request"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Compilation Request</span>
           </a>
         </li>
       </ul>

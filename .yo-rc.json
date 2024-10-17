@@ -317,7 +317,14 @@
       "LeaseLiabilityPostingReport",
       "TransactionAccountCategory",
       "TransactionAccountPostingProcessType",
-      "TAAmortizationRule"
+      "TAAmortizationRule",
+      "TALeaseInterestAccrualRule",
+      "TransactionDetails",
+      "TARecognitionROURule",
+      "TALeaseRecognitionRule",
+      "TALeaseRepaymentRule",
+      "TAInterestPaidTransferRule",
+      "TACompilationRequest"
     ],
     "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,
