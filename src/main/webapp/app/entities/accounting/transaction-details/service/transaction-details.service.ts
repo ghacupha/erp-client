@@ -113,12 +113,16 @@ export class TransactionDetailsService {
   protected convertDateFromClient(transactionDetails: ITransactionDetails): ITransactionDetails {
     return Object.assign({}, transactionDetails, {
       transactionDate: transactionDetails.transactionDate?.isValid() ? transactionDetails.transactionDate.format(DATE_FORMAT) : undefined,
+      createdAt: transactionDetails.createdAt?.isValid() ? transactionDetails.createdAt.toJSON() : undefined,
+      modifiedAt: transactionDetails.modifiedAt?.isValid() ? transactionDetails.modifiedAt.toJSON() : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.transactionDate = res.body.transactionDate ? dayjs(res.body.transactionDate) : undefined;
+      res.body.createdAt = res.body.createdAt ? dayjs(res.body.createdAt) : undefined;
+      res.body.modifiedAt = res.body.modifiedAt ? dayjs(res.body.modifiedAt) : undefined;
     }
     return res;
   }
@@ -127,6 +131,8 @@ export class TransactionDetailsService {
     if (res.body) {
       res.body.forEach((transactionDetails: ITransactionDetails) => {
         transactionDetails.transactionDate = transactionDetails.transactionDate ? dayjs(transactionDetails.transactionDate) : undefined;
+        transactionDetails.createdAt = transactionDetails.createdAt ? dayjs(transactionDetails.createdAt) : undefined;
+        transactionDetails.modifiedAt = transactionDetails.modifiedAt ? dayjs(transactionDetails.modifiedAt) : undefined;
       });
     }
     return res;

@@ -79,21 +79,6 @@
           <th scope="col" jhiSortBy="batchJobIdentifier">
             <span>Batch Job Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="initialAmountStepIdentifier">
-            <span>Initial Amount Step Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="depreciationAmountStepIdentifier">
-            <span>Depreciation Amount Step Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="initialLeaseAmountStepIdentifier">
-            <span>Initial Lease Amount Step Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="interestAmountStepIdentifier">
-            <span>Interest Amount Step Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="flagAmortisedStepIdentifier">
-            <span>Flag Amortised Step Identifier</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="compilationTime"><span>Compilation Time</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="invalidated"><span>Invalidated</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="initiatedBy.applicationIdentity"><span>Initiated By</span> <fa-icon icon="sort"></fa-icon></th>
@@ -110,11 +95,6 @@
           <td>{{ tACompilationRequest.compilationProcessStatus }}</td>
           <td>{{ tACompilationRequest.numberOfEnumeratedItems }}</td>
           <td>{{ tACompilationRequest.batchJobIdentifier }}</td>
-          <td>{{ tACompilationRequest.initialAmountStepIdentifier }}</td>
-          <td>{{ tACompilationRequest.depreciationAmountStepIdentifier }}</td>
-          <td>{{ tACompilationRequest.initialLeaseAmountStepIdentifier }}</td>
-          <td>{{ tACompilationRequest.interestAmountStepIdentifier }}</td>
-          <td>{{ tACompilationRequest.flagAmortisedStepIdentifier }}</td>
           <td>{{ tACompilationRequest.compilationTime | formatMediumDatetime }}</td>
           <td>{{ tACompilationRequest.invalidated }}</td>
           <td>

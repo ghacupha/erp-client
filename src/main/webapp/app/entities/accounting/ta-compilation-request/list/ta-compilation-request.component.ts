@@ -96,19 +96,7 @@ export class TACompilationRequestComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (
-      query &&
-      [
-        'requisitionId',
-        'compilationProcessStatus',
-        'batchJobIdentifier',
-        'initialAmountStepIdentifier',
-        'depreciationAmountStepIdentifier',
-        'initialLeaseAmountStepIdentifier',
-        'interestAmountStepIdentifier',
-        'flagAmortisedStepIdentifier',
-      ].includes(this.predicate)
-    ) {
+    if (query && ['requisitionId', 'compilationProcessStatus', 'batchJobIdentifier'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

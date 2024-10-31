@@ -35,13 +35,8 @@ describe('TACompilationRequest e2e test', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
   const tACompilationRequestSample = {
-    requisitionId: '701d8b71-3a1a-475a-b1e3-27ceb25837b2',
-    batchJobIdentifier: 'd70d8f68-987d-47bd-b9ff-6867ab430298',
-    initialAmountStepIdentifier: '4df47b28-f4d1-43a1-8b89-88d4ed9342fd',
-    depreciationAmountStepIdentifier: 'e2bbff65-64d7-4795-89b9-58c8f96969b8',
-    initialLeaseAmountStepIdentifier: '259522d3-32fd-4fbf-88ef-0270dd76d6ea',
-    interestAmountStepIdentifier: '7b7d2442-b7ff-4b60-b23d-61ade77afa58',
-    flagAmortisedStepIdentifier: 'ddcd7e6e-6557-4698-a5be-ee2f4e884e90',
+    requisitionId: 'e24d367f-65f5-4802-9b60-103721b935c0',
+    batchJobIdentifier: '025453ac-40b8-4c24-877c-cd80881507dc',
   };
 
   let tACompilationRequest: any;
@@ -195,32 +190,7 @@ describe('TACompilationRequest e2e test', () => {
         .invoke('val')
         .should('match', new RegExp('df04dbf7-a162-469a-949a-576ae96c230e'));
 
-      cy.get(`[data-cy="initialAmountStepIdentifier"]`)
-        .type('13e24d36-7f65-4f58-821b-60103721b935')
-        .invoke('val')
-        .should('match', new RegExp('13e24d36-7f65-4f58-821b-60103721b935'));
-
-      cy.get(`[data-cy="depreciationAmountStepIdentifier"]`)
-        .type('c0025453-ac40-4b8c-a4c7-7ccd80881507')
-        .invoke('val')
-        .should('match', new RegExp('c0025453-ac40-4b8c-a4c7-7ccd80881507'));
-
-      cy.get(`[data-cy="initialLeaseAmountStepIdentifier"]`)
-        .type('dc027ee3-f374-424d-abcc-1a7db0f398fc')
-        .invoke('val')
-        .should('match', new RegExp('dc027ee3-f374-424d-abcc-1a7db0f398fc'));
-
-      cy.get(`[data-cy="interestAmountStepIdentifier"]`)
-        .type('2f4a6077-0fb7-46f1-a600-f52206cfd437')
-        .invoke('val')
-        .should('match', new RegExp('2f4a6077-0fb7-46f1-a600-f52206cfd437'));
-
-      cy.get(`[data-cy="flagAmortisedStepIdentifier"]`)
-        .type('dbac7e9d-89e5-43c3-9e0e-7b0422baec1a')
-        .invoke('val')
-        .should('match', new RegExp('dbac7e9d-89e5-43c3-9e0e-7b0422baec1a'));
-
-      cy.get(`[data-cy="compilationTime"]`).type('2024-10-13T16:43').should('have.value', '2024-10-13T16:43');
+      cy.get(`[data-cy="compilationTime"]`).type('2024-10-14T13:50').should('have.value', '2024-10-14T13:50');
 
       cy.get(`[data-cy="invalidated"]`).should('not.be.checked');
       cy.get(`[data-cy="invalidated"]`).click().should('be.checked');

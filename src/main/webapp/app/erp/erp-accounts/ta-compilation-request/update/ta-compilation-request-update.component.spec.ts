@@ -27,10 +27,9 @@ import { of, Subject } from 'rxjs';
 
 import { TACompilationRequestService } from '../service/ta-compilation-request.service';
 import { ITACompilationRequest, TACompilationRequest } from '../ta-compilation-request.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 import { TACompilationRequestUpdateComponent } from './ta-compilation-request-update.component';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
 
 describe('TACompilationRequest Management Update Component', () => {
   let comp: TACompilationRequestUpdateComponent;

@@ -23,12 +23,17 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
+import * as dayjs from 'dayjs';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+
 import { ITransactionDetails, TransactionDetails } from '../transaction-details.model';
 import { TransactionDetailsService } from '../service/transaction-details.service';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 @Component({
   selector: 'jhi-transaction-details-update',
@@ -39,6 +44,7 @@ export class TransactionDetailsUpdateComponent implements OnInit {
 
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  applicationUsersSharedCollection: IApplicationUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -46,21 +52,32 @@ export class TransactionDetailsUpdateComponent implements OnInit {
     transactionDate: [null, [Validators.required]],
     description: [],
     amount: [null, [Validators.required]],
+    createdAt: [null, [Validators.required]],
+    modifiedAt: [],
+    transactionType: [],
     debitAccount: [null, Validators.required],
     creditAccount: [null, Validators.required],
     placeholders: [],
+    postedBy: [],
   });
 
   constructor(
     protected transactionDetailsService: TransactionDetailsService,
     protected transactionAccountService: TransactionAccountService,
     protected placeholderService: PlaceholderService,
+    protected applicationUserService: ApplicationUserService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ transactionDetails }) => {
+      if (transactionDetails.id === undefined) {
+        const today = dayjs().startOf('day');
+        transactionDetails.createdAt = today;
+        transactionDetails.modifiedAt = today;
+      }
+
       this.updateForm(transactionDetails);
 
       this.loadRelationshipsOptions();
@@ -86,6 +103,10 @@ export class TransactionDetailsUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackApplicationUserById(index: number, item: IApplicationUser): number {
     return item.id!;
   }
 
@@ -126,9 +147,13 @@ export class TransactionDetailsUpdateComponent implements OnInit {
       transactionDate: transactionDetails.transactionDate,
       description: transactionDetails.description,
       amount: transactionDetails.amount,
+      createdAt: transactionDetails.createdAt ? transactionDetails.createdAt.format(DATE_TIME_FORMAT) : null,
+      modifiedAt: transactionDetails.modifiedAt ? transactionDetails.modifiedAt.format(DATE_TIME_FORMAT) : null,
+      transactionType: transactionDetails.transactionType,
       debitAccount: transactionDetails.debitAccount,
       creditAccount: transactionDetails.creditAccount,
       placeholders: transactionDetails.placeholders,
+      postedBy: transactionDetails.postedBy,
     });
 
     this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
@@ -139,6 +164,10 @@ export class TransactionDetailsUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(transactionDetails.placeholders ?? [])
+    );
+    this.applicationUsersSharedCollection = this.applicationUserService.addApplicationUserToCollectionIfMissing(
+      this.applicationUsersSharedCollection,
+      transactionDetails.postedBy
     );
   }
 
@@ -166,6 +195,16 @@ export class TransactionDetailsUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.applicationUserService
+      .query()
+      .pipe(map((res: HttpResponse<IApplicationUser[]>) => res.body ?? []))
+      .pipe(
+        map((applicationUsers: IApplicationUser[]) =>
+          this.applicationUserService.addApplicationUserToCollectionIfMissing(applicationUsers, this.editForm.get('postedBy')!.value)
+        )
+      )
+      .subscribe((applicationUsers: IApplicationUser[]) => (this.applicationUsersSharedCollection = applicationUsers));
   }
 
   protected createFromForm(): ITransactionDetails {
@@ -176,9 +215,13 @@ export class TransactionDetailsUpdateComponent implements OnInit {
       transactionDate: this.editForm.get(['transactionDate'])!.value,
       description: this.editForm.get(['description'])!.value,
       amount: this.editForm.get(['amount'])!.value,
+      createdAt: this.editForm.get(['createdAt'])!.value ? dayjs(this.editForm.get(['createdAt'])!.value, DATE_TIME_FORMAT) : undefined,
+      modifiedAt: this.editForm.get(['modifiedAt'])!.value ? dayjs(this.editForm.get(['modifiedAt'])!.value, DATE_TIME_FORMAT) : undefined,
+      transactionType: this.editForm.get(['transactionType'])!.value,
       debitAccount: this.editForm.get(['debitAccount'])!.value,
       creditAccount: this.editForm.get(['creditAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      postedBy: this.editForm.get(['postedBy'])!.value,
     };
   }
 }

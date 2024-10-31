@@ -19,6 +19,7 @@
 import * as dayjs from 'dayjs';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 
 export interface ITransactionDetails {
   id?: number;
@@ -26,9 +27,13 @@ export interface ITransactionDetails {
   transactionDate?: dayjs.Dayjs;
   description?: string | null;
   amount?: number;
+  createdAt?: dayjs.Dayjs;
+  modifiedAt?: dayjs.Dayjs | null;
+  transactionType?: string | null;
   debitAccount?: ITransactionAccount;
   creditAccount?: ITransactionAccount;
   placeholders?: IPlaceholder[] | null;
+  postedBy?: IApplicationUser | null;
 }
 
 export class TransactionDetails implements ITransactionDetails {
@@ -38,9 +43,13 @@ export class TransactionDetails implements ITransactionDetails {
     public transactionDate?: dayjs.Dayjs,
     public description?: string | null,
     public amount?: number,
+    public createdAt?: dayjs.Dayjs,
+    public modifiedAt?: dayjs.Dayjs | null,
+    public transactionType?: string | null,
     public debitAccount?: ITransactionAccount,
     public creditAccount?: ITransactionAccount,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public postedBy?: IApplicationUser | null
   ) {}
 }
 

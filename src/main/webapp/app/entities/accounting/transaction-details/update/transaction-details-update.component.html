@@ -92,6 +92,54 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" for="field_createdAt">Created At</label>
+          <div class="d-flex">
+            <input
+              id="field_createdAt"
+              data-cy="createdAt"
+              type="datetime-local"
+              class="form-control"
+              name="createdAt"
+              formControlName="createdAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div *ngIf="editForm.get('createdAt')!.invalid && (editForm.get('createdAt')!.dirty || editForm.get('createdAt')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('createdAt')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('createdAt')?.errors?.ZonedDateTimelocal">
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_modifiedAt">Modified At</label>
+          <div class="d-flex">
+            <input
+              id="field_modifiedAt"
+              data-cy="modifiedAt"
+              type="datetime-local"
+              class="form-control"
+              name="modifiedAt"
+              formControlName="modifiedAt"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_transactionType">Transaction Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="transactionType"
+            id="field_transactionType"
+            data-cy="transactionType"
+            formControlName="transactionType"
+          />
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" for="field_debitAccount">Debit Account</label>
           <select class="form-control" id="field_debitAccount" data-cy="debitAccount" name="debitAccount" formControlName="debitAccount">
             <option *ngIf="!editForm.get('debitAccount')!.value" [ngValue]="null" selected></option>
@@ -160,6 +208,21 @@
               *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
             >
               {{ placeholderOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_postedBy">Posted By</label>
+          <select class="form-control" id="field_postedBy" data-cy="postedBy" name="postedBy" formControlName="postedBy">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                applicationUserOption.id === editForm.get('postedBy')!.value?.id ? editForm.get('postedBy')!.value : applicationUserOption
+              "
+              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
+            >
+              {{ applicationUserOption.applicationIdentity }}
             </option>
           </select>
         </div>

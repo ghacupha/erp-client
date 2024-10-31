@@ -32,7 +32,7 @@ export class FooterComponent implements OnInit {
 
   serverHash = '';
 
-  clientVersion = '1.7.7';
+  clientVersion = '1.7.8';
 
   serverVersion = '1.8.1';
 

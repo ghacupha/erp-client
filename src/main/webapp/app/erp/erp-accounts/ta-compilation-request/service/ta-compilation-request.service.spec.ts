@@ -21,10 +21,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { compilationProcessStatusTypes } from 'app/entities/enumerations/compilation-process-status-types.model';
 import { ITACompilationRequest, TACompilationRequest } from '../ta-compilation-request.model';
 
 import { TACompilationRequestService } from './ta-compilation-request.service';
+import { compilationProcessStatusTypes } from '../../../erp-common/enumerations/compilation-process-status-types.model';
 
 describe('TACompilationRequest Service', () => {
   let service: TACompilationRequestService;

@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
+import { browser, ExpectedConditions as ec /* , protractor, promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
@@ -72,9 +72,13 @@ describe('TransactionDetails e2e test', () => {
             transactionDetailsUpdatePage.setTransactionDateInput('2000-12-31'),
             transactionDetailsUpdatePage.setDescriptionInput('description'),
             transactionDetailsUpdatePage.setAmountInput('5'),
+            transactionDetailsUpdatePage.setCreatedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            transactionDetailsUpdatePage.setModifiedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
+            transactionDetailsUpdatePage.setTransactionTypeInput('transactionType'),
             transactionDetailsUpdatePage.debitAccountSelectLastOption(),
             transactionDetailsUpdatePage.creditAccountSelectLastOption(),
             // transactionDetailsUpdatePage.placeholderSelectLastOption(),
+            transactionDetailsUpdatePage.postedBySelectLastOption(),
         ]);
 
         await transactionDetailsUpdatePage.save();

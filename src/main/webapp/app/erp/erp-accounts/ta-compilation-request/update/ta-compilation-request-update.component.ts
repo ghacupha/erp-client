@@ -28,10 +28,10 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { ITACompilationRequest, TACompilationRequest } from '../ta-compilation-request.model';
 import { TACompilationRequestService } from '../service/ta-compilation-request.service';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
-import { compilationProcessStatusTypes } from 'app/entities/enumerations/compilation-process-status-types.model';
 import { uuidv7 } from 'uuidv7';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+import { compilationProcessStatusTypes } from '../../../erp-common/enumerations/compilation-process-status-types.model';
 
 @Component({
   selector: 'jhi-ta-compilation-request-update',

@@ -74,8 +74,14 @@
           <th scope="col" jhiSortBy="transactionDate"><span>Transaction Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="amount"><span>Amount</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="createdAt"><span>Created At</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="modifiedAt"><span>Modified At</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="transactionType">
+            <span>Transaction Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="debitAccount.accountNumber"><span>Debit Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="creditAccount.accountNumber"><span>Credit Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="postedBy.applicationIdentity"><span>Posted By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -88,6 +94,9 @@
           <td>{{ transactionDetails.transactionDate | formatMediumDate }}</td>
           <td>{{ transactionDetails.description }}</td>
           <td>{{ transactionDetails.amount }}</td>
+          <td>{{ transactionDetails.createdAt | formatMediumDatetime }}</td>
+          <td>{{ transactionDetails.modifiedAt | formatMediumDatetime }}</td>
+          <td>{{ transactionDetails.transactionType }}</td>
           <td>
             <div *ngIf="transactionDetails.debitAccount">
               <a [routerLink]="['/transaction-account', transactionDetails.debitAccount?.id, 'view']">{{
@@ -99,6 +108,13 @@
             <div *ngIf="transactionDetails.creditAccount">
               <a [routerLink]="['/transaction-account', transactionDetails.creditAccount?.id, 'view']">{{
                 transactionDetails.creditAccount?.accountNumber
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionDetails.postedBy">
+              <a [routerLink]="['/application-user', transactionDetails.postedBy?.id, 'view']">{{
+                transactionDetails.postedBy?.applicationIdentity
               }}</a>
             </div>
           </td>

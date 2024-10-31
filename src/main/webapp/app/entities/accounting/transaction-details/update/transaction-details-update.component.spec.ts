@@ -31,6 +31,8 @@ import { ITransactionAccount } from 'app/entities/accounting/transaction-account
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
+import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { TransactionDetailsUpdateComponent } from './transaction-details-update.component';
 
@@ -41,6 +43,7 @@ describe('TransactionDetails Management Update Component', () => {
   let transactionDetailsService: TransactionDetailsService;
   let transactionAccountService: TransactionAccountService;
   let placeholderService: PlaceholderService;
+  let applicationUserService: ApplicationUserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -56,6 +59,7 @@ describe('TransactionDetails Management Update Component', () => {
     transactionDetailsService = TestBed.inject(TransactionDetailsService);
     transactionAccountService = TestBed.inject(TransactionAccountService);
     placeholderService = TestBed.inject(PlaceholderService);
+    applicationUserService = TestBed.inject(ApplicationUserService);
 
     comp = fixture.componentInstance;
   });
@@ -104,6 +108,28 @@ describe('TransactionDetails Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call ApplicationUser query and add missing value', () => {
+      const transactionDetails: ITransactionDetails = { id: 456 };
+      const postedBy: IApplicationUser = { id: 90290 };
+      transactionDetails.postedBy = postedBy;
+
+      const applicationUserCollection: IApplicationUser[] = [{ id: 20070 }];
+      jest.spyOn(applicationUserService, 'query').mockReturnValue(of(new HttpResponse({ body: applicationUserCollection })));
+      const additionalApplicationUsers = [postedBy];
+      const expectedCollection: IApplicationUser[] = [...additionalApplicationUsers, ...applicationUserCollection];
+      jest.spyOn(applicationUserService, 'addApplicationUserToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ transactionDetails });
+      comp.ngOnInit();
+
+      expect(applicationUserService.query).toHaveBeenCalled();
+      expect(applicationUserService.addApplicationUserToCollectionIfMissing).toHaveBeenCalledWith(
+        applicationUserCollection,
+        ...additionalApplicationUsers
+      );
+      expect(comp.applicationUsersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const transactionDetails: ITransactionDetails = { id: 456 };
       const debitAccount: ITransactionAccount = { id: 59075 };
@@ -112,6 +138,8 @@ describe('TransactionDetails Management Update Component', () => {
       transactionDetails.creditAccount = creditAccount;
       const placeholders: IPlaceholder = { id: 18799 };
       transactionDetails.placeholders = [placeholders];
+      const postedBy: IApplicationUser = { id: 62637 };
+      transactionDetails.postedBy = postedBy;
 
       activatedRoute.data = of({ transactionDetails });
       comp.ngOnInit();
@@ -120,6 +148,7 @@ describe('TransactionDetails Management Update Component', () => {
       expect(comp.transactionAccountsSharedCollection).toContain(debitAccount);
       expect(comp.transactionAccountsSharedCollection).toContain(creditAccount);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.applicationUsersSharedCollection).toContain(postedBy);
     });
   });
 
@@ -200,6 +229,14 @@ describe('TransactionDetails Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackApplicationUserById', () => {
+      it('Should return tracked ApplicationUser primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackApplicationUserById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

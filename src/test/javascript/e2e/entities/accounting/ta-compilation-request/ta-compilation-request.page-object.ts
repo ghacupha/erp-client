@@ -53,11 +53,6 @@ export class TACompilationRequestUpdatePage {
   compilationProcessStatusSelect = element(by.id('field_compilationProcessStatus'));
   numberOfEnumeratedItemsInput = element(by.id('field_numberOfEnumeratedItems'));
   batchJobIdentifierInput = element(by.id('field_batchJobIdentifier'));
-  initialAmountStepIdentifierInput = element(by.id('field_initialAmountStepIdentifier'));
-  depreciationAmountStepIdentifierInput = element(by.id('field_depreciationAmountStepIdentifier'));
-  initialLeaseAmountStepIdentifierInput = element(by.id('field_initialLeaseAmountStepIdentifier'));
-  interestAmountStepIdentifierInput = element(by.id('field_interestAmountStepIdentifier'));
-  flagAmortisedStepIdentifierInput = element(by.id('field_flagAmortisedStepIdentifier'));
   compilationTimeInput = element(by.id('field_compilationTime'));
   invalidatedInput = element(by.id('field_invalidated'));
 
@@ -117,46 +112,6 @@ export class TACompilationRequestUpdatePage {
 
   async getBatchJobIdentifierInput(): Promise<string> {
     return await this.batchJobIdentifierInput.getAttribute('value');
-  }
-
-  async setInitialAmountStepIdentifierInput(initialAmountStepIdentifier: string): Promise<void> {
-    await this.initialAmountStepIdentifierInput.sendKeys(initialAmountStepIdentifier);
-  }
-
-  async getInitialAmountStepIdentifierInput(): Promise<string> {
-    return await this.initialAmountStepIdentifierInput.getAttribute('value');
-  }
-
-  async setDepreciationAmountStepIdentifierInput(depreciationAmountStepIdentifier: string): Promise<void> {
-    await this.depreciationAmountStepIdentifierInput.sendKeys(depreciationAmountStepIdentifier);
-  }
-
-  async getDepreciationAmountStepIdentifierInput(): Promise<string> {
-    return await this.depreciationAmountStepIdentifierInput.getAttribute('value');
-  }
-
-  async setInitialLeaseAmountStepIdentifierInput(initialLeaseAmountStepIdentifier: string): Promise<void> {
-    await this.initialLeaseAmountStepIdentifierInput.sendKeys(initialLeaseAmountStepIdentifier);
-  }
-
-  async getInitialLeaseAmountStepIdentifierInput(): Promise<string> {
-    return await this.initialLeaseAmountStepIdentifierInput.getAttribute('value');
-  }
-
-  async setInterestAmountStepIdentifierInput(interestAmountStepIdentifier: string): Promise<void> {
-    await this.interestAmountStepIdentifierInput.sendKeys(interestAmountStepIdentifier);
-  }
-
-  async getInterestAmountStepIdentifierInput(): Promise<string> {
-    return await this.interestAmountStepIdentifierInput.getAttribute('value');
-  }
-
-  async setFlagAmortisedStepIdentifierInput(flagAmortisedStepIdentifier: string): Promise<void> {
-    await this.flagAmortisedStepIdentifierInput.sendKeys(flagAmortisedStepIdentifier);
-  }
-
-  async getFlagAmortisedStepIdentifierInput(): Promise<string> {
-    return await this.flagAmortisedStepIdentifierInput.getAttribute('value');
   }
 
   async setCompilationTimeInput(compilationTime: string): Promise<void> {

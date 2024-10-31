@@ -52,10 +52,14 @@ export class TransactionDetailsUpdatePage {
   transactionDateInput = element(by.id('field_transactionDate'));
   descriptionInput = element(by.id('field_description'));
   amountInput = element(by.id('field_amount'));
+  createdAtInput = element(by.id('field_createdAt'));
+  modifiedAtInput = element(by.id('field_modifiedAt'));
+  transactionTypeInput = element(by.id('field_transactionType'));
 
   debitAccountSelect = element(by.id('field_debitAccount'));
   creditAccountSelect = element(by.id('field_creditAccount'));
   placeholderSelect = element(by.id('field_placeholder'));
+  postedBySelect = element(by.id('field_postedBy'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -99,6 +103,30 @@ export class TransactionDetailsUpdatePage {
 
   async getAmountInput(): Promise<string> {
     return await this.amountInput.getAttribute('value');
+  }
+
+  async setCreatedAtInput(createdAt: string): Promise<void> {
+    await this.createdAtInput.sendKeys(createdAt);
+  }
+
+  async getCreatedAtInput(): Promise<string> {
+    return await this.createdAtInput.getAttribute('value');
+  }
+
+  async setModifiedAtInput(modifiedAt: string): Promise<void> {
+    await this.modifiedAtInput.sendKeys(modifiedAt);
+  }
+
+  async getModifiedAtInput(): Promise<string> {
+    return await this.modifiedAtInput.getAttribute('value');
+  }
+
+  async setTransactionTypeInput(transactionType: string): Promise<void> {
+    await this.transactionTypeInput.sendKeys(transactionType);
+  }
+
+  async getTransactionTypeInput(): Promise<string> {
+    return await this.transactionTypeInput.getAttribute('value');
   }
 
   async debitAccountSelectLastOption(): Promise<void> {
@@ -147,6 +175,22 @@ export class TransactionDetailsUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async postedBySelectLastOption(): Promise<void> {
+    await this.postedBySelect.all(by.tagName('option')).last().click();
+  }
+
+  async postedBySelectOption(option: string): Promise<void> {
+    await this.postedBySelect.sendKeys(option);
+  }
+
+  getPostedBySelect(): ElementFinder {
+    return this.postedBySelect;
+  }
+
+  async getPostedBySelectedOption(): Promise<string> {
+    return await this.postedBySelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

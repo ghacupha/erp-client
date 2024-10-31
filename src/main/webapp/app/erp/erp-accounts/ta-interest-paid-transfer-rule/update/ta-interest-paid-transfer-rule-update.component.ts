@@ -25,12 +25,12 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ITAInterestPaidTransferRule, TAInterestPaidTransferRule } from '../ta-interest-paid-transfer-rule.model';
 import { TAInterestPaidTransferRuleService } from '../service/ta-interest-paid-transfer-rule.service';
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccount } from '../../transaction-account/transaction-account.model';
+import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
   selector: 'jhi-ta-interest-paid-transfer-rule-update',

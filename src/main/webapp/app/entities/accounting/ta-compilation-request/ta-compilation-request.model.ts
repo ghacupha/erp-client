@@ -27,11 +27,6 @@ export interface ITACompilationRequest {
   compilationProcessStatus?: compilationProcessStatusTypes | null;
   numberOfEnumeratedItems?: number | null;
   batchJobIdentifier?: string;
-  initialAmountStepIdentifier?: string;
-  depreciationAmountStepIdentifier?: string;
-  initialLeaseAmountStepIdentifier?: string;
-  interestAmountStepIdentifier?: string;
-  flagAmortisedStepIdentifier?: string;
   compilationTime?: dayjs.Dayjs | null;
   invalidated?: boolean | null;
   initiatedBy?: IApplicationUser | null;
@@ -45,11 +40,6 @@ export class TACompilationRequest implements ITACompilationRequest {
     public compilationProcessStatus?: compilationProcessStatusTypes | null,
     public numberOfEnumeratedItems?: number | null,
     public batchJobIdentifier?: string,
-    public initialAmountStepIdentifier?: string,
-    public depreciationAmountStepIdentifier?: string,
-    public initialLeaseAmountStepIdentifier?: string,
-    public interestAmountStepIdentifier?: string,
-    public flagAmortisedStepIdentifier?: string,
     public compilationTime?: dayjs.Dayjs | null,
     public invalidated?: boolean | null,
     public initiatedBy?: IApplicationUser | null

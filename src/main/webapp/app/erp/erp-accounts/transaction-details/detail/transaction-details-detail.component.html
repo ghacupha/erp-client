@@ -49,6 +49,18 @@
         <dd>
           <span>{{ transactionDetails.amount }}</span>
         </dd>
+        <dt><span>Created At</span></dt>
+        <dd>
+          <span>{{ transactionDetails.createdAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Modified At</span></dt>
+        <dd>
+          <span>{{ transactionDetails.modifiedAt | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Transaction Type</span></dt>
+        <dd>
+          <span>{{ transactionDetails.transactionType }}</span>
+        </dd>
         <dt><span>Debit Account</span></dt>
         <dd>
           <div *ngIf="transactionDetails.debitAccount">
@@ -71,6 +83,14 @@
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Posted By</span></dt>
+        <dd>
+          <div *ngIf="transactionDetails.postedBy">
+            <a [routerLink]="['/application-user', transactionDetails.postedBy?.id, 'view']">{{
+              transactionDetails.postedBy?.applicationIdentity
+            }}</a>
+          </div>
         </dd>
       </dl>
 

@@ -20,7 +20,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import * as dayjs from 'dayjs';
 
-import { DATE_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { ITransactionDetails, TransactionDetails } from '../transaction-details.model';
 
 import { TransactionDetailsService } from './transaction-details.service';
@@ -47,6 +47,9 @@ describe('TransactionDetails Service', () => {
       transactionDate: currentDate,
       description: 'AAAAAAA',
       amount: 0,
+      createdAt: currentDate,
+      modifiedAt: currentDate,
+      transactionType: 'AAAAAAA',
     };
   });
 
@@ -55,6 +58,8 @@ describe('TransactionDetails Service', () => {
       const returnedFromService = Object.assign(
         {
           transactionDate: currentDate.format(DATE_FORMAT),
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+          modifiedAt: currentDate.format(DATE_TIME_FORMAT),
         },
         elemDefault
       );
@@ -71,6 +76,8 @@ describe('TransactionDetails Service', () => {
         {
           id: 0,
           transactionDate: currentDate.format(DATE_FORMAT),
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+          modifiedAt: currentDate.format(DATE_TIME_FORMAT),
         },
         elemDefault
       );
@@ -78,6 +85,8 @@ describe('TransactionDetails Service', () => {
       const expected = Object.assign(
         {
           transactionDate: currentDate,
+          createdAt: currentDate,
+          modifiedAt: currentDate,
         },
         returnedFromService
       );
@@ -97,6 +106,9 @@ describe('TransactionDetails Service', () => {
           transactionDate: currentDate.format(DATE_FORMAT),
           description: 'BBBBBB',
           amount: 1,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+          modifiedAt: currentDate.format(DATE_TIME_FORMAT),
+          transactionType: 'BBBBBB',
         },
         elemDefault
       );
@@ -104,6 +116,8 @@ describe('TransactionDetails Service', () => {
       const expected = Object.assign(
         {
           transactionDate: currentDate,
+          createdAt: currentDate,
+          modifiedAt: currentDate,
         },
         returnedFromService
       );
@@ -120,6 +134,8 @@ describe('TransactionDetails Service', () => {
         {
           transactionDate: currentDate.format(DATE_FORMAT),
           amount: 1,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+          modifiedAt: currentDate.format(DATE_TIME_FORMAT),
         },
         new TransactionDetails()
       );
@@ -129,6 +145,8 @@ describe('TransactionDetails Service', () => {
       const expected = Object.assign(
         {
           transactionDate: currentDate,
+          createdAt: currentDate,
+          modifiedAt: currentDate,
         },
         returnedFromService
       );
@@ -148,6 +166,9 @@ describe('TransactionDetails Service', () => {
           transactionDate: currentDate.format(DATE_FORMAT),
           description: 'BBBBBB',
           amount: 1,
+          createdAt: currentDate.format(DATE_TIME_FORMAT),
+          modifiedAt: currentDate.format(DATE_TIME_FORMAT),
+          transactionType: 'BBBBBB',
         },
         elemDefault
       );
@@ -155,6 +176,8 @@ describe('TransactionDetails Service', () => {
       const expected = Object.assign(
         {
           transactionDate: currentDate,
+          createdAt: currentDate,
+          modifiedAt: currentDate,
         },
         returnedFromService
       );
@@ -204,7 +227,7 @@ describe('TransactionDetails Service', () => {
       });
 
       it('should add only unique TransactionDetails to an array', () => {
-        const transactionDetailsArray: ITransactionDetails[] = [{ id: 123 }, { id: 456 }, { id: 56635 }];
+        const transactionDetailsArray: ITransactionDetails[] = [{ id: 123 }, { id: 456 }, { id: 994 }];
         const transactionDetailsCollection: ITransactionDetails[] = [{ id: 123 }];
         expectedResult = service.addTransactionDetailsToCollectionIfMissing(transactionDetailsCollection, ...transactionDetailsArray);
         expect(expectedResult).toHaveLength(3);

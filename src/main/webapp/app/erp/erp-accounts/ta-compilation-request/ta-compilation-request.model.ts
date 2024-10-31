@@ -17,8 +17,8 @@
 ///
 
 import * as dayjs from 'dayjs';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { compilationProcessStatusTypes } from 'app/entities/enumerations/compilation-process-status-types.model';
+import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
+import { compilationProcessStatusTypes } from '../../erp-common/enumerations/compilation-process-status-types.model';
 
 export interface ITACompilationRequest {
   id?: number;

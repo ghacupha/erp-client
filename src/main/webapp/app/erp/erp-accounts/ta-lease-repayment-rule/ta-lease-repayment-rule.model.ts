@@ -16,9 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+
+import { IIFRS16LeaseContract } from '../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccount } from '../transaction-account/transaction-account.model';
 
 export interface ITALeaseRepaymentRule {
   id?: number;

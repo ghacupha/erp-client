@@ -49,11 +49,6 @@ describe('TACompilationRequest Service', () => {
       compilationProcessStatus: compilationProcessStatusTypes.STARTED,
       numberOfEnumeratedItems: 0,
       batchJobIdentifier: 'AAAAAAA',
-      initialAmountStepIdentifier: 'AAAAAAA',
-      depreciationAmountStepIdentifier: 'AAAAAAA',
-      initialLeaseAmountStepIdentifier: 'AAAAAAA',
-      interestAmountStepIdentifier: 'AAAAAAA',
-      flagAmortisedStepIdentifier: 'AAAAAAA',
       compilationTime: currentDate,
       invalidated: false,
     };
@@ -110,11 +105,6 @@ describe('TACompilationRequest Service', () => {
           compilationProcessStatus: 'BBBBBB',
           numberOfEnumeratedItems: 1,
           batchJobIdentifier: 'BBBBBB',
-          initialAmountStepIdentifier: 'BBBBBB',
-          depreciationAmountStepIdentifier: 'BBBBBB',
-          initialLeaseAmountStepIdentifier: 'BBBBBB',
-          interestAmountStepIdentifier: 'BBBBBB',
-          flagAmortisedStepIdentifier: 'BBBBBB',
           compilationTime: currentDate.format(DATE_TIME_FORMAT),
           invalidated: true,
         },
@@ -142,9 +132,8 @@ describe('TACompilationRequest Service', () => {
           requisitionId: 'BBBBBB',
           compilationProcessStatus: 'BBBBBB',
           numberOfEnumeratedItems: 1,
-          initialAmountStepIdentifier: 'BBBBBB',
-          depreciationAmountStepIdentifier: 'BBBBBB',
-          interestAmountStepIdentifier: 'BBBBBB',
+          compilationTime: currentDate.format(DATE_TIME_FORMAT),
+          invalidated: true,
         },
         new TACompilationRequest()
       );
@@ -175,11 +164,6 @@ describe('TACompilationRequest Service', () => {
           compilationProcessStatus: 'BBBBBB',
           numberOfEnumeratedItems: 1,
           batchJobIdentifier: 'BBBBBB',
-          initialAmountStepIdentifier: 'BBBBBB',
-          depreciationAmountStepIdentifier: 'BBBBBB',
-          initialLeaseAmountStepIdentifier: 'BBBBBB',
-          interestAmountStepIdentifier: 'BBBBBB',
-          flagAmortisedStepIdentifier: 'BBBBBB',
           compilationTime: currentDate.format(DATE_TIME_FORMAT),
           invalidated: true,
         },
@@ -239,7 +223,7 @@ describe('TACompilationRequest Service', () => {
       });
 
       it('should add only unique TACompilationRequest to an array', () => {
-        const tACompilationRequestArray: ITACompilationRequest[] = [{ id: 123 }, { id: 456 }, { id: 53532 }];
+        const tACompilationRequestArray: ITACompilationRequest[] = [{ id: 123 }, { id: 456 }, { id: 6801 }];
         const tACompilationRequestCollection: ITACompilationRequest[] = [{ id: 123 }];
         expectedResult = service.addTACompilationRequestToCollectionIfMissing(tACompilationRequestCollection, ...tACompilationRequestArray);
         expect(expectedResult).toHaveLength(3);

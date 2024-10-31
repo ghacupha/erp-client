@@ -96,7 +96,7 @@ export class TransactionDetailsComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['description'].includes(this.predicate)) {
+    if (query && ['description', 'transactionType'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

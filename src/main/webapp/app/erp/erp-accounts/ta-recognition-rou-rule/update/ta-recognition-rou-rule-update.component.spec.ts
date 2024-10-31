@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,14 +29,13 @@ import { of, Subject } from 'rxjs';
 
 import { TARecognitionROURuleService } from '../service/ta-recognition-rou-rule.service';
 import { ITARecognitionROURule, TARecognitionROURule } from '../ta-recognition-rou-rule.model';
-import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
-import { IFRS16LeaseContractService } from 'app/entities/leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
-import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
-import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
 import { TARecognitionROURuleUpdateComponent } from './ta-recognition-rou-rule-update.component';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { ITransactionAccount } from '../../transaction-account/transaction-account.model';
+import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('TARecognitionROURule Management Update Component', () => {
   let comp: TARecognitionROURuleUpdateComponent;

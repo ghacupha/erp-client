@@ -34,7 +34,7 @@ describe('TransactionDetails e2e test', () => {
   const transactionDetailsPageUrlPattern = new RegExp('/transaction-details(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const transactionDetailsSample = { entryId: 93714, transactionDate: '2024-10-13', amount: 31122 };
+  const transactionDetailsSample = { entryId: 79450, transactionDate: '2024-10-14', amount: 60287, createdAt: '2024-10-14T04:54:49.986Z' };
 
   let transactionDetails: any;
   let transactionAccount: any;
@@ -78,6 +78,11 @@ describe('TransactionDetails e2e test', () => {
     });
 
     cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/application-users', {
       statusCode: 200,
       body: [],
     });
@@ -224,6 +229,12 @@ describe('TransactionDetails e2e test', () => {
       cy.get(`[data-cy="description"]`).type('District Granite').should('have.value', 'District Granite');
 
       cy.get(`[data-cy="amount"]`).type('18886').should('have.value', '18886');
+
+      cy.get(`[data-cy="createdAt"]`).type('2024-10-13T16:22').should('have.value', '2024-10-13T16:22');
+
+      cy.get(`[data-cy="modifiedAt"]`).type('2024-10-13T23:47').should('have.value', '2024-10-13T23:47');
+
+      cy.get(`[data-cy="transactionType"]`).type('Orchard').should('have.value', 'Orchard');
 
       cy.get(`[data-cy="debitAccount"]`).select(1);
       cy.get(`[data-cy="creditAccount"]`).select(1);
