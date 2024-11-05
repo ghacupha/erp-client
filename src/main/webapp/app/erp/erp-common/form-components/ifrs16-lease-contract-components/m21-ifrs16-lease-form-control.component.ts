@@ -18,10 +18,21 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { concat, from, Observable, of, Subject } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  mergeMap,
+  switchMap,
+  tap,
+  toArray
+} from 'rxjs/operators';
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { Ifrs16LeaseContractSuggestionService } from './ifrs16-lease-contract-suggestion.service';
+import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 
 /**
  * Many-to-one form control component for prepayment-account
@@ -53,6 +64,7 @@ export class M21Ifrs16LeaseFormControlComponent implements OnInit, ControlValueA
   valueLookUps$: Observable<IIFRS16LeaseContract[]> = of([]);
 
   constructor(
+    protected valueService: IFRS16LeaseContractService,
     protected valueSuggestionService: Ifrs16LeaseContractSuggestionService
   ) {}
 
@@ -66,6 +78,14 @@ export class M21Ifrs16LeaseFormControlComponent implements OnInit, ControlValueA
   ngOnInit(): void {
 
     this.loadValues();
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
   }
 
   ngOnDestroy(): void {
@@ -78,17 +98,30 @@ export class M21Ifrs16LeaseFormControlComponent implements OnInit, ControlValueA
     this.valueLookUps$ = concat(
       of([]), // default items
       this.valueControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
+        filter(res => res !== null && res.length >= this.minAccountLengthTerm),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.valuesLoading = true),
         switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
+          switchMap(searchResults => searchResults.length > 0 ?
+            from(searchResults).pipe(
+              mergeMap(result =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                result?.id ? this.valueService.find(result.id).pipe(
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                  map((response: { body: any; }) => response.body), // Assuming response is HttpResponse<IServiceOutlet>
+                  catchError(() => of(null))
+                ) : of(null)
+              ),
+              filter((result): result is IIFRS16LeaseContract => result !== null),
+              toArray()
+            ) : of([])
+          ),
           tap(() => this.valuesLoading = false)
         ))
-      ),
+      )
     );
   }
 
@@ -105,6 +138,7 @@ export class M21Ifrs16LeaseFormControlComponent implements OnInit, ControlValueA
   }
 
   getValues(): void {
+    // TODO check service on this
     this.valueSelected.emit(this.inputValue);
   }
 
