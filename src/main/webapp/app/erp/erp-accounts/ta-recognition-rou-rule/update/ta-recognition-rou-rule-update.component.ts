@@ -65,9 +65,8 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tARecognitionROURule }) => {
-      this.editForm.patchValue({
-        identifier: uuidv7()
-      });
+
+      tARecognitionROURule.identifier = uuidv7();
 
       this.updateForm(tARecognitionROURule);
 

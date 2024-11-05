@@ -31,6 +31,7 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ta-lease-interest-accrual-rule-update',
@@ -64,9 +65,36 @@ export class TALeaseInterestAccrualRuleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseInterestAccrualRule }) => {
+
+      tALeaseInterestAccrualRule.identifier = uuidv7();
+
       this.updateForm(tALeaseInterestAccrualRule);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateDebitAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debit: $event
+    });
+  }
+
+  updateCreditAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      credit: $event
+    });
+  }
+
+  updateLeaseContract($event: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leasContract: $event
+    })
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...value]
     });
   }
 

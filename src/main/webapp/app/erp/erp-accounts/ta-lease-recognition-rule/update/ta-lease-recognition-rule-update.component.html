@@ -55,90 +55,45 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_leaseContract">Lease Contract</label>
-          <select
-            class="form-control"
-            id="field_leaseContract"
-            data-cy="leaseContract"
-            name="leaseContract"
-            formControlName="leaseContract"
-          >
-            <option *ngIf="editForm.get(['leaseContract'])!.value == null" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                iFRS16LeaseContractOption.id === editForm.get('leaseContract')!.value?.id
-                  ? editForm.get('leaseContract')!.value
-                  : iFRS16LeaseContractOption
-              "
-              *ngFor="let iFRS16LeaseContractOption of leaseContractsCollection; trackBy: trackIFRS16LeaseContractById"
-            >
-              {{ iFRS16LeaseContractOption.shortTitle }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['leaseContract'])!.invalid && (editForm.get(['leaseContract'])!.dirty || editForm.get(['leaseContract'])!.touched)
-          "
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get('leaseContract')!.value"
+          (valueSelected)='updateLeaseContract($event)'
+          inputControlLabel="Lease Contract"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['leaseContract'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_debit">Debit</label>
-          <select class="form-control" id="field_debit" data-cy="debit" name="debit" formControlName="debit">
-            <option *ngIf="!editForm.get('debit')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('debit')!.value?.id ? editForm.get('debit')!.value : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['debit'])!.invalid && (editForm.get(['debit'])!.dirty || editForm.get(['debit'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['debit'])?.errors?.required"> This field is required. </small>
-        </div>
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='debit'
+          [inputValue]="editForm.get('debit')!.value"
+          (valueSelected)='updateDebitAccount($event)'
+          inputControlLabel="Debit Account"
+        >
+          <option [ngValue]="editForm.get('debit')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_credit">Credit</label>
-          <select class="form-control" id="field_credit" data-cy="credit" name="credit" formControlName="credit">
-            <option *ngIf="!editForm.get('credit')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('credit')!.value?.id ? editForm.get('credit')!.value : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountName }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['credit'])!.invalid && (editForm.get(['credit'])!.dirty || editForm.get(['credit'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['credit'])?.errors?.required"> This field is required. </small>
-        </div>
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='credit'
+          [inputValue]="editForm.get('credit')!.value"
+          (valueSelected)='updateCreditAccount($event)'
+          inputControlLabel="Credit Account"
+        >
+          <option [ngValue]="editForm.get('credit')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
       </div>
 
       <div>

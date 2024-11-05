@@ -31,10 +31,11 @@ import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-co
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ta-lease-recognition-rule-update',
-  templateUrl: './ta-lease-recognition-rule-update.component.html',
+  templateUrl: './ta-lease-recognition-rule-update.component.html'
 })
 export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
   isSaving = false;
@@ -50,7 +51,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
     leaseContract: [null, Validators.required],
     debit: [null, Validators.required],
     credit: [null, Validators.required],
-    placeholders: [],
+    placeholders: []
   });
 
   constructor(
@@ -60,13 +61,41 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseRecognitionRule }) => {
+
+      tALeaseRecognitionRule.identifier = uuidv7();
+
       this.updateForm(tALeaseRecognitionRule);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateDebitAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debit: $event
+    });
+  }
+
+  updateCreditAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      credit: $event
+    });
+  }
+
+  updateLeaseContract($event: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leasContract: $event
+    });
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...value]
     });
   }
 
@@ -134,7 +163,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
       leaseContract: tALeaseRecognitionRule.leaseContract,
       debit: tALeaseRecognitionRule.debit,
       credit: tALeaseRecognitionRule.credit,
-      placeholders: tALeaseRecognitionRule.placeholders,
+      placeholders: tALeaseRecognitionRule.placeholders
     });
 
     this.leaseContractsCollection = this.iFRS16LeaseContractService.addIFRS16LeaseContractToCollectionIfMissing(
@@ -200,7 +229,7 @@ export class TALeaseRecognitionRuleUpdateComponent implements OnInit {
       leaseContract: this.editForm.get(['leaseContract'])!.value,
       debit: this.editForm.get(['debit'])!.value,
       credit: this.editForm.get(['credit'])!.value,
-      placeholders: this.editForm.get(['placeholders'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value
     };
   }
 }

@@ -31,6 +31,7 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IFRS16LeaseContractService } from '../../../erp-leases/ifrs-16-lease-contract/service/ifrs-16-lease-contract.service';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ta-lease-repayment-rule-update',
@@ -64,9 +65,35 @@ export class TALeaseRepaymentRuleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tALeaseRepaymentRule }) => {
+
+      tALeaseRepaymentRule.identifier = uuidv7();
+
       this.updateForm(tALeaseRepaymentRule);
 
       this.loadRelationshipsOptions();
+    });
+  }
+  updateDebitAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debit: $event
+    });
+  }
+
+  updateCreditAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      credit: $event
+    });
+  }
+
+  updateLeaseContract($event: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leasContract: $event
+    })
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...value]
     });
   }
 

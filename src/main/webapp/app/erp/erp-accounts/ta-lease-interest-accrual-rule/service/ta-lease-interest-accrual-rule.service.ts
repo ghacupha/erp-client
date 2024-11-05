@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ITALeaseInterestAccrualRule[]
 
 @Injectable({ providedIn: 'root' })
 export class TALeaseInterestAccrualRuleService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/ta-lease-interest-accrual-rules');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/ta-lease-interest-accrual-rules');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/accounts/ta-lease-interest-accrual-rules');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/accounts/_search/ta-lease-interest-accrual-rules');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

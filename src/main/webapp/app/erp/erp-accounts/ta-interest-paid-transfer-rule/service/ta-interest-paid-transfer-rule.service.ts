@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ITAInterestPaidTransferRule[]
 
 @Injectable({ providedIn: 'root' })
 export class TAInterestPaidTransferRuleService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/ta-interest-paid-transfer-rules');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/ta-interest-paid-transfer-rules');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/accounts/ta-interest-paid-transfer-rules');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/accounts/_search/ta-interest-paid-transfer-rules');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

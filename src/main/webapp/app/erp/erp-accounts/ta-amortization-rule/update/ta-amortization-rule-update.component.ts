@@ -90,10 +90,6 @@ export class TAAmortizationRuleUpdateComponent implements OnInit {
 
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
-
-      this.editForm.patchValue({
-        identifier: uuidv7(),
-      })
     }
 
     if (this.weAreCopying) {

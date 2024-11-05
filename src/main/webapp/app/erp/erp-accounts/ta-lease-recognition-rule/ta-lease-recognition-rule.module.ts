@@ -23,9 +23,10 @@ import { TALeaseRecognitionRuleDetailComponent } from './detail/ta-lease-recogni
 import { TALeaseRecognitionRuleUpdateComponent } from './update/ta-lease-recognition-rule-update.component';
 import { TALeaseRecognitionRuleDeleteDialogComponent } from './delete/ta-lease-recognition-rule-delete-dialog.component';
 import { TALeaseRecognitionRuleRoutingModule } from './route/ta-lease-recognition-rule-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, TALeaseRecognitionRuleRoutingModule],
+  imports: [SharedModule, TALeaseRecognitionRuleRoutingModule, ErpCommonModule],
   declarations: [
     TALeaseRecognitionRuleComponent,
     TALeaseRecognitionRuleDetailComponent,
