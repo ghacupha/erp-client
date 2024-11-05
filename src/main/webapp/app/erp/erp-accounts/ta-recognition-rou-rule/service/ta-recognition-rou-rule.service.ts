@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ITARecognitionROURule[]>;
 
 @Injectable({ providedIn: 'root' })
 export class TARecognitionROURuleService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/ta-recognition-rou-rules');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/ta-recognition-rou-rules');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/accounts/ta-recognition-rou-rules');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/accounts/_search/ta-recognition-rou-rules');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

@@ -31,6 +31,7 @@ import { ITransactionAccount } from '../../transaction-account/transaction-accou
 import { IIFRS16LeaseContract } from '../../../erp-leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
 import { TransactionAccountService } from '../../transaction-account/service/transaction-account.service';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-ta-recognition-rou-rule-update',
@@ -64,9 +65,37 @@ export class TARecognitionROURuleUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ tARecognitionROURule }) => {
+      this.editForm.patchValue({
+        identifier: uuidv7()
+      });
+
       this.updateForm(tARecognitionROURule);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateDebitAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      debit: $event
+    });
+  }
+
+  updateCreditAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      credit: $event
+    });
+  }
+
+  updateLeaseContract($event: IIFRS16LeaseContract): void {
+    this.editForm.patchValue({
+      leasContract: $event
+    })
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...value]
     });
   }
 
