@@ -184,6 +184,18 @@
         <li>
           <a
             class='dropdown-item'
+            routerLink='rou-initial-direct-cost'
+            routerLinkActive='active'
+            [routerLinkActiveOptions]='{ exact: true }'
+            (click)='collapseNavbar()'
+          >
+            <fa-icon icon='asterisk' [fixedWidth]='true'></fa-icon>
+            <span>ROU Initial Direct Costs</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class='dropdown-item'
             routerLink='rou-depreciation-request'
             routerLinkActive='active'
             [routerLinkActiveOptions]='{ exact: true }'

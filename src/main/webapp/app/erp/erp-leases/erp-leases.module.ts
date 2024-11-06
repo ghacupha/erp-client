@@ -431,6 +431,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.LeaseLiabilityScheduleReportItemModule
             ),
         },
+        {
+          path: 'rou-initial-direct-cost',
+          data: {
+            pageTitle: 'ERP | Initial Direct Costs',
+            authorities: ['ROLE_LEASE_MANAGER'],
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./rou-initial-direct-cost/rou-initial-direct-cost.module').then(
+              m => m.RouInitialDirectCostModule
+            ),
+        },
       ]
     )
   ]
