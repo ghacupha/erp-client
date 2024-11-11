@@ -88,6 +88,11 @@ export class RouInitialDirectCostService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
+  getNextReferenceNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/reference-number`, { observe: 'response' });
+  }
+
   addRouInitialDirectCostToCollectionIfMissing(
     rouInitialDirectCostCollection: IRouInitialDirectCost[],
     ...rouInitialDirectCostsToCheck: (IRouInitialDirectCost | null | undefined)[]

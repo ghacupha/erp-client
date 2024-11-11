@@ -73,7 +73,16 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ rouInitialDirectCost }) => {
       this.updateForm(rouInitialDirectCost);
 
-      this.loadRelationshipsOptions();
+      if (rouInitialDirectCost.id === undefined ) {
+        this.rouInitialDirectCostService.getNextReferenceNumber().subscribe(nextValue => {
+          if (nextValue.body) {
+            this.editForm.patchValue({
+              referenceNumber: nextValue.body,
+            })
+          }
+        });
+      }
+
     });
   }
 
