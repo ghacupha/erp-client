@@ -91,31 +91,34 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
     }
   }
 
-  trackIFRS16LeaseContractById(index: number, item: IIFRS16LeaseContract): number {
-    return item.id!;
+  updatePlaceholders($event: IPlaceholder[]) {
+    this.editForm.patchValue({
+      placeholders: [...$event]
+    })
   }
 
-  trackSettlementById(index: number, item: ISettlement): number {
-    return item.id!;
+  transferAccount($event: ITransactionAccount) {
+    this.editForm.patchValue({
+      transferAccount: $event
+    })
   }
 
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
-    return item.id!;
+  targetROUAccount($event: ITransactionAccount) {
+    this.editForm.patchValue({
+      targetROUAccount: $event
+    })
   }
 
-  trackPlaceholderById(index: number, item: IPlaceholder): number {
-    return item.id!;
+  settlementDetails($event: ISettlement) {
+    this.editForm.patchValue({
+      settlementDetails: $event
+    })
   }
 
-  getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
-    }
-    return option;
+  leaseContract($event: IIFRS16LeaseContract) {
+    this.editForm.patchValue({
+      leaseContract: $event
+    })
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IRouInitialDirectCost>>): void {

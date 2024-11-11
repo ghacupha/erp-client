@@ -23,9 +23,10 @@ import { RouInitialDirectCostDetailComponent } from './detail/rou-initial-direct
 import { RouInitialDirectCostUpdateComponent } from './update/rou-initial-direct-cost-update.component';
 import { RouInitialDirectCostDeleteDialogComponent } from './delete/rou-initial-direct-cost-delete-dialog.component';
 import { RouInitialDirectCostRoutingModule } from './route/rou-initial-direct-cost-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, RouInitialDirectCostRoutingModule],
+  imports: [SharedModule, RouInitialDirectCostRoutingModule, ErpCommonModule],
   declarations: [
     RouInitialDirectCostComponent,
     RouInitialDirectCostDetailComponent,
