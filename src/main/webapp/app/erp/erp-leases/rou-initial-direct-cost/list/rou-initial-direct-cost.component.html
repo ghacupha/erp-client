@@ -88,7 +88,7 @@
           </td>
           <td>{{ rouInitialDirectCost.transactionDate | formatMediumDate }}</td>
           <td>{{ rouInitialDirectCost.description }}</td>
-          <td>{{ rouInitialDirectCost.cost }}</td>
+          <td>{{ rouInitialDirectCost.cost | currency }}</td>
           <td>{{ rouInitialDirectCost.referenceNumber }}</td>
           <td>
             <div *ngIf="rouInitialDirectCost.leaseContract">

@@ -45,6 +45,46 @@
           />
         </div>
 
+        <jhi-m21-ifrs16-lease-form-control
+          ngDefaultControl
+          formControlName='leaseContract'
+          [inputValue]="editForm.get('leaseContract')!.value"
+          (valueSelected)='leaseContract($event)'
+          inputControlLabel='Lease Contract'
+        >
+          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
+        </jhi-m21-ifrs16-lease-form-control>
+
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='settlementDetails'
+          [inputValue]="editForm.get('settlementDetails')!.value"
+          (valueSelected)='settlementDetails($event)'
+          inputControlLabel='Settlement Details'
+        >
+          <option [ngValue]="editForm.get('settlementDetails')!.value"></option>
+        </jhi-m21-settlement-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='targetROUAccount'
+          [inputValue]="editForm.get('targetROUAccount')!.value"
+          (valueSelected)='targetROUAccount($event)'
+          inputControlLabel='Target ROU Account (Account debited by IFRS16 Recognition routine)'
+        >
+          <option [ngValue]="editForm.get('targetROUAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='transferAccount'
+          [inputValue]="editForm.get('transferAccount')!.value"
+          (valueSelected)='transferAccount($event)'
+          inputControlLabel='Transfer Account (Account credited by IFRS16 Recognition routine)'
+        >
+          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
+
         <div class='form-group'>
           <label class='form-control-label' for='field_transactionDate'>Transaction Date</label>
           <div class='input-group'>
@@ -99,46 +139,6 @@
               a number. </small>
           </div>
         </div>
-
-        <jhi-m21-ifrs16-lease-form-control
-          ngDefaultControl
-          formControlName='leaseContract'
-          [inputValue]="editForm.get('leaseContract')!.value"
-          (valueSelected)='leaseContract($event)'
-          inputControlLabel='Lease Contract'
-        >
-          <option [ngValue]="editForm.get('leaseContract')!.value"></option>
-        </jhi-m21-ifrs16-lease-form-control>
-
-        <jhi-m21-settlement-form-control
-          ngDefaultControl
-          formControlName='settlementDetails'
-          [inputValue]="editForm.get('settlementDetails')!.value"
-          (valueSelected)='settlementDetails($event)'
-          inputControlLabel='Settlement Details'
-        >
-          <option [ngValue]="editForm.get('settlementDetails')!.value"></option>
-        </jhi-m21-settlement-form-control>
-
-        <jhi-m21-transaction-account-form-control
-          ngDefaultControl
-          formControlName='targetROUAccount'
-          [inputValue]="editForm.get('targetROUAccount')!.value"
-          (valueSelected)='targetROUAccount($event)'
-          inputControlLabel='Target ROU Account (Account debited by IFRS16 Recognition routine)'
-        >
-          <option [ngValue]="editForm.get('targetROUAccount')!.value"></option>
-        </jhi-m21-transaction-account-form-control>
-
-        <jhi-m21-transaction-account-form-control
-          ngDefaultControl
-          formControlName='transferAccount'
-          [inputValue]="editForm.get('transferAccount')!.value"
-          (valueSelected)='transferAccount($event)'
-          inputControlLabel='Transfer Account (Account credited by IFRS16 Recognition routine)'
-        >
-          <option [ngValue]="editForm.get('transferAccount')!.value"></option>
-        </jhi-m21-transaction-account-form-control>
 
         <jhi-m2m-placeholder-form-control
           ngDefaultControl

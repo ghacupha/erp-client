@@ -84,6 +84,25 @@ export class RouInitialDirectCostUpdateComponent implements OnInit {
       }
 
     });
+
+    this.updateDescriptionGivenSettlement();
+  }
+
+  updateDescriptionGivenSettlement(): void {
+    this.editForm.get(['settlementDetails'])?.valueChanges.subscribe((settlementDetailsChange) => {
+      if (settlementDetailsChange.id) {
+        this.settlementService.find(settlementDetailsChange.id).subscribe(settlementDetailsResponse => {
+          if (settlementDetailsResponse.body) {
+            const settlementDetailsBody = settlementDetailsResponse.body;
+            this.editForm.patchValue({
+              cost: settlementDetailsBody.paymentAmount,
+              description: settlementDetailsBody.description,
+              transactionDate: settlementDetailsBody.paymentDate
+            });
+          }
+        });
+      }
+    });
   }
 
   previousState(): void {
