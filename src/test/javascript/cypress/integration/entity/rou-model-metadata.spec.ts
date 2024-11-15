@@ -69,7 +69,7 @@ describe('RouModelMetadata e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"synthesizing card Kenyan","accountName":"Auto Loan Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"synthesizing card Kenyan","accountName":"Auto Loan Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"ASSET","accountSubType":"OTHER_COMPREHENSIVE_INCOME","dummyAccount":true},
     }).then(({ body }) => {
       transactionAccount = body;
     });

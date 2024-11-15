@@ -16,7 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 
 jest.mock('@angular/router');
 
@@ -31,7 +31,9 @@ import { TransactionAccountCategoryService } from '../service/transaction-accoun
 import { ITransactionAccountCategory, TransactionAccountCategory } from '../transaction-account-category.model';
 
 import { TransactionAccountCategoryUpdateComponent } from './transaction-account-category-update.component';
-import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { TransactionAccountLedgerService } from '../../transaction-account-ledger/service/transaction-account-ledger.service';
+import { ITransactionAccountLedger } from '../../transaction-account-ledger/transaction-account-ledger.model';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 describe('TransactionAccountCategory Management Update Component', () => {
   let comp: TransactionAccountCategoryUpdateComponent;
@@ -39,6 +41,7 @@ describe('TransactionAccountCategory Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let transactionAccountCategoryService: TransactionAccountCategoryService;
   let placeholderService: PlaceholderService;
+  let transactionAccountLedgerService: TransactionAccountLedgerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,6 +56,7 @@ describe('TransactionAccountCategory Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     transactionAccountCategoryService = TestBed.inject(TransactionAccountCategoryService);
     placeholderService = TestBed.inject(PlaceholderService);
+    transactionAccountLedgerService = TestBed.inject(TransactionAccountLedgerService);
 
     comp = fixture.componentInstance;
   });
@@ -77,16 +81,46 @@ describe('TransactionAccountCategory Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call TransactionAccountLedger query and add missing value', () => {
+      const transactionAccountCategory: ITransactionAccountCategory = { id: 456 };
+      const accountLedger: ITransactionAccountLedger = { id: 68451 };
+      transactionAccountCategory.accountLedger = accountLedger;
+
+      const transactionAccountLedgerCollection: ITransactionAccountLedger[] = [{ id: 81664 }];
+      jest
+        .spyOn(transactionAccountLedgerService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: transactionAccountLedgerCollection })));
+      const additionalTransactionAccountLedgers = [accountLedger];
+      const expectedCollection: ITransactionAccountLedger[] = [
+        ...additionalTransactionAccountLedgers,
+        ...transactionAccountLedgerCollection,
+      ];
+      jest.spyOn(transactionAccountLedgerService, 'addTransactionAccountLedgerToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ transactionAccountCategory });
+      comp.ngOnInit();
+
+      expect(transactionAccountLedgerService.query).toHaveBeenCalled();
+      expect(transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing).toHaveBeenCalledWith(
+        transactionAccountLedgerCollection,
+        ...additionalTransactionAccountLedgers
+      );
+      expect(comp.transactionAccountLedgersSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const transactionAccountCategory: ITransactionAccountCategory = { id: 456 };
       const placeholders: IPlaceholder = { id: 40687 };
       transactionAccountCategory.placeholders = [placeholders];
+      const accountLedger: ITransactionAccountLedger = { id: 34583 };
+      transactionAccountCategory.accountLedger = accountLedger;
 
       activatedRoute.data = of({ transactionAccountCategory });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(transactionAccountCategory));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
+      expect(comp.transactionAccountLedgersSharedCollection).toContain(accountLedger);
     });
   });
 
@@ -159,6 +193,14 @@ describe('TransactionAccountCategory Management Update Component', () => {
       it('Should return tracked Placeholder primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPlaceholderById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackTransactionAccountLedgerById', () => {
+      it('Should return tracked TransactionAccountLedger primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackTransactionAccountLedgerById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

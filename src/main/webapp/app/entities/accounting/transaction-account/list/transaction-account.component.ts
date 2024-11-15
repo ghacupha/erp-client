@@ -98,7 +98,7 @@ export class TransactionAccountComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['accountNumber', 'accountName', 'notes'].includes(this.predicate)) {
+    if (query && ['accountNumber', 'accountName', 'notes', 'accountType', 'accountSubType'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

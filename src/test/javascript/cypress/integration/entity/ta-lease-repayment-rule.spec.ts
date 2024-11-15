@@ -63,7 +63,7 @@ describe('TALeaseRepaymentRule e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"Cotton Kentucky Small","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"Cotton Kentucky Small","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"EQUITY","accountSubType":"ACCOUNT_PAYABLE","dummyAccount":true},
     }).then(({ body }) => {
       transactionAccount = body;
     });

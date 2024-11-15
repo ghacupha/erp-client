@@ -37,6 +37,7 @@ describe('TransactionAccountCategory e2e test', () => {
   const transactionAccountCategorySample = { name: 'Technician holistic', transactionAccountPostingType: 'CREDIT' };
 
   let transactionAccountCategory: any;
+  let transactionAccountLedger: any;
 
   before(() => {
     cy.window().then(win => {
@@ -48,9 +49,33 @@ describe('TransactionAccountCategory e2e test', () => {
   });
 
   beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/transaction-account-ledgers',
+      body: { ledgerCode: 'harness', ledgerName: 'Data Account' },
+    }).then(({ body }) => {
+      transactionAccountLedger = body;
+    });
+  });
+
+  beforeEach(() => {
     cy.intercept('GET', '/api/transaction-account-categories+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/transaction-account-categories').as('postEntityRequest');
     cy.intercept('DELETE', '/api/transaction-account-categories/*').as('deleteEntityRequest');
+  });
+
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/placeholders', {
+      statusCode: 200,
+      body: [],
+    });
+
+    cy.intercept('GET', '/api/transaction-account-ledgers', {
+      statusCode: 200,
+      body: [transactionAccountLedger],
+    });
   });
 
   afterEach(() => {
@@ -60,6 +85,17 @@ describe('TransactionAccountCategory e2e test', () => {
         url: `/api/transaction-account-categories/${transactionAccountCategory.id}`,
       }).then(() => {
         transactionAccountCategory = undefined;
+      });
+    }
+  });
+
+  afterEach(() => {
+    if (transactionAccountLedger) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/transaction-account-ledgers/${transactionAccountLedger.id}`,
+      }).then(() => {
+        transactionAccountLedger = undefined;
       });
     }
   });
@@ -103,7 +139,11 @@ describe('TransactionAccountCategory e2e test', () => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/transaction-account-categories',
-          body: transactionAccountCategorySample,
+
+          body: {
+            ...transactionAccountCategorySample,
+            accountLedger: transactionAccountLedger,
+          },
         }).then(({ body }) => {
           transactionAccountCategory = body;
 
@@ -174,6 +214,8 @@ describe('TransactionAccountCategory e2e test', () => {
       cy.get(`[data-cy="name"]`).type('service-desk').should('have.value', 'service-desk');
 
       cy.get(`[data-cy="transactionAccountPostingType"]`).select('CREDIT');
+
+      cy.get(`[data-cy="accountLedger"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

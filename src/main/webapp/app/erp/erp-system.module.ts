@@ -35,6 +35,8 @@ import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-acco
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
 import { ErpLeasesModule } from './erp-leases/erp-leases.module';
 import { ErpGDIModule } from "./erp-gdi/erp-gdi.module";
+import { ErpAdminModule } from './admin/erp-admin.module';
+import { ErpAccountReportModule } from './erp-account-reports/erp-account-report.module';
 
 export const routes: Routes = [];
 
@@ -58,6 +60,8 @@ export const routes: Routes = [];
     ErpTransactionAccountModule,
     ErpLeasesModule,
     ErpGDIModule,
+    ErpAdminModule,
+    ErpAccountReportModule,
   ],
   exports: [
     ErpNavbarModule,
@@ -72,6 +76,8 @@ export const routes: Routes = [];
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
     ErpGDIModule,
+    ErpAdminModule,
+    ErpAccountReportModule,
   ]
 })
 export class ErpSystemModule {}

@@ -61,7 +61,7 @@ describe('RouDepreciationEntry e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"invoice Planner","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"invoice Planner","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"LIABILITY","accountSubType":"SETTLEMENT_ASSET","dummyAccount":true},
     }).then(({ body }) => {
       transactionAccount = body;
     });

@@ -21,10 +21,21 @@
       "otherEntityField": "description",
       "ownerSide": true,
       "otherEntityRelationshipName": "transactionAccountCategory"
+    },
+    {
+      "relationshipName": "accountLedger",
+      "otherEntityName": "transactionAccountLedger",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "ledgerName"
     }
   ],
+  "service": "serviceImpl",
+  "dto": "mapstruct",
+  "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "pagination",
   "name": "TransactionAccountCategory",
-  "changelogDate": "20241007120855"
+  "changelogDate": "20241007115738",
+  "incrementalChangelog": false
 }

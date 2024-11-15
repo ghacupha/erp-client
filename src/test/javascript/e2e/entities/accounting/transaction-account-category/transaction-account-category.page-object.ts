@@ -52,6 +52,7 @@ export class TransactionAccountCategoryUpdatePage {
   transactionAccountPostingTypeSelect = element(by.id('field_transactionAccountPostingType'));
 
   placeholderSelect = element(by.id('field_placeholder'));
+  accountLedgerSelect = element(by.id('field_accountLedger'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -99,6 +100,22 @@ export class TransactionAccountCategoryUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async accountLedgerSelectLastOption(): Promise<void> {
+    await this.accountLedgerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async accountLedgerSelectOption(option: string): Promise<void> {
+    await this.accountLedgerSelect.sendKeys(option);
+  }
+
+  getAccountLedgerSelect(): ElementFinder {
+    return this.accountLedgerSelect;
+  }
+
+  async getAccountLedgerSelectedOption(): Promise<string> {
+    return await this.accountLedgerSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

@@ -63,7 +63,7 @@ describe('TAInterestPaidTransferRule e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"Sausages","accountName":"Auto Loan Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"Sausages","accountName":"Auto Loan Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"ASSET","accountSubType":"ACCOUNT_RECEIVABLE","dummyAccount":true},
     }).then(({ body }) => {
       transactionAccount = body;
     });

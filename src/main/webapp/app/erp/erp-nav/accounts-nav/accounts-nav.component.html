@@ -33,6 +33,18 @@
         <li>
           <a
             class="dropdown-item"
+            routerLink="transaction-account-report-item"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Account Report Items</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
             routerLink="transaction-account"
             routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }"
@@ -40,6 +52,18 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>Transaction Accounts</span>
+          </a>
+        </li>
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="transaction-account-ledger"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Account Ledger</span>
           </a>
         </li>
         <li>

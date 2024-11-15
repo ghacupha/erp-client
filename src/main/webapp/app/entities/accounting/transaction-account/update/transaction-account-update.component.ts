@@ -28,8 +28,14 @@ import { TransactionAccountService } from '../service/transaction-account.servic
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { ITransactionAccountLedger } from 'app/entities/accounting/transaction-account-ledger/transaction-account-ledger.model';
+import { TransactionAccountLedgerService } from 'app/entities/accounting/transaction-account-ledger/service/transaction-account-ledger.service';
+import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
+import { TransactionAccountCategoryService } from 'app/entities/accounting/transaction-account-category/service/transaction-account-category.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { AccountTypes } from 'app/entities/enumerations/account-types.model';
+import { AccountSubTypes } from 'app/entities/enumerations/account-sub-types.model';
 
 @Component({
   selector: 'jhi-transaction-account-update',
@@ -37,8 +43,11 @@ import { PlaceholderService } from 'app/entities/system/placeholder/service/plac
 })
 export class TransactionAccountUpdateComponent implements OnInit {
   isSaving = false;
+  accountTypesValues = Object.keys(AccountTypes);
+  accountSubTypesValues = Object.keys(AccountSubTypes);
 
-  transactionAccountsSharedCollection: ITransactionAccount[] = [];
+  transactionAccountLedgersSharedCollection: ITransactionAccountLedger[] = [];
+  transactionAccountCategoriesSharedCollection: ITransactionAccountCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
 
   editForm = this.fb.group({
@@ -47,7 +56,11 @@ export class TransactionAccountUpdateComponent implements OnInit {
     accountName: [null, [Validators.required]],
     notes: [],
     notesContentType: [],
-    parentAccount: [],
+    accountType: [null, [Validators.required]],
+    accountSubType: [null, [Validators.required]],
+    dummyAccount: [],
+    accountLedger: [null, Validators.required],
+    accountCategory: [null, Validators.required],
     placeholders: [],
   });
 
@@ -55,6 +68,8 @@ export class TransactionAccountUpdateComponent implements OnInit {
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected transactionAccountService: TransactionAccountService,
+    protected transactionAccountLedgerService: TransactionAccountLedgerService,
+    protected transactionAccountCategoryService: TransactionAccountCategoryService,
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -97,7 +112,11 @@ export class TransactionAccountUpdateComponent implements OnInit {
     }
   }
 
-  trackTransactionAccountById(index: number, item: ITransactionAccount): number {
+  trackTransactionAccountLedgerById(index: number, item: ITransactionAccountLedger): number {
+    return item.id!;
+  }
+
+  trackTransactionAccountCategoryById(index: number, item: ITransactionAccountCategory): number {
     return item.id!;
   }
 
@@ -142,14 +161,23 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountName: transactionAccount.accountName,
       notes: transactionAccount.notes,
       notesContentType: transactionAccount.notesContentType,
-      parentAccount: transactionAccount.parentAccount,
+      accountType: transactionAccount.accountType,
+      accountSubType: transactionAccount.accountSubType,
+      dummyAccount: transactionAccount.dummyAccount,
+      accountLedger: transactionAccount.accountLedger,
+      accountCategory: transactionAccount.accountCategory,
       placeholders: transactionAccount.placeholders,
     });
 
-    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-      this.transactionAccountsSharedCollection,
-      transactionAccount.parentAccount
+    this.transactionAccountLedgersSharedCollection = this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+      this.transactionAccountLedgersSharedCollection,
+      transactionAccount.accountLedger
     );
+    this.transactionAccountCategoriesSharedCollection =
+      this.transactionAccountCategoryService.addTransactionAccountCategoryToCollectionIfMissing(
+        this.transactionAccountCategoriesSharedCollection,
+        transactionAccount.accountCategory
+      );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(transactionAccount.placeholders ?? [])
@@ -157,18 +185,37 @@ export class TransactionAccountUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
-    this.transactionAccountService
+    this.transactionAccountLedgerService
       .query()
-      .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<ITransactionAccountLedger[]>) => res.body ?? []))
       .pipe(
-        map((transactionAccounts: ITransactionAccount[]) =>
-          this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-            transactionAccounts,
-            this.editForm.get('parentAccount')!.value
+        map((transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+            transactionAccountLedgers,
+            this.editForm.get('accountLedger')!.value
           )
         )
       )
-      .subscribe((transactionAccounts: ITransactionAccount[]) => (this.transactionAccountsSharedCollection = transactionAccounts));
+      .subscribe(
+        (transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          (this.transactionAccountLedgersSharedCollection = transactionAccountLedgers)
+      );
+
+    this.transactionAccountCategoryService
+      .query()
+      .pipe(map((res: HttpResponse<ITransactionAccountCategory[]>) => res.body ?? []))
+      .pipe(
+        map((transactionAccountCategories: ITransactionAccountCategory[]) =>
+          this.transactionAccountCategoryService.addTransactionAccountCategoryToCollectionIfMissing(
+            transactionAccountCategories,
+            this.editForm.get('accountCategory')!.value
+          )
+        )
+      )
+      .subscribe(
+        (transactionAccountCategories: ITransactionAccountCategory[]) =>
+          (this.transactionAccountCategoriesSharedCollection = transactionAccountCategories)
+      );
 
     this.placeholderService
       .query()
@@ -189,7 +236,11 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountName: this.editForm.get(['accountName'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,
       notes: this.editForm.get(['notes'])!.value,
-      parentAccount: this.editForm.get(['parentAccount'])!.value,
+      accountType: this.editForm.get(['accountType'])!.value,
+      accountSubType: this.editForm.get(['accountSubType'])!.value,
+      dummyAccount: this.editForm.get(['dummyAccount'])!.value,
+      accountLedger: this.editForm.get(['accountLedger'])!.value,
+      accountCategory: this.editForm.get(['accountCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
     };
   }

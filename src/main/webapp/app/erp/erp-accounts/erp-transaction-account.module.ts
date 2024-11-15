@@ -48,6 +48,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
             )
         },
         {
+          path: 'transaction-account-ledger',
+          data: {
+            pageTitle: 'ERP | Account Ledger',
+            authorities: ['ROLE_BOOK_KEEPING', 'ROLE_PREPAYMENTS_MODULE_USER']
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./transaction-account-ledger/transaction-account-ledger.module').then(
+              m => m.TransactionAccountLedgerModule
+            )
+        },
+        {
           path: 'transaction-account-posting-process-type',
           data: {
             pageTitle: 'ERP | Account Processing',

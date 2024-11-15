@@ -16,6 +16,7 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { ITransactionAccountLedger } from '../transaction-account-ledger/transaction-account-ledger.model';
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
 import { transactionAccountPostingTypes } from '../../erp-common/enumerations/transaction-account-posting-types.model';
 
@@ -24,6 +25,7 @@ export interface ITransactionAccountCategory {
   name?: string;
   transactionAccountPostingType?: transactionAccountPostingTypes;
   placeholders?: IPlaceholder[] | null;
+  accountLedger?: ITransactionAccountLedger;
 }
 
 export class TransactionAccountCategory implements ITransactionAccountCategory {
@@ -31,7 +33,8 @@ export class TransactionAccountCategory implements ITransactionAccountCategory {
     public id?: number,
     public name?: string,
     public transactionAccountPostingType?: transactionAccountPostingTypes,
-    public placeholders?: IPlaceholder[] | null
+    public placeholders?: IPlaceholder[] | null,
+    public accountLedger?: ITransactionAccountLedger
   ) {}
 }
 

@@ -48,6 +48,14 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Account Ledger</span></dt>
+        <dd>
+          <div *ngIf="transactionAccountCategory.accountLedger">
+            <a [routerLink]="['/transaction-account-ledger', transactionAccountCategory.accountLedger?.id, 'view']">{{
+              transactionAccountCategory.accountLedger?.ledgerName
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -51,8 +51,12 @@ export class TransactionAccountUpdatePage {
   accountNumberInput = element(by.id('field_accountNumber'));
   accountNameInput = element(by.id('field_accountName'));
   notesInput = element(by.id('file_notes'));
+  accountTypeSelect = element(by.id('field_accountType'));
+  accountSubTypeSelect = element(by.id('field_accountSubType'));
+  dummyAccountInput = element(by.id('field_dummyAccount'));
 
-  parentAccountSelect = element(by.id('field_parentAccount'));
+  accountLedgerSelect = element(by.id('field_accountLedger'));
+  accountCategorySelect = element(by.id('field_accountCategory'));
   placeholderSelect = element(by.id('field_placeholder'));
 
   async getPageTitle(): Promise<string> {
@@ -91,20 +95,64 @@ export class TransactionAccountUpdatePage {
     return await this.notesInput.getAttribute('value');
   }
 
-  async parentAccountSelectLastOption(): Promise<void> {
-    await this.parentAccountSelect.all(by.tagName('option')).last().click();
+  async setAccountTypeSelect(accountType: string): Promise<void> {
+    await this.accountTypeSelect.sendKeys(accountType);
   }
 
-  async parentAccountSelectOption(option: string): Promise<void> {
-    await this.parentAccountSelect.sendKeys(option);
+  async getAccountTypeSelect(): Promise<string> {
+    return await this.accountTypeSelect.element(by.css('option:checked')).getText();
   }
 
-  getParentAccountSelect(): ElementFinder {
-    return this.parentAccountSelect;
+  async accountTypeSelectLastOption(): Promise<void> {
+    await this.accountTypeSelect.all(by.tagName('option')).last().click();
   }
 
-  async getParentAccountSelectedOption(): Promise<string> {
-    return await this.parentAccountSelect.element(by.css('option:checked')).getText();
+  async setAccountSubTypeSelect(accountSubType: string): Promise<void> {
+    await this.accountSubTypeSelect.sendKeys(accountSubType);
+  }
+
+  async getAccountSubTypeSelect(): Promise<string> {
+    return await this.accountSubTypeSelect.element(by.css('option:checked')).getText();
+  }
+
+  async accountSubTypeSelectLastOption(): Promise<void> {
+    await this.accountSubTypeSelect.all(by.tagName('option')).last().click();
+  }
+
+  getDummyAccountInput(): ElementFinder {
+    return this.dummyAccountInput;
+  }
+
+  async accountLedgerSelectLastOption(): Promise<void> {
+    await this.accountLedgerSelect.all(by.tagName('option')).last().click();
+  }
+
+  async accountLedgerSelectOption(option: string): Promise<void> {
+    await this.accountLedgerSelect.sendKeys(option);
+  }
+
+  getAccountLedgerSelect(): ElementFinder {
+    return this.accountLedgerSelect;
+  }
+
+  async getAccountLedgerSelectedOption(): Promise<string> {
+    return await this.accountLedgerSelect.element(by.css('option:checked')).getText();
+  }
+
+  async accountCategorySelectLastOption(): Promise<void> {
+    await this.accountCategorySelect.all(by.tagName('option')).last().click();
+  }
+
+  async accountCategorySelectOption(option: string): Promise<void> {
+    await this.accountCategorySelect.sendKeys(option);
+  }
+
+  getAccountCategorySelect(): ElementFinder {
+    return this.accountCategorySelect;
+  }
+
+  async getAccountCategorySelectedOption(): Promise<string> {
+    return await this.accountCategorySelect.element(by.css('option:checked')).getText();
   }
 
   async placeholderSelectLastOption(): Promise<void> {

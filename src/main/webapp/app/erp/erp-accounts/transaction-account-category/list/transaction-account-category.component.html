@@ -74,6 +74,7 @@
           <th scope="col" jhiSortBy="transactionAccountPostingType">
             <span>Transaction Account Posting Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
+          <th scope="col" jhiSortBy="accountLedger.ledgerName"><span>Account Ledger</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -86,6 +87,13 @@
           </td>
           <td>{{ transactionAccountCategory.name }}</td>
           <td>{{ transactionAccountCategory.transactionAccountPostingType }}</td>
+          <td>
+            <div *ngIf="transactionAccountCategory.accountLedger">
+              <a [routerLink]="['/transaction-account-ledger', transactionAccountCategory.accountLedger?.id, 'view']">{{
+                transactionAccountCategory.accountLedger?.ledgerName
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

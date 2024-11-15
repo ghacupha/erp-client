@@ -87,6 +87,39 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_accountLedger">Account Ledger</label>
+          <select
+            class="form-control"
+            id="field_accountLedger"
+            data-cy="accountLedger"
+            name="accountLedger"
+            formControlName="accountLedger"
+          >
+            <option *ngIf="!editForm.get('accountLedger')!.value" [ngValue]="null" selected></option>
+            <option
+              [ngValue]="
+                transactionAccountLedgerOption.id === editForm.get('accountLedger')!.value?.id
+                  ? editForm.get('accountLedger')!.value
+                  : transactionAccountLedgerOption
+              "
+              *ngFor="
+                let transactionAccountLedgerOption of transactionAccountLedgersSharedCollection;
+                trackBy: trackTransactionAccountLedgerById
+              "
+            >
+              {{ transactionAccountLedgerOption.ledgerName }}
+            </option>
+          </select>
+        </div>
+        <div
+          *ngIf="
+            editForm.get(['accountLedger'])!.invalid && (editForm.get(['accountLedger'])!.dirty || editForm.get(['accountLedger'])!.touched)
+          "
+        >
+          <small class="form-text text-danger" *ngIf="editForm.get(['accountLedger'])?.errors?.required"> This field is required. </small>
+        </div>
       </div>
 
       <div>

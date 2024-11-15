@@ -325,7 +325,10 @@
       "TALeaseRepaymentRule",
       "TAInterestPaidTransferRule",
       "TACompilationRequest",
-      "RouInitialDirectCost"
+      "RouInitialDirectCost",
+      "TransactionAccountLedger",
+      "ReportingEntity",
+      "TransactionAccountReportItem"
     ],
     "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,

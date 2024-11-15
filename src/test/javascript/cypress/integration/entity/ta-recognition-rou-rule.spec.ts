@@ -63,7 +63,7 @@ describe('TARecognitionROURule e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"copy","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"copy","accountName":"Checking Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"ASSET","accountSubType":"LONG_LIVED_LIABILITY","dummyAccount":false},
     }).then(({ body }) => {
       transactionAccount = body;
     });

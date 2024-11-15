@@ -27,6 +27,10 @@ import { of, Subject } from 'rxjs';
 
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
+import { ITransactionAccountLedger } from 'app/entities/accounting/transaction-account-ledger/transaction-account-ledger.model';
+import { TransactionAccountLedgerService } from 'app/entities/accounting/transaction-account-ledger/service/transaction-account-ledger.service';
+import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
+import { TransactionAccountCategoryService } from 'app/entities/accounting/transaction-account-category/service/transaction-account-category.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 
@@ -37,6 +41,8 @@ describe('TransactionAccount Management Update Component', () => {
   let fixture: ComponentFixture<TransactionAccountUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let transactionAccountService: TransactionAccountService;
+  let transactionAccountLedgerService: TransactionAccountLedgerService;
+  let transactionAccountCategoryService: TransactionAccountCategoryService;
   let placeholderService: PlaceholderService;
 
   beforeEach(() => {
@@ -51,32 +57,68 @@ describe('TransactionAccount Management Update Component', () => {
     fixture = TestBed.createComponent(TransactionAccountUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     transactionAccountService = TestBed.inject(TransactionAccountService);
+    transactionAccountLedgerService = TestBed.inject(TransactionAccountLedgerService);
+    transactionAccountCategoryService = TestBed.inject(TransactionAccountCategoryService);
     placeholderService = TestBed.inject(PlaceholderService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call TransactionAccount query and add missing value', () => {
+    it('Should call TransactionAccountLedger query and add missing value', () => {
       const transactionAccount: ITransactionAccount = { id: 456 };
-      const parentAccount: ITransactionAccount = { id: 77148 };
-      transactionAccount.parentAccount = parentAccount;
+      const accountLedger: ITransactionAccountLedger = { id: 48225 };
+      transactionAccount.accountLedger = accountLedger;
 
-      const transactionAccountCollection: ITransactionAccount[] = [{ id: 6368 }];
-      jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: transactionAccountCollection })));
-      const additionalTransactionAccounts = [parentAccount];
-      const expectedCollection: ITransactionAccount[] = [...additionalTransactionAccounts, ...transactionAccountCollection];
-      jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const transactionAccountLedgerCollection: ITransactionAccountLedger[] = [{ id: 88130 }];
+      jest
+        .spyOn(transactionAccountLedgerService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: transactionAccountLedgerCollection })));
+      const additionalTransactionAccountLedgers = [accountLedger];
+      const expectedCollection: ITransactionAccountLedger[] = [
+        ...additionalTransactionAccountLedgers,
+        ...transactionAccountLedgerCollection,
+      ];
+      jest.spyOn(transactionAccountLedgerService, 'addTransactionAccountLedgerToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ transactionAccount });
       comp.ngOnInit();
 
-      expect(transactionAccountService.query).toHaveBeenCalled();
-      expect(transactionAccountService.addTransactionAccountToCollectionIfMissing).toHaveBeenCalledWith(
-        transactionAccountCollection,
-        ...additionalTransactionAccounts
+      expect(transactionAccountLedgerService.query).toHaveBeenCalled();
+      expect(transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing).toHaveBeenCalledWith(
+        transactionAccountLedgerCollection,
+        ...additionalTransactionAccountLedgers
       );
-      expect(comp.transactionAccountsSharedCollection).toEqual(expectedCollection);
+      expect(comp.transactionAccountLedgersSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call TransactionAccountCategory query and add missing value', () => {
+      const transactionAccount: ITransactionAccount = { id: 456 };
+      const accountCategory: ITransactionAccountCategory = { id: 66811 };
+      transactionAccount.accountCategory = accountCategory;
+
+      const transactionAccountCategoryCollection: ITransactionAccountCategory[] = [{ id: 99751 }];
+      jest
+        .spyOn(transactionAccountCategoryService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: transactionAccountCategoryCollection })));
+      const additionalTransactionAccountCategories = [accountCategory];
+      const expectedCollection: ITransactionAccountCategory[] = [
+        ...additionalTransactionAccountCategories,
+        ...transactionAccountCategoryCollection,
+      ];
+      jest
+        .spyOn(transactionAccountCategoryService, 'addTransactionAccountCategoryToCollectionIfMissing')
+        .mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ transactionAccount });
+      comp.ngOnInit();
+
+      expect(transactionAccountCategoryService.query).toHaveBeenCalled();
+      expect(transactionAccountCategoryService.addTransactionAccountCategoryToCollectionIfMissing).toHaveBeenCalledWith(
+        transactionAccountCategoryCollection,
+        ...additionalTransactionAccountCategories
+      );
+      expect(comp.transactionAccountCategoriesSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should call Placeholder query and add missing value', () => {
@@ -100,8 +142,10 @@ describe('TransactionAccount Management Update Component', () => {
 
     it('Should update editForm', () => {
       const transactionAccount: ITransactionAccount = { id: 456 };
-      const parentAccount: ITransactionAccount = { id: 32695 };
-      transactionAccount.parentAccount = parentAccount;
+      const accountLedger: ITransactionAccountLedger = { id: 23853 };
+      transactionAccount.accountLedger = accountLedger;
+      const accountCategory: ITransactionAccountCategory = { id: 49119 };
+      transactionAccount.accountCategory = accountCategory;
       const placeholders: IPlaceholder = { id: 58708 };
       transactionAccount.placeholders = [placeholders];
 
@@ -109,7 +153,8 @@ describe('TransactionAccount Management Update Component', () => {
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(transactionAccount));
-      expect(comp.transactionAccountsSharedCollection).toContain(parentAccount);
+      expect(comp.transactionAccountLedgersSharedCollection).toContain(accountLedger);
+      expect(comp.transactionAccountCategoriesSharedCollection).toContain(accountCategory);
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
     });
   });
@@ -179,10 +224,18 @@ describe('TransactionAccount Management Update Component', () => {
   });
 
   describe('Tracking relationships identifiers', () => {
-    describe('trackTransactionAccountById', () => {
-      it('Should return tracked TransactionAccount primary key', () => {
+    describe('trackTransactionAccountLedgerById', () => {
+      it('Should return tracked TransactionAccountLedger primary key', () => {
         const entity = { id: 123 };
-        const trackResult = comp.trackTransactionAccountById(0, entity);
+        const trackResult = comp.trackTransactionAccountLedgerById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackTransactionAccountCategoryById', () => {
+      it('Should return tracked TransactionAccountCategory primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackTransactionAccountCategoryById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

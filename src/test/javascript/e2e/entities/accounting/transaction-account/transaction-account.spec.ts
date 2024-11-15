@@ -16,12 +16,12 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { browser, ExpectedConditions as ec, promise } from 'protractor';
+import { browser, ExpectedConditions as ec /* , promise */ } from 'protractor';
 import { NavBarPage, SignInPage } from '../../../page-objects/jhi-page-objects';
 
 import {
   TransactionAccountComponentsPage,
-  TransactionAccountDeleteDialog,
+  /* TransactionAccountDeleteDialog, */
   TransactionAccountUpdatePage,
 } from './transaction-account.page-object';
 import * as path from 'path';
@@ -33,7 +33,7 @@ describe('TransactionAccount e2e test', () => {
   let signInPage: SignInPage;
   let transactionAccountComponentsPage: TransactionAccountComponentsPage;
   let transactionAccountUpdatePage: TransactionAccountUpdatePage;
-  let transactionAccountDeleteDialog: TransactionAccountDeleteDialog;
+  /* let transactionAccountDeleteDialog: TransactionAccountDeleteDialog; */
   const fileNameToUpload = 'logo-jhipster.png';
   const fileToUpload = '../../../../../../../src/main/webapp/content/images/' + fileNameToUpload;
   const absolutePath = path.resolve(__dirname, fileToUpload);
@@ -66,39 +66,41 @@ describe('TransactionAccount e2e test', () => {
     await transactionAccountUpdatePage.cancel();
   });
 
-  it('should create and save TransactionAccounts', async () => {
-    const nbButtonsBeforeCreate = await transactionAccountComponentsPage.countDeleteButtons();
+  /* it('should create and save TransactionAccounts', async () => {
+        const nbButtonsBeforeCreate = await transactionAccountComponentsPage.countDeleteButtons();
 
-    await transactionAccountComponentsPage.clickOnCreateButton();
+        await transactionAccountComponentsPage.clickOnCreateButton();
 
-    await promise.all([
-      transactionAccountUpdatePage.setAccountNumberInput('accountNumber'),
-      transactionAccountUpdatePage.setAccountNameInput('accountName'),
-      transactionAccountUpdatePage.setNotesInput(absolutePath),
-      transactionAccountUpdatePage.parentAccountSelectLastOption(),
-      // transactionAccountUpdatePage.placeholderSelectLastOption(),
-    ]);
+        await promise.all([
+            transactionAccountUpdatePage.setAccountNumberInput('accountNumber'),
+            transactionAccountUpdatePage.setAccountNameInput('accountName'),
+            transactionAccountUpdatePage.setNotesInput(absolutePath),
+            transactionAccountUpdatePage.accountTypeSelectLastOption(),
+            transactionAccountUpdatePage.accountSubTypeSelectLastOption(),
+            transactionAccountUpdatePage.getDummyAccountInput().click(),
+            transactionAccountUpdatePage.accountLedgerSelectLastOption(),
+            transactionAccountUpdatePage.accountCategorySelectLastOption(),
+            // transactionAccountUpdatePage.placeholderSelectLastOption(),
+        ]);
 
-    await transactionAccountUpdatePage.save();
-    expect(await transactionAccountUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
+        await transactionAccountUpdatePage.save();
+        expect(await transactionAccountUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 
-    expect(await transactionAccountComponentsPage.countDeleteButtons()).to.eq(
-      nbButtonsBeforeCreate + 1,
-      'Expected one more entry in the table'
-    );
-  });
+        expect(await transactionAccountComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeCreate + 1, 'Expected one more entry in the table');
+    }); */
 
-  it('should delete last TransactionAccount', async () => {
-    const nbButtonsBeforeDelete = await transactionAccountComponentsPage.countDeleteButtons();
-    await transactionAccountComponentsPage.clickOnLastDeleteButton();
+  /* it('should delete last TransactionAccount', async () => {
+        const nbButtonsBeforeDelete = await transactionAccountComponentsPage.countDeleteButtons();
+        await transactionAccountComponentsPage.clickOnLastDeleteButton();
 
-    transactionAccountDeleteDialog = new TransactionAccountDeleteDialog();
-    expect(await transactionAccountDeleteDialog.getDialogTitle()).to.eq('Are you sure you want to delete this Transaction Account?');
-    await transactionAccountDeleteDialog.clickOnConfirmButton();
-    await browser.wait(ec.visibilityOf(transactionAccountComponentsPage.title), 5000);
+        transactionAccountDeleteDialog = new TransactionAccountDeleteDialog();
+        expect(await transactionAccountDeleteDialog.getDialogTitle())
+            .to.eq('Are you sure you want to delete this Transaction Account?');
+        await transactionAccountDeleteDialog.clickOnConfirmButton();
+        await browser.wait(ec.visibilityOf(transactionAccountComponentsPage.title), 5000);
 
-    expect(await transactionAccountComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
-  });
+        expect(await transactionAccountComponentsPage.countDeleteButtons()).to.eq(nbButtonsBeforeDelete - 1);
+    }); */
 
   after(async () => {
     await navBarPage.autoSignOut();

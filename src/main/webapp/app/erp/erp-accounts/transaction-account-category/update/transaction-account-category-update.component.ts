@@ -27,6 +27,8 @@ import { ITransactionAccountCategory, TransactionAccountCategory } from '../tran
 import { TransactionAccountCategoryService } from '../service/transaction-account-category.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { transactionAccountPostingTypes } from '../../../erp-common/enumerations/transaction-account-posting-types.model';
+import { TransactionAccountLedgerService } from '../../transaction-account-ledger/service/transaction-account-ledger.service';
+import { ITransactionAccountLedger } from '../../transaction-account-ledger/transaction-account-ledger.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
 
 @Component({
@@ -38,17 +40,20 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
   transactionAccountPostingTypesValues = Object.keys(transactionAccountPostingTypes);
 
   placeholdersSharedCollection: IPlaceholder[] = [];
+  transactionAccountLedgersSharedCollection: ITransactionAccountLedger[] = [];
 
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
     transactionAccountPostingType: [null, [Validators.required]],
     placeholders: [],
+    accountLedger: [null, Validators.required],
   });
 
   constructor(
     protected transactionAccountCategoryService: TransactionAccountCategoryService,
     protected placeholderService: PlaceholderService,
+    protected transactionAccountLedgerService: TransactionAccountLedgerService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -76,6 +81,10 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
   }
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
+    return item.id!;
+  }
+
+  trackTransactionAccountLedgerById(index: number, item: ITransactionAccountLedger): number {
     return item.id!;
   }
 
@@ -115,11 +124,16 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
       name: transactionAccountCategory.name,
       transactionAccountPostingType: transactionAccountCategory.transactionAccountPostingType,
       placeholders: transactionAccountCategory.placeholders,
+      accountLedger: transactionAccountCategory.accountLedger,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(transactionAccountCategory.placeholders ?? [])
+    );
+    this.transactionAccountLedgersSharedCollection = this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+      this.transactionAccountLedgersSharedCollection,
+      transactionAccountCategory.accountLedger
     );
   }
 
@@ -133,6 +147,22 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.transactionAccountLedgerService
+      .query()
+      .pipe(map((res: HttpResponse<ITransactionAccountLedger[]>) => res.body ?? []))
+      .pipe(
+        map((transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+            transactionAccountLedgers,
+            this.editForm.get('accountLedger')!.value
+          )
+        )
+      )
+      .subscribe(
+        (transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          (this.transactionAccountLedgersSharedCollection = transactionAccountLedgers)
+      );
   }
 
   protected createFromForm(): ITransactionAccountCategory {
@@ -142,6 +172,7 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       transactionAccountPostingType: this.editForm.get(['transactionAccountPostingType'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      accountLedger: this.editForm.get(['accountLedger'])!.value,
     };
   }
 }

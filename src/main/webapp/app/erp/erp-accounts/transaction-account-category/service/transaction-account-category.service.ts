@@ -31,8 +31,8 @@ export type EntityArrayResponseType = HttpResponse<ITransactionAccountCategory[]
 
 @Injectable({ providedIn: 'root' })
 export class TransactionAccountCategoryService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/accounts/transaction-account-categories');
-  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/accounts/_search/transaction-account-categories');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/transaction-account-categories');
+  protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/_search/transaction-account-categories');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 

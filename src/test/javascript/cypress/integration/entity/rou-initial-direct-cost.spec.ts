@@ -72,7 +72,7 @@ describe('RouInitialDirectCost e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/transaction-accounts',
-      body: {"accountNumber":"invoice","accountName":"Investment Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown"},
+      body: {"accountNumber":"invoice","accountName":"Investment Account","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci5wbmc=","notesContentType":"unknown","accountType":"EQUITY","accountSubType":"OTHER_SHORT_LIVED_ASSET","dummyAccount":true},
     }).then(({ body }) => {
       transactionAccount = body;
     });

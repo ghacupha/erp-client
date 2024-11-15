@@ -19,10 +19,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { transactionAccountPostingTypes } from 'app/entities/enumerations/transaction-account-posting-types.model';
 import { ITransactionAccountCategory, TransactionAccountCategory } from '../transaction-account-category.model';
 
 import { TransactionAccountCategoryService } from './transaction-account-category.service';
-import { transactionAccountPostingTypes } from '../../../erp-common/enumerations/transaction-account-posting-types.model';
 
 describe('TransactionAccountCategory Service', () => {
   let service: TransactionAccountCategoryService;
