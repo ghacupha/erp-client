@@ -19,7 +19,7 @@
 -->
 <div>
   <h2 id="page-heading" data-cy="TransactionAccountReportItemHeading">
-    <span>Transaction Account Report Items</span>
+    <span>Account Report Items: {{ reportDateFormatted }}</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">

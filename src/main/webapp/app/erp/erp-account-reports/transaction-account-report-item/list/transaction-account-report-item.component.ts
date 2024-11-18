@@ -25,6 +25,12 @@ import { ITransactionAccountReportItem } from '../transaction-account-report-ite
 
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TransactionAccountReportItemService } from '../service/transaction-account-report-item.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import dayjs from 'dayjs';
+import { transactionAccountReportDateSelected } from '../../../store/selectors/report-date-paramater.selector';
+import { NGXLogger } from 'ngx-logger';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 @Component({
   selector: 'jhi-transaction-account-report-item',
@@ -41,11 +47,23 @@ export class TransactionAccountReportItemComponent implements OnInit {
   ascending!: boolean;
   ngbPaginationPage = 1;
 
+  reportDate!: dayjs.Dayjs;
+  reportDateFormatted!: string;
+
   constructor(
     protected transactionAccountReportItemService: TransactionAccountReportItemService,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    protected log: NGXLogger,
+    protected store: Store<State>
   ) {
+    // Assign  the lease-period-id from store
+    this.store.pipe(select(transactionAccountReportDateSelected)).subscribe(selectedReportDate => {
+        this.reportDate = selectedReportDate;
+        this.reportDateFormatted = this.reportDate.format('D MMM YYYY')
+    });
+
+
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 
@@ -75,7 +93,8 @@ export class TransactionAccountReportItemComponent implements OnInit {
     }
 
     this.transactionAccountReportItemService
-      .query({
+      .query(this.reportDate,
+        {
         page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),

@@ -35,6 +35,18 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
               m => m.TransactionAccountReportItemModule
             )
         },
+        {
+          path: 'report-date-param',
+          data: {
+            pageTitle: 'ERP | Report Parameters',
+            authorities: []
+          },
+          canActivate: [UserRouteAccessService],
+          loadChildren: () =>
+            import('./report-date-param/report-date-param.module').then(
+              m => m.ReportDateParamModule
+            )
+        },
       ]
     )
   ]

@@ -23,6 +23,10 @@ import {AccountService} from "../../../core/auth/account.service";
 import {ProfileService} from "../../../layouts/profiles/profile.service";
 import {Router} from "@angular/router";
 import {VERSION} from "../../../app.constants";
+import { Store } from '@ngrx/store';
+import { State } from '../../store/global-store.definition';
+import { wipOverviewResetReportDateAction } from '../../store/actions/report-navigation-profile-status.actions';
+import { initiateNavToTransactionAccountReport } from '../../store/actions/report-date-parameter-status.action';
 
 @Component({
   selector: "jhi-accounts-nav",
@@ -39,6 +43,7 @@ export class AccountsNavComponent implements OnInit{
     private loginService: LoginService,
     private accountService: AccountService,
     private profileService: ProfileService,
+    protected store: Store<State>,
     private router: Router
   ) {
     if (VERSION) {
@@ -74,5 +79,11 @@ export class AccountsNavComponent implements OnInit{
 
   isAuthenticated(): boolean {
     return this.accountService.isAuthenticated();
+  }
+
+  navToAccountReportItems(): void {
+    this.store.dispatch(initiateNavToTransactionAccountReport());
+
+    this.isNavbarCollapsed = true;
   }
 }

@@ -25,6 +25,8 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { ITransactionAccountReportItem, getTransactionAccountReportItemIdentifier } from '../transaction-account-report-item.model';
+import dayjs from 'dayjs';
+import { DATE_FORMAT } from '../../../../config/input.constants';
 
 export type EntityResponseType = HttpResponse<ITransactionAccountReportItem>;
 export type EntityArrayResponseType = HttpResponse<ITransactionAccountReportItem[]>;
@@ -40,8 +42,15 @@ export class TransactionAccountReportItemService {
     return this.http.get<ITransactionAccountReportItem>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(reportDate: dayjs.Dayjs, req?: any): Observable<EntityArrayResponseType> {
+
+    req = {
+      ...req,
+      'reportDate': reportDate.format(DATE_FORMAT)
+    }
+
     const options = createRequestOption(req);
+
     return this.http.get<ITransactionAccountReportItem[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
