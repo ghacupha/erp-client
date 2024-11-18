@@ -30,7 +30,8 @@ import { State } from '../../../store/global-store.definition';
 import dayjs from 'dayjs';
 import { transactionAccountReportDateSelected } from '../../../store/selectors/report-date-paramater.selector';
 import { NGXLogger } from 'ngx-logger';
-import { DATE_FORMAT } from '../../../../config/input.constants';
+import advancedFormat from "dayjs/plugin/advancedFormat";
+dayjs.extend(advancedFormat);
 
 @Component({
   selector: 'jhi-transaction-account-report-item',
@@ -60,7 +61,7 @@ export class TransactionAccountReportItemComponent implements OnInit {
     // Assign  the lease-period-id from store
     this.store.pipe(select(transactionAccountReportDateSelected)).subscribe(selectedReportDate => {
         this.reportDate = selectedReportDate;
-        this.reportDateFormatted = this.reportDate.format('D MMM YYYY')
+        this.reportDateFormatted = this.reportDate.format('Do MMMM YYYY')
     });
 
 
