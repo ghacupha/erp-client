@@ -181,6 +181,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
         // prevent GUID overwrite
         prepaymentGuid: this.editForm.get(['prepaymentGuid'])?.value,
         dealer: transaction.biller,
+        recognitionDate: transaction.paymentDate,
         settlementCurrency: transaction.settlementCurrency,
         particulars: transaction.description,
         prepaymentAmount: transaction.paymentAmount,

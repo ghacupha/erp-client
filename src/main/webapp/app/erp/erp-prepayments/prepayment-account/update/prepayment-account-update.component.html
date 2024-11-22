@@ -69,6 +69,15 @@
           </div>
         </div>
 
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='prepaymentTransaction'
+          [inputValue]="editForm.get('prepaymentTransaction')!.value"
+          (valueSelected)='updateSettlement($event)'
+          inputControlLabel='Prepayment Transaction'
+        >
+        </jhi-m21-settlement-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_recognitionDate">Recognition Date</label>
           <div class="input-group">
@@ -97,15 +106,6 @@
             <small class="form-text text-danger" *ngIf="editForm.get('recognitionDate')?.errors?.required"> This field is required. </small>
           </div>
         </div>
-
-        <jhi-m21-settlement-form-control
-          ngDefaultControl
-          formControlName='prepaymentTransaction'
-          [inputValue]="editForm.get('prepaymentTransaction')!.value"
-          (valueSelected)='updateSettlement($event)'
-          inputControlLabel='Prepayment Transaction'
-        >
-        </jhi-m21-settlement-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_particulars">Particulars</label>
