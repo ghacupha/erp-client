@@ -195,6 +195,30 @@ export class TransactionAccountUpdateComponent implements OnInit {
       });
   }
 
+  updateAccountLedger($event: ITransactionAccountLedger): void {
+      this.editForm.patchValue({
+        accountLedger: $event
+      });
+  }
+
+  updateServiceOutlet($event: IServiceOutlet): void {
+      this.editForm.patchValue({
+        serviceOutlet: $event
+      });
+  }
+
+  updateAccountCategory($event: ITransactionAccountCategory): void {
+      this.editForm.patchValue({
+        accountCategory: $event
+      });
+  }
+
+  updateSettlementCurrency($event: ISettlementCurrency): void {
+      this.editForm.patchValue({
+        settlementCurrency: $event
+      });
+  }
+
   trackServiceOutletById(index: number, item: IServiceOutlet): number {
     return item.id!;
   }

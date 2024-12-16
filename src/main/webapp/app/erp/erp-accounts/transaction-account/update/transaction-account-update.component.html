@@ -128,135 +128,45 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountLedger">Account Ledger</label>
-          <select
-            class="form-control"
-            id="field_accountLedger"
-            data-cy="accountLedger"
-            name="accountLedger"
-            formControlName="accountLedger"
-          >
-            <option *ngIf="!editForm.get('accountLedger')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountLedgerOption.id === editForm.get('accountLedger')!.value?.id
-                  ? editForm.get('accountLedger')!.value
-                  : transactionAccountLedgerOption
-              "
-              *ngFor="
-                let transactionAccountLedgerOption of transactionAccountLedgersSharedCollection;
-                trackBy: trackTransactionAccountLedgerById
-              "
-            >
-              {{ transactionAccountLedgerOption.ledgerName }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['accountLedger'])!.invalid && (editForm.get(['accountLedger'])!.dirty || editForm.get(['accountLedger'])!.touched)
-          "
+        <jhi-m21-account-ledger-form-control
+          ngDefaultControl
+          formControlName='accountLedger'
+          [inputValue]="editForm.get('accountLedger')!.value"
+          (valueSelected)='updateAccountLedger($event)'
+          inputControlLabel="Account Ledger"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['accountLedger'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('accountLedger')!.value"></option>
+        </jhi-m21-account-ledger-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_accountCategory">Account Category</label>
-          <select
-            class="form-control"
-            id="field_accountCategory"
-            data-cy="accountCategory"
-            name="accountCategory"
-            formControlName="accountCategory"
-          >
-            <option *ngIf="!editForm.get('accountCategory')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                transactionAccountCategoryOption.id === editForm.get('accountCategory')!.value?.id
-                  ? editForm.get('accountCategory')!.value
-                  : transactionAccountCategoryOption
-              "
-              *ngFor="
-                let transactionAccountCategoryOption of transactionAccountCategoriesSharedCollection;
-                trackBy: trackTransactionAccountCategoryById
-              "
-            >
-              {{ transactionAccountCategoryOption.name }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['accountCategory'])!.invalid &&
-            (editForm.get(['accountCategory'])!.dirty || editForm.get(['accountCategory'])!.touched)
-          "
+        <jhi-m21-account-category-form-control
+          ngDefaultControl
+          formControlName='accountCategory'
+          [inputValue]="editForm.get('accountCategory')!.value"
+          (valueSelected)='updateAccountCategory($event)'
+          inputControlLabel="Account Category"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['accountCategory'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('accountCategory')!.value"></option>
+        </jhi-m21-account-category-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_serviceOutlet">Service Outlet</label>
-          <select
-            class="form-control"
-            id="field_serviceOutlet"
-            data-cy="serviceOutlet"
-            name="serviceOutlet"
-            formControlName="serviceOutlet"
-          >
-            <option *ngIf="!editForm.get('serviceOutlet')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                serviceOutletOption.id === editForm.get('serviceOutlet')!.value?.id
-                  ? editForm.get('serviceOutlet')!.value
-                  : serviceOutletOption
-              "
-              *ngFor="let serviceOutletOption of serviceOutletsSharedCollection; trackBy: trackServiceOutletById"
-            >
-              {{ serviceOutletOption.outletCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['serviceOutlet'])!.invalid && (editForm.get(['serviceOutlet'])!.dirty || editForm.get(['serviceOutlet'])!.touched)
-          "
+        <jhi-m21-service-outlet-form-control
+          ngDefaultControl
+          formControlName='serviceOutlet'
+          [inputValue]="editForm.get('serviceOutlet')!.value"
+          (valueSelected)='updateServiceOutlet($event)'
+          inputControlLabel="Service Outlet"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['serviceOutlet'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('serviceOutlet')!.value"></option>
+        </jhi-m21-service-outlet-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_settlementCurrency">Settlement Currency</label>
-          <select
-            class="form-control"
-            id="field_settlementCurrency"
-            data-cy="settlementCurrency"
-            name="settlementCurrency"
-            formControlName="settlementCurrency"
-          >
-            <option *ngIf="!editForm.get('settlementCurrency')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                settlementCurrencyOption.id === editForm.get('settlementCurrency')!.value?.id
-                  ? editForm.get('settlementCurrency')!.value
-                  : settlementCurrencyOption
-              "
-              *ngFor="let settlementCurrencyOption of settlementCurrenciesSharedCollection; trackBy: trackSettlementCurrencyById"
-            >
-              {{ settlementCurrencyOption.iso4217CurrencyCode }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['settlementCurrency'])!.invalid &&
-            (editForm.get(['settlementCurrency'])!.dirty || editForm.get(['settlementCurrency'])!.touched)
-          "
+        <jhi-m21-settlement-currency-form-control
+          ngDefaultControl
+          formControlName='settlementCurrency'
+          [inputValue]="editForm.get('settlementCurrency')!.value"
+          (valueSelected)='updateSettlementCurrency($event)'
+          inputControlLabel="Currency"
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementCurrency'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get('settlementCurrency')!.value"></option>
+        </jhi-m21-settlement-currency-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_institution">Institution</label>

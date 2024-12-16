@@ -79,6 +79,8 @@ import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-c
 import { FiscalMonthFormControlsModule } from './fiscal-month-components/fiscal-month-form-controls.module';
 import { FiscalQuarterComponentsModule } from './fiscal-quarter-components/fiscal-quarter-components.module';
 import { LeaseRepaymentPeriodFormComponentsModule } from './lease-repayment-period-components/lease-repayment-period-form-components.module';
+import { AccountLedgerFormControlsModule } from './account_ledger/account-ledger-form-controls.module';
+import { AccountCategoryFormControlsModule } from './account-category-form-components/account-category-form-controls.module';
 
 @NgModule({
   declarations: [
@@ -192,6 +194,8 @@ import { LeaseRepaymentPeriodFormComponentsModule } from './lease-repayment-peri
     FiscalMonthFormControlsModule,
     FiscalQuarterComponentsModule,
     LeaseRepaymentPeriodFormComponentsModule,
+    AccountLedgerFormControlsModule,
+    AccountCategoryFormControlsModule,
   ]
 })
 export class FormComponentsModule {
