@@ -17,6 +17,13 @@
 ///
 
 import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { AccountTypes } from '../../erp-common/enumerations/account-types.model';
+import { AccountSubTypes } from '../../erp-common/enumerations/account-sub-types.model';
+import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
+import { ITransactionAccountCategory } from '../transaction-account-category/transaction-account-category.model';
+import { ITransactionAccountLedger } from '../transaction-account-ledger/transaction-account-ledger.model';
+import { IReportingEntity } from '../../admin/reporting-entity/reporting-entity.model';
+import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet.model';
 
 export interface ITransactionAccount {
   id?: number;
@@ -24,8 +31,15 @@ export interface ITransactionAccount {
   accountName?: string;
   notesContentType?: string | null;
   notes?: string | null;
-  parentAccount?: ITransactionAccount | null;
+  accountType?: AccountTypes;
+  accountSubType?: AccountSubTypes;
+  dummyAccount?: boolean | null;
+  accountLedger?: ITransactionAccountLedger;
+  accountCategory?: ITransactionAccountCategory;
   placeholders?: IPlaceholder[] | null;
+  serviceOutlet?: IServiceOutlet;
+  settlementCurrency?: ISettlementCurrency;
+  institution?: IReportingEntity;
 }
 
 export class TransactionAccount implements ITransactionAccount {
@@ -35,9 +49,18 @@ export class TransactionAccount implements ITransactionAccount {
     public accountName?: string,
     public notesContentType?: string | null,
     public notes?: string | null,
-    public parentAccount?: ITransactionAccount | null,
-    public placeholders?: IPlaceholder[] | null
-  ) {}
+    public accountType?: AccountTypes,
+    public accountSubType?: AccountSubTypes,
+    public dummyAccount?: boolean | null,
+    public accountLedger?: ITransactionAccountLedger,
+    public accountCategory?: ITransactionAccountCategory,
+    public placeholders?: IPlaceholder[] | null,
+    public serviceOutlet?: IServiceOutlet,
+    public settlementCurrency?: ISettlementCurrency,
+    public institution?: IReportingEntity
+  ) {
+    this.dummyAccount = this.dummyAccount ?? false;
+  }
 }
 
 export function getTransactionAccountIdentifier(transactionAccount: ITransactionAccount): number | undefined {

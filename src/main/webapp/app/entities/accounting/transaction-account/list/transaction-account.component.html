@@ -80,6 +80,11 @@
           <th scope="col" jhiSortBy="dummyAccount"><span>Dummy Account</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountLedger.ledgerName"><span>Account Ledger</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountCategory.name"><span>Account Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="institution.entityName"><span>Institution</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -110,6 +115,27 @@
             <div *ngIf="transactionAccount.accountCategory">
               <a [routerLink]="['/transaction-account-category', transactionAccount.accountCategory?.id, 'view']">{{
                 transactionAccount.accountCategory?.name
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.serviceOutlet">
+              <a [routerLink]="['/service-outlet', transactionAccount.serviceOutlet?.id, 'view']">{{
+                transactionAccount.serviceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', transactionAccount.settlementCurrency?.id, 'view']">{{
+                transactionAccount.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.institution">
+              <a [routerLink]="['/reporting-entity', transactionAccount.institution?.id, 'view']">{{
+                transactionAccount.institution?.entityName
               }}</a>
             </div>
           </td>

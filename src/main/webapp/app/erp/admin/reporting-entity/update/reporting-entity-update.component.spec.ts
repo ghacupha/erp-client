@@ -29,12 +29,18 @@ import { ReportingEntityService } from '../service/reporting-entity.service';
 import { IReportingEntity, ReportingEntity } from '../reporting-entity.model';
 
 import { ReportingEntityUpdateComponent } from './reporting-entity-update.component';
+import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 
 describe('ReportingEntity Management Update Component', () => {
   let comp: ReportingEntityUpdateComponent;
   let fixture: ComponentFixture<ReportingEntityUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let reportingEntityService: ReportingEntityService;
+  let settlementCurrencyService: SettlementCurrencyService;
+  let transactionAccountService: TransactionAccountService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -48,18 +54,68 @@ describe('ReportingEntity Management Update Component', () => {
     fixture = TestBed.createComponent(ReportingEntityUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     reportingEntityService = TestBed.inject(ReportingEntityService);
+    settlementCurrencyService = TestBed.inject(SettlementCurrencyService);
+    transactionAccountService = TestBed.inject(TransactionAccountService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call reportingCurrency query and add missing value', () => {
+      const reportingEntity: IReportingEntity = { id: 456 };
+      const reportingCurrency: ISettlementCurrency = { id: 69411 };
+      reportingEntity.reportingCurrency = reportingCurrency;
+
+      const reportingCurrencyCollection: ISettlementCurrency[] = [{ id: 42452 }];
+      jest.spyOn(settlementCurrencyService, 'query').mockReturnValue(of(new HttpResponse({ body: reportingCurrencyCollection })));
+      const expectedCollection: ISettlementCurrency[] = [reportingCurrency, ...reportingCurrencyCollection];
+      jest.spyOn(settlementCurrencyService, 'addSettlementCurrencyToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ reportingEntity });
+      comp.ngOnInit();
+
+      expect(settlementCurrencyService.query).toHaveBeenCalled();
+      expect(settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing).toHaveBeenCalledWith(
+        reportingCurrencyCollection,
+        reportingCurrency
+      );
+      expect(comp.reportingCurrenciesCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call retainedEarningsAccount query and add missing value', () => {
+      const reportingEntity: IReportingEntity = { id: 456 };
+      const retainedEarningsAccount: ITransactionAccount = { id: 78590 };
+      reportingEntity.retainedEarningsAccount = retainedEarningsAccount;
+
+      const retainedEarningsAccountCollection: ITransactionAccount[] = [{ id: 81291 }];
+      jest.spyOn(transactionAccountService, 'query').mockReturnValue(of(new HttpResponse({ body: retainedEarningsAccountCollection })));
+      const expectedCollection: ITransactionAccount[] = [retainedEarningsAccount, ...retainedEarningsAccountCollection];
+      jest.spyOn(transactionAccountService, 'addTransactionAccountToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ reportingEntity });
+      comp.ngOnInit();
+
+      expect(transactionAccountService.query).toHaveBeenCalled();
+      expect(transactionAccountService.addTransactionAccountToCollectionIfMissing).toHaveBeenCalledWith(
+        retainedEarningsAccountCollection,
+        retainedEarningsAccount
+      );
+      expect(comp.retainedEarningsAccountsCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const reportingEntity: IReportingEntity = { id: 456 };
+      const reportingCurrency: ISettlementCurrency = { id: 49638 };
+      reportingEntity.reportingCurrency = reportingCurrency;
+      const retainedEarningsAccount: ITransactionAccount = { id: 75433 };
+      reportingEntity.retainedEarningsAccount = retainedEarningsAccount;
 
       activatedRoute.data = of({ reportingEntity });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(reportingEntity));
+      expect(comp.reportingCurrenciesCollection).toContain(reportingCurrency);
+      expect(comp.retainedEarningsAccountsCollection).toContain(retainedEarningsAccount);
     });
   });
 
@@ -124,6 +180,24 @@ describe('ReportingEntity Management Update Component', () => {
       expect(reportingEntityService.update).toHaveBeenCalledWith(reportingEntity);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Tracking relationships identifiers', () => {
+    describe('trackSettlementCurrencyById', () => {
+      it('Should return tracked SettlementCurrency primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackSettlementCurrencyById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackTransactionAccountById', () => {
+      it('Should return tracked TransactionAccount primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackTransactionAccountById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
     });
   });
 });

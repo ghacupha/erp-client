@@ -71,6 +71,12 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="entityName"><span>Entity Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="reportingCurrency.iso4217CurrencyCode">
+            <span>Reporting Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="retainedEarningsAccount.accountName">
+            <span>Retained Earnings Account</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -80,6 +86,20 @@
             <a [routerLink]="['/reporting-entity', reportingEntity.id, 'view']">{{ reportingEntity.id }}</a>
           </td>
           <td>{{ reportingEntity.entityName }}</td>
+          <td>
+            <div *ngIf="reportingEntity.reportingCurrency">
+              <a [routerLink]="['/settlement-currency', reportingEntity.reportingCurrency?.id, 'view']">{{
+                reportingEntity.reportingCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="reportingEntity.retainedEarningsAccount">
+              <a [routerLink]="['/transaction-account', reportingEntity.retainedEarningsAccount?.id, 'view']">{{
+                reportingEntity.retainedEarningsAccount?.accountName
+              }}</a>
+            </div>
+          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

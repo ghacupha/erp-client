@@ -34,6 +34,12 @@ import { ITransactionAccountCategory } from 'app/entities/accounting/transaction
 import { TransactionAccountCategoryService } from 'app/entities/accounting/transaction-account-category/service/transaction-account-category.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
+import { IReportingEntity } from 'app/entities/admin/reporting-entity/reporting-entity.model';
+import { ReportingEntityService } from 'app/entities/admin/reporting-entity/service/reporting-entity.service';
 import { AccountTypes } from 'app/entities/enumerations/account-types.model';
 import { AccountSubTypes } from 'app/entities/enumerations/account-sub-types.model';
 
@@ -49,6 +55,9 @@ export class TransactionAccountUpdateComponent implements OnInit {
   transactionAccountLedgersSharedCollection: ITransactionAccountLedger[] = [];
   transactionAccountCategoriesSharedCollection: ITransactionAccountCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  serviceOutletsSharedCollection: IServiceOutlet[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  reportingEntitiesSharedCollection: IReportingEntity[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -62,6 +71,9 @@ export class TransactionAccountUpdateComponent implements OnInit {
     accountLedger: [null, Validators.required],
     accountCategory: [null, Validators.required],
     placeholders: [],
+    serviceOutlet: [null, Validators.required],
+    settlementCurrency: [null, Validators.required],
+    institution: [null, Validators.required],
   });
 
   constructor(
@@ -71,6 +83,9 @@ export class TransactionAccountUpdateComponent implements OnInit {
     protected transactionAccountLedgerService: TransactionAccountLedgerService,
     protected transactionAccountCategoryService: TransactionAccountCategoryService,
     protected placeholderService: PlaceholderService,
+    protected serviceOutletService: ServiceOutletService,
+    protected settlementCurrencyService: SettlementCurrencyService,
+    protected reportingEntityService: ReportingEntityService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -124,6 +139,18 @@ export class TransactionAccountUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackServiceOutletById(index: number, item: IServiceOutlet): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
+  }
+
+  trackReportingEntityById(index: number, item: IReportingEntity): number {
+    return item.id!;
+  }
+
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -167,6 +194,9 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountLedger: transactionAccount.accountLedger,
       accountCategory: transactionAccount.accountCategory,
       placeholders: transactionAccount.placeholders,
+      serviceOutlet: transactionAccount.serviceOutlet,
+      settlementCurrency: transactionAccount.settlementCurrency,
+      institution: transactionAccount.institution,
     });
 
     this.transactionAccountLedgersSharedCollection = this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
@@ -181,6 +211,18 @@ export class TransactionAccountUpdateComponent implements OnInit {
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(transactionAccount.placeholders ?? [])
+    );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      transactionAccount.serviceOutlet
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      transactionAccount.settlementCurrency
+    );
+    this.reportingEntitiesSharedCollection = this.reportingEntityService.addReportingEntityToCollectionIfMissing(
+      this.reportingEntitiesSharedCollection,
+      transactionAccount.institution
     );
   }
 
@@ -226,6 +268,39 @@ export class TransactionAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.serviceOutletService
+      .query()
+      .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
+      .pipe(
+        map((serviceOutlets: IServiceOutlet[]) =>
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
+        )
+      )
+      .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.reportingEntityService
+      .query()
+      .pipe(map((res: HttpResponse<IReportingEntity[]>) => res.body ?? []))
+      .pipe(
+        map((reportingEntities: IReportingEntity[]) =>
+          this.reportingEntityService.addReportingEntityToCollectionIfMissing(reportingEntities, this.editForm.get('institution')!.value)
+        )
+      )
+      .subscribe((reportingEntities: IReportingEntity[]) => (this.reportingEntitiesSharedCollection = reportingEntities));
   }
 
   protected createFromForm(): ITransactionAccount {
@@ -242,6 +317,9 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountLedger: this.editForm.get(['accountLedger'])!.value,
       accountCategory: this.editForm.get(['accountCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      institution: this.editForm.get(['institution'])!.value,
     };
   }
 }

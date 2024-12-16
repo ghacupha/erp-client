@@ -83,6 +83,30 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.serviceOutlet">
+            <a [routerLink]="['/service-outlet', transactionAccount.serviceOutlet?.id, 'view']">{{
+              transactionAccount.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', transactionAccount.settlementCurrency?.id, 'view']">{{
+              transactionAccount.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Institution</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.institution">
+            <a [routerLink]="['/reporting-entity', transactionAccount.institution?.id, 'view']">{{
+              transactionAccount.institution?.entityName
+            }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

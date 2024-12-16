@@ -48,11 +48,31 @@
             {{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}
           </div>
         </dd>
-        <dt><span>Parent Account</span></dt>
+        <dt><span>Account Type</span></dt>
         <dd>
-          <div *ngIf="transactionAccount.parentAccount">
-            <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
-              transactionAccount.parentAccount?.accountNumber
+          <span>{{ transactionAccount.accountType }}</span>
+        </dd>
+        <dt><span>Account Sub Type</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountSubType }}</span>
+        </dd>
+        <dt><span>Dummy Account</span></dt>
+        <dd>
+          <span>{{ transactionAccount.dummyAccount }}</span>
+        </dd>
+        <dt><span>Account Ledger</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountLedger">
+            <a [routerLink]="['/transaction-account-ledger', transactionAccount.accountLedger?.id, 'view']">{{
+              transactionAccount.accountLedger?.ledgerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Account Category</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountCategory">
+            <a [routerLink]="['/transaction-account-category', transactionAccount.accountCategory?.id, 'view']">{{
+              transactionAccount.accountCategory?.name
             }}</a>
           </div>
         </dd>
@@ -62,6 +82,30 @@
             <a [routerLink]="['/placeholder', placeholder?.id, 'view']">{{ placeholder.description }}</a
             >{{ last ? '' : ', ' }}
           </span>
+        </dd>
+        <dt><span>Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.serviceOutlet">
+            <a [routerLink]="['/service-outlet', transactionAccount.serviceOutlet?.id, 'view']">{{
+              transactionAccount.serviceOutlet?.outletCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Settlement Currency</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.settlementCurrency">
+            <a [routerLink]="['/settlement-currency', transactionAccount.settlementCurrency?.id, 'view']">{{
+              transactionAccount.settlementCurrency?.iso4217CurrencyCode
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Institution</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.institution">
+            <a [routerLink]="['/reporting-entity', transactionAccount.institution?.id, 'view']">{{
+              transactionAccount.institution?.entityName
+            }}</a>
+          </div>
         </dd>
       </dl>
 

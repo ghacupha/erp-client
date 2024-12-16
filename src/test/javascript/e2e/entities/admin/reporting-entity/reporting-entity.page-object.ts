@@ -50,6 +50,9 @@ export class ReportingEntityUpdatePage {
   idInput = element(by.id('field_id'));
   entityNameInput = element(by.id('field_entityName'));
 
+  reportingCurrencySelect = element(by.id('field_reportingCurrency'));
+  retainedEarningsAccountSelect = element(by.id('field_retainedEarningsAccount'));
+
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
@@ -68,6 +71,38 @@ export class ReportingEntityUpdatePage {
 
   async getEntityNameInput(): Promise<string> {
     return await this.entityNameInput.getAttribute('value');
+  }
+
+  async reportingCurrencySelectLastOption(): Promise<void> {
+    await this.reportingCurrencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async reportingCurrencySelectOption(option: string): Promise<void> {
+    await this.reportingCurrencySelect.sendKeys(option);
+  }
+
+  getReportingCurrencySelect(): ElementFinder {
+    return this.reportingCurrencySelect;
+  }
+
+  async getReportingCurrencySelectedOption(): Promise<string> {
+    return await this.reportingCurrencySelect.element(by.css('option:checked')).getText();
+  }
+
+  async retainedEarningsAccountSelectLastOption(): Promise<void> {
+    await this.retainedEarningsAccountSelect.all(by.tagName('option')).last().click();
+  }
+
+  async retainedEarningsAccountSelectOption(option: string): Promise<void> {
+    await this.retainedEarningsAccountSelect.sendKeys(option);
+  }
+
+  getRetainedEarningsAccountSelect(): ElementFinder {
+    return this.retainedEarningsAccountSelect;
+  }
+
+  async getRetainedEarningsAccountSelectedOption(): Promise<string> {
+    return await this.retainedEarningsAccountSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

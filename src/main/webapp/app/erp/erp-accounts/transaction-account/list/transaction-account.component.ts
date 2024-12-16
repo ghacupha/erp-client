@@ -24,7 +24,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITransactionAccount } from '../transaction-account.model';
 
-import { ASC, DESC, SORT } from 'app/config/pagination.constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { TransactionAccountDeleteDialogComponent } from '../delete/transaction-account-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -44,7 +44,7 @@ export class TransactionAccountComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = 20;
+  itemsPerPage = ITEMS_PER_PAGE;
   page?: number;
   predicate!: string;
   ascending!: boolean;
@@ -117,7 +117,7 @@ export class TransactionAccountComponent implements OnInit {
   }
 
   search(query: string): void {
-    if (query && ['accountNumber', 'accountName', 'notes'].includes(this.predicate)) {
+    if (query && ['accountNumber', 'accountName', 'notes', 'accountType', 'accountSubType'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }

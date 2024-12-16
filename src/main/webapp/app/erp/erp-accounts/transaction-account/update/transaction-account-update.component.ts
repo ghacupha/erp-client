@@ -38,6 +38,18 @@ import {
   editingTransactionAccountStatus,
   transactionAccountUpdateSelectedInstance
 } from '../../../store/selectors/transaction-account-update-status.selectors';
+import { AccountTypes } from '../../../erp-common/enumerations/account-types.model';
+import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { ReportingEntityService } from '../../../admin/reporting-entity/service/reporting-entity.service';
+import { TransactionAccountLedgerService } from '../../transaction-account-ledger/service/transaction-account-ledger.service';
+import { ITransactionAccountCategory } from '../../transaction-account-category/transaction-account-category.model';
+import { ITransactionAccountLedger } from '../../transaction-account-ledger/transaction-account-ledger.model';
+import { AccountSubTypes } from '../../../erp-common/enumerations/account-sub-types.model';
+import { IReportingEntity } from '../../../admin/reporting-entity/reporting-entity.model';
+import { TransactionAccountCategoryService } from '../../transaction-account-category/service/transaction-account-category.service';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
+import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
 
 @Component({
   selector: 'jhi-transaction-account-update',
@@ -45,6 +57,8 @@ import {
 })
 export class TransactionAccountUpdateComponent implements OnInit {
   isSaving = false;
+  accountTypesValues = Object.keys(AccountTypes);
+  accountSubTypesValues = Object.keys(AccountSubTypes);
 
   // Setting up default form states
   weAreCopying = false;
@@ -53,7 +67,12 @@ export class TransactionAccountUpdateComponent implements OnInit {
   selectedItem = {...new TransactionAccount()}
 
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
+  transactionAccountLedgersSharedCollection: ITransactionAccountLedger[] = [];
+  transactionAccountCategoriesSharedCollection: ITransactionAccountCategory[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
+  serviceOutletsSharedCollection: IServiceOutlet[] = [];
+  settlementCurrenciesSharedCollection: ISettlementCurrency[] = [];
+  reportingEntitiesSharedCollection: IReportingEntity[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -61,15 +80,27 @@ export class TransactionAccountUpdateComponent implements OnInit {
     accountName: [null, [Validators.required]],
     notes: [],
     notesContentType: [],
-    parentAccount: [],
+    accountType: [null, [Validators.required]],
+    accountSubType: [null, [Validators.required]],
+    dummyAccount: [],
+    accountLedger: [null, Validators.required],
+    accountCategory: [null, Validators.required],
     placeholders: [],
+    serviceOutlet: [null, Validators.required],
+    settlementCurrency: [null, Validators.required],
+    institution: [null, Validators.required],
   });
 
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
     protected transactionAccountService: TransactionAccountService,
+    protected transactionAccountLedgerService: TransactionAccountLedgerService,
+    protected transactionAccountCategoryService: TransactionAccountCategoryService,
     protected placeholderService: PlaceholderService,
+    protected serviceOutletService: ServiceOutletService,
+    protected settlementCurrencyService: SettlementCurrencyService,
+    protected reportingEntityService: ReportingEntityService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected store: Store<State>,
@@ -83,10 +114,12 @@ export class TransactionAccountUpdateComponent implements OnInit {
   ngOnInit(): void {
     if (this.weAreEditing) {
       this.updateForm(this.selectedItem);
+      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCopying) {
       this.updateForm(this.selectedItem);
+      this.loadRelationshipsOptions();
     }
 
     if (this.weAreCreating) {
@@ -144,16 +177,30 @@ export class TransactionAccountUpdateComponent implements OnInit {
     return item.id!;
   }
 
-  updateParentAccount(value: ITransactionAccount): void {
-      this.editForm.patchValue({
-        parentAccount: value
-      });
+  trackTransactionAccountLedgerById(index: number, item: ITransactionAccountLedger): number {
+    return item.id!;
+  }
+
+  trackReportingEntityById(index: number, item: IReportingEntity): number {
+    return item.id!;
+  }
+
+  trackTransactionAccountCategoryById(index: number, item: ITransactionAccountCategory): number {
+    return item.id!;
   }
 
   updatePlaceholders(value: IPlaceholder[]): void {
       this.editForm.patchValue({
         placeholders: [...value]
       });
+  }
+
+  trackServiceOutletById(index: number, item: IServiceOutlet): number {
+    return item.id!;
+  }
+
+  trackSettlementCurrencyById(index: number, item: ISettlementCurrency): number {
+    return item.id!;
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -193,33 +240,76 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountName: transactionAccount.accountName,
       notes: transactionAccount.notes,
       notesContentType: transactionAccount.notesContentType,
-      parentAccount: transactionAccount.parentAccount,
+      accountType: transactionAccount.accountType,
+      accountSubType: transactionAccount.accountSubType,
+      dummyAccount: transactionAccount.dummyAccount,
+      accountLedger: transactionAccount.accountLedger,
+      accountCategory: transactionAccount.accountCategory,
       placeholders: transactionAccount.placeholders,
+      serviceOutlet: transactionAccount.serviceOutlet,
+      settlementCurrency: transactionAccount.settlementCurrency,
+      institution: transactionAccount.institution,
     });
 
-    this.transactionAccountsSharedCollection = this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-      this.transactionAccountsSharedCollection,
-      transactionAccount.parentAccount
+    this.transactionAccountLedgersSharedCollection = this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+      this.transactionAccountLedgersSharedCollection,
+      transactionAccount.accountLedger
     );
+    this.transactionAccountCategoriesSharedCollection =
+      this.transactionAccountCategoryService.addTransactionAccountCategoryToCollectionIfMissing(
+        this.transactionAccountCategoriesSharedCollection,
+        transactionAccount.accountCategory
+      );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
       ...(transactionAccount.placeholders ?? [])
     );
+    this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
+      this.serviceOutletsSharedCollection,
+      transactionAccount.serviceOutlet
+    );
+    this.settlementCurrenciesSharedCollection = this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+      this.settlementCurrenciesSharedCollection,
+      transactionAccount.settlementCurrency
+    );
+    this.reportingEntitiesSharedCollection = this.reportingEntityService.addReportingEntityToCollectionIfMissing(
+      this.reportingEntitiesSharedCollection,
+      transactionAccount.institution
+    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.transactionAccountService
+    this.transactionAccountLedgerService
       .query()
-      .pipe(map((res: HttpResponse<ITransactionAccount[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<ITransactionAccountLedger[]>) => res.body ?? []))
       .pipe(
-        map((transactionAccounts: ITransactionAccount[]) =>
-          this.transactionAccountService.addTransactionAccountToCollectionIfMissing(
-            transactionAccounts,
-            this.editForm.get('parentAccount')!.value
+        map((transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          this.transactionAccountLedgerService.addTransactionAccountLedgerToCollectionIfMissing(
+            transactionAccountLedgers,
+            this.editForm.get('accountLedger')!.value
           )
         )
       )
-      .subscribe((transactionAccounts: ITransactionAccount[]) => (this.transactionAccountsSharedCollection = transactionAccounts));
+      .subscribe(
+        (transactionAccountLedgers: ITransactionAccountLedger[]) =>
+          (this.transactionAccountLedgersSharedCollection = transactionAccountLedgers)
+      );
+
+    this.transactionAccountCategoryService
+      .query()
+      .pipe(map((res: HttpResponse<ITransactionAccountCategory[]>) => res.body ?? []))
+      .pipe(
+        map((transactionAccountCategories: ITransactionAccountCategory[]) =>
+          this.transactionAccountCategoryService.addTransactionAccountCategoryToCollectionIfMissing(
+            transactionAccountCategories,
+            this.editForm.get('accountCategory')!.value
+          )
+        )
+      )
+      .subscribe(
+        (transactionAccountCategories: ITransactionAccountCategory[]) =>
+          (this.transactionAccountCategoriesSharedCollection = transactionAccountCategories)
+      );
 
     this.placeholderService
       .query()
@@ -230,6 +320,39 @@ export class TransactionAccountUpdateComponent implements OnInit {
         )
       )
       .subscribe((placeholders: IPlaceholder[]) => (this.placeholdersSharedCollection = placeholders));
+
+    this.serviceOutletService
+      .query()
+      .pipe(map((res: HttpResponse<IServiceOutlet[]>) => res.body ?? []))
+      .pipe(
+        map((serviceOutlets: IServiceOutlet[]) =>
+          this.serviceOutletService.addServiceOutletToCollectionIfMissing(serviceOutlets, this.editForm.get('serviceOutlet')!.value)
+        )
+      )
+      .subscribe((serviceOutlets: IServiceOutlet[]) => (this.serviceOutletsSharedCollection = serviceOutlets));
+
+    this.settlementCurrencyService
+      .query()
+      .pipe(map((res: HttpResponse<ISettlementCurrency[]>) => res.body ?? []))
+      .pipe(
+        map((settlementCurrencies: ISettlementCurrency[]) =>
+          this.settlementCurrencyService.addSettlementCurrencyToCollectionIfMissing(
+            settlementCurrencies,
+            this.editForm.get('settlementCurrency')!.value
+          )
+        )
+      )
+      .subscribe((settlementCurrencies: ISettlementCurrency[]) => (this.settlementCurrenciesSharedCollection = settlementCurrencies));
+
+    this.reportingEntityService
+      .query()
+      .pipe(map((res: HttpResponse<IReportingEntity[]>) => res.body ?? []))
+      .pipe(
+        map((reportingEntities: IReportingEntity[]) =>
+          this.reportingEntityService.addReportingEntityToCollectionIfMissing(reportingEntities, this.editForm.get('institution')!.value)
+        )
+      )
+      .subscribe((reportingEntities: IReportingEntity[]) => (this.reportingEntitiesSharedCollection = reportingEntities));
   }
 
   protected createFromForm(): ITransactionAccount {
@@ -240,8 +363,15 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountName: this.editForm.get(['accountName'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,
       notes: this.editForm.get(['notes'])!.value,
-      parentAccount: this.editForm.get(['parentAccount'])!.value,
+      accountType: this.editForm.get(['accountType'])!.value,
+      accountSubType: this.editForm.get(['accountSubType'])!.value,
+      dummyAccount: this.editForm.get(['dummyAccount'])!.value,
+      accountLedger: this.editForm.get(['accountLedger'])!.value,
+      accountCategory: this.editForm.get(['accountCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      institution: this.editForm.get(['institution'])!.value,
     };
   }
 
@@ -252,8 +382,15 @@ export class TransactionAccountUpdateComponent implements OnInit {
       accountName: this.editForm.get(['accountName'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,
       notes: this.editForm.get(['notes'])!.value,
-      parentAccount: this.editForm.get(['parentAccount'])!.value,
+      accountType: this.editForm.get(['accountType'])!.value,
+      accountSubType: this.editForm.get(['accountSubType'])!.value,
+      dummyAccount: this.editForm.get(['dummyAccount'])!.value,
+      accountLedger: this.editForm.get(['accountLedger'])!.value,
+      accountCategory: this.editForm.get(['accountCategory'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
+      serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
+      settlementCurrency: this.editForm.get(['settlementCurrency'])!.value,
+      institution: this.editForm.get(['institution'])!.value,
     };
   }
 }

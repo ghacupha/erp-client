@@ -81,6 +81,9 @@ describe('TransactionAccount e2e test', () => {
             transactionAccountUpdatePage.accountLedgerSelectLastOption(),
             transactionAccountUpdatePage.accountCategorySelectLastOption(),
             // transactionAccountUpdatePage.placeholderSelectLastOption(),
+            transactionAccountUpdatePage.serviceOutletSelectLastOption(),
+            transactionAccountUpdatePage.settlementCurrencySelectLastOption(),
+            transactionAccountUpdatePage.institutionSelectLastOption(),
         ]);
 
         await transactionAccountUpdatePage.save();

@@ -73,7 +73,19 @@
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountNumber"><span>Account Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="accountName"><span>Account Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="parentAccount.accountNumber"><span>Parent Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="notes"><span>Notes</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountType"><span>Account Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountSubType">
+            <span>Account Sub Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="dummyAccount"><span>Dummy Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountLedger.ledgerName"><span>Account Ledger</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="accountCategory.name"><span>Account Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
+            <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="institution.entityName"><span>Institution</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -85,9 +97,46 @@
           <td>{{ transactionAccount.accountNumber }}</td>
           <td>{{ transactionAccount.accountName }}</td>
           <td>
-            <div *ngIf="transactionAccount.parentAccount">
-              <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
-                transactionAccount.parentAccount?.accountNumber
+            <a *ngIf="transactionAccount.notes" (click)="openFile(transactionAccount.notes, transactionAccount.notesContentType)">open</a>
+            <span *ngIf="transactionAccount.notes"
+              >{{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}</span
+            >
+          </td>
+          <td>{{ transactionAccount.accountType }}</td>
+          <td>{{ transactionAccount.accountSubType }}</td>
+          <td>{{ transactionAccount.dummyAccount }}</td>
+          <td>
+            <div *ngIf="transactionAccount.accountLedger">
+              <a [routerLink]="['/transaction-account-ledger', transactionAccount.accountLedger?.id, 'view']">{{
+                transactionAccount.accountLedger?.ledgerName
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.accountCategory">
+              <a [routerLink]="['/transaction-account-category', transactionAccount.accountCategory?.id, 'view']">{{
+                transactionAccount.accountCategory?.name
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.serviceOutlet">
+              <a [routerLink]="['/service-outlet', transactionAccount.serviceOutlet?.id, 'view']">{{
+                transactionAccount.serviceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.settlementCurrency">
+              <a [routerLink]="['/settlement-currency', transactionAccount.settlementCurrency?.id, 'view']">{{
+                transactionAccount.settlementCurrency?.iso4217CurrencyCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="transactionAccount.institution">
+              <a [routerLink]="['/reporting-entity', transactionAccount.institution?.id, 'view']">{{
+                transactionAccount.institution?.entityName
               }}</a>
             </div>
           </td>

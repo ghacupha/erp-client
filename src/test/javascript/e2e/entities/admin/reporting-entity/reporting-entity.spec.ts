@@ -63,7 +63,11 @@ describe('ReportingEntity e2e test', () => {
 
     await reportingEntityComponentsPage.clickOnCreateButton();
 
-    await promise.all([reportingEntityUpdatePage.setEntityNameInput('entityName')]);
+    await promise.all([
+      reportingEntityUpdatePage.setEntityNameInput('entityName'),
+      reportingEntityUpdatePage.reportingCurrencySelectLastOption(),
+      reportingEntityUpdatePage.retainedEarningsAccountSelectLastOption(),
+    ]);
 
     await reportingEntityUpdatePage.save();
     expect(await reportingEntityUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

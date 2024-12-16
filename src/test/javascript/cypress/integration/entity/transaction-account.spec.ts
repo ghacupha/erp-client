@@ -44,6 +44,9 @@ describe('TransactionAccount e2e test', () => {
   let transactionAccount: any;
   //let transactionAccountLedger: any;
   //let transactionAccountCategory: any;
+  //let serviceOutlet: any;
+  //let settlementCurrency: any;
+  //let reportingEntity: any;
 
   before(() => {
     cy.window().then(win => {
@@ -72,6 +75,30 @@ describe('TransactionAccount e2e test', () => {
     }).then(({ body }) => {
       transactionAccountCategory = body;
     });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/service-outlets',
+      body: {"outletCode":"Outdoors","outletName":"Bedfordshire","town":"invoice compressing Car","parliamentaryConstituency":"Gibraltar","gpsCoordinates":"Automotive haptic","outletOpeningDate":"2022-02-28","regulatorApprovalDate":"2022-03-01","outletClosureDate":"2022-02-28","dateLastModified":"2022-02-28","licenseFeePayable":7824},
+    }).then(({ body }) => {
+      serviceOutlet = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/settlement-currencies',
+      body: {"iso4217CurrencyCode":"ROI","currencyName":"Iranian Rial","country":"Nicaragua","numericCode":"National","minorUnit":"protocol JSON Senior","fileUploadToken":"red","compilationToken":"Forward"},
+    }).then(({ body }) => {
+      settlementCurrency = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/reporting-entities',
+      body: {"entityName":"bypassing"},
+    }).then(({ body }) => {
+      reportingEntity = body;
+    });
   });
    */
 
@@ -97,6 +124,21 @@ describe('TransactionAccount e2e test', () => {
     cy.intercept('GET', '/api/placeholders', {
       statusCode: 200,
       body: [],
+    });
+
+    cy.intercept('GET', '/api/service-outlets', {
+      statusCode: 200,
+      body: [serviceOutlet],
+    });
+
+    cy.intercept('GET', '/api/settlement-currencies', {
+      statusCode: 200,
+      body: [settlementCurrency],
+    });
+
+    cy.intercept('GET', '/api/reporting-entities', {
+      statusCode: 200,
+      body: [reportingEntity],
     });
 
   });
@@ -129,6 +171,30 @@ describe('TransactionAccount e2e test', () => {
         url: `/api/transaction-account-categories/${transactionAccountCategory.id}`,
       }).then(() => {
         transactionAccountCategory = undefined;
+      });
+    }
+    if (serviceOutlet) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/service-outlets/${serviceOutlet.id}`,
+      }).then(() => {
+        serviceOutlet = undefined;
+      });
+    }
+    if (settlementCurrency) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/settlement-currencies/${settlementCurrency.id}`,
+      }).then(() => {
+        settlementCurrency = undefined;
+      });
+    }
+    if (reportingEntity) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/reporting-entities/${reportingEntity.id}`,
+      }).then(() => {
+        reportingEntity = undefined;
       });
     }
   });
@@ -179,6 +245,9 @@ describe('TransactionAccount e2e test', () => {
             ...transactionAccountSample,
             accountLedger: transactionAccountLedger,
             accountCategory: transactionAccountCategory,
+            serviceOutlet: serviceOutlet,
+            settlementCurrency: settlementCurrency,
+            institution: reportingEntity,
           },
         }).then(({ body }) => {
           transactionAccount = body;
@@ -273,6 +342,9 @@ describe('TransactionAccount e2e test', () => {
 
       cy.get(`[data-cy="accountLedger"]`).select(1);
       cy.get(`[data-cy="accountCategory"]`).select(1);
+      cy.get(`[data-cy="serviceOutlet"]`).select(1);
+      cy.get(`[data-cy="settlementCurrency"]`).select(1);
+      cy.get(`[data-cy="institution"]`).select(1);
 
       // since cypress clicks submit too fast before the blob fields are validated
       cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting

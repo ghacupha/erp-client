@@ -58,6 +58,9 @@ export class TransactionAccountUpdatePage {
   accountLedgerSelect = element(by.id('field_accountLedger'));
   accountCategorySelect = element(by.id('field_accountCategory'));
   placeholderSelect = element(by.id('field_placeholder'));
+  serviceOutletSelect = element(by.id('field_serviceOutlet'));
+  settlementCurrencySelect = element(by.id('field_settlementCurrency'));
+  institutionSelect = element(by.id('field_institution'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -169,6 +172,54 @@ export class TransactionAccountUpdatePage {
 
   async getPlaceholderSelectedOption(): Promise<string> {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
+  }
+
+  async serviceOutletSelectLastOption(): Promise<void> {
+    await this.serviceOutletSelect.all(by.tagName('option')).last().click();
+  }
+
+  async serviceOutletSelectOption(option: string): Promise<void> {
+    await this.serviceOutletSelect.sendKeys(option);
+  }
+
+  getServiceOutletSelect(): ElementFinder {
+    return this.serviceOutletSelect;
+  }
+
+  async getServiceOutletSelectedOption(): Promise<string> {
+    return await this.serviceOutletSelect.element(by.css('option:checked')).getText();
+  }
+
+  async settlementCurrencySelectLastOption(): Promise<void> {
+    await this.settlementCurrencySelect.all(by.tagName('option')).last().click();
+  }
+
+  async settlementCurrencySelectOption(option: string): Promise<void> {
+    await this.settlementCurrencySelect.sendKeys(option);
+  }
+
+  getSettlementCurrencySelect(): ElementFinder {
+    return this.settlementCurrencySelect;
+  }
+
+  async getSettlementCurrencySelectedOption(): Promise<string> {
+    return await this.settlementCurrencySelect.element(by.css('option:checked')).getText();
+  }
+
+  async institutionSelectLastOption(): Promise<void> {
+    await this.institutionSelect.all(by.tagName('option')).last().click();
+  }
+
+  async institutionSelectOption(option: string): Promise<void> {
+    await this.institutionSelect.sendKeys(option);
+  }
+
+  getInstitutionSelect(): ElementFinder {
+    return this.institutionSelect;
+  }
+
+  async getInstitutionSelectedOption(): Promise<string> {
+    return await this.institutionSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {
