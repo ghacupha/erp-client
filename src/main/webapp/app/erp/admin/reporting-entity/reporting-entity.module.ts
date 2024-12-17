@@ -23,9 +23,10 @@ import { ReportingEntityDetailComponent } from './detail/reporting-entity-detail
 import { ReportingEntityUpdateComponent } from './update/reporting-entity-update.component';
 import { ReportingEntityDeleteDialogComponent } from './delete/reporting-entity-delete-dialog.component';
 import { ReportingEntityRoutingModule } from './route/reporting-entity-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, ReportingEntityRoutingModule],
+  imports: [SharedModule, ReportingEntityRoutingModule, ErpCommonModule],
   declarations: [
     ReportingEntityComponent,
     ReportingEntityDetailComponent,

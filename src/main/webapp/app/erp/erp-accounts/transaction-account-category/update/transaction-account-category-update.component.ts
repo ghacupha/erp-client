@@ -66,6 +66,12 @@ export class TransactionAccountCategoryUpdateComponent implements OnInit {
     });
   }
 
+  updateAccountLedger($event: ITransactionAccountLedger): void {
+    this.editForm.patchValue({
+      accountLedger: $event
+    });
+  }
+
   previousState(): void {
     window.history.back();
   }

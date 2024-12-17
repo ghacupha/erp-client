@@ -29,6 +29,7 @@ import { ISettlementCurrency } from '../../../erp-settlements/settlement-currenc
 import { ITransactionAccount } from '../../../erp-accounts/transaction-account/transaction-account.model';
 import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 import { TransactionAccountService } from '../../../erp-accounts/transaction-account/service/transaction-account.service';
+import { ITransactionAccountLedger } from '../../../erp-accounts/transaction-account-ledger/transaction-account-ledger.model';
 
 @Component({
   selector: 'jhi-reporting-entity-update',
@@ -60,6 +61,18 @@ export class ReportingEntityUpdateComponent implements OnInit {
       this.updateForm(reportingEntity);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updateReportingCurrency($event: ISettlementCurrency): void {
+    this.editForm.patchValue({
+      reportingCurrency: $event
+    });
+  }
+
+  updateRetainedEarningsAccount($event: ITransactionAccount): void {
+    this.editForm.patchValue({
+      retainedEarningsAccount: $event
     });
   }
 
