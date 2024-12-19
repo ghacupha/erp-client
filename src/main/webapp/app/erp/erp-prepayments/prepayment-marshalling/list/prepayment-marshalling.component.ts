@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -27,6 +27,14 @@ import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
 import { PrepaymentMarshallingDeleteDialogComponent } from '../delete/prepayment-marshalling-delete-dialog.component';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentMarshallingCopyWorkflowInitiatedFromList,
+  prepaymentMarshallingCreationWorkflowInitiatedFromList,
+  prepaymentMarshallingEditWorkflowInitiatedFromList
+} from '../../../store/actions/prepayment-marshalling-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-marshalling',
@@ -37,7 +45,7 @@ export class PrepaymentMarshallingComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 50;
   page?: number;
   predicate!: string;
   ascending!: boolean;
@@ -47,7 +55,8 @@ export class PrepaymentMarshallingComponent implements OnInit {
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected store: Store<State>,
   ) {
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
@@ -102,6 +111,18 @@ export class PrepaymentMarshallingComponent implements OnInit {
 
   ngOnInit(): void {
     this.handleNavigation();
+  }
+
+  createButtonEvent(): void {
+    this.store.dispatch(prepaymentMarshallingCreationWorkflowInitiatedFromList())
+  }
+
+  copyButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentMarshallingCopyWorkflowInitiatedFromList({ copiedInstance: instance }));
+  }
+
+  editButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentMarshallingEditWorkflowInitiatedFromList({editedInstance: instance}));
   }
 
   trackId(index: number, item: IPrepaymentMarshalling): number {

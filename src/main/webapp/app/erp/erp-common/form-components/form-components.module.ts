@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -34,13 +34,10 @@ import { M21PaymentInvoiceFormControlComponent } from './payment-invoice-control
 import { M21PurchaseOrderFormControlComponent } from './purchase-order-form-control-components/m21-purchase-order-form-control.component';
 import { M2MJobSheetFormControlComponent } from './job-sheet-form-components/m2m-job-sheet-form-control.component';
 import { M2MDeliveryNoteFormControlComponent } from './delivery-note-form-components/m2m-delivery-note-form-control.component';
-import { M21ServiceOutletFormControlComponent } from './service-outlet-form-components/m21-service-outlet-form-control.component';
-import { M21TransactionAccountFormControlComponent } from './transaction-account-form-components/m21-transaction-account-form-control.component';
 import { M2mUniversallyUniqueMappingFormControlComponent } from './unique-mapping-components/m2m-universally-unique-mapping-form-control.component';
 import { M21SecurityClearanceFormControlComponent } from './security-clearance-form-components/m21-security-clearance-form-control.component';
 import { M21ApplicationUserFormControlComponent } from './application-user-form-components/m21-application-user-form-control.component';
 import { M2mPrepaymentMappingFormControlComponent } from './prepayment-mapping-components/m2m-prepayment-mapping-form-control.component';
-import { M21PrepaymentAccountFormControlComponent } from './prepayment-account-form-components/m21-prepayment-account-form-control.component';
 import { M21ReportDesignControlComponent } from './report-design-form-components/m21-report-design-control.component';
 import { M21AlgorithmFormControlComponent } from './algorithm-form-components/m21-algorithm-form-control.component';
 import { M21SystemModuleFormControlComponent } from './system-module-form-components/m21-system-module-form-control.component';
@@ -55,7 +52,6 @@ import { M2mAssetAccessoryFormComponent } from './asset-accessory-components/m2m
 import { M2mAssetWarrantyFormComponent } from './asset-warranty-form-components/m2m-asset-warranty-form-component';
 import { M21AssetCategoryFormControlComponent } from './asset-category-form-controls/m21-asset-category-form-control.component';
 import { M2mPurchaseOrderFormComponent } from './purchase-order-form-control-components/m2m-purchase-order-form-component';
-import { M2mServiceOutletFormControlComponent } from './service-outlet-form-components/m2m-service-outlet-form-control.component';
 import { M21WIPTransferFormControlComponent } from './wip-transfer/m21-wip-transfer-form-control.component';
 import { M2mWipTransferFormControlComponent } from './wip-transfer/m2m-wip-transfer-form-control.component';
 import { M21WorkProjectRegisterFormControlComponent } from './work-project-register/m21-work-project-register-form-control.component';
@@ -63,6 +59,26 @@ import { M2mWorkProjectRegisterFormControlComponent } from './work-project-regis
 import { M21WipRegistrationFormControlComponent } from './wip-registration/m21-wip-registration-form-control.component';
 import { M21DeliveryNoteControlComponent } from './delivery-note-form-components/m21-delivery-note-control.component';
 import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job-sheet-control.component';
+import { FiscalYearOptionViewComponent } from './fiscal-year-components/fiscal-year-option-view.component';
+import { FormatFiscalYearPipe } from './fiscal-year-components/format-fiscal-year.pipe';
+import { M21FiscalYearFormControlComponent } from './fiscal-year-components/m21-fiscal-year-form-control.component';
+import { M21DepreciationJobFormControlComponent } from './depreciation-job/m21-depreciation-job-form-control.component';
+import { DepreciationJobOptionViewComponent } from './depreciation-job/depreciation-job-option-view.component';
+import { FormatDepreciationJobPipe } from './depreciation-job/format-depreciation-job.pipe';
+import { DepreciationPeriodFormComponentsModule } from './depreciation-period/depreciation-period-form-components.module';
+import { Ifrs16LeaseContractComponentsModule } from './ifrs16-lease-contract-components/ifrs-16-lease-contract-components.module';
+import { AssetRegistrationFormComponentsModule } from './asset-registration-form-components/asset-registration-form-components.module';
+import { AmortizationPeriodFormComponentsModule } from './amortization-period/amortization-period-form-components.module';
+import { UserComponentsModule } from './user-form-components/user-components.module';
+import { LeasePeriodFormComponentsModule } from './lease-period-components/lease-period-form-components.module';
+import { LeaseLiabilityFormComponentsModule } from './lease-liability-components/lease-liability-form-components.module';
+import { LeaseAmortizationCalculationFormComponentsModule } from './lease-amortization-calculation-components/lease-amortization-calculation-form-components.module';
+import { ServiceOutletFormComponentsModule } from './service-outlet-form-components/service-outlet-form-components.module';
+import { TransactionAccountFormComponentsModule } from './transaction-account-form-components/transaction-account-form-components.module';
+import { PrepaymentAccountFormControlsModule } from './prepayment-account-form-components/prepayment-account-form-controls.module';
+import { FiscalMonthFormControlsModule } from './fiscal-month-components/fiscal-month-form-controls.module';
+import { FiscalQuarterComponentsModule } from './fiscal-quarter-components/fiscal-quarter-components.module';
+import { LeaseRepaymentPeriodFormComponentsModule } from './lease-repayment-period-components/lease-repayment-period-form-components.module';
 
 @NgModule({
   declarations: [
@@ -79,13 +95,10 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21ServiceOutletFormControlComponent,
-    M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
-    M21PrepaymentAccountFormControlComponent,
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
@@ -100,7 +113,6 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
-    M2mServiceOutletFormControlComponent,
     M21WIPTransferFormControlComponent,
     M2mWipTransferFormControlComponent,
     M21WorkProjectRegisterFormControlComponent,
@@ -108,6 +120,12 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
+    FiscalYearOptionViewComponent,
+    FormatFiscalYearPipe,
+    M21FiscalYearFormControlComponent,
+    M21DepreciationJobFormControlComponent,
+    DepreciationJobOptionViewComponent,
+    FormatDepreciationJobPipe,
   ],
   imports: [
     CommonModule,
@@ -129,13 +147,10 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21PurchaseOrderFormControlComponent,
     M2MJobSheetFormControlComponent,
     M2MDeliveryNoteFormControlComponent,
-    M21ServiceOutletFormControlComponent,
-    M21TransactionAccountFormControlComponent,
     M2mUniversallyUniqueMappingFormControlComponent,
     M21SecurityClearanceFormControlComponent,
     M21ApplicationUserFormControlComponent,
     M2mPrepaymentMappingFormControlComponent,
-    M21PrepaymentAccountFormControlComponent,
     M21ReportDesignControlComponent,
     M21AlgorithmFormControlComponent,
     M21SystemModuleFormControlComponent,
@@ -150,7 +165,6 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M2mAssetWarrantyFormComponent,
     M21AssetCategoryFormControlComponent,
     M2mPurchaseOrderFormComponent,
-    M2mServiceOutletFormControlComponent,
     M21WIPTransferFormControlComponent,
     M2mWipTransferFormControlComponent,
     M21WorkProjectRegisterFormControlComponent,
@@ -158,6 +172,26 @@ import { M21JobSheetControlComponent } from './job-sheet-form-components/m21-job
     M21WipRegistrationFormControlComponent,
     M21DeliveryNoteControlComponent,
     M21JobSheetControlComponent,
+    FiscalYearOptionViewComponent,
+    FormatFiscalYearPipe,
+    M21FiscalYearFormControlComponent,
+    M21DepreciationJobFormControlComponent,
+    DepreciationJobOptionViewComponent,
+    FormatDepreciationJobPipe,
+    DepreciationPeriodFormComponentsModule,
+    Ifrs16LeaseContractComponentsModule,
+    AssetRegistrationFormComponentsModule,
+    AmortizationPeriodFormComponentsModule,
+    UserComponentsModule,
+    LeasePeriodFormComponentsModule,
+    LeaseLiabilityFormComponentsModule,
+    LeaseAmortizationCalculationFormComponentsModule,
+    ServiceOutletFormComponentsModule,
+    TransactionAccountFormComponentsModule,
+    PrepaymentAccountFormControlsModule,
+    FiscalMonthFormControlsModule,
+    FiscalQuarterComponentsModule,
+    LeaseRepaymentPeriodFormComponentsModule,
   ]
 })
 export class FormComponentsModule {

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -50,6 +50,12 @@ export class DepreciationJobUpdateComponent implements OnInit {
     timeOfCommencement: [],
     depreciationJobStatus: [],
     description: [],
+    numberOfBatches: [],
+    processedBatches: [],
+    lastBatchSize: [],
+    processedItems: [],
+    processingTime: [],
+    totalItems: [],
     createdBy: [],
     depreciationPeriod: [],
   });
@@ -122,6 +128,12 @@ export class DepreciationJobUpdateComponent implements OnInit {
       timeOfCommencement: depreciationJob.timeOfCommencement ? depreciationJob.timeOfCommencement.format(DATE_TIME_FORMAT) : null,
       depreciationJobStatus: depreciationJob.depreciationJobStatus,
       description: depreciationJob.description,
+      numberOfBatches: depreciationJob.numberOfBatches,
+      processedBatches: depreciationJob.processedBatches,
+      lastBatchSize: depreciationJob.lastBatchSize,
+      processedItems: depreciationJob.processedItems,
+      processingTime: depreciationJob.processingTime,
+      totalItems: depreciationJob.totalItems,
       createdBy: depreciationJob.createdBy,
       depreciationPeriod: depreciationJob.depreciationPeriod,
     });
@@ -170,6 +182,12 @@ export class DepreciationJobUpdateComponent implements OnInit {
         : undefined,
       depreciationJobStatus: this.editForm.get(['depreciationJobStatus'])!.value,
       description: this.editForm.get(['description'])!.value,
+      numberOfBatches: this.editForm.get(['numberOfBatches'])!.value,
+      processedBatches: this.editForm.get(['processedBatches'])!.value,
+      lastBatchSize: this.editForm.get(['lastBatchSize'])!.value,
+      processedItems: this.editForm.get(['processedItems'])!.value,
+      processingTime: this.editForm.get(['processingTime'])!.value,
+      totalItems: this.editForm.get(['totalItems'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,
       depreciationPeriod: this.editForm.get(['depreciationPeriod'])!.value,
     };

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ export class PrepaymentAmortizationUpdatePage {
   placeholderSelect = element(by.id('field_placeholder'));
   fiscalMonthSelect = element(by.id('field_fiscalMonth'));
   prepaymentCompilationRequestSelect = element(by.id('field_prepaymentCompilationRequest'));
+  amortizationPeriodSelect = element(by.id('field_amortizationPeriod'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -211,6 +212,22 @@ export class PrepaymentAmortizationUpdatePage {
 
   async getPrepaymentCompilationRequestSelectedOption(): Promise<string> {
     return await this.prepaymentCompilationRequestSelect.element(by.css('option:checked')).getText();
+  }
+
+  async amortizationPeriodSelectLastOption(): Promise<void> {
+    await this.amortizationPeriodSelect.all(by.tagName('option')).last().click();
+  }
+
+  async amortizationPeriodSelectOption(option: string): Promise<void> {
+    await this.amortizationPeriodSelect.sendKeys(option);
+  }
+
+  getAmortizationPeriodSelect(): ElementFinder {
+    return this.amortizationPeriodSelect;
+  }
+
+  async getAmortizationPeriodSelectedOption(): Promise<string> {
+    return await this.amortizationPeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

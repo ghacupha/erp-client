@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -16,7 +16,11 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { ITransactionAccountLedger } from 'app/entities/accounting/transaction-account-ledger/transaction-account-ledger.model';
+import { ITransactionAccountCategory } from 'app/entities/accounting/transaction-account-category/transaction-account-category.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
+import { AccountTypes } from 'app/entities/enumerations/account-types.model';
+import { AccountSubTypes } from 'app/entities/enumerations/account-sub-types.model';
 
 export interface ITransactionAccount {
   id?: number;
@@ -24,7 +28,11 @@ export interface ITransactionAccount {
   accountName?: string;
   notesContentType?: string | null;
   notes?: string | null;
-  parentAccount?: ITransactionAccount | null;
+  accountType?: AccountTypes;
+  accountSubType?: AccountSubTypes;
+  dummyAccount?: boolean | null;
+  accountLedger?: ITransactionAccountLedger;
+  accountCategory?: ITransactionAccountCategory;
   placeholders?: IPlaceholder[] | null;
 }
 
@@ -35,9 +43,15 @@ export class TransactionAccount implements ITransactionAccount {
     public accountName?: string,
     public notesContentType?: string | null,
     public notes?: string | null,
-    public parentAccount?: ITransactionAccount | null,
+    public accountType?: AccountTypes,
+    public accountSubType?: AccountSubTypes,
+    public dummyAccount?: boolean | null,
+    public accountLedger?: ITransactionAccountLedger,
+    public accountCategory?: ITransactionAccountCategory,
     public placeholders?: IPlaceholder[] | null
-  ) {}
+  ) {
+    this.dummyAccount = this.dummyAccount ?? false;
+  }
 }
 
 export function getTransactionAccountIdentifier(transactionAccount: ITransactionAccount): number | undefined {

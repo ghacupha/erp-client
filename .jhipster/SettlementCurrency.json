@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220203121814",
   "dto": "mapstruct",
-  "clientRootFolder": "gdi",
+  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "iso4217CurrencyCode",

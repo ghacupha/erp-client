@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,6 +73,11 @@
           <th scope="col" jhiSortBy="postedAt"><span>Posted At</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationAmount"><span>Depreciation Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetNumber"><span>Asset Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="batchSequenceNumber"><span>Batch Sequence Number</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedItems">
+            <span>Processed Items</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalItemsProcessed"><span>Total Items Processed</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationMethod.depreciationMethodName">
@@ -83,6 +88,10 @@
           <th scope="col" jhiSortBy="fiscalMonth.fiscalMonthCode"><span>Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fiscalQuarter.fiscalQuarterCode"><span>Fiscal Quarter</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="fiscalYear.fiscalYearCode"><span>Fiscal Year</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationJob.description"><span>Depreciation Job</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="depreciationBatchSequence.id">
+            <span>Depreciation Batch Sequence</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -94,6 +103,9 @@
           <td>{{ depreciationEntry.postedAt | formatMediumDatetime }}</td>
           <td>{{ depreciationEntry.depreciationAmount }}</td>
           <td>{{ depreciationEntry.assetNumber }}</td>
+          <td>{{ depreciationEntry.batchSequenceNumber }}</td>
+          <td>{{ depreciationEntry.processedItems }}</td>
+          <td>{{ depreciationEntry.totalItemsProcessed }}</td>
           <td>
             <div *ngIf="depreciationEntry.serviceOutlet">
               <a [routerLink]="['/service-outlet', depreciationEntry.serviceOutlet?.id, 'view']">{{
@@ -147,6 +159,20 @@
             <div *ngIf="depreciationEntry.fiscalYear">
               <a [routerLink]="['/fiscal-year', depreciationEntry.fiscalYear?.id, 'view']">{{
                 depreciationEntry.fiscalYear?.fiscalYearCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationEntry.depreciationJob">
+              <a [routerLink]="['/depreciation-job', depreciationEntry.depreciationJob?.id, 'view']">{{
+                depreciationEntry.depreciationJob?.description
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="depreciationEntry.depreciationBatchSequence">
+              <a [routerLink]="['/depreciation-batch-sequence', depreciationEntry.depreciationBatchSequence?.id, 'view']">{{
+                depreciationEntry.depreciationBatchSequence?.id
               }}</a>
             </div>
           </td>

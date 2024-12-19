@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -20,18 +20,24 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, finalize, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
 import { TransactionAccountService } from '../service/transaction-account.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { PlaceholderSuggestionService } from '../../../erp-common/suggestion/placeholder-suggestion.service';
-import { TransactionAccountSuggestionService } from '../../../erp-common/suggestion/transaction-account-suggestion.service';
 import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
 import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingTransactionAccountStatus,
+  creatingTransactionAccountStatus,
+  editingTransactionAccountStatus,
+  transactionAccountUpdateSelectedInstance
+} from '../../../store/selectors/transaction-account-update-status.selectors';
 
 @Component({
   selector: 'jhi-transaction-account-update',
@@ -39,6 +45,12 @@ import { PlaceholderService } from '../../../erp-pages/placeholder/service/place
 })
 export class TransactionAccountUpdateComponent implements OnInit {
   isSaving = false;
+
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = {...new TransactionAccount()}
 
   transactionAccountsSharedCollection: ITransactionAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
@@ -53,16 +65,6 @@ export class TransactionAccountUpdateComponent implements OnInit {
     placeholders: [],
   });
 
-  minAccountLengthTerm = 3;
-
-  placeholdersLoading = false;
-  placeholderControlInput$ = new Subject<string>();
-  placeholderLookups$: Observable<IPlaceholder[]> = of([]);
-
-  parentAccountsLoading = false;
-  parentAccountsControlInput$ = new Subject<string>();
-  parentAccountLookups$: Observable<ITransactionAccount[]> = of([]);
-
   constructor(
     protected dataUtils: DataUtils,
     protected eventManager: EventManager,
@@ -70,58 +72,26 @@ export class TransactionAccountUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected placeholderSuggestionService: PlaceholderSuggestionService,
-    protected transactionAccountSuggestionService: TransactionAccountSuggestionService,
-  ) {}
+    protected store: Store<State>,
+  ) {
+    this.store.pipe(select(copyingTransactionAccountStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingTransactionAccountStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingTransactionAccountStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(transactionAccountUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ transactionAccount }) => {
-      this.updateForm(transactionAccount);
+    if (this.weAreEditing) {
+      this.updateForm(this.selectedItem);
+    }
 
+    if (this.weAreCopying) {
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
-    });
-
-    // fire-up typeahead items
-    this.loadParentAccounts();
-    this.loadPlaceholders();
-  }
-
-  loadPlaceholders(): void {
-    this.placeholderLookups$ = concat(
-      of([]), // default items
-      this.placeholderControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.placeholdersLoading = true),
-        switchMap(term => this.placeholderSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.placeholdersLoading = false)
-        ))
-      ),
-      of([...this.placeholdersSharedCollection])
-    );
-  }
-
-  loadParentAccounts(): void {
-    this.parentAccountLookups$ = concat(
-      of([]), // default items
-      this.parentAccountsControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
-        distinctUntilChanged(),
-        debounceTime(800),
-        tap(() => this.parentAccountsLoading = true),
-        switchMap(term => this.transactionAccountSuggestionService.search(term).pipe(
-          catchError(() => of([])),
-          tap(() => this.parentAccountsLoading = false)
-        ))
-      ),
-      of([...this.transactionAccountsSharedCollection])
-    );
+    }
   }
 
   trackPlaceholdersByFn(item: IPlaceholder): number {
@@ -153,12 +123,17 @@ export class TransactionAccountUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const transactionAccount = this.createFromForm();
-    if (transactionAccount.id !== undefined) {
-      this.subscribeToSaveResponse(this.transactionAccountService.update(transactionAccount));
-    } else {
-      this.subscribeToSaveResponse(this.transactionAccountService.create(transactionAccount));
-    }
+    this.subscribeToSaveResponse(this.transactionAccountService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.transactionAccountService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.transactionAccountService.create(this.copyFromForm()));
   }
 
   trackTransactionAccountById(index: number, item: ITransactionAccount): number {
@@ -167,6 +142,18 @@ export class TransactionAccountUpdateComponent implements OnInit {
 
   trackPlaceholderById(index: number, item: IPlaceholder): number {
     return item.id!;
+  }
+
+  updateParentAccount(value: ITransactionAccount): void {
+      this.editForm.patchValue({
+        parentAccount: value
+      });
+  }
+
+  updatePlaceholders(value: IPlaceholder[]): void {
+      this.editForm.patchValue({
+        placeholders: [...value]
+      });
   }
 
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
@@ -249,6 +236,18 @@ export class TransactionAccountUpdateComponent implements OnInit {
     return {
       ...new TransactionAccount(),
       id: this.editForm.get(['id'])!.value,
+      accountNumber: this.editForm.get(['accountNumber'])!.value,
+      accountName: this.editForm.get(['accountName'])!.value,
+      notesContentType: this.editForm.get(['notesContentType'])!.value,
+      notes: this.editForm.get(['notes'])!.value,
+      parentAccount: this.editForm.get(['parentAccount'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+    };
+  }
+
+  protected copyFromForm(): ITransactionAccount {
+    return {
+      ...new TransactionAccount(),
       accountNumber: this.editForm.get(['accountNumber'])!.value,
       accountName: this.editForm.get(['accountName'])!.value,
       notesContentType: this.editForm.get(['notesContentType'])!.value,

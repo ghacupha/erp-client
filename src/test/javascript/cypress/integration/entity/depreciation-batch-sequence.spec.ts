@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -178,6 +178,19 @@ describe('DepreciationBatchSequence e2e test', () => {
       cy.get(`[data-cy="createdAt"]`).type('2023-07-04T16:14').should('have.value', '2023-07-04T16:14');
 
       cy.get(`[data-cy="depreciationBatchStatus"]`).select('ERRORED');
+
+      cy.get(`[data-cy="batchSize"]`).type('15128').should('have.value', '15128');
+
+      cy.get(`[data-cy="processedItems"]`).type('93266').should('have.value', '93266');
+
+      cy.get(`[data-cy="sequenceNumber"]`).type('17670').should('have.value', '17670');
+
+      cy.get(`[data-cy="isLastBatch"]`).should('not.be.checked');
+      cy.get(`[data-cy="isLastBatch"]`).click().should('be.checked');
+
+      cy.get(`[data-cy="processingTime"]`).type('PT57M').should('have.value', 'PT57M');
+
+      cy.get(`[data-cy="totalItems"]`).type('38902').should('have.value', '38902');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

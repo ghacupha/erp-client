@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -58,9 +58,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
     processLocked: [],
     previousPeriod: [],
     createdBy: [],
-    fiscalYear: [null, Validators.required],
     fiscalMonth: [null, Validators.required],
-    fiscalQuarter: [null, Validators.required],
   });
 
   constructor(
@@ -75,9 +73,26 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ depreciationPeriod }) => {
+
+      if ( depreciationPeriod.id === undefined ) {
+
+        depreciationPeriod.depreciationPeriodStatus = DepreciationPeriodStatusTypes.OPEN;
+      }
+
       this.updateForm(depreciationPeriod);
 
       this.loadRelationshipsOptions();
+    });
+
+    this.updateDetailsGivenFiscalMonth();
+  }
+
+  updateDetailsGivenFiscalMonth(): void {
+    this.editForm.get(['fiscalMonth'])?.valueChanges.subscribe((month) => {
+      this.editForm.patchValue({
+        fiscalYear: month.fiscalYear,
+        fiscalQuarter: month.fiscalQuarter
+      })
     });
   }
 
@@ -93,6 +108,12 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.depreciationPeriodService.create(depreciationPeriod));
     }
+  }
+
+  updateFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      fiscalMonth: update,
+    });
   }
 
   trackDepreciationPeriodById(index: number, item: IDepreciationPeriod): number {
@@ -144,9 +165,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       processLocked: depreciationPeriod.processLocked,
       previousPeriod: depreciationPeriod.previousPeriod,
       createdBy: depreciationPeriod.createdBy,
-      fiscalYear: depreciationPeriod.fiscalYear,
       fiscalMonth: depreciationPeriod.fiscalMonth,
-      fiscalQuarter: depreciationPeriod.fiscalQuarter,
     });
 
     this.previousPeriodsCollection = this.depreciationPeriodService.addDepreciationPeriodToCollectionIfMissing(
@@ -157,17 +176,9 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       this.applicationUsersSharedCollection,
       depreciationPeriod.createdBy
     );
-    this.fiscalYearsSharedCollection = this.fiscalYearService.addFiscalYearToCollectionIfMissing(
-      this.fiscalYearsSharedCollection,
-      depreciationPeriod.fiscalYear
-    );
     this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
       this.fiscalMonthsSharedCollection,
       depreciationPeriod.fiscalMonth
-    );
-    this.fiscalQuartersSharedCollection = this.fiscalQuarterService.addFiscalQuarterToCollectionIfMissing(
-      this.fiscalQuartersSharedCollection,
-      depreciationPeriod.fiscalQuarter
     );
   }
 
@@ -237,9 +248,7 @@ export class DepreciationPeriodUpdateComponent implements OnInit {
       processLocked: this.editForm.get(['processLocked'])!.value,
       previousPeriod: this.editForm.get(['previousPeriod'])!.value,
       createdBy: this.editForm.get(['createdBy'])!.value,
-      fiscalYear: this.editForm.get(['fiscalYear'])!.value,
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
-      fiscalQuarter: this.editForm.get(['fiscalQuarter'])!.value,
     };
   }
 }

@@ -64,6 +64,13 @@
       "relationshipType": "many-to-one",
       "relationshipValidateRules": ["required"],
       "otherEntityField": "id"
+    },
+    {
+      "relationshipName": "amortizationPeriod",
+      "otherEntityName": "amortizationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
     }
   ],
   "service": "serviceImpl",

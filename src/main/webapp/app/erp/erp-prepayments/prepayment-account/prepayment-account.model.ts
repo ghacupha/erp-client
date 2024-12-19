@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -24,10 +24,13 @@ import { IServiceOutlet } from '../../erp-granular/service-outlet/service-outlet
 import { ISettlement } from '../../erp-settlements/settlement/settlement.model';
 import { IUniversallyUniqueMapping } from '../../erp-pages/universally-unique-mapping/universally-unique-mapping.model';
 import { IDealer } from '../../erp-pages/dealers/dealer/dealer.model';
+import { IBusinessDocument } from '../../erp-pages/business-document/business-document.model';
+import * as dayjs from 'dayjs';
 
 export interface IPrepaymentAccount {
   id?: number;
   catalogueNumber?: string;
+  recognitionDate?: dayjs.Dayjs;
   particulars?: string;
   notes?: string | null;
   prepaymentAmount?: number | null;
@@ -41,12 +44,14 @@ export interface IPrepaymentAccount {
   placeholders?: IPlaceholder[] | null;
   generalParameters?: IUniversallyUniqueMapping[] | null;
   prepaymentParameters?: IPrepaymentMapping[] | null;
+  businessDocuments?: IBusinessDocument[] | null;
 }
 
 export class PrepaymentAccount implements IPrepaymentAccount {
   constructor(
     public id?: number,
     public catalogueNumber?: string,
+    public recognitionDate?: dayjs.Dayjs,
     public particulars?: string,
     public notes?: string | null,
     public prepaymentAmount?: number | null,
@@ -59,7 +64,8 @@ export class PrepaymentAccount implements IPrepaymentAccount {
     public transferAccount?: ITransactionAccount | null,
     public placeholders?: IPlaceholder[] | null,
     public generalParameters?: IUniversallyUniqueMapping[] | null,
-    public prepaymentParameters?: IPrepaymentMapping[] | null
+    public prepaymentParameters?: IPrepaymentMapping[] | null,
+    public businessDocuments?: IBusinessDocument[] | null
   ) {}
 }
 

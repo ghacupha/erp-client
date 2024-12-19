@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -33,9 +33,10 @@ import { ErpGranularModule } from './erp-granular/erp-granular.module';
 import { ErpPrepaymentsAccountingModule } from './erp-prepayments/erp-prepayments-accounting.module';
 import { ErpTransactionAccountModule } from './erp-accounts/erp-transaction-account.module';
 import { ErpReportsModule } from './erp-reports/erp-reports.module';
-import { EntityRoutingModule } from '../entities/entity-routing.module';
 import { ErpLeasesModule } from './erp-leases/erp-leases.module';
 import { ErpGDIModule } from "./erp-gdi/erp-gdi.module";
+import { ErpAdminModule } from './admin/erp-admin.module';
+import { ErpAccountReportModule } from './erp-account-reports/erp-account-report.module';
 
 export const routes: Routes = [];
 
@@ -59,6 +60,8 @@ export const routes: Routes = [];
     ErpTransactionAccountModule,
     ErpLeasesModule,
     ErpGDIModule,
+    ErpAdminModule,
+    ErpAccountReportModule,
   ],
   exports: [
     ErpNavbarModule,
@@ -72,8 +75,9 @@ export const routes: Routes = [];
     ErpSettlementsModule,
     ErpPrepaymentsAccountingModule,
     ErpTransactionAccountModule,
-    EntityRoutingModule,
     ErpGDIModule,
+    ErpAdminModule,
+    ErpAccountReportModule,
   ]
 })
 export class ErpSystemModule {}

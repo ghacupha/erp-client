@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@ export class PrepaymentAccountUpdatePage {
 
   idInput = element(by.id('field_id'));
   catalogueNumberInput = element(by.id('field_catalogueNumber'));
+  recognitionDateInput = element(by.id('field_recognitionDate'));
   particularsInput = element(by.id('field_particulars'));
   notesInput = element(by.id('field_notes'));
   prepaymentAmountInput = element(by.id('field_prepaymentAmount'));
@@ -83,6 +84,14 @@ export class PrepaymentAccountUpdatePage {
 
   async getCatalogueNumberInput(): Promise<string> {
     return await this.catalogueNumberInput.getAttribute('value');
+  }
+
+  async setRecognitionDateInput(recognitionDate: string): Promise<void> {
+    await this.recognitionDateInput.sendKeys(recognitionDate);
+  }
+
+  async getRecognitionDateInput(): Promise<string> {
+    return await this.recognitionDateInput.getAttribute('value');
   }
 
   async setParticularsInput(particulars: string): Promise<void> {

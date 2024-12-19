@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -20,8 +20,6 @@ import * as dayjs from 'dayjs';
 import { DepreciationPeriodStatusTypes } from '../../erp-common/enumerations/depreciation-period-status-types.model';
 import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
 import { IApplicationUser } from '../../erp-pages/application-user/application-user.model';
-import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
-import { IFiscalQuarter } from '../../erp-pages/fiscal-quarter/fiscal-quarter.model';
 
 export interface IDepreciationPeriod {
   id?: number;
@@ -32,9 +30,7 @@ export interface IDepreciationPeriod {
   processLocked?: boolean | null;
   previousPeriod?: IDepreciationPeriod | null;
   createdBy?: IApplicationUser | null;
-  fiscalYear?: IFiscalYear;
   fiscalMonth?: IFiscalMonth;
-  fiscalQuarter?: IFiscalQuarter;
 }
 
 export class DepreciationPeriod implements IDepreciationPeriod {
@@ -47,9 +43,7 @@ export class DepreciationPeriod implements IDepreciationPeriod {
     public processLocked?: boolean | null,
     public previousPeriod?: IDepreciationPeriod | null,
     public createdBy?: IApplicationUser | null,
-    public fiscalYear?: IFiscalYear,
     public fiscalMonth?: IFiscalMonth,
-    public fiscalQuarter?: IFiscalQuarter
   ) {
     this.processLocked = this.processLocked ?? false;
   }

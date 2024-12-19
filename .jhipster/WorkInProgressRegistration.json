@@ -1,6 +1,6 @@
 {
   "changelogDate": "20220413185958",
-  "clientRootFolder": "assets",
+  "clientRootFolder": "wip",
   "dto": "mapstruct",
   "fields": [
     {
@@ -11,6 +11,10 @@
     {
       "fieldName": "particulars",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "instalmentDate",
+      "fieldType": "LocalDate"
     },
     {
       "fieldName": "instalmentAmount",

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ describe('PrepaymentMarshalling e2e test', () => {
 
   let prepaymentMarshalling: any;
   //let prepaymentAccount: any;
+  //let amortizationPeriod: any;
   //let fiscalMonth: any;
 
   before(() => {
@@ -55,9 +56,17 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-accounts',
-      body: {"catalogueNumber":"Chicken","particulars":"Fully-configurable utilisation","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":47673,"prepaymentGuid":"c8a9da64-56e5-4591-8d07-b24137561029"},
+      body: {"catalogueNumber":"Chicken","recognitionDate":"2022-05-01","particulars":"neural-net","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":97856,"prepaymentGuid":"e7c8a9da-6456-4e55-91cd-07b241375610"},
     }).then(({ body }) => {
       prepaymentAccount = body;
+    });
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/amortization-periods',
+      body: {"sequenceNumber":20285,"startDate":"2024-04-27","endDate":"2024-04-27","periodCode":"monitor Cambridgeshire Cheese"},
+    }).then(({ body }) => {
+      amortizationPeriod = body;
     });
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
@@ -82,6 +91,11 @@ describe('PrepaymentMarshalling e2e test', () => {
     cy.intercept('GET', '/api/prepayment-accounts', {
       statusCode: 200,
       body: [prepaymentAccount],
+    });
+
+    cy.intercept('GET', '/api/amortization-periods', {
+      statusCode: 200,
+      body: [amortizationPeriod],
     });
 
     cy.intercept('GET', '/api/placeholders', {
@@ -116,6 +130,14 @@ describe('PrepaymentMarshalling e2e test', () => {
         url: `/api/prepayment-accounts/${prepaymentAccount.id}`,
       }).then(() => {
         prepaymentAccount = undefined;
+      });
+    }
+    if (amortizationPeriod) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/amortization-periods/${amortizationPeriod.id}`,
+      }).then(() => {
+        amortizationPeriod = undefined;
       });
     }
     if (fiscalMonth) {
@@ -173,6 +195,7 @@ describe('PrepaymentMarshalling e2e test', () => {
           body: {
             ...prepaymentMarshallingSample,
             prepaymentAccount: prepaymentAccount,
+            firstAmortizationPeriod: amortizationPeriod,
             firstFiscalMonth: fiscalMonth,
             lastFiscalMonth: fiscalMonth,
           },
@@ -263,6 +286,7 @@ describe('PrepaymentMarshalling e2e test', () => {
       cy.get(`[data-cy="processed"]`).click().should('be.checked');
 
       cy.get(`[data-cy="prepaymentAccount"]`).select(1);
+      cy.get(`[data-cy="firstAmortizationPeriod"]`).select(1);
       cy.get(`[data-cy="firstFiscalMonth"]`).select(1);
       cy.get(`[data-cy="lastFiscalMonth"]`).select(1);
 

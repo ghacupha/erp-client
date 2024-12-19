@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -75,6 +75,12 @@ describe('DepreciationBatchSequence e2e test', () => {
       depreciationBatchSequenceUpdatePage.setEndIndexInput('5'),
       depreciationBatchSequenceUpdatePage.setCreatedAtInput('01/01/2001' + protractor.Key.TAB + '02:30AM'),
       depreciationBatchSequenceUpdatePage.depreciationBatchStatusSelectLastOption(),
+      depreciationBatchSequenceUpdatePage.setBatchSizeInput('5'),
+      depreciationBatchSequenceUpdatePage.setProcessedItemsInput('5'),
+      depreciationBatchSequenceUpdatePage.setSequenceNumberInput('5'),
+      depreciationBatchSequenceUpdatePage.getIsLastBatchInput().click(),
+      depreciationBatchSequenceUpdatePage.setProcessingTimeInput('PT12S'),
+      depreciationBatchSequenceUpdatePage.setTotalItemsInput('5'),
       depreciationBatchSequenceUpdatePage.depreciationJobSelectLastOption(),
     ]);
 

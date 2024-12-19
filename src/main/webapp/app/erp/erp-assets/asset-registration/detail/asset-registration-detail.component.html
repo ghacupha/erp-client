@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,7 +51,45 @@
         </dd>
         <dt><span>Asset Cost</span></dt>
         <dd>
-          <span>{{ assetRegistration.assetCost }}</span>
+          <span>{{ assetRegistration.assetCost | currency }}</span>
+        </dd>
+        <dt><span>Historical Cost</span></dt>
+        <dd>
+          <span>{{ assetRegistration.historicalCost | currency }}</span>
+        </dd>
+        <dt><span>Registration Date</span></dt>
+        <dd>
+          <span>{{ assetRegistration.registrationDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Main Service Outlet</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.mainServiceOutlet">
+            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
+              assetRegistration.mainServiceOutlet?.outletCode
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Acquiring Transaction</span></dt>
+        <dd>
+          <div *ngIf="assetAcquiringTransaction">
+            <a [routerLink]="['/settlement', assetAcquiringTransaction?.id, 'view']">
+              <span>TRX: {{ assetAcquiringTransaction?.paymentNumber }}</span> <span> | {{ assetAcquiringTransaction?.paymentDate | formatMediumDate }} </span><span> | {{ assetAcquiringTransaction?.biller?.dealerName }} </span><span> | {{ assetAcquiringTransaction?.paymentAmount | currency }}</span>
+            </a>
+          </div>
+        </dd>
+        <dt><span>Asset Category</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.assetCategory">
+            <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
+              assetRegistration.assetCategory?.assetCategoryName
+              }}</a>
+          </div>
+        </dd>
+        <dt><span>Dealer</span></dt>
+        <dd>
+          <div *ngIf="assetRegistration.dealer">
+            <a [routerLink]="['/erp/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
+          </div>
         </dd>
         <dt><span>Model Number</span></dt>
         <dd>
@@ -82,29 +120,7 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Main Service Outlet</span></dt>
-        <dd>
-          <div *ngIf="assetRegistration.mainServiceOutlet">
-            <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
-              assetRegistration.mainServiceOutlet?.outletCode
-              }}</a>
-          </div>
-        </dd>
-        <dt><span>Settlement</span></dt>
-        <dd>
-          <span *ngFor="let settlement of assetRegistration.settlements; let last = last">
-            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentNumber }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span>Asset Category</span></dt>
-        <dd>
-          <div *ngIf="assetRegistration.assetCategory">
-            <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
-              assetRegistration.assetCategory?.assetCategoryName
-            }}</a>
-          </div>
-        </dd>
+
         <dt><span>Purchase Order</span></dt>
         <dd>
           <span *ngFor="let purchaseOrder of assetRegistration.purchaseOrders; let last = last">
@@ -126,12 +142,7 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Dealer</span></dt>
-        <dd>
-          <div *ngIf="assetRegistration.dealer">
-            <a [routerLink]="['/erp/dealer', assetRegistration.dealer?.id, 'view']">{{ assetRegistration.dealer?.dealerName }}</a>
-          </div>
-        </dd>
+
         <dt><span>Designated Users</span></dt>
         <dd>
           <span *ngFor="let designatedUsers of assetRegistration.designatedUsers; let last = last">
@@ -169,10 +180,17 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
-        <dt><span>Service Outlet</span></dt>
+        <dt><span>Other Service Outlets</span></dt>
         <dd>
-          <span *ngFor="let serviceOutlet of assetRegistration.serviceOutlets; let last = last">
+          <span *ngFor="let serviceOutlet of assetRegistration.otherRelatedServiceOutlets; let last = last">
             <a [routerLink]="['/service-outlet', serviceOutlet?.id, 'view']">{{ serviceOutlet.outletCode }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Other Related Settlements</span></dt>
+        <dd>
+          <span *ngFor="let settlement of assetRegistration.otherRelatedSettlements; let last = last">
+            <a [routerLink]="['/settlement', settlement?.id, 'view']">{{ settlement.paymentDate }}</a
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
@@ -186,11 +204,11 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/asset-registration', assetRegistration.id, 'edit']" class="btn btn-primary">
+      <button type="button" (click)='editButtonEvent(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
       </button>
 
-      <button type="button" (click)='copy(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
+      <button type="button" (click)='copyButtonEvent(assetRegistration)' [routerLink]="['/asset-registration', assetRegistration.id, 'copy']" class="btn btn-primary">
         <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy</span>
       </button>
     </div>

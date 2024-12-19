@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,11 +18,22 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { concat, from, Observable, of, Subject } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter, map,
+  mergeMap,
+  switchMap,
+  tap,
+  toArray
+} from 'rxjs/operators';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
-import { ServiceOutletSuggestionService } from '../../suggestion/service-outlet-suggestion.service';
+import {
+  ServiceOutletService
+} from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { ServiceOutletSuggestionService } from './service-outlet-suggestion.service';
 
 /**
  * Service to fetch suggestion values that coincide with the search terms input by the user
@@ -42,9 +53,7 @@ import { ServiceOutletSuggestionService } from '../../suggestion/service-outlet-
 export class M2mServiceOutletFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
   @Input() inputValues: IServiceOutlet[] = [];
-
   @Input() inputControlLabel = '';
-
   @Output() selectedValues: EventEmitter<IServiceOutlet[]> = new EventEmitter<IServiceOutlet[]>();
 
   minAccountLengthTerm = 3;
@@ -69,7 +78,6 @@ export class M2mServiceOutletFormControlComponent implements OnInit, OnDestroy, 
   }
 
   ngOnDestroy(): void {
-
     this.valueLookUps$ = of([]);
     this.inputValues = [];
   }
@@ -78,22 +86,34 @@ export class M2mServiceOutletFormControlComponent implements OnInit, OnDestroy, 
     this.valueLookUps$ = concat(
       of([]), // default items
       this.valueInputControl$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
+        filter(res => res !== null && res.length >= this.minAccountLengthTerm),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.valuesLoading = true),
         switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
+          switchMap(searchResults => searchResults.length > 0 ?
+            from(searchResults).pipe(
+              mergeMap(result =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                result?.id ? this.valueService.find(result.id).pipe(
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+                  map((response: { body: any; }) => response.body), // Assuming response is HttpResponse<IServiceOutlet>
+                  catchError(() => of(null))
+                ) : of(null)
+              ),
+              filter((result): result is IServiceOutlet => result !== null),
+              toArray()
+            ) : of([])
+          ),
           tap(() => this.valuesLoading = false)
         ))
       )
     );
   }
 
-  trackValuesByFn(item: any): number {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  trackValuesByFn(item: IServiceOutlet): number {
     return item.id!;
   }
 
@@ -104,7 +124,7 @@ export class M2mServiceOutletFormControlComponent implements OnInit, OnDestroy, 
    */
   writeValue(value: IServiceOutlet[]): void {
     if (value.length !== 0) {
-      this.inputValues = value
+      this.inputValues = value;
     }
   }
 

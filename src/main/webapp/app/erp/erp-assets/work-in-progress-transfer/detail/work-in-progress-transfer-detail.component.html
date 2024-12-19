@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,10 +36,6 @@
         <dt><span>Description</span></dt>
         <dd>
           <span>{{ workInProgressTransfer.description }}</span>
-        </dd>
-        <dt><span>Target Asset Number</span></dt>
-        <dd>
-          <span>{{ workInProgressTransfer.targetAssetNumber }}</span>
         </dd>
         <dt><span>Transfer Amount</span></dt>
         <dd>
@@ -91,14 +87,21 @@
             }}</a>
           </div>
         </dd>
-        <dt><span>Settlement</span></dt>
+        <dt><span>Transfer Settlement</span></dt>
         <dd>
-          <div *ngIf="workInProgressTransfer.settlement">
-            <a [routerLink]="['/settlement', workInProgressTransfer.settlement?.id, 'view']">{{
-              workInProgressTransfer.settlement?.paymentNumber
-            }}</a>
+          <div *ngIf="workInProgressTransfer.transferSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.transferSettlement?.id, 'view']">{{
+              workInProgressTransfer.transferSettlement?.paymentNumber
+              }}</a>
           </div>
         </dd>
+        <dt><span>Original Settlement</span></dt>
+        <dd>
+          <div *ngIf="workInProgressTransfer.originalSettlement">
+            <a [routerLink]="['/settlement', workInProgressTransfer.originalSettlement?.id, 'view']">{{
+              workInProgressTransfer.originalSettlement?.paymentNumber
+              }}</a>
+          </div>
         <dt><span>Work Project Register</span></dt>
         <dd>
           <div *ngIf="workInProgressTransfer.workProjectRegister">

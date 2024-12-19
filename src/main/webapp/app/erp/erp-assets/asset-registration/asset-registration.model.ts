@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -44,10 +44,12 @@ export interface IAssetRegistration {
   serialNumber?: string | null;
   remarks?: string | null;
   capitalizationDate?: dayjs.Dayjs;
+  historicalCost?: number;
+  registrationDate?: dayjs.Dayjs;
   placeholders?: IPlaceholder[] | null;
   paymentInvoices?: IPaymentInvoice[] | null;
-  serviceOutlets?: IServiceOutlet[] | null;
-  settlements?: ISettlement[];
+  otherRelatedServiceOutlets?: IServiceOutlet[] | null,
+  otherRelatedSettlements?: ISettlement[] | null,
   assetCategory?: IAssetCategory;
   purchaseOrders?: IPurchaseOrder[] | null;
   deliveryNotes?: IDeliveryNote[] | null;
@@ -60,6 +62,7 @@ export interface IAssetRegistration {
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
   assetAccessories?: IAssetAccessory[] | null;
   mainServiceOutlet?: IServiceOutlet | null;
+  acquiringTransaction?: ISettlement;
 }
 
 export class AssetRegistration implements IAssetRegistration {
@@ -75,10 +78,12 @@ export class AssetRegistration implements IAssetRegistration {
     public serialNumber?: string | null,
     public remarks?: string | null,
     public capitalizationDate?: dayjs.Dayjs,
+    public historicalCost?: number,
+    public registrationDate?: dayjs.Dayjs,
     public placeholders?: IPlaceholder[] | null,
     public paymentInvoices?: IPaymentInvoice[] | null,
-    public serviceOutlets?: IServiceOutlet[] | null,
-    public settlements?: ISettlement[],
+    public otherRelatedServiceOutlets?: IServiceOutlet[] | null,
+    public otherRelatedSettlements?: ISettlement[] | null,
     public assetCategory?: IAssetCategory,
     public purchaseOrders?: IPurchaseOrder[] | null,
     public deliveryNotes?: IDeliveryNote[] | null,
@@ -90,7 +95,8 @@ export class AssetRegistration implements IAssetRegistration {
     public assetWarranties?: IAssetWarranty[] | null,
     public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
     public assetAccessories?: IAssetAccessory[] | null,
-    public mainServiceOutlet?: IServiceOutlet | null
+    public mainServiceOutlet?: IServiceOutlet | null,
+    public acquiringTransaction?: ISettlement
   ) {}
 }
 

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -52,6 +52,12 @@ export class DepreciationBatchSequenceUpdatePage {
   endIndexInput = element(by.id('field_endIndex'));
   createdAtInput = element(by.id('field_createdAt'));
   depreciationBatchStatusSelect = element(by.id('field_depreciationBatchStatus'));
+  batchSizeInput = element(by.id('field_batchSize'));
+  processedItemsInput = element(by.id('field_processedItems'));
+  sequenceNumberInput = element(by.id('field_sequenceNumber'));
+  isLastBatchInput = element(by.id('field_isLastBatch'));
+  processingTimeInput = element(by.id('field_processingTime'));
+  totalItemsInput = element(by.id('field_totalItems'));
 
   depreciationJobSelect = element(by.id('field_depreciationJob'));
 
@@ -101,6 +107,50 @@ export class DepreciationBatchSequenceUpdatePage {
 
   async depreciationBatchStatusSelectLastOption(): Promise<void> {
     await this.depreciationBatchStatusSelect.all(by.tagName('option')).last().click();
+  }
+
+  async setBatchSizeInput(batchSize: string): Promise<void> {
+    await this.batchSizeInput.sendKeys(batchSize);
+  }
+
+  async getBatchSizeInput(): Promise<string> {
+    return await this.batchSizeInput.getAttribute('value');
+  }
+
+  async setProcessedItemsInput(processedItems: string): Promise<void> {
+    await this.processedItemsInput.sendKeys(processedItems);
+  }
+
+  async getProcessedItemsInput(): Promise<string> {
+    return await this.processedItemsInput.getAttribute('value');
+  }
+
+  async setSequenceNumberInput(sequenceNumber: string): Promise<void> {
+    await this.sequenceNumberInput.sendKeys(sequenceNumber);
+  }
+
+  async getSequenceNumberInput(): Promise<string> {
+    return await this.sequenceNumberInput.getAttribute('value');
+  }
+
+  getIsLastBatchInput(): ElementFinder {
+    return this.isLastBatchInput;
+  }
+
+  async setProcessingTimeInput(processingTime: string): Promise<void> {
+    await this.processingTimeInput.sendKeys(processingTime);
+  }
+
+  async getProcessingTimeInput(): Promise<string> {
+    return await this.processingTimeInput.getAttribute('value');
+  }
+
+  async setTotalItemsInput(totalItems: string): Promise<void> {
+    await this.totalItemsInput.sendKeys(totalItems);
+  }
+
+  async getTotalItemsInput(): Promise<string> {
+    return await this.totalItemsInput.getAttribute('value');
   }
 
   async depreciationJobSelectLastOption(): Promise<void> {

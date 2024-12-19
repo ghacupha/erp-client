@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import { IDepreciationJob } from 'app/entities/assets/depreciation-job/depreciat
 import { IDepreciationBatchSequence } from 'app/entities/assets/depreciation-batch-sequence/depreciation-batch-sequence.model';
 import { IDepreciationPeriod } from 'app/entities/assets/depreciation-period/depreciation-period.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { DepreciationNoticeStatusType } from 'app/entities/enumerations/depreciation-notice-status-type.model';
 

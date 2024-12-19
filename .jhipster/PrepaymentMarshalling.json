@@ -24,6 +24,13 @@
       "otherEntityField": "catalogueNumber"
     },
     {
+      "relationshipName": "firstAmortizationPeriod",
+      "otherEntityName": "amortizationPeriod",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": ["required"],
+      "otherEntityField": "periodCode"
+    },
+    {
       "relationshipName": "placeholder",
       "otherEntityName": "placeholder",
       "relationshipType": "many-to-many",

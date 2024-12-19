@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,27 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-transaction-account-heading" data-cy="TransactionAccountCreateUpdateHeading">Create or edit a Transaction Account</h2>
+      <h2
+        id="jhi-transaction-account-heading-new"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Transaction Account
+      </h2>
+
+      <h2
+        id="jhi-transaction-account-heading-copy"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copying Account# {{ selectedItem.accountNumber }}
+      </h2>
+
+      <h2
+        id="jhi-transaction-account-heading-edit"
+        data-cy="TransactionAccountCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Editing Account# {{ selectedItem.accountNumber }}
+      </h2>
+
 
       <div>
         <jhi-alert-error></jhi-alert-error>
@@ -90,97 +110,25 @@
           />
         </div>
 
-        <!--<div class="form-group">
-          <label class="form-control-label" for="field_parentAccount">Parent Account</label>
-          <select
-            class="form-control"
-            id="field_parentAccount"
-            data-cy="parentAccount"
-            name="parentAccount"
-            formControlName="parentAccount"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                transactionAccountOption.id === editForm.get('parentAccount')!.value?.id
-                  ? editForm.get('parentAccount')!.value
-                  : transactionAccountOption
-              "
-              *ngFor="let transactionAccountOption of transactionAccountsSharedCollection; trackBy: trackTransactionAccountById"
-            >
-              {{ transactionAccountOption.accountNumber }}
-            </option>
-          </select>
-        </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label">Parent Account</label>
-          <ng-select
-            [items]="parentAccountLookups$ | async"
-            bindLabel="accountNumber"
-            [trackByFn]="trackTransactionAccountsByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="parentAccountsLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="parentAccountsControlInput$"
-            formControlName="parentAccount"
-          >
-            <ng-template ng-label-tmp let-item="item" let-clear="clear">
-              <jhi-transaction-account-option-view [item]='item'></jhi-transaction-account-option-view>
-              <span class="ng-value-icon right" (click)="clear(item)">×</span>
-            </ng-template>
-            <option [ngValue]="editForm.get('parentAccount')!.value"></option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" />
-              <jhi-transaction-account-option-view [item]='item'></jhi-transaction-account-option-view>
-            </ng-template>
-          </ng-select>
-          <div>{{ editForm.get('parentAccount')!.value|formatTransactionAccount: [35, '...'] }}</div>
-        </div>
+        <jhi-m21-transaction-account-form-control
+          ngDefaultControl
+          formControlName='parentAccount'
+          [inputValue]="editForm.get('parentAccount')!.value"
+          (valueSelected)='updateParentAccount($event)'
+          inputControlLabel="Parent Account"
+        >
+          <option [ngValue]="editForm.get('parentAccount')!.value"></option>
+        </jhi-m21-transaction-account-form-control>
 
-        <!--<div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>-->
-
-        <div class="form-group">
-          <label class="form-control-label">Placeholder(s)</label>
-          <ng-select
-            [items]="placeholderLookups$ | async"
-            bindLabel="description"
-            [trackByFn]="trackPlaceholdersByFn"
-            [minTermLength]="minAccountLengthTerm"
-            [loading]="placeholdersLoading"
-            typeToSearchText="Please enter {{minAccountLengthTerm}} or more characters"
-            [typeahead]="placeholderControlInput$"
-            formControlName="placeholders"
-            [multiple]='true'
-          >
-            <ng-option *ngFor="let option of placeholderLookups$ | async" [value]="option">
-              {{ option.description }}
-            </ng-option>
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <!-- // TODO Check if we need to track selection on the many to many entities with selected: boolean-->
-              <input id="item-{{index}}" type="checkbox" [checked]="item$.selected" /> {{item.description}}
-            </ng-template>
-          </ng-select>
-          <div *jhiHasAnyAuthority="'ROLE_DEV'">{{editForm.get(['placeholders'])!.value|json}}</div>
-        </div>
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
 
       </div>
 
@@ -195,8 +143,34 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
         </button>
       </div>
     </form>

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -72,21 +72,20 @@ describe('LeaseLiabilityScheduleItem e2e test', () => {
 
         await promise.all([
             leaseLiabilityScheduleItemUpdatePage.setSequenceNumberInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.getPeriodIncludedInput().click(),
-            leaseLiabilityScheduleItemUpdatePage.setPeriodStartDateInput('2000-12-31'),
-            leaseLiabilityScheduleItemUpdatePage.setPeriodEndDateInput('2000-12-31'),
             leaseLiabilityScheduleItemUpdatePage.setOpeningBalanceInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setCashPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setPrincipalPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setInterestPaymentInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setOutstandingBalanceInput('5'),
             leaseLiabilityScheduleItemUpdatePage.setInterestPayableOpeningInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.setInterestExpenseAccruedInput('5'),
-            leaseLiabilityScheduleItemUpdatePage.setInterestPayableBalanceInput('5'),
+            leaseLiabilityScheduleItemUpdatePage.setInterestAccruedInput('5'),
+            leaseLiabilityScheduleItemUpdatePage.setInterestPayableClosingInput('5'),
             // leaseLiabilityScheduleItemUpdatePage.placeholderSelectLastOption(),
-            leaseLiabilityScheduleItemUpdatePage.leaseContractSelectLastOption(),
-            leaseLiabilityScheduleItemUpdatePage.leaseModelMetadataSelectLastOption(),
             // leaseLiabilityScheduleItemUpdatePage.universallyUniqueMappingSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseAmortizationScheduleSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseContractSelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leaseLiabilitySelectLastOption(),
+            leaseLiabilityScheduleItemUpdatePage.leasePeriodSelectLastOption(),
         ]);
 
         await leaseLiabilityScheduleItemUpdatePage.save();

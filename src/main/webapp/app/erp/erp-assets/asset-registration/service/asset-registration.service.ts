@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -40,17 +40,23 @@ export class AssetRegistrationService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.post<IAssetRegistration>(this.resourceUrl, assetRegistration, { observe: 'response' })
-      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)))
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .post<IAssetRegistration>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  getNextAssetNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/asset-number`, { observe: 'response' });
+  }
+
   update(assetRegistration: IAssetRegistration): Observable<EntityResponseType> {
-    return this.http.put<IAssetRegistration>(
-      `${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`,
-      assetRegistration,
-      { observe: 'response' }
-    )
+    const copy = this.convertDateFromClient(assetRegistration);
+    return this.http
+      .put<IAssetRegistration>(`${this.resourceUrl}/${getAssetRegistrationIdentifier(assetRegistration) as number}`, copy, {
+        observe: 'response',
+      })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
@@ -111,12 +117,14 @@ export class AssetRegistrationService {
       capitalizationDate: assetRegistration.capitalizationDate?.isValid()
         ? assetRegistration.capitalizationDate.format(DATE_FORMAT)
         : undefined,
+      registrationDate: assetRegistration.registrationDate?.isValid() ? assetRegistration.registrationDate.format(DATE_FORMAT) : undefined,
     });
   }
 
   protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
     if (res.body) {
       res.body.capitalizationDate = res.body.capitalizationDate ? dayjs(res.body.capitalizationDate) : undefined;
+      res.body.registrationDate = res.body.registrationDate ? dayjs(res.body.registrationDate) : undefined;
     }
     return res;
   }
@@ -127,6 +135,7 @@ export class AssetRegistrationService {
         assetRegistration.capitalizationDate = assetRegistration.capitalizationDate
           ? dayjs(assetRegistration.capitalizationDate)
           : undefined;
+        assetRegistration.registrationDate = assetRegistration.registrationDate ? dayjs(assetRegistration.registrationDate) : undefined;
       });
     }
     return res;

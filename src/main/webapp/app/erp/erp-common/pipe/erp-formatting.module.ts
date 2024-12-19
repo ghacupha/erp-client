@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormatServiceOutletPipe } from './format-service-outlet.pipe';
 import { FormatDealerIdPipe } from './format-dealer-id.pipe';
 import { FormatPaymentCategoryPipe } from './format-payment-category.pipe';
 import { TruncatePipe } from './truncate.pipe';
@@ -27,11 +26,9 @@ import { FormatSettlementCurrencyPipe } from './format-settlement-currency.pipe'
 import { FormatSettlementPipe } from './format-settlement.pipe';
 import { FormatDepreciationMethodPipe } from './format-depreciation-method.pipe';
 import { FormatPurchaseOrderPipe } from './format-purchase-order.pipe';
-import { FormatTransactionAccountPipe } from './format-transaction-account.pipe';
 import { FormatPaymentInvoicePipe } from './format-payment-invoice.pipe';
 import { FormatSecurityClearancePipe } from './format-security-clearance.pipe';
 import { FormatApplicationUserPipe } from './format-application-user.pipe';
-import { FormatPrepaymentAccountPipe } from './format-prepayment-account.pipe';
 import { FormatReportDesignPipe } from './format-report-design.pipe';
 import { FormatAlgorithmPipe } from './format-algorithm.pipe';
 import { FormatSystemModulePipe } from './format-system-module.pipe';
@@ -56,12 +53,9 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
-    FormatTransactionAccountPipe,
-    FormatServiceOutletPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
-    FormatPrepaymentAccountPipe,
     FormatReportDesignPipe,
     FormatAlgorithmPipe,
     FormatSystemModulePipe,
@@ -86,12 +80,9 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatSettlementPipe,
     FormatDepreciationMethodPipe,
     FormatPurchaseOrderPipe,
-    FormatTransactionAccountPipe,
-    FormatServiceOutletPipe,
     FormatPaymentInvoicePipe,
     FormatSecurityClearancePipe,
     FormatApplicationUserPipe,
-    FormatPrepaymentAccountPipe,
     FormatReportDesignPipe,
     FormatAlgorithmPipe,
     FormatSystemModulePipe,
@@ -104,7 +95,7 @@ import { FormatDeliveryNotePipe } from './format-delivery-note.pipe';
     FormatWorkProjectPipe,
     FormatWipRegistrationPipe,
     FormatJobSheetPipe,
-    FormatDeliveryNotePipe
+    FormatDeliveryNotePipe,
   ]
 })
 export class ErpFormattingModule{}

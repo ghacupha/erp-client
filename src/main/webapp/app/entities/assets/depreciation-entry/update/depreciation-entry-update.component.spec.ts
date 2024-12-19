@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ import { of, Subject } from 'rxjs';
 
 import { DepreciationEntryService } from '../service/depreciation-entry.service';
 import { IDepreciationEntry, DepreciationEntry } from '../depreciation-entry.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
 import { AssetCategoryService } from 'app/entities/assets/asset-category/service/asset-category.service';
 import { IDepreciationMethod } from 'app/entities/assets/depreciation-method/depreciation-method.model';
@@ -43,6 +43,10 @@ import { IFiscalQuarter } from 'app/entities/system/fiscal-quarter/fiscal-quarte
 import { FiscalQuarterService } from 'app/entities/system/fiscal-quarter/service/fiscal-quarter.service';
 import { IFiscalYear } from 'app/entities/system/fiscal-year/fiscal-year.model';
 import { FiscalYearService } from 'app/entities/system/fiscal-year/service/fiscal-year.service';
+import { IDepreciationJob } from 'app/entities/assets/depreciation-job/depreciation-job.model';
+import { DepreciationJobService } from 'app/entities/assets/depreciation-job/service/depreciation-job.service';
+import { IDepreciationBatchSequence } from 'app/entities/assets/depreciation-batch-sequence/depreciation-batch-sequence.model';
+import { DepreciationBatchSequenceService } from 'app/entities/assets/depreciation-batch-sequence/service/depreciation-batch-sequence.service';
 
 import { DepreciationEntryUpdateComponent } from './depreciation-entry-update.component';
 
@@ -59,6 +63,8 @@ describe('DepreciationEntry Management Update Component', () => {
   let fiscalMonthService: FiscalMonthService;
   let fiscalQuarterService: FiscalQuarterService;
   let fiscalYearService: FiscalYearService;
+  let depreciationJobService: DepreciationJobService;
+  let depreciationBatchSequenceService: DepreciationBatchSequenceService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -80,6 +86,8 @@ describe('DepreciationEntry Management Update Component', () => {
     fiscalMonthService = TestBed.inject(FiscalMonthService);
     fiscalQuarterService = TestBed.inject(FiscalQuarterService);
     fiscalYearService = TestBed.inject(FiscalYearService);
+    depreciationJobService = TestBed.inject(DepreciationJobService);
+    depreciationBatchSequenceService = TestBed.inject(DepreciationBatchSequenceService);
 
     comp = fixture.componentInstance;
   });
@@ -255,6 +263,55 @@ describe('DepreciationEntry Management Update Component', () => {
       expect(comp.fiscalYearsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call DepreciationJob query and add missing value', () => {
+      const depreciationEntry: IDepreciationEntry = { id: 456 };
+      const depreciationJob: IDepreciationJob = { id: 13222 };
+      depreciationEntry.depreciationJob = depreciationJob;
+
+      const depreciationJobCollection: IDepreciationJob[] = [{ id: 77330 }];
+      jest.spyOn(depreciationJobService, 'query').mockReturnValue(of(new HttpResponse({ body: depreciationJobCollection })));
+      const additionalDepreciationJobs = [depreciationJob];
+      const expectedCollection: IDepreciationJob[] = [...additionalDepreciationJobs, ...depreciationJobCollection];
+      jest.spyOn(depreciationJobService, 'addDepreciationJobToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationEntry });
+      comp.ngOnInit();
+
+      expect(depreciationJobService.query).toHaveBeenCalled();
+      expect(depreciationJobService.addDepreciationJobToCollectionIfMissing).toHaveBeenCalledWith(
+        depreciationJobCollection,
+        ...additionalDepreciationJobs
+      );
+      expect(comp.depreciationJobsSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('Should call DepreciationBatchSequence query and add missing value', () => {
+      const depreciationEntry: IDepreciationEntry = { id: 456 };
+      const depreciationBatchSequence: IDepreciationBatchSequence = { id: 46370 };
+      depreciationEntry.depreciationBatchSequence = depreciationBatchSequence;
+
+      const depreciationBatchSequenceCollection: IDepreciationBatchSequence[] = [{ id: 32758 }];
+      jest
+        .spyOn(depreciationBatchSequenceService, 'query')
+        .mockReturnValue(of(new HttpResponse({ body: depreciationBatchSequenceCollection })));
+      const additionalDepreciationBatchSequences = [depreciationBatchSequence];
+      const expectedCollection: IDepreciationBatchSequence[] = [
+        ...additionalDepreciationBatchSequences,
+        ...depreciationBatchSequenceCollection,
+      ];
+      jest.spyOn(depreciationBatchSequenceService, 'addDepreciationBatchSequenceToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ depreciationEntry });
+      comp.ngOnInit();
+
+      expect(depreciationBatchSequenceService.query).toHaveBeenCalled();
+      expect(depreciationBatchSequenceService.addDepreciationBatchSequenceToCollectionIfMissing).toHaveBeenCalledWith(
+        depreciationBatchSequenceCollection,
+        ...additionalDepreciationBatchSequences
+      );
+      expect(comp.depreciationBatchSequencesSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const depreciationEntry: IDepreciationEntry = { id: 456 };
       const serviceOutlet: IServiceOutlet = { id: 27372 };
@@ -273,6 +330,10 @@ describe('DepreciationEntry Management Update Component', () => {
       depreciationEntry.fiscalQuarter = fiscalQuarter;
       const fiscalYear: IFiscalYear = { id: 14983 };
       depreciationEntry.fiscalYear = fiscalYear;
+      const depreciationJob: IDepreciationJob = { id: 29177 };
+      depreciationEntry.depreciationJob = depreciationJob;
+      const depreciationBatchSequence: IDepreciationBatchSequence = { id: 21118 };
+      depreciationEntry.depreciationBatchSequence = depreciationBatchSequence;
 
       activatedRoute.data = of({ depreciationEntry });
       comp.ngOnInit();
@@ -286,6 +347,8 @@ describe('DepreciationEntry Management Update Component', () => {
       expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
       expect(comp.fiscalQuartersSharedCollection).toContain(fiscalQuarter);
       expect(comp.fiscalYearsSharedCollection).toContain(fiscalYear);
+      expect(comp.depreciationJobsSharedCollection).toContain(depreciationJob);
+      expect(comp.depreciationBatchSequencesSharedCollection).toContain(depreciationBatchSequence);
     });
   });
 
@@ -414,6 +477,22 @@ describe('DepreciationEntry Management Update Component', () => {
       it('Should return tracked FiscalYear primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackFiscalYearById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDepreciationJobById', () => {
+      it('Should return tracked DepreciationJob primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDepreciationJobById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackDepreciationBatchSequenceById', () => {
+      it('Should return tracked DepreciationBatchSequence primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackDepreciationBatchSequenceById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

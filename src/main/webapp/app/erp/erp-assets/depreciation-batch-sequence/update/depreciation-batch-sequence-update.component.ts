@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -48,6 +48,12 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
     endIndex: [],
     createdAt: [],
     depreciationBatchStatus: [],
+    batchSize: [],
+    processedItems: [],
+    sequenceNumber: [],
+    isLastBatch: [],
+    processingTime: [],
+    totalItems: [],
     depreciationJob: [],
   });
 
@@ -115,6 +121,12 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
       endIndex: depreciationBatchSequence.endIndex,
       createdAt: depreciationBatchSequence.createdAt ? depreciationBatchSequence.createdAt.format(DATE_TIME_FORMAT) : null,
       depreciationBatchStatus: depreciationBatchSequence.depreciationBatchStatus,
+      batchSize: depreciationBatchSequence.batchSize,
+      processedItems: depreciationBatchSequence.processedItems,
+      sequenceNumber: depreciationBatchSequence.sequenceNumber,
+      isLastBatch: depreciationBatchSequence.isLastBatch,
+      processingTime: depreciationBatchSequence.processingTime,
+      totalItems: depreciationBatchSequence.totalItems,
       depreciationJob: depreciationBatchSequence.depreciationJob,
     });
 
@@ -144,6 +156,12 @@ export class DepreciationBatchSequenceUpdateComponent implements OnInit {
       endIndex: this.editForm.get(['endIndex'])!.value,
       createdAt: this.editForm.get(['createdAt'])!.value ? dayjs(this.editForm.get(['createdAt'])!.value, DATE_TIME_FORMAT) : undefined,
       depreciationBatchStatus: this.editForm.get(['depreciationBatchStatus'])!.value,
+      batchSize: this.editForm.get(['batchSize'])!.value,
+      processedItems: this.editForm.get(['processedItems'])!.value,
+      sequenceNumber: this.editForm.get(['sequenceNumber'])!.value,
+      isLastBatch: this.editForm.get(['isLastBatch'])!.value,
+      processingTime: this.editForm.get(['processingTime'])!.value,
+      totalItems: this.editForm.get(['totalItems'])!.value,
       depreciationJob: this.editForm.get(['depreciationJob'])!.value,
     };
   }

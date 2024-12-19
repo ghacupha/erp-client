@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -79,12 +79,17 @@
           <th scope="col" jhiSortBy="serialNumber"><span>Serial Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="remarks"><span>Remarks</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="capitalizationDate"><span>Capitalization Date</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="historicalCost"><span>Historical Cost</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="registrationDate"><span>Registration Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="mainServiceOutlet.outletCode"><span>Main Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="acquiringTransaction.paymentDate">
+            <span>Acquiring Transaction</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -109,6 +114,8 @@
           <td>{{ assetRegistration.serialNumber }}</td>
           <td>{{ assetRegistration.remarks }}</td>
           <td>{{ assetRegistration.capitalizationDate | formatMediumDate }}</td>
+          <td>{{ assetRegistration.historicalCost }}</td>
+          <td>{{ assetRegistration.registrationDate | formatMediumDate }}</td>
           <td>
             <div *ngIf="assetRegistration.assetCategory">
               <a [routerLink]="['/asset-category', assetRegistration.assetCategory?.id, 'view']">{{
@@ -132,6 +139,13 @@
             <div *ngIf="assetRegistration.mainServiceOutlet">
               <a [routerLink]="['/service-outlet', assetRegistration.mainServiceOutlet?.id, 'view']">{{
                 assetRegistration.mainServiceOutlet?.outletCode
+              }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="assetRegistration.acquiringTransaction">
+              <a [routerLink]="['/settlement', assetRegistration.acquiringTransaction?.id, 'view']">{{
+                assetRegistration.acquiringTransaction?.paymentDate
               }}</a>
             </div>
           </td>

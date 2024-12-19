@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,11 +18,12 @@
 
 import * as dayjs from 'dayjs';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
 import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
+import { IAmortizationPeriod } from 'app/entities/prepayments/amortization-period/amortization-period.model';
 
 export interface IPrepaymentAmortization {
   id?: number;
@@ -37,6 +38,7 @@ export interface IPrepaymentAmortization {
   placeholders?: IPlaceholder[] | null;
   fiscalMonth?: IFiscalMonth;
   prepaymentCompilationRequest?: IPrepaymentCompilationRequest;
+  amortizationPeriod?: IAmortizationPeriod;
 }
 
 export class PrepaymentAmortization implements IPrepaymentAmortization {
@@ -52,7 +54,8 @@ export class PrepaymentAmortization implements IPrepaymentAmortization {
     public creditAccount?: ITransactionAccount | null,
     public placeholders?: IPlaceholder[] | null,
     public fiscalMonth?: IFiscalMonth,
-    public prepaymentCompilationRequest?: IPrepaymentCompilationRequest
+    public prepaymentCompilationRequest?: IPrepaymentCompilationRequest,
+    public amortizationPeriod?: IAmortizationPeriod
   ) {
     this.inactive = this.inactive ?? false;
   }

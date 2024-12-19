@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -187,25 +187,28 @@
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
-          <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
-            <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('fiscalMonth')!.value?.id ? editForm.get('fiscalMonth')!.value : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.endDate }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]=false
+          formControlName='fiscalMonth'
+          [inputValue]="editForm.get('fiscalMonth')!.value"
+          (valueSelected)='updateFiscalMonth($event)'
+          inputControlLabel='Fiscal Month'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
+
+        <!--// TODO firstAmortizationPeriod -->
+        <jhi-m21-amortization-period-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('amortizationPeriod')!.value"
+          formControlName='amortizationPeriod'
+          [inputValue]="editForm.get('amortizationPeriod')!.value"
+          (valueSelected)='updateFirstAmortizationPeriod($event)'
+          inputControlLabel='Amortization Period'
+        >
+          <option [ngValue]="editForm.get('amortizationPeriod')!.value"></option>
+        </jhi-m21-amortization-period-form-control>
 
         <div class="form-group">
           <label class="form-control-label" for="field_prepaymentCompilationRequest">Prepayment Compilation Request</label>

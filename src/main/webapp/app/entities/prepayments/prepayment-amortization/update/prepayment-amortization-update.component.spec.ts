@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ import { PrepaymentAmortizationService } from '../service/prepayment-amortizatio
 import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-amortization.model';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
@@ -39,6 +39,8 @@ import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.mode
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
 import { PrepaymentCompilationRequestService } from 'app/entities/prepayments/prepayment-compilation-request/service/prepayment-compilation-request.service';
+import { IAmortizationPeriod } from 'app/entities/prepayments/amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from 'app/entities/prepayments/amortization-period/service/amortization-period.service';
 
 import { PrepaymentAmortizationUpdateComponent } from './prepayment-amortization-update.component';
 
@@ -53,6 +55,7 @@ describe('PrepaymentAmortization Management Update Component', () => {
   let placeholderService: PlaceholderService;
   let fiscalMonthService: FiscalMonthService;
   let prepaymentCompilationRequestService: PrepaymentCompilationRequestService;
+  let amortizationPeriodService: AmortizationPeriodService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -72,6 +75,7 @@ describe('PrepaymentAmortization Management Update Component', () => {
     placeholderService = TestBed.inject(PlaceholderService);
     fiscalMonthService = TestBed.inject(FiscalMonthService);
     prepaymentCompilationRequestService = TestBed.inject(PrepaymentCompilationRequestService);
+    amortizationPeriodService = TestBed.inject(AmortizationPeriodService);
 
     comp = fixture.componentInstance;
   });
@@ -212,6 +216,28 @@ describe('PrepaymentAmortization Management Update Component', () => {
       expect(comp.prepaymentCompilationRequestsSharedCollection).toEqual(expectedCollection);
     });
 
+    it('Should call AmortizationPeriod query and add missing value', () => {
+      const prepaymentAmortization: IPrepaymentAmortization = { id: 456 };
+      const amortizationPeriod: IAmortizationPeriod = { id: 95682 };
+      prepaymentAmortization.amortizationPeriod = amortizationPeriod;
+
+      const amortizationPeriodCollection: IAmortizationPeriod[] = [{ id: 24883 }];
+      jest.spyOn(amortizationPeriodService, 'query').mockReturnValue(of(new HttpResponse({ body: amortizationPeriodCollection })));
+      const additionalAmortizationPeriods = [amortizationPeriod];
+      const expectedCollection: IAmortizationPeriod[] = [...additionalAmortizationPeriods, ...amortizationPeriodCollection];
+      jest.spyOn(amortizationPeriodService, 'addAmortizationPeriodToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ prepaymentAmortization });
+      comp.ngOnInit();
+
+      expect(amortizationPeriodService.query).toHaveBeenCalled();
+      expect(amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing).toHaveBeenCalledWith(
+        amortizationPeriodCollection,
+        ...additionalAmortizationPeriods
+      );
+      expect(comp.amortizationPeriodsSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const prepaymentAmortization: IPrepaymentAmortization = { id: 456 };
       const prepaymentAccount: IPrepaymentAccount = { id: 29845 };
@@ -228,6 +254,8 @@ describe('PrepaymentAmortization Management Update Component', () => {
       prepaymentAmortization.fiscalMonth = fiscalMonth;
       const prepaymentCompilationRequest: IPrepaymentCompilationRequest = { id: 2753 };
       prepaymentAmortization.prepaymentCompilationRequest = prepaymentCompilationRequest;
+      const amortizationPeriod: IAmortizationPeriod = { id: 85145 };
+      prepaymentAmortization.amortizationPeriod = amortizationPeriod;
 
       activatedRoute.data = of({ prepaymentAmortization });
       comp.ngOnInit();
@@ -240,6 +268,7 @@ describe('PrepaymentAmortization Management Update Component', () => {
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.fiscalMonthsSharedCollection).toContain(fiscalMonth);
       expect(comp.prepaymentCompilationRequestsSharedCollection).toContain(prepaymentCompilationRequest);
+      expect(comp.amortizationPeriodsSharedCollection).toContain(amortizationPeriod);
     });
   });
 
@@ -352,6 +381,14 @@ describe('PrepaymentAmortization Management Update Component', () => {
       it('Should return tracked PrepaymentCompilationRequest primary key', () => {
         const entity = { id: 123 };
         const trackResult = comp.trackPrepaymentCompilationRequestById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
+    });
+
+    describe('trackAmortizationPeriodById', () => {
+      it('Should return tracked AmortizationPeriod primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackAmortizationPeriodById(0, entity);
         expect(trackResult).toEqual(entity.id);
       });
     });

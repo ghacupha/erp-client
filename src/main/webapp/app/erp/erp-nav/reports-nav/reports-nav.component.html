@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -162,6 +162,7 @@
             <span>Report Content Type</span>
           </a>
         </li>
+
       </ul>
     </li>
 
@@ -210,6 +211,53 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>WIP Summary</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="work-in-progress-outstanding-report-requisition"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Report Request</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLinkActive="active"
+            routerLink="prepayment-outstanding-overview-report"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Overview</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="prepayment-account-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayments By Account Report</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_DEV']">
@@ -282,6 +330,381 @@
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
             <span>PDF Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="amortization-posting-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Amortization Posting</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="depreciation-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Depreciation Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="asset-additions-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Additions Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="nbv-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>NBV Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/monthly-prepayment-report-requisition/new']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Monthly Prepayment Report Item</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/monthly-prepayment-report-requisition']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Monthly Prepayment Report Requisition</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/prepayment-report-requisition']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment Report Requisition</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/amortization-posting-report-requisition']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Amortization posting requisition</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_PREPAYMENTS_MODULE_USER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/prepayment-by-account-report-requisition']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Prepayment by Account requisition</span>
+          </a>
+        </li>
+
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-account-balance-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Account Balances</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-period/report-nav']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="leasePeriodReportPathToRouAccountBalanceReportItem()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Account Balances Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-asset-list-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Asset List Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-asset-nbv-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Asset NBV Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-period/report-nav']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="leasePeriodReportPathToRouAssetNBVReportItem()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Asset NBV Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-depreciation-entry-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Depreciation Entry Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-depreciation-posting-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Depreciation Posting</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-period/report-nav']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="leasePeriodReportPathToRouDepreciationPostingReportItem()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Depreciation Posting Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-monthly-depreciation-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Monthly Depreciation</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-monthly-depreciation-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Monthly Depreciation Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/rou-depreciation-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>ROU Depreciation Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-by-account-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability by Account Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-by-account-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability by Account Report Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-posting-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Posting Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-posting-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Posting Report Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Report Items</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-schedule-report']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Schedule Report</span>
+          </a>
+        </li>
+
+        <li *jhiHasAnyAuthority="['ROLE_LEASE_MANAGER']">
+          <a
+            class="dropdown-item"
+            [routerLink]="['/lease-liability-schedule-report-item']"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Liability Schedule Report Items</span>
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            routerLink="autonomous-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>Auto Reports</span>
           </a>
         </li>
       </ul>

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -44,6 +44,10 @@ import { IDepreciationPeriod } from '../../depreciation-period/depreciation-peri
 import { AssetCategoryService } from '../../asset-category/service/asset-category.service';
 import { FiscalQuarterService } from '../../../erp-pages/fiscal-quarter/service/fiscal-quarter.service';
 import { DepreciationMethodService } from '../../depreciation-method/service/depreciation-method.service';
+import { IDepreciationBatchSequence } from '../../depreciation-batch-sequence/depreciation-batch-sequence.model';
+import { IDepreciationJob } from '../../depreciation-job/depreciation-job.model';
+import { DepreciationJobService } from '../../depreciation-job/service/depreciation-job.service';
+import { DepreciationBatchSequenceService } from '../../depreciation-batch-sequence/service/depreciation-batch-sequence.service';
 
 @Component({
   selector: 'jhi-depreciation-entry-update',
@@ -60,12 +64,17 @@ export class DepreciationEntryUpdateComponent implements OnInit {
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
   fiscalQuartersSharedCollection: IFiscalQuarter[] = [];
   fiscalYearsSharedCollection: IFiscalYear[] = [];
+  depreciationJobsSharedCollection: IDepreciationJob[] = [];
+  depreciationBatchSequencesSharedCollection: IDepreciationBatchSequence[] = [];
 
   editForm = this.fb.group({
     id: [],
     postedAt: [],
     depreciationAmount: [],
     assetNumber: [],
+    batchSequenceNumber: [],
+    processedItems: [],
+    totalItemsProcessed: [],
     serviceOutlet: [],
     assetCategory: [],
     depreciationMethod: [],
@@ -74,6 +83,8 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     fiscalMonth: [],
     fiscalQuarter: [],
     fiscalYear: [],
+    depreciationJob: [],
+    depreciationBatchSequence: [],
   });
 
   constructor(
@@ -86,6 +97,8 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     protected fiscalMonthService: FiscalMonthService,
     protected fiscalQuarterService: FiscalQuarterService,
     protected fiscalYearService: FiscalYearService,
+    protected depreciationJobService: DepreciationJobService,
+    protected depreciationBatchSequenceService: DepreciationBatchSequenceService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -149,6 +162,14 @@ export class DepreciationEntryUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackDepreciationJobById(index: number, item: IDepreciationJob): number {
+    return item.id!;
+  }
+
+  trackDepreciationBatchSequenceById(index: number, item: IDepreciationBatchSequence): number {
+    return item.id!;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IDepreciationEntry>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -174,6 +195,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       postedAt: depreciationEntry.postedAt ? depreciationEntry.postedAt.format(DATE_TIME_FORMAT) : null,
       depreciationAmount: depreciationEntry.depreciationAmount,
       assetNumber: depreciationEntry.assetNumber,
+      batchSequenceNumber: depreciationEntry.batchSequenceNumber,
+      processedItems: depreciationEntry.processedItems,
+      totalItemsProcessed: depreciationEntry.totalItemsProcessed,
       serviceOutlet: depreciationEntry.serviceOutlet,
       assetCategory: depreciationEntry.assetCategory,
       depreciationMethod: depreciationEntry.depreciationMethod,
@@ -182,6 +206,8 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       fiscalMonth: depreciationEntry.fiscalMonth,
       fiscalQuarter: depreciationEntry.fiscalQuarter,
       fiscalYear: depreciationEntry.fiscalYear,
+      depreciationJob: depreciationEntry.depreciationJob,
+      depreciationBatchSequence: depreciationEntry.depreciationBatchSequence,
     });
 
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
@@ -216,6 +242,15 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       this.fiscalYearsSharedCollection,
       depreciationEntry.fiscalYear
     );
+    this.depreciationJobsSharedCollection = this.depreciationJobService.addDepreciationJobToCollectionIfMissing(
+      this.depreciationJobsSharedCollection,
+      depreciationEntry.depreciationJob
+    );
+    this.depreciationBatchSequencesSharedCollection =
+      this.depreciationBatchSequenceService.addDepreciationBatchSequenceToCollectionIfMissing(
+        this.depreciationBatchSequencesSharedCollection,
+        depreciationEntry.depreciationBatchSequence
+      );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -307,6 +342,32 @@ export class DepreciationEntryUpdateComponent implements OnInit {
         )
       )
       .subscribe((fiscalYears: IFiscalYear[]) => (this.fiscalYearsSharedCollection = fiscalYears));
+
+    this.depreciationJobService
+      .query()
+      .pipe(map((res: HttpResponse<IDepreciationJob[]>) => res.body ?? []))
+      .pipe(
+        map((depreciationJobs: IDepreciationJob[]) =>
+          this.depreciationJobService.addDepreciationJobToCollectionIfMissing(depreciationJobs, this.editForm.get('depreciationJob')!.value)
+        )
+      )
+      .subscribe((depreciationJobs: IDepreciationJob[]) => (this.depreciationJobsSharedCollection = depreciationJobs));
+
+    this.depreciationBatchSequenceService
+      .query()
+      .pipe(map((res: HttpResponse<IDepreciationBatchSequence[]>) => res.body ?? []))
+      .pipe(
+        map((depreciationBatchSequences: IDepreciationBatchSequence[]) =>
+          this.depreciationBatchSequenceService.addDepreciationBatchSequenceToCollectionIfMissing(
+            depreciationBatchSequences,
+            this.editForm.get('depreciationBatchSequence')!.value
+          )
+        )
+      )
+      .subscribe(
+        (depreciationBatchSequences: IDepreciationBatchSequence[]) =>
+          (this.depreciationBatchSequencesSharedCollection = depreciationBatchSequences)
+      );
   }
 
   protected createFromForm(): IDepreciationEntry {
@@ -316,6 +377,9 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       postedAt: this.editForm.get(['postedAt'])!.value ? dayjs(this.editForm.get(['postedAt'])!.value, DATE_TIME_FORMAT) : undefined,
       depreciationAmount: this.editForm.get(['depreciationAmount'])!.value,
       assetNumber: this.editForm.get(['assetNumber'])!.value,
+      batchSequenceNumber: this.editForm.get(['batchSequenceNumber'])!.value,
+      processedItems: this.editForm.get(['processedItems'])!.value,
+      totalItemsProcessed: this.editForm.get(['totalItemsProcessed'])!.value,
       serviceOutlet: this.editForm.get(['serviceOutlet'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       depreciationMethod: this.editForm.get(['depreciationMethod'])!.value,
@@ -324,6 +388,8 @@ export class DepreciationEntryUpdateComponent implements OnInit {
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
       fiscalQuarter: this.editForm.get(['fiscalQuarter'])!.value,
       fiscalYear: this.editForm.get(['fiscalYear'])!.value,
+      depreciationJob: this.editForm.get(['depreciationJob'])!.value,
+      depreciationBatchSequence: this.editForm.get(['depreciationBatchSequence'])!.value,
     };
   }
 }

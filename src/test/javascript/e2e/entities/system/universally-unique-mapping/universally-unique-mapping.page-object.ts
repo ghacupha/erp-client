@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -51,6 +51,9 @@ export class UniversallyUniqueMappingUpdatePage {
   universalKeyInput = element(by.id('field_universalKey'));
   mappedValueInput = element(by.id('field_mappedValue'));
 
+  parentMappingSelect = element(by.id('field_parentMapping'));
+  placeholderSelect = element(by.id('field_placeholder'));
+
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
   }
@@ -77,6 +80,38 @@ export class UniversallyUniqueMappingUpdatePage {
 
   async getMappedValueInput(): Promise<string> {
     return await this.mappedValueInput.getAttribute('value');
+  }
+
+  async parentMappingSelectLastOption(): Promise<void> {
+    await this.parentMappingSelect.all(by.tagName('option')).last().click();
+  }
+
+  async parentMappingSelectOption(option: string): Promise<void> {
+    await this.parentMappingSelect.sendKeys(option);
+  }
+
+  getParentMappingSelect(): ElementFinder {
+    return this.parentMappingSelect;
+  }
+
+  async getParentMappingSelectedOption(): Promise<string> {
+    return await this.parentMappingSelect.element(by.css('option:checked')).getText();
+  }
+
+  async placeholderSelectLastOption(): Promise<void> {
+    await this.placeholderSelect.all(by.tagName('option')).last().click();
+  }
+
+  async placeholderSelectOption(option: string): Promise<void> {
+    await this.placeholderSelect.sendKeys(option);
+  }
+
+  getPlaceholderSelect(): ElementFinder {
+    return this.placeholderSelect;
+  }
+
+  async getPlaceholderSelectedOption(): Promise<string> {
+    return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

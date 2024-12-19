@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,10 +18,21 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { concat, Observable, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
+import { concat, from, Observable, of, Subject } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter, map,
+  mergeMap,
+  switchMap,
+  tap,
+  toArray
+} from 'rxjs/operators';
 import { IServiceOutlet } from '../../../erp-granular/service-outlet/service-outlet.model';
-import { ServiceOutletSuggestionService } from '../../suggestion/service-outlet-suggestion.service';
+import { ServiceOutletSuggestionService } from './service-outlet-suggestion.service';
+import { ServiceOutletService } from '../../../erp-granular/service-outlet/service/service-outlet.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-m21-service-outlet-form-control',
@@ -34,9 +45,9 @@ import { ServiceOutletSuggestionService } from '../../suggestion/service-outlet-
     }
   ]
 })
-export class M21ServiceOutletFormControlComponent implements OnInit, ControlValueAccessor, OnDestroy {
+export class M21ServiceOutletFormControlComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  @Input() inputValue: IServiceOutlet = {}
+  @Input() inputValue: IServiceOutlet = {} as IServiceOutlet;
 
   @Input() inputControlLabel = '';
 
@@ -48,6 +59,7 @@ export class M21ServiceOutletFormControlComponent implements OnInit, ControlValu
   valueLookUps$: Observable<IServiceOutlet[]> = of([]);
 
   constructor(
+    protected valueService: ServiceOutletService,
     protected valueSuggestionService: ServiceOutletSuggestionService
   ) {}
 
@@ -61,34 +73,53 @@ export class M21ServiceOutletFormControlComponent implements OnInit, ControlValu
   ngOnInit(): void {
 
     this.loadValues();
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
+
   }
 
   ngOnDestroy(): void {
-
     this.valueLookUps$ = of([]);
-    this.inputValue = {}
+    this.inputValue = {} as IServiceOutlet;
   }
 
   loadValues(): void {
     this.valueLookUps$ = concat(
       of([]), // default items
       this.valueControlInput$.pipe(
-        /* filter(res => res.length >= this.minAccountLengthTerm), */
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        filter(res => res !== null),
+        filter(res => res !== null && res.length >= this.minAccountLengthTerm),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.valuesLoading = true),
         switchMap(term => this.valueSuggestionService.search(term).pipe(
           catchError(() => of([])),
+          switchMap(searchResults => searchResults.length > 0 ?
+            from(searchResults).pipe(
+              mergeMap(result =>
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                result?.id ? this.valueService.find(result.id).pipe(
+                  map(response => response.body),
+                  catchError(() => of(null))
+                ) : of(null)
+              ),
+              filter((result): result is IServiceOutlet => result !== null),
+              toArray()
+            ) : of([])
+          ),
           tap(() => this.valuesLoading = false)
         ))
-      ),
+      )
     );
   }
 
-  trackValueByFn(item: any): number {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  trackValueByFn(item: IServiceOutlet): number {
     return item.id!;
   }
 

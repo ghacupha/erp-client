@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { DepreciationJobDetailComponent } from './detail/depreciation-job-detail
 import { DepreciationJobUpdateComponent } from './update/depreciation-job-update.component';
 import { DepreciationJobDeleteDialogComponent } from './delete/depreciation-job-delete-dialog.component';
 import { DepreciationJobRoutingModule } from './route/depreciation-job-routing.module';
+import { FormComponentsModule } from '../../erp-common/form-components/form-components.module';
 
 @NgModule({
-  imports: [SharedModule, DepreciationJobRoutingModule],
+  imports: [SharedModule, DepreciationJobRoutingModule, FormComponentsModule],
   declarations: [
     DepreciationJobComponent,
     DepreciationJobDetailComponent,

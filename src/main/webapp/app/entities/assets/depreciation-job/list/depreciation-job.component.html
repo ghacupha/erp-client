@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,6 +75,14 @@
             <span>Depreciation Job Status</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="numberOfBatches"><span>Number Of Batches</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedBatches"><span>Processed Batches</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="lastBatchSize"><span>Last Batch Size</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processedItems"><span>Processed Items</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="processingTime">
+            <span>Processing Time</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="totalItems"><span>Total Items</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="createdBy.designation"><span>Created By</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="depreciationPeriod.endDate"><span>Depreciation Period</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -88,6 +96,12 @@
           <td>{{ depreciationJob.timeOfCommencement | formatMediumDatetime }}</td>
           <td>{{ depreciationJob.depreciationJobStatus }}</td>
           <td>{{ depreciationJob.description }}</td>
+          <td>{{ depreciationJob.numberOfBatches }}</td>
+          <td>{{ depreciationJob.processedBatches }}</td>
+          <td>{{ depreciationJob.lastBatchSize }}</td>
+          <td>{{ depreciationJob.processedItems }}</td>
+          <td title="{{ depreciationJob.processingTime }}">{{ depreciationJob.processingTime | duration }}</td>
+          <td>{{ depreciationJob.totalItems }}</td>
           <td>
             <div *ngIf="depreciationJob.createdBy">
               <a [routerLink]="['/application-user', depreciationJob.createdBy?.id, 'view']">{{

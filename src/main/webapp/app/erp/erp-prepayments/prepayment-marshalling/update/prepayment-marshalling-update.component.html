@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,29 +20,39 @@
 <div class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-prepayment-marshalling-heading" data-cy="PrepaymentMarshallingCreateUpdateHeading">
-        Create or edit a Prepayment Marshalling
+      <h2
+        id="jhi-prepayment-marshalling-heading-new"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreCreating'>
+        New Prepayment Marshalling
+      </h2>
+
+      <h2
+        id="jhi-prepayment-marshalling-copying-heading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreCopying'>
+        Copy Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
+      </h2>
+
+      <h2
+        id="jhi-prepayment-marshalling-editing-heading"
+        data-cy="PrepaymentMarshallingCreateUpdateHeading"
+        [hidden]='!weAreEditing'>
+        Edit Marshalling # {{ selectedItem.id }} For Catalogue No. {{ selectedItem.prepaymentAccount?.catalogueNumber }}
       </h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null || weAreCopying">
           <label class="form-control-label" for="field_id">ID</label>
           <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_inactive">Inactive</label>
-          <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
-          <div *ngIf="editForm.get('inactive')!.invalid && (editForm.get('inactive')!.dirty || editForm.get('inactive')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('inactive')?.errors?.required"> This field is required. </small>
-          </div>
-        </div>
-
-        <div class="form-group">
+        <div class="form-group" >
           <label class="form-control-label" for="field_amortizationPeriods">Amortization Periods</label>
           <input
+            [readonly]="editForm.get('processed')!.value == true && weAreEditing"
             type="number"
             class="form-control"
             name="amortizationPeriods"
@@ -52,118 +62,51 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_processed">Processed</label>
-          <input type="checkbox" class="form-check" name="processed" id="field_processed" data-cy="processed" formControlName="processed" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="field_prepaymentAccount">Prepayment Account</label>
-          <select
-            class="form-control"
-            id="field_prepaymentAccount"
-            data-cy="prepaymentAccount"
-            name="prepaymentAccount"
-            formControlName="prepaymentAccount"
-          >
-            <option *ngIf="!editForm.get('prepaymentAccount')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                prepaymentAccountOption.id === editForm.get('prepaymentAccount')!.value?.id
-                  ? editForm.get('prepaymentAccount')!.value
-                  : prepaymentAccountOption
-              "
-              *ngFor="let prepaymentAccountOption of prepaymentAccountsSharedCollection; trackBy: trackPrepaymentAccountById"
-            >
-              {{ prepaymentAccountOption.catalogueNumber }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['prepaymentAccount'])!.invalid &&
-            (editForm.get(['prepaymentAccount'])!.dirty || editForm.get(['prepaymentAccount'])!.touched)
-          "
+        <jhi-m21-prepayment-account-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='prepaymentAccount'
+          [inputValue]="editForm.get('prepaymentAccount')!.value"
+          (valueSelected)='updatePrepaymentAccount($event)'
+          inputControlLabel='Prepayment Account'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['prepaymentAccount'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get('prepaymentAccount')!.value"></option>
+        </jhi-m21-prepayment-account-form-control>
 
-        <div class="form-group">
-          <label for="field_placeholders">Placeholder</label>
-          <select
-            class="form-control"
-            id="field_placeholders"
-            data-cy="placeholder"
-            multiple
-            name="placeholders"
-            formControlName="placeholders"
-          >
-            <option
-              [ngValue]="getSelectedPlaceholder(placeholderOption, editForm.get('placeholders')!.value)"
-              *ngFor="let placeholderOption of placeholdersSharedCollection; trackBy: trackPlaceholderById"
-            >
-              {{ placeholderOption.description }}
-            </option>
-          </select>
-        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_firstFiscalMonth">First Fiscal Month</label>
-          <select
-            class="form-control"
-            id="field_firstFiscalMonth"
-            data-cy="firstFiscalMonth"
-            name="firstFiscalMonth"
-            formControlName="firstFiscalMonth"
+        <!--// TODO firstAmortizationPeriod -->
+        <jhi-m21-amortization-period-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='firstAmortizationPeriod'
+          [inputValue]="editForm.get('firstAmortizationPeriod')!.value"
+          (valueSelected)='updateFirstAmortizationPeriod($event)'
+          inputControlLabel='First Amortization Period'
           >
-            <option *ngIf="!editForm.get('firstFiscalMonth')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('firstFiscalMonth')!.value?.id
-                  ? editForm.get('firstFiscalMonth')!.value
-                  : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.startDate }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['firstFiscalMonth'])!.invalid &&
-            (editForm.get(['firstFiscalMonth'])!.dirty || editForm.get(['firstFiscalMonth'])!.touched)
-          "
+          <option [ngValue]="editForm.get('firstAmortizationPeriod')!.value"></option>
+        </jhi-m21-amortization-period-form-control>
+
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='firstFiscalMonth'
+          [inputValue]="editForm.get('firstFiscalMonth')!.value"
+          (valueSelected)='updateFirstFiscalMonth($event)'
+          inputControlLabel='First Fiscal Month'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['firstFiscalMonth'])?.errors?.required">
-            This field is required.
-          </small>
-        </div>
+          <option [ngValue]="editForm.get('firstFiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_lastFiscalMonth">Last Fiscal Month</label>
-          <select
-            class="form-control"
-            id="field_lastFiscalMonth"
-            data-cy="lastFiscalMonth"
-            name="lastFiscalMonth"
-            formControlName="lastFiscalMonth"
-          >
-            <option *ngIf="!editForm.get('lastFiscalMonth')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalMonthOption.id === editForm.get('lastFiscalMonth')!.value?.id
-                  ? editForm.get('lastFiscalMonth')!.value
-                  : fiscalMonthOption
-              "
-              *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
-            >
-              {{ fiscalMonthOption.endDate }}
-            </option>
-          </select>
-        </div>
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='lastFiscalMonth'
+          [inputValue]="editForm.get('lastFiscalMonth')!.value"
+          (valueSelected)='updateLastFiscalMonth($event)'
+          inputControlLabel='Last Fiscal Month'
+        >
+          <option [ngValue]="editForm.get('lastFiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
         <div
           *ngIf="
             editForm.get(['lastFiscalMonth'])!.invalid &&
@@ -172,6 +115,25 @@
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['lastFiscalMonth'])?.errors?.required"> This field is required. </small>
         </div>
+
+        <jhi-m2m-placeholder-form-control
+          ngDefaultControl
+          [disabledInput]="editForm.get('processed')!.value"
+          formControlName='placeholders'
+          [inputValues]="editForm.get(['placeholders'])!.value"
+          (selectedValues)='updatePlaceholders($event)'
+          inputControlLabel='Placeholder Items'
+        >
+        </jhi-m2m-placeholder-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_inactive">Inactive</label>
+          <input type="checkbox" class="form-check" name="inactive" id="field_inactive" data-cy="inactive" formControlName="inactive" />
+          <div *ngIf="editForm.get('inactive')!.invalid && (editForm.get('inactive')!.dirty || editForm.get('inactive')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('inactive')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
       </div>
 
       <div>
@@ -185,10 +147,38 @@
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
           class="btn btn-primary"
+          [hidden]='!weAreCreating'
+          (click)='save()'
         >
           <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
         </button>
+
+        <button
+          type="submit"
+          id="edit-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreEditing'
+          (click)='edit()'
+        >
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Update # {{ selectedItem.id }}</span>
+        </button>
+
+        <button
+          type="submit"
+          id="copy-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+          [hidden]='!weAreCopying'
+          (click)='copy()'
+        >
+          <fa-icon icon="copy"></fa-icon>&nbsp;<span>Copy # {{ selectedItem.id }}</span>
+        </button>
       </div>
+
+
     </form>
   </div>
 </div>

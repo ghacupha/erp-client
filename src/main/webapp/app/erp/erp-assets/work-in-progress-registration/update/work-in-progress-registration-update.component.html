@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,6 +65,15 @@
           </div>
         </div>
 
+        <jhi-m21-settlement-form-control
+          ngDefaultControl
+          formControlName='settlementTransaction'
+          [inputValue]="editForm.get(['settlementTransaction'])!.value"
+          (valueSelected)='updateSettlementTransaction($event)'
+          inputControlLabel='Settlement'
+        >
+        </jhi-m21-settlement-form-control>
+
         <div class="form-group">
           <label class="form-control-label" for="field_particulars">Particulars</label>
           <input
@@ -86,6 +95,34 @@
         >
           <option [ngValue]="editForm.get(['settlementCurrency'])!.value"></option>
         </jhi-m21-settlement-currency-form-control>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_instalmentDate">Instalment Date</label>
+          <div class="input-group">
+            <input
+              id="field_instalmentDate"
+              data-cy="instalmentDate"
+              type="text"
+              class="form-control"
+              name="instalmentDate"
+              ngbDatepicker
+              #instalmentDateDp="ngbDatepicker"
+              formControlName="instalmentDate"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="instalmentDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div
+            *ngIf="
+              editForm.get('instalmentDate')!.invalid && (editForm.get('instalmentDate')!.dirty || editForm.get('instalmentDate')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('instalmentDate')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
 
         <div class="form-group">
           <label class="form-control-label" for="field_instalmentAmount">Instalment Amount</label>
@@ -146,31 +183,6 @@
         >
           <option [ngValue]="editForm.get(['outletCode'])!.value"></option>
         </jhi-m21-service-outlet-form-control>
-        <div
-          *ngIf="
-            editForm.get(['outletCode'])!.invalid &&
-            (editForm.get(['outletCode'])!.dirty || editForm.get(['outletCode'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['outletCode'])?.errors?.required"> This field is required. </small>
-        </div>
-
-        <jhi-m21-settlement-form-control
-          ngDefaultControl
-          formControlName='settlementTransaction'
-          [inputValue]="editForm.get(['settlementTransaction'])!.value"
-          (valueSelected)='updateSettlementTransaction($event)'
-          inputControlLabel='Settlement'
-        >
-        </jhi-m21-settlement-form-control>
-        <div
-          *ngIf="
-            editForm.get(['settlementTransaction'])!.invalid &&
-            (editForm.get(['settlementTransaction'])!.dirty || editForm.get(['settlementTransaction'])!.touched)
-          "
-        >
-          <small class="form-text text-danger" *ngIf="editForm.get(['settlementTransaction'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m21-purchase-order-form-control
           ngDefaultControl
@@ -181,7 +193,6 @@
         >
         </jhi-m21-purchase-order-form-control>
 
-        <!--// TODO Implement m21 delivery-note-->
         <jhi-m21-delivery-note-form-control
           ngDefaultControl
           formControlName='deliveryNote'
@@ -191,7 +202,6 @@
         >
         </jhi-m21-delivery-note-form-control>
 
-        <!--// TODO implement m21 JobSheet-->
         <jhi-m21-job-sheet-form-control
           ngDefaultControl
           formControlName='jobSheet'
@@ -209,9 +219,6 @@
           inputControlLabel='Dealer'
         >
         </jhi-m21-dealer-form-control>
-        <div *ngIf="editForm.get(['dealer'])!.invalid && (editForm.get(['dealer'])!.dirty || editForm.get(['dealer'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['dealer'])?.errors?.required"> This field is required. </small>
-        </div>
 
         <jhi-m2m-asset-accessory-form-control
           ngDefaultControl
@@ -256,7 +263,7 @@
           formControlName='businessDocuments'
           [inputValues]="editForm.get(['businessDocuments'])!.value"
           (selectedValues)='updateBusinessDocuments($event)'
-          inputControlLabel='Attachment'
+          inputControlLabel='Business Documents'
         >
         </jhi-m2m-business-document-form-control>
 
@@ -277,7 +284,6 @@
           <input type="checkbox" class="form-check" name="completed" id="field_completed" data-cy="completed" formControlName="completed" />
         </div>
 
-        <!--// TODO Implement placeholder form-control-->
         <jhi-m2m-placeholder-form-control
           ngDefaultControl
           formControlName='placeholders'

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 import { IWorkInProgressRegistration } from '../../erp-assets/work-in-progress-registration/work-in-progress-registration.model';
+import { formatCurrency } from '@angular/common';
 
 @Pipe({
   name: 'formatWipRegistration',
@@ -37,9 +38,13 @@ export class FormatWipRegistrationPipe implements PipeTransform {
 
       if (value.particulars.length > limit) {
         // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        desc = value.particulars.substring(0, limit) + trail;
+        if (typeof value.instalmentAmount === 'number') {
+          desc = `${formatCurrency(value.instalmentAmount, 'En', 'Cu')} date:${value.instalmentDate}${value.particulars.substring(0, limit)}${trail}`;
+        }
       } else {
-        desc = value.particulars;
+        if (typeof value.instalmentAmount === 'number') {
+          desc = `${formatCurrency(value.instalmentAmount, 'En', 'Cu')} date:${value.instalmentDate}${value.particulars}`;
+        }
       }
 
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

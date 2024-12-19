@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,43 +17,47 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-application-user-heading" data-cy="ApplicationUserCreateUpdateHeading">Create or edit a Application User</h2>
+<div class='row justify-content-center'>
+  <div class='col-8'>
+    <form name='editForm' role='form' novalidate (ngSubmit)='save()' [formGroup]='editForm'>
+      <h2 id='jhi-application-user-heading' data-cy='ApplicationUserCreateUpdateHeading'>Create or edit a Application
+        User</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        <div class='form-group' [hidden]="editForm.get('id')!.value == null">
+          <label class='form-control-label' for='field_id'>ID</label>
+          <input type='number' class='form-control' name='id' id='field_id' data-cy='id' formControlName='id'
+                 [readonly]='true' />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_designation">Designation</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_designation'>Designation</label>
           <input
-            type="text"
-            class="form-control"
-            name="designation"
-            id="field_designation"
-            data-cy="designation"
-            formControlName="designation"
+            type='text'
+            class='form-control'
+            name='designation'
+            id='field_designation'
+            data-cy='designation'
+            formControlName='designation'
           />
-          <div *ngIf="editForm.get('designation')!.invalid && (editForm.get('designation')!.dirty || editForm.get('designation')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('designation')?.errors?.required"> This field is required. </small>
+          <div
+            *ngIf="editForm.get('designation')!.invalid && (editForm.get('designation')!.dirty || editForm.get('designation')!.touched)">
+            <small class='form-text text-danger' *ngIf="editForm.get('designation')?.errors?.required"> This field is
+              required. </small>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_applicationIdentity">Application Identity</label>
+        <div class='form-group'>
+          <label class='form-control-label' for='field_applicationIdentity'>Application Identity</label>
           <input
-            type="text"
-            class="form-control"
-            name="applicationIdentity"
-            id="field_applicationIdentity"
-            data-cy="applicationIdentity"
-            formControlName="applicationIdentity"
+            type='text'
+            class='form-control'
+            name='applicationIdentity'
+            id='field_applicationIdentity'
+            data-cy='applicationIdentity'
+            formControlName='applicationIdentity'
           />
           <div
             *ngIf="
@@ -61,7 +65,7 @@
               (editForm.get('applicationIdentity')!.dirty || editForm.get('applicationIdentity')!.touched)
             "
           >
-            <small class="form-text text-danger" *ngIf="editForm.get('applicationIdentity')?.errors?.required">
+            <small class='form-text text-danger' *ngIf="editForm.get('applicationIdentity')?.errors?.required">
               This field is required.
             </small>
           </div>
@@ -72,7 +76,7 @@
           formControlName='organization'
           [inputValue]="editForm.get('organization')!.value"
           (valueSelected)='updateOrganization($event)'
-          inputControlLabel="organization (Required)"
+          inputControlLabel='organization (Required)'
         >
           <option [ngValue]="editForm.get('organization')!.value"></option>
         </jhi-m21-dealer-form-control>
@@ -82,7 +86,7 @@
           formControlName='department'
           [inputValue]="editForm.get('department')!.value"
           (valueSelected)='updateDepartment($event)'
-          inputControlLabel="Department (Required)"
+          inputControlLabel='Department (Required)'
         >
           <option [ngValue]="editForm.get('department')!.value"></option>
         </jhi-m21-dealer-form-control>
@@ -92,37 +96,20 @@
           formControlName='securityClearance'
           [inputValue]="editForm.get('securityClearance')!.value"
           (valueSelected)='updateSecurityClearance($event)'
-          inputControlLabel="Security Clearance"
+          inputControlLabel='Security Clearance'
         >
           <option [ngValue]="editForm.get('securityClearance')!.value"></option>
         </jhi-m21-security-clearance-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_systemIdentity">System Identity</label>
-          <select
-            class="form-control"
-            id="field_systemIdentity"
-            data-cy="systemIdentity"
-            name="systemIdentity"
-            formControlName="systemIdentity"
-          >
-            <option *ngIf="!editForm.get('systemIdentity')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="userOption.id === editForm.get('systemIdentity')!.value?.id ? editForm.get('systemIdentity')!.value : userOption"
-              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
-            >
-              {{ userOption.login }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['systemIdentity'])!.invalid &&
-            (editForm.get(['systemIdentity'])!.dirty || editForm.get(['systemIdentity'])!.touched)
-          "
+        <jhi-m21-user-form-control
+          ngDefaultControl
+          formControlName='systemIdentity'
+          [inputValue]="editForm.get('systemIdentity')!.value"
+          (valueSelected)='updateSystemIdentity($event)'
+          inputControlLabel='System Identity (Required)'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['systemIdentity'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('systemIdentity')!.value"></option>
+        </jhi-m21-user-form-control>
 
         <jhi-m2m-universally-unique-mapping-form-control
           ngDefaultControl
@@ -138,7 +125,7 @@
           formControlName='dealerIdentity'
           [inputValue]="editForm.get('dealerIdentity')!.value"
           (valueSelected)='updateDealerIdentity($event)'
-          inputControlLabel="Dealer Id (Required)"
+          inputControlLabel='Dealer Id (Required)'
         >
           <option [ngValue]="editForm.get('dealerIdentity')!.value"></option>
         </jhi-m21-dealer-form-control>
@@ -155,18 +142,19 @@
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        <button type='button' id='cancel-save' data-cy='entityCreateCancelButton' class='btn btn-secondary'
+                (click)='previousState()'>
+          <fa-icon icon='ban'></fa-icon>&nbsp;<span>Cancel</span>
         </button>
 
         <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          type='submit'
+          id='save-entity'
+          data-cy='entityCreateSaveButton'
+          [disabled]='editForm.invalid || isSaving'
+          class='btn btn-primary'
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+          <fa-icon icon='save'></fa-icon>&nbsp;<span>Save</span>
         </button>
       </div>
     </form>

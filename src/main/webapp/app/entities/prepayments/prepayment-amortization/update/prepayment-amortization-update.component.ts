@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -27,8 +27,8 @@ import { IPrepaymentAmortization, PrepaymentAmortization } from '../prepayment-a
 import { PrepaymentAmortizationService } from '../service/prepayment-amortization.service';
 import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
 import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
@@ -37,6 +37,8 @@ import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.mode
 import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
 import { IPrepaymentCompilationRequest } from 'app/entities/prepayments/prepayment-compilation-request/prepayment-compilation-request.model';
 import { PrepaymentCompilationRequestService } from 'app/entities/prepayments/prepayment-compilation-request/service/prepayment-compilation-request.service';
+import { IAmortizationPeriod } from 'app/entities/prepayments/amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from 'app/entities/prepayments/amortization-period/service/amortization-period.service';
 
 @Component({
   selector: 'jhi-prepayment-amortization-update',
@@ -51,6 +53,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
   prepaymentCompilationRequestsSharedCollection: IPrepaymentCompilationRequest[] = [];
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -65,6 +68,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     placeholders: [],
     fiscalMonth: [null, Validators.required],
     prepaymentCompilationRequest: [null, Validators.required],
+    amortizationPeriod: [null, Validators.required],
   });
 
   constructor(
@@ -75,6 +79,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
     protected prepaymentCompilationRequestService: PrepaymentCompilationRequestService,
+    protected amortizationPeriodService: AmortizationPeriodService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -125,6 +130,10 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
+    return item.id!;
+  }
+
   getSelectedPlaceholder(option: IPlaceholder, selectedVals?: IPlaceholder[]): IPlaceholder {
     if (selectedVals) {
       for (const selectedVal of selectedVals) {
@@ -169,6 +178,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       placeholders: prepaymentAmortization.placeholders,
       fiscalMonth: prepaymentAmortization.fiscalMonth,
       prepaymentCompilationRequest: prepaymentAmortization.prepaymentCompilationRequest,
+      amortizationPeriod: prepaymentAmortization.amortizationPeriod,
     });
 
     this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
@@ -197,6 +207,10 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
         this.prepaymentCompilationRequestsSharedCollection,
         prepaymentAmortization.prepaymentCompilationRequest
       );
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentAmortization.amortizationPeriod
+    );
   }
 
   protected loadRelationshipsOptions(): void {
@@ -275,6 +289,19 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
         (prepaymentCompilationRequests: IPrepaymentCompilationRequest[]) =>
           (this.prepaymentCompilationRequestsSharedCollection = prepaymentCompilationRequests)
       );
+
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('amortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
   }
 
   protected createFromForm(): IPrepaymentAmortization {
@@ -292,6 +319,7 @@ export class PrepaymentAmortizationUpdateComponent implements OnInit {
       placeholders: this.editForm.get(['placeholders'])!.value,
       fiscalMonth: this.editForm.get(['fiscalMonth'])!.value,
       prepaymentCompilationRequest: this.editForm.get(['prepaymentCompilationRequest'])!.value,
+      amortizationPeriod: this.editForm.get(['amortizationPeriod'])!.value,
     };
   }
 }

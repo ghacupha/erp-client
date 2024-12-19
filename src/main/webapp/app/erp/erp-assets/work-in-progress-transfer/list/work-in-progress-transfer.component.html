@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,19 +70,17 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="targetAssetNumber">
-            <span>Target Asset Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
-          </th>
+          <th scope="col" jhiSortBy="transferType"><span>Transfer Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <!--<th scope="col" jhiSortBy="description"><span>Description</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>-->
+          <th scope="col" jhiSortBy="transferSettlement.paymentNumber"><span>Transfer Settlement</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferAmount"><span>Transfer Amount</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="transferDate"><span>Transfer Date</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="transferType"><span>Transfer Type</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="assetCategory.assetCategoryName"><span>Asset Category</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="originalSettlement.paymentNumber"><span>Original Settlement</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="workInProgressRegistration.sequenceNumber">
             <span>Work In Progress Registration</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="serviceOutlet.outletCode"><span>Service Outlet</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="settlement.paymentNumber"><span>Settlement</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="workProjectRegister.projectTitle">
             <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
           </th>
@@ -94,16 +92,29 @@
           <td>
             <a [routerLink]="['/work-in-progress-transfer', workInProgressTransfer.id, 'view']">{{ workInProgressTransfer.id }}</a>
           </td>
-          <td>{{ workInProgressTransfer.description }}</td>
-          <td>{{ workInProgressTransfer.targetAssetNumber }}</td>
+          <td>{{ workInProgressTransfer.transferType }}</td>
+          <!--<td>{{ workInProgressTransfer.description }}</td>-->
+          <td>
+            <div *ngIf="workInProgressTransfer.transferSettlement">
+              <a [routerLink]="['/settlement', workInProgressTransfer.transferSettlement?.id, 'view']">{{
+                workInProgressTransfer.transferSettlement?.paymentNumber
+                }}</a>
+            </div>
+          </td>
           <td>{{ workInProgressTransfer.transferAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
           <td>{{ workInProgressTransfer.transferDate | formatMediumDate }}</td>
-          <td>{{ workInProgressTransfer.transferType }}</td>
           <td>
             <div *ngIf="workInProgressTransfer.assetCategory">
               <a [routerLink]="['/asset-category', workInProgressTransfer.assetCategory?.id, 'view']">{{
                 workInProgressTransfer.assetCategory?.assetCategoryName
               }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="workInProgressTransfer.originalSettlement">
+              <a [routerLink]="['/settlement', workInProgressTransfer.originalSettlement?.id, 'view']">{{
+                workInProgressTransfer.originalSettlement?.paymentNumber
+                }}</a>
             </div>
           </td>
           <td>
@@ -117,13 +128,6 @@
             <div *ngIf="workInProgressTransfer.serviceOutlet">
               <a [routerLink]="['/service-outlet', workInProgressTransfer.serviceOutlet?.id, 'view']">{{
                 workInProgressTransfer.serviceOutlet?.outletCode
-              }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="workInProgressTransfer.settlement">
-              <a [routerLink]="['/settlement', workInProgressTransfer.settlement?.id, 'view']">{{
-                workInProgressTransfer.settlement?.paymentNumber
               }}</a>
             </div>
           </td>

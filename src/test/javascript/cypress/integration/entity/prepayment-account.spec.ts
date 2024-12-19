@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -34,7 +34,11 @@ describe('PrepaymentAccount e2e test', () => {
   const prepaymentAccountPageUrlPattern = new RegExp('/prepayment-account(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
-  const prepaymentAccountSample = { catalogueNumber: 'IB', particulars: 'eco-centric Shoes Squares' };
+  const prepaymentAccountSample = {
+    catalogueNumber: 'Intelligent parsing eco-centric',
+    recognitionDate: '2022-05-01',
+    particulars: 'Optimization',
+  };
 
   let prepaymentAccount: any;
 
@@ -173,19 +177,21 @@ describe('PrepaymentAccount e2e test', () => {
     it('should create an instance of PrepaymentAccount', () => {
       cy.get(`[data-cy="catalogueNumber"]`).type('Belarussian Bike').should('have.value', 'Belarussian Bike');
 
-      cy.get(`[data-cy="particulars"]`).type('Iowa program Avon').should('have.value', 'Iowa program Avon');
+      cy.get(`[data-cy="recognitionDate"]`).type('2022-04-30').should('have.value', '2022-04-30');
+
+      cy.get(`[data-cy="particulars"]`).type('foreground silver').should('have.value', 'foreground silver');
 
       cy.get(`[data-cy="notes"]`)
         .type('../fake-data/blob/hipster.txt')
         .invoke('val')
         .should('match', new RegExp('../fake-data/blob/hipster.txt'));
 
-      cy.get(`[data-cy="prepaymentAmount"]`).type('68526').should('have.value', '68526');
+      cy.get(`[data-cy="prepaymentAmount"]`).type('6517').should('have.value', '6517');
 
       cy.get(`[data-cy="prepaymentGuid"]`)
-        .type('9ca1876d-89bd-43d3-ad47-544aa5d6d9e1')
+        .type('4a9ca187-6d89-4bd3-936d-47544aa5d6d9')
         .invoke('val')
-        .should('match', new RegExp('9ca1876d-89bd-43d3-ad47-544aa5d6d9e1'));
+        .should('match', new RegExp('4a9ca187-6d89-4bd3-936d-47544aa5d6d9'));
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,11 +48,31 @@
             {{ transactionAccount.notesContentType }}, {{ byteSize(transactionAccount.notes) }}
           </div>
         </dd>
-        <dt><span>Parent Account</span></dt>
+        <dt><span>Account Type</span></dt>
         <dd>
-          <div *ngIf="transactionAccount.parentAccount">
-            <a [routerLink]="['/transaction-account', transactionAccount.parentAccount?.id, 'view']">{{
-              transactionAccount.parentAccount?.accountNumber
+          <span>{{ transactionAccount.accountType }}</span>
+        </dd>
+        <dt><span>Account Sub Type</span></dt>
+        <dd>
+          <span>{{ transactionAccount.accountSubType }}</span>
+        </dd>
+        <dt><span>Dummy Account</span></dt>
+        <dd>
+          <span>{{ transactionAccount.dummyAccount }}</span>
+        </dd>
+        <dt><span>Account Ledger</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountLedger">
+            <a [routerLink]="['/transaction-account-ledger', transactionAccount.accountLedger?.id, 'view']">{{
+              transactionAccount.accountLedger?.ledgerName
+            }}</a>
+          </div>
+        </dd>
+        <dt><span>Account Category</span></dt>
+        <dd>
+          <div *ngIf="transactionAccount.accountCategory">
+            <a [routerLink]="['/transaction-account-category', transactionAccount.accountCategory?.id, 'view']">{{
+              transactionAccount.accountCategory?.name
             }}</a>
           </div>
         </dd>

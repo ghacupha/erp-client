@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -111,18 +111,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_processLocked">Process Locked</label>
-          <input
-            type="checkbox"
-            class="form-check"
-            name="processLocked"
-            id="field_processLocked"
-            data-cy="processLocked"
-            formControlName="processLocked"
-          />
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_previousPeriod">Previous Period</label>
           <select
             class="form-control"
@@ -140,27 +128,12 @@
               "
               *ngFor="let depreciationPeriodOption of previousPeriodsCollection; trackBy: trackDepreciationPeriodById"
             >
-              {{ depreciationPeriodOption.endDate }}
+              {{ depreciationPeriodOption.periodCode }}
             </option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.applicationIdentity }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fiscalYear">Fiscal Year</label>
           <select class="form-control" id="field_fiscalYear" data-cy="fiscalYear" name="fiscalYear" formControlName="fiscalYear">
             <option *ngIf="!editForm.get('fiscalYear')!.value" [ngValue]="null" selected></option>
@@ -178,9 +151,9 @@
           *ngIf="editForm.get(['fiscalYear'])!.invalid && (editForm.get(['fiscalYear'])!.dirty || editForm.get(['fiscalYear'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['fiscalYear'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
+        <!--<div class="form-group">
           <label class="form-control-label" for="field_fiscalMonth">Fiscal Month</label>
           <select class="form-control" id="field_fiscalMonth" data-cy="fiscalMonth" name="fiscalMonth" formControlName="fiscalMonth">
             <option *ngIf="!editForm.get('fiscalMonth')!.value" [ngValue]="null" selected></option>
@@ -190,7 +163,7 @@
               "
               *ngFor="let fiscalMonthOption of fiscalMonthsSharedCollection; trackBy: trackFiscalMonthById"
             >
-              {{ fiscalMonthOption.id }}
+              {{ fiscalMonthOption.fiscalMonthCode }}
             </option>
           </select>
         </div>
@@ -198,37 +171,30 @@
           *ngIf="editForm.get(['fiscalMonth'])!.invalid && (editForm.get(['fiscalMonth'])!.dirty || editForm.get(['fiscalMonth'])!.touched)"
         >
           <small class="form-text text-danger" *ngIf="editForm.get(['fiscalMonth'])?.errors?.required"> This field is required. </small>
-        </div>
+        </div>-->
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_fiscalQuarter">Fiscal Quarter</label>
-          <select
-            class="form-control"
-            id="field_fiscalQuarter"
-            data-cy="fiscalQuarter"
-            name="fiscalQuarter"
-            formControlName="fiscalQuarter"
-          >
-            <option *ngIf="!editForm.get('fiscalQuarter')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="
-                fiscalQuarterOption.id === editForm.get('fiscalQuarter')!.value?.id
-                  ? editForm.get('fiscalQuarter')!.value
-                  : fiscalQuarterOption
-              "
-              *ngFor="let fiscalQuarterOption of fiscalQuartersSharedCollection; trackBy: trackFiscalQuarterById"
-            >
-              {{ fiscalQuarterOption.id }}
-            </option>
-          </select>
-        </div>
-        <div
-          *ngIf="
-            editForm.get(['fiscalQuarter'])!.invalid && (editForm.get(['fiscalQuarter'])!.dirty || editForm.get(['fiscalQuarter'])!.touched)
-          "
+        <jhi-m21-fiscal-month-form-control
+          ngDefaultControl
+          [disabledInput]="false"
+          formControlName='fiscalMonth'
+          [inputValue]="editForm.get('fiscalMonth')!.value"
+          (valueSelected)='updateFiscalMonth($event)'
+          inputControlLabel='Fiscal Month'
         >
-          <small class="form-text text-danger" *ngIf="editForm.get(['fiscalQuarter'])?.errors?.required"> This field is required. </small>
-        </div>
+          <option [ngValue]="editForm.get('fiscalMonth')!.value"></option>
+        </jhi-m21-fiscal-month-form-control>
+
+        <!--<jhi-m21-fiscal-quarter-form-control
+          ngDefaultControl
+          [disabledInput]="false"
+          formControlName='fiscalQuarter'
+          [inputValue]="editForm.get('fiscalQuarter')!.value"
+          (valueSelected)='updateFiscalQuarter($event)'
+          inputControlLabel='Fiscal Quarter'
+        >
+          <option [ngValue]="editForm.get('fiscalQuarter')!.value"></option>
+        </jhi-m21-fiscal-quarter-form-control>-->
+
       </div>
 
       <div>

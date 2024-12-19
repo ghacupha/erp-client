@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,9 +23,10 @@ import { FiscalYearDetailComponent } from './detail/fiscal-year-detail.component
 import { FiscalYearUpdateComponent } from './update/fiscal-year-update.component';
 import { FiscalYearDeleteDialogComponent } from './delete/fiscal-year-delete-dialog.component';
 import { FiscalYearRoutingModule } from './route/fiscal-year-routing.module';
+import { ErpCommonModule } from '../../erp-common/erp-common.module';
 
 @NgModule({
-  imports: [SharedModule, FiscalYearRoutingModule],
+  imports: [SharedModule, FiscalYearRoutingModule, ErpCommonModule],
   declarations: [FiscalYearComponent, FiscalYearDetailComponent, FiscalYearUpdateComponent, FiscalYearDeleteDialogComponent],
   entryComponents: [FiscalYearDeleteDialogComponent],
 })

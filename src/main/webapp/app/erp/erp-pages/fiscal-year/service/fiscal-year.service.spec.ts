@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,10 +21,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
-import { FiscalYearStatusType } from 'app/entities/enumerations/fiscal-year-status-type.model';
 import { IFiscalYear, FiscalYear } from '../fiscal-year.model';
 
 import { FiscalYearService } from './fiscal-year.service';
+import { FiscalYearStatusType } from '../../../erp-common/enumerations/fiscal-year-status-type.model';
 
 describe('FiscalYear Service', () => {
   let service: FiscalYearService;

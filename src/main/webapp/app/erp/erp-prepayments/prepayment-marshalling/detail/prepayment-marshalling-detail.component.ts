@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -20,6 +20,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentMarshallingCopyWorkflowInitiatedFromView,
+  prepaymentMarshallingEditWorkflowInitiatedFromView
+} from '../../../store/actions/prepayment-marshalling-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-detail',
@@ -28,12 +34,20 @@ import { IPrepaymentMarshalling } from '../prepayment-marshalling.model';
 export class PrepaymentMarshallingDetailComponent implements OnInit {
   prepaymentMarshalling: IPrepaymentMarshalling | null = null;
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute, protected store: Store<State>) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentMarshalling }) => {
       this.prepaymentMarshalling = prepaymentMarshalling;
     });
+  }
+
+  editButtonEvent(instance: IPrepaymentMarshalling): void {
+    this.store.dispatch(prepaymentMarshallingEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IPrepaymentMarshalling): void {
+    this.store.dispatch(prepaymentMarshallingCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   previousState(): void {

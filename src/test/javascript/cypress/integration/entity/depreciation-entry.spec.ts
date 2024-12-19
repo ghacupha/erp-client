@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -176,6 +176,12 @@ describe('DepreciationEntry e2e test', () => {
       cy.get(`[data-cy="depreciationAmount"]`).type('27043').should('have.value', '27043');
 
       cy.get(`[data-cy="assetNumber"]`).type('31619').should('have.value', '31619');
+
+      cy.get(`[data-cy="batchSequenceNumber"]`).type('4626').should('have.value', '4626');
+
+      cy.get(`[data-cy="processedItems"]`).type('Analyst').should('have.value', 'Analyst');
+
+      cy.get(`[data-cy="totalItemsProcessed"]`).type('3035').should('have.value', '3035');
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@ import { RelatedPartyRelationshipService } from '../service/related-party-relati
 import { IRelatedPartyRelationship, RelatedPartyRelationship } from '../related-party-relationship.model';
 import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
 import { InstitutionCodeService } from 'app/entities/gdi/institution-code/service/institution-code.service';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
-import { BankBranchCodeService } from 'app/entities/gdi/bank-branch-code/service/bank-branch-code.service';
+import { IBankBranchCode } from 'app/entities/system/bank-branch-code/bank-branch-code.model';
+import { BankBranchCodeService } from 'app/entities/system/bank-branch-code/service/bank-branch-code.service';
 import { IPartyRelationType } from 'app/entities/gdi/party-relation-type/party-relation-type.model';
 import { PartyRelationTypeService } from 'app/entities/gdi/party-relation-type/service/party-relation-type.service';
 

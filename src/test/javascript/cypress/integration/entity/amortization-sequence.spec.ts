@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ describe('AmortizationSequence e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/prepayment-accounts',
-      body: {"catalogueNumber":"navigate hack","particulars":"Sports","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":7209,"prepaymentGuid":"2e445692-b324-44a7-a9f3-de4306f33927"},
+      body: {"catalogueNumber":"navigate hack","recognitionDate":"2022-05-01","particulars":"navigating","notes":"Li4vZmFrZS1kYXRhL2Jsb2IvaGlwc3Rlci50eHQ=","prepaymentAmount":15832,"prepaymentGuid":"e445692b-3244-4a7e-9f3d-e4306f33927f"},
     }).then(({ body }) => {
       prepaymentAccount = body;
     });

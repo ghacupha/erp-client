@@ -9,6 +9,11 @@
       "fieldValidateRules": ["required", "unique"]
     },
     {
+      "fieldName": "recognitionDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "particulars",
       "fieldType": "String",
       "fieldValidateRules": ["required"]

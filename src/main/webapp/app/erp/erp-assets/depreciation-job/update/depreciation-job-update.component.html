@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,22 +46,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" for="field_depreciationJobStatus">Depreciation Job Status</label>
-          <select
-            class="form-control"
-            name="depreciationJobStatus"
-            formControlName="depreciationJobStatus"
-            id="field_depreciationJobStatus"
-            data-cy="depreciationJobStatus"
-          >
-            <option [ngValue]="null"></option>
-            <option *ngFor="let depreciationJobStatusType of depreciationJobStatusTypeValues" [value]="depreciationJobStatusType">
-              {{ depreciationJobStatusType }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" for="field_description">Description</label>
           <input
             type="text"
@@ -73,43 +57,15 @@
           />
         </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_createdBy">Created By</label>
-          <select class="form-control" id="field_createdBy" data-cy="createdBy" name="createdBy" formControlName="createdBy">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                applicationUserOption.id === editForm.get('createdBy')!.value?.id ? editForm.get('createdBy')!.value : applicationUserOption
-              "
-              *ngFor="let applicationUserOption of applicationUsersSharedCollection; trackBy: trackApplicationUserById"
-            >
-              {{ applicationUserOption.designation }}
-            </option>
-          </select>
-        </div>
+        <jhi-depreciation-period-form-control
+          ngDefaultControl
+          formControlName='depreciationPeriod'
+          [inputValue]="editForm.get('depreciationPeriod')!.value"
+          (valueSelected)='updateDepreciationPeriod($event)'
+          inputControlLabel='Depreciation Period'
+        >
+        </jhi-depreciation-period-form-control>
 
-        <div class="form-group">
-          <label class="form-control-label" for="field_depreciationPeriod">Depreciation Period</label>
-          <select
-            class="form-control"
-            id="field_depreciationPeriod"
-            data-cy="depreciationPeriod"
-            name="depreciationPeriod"
-            formControlName="depreciationPeriod"
-          >
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                depreciationPeriodOption.id === editForm.get('depreciationPeriod')!.value?.id
-                  ? editForm.get('depreciationPeriod')!.value
-                  : depreciationPeriodOption
-              "
-              *ngFor="let depreciationPeriodOption of depreciationPeriodsCollection; trackBy: trackDepreciationPeriodById"
-            >
-              {{ depreciationPeriodOption.endDate }}
-            </option>
-          </select>
-        </div>
       </div>
 
       <div>

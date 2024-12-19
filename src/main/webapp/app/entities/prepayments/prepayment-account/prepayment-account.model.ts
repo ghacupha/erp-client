@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -16,19 +16,21 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import * as dayjs from 'dayjs';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
 import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/prepayment-mapping.model';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 
 export interface IPrepaymentAccount {
   id?: number;
   catalogueNumber?: string;
+  recognitionDate?: dayjs.Dayjs;
   particulars?: string;
   notes?: string | null;
   prepaymentAmount?: number | null;
@@ -49,6 +51,7 @@ export class PrepaymentAccount implements IPrepaymentAccount {
   constructor(
     public id?: number,
     public catalogueNumber?: string,
+    public recognitionDate?: dayjs.Dayjs,
     public particulars?: string,
     public notes?: string | null,
     public prepaymentAmount?: number | null,

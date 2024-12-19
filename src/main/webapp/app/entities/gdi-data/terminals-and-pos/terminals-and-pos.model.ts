@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import { ITerminalTypes } from 'app/entities/gdi/terminal-types/terminal-types.m
 import { ITerminalFunctions } from 'app/entities/gdi/terminal-functions/terminal-functions.model';
 import { ICountySubCountyCode } from 'app/entities/gdi-data/county-sub-county-code/county-sub-county-code.model';
 import { IInstitutionCode } from 'app/entities/gdi/institution-code/institution-code.model';
-import { IBankBranchCode } from 'app/entities/gdi/bank-branch-code/bank-branch-code.model';
+import { IBankBranchCode } from 'app/entities/system/bank-branch-code/bank-branch-code.model';
 
 export interface ITerminalsAndPOS {
   id?: number;

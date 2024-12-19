@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -73,6 +73,30 @@ export class FiscalMonthUpdateComponent implements OnInit {
       this.updateForm(fiscalMonth);
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateUniversallyUniqueMappings(update: IUniversallyUniqueMapping[]): void {
+    this.editForm.patchValue({
+      universallyUniqueMappings: [...update]
+    });
+  }
+
+  updateFiscalYear(update: IFiscalYear): void {
+    this.editForm.patchValue({
+      fiscalYear: update
+    });
+  }
+
+  updateFiscalQuarter(update: IFiscalQuarter): void {
+    this.editForm.patchValue({
+      fiscalQuarter: update
     });
   }
 

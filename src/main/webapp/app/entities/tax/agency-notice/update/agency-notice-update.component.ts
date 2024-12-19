@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -30,8 +30,8 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';

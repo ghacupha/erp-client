@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ILeaseLiabilityScheduleItem } from '../lease-liability-schedule-item.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT } from 'app/config/pagination.constants';
 import { LeaseLiabilityScheduleItemService } from '../service/lease-liability-schedule-item.service';
 import { LeaseLiabilityScheduleItemDeleteDialogComponent } from '../delete/lease-liability-schedule-item-delete-dialog.component';
 
@@ -37,7 +37,7 @@ export class LeaseLiabilityScheduleItemComponent implements OnInit {
   currentSearch: string;
   isLoading = false;
   totalItems = 0;
-  itemsPerPage = ITEMS_PER_PAGE;
+  itemsPerPage = 50;
   page?: number;
   predicate!: string;
   ascending!: boolean;

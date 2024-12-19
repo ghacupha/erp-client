@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -25,49 +25,196 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IPrepaymentMarshalling, PrepaymentMarshalling } from '../prepayment-marshalling.model';
 import { PrepaymentMarshallingService } from '../service/prepayment-marshalling.service';
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountService } from 'app/entities/prepayments/prepayment-account/service/prepayment-account.service';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
-import { FiscalMonthService } from 'app/entities/system/fiscal-month/service/fiscal-month.service';
+import { IPlaceholder } from '../../../erp-pages/placeholder/placeholder.model';
+import { PrepaymentAccountService } from '../../prepayment-account/service/prepayment-account.service';
+import { IFiscalMonth } from '../../../erp-pages/fiscal-month/fiscal-month.model';
+import { FiscalMonthService } from '../../../erp-pages/fiscal-month/service/fiscal-month.service';
+import { PlaceholderService } from '../../../erp-pages/placeholder/service/placeholder.service';
+import { IPrepaymentAccount } from '../../prepayment-account/prepayment-account.model';
+import { select, Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  copyingPrepaymentMarshallingStatus,
+  creatingPrepaymentMarshallingStatus,
+  editingPrepaymentMarshallingStatus,
+  prepaymentMarshallingUpdateSelectedInstance
+} from '../../../store/selectors/prepayment-marshalling-workflow-status.selector';
+import { IAmortizationPeriod } from '../../amortization-period/amortization-period.model';
+import { AmortizationPeriodService } from '../../amortization-period/service/amortization-period.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-prepayment-marshalling-update',
-  templateUrl: './prepayment-marshalling-update.component.html',
+  templateUrl: './prepayment-marshalling-update.component.html'
 })
 export class PrepaymentMarshallingUpdateComponent implements OnInit {
   isSaving = false;
 
+  amortizationPeriodsSharedCollection: IAmortizationPeriod[] = [];
   prepaymentAccountsSharedCollection: IPrepaymentAccount[] = [];
   placeholdersSharedCollection: IPlaceholder[] = [];
   fiscalMonthsSharedCollection: IFiscalMonth[] = [];
 
+  // Setting up default form states
+  weAreCopying = false;
+  weAreEditing = false;
+  weAreCreating = false;
+  selectedItem = { ...new PrepaymentMarshalling() };
+
+  todDate = dayjs();
+
   editForm = this.fb.group({
     id: [],
-    inactive: [null, [Validators.required]],
+    inactive: [],
     amortizationPeriods: [],
     processed: [],
     prepaymentAccount: [null, Validators.required],
+    firstAmortizationPeriod: [null, Validators.required],
     placeholders: [],
     firstFiscalMonth: [null, Validators.required],
-    lastFiscalMonth: [null, Validators.required],
+    lastFiscalMonth: [null, Validators.required]
   });
+
+  disableAmortizationPeriodControl = false;
 
   constructor(
     protected prepaymentMarshallingService: PrepaymentMarshallingService,
     protected prepaymentAccountService: PrepaymentAccountService,
+    protected amortizationPeriodService: AmortizationPeriodService,
     protected placeholderService: PlaceholderService,
     protected fiscalMonthService: FiscalMonthService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+    protected fb: FormBuilder,
+    protected store: Store<State>
+  ) {
+    this.store.pipe(select(copyingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreCopying = stat);
+    this.store.pipe(select(editingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreEditing = stat);
+    this.store.pipe(select(creatingPrepaymentMarshallingStatus)).subscribe(stat => this.weAreCreating = stat);
+    this.store.pipe(select(prepaymentMarshallingUpdateSelectedInstance)).subscribe(copied => this.selectedItem = copied);
+  }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ prepaymentMarshalling }) => {
-      this.updateForm(prepaymentMarshalling);
 
+    if (this.weAreEditing) {
+      this.disableAmortizationPeriodControl = true;
+      this.updateForm(this.selectedItem);
+    }
+
+    if (this.weAreCopying) {
+      this.disableAmortizationPeriodControl = true;
+      this.copyForm(this.selectedItem);
+    }
+
+    if (this.weAreCreating) {
       this.loadRelationshipsOptions();
+    }
+
+    this.updateFirstPeriod();
+
+    this.updateFirstFiscalMonthGivenFirstPeriod();
+
+    this.updateLastFiscalMonthGivenPeriods();
+
+    this.updateLastFiscalMonthGivenAmortizationPeriod();
+
+  }
+
+  updateFirstPeriod(): void {
+    if(!this.weAreCopying) {
+      this.amortizationPeriodService.findByDate(this.todDate).subscribe(periodResponse => {
+        if (periodResponse.body) {
+          this.editForm.patchValue({
+            firstAmortizationPeriod: periodResponse.body
+          });
+        }
+      });
+    }
+  }
+
+  updateFirstFiscalMonthGivenFirstPeriod(): void {
+    this.editForm.get(['firstAmortizationPeriod'])?.valueChanges.subscribe((amortizationPeriodChange) => {
+
+      this.fiscalMonthService.find(amortizationPeriodChange.fiscalMonth.id).subscribe(fiscalMonthResponse => {
+        if (fiscalMonthResponse.body) {
+          const fiscalMonth = fiscalMonthResponse.body;
+          this.editForm.patchValue({
+            firstFiscalMonth: fiscalMonth
+          });
+        }
+      });
+    });
+  }
+
+  updateLastFiscalMonthGivenPeriods(): void {
+    this.editForm.get(['amortizationPeriods'])?.valueChanges.subscribe((amortizationPeriodsChange) => {
+      const firstFiscalMonth = this.editForm.get(['firstFiscalMonth'])!.value;
+      if (firstFiscalMonth) {
+        this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriodsChange).subscribe(fiscalMonthResponse => {
+          if (fiscalMonthResponse.body) {
+            const fiscalMonth = fiscalMonthResponse.body;
+            this.editForm.patchValue({
+              lastFiscalMonth: fiscalMonth
+            });
+          }
+        });
+      }
+    });
+  }
+
+  /**
+   * Reacts to changes in firstAmortizationPeriod given the periods are provided
+   */
+  updateLastFiscalMonthGivenAmortizationPeriod(): void {
+    this.editForm.get(['firstAmortizationPeriod'])?.valueChanges.subscribe((amortizationPeriodChange) => {
+
+      const amortizationPeriods = this.editForm.get(['amortizationPeriods'])!.value;
+
+      if(amortizationPeriods) {
+        this.fiscalMonthService.find(amortizationPeriodChange.fiscalMonth.id).subscribe(fiscalMonthProposedChange => {
+          if (fiscalMonthProposedChange.body) {
+            const firstFiscalMonth = fiscalMonthProposedChange.body;
+            if (firstFiscalMonth.id != null) {
+              this.fiscalMonthService.findFiscalMonthAfterGivenPeriods(firstFiscalMonth.id, amortizationPeriods).subscribe(lastFiscalMonthResponse => {
+                if (lastFiscalMonthResponse.body) {
+                  this.editForm.patchValue({
+                    lastFiscalMonth: lastFiscalMonthResponse.body
+                  });
+                }
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
+  updatePrepaymentAccount(update: IPrepaymentAccount): void {
+    this.editForm.patchValue({
+      prepaymentAccount: update
+    });
+  }
+
+  updateFirstAmortizationPeriod(update: IAmortizationPeriod): void {
+    this.editForm.patchValue({
+      firstAmortizationPeriod: update
+    });
+  }
+
+  updatePlaceholders(update: IPlaceholder[]): void {
+    this.editForm.patchValue({
+      placeholders: [...update]
+    });
+  }
+
+  updateFirstFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      firstFiscalMonth: update
+    });
+  }
+
+  updateLastFiscalMonth(update: IFiscalMonth): void {
+    this.editForm.patchValue({
+      lastFiscalMonth: update
     });
   }
 
@@ -77,12 +224,21 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
 
   save(): void {
     this.isSaving = true;
-    const prepaymentMarshalling = this.createFromForm();
-    if (prepaymentMarshalling.id !== undefined) {
-      this.subscribeToSaveResponse(this.prepaymentMarshallingService.update(prepaymentMarshalling));
-    } else {
-      this.subscribeToSaveResponse(this.prepaymentMarshallingService.create(prepaymentMarshalling));
-    }
+    this.subscribeToSaveResponse(this.prepaymentMarshallingService.create(this.createFromForm()));
+  }
+
+  edit(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.prepaymentMarshallingService.update(this.createFromForm()));
+  }
+
+  copy(): void {
+    this.isSaving = true;
+    this.subscribeToSaveResponse(this.prepaymentMarshallingService.create(this.copyFromForm()));
+  }
+
+  trackAmortizationPeriodById(index: number, item: IAmortizationPeriod): number {
+    return item.id!;
   }
 
   trackPrepaymentAccountById(index: number, item: IPrepaymentAccount): number {
@@ -137,11 +293,40 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
       placeholders: prepaymentMarshalling.placeholders,
       firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
       lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod
     });
 
-    this.prepaymentAccountsSharedCollection = this.prepaymentAccountService.addPrepaymentAccountToCollectionIfMissing(
-      this.prepaymentAccountsSharedCollection,
-      prepaymentMarshalling.prepaymentAccount
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentMarshalling.firstAmortizationPeriod
+    );
+    this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
+      this.placeholdersSharedCollection,
+      ...(prepaymentMarshalling.placeholders ?? [])
+    );
+    this.fiscalMonthsSharedCollection = this.fiscalMonthService.addFiscalMonthToCollectionIfMissing(
+      this.fiscalMonthsSharedCollection,
+      prepaymentMarshalling.firstFiscalMonth,
+      prepaymentMarshalling.lastFiscalMonth
+    );
+  }
+
+  protected copyForm(prepaymentMarshalling: IPrepaymentMarshalling): void {
+    this.editForm.patchValue({
+      id: prepaymentMarshalling.id,
+      inactive: prepaymentMarshalling.inactive,
+      amortizationPeriods: prepaymentMarshalling.amortizationPeriods,
+      processed: false,
+      prepaymentAccount: prepaymentMarshalling.prepaymentAccount,
+      placeholders: prepaymentMarshalling.placeholders,
+      firstFiscalMonth: prepaymentMarshalling.firstFiscalMonth,
+      lastFiscalMonth: prepaymentMarshalling.lastFiscalMonth,
+      firstAmortizationPeriod: prepaymentMarshalling.firstAmortizationPeriod
+    });
+
+    this.amortizationPeriodsSharedCollection = this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+      this.amortizationPeriodsSharedCollection,
+      prepaymentMarshalling.firstAmortizationPeriod
     );
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
       this.placeholdersSharedCollection,
@@ -167,6 +352,19 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
         )
       )
       .subscribe((prepaymentAccounts: IPrepaymentAccount[]) => (this.prepaymentAccountsSharedCollection = prepaymentAccounts));
+
+    this.amortizationPeriodService
+      .query()
+      .pipe(map((res: HttpResponse<IAmortizationPeriod[]>) => res.body ?? []))
+      .pipe(
+        map((amortizationPeriods: IAmortizationPeriod[]) =>
+          this.amortizationPeriodService.addAmortizationPeriodToCollectionIfMissing(
+            amortizationPeriods,
+            this.editForm.get('firstAmortizationPeriod')!.value
+          )
+        )
+      )
+      .subscribe((amortizationPeriods: IAmortizationPeriod[]) => (this.amortizationPeriodsSharedCollection = amortizationPeriods));
 
     this.placeholderService
       .query()
@@ -197,13 +395,29 @@ export class PrepaymentMarshallingUpdateComponent implements OnInit {
     return {
       ...new PrepaymentMarshalling(),
       id: this.editForm.get(['id'])!.value,
-      inactive: this.editForm.get(['inactive'])!.value,
+      inactive: false,
       amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
-      processed: this.editForm.get(['processed'])!.value,
+      processed: false,
       prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
       lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value
+    };
+  }
+
+  protected copyFromForm(): IPrepaymentMarshalling {
+    return {
+      ...new PrepaymentMarshalling(),
+      // id: this.editForm.get(['id'])!.value,
+      inactive: false,
+      amortizationPeriods: this.editForm.get(['amortizationPeriods'])!.value,
+      processed: false,
+      prepaymentAccount: this.editForm.get(['prepaymentAccount'])!.value,
+      placeholders: this.editForm.get(['placeholders'])!.value,
+      firstFiscalMonth: this.editForm.get(['firstFiscalMonth'])!.value,
+      lastFiscalMonth: this.editForm.get(['lastFiscalMonth'])!.value,
+      firstAmortizationPeriod: this.editForm.get(['firstAmortizationPeriod'])!.value
     };
   }
 }

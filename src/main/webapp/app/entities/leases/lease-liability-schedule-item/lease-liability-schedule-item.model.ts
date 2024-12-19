@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -16,54 +16,51 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import * as dayjs from 'dayjs';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { ILeaseContract } from 'app/entities/leases/lease-contract/lease-contract.model';
-import { ILeaseModelMetadata } from 'app/entities/leases/lease-model-metadata/lease-model-metadata.model';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { ILeaseAmortizationSchedule } from 'app/entities/leases/lease-amortization-schedule/lease-amortization-schedule.model';
+import { IIFRS16LeaseContract } from 'app/entities/leases/ifrs-16-lease-contract/ifrs-16-lease-contract.model';
+import { ILeaseLiability } from 'app/entities/leases/lease-liability/lease-liability.model';
+import { ILeaseRepaymentPeriod } from 'app/entities/leases/lease-repayment-period/lease-repayment-period.model';
 
 export interface ILeaseLiabilityScheduleItem {
   id?: number;
   sequenceNumber?: number | null;
-  periodIncluded?: boolean | null;
-  periodStartDate?: dayjs.Dayjs | null;
-  periodEndDate?: dayjs.Dayjs | null;
   openingBalance?: number | null;
   cashPayment?: number | null;
   principalPayment?: number | null;
   interestPayment?: number | null;
   outstandingBalance?: number | null;
   interestPayableOpening?: number | null;
-  interestExpenseAccrued?: number | null;
-  interestPayableBalance?: number | null;
+  interestAccrued?: number | null;
+  interestPayableClosing?: number | null;
   placeholders?: IPlaceholder[] | null;
-  leaseContract?: ILeaseContract;
-  leaseModelMetadata?: ILeaseModelMetadata | null;
   universallyUniqueMappings?: IUniversallyUniqueMapping[] | null;
+  leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null;
+  leaseContract?: IIFRS16LeaseContract;
+  leaseLiability?: ILeaseLiability;
+  leasePeriod?: ILeaseRepaymentPeriod;
 }
 
 export class LeaseLiabilityScheduleItem implements ILeaseLiabilityScheduleItem {
   constructor(
     public id?: number,
     public sequenceNumber?: number | null,
-    public periodIncluded?: boolean | null,
-    public periodStartDate?: dayjs.Dayjs | null,
-    public periodEndDate?: dayjs.Dayjs | null,
     public openingBalance?: number | null,
     public cashPayment?: number | null,
     public principalPayment?: number | null,
     public interestPayment?: number | null,
     public outstandingBalance?: number | null,
     public interestPayableOpening?: number | null,
-    public interestExpenseAccrued?: number | null,
-    public interestPayableBalance?: number | null,
+    public interestAccrued?: number | null,
+    public interestPayableClosing?: number | null,
     public placeholders?: IPlaceholder[] | null,
-    public leaseContract?: ILeaseContract,
-    public leaseModelMetadata?: ILeaseModelMetadata | null,
-    public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null
-  ) {
-    this.periodIncluded = this.periodIncluded ?? false;
-  }
+    public universallyUniqueMappings?: IUniversallyUniqueMapping[] | null,
+    public leaseAmortizationSchedule?: ILeaseAmortizationSchedule | null,
+    public leaseContract?: IIFRS16LeaseContract,
+    public leaseLiability?: ILeaseLiability,
+    public leasePeriod?: ILeaseRepaymentPeriod
+  ) {}
 }
 
 export function getLeaseLiabilityScheduleItemIdentifier(leaseLiabilityScheduleItem: ILeaseLiabilityScheduleItem): number | undefined {

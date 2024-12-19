@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -16,9 +16,10 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
-import { IPrepaymentAccount } from 'app/entities/prepayments/prepayment-account/prepayment-account.model';
-import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { IFiscalMonth } from 'app/entities/system/fiscal-month/fiscal-month.model';
+import { IPrepaymentAccount } from '../prepayment-account/prepayment-account.model';
+import { IPlaceholder } from '../../erp-pages/placeholder/placeholder.model';
+import { IFiscalMonth } from '../../erp-pages/fiscal-month/fiscal-month.model';
+import { IAmortizationPeriod } from '../amortization-period/amortization-period.model';
 
 export interface IPrepaymentMarshalling {
   id?: number;
@@ -29,6 +30,7 @@ export interface IPrepaymentMarshalling {
   placeholders?: IPlaceholder[] | null;
   firstFiscalMonth?: IFiscalMonth;
   lastFiscalMonth?: IFiscalMonth;
+  firstAmortizationPeriod?: IAmortizationPeriod;
 }
 
 export class PrepaymentMarshalling implements IPrepaymentMarshalling {
@@ -40,7 +42,8 @@ export class PrepaymentMarshalling implements IPrepaymentMarshalling {
     public prepaymentAccount?: IPrepaymentAccount,
     public placeholders?: IPlaceholder[] | null,
     public firstFiscalMonth?: IFiscalMonth,
-    public lastFiscalMonth?: IFiscalMonth
+    public lastFiscalMonth?: IFiscalMonth,
+    public firstAmortizationPeriod?: IAmortizationPeriod,
   ) {
     this.inactive = this.inactive ?? false;
     this.processed = this.processed ?? false;

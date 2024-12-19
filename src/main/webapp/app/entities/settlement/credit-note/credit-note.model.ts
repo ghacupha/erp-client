@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import { IPurchaseOrder } from 'app/entities/settlement/purchase-order/purchase-
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { IPaymentLabel } from 'app/entities/settlement/payment-label/payment-label.model';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
 
 export interface ICreditNote {
   id?: number;

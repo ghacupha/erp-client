@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ISettlementCurrency } from '../../../erp-settlements/settlement-currency/settlement-currency.model';
 import { SettlementCurrencySuggestionService } from '../../suggestion/settlement-currency-suggestion.service';
+import { SettlementCurrencyService } from '../../../erp-settlements/settlement-currency/service/settlement-currency.service';
 
 @Component({
   selector: 'jhi-m21-settlement-currency-form-control',
@@ -48,6 +49,7 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
   valueLookUps$: Observable<ISettlementCurrency[]> = of([]);
 
   constructor(
+    protected valueService: SettlementCurrencyService,
     protected valueSuggestionService: SettlementCurrencySuggestionService
   ) {}
 
@@ -59,8 +61,15 @@ export class M21SettlementCurrencyFormControlComponent implements OnInit, Contro
   onTouched: any = () => {};
 
   ngOnInit(): void {
-
     this.loadValues();
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(inputUpdate => {
+        if (inputUpdate.body) {
+          this.inputValue = inputUpdate.body;
+        }
+      })
+    }
   }
 
   ngOnDestroy(): void {

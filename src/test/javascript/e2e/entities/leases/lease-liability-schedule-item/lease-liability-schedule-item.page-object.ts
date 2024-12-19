@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -49,22 +49,21 @@ export class LeaseLiabilityScheduleItemUpdatePage {
 
   idInput = element(by.id('field_id'));
   sequenceNumberInput = element(by.id('field_sequenceNumber'));
-  periodIncludedInput = element(by.id('field_periodIncluded'));
-  periodStartDateInput = element(by.id('field_periodStartDate'));
-  periodEndDateInput = element(by.id('field_periodEndDate'));
   openingBalanceInput = element(by.id('field_openingBalance'));
   cashPaymentInput = element(by.id('field_cashPayment'));
   principalPaymentInput = element(by.id('field_principalPayment'));
   interestPaymentInput = element(by.id('field_interestPayment'));
   outstandingBalanceInput = element(by.id('field_outstandingBalance'));
   interestPayableOpeningInput = element(by.id('field_interestPayableOpening'));
-  interestExpenseAccruedInput = element(by.id('field_interestExpenseAccrued'));
-  interestPayableBalanceInput = element(by.id('field_interestPayableBalance'));
+  interestAccruedInput = element(by.id('field_interestAccrued'));
+  interestPayableClosingInput = element(by.id('field_interestPayableClosing'));
 
   placeholderSelect = element(by.id('field_placeholder'));
-  leaseContractSelect = element(by.id('field_leaseContract'));
-  leaseModelMetadataSelect = element(by.id('field_leaseModelMetadata'));
   universallyUniqueMappingSelect = element(by.id('field_universallyUniqueMapping'));
+  leaseAmortizationScheduleSelect = element(by.id('field_leaseAmortizationSchedule'));
+  leaseContractSelect = element(by.id('field_leaseContract'));
+  leaseLiabilitySelect = element(by.id('field_leaseLiability'));
+  leasePeriodSelect = element(by.id('field_leasePeriod'));
 
   async getPageTitle(): Promise<string> {
     return this.pageTitle.getText();
@@ -84,26 +83,6 @@ export class LeaseLiabilityScheduleItemUpdatePage {
 
   async getSequenceNumberInput(): Promise<string> {
     return await this.sequenceNumberInput.getAttribute('value');
-  }
-
-  getPeriodIncludedInput(): ElementFinder {
-    return this.periodIncludedInput;
-  }
-
-  async setPeriodStartDateInput(periodStartDate: string): Promise<void> {
-    await this.periodStartDateInput.sendKeys(periodStartDate);
-  }
-
-  async getPeriodStartDateInput(): Promise<string> {
-    return await this.periodStartDateInput.getAttribute('value');
-  }
-
-  async setPeriodEndDateInput(periodEndDate: string): Promise<void> {
-    await this.periodEndDateInput.sendKeys(periodEndDate);
-  }
-
-  async getPeriodEndDateInput(): Promise<string> {
-    return await this.periodEndDateInput.getAttribute('value');
   }
 
   async setOpeningBalanceInput(openingBalance: string): Promise<void> {
@@ -154,20 +133,20 @@ export class LeaseLiabilityScheduleItemUpdatePage {
     return await this.interestPayableOpeningInput.getAttribute('value');
   }
 
-  async setInterestExpenseAccruedInput(interestExpenseAccrued: string): Promise<void> {
-    await this.interestExpenseAccruedInput.sendKeys(interestExpenseAccrued);
+  async setInterestAccruedInput(interestAccrued: string): Promise<void> {
+    await this.interestAccruedInput.sendKeys(interestAccrued);
   }
 
-  async getInterestExpenseAccruedInput(): Promise<string> {
-    return await this.interestExpenseAccruedInput.getAttribute('value');
+  async getInterestAccruedInput(): Promise<string> {
+    return await this.interestAccruedInput.getAttribute('value');
   }
 
-  async setInterestPayableBalanceInput(interestPayableBalance: string): Promise<void> {
-    await this.interestPayableBalanceInput.sendKeys(interestPayableBalance);
+  async setInterestPayableClosingInput(interestPayableClosing: string): Promise<void> {
+    await this.interestPayableClosingInput.sendKeys(interestPayableClosing);
   }
 
-  async getInterestPayableBalanceInput(): Promise<string> {
-    return await this.interestPayableBalanceInput.getAttribute('value');
+  async getInterestPayableClosingInput(): Promise<string> {
+    return await this.interestPayableClosingInput.getAttribute('value');
   }
 
   async placeholderSelectLastOption(): Promise<void> {
@@ -186,6 +165,38 @@ export class LeaseLiabilityScheduleItemUpdatePage {
     return await this.placeholderSelect.element(by.css('option:checked')).getText();
   }
 
+  async universallyUniqueMappingSelectLastOption(): Promise<void> {
+    await this.universallyUniqueMappingSelect.all(by.tagName('option')).last().click();
+  }
+
+  async universallyUniqueMappingSelectOption(option: string): Promise<void> {
+    await this.universallyUniqueMappingSelect.sendKeys(option);
+  }
+
+  getUniversallyUniqueMappingSelect(): ElementFinder {
+    return this.universallyUniqueMappingSelect;
+  }
+
+  async getUniversallyUniqueMappingSelectedOption(): Promise<string> {
+    return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
+  }
+
+  async leaseAmortizationScheduleSelectLastOption(): Promise<void> {
+    await this.leaseAmortizationScheduleSelect.all(by.tagName('option')).last().click();
+  }
+
+  async leaseAmortizationScheduleSelectOption(option: string): Promise<void> {
+    await this.leaseAmortizationScheduleSelect.sendKeys(option);
+  }
+
+  getLeaseAmortizationScheduleSelect(): ElementFinder {
+    return this.leaseAmortizationScheduleSelect;
+  }
+
+  async getLeaseAmortizationScheduleSelectedOption(): Promise<string> {
+    return await this.leaseAmortizationScheduleSelect.element(by.css('option:checked')).getText();
+  }
+
   async leaseContractSelectLastOption(): Promise<void> {
     await this.leaseContractSelect.all(by.tagName('option')).last().click();
   }
@@ -202,36 +213,36 @@ export class LeaseLiabilityScheduleItemUpdatePage {
     return await this.leaseContractSelect.element(by.css('option:checked')).getText();
   }
 
-  async leaseModelMetadataSelectLastOption(): Promise<void> {
-    await this.leaseModelMetadataSelect.all(by.tagName('option')).last().click();
+  async leaseLiabilitySelectLastOption(): Promise<void> {
+    await this.leaseLiabilitySelect.all(by.tagName('option')).last().click();
   }
 
-  async leaseModelMetadataSelectOption(option: string): Promise<void> {
-    await this.leaseModelMetadataSelect.sendKeys(option);
+  async leaseLiabilitySelectOption(option: string): Promise<void> {
+    await this.leaseLiabilitySelect.sendKeys(option);
   }
 
-  getLeaseModelMetadataSelect(): ElementFinder {
-    return this.leaseModelMetadataSelect;
+  getLeaseLiabilitySelect(): ElementFinder {
+    return this.leaseLiabilitySelect;
   }
 
-  async getLeaseModelMetadataSelectedOption(): Promise<string> {
-    return await this.leaseModelMetadataSelect.element(by.css('option:checked')).getText();
+  async getLeaseLiabilitySelectedOption(): Promise<string> {
+    return await this.leaseLiabilitySelect.element(by.css('option:checked')).getText();
   }
 
-  async universallyUniqueMappingSelectLastOption(): Promise<void> {
-    await this.universallyUniqueMappingSelect.all(by.tagName('option')).last().click();
+  async leasePeriodSelectLastOption(): Promise<void> {
+    await this.leasePeriodSelect.all(by.tagName('option')).last().click();
   }
 
-  async universallyUniqueMappingSelectOption(option: string): Promise<void> {
-    await this.universallyUniqueMappingSelect.sendKeys(option);
+  async leasePeriodSelectOption(option: string): Promise<void> {
+    await this.leasePeriodSelect.sendKeys(option);
   }
 
-  getUniversallyUniqueMappingSelect(): ElementFinder {
-    return this.universallyUniqueMappingSelect;
+  getLeasePeriodSelect(): ElementFinder {
+    return this.leasePeriodSelect;
   }
 
-  async getUniversallyUniqueMappingSelectedOption(): Promise<string> {
-    return await this.universallyUniqueMappingSelect.element(by.css('option:checked')).getText();
+  async getLeasePeriodSelectedOption(): Promise<string> {
+    return await this.leasePeriodSelect.element(by.css('option:checked')).getText();
   }
 
   async save(): Promise<void> {

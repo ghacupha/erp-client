@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -66,6 +66,42 @@
             id="field_assetNumber"
             data-cy="assetNumber"
             formControlName="assetNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_batchSequenceNumber">Batch Sequence Number</label>
+          <input
+            type="number"
+            class="form-control"
+            name="batchSequenceNumber"
+            id="field_batchSequenceNumber"
+            data-cy="batchSequenceNumber"
+            formControlName="batchSequenceNumber"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_processedItems">Processed Items</label>
+          <input
+            type="text"
+            class="form-control"
+            name="processedItems"
+            id="field_processedItems"
+            data-cy="processedItems"
+            formControlName="processedItems"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_totalItemsProcessed">Total Items Processed</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalItemsProcessed"
+            id="field_totalItemsProcessed"
+            data-cy="totalItemsProcessed"
+            formControlName="totalItemsProcessed"
           />
         </div>
 
@@ -233,6 +269,55 @@
               *ngFor="let fiscalYearOption of fiscalYearsSharedCollection; trackBy: trackFiscalYearById"
             >
               {{ fiscalYearOption.fiscalYearCode }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationJob">Depreciation Job</label>
+          <select
+            class="form-control"
+            id="field_depreciationJob"
+            data-cy="depreciationJob"
+            name="depreciationJob"
+            formControlName="depreciationJob"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationJobOption.id === editForm.get('depreciationJob')!.value?.id
+                  ? editForm.get('depreciationJob')!.value
+                  : depreciationJobOption
+              "
+              *ngFor="let depreciationJobOption of depreciationJobsSharedCollection; trackBy: trackDepreciationJobById"
+            >
+              {{ depreciationJobOption.description }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_depreciationBatchSequence">Depreciation Batch Sequence</label>
+          <select
+            class="form-control"
+            id="field_depreciationBatchSequence"
+            data-cy="depreciationBatchSequence"
+            name="depreciationBatchSequence"
+            formControlName="depreciationBatchSequence"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                depreciationBatchSequenceOption.id === editForm.get('depreciationBatchSequence')!.value?.id
+                  ? editForm.get('depreciationBatchSequence')!.value
+                  : depreciationBatchSequenceOption
+              "
+              *ngFor="
+                let depreciationBatchSequenceOption of depreciationBatchSequencesSharedCollection;
+                trackBy: trackDepreciationBatchSequenceById
+              "
+            >
+              {{ depreciationBatchSequenceOption.id }}
             </option>
           </select>
         </div>

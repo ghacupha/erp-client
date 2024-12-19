@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -27,20 +27,20 @@ import { of, Subject } from 'rxjs';
 
 import { PrepaymentAccountService } from '../service/prepayment-account.service';
 import { IPrepaymentAccount, PrepaymentAccount } from '../prepayment-account.model';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
 import { ITransactionAccount } from 'app/entities/accounting/transaction-account/transaction-account.model';
 import { TransactionAccountService } from 'app/entities/accounting/transaction-account/service/transaction-account.service';
 import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model';
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IPrepaymentMapping } from 'app/entities/prepayments/prepayment-mapping/prepayment-mapping.model';
 import { PrepaymentMappingService } from 'app/entities/prepayments/prepayment-mapping/service/prepayment-mapping.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';

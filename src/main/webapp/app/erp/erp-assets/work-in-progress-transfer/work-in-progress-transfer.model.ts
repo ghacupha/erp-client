@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -38,7 +38,8 @@ export interface IWorkInProgressTransfer {
   assetCategory?: IAssetCategory | null;
   workInProgressRegistration?: IWorkInProgressRegistration | null;
   serviceOutlet?: IServiceOutlet | null;
-  settlement?: ISettlement | null;
+  transferSettlement?: ISettlement | null;
+  originalSettlement?: ISettlement | null;
   workProjectRegister?: IWorkProjectRegister | null;
 }
 
@@ -55,7 +56,8 @@ export class WorkInProgressTransfer implements IWorkInProgressTransfer {
     public assetCategory?: IAssetCategory | null,
     public workInProgressRegistration?: IWorkInProgressRegistration | null,
     public serviceOutlet?: IServiceOutlet | null,
-    public settlement?: ISettlement | null,
+    public transferSettlement?: ISettlement | null,
+    public originalSettlement?: ISettlement | null,
     public workProjectRegister?: IWorkProjectRegister | null
   ) {}
 }

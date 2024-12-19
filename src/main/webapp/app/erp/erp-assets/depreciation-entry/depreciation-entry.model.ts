@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -25,12 +25,17 @@ import { IDepreciationMethod } from '../depreciation-method/depreciation-method.
 import { IDepreciationPeriod } from '../depreciation-period/depreciation-period.model';
 import { IFiscalYear } from '../../erp-pages/fiscal-year/fiscal-year.model';
 import { IFiscalQuarter } from '../../erp-pages/fiscal-quarter/fiscal-quarter.model';
+import { IDepreciationJob } from '../depreciation-job/depreciation-job.model';
+import { IDepreciationBatchSequence } from '../depreciation-batch-sequence/depreciation-batch-sequence.model';
 
 export interface IDepreciationEntry {
   id?: number;
   postedAt?: dayjs.Dayjs | null;
   depreciationAmount?: number | null;
   assetNumber?: number | null;
+  batchSequenceNumber?: number | null;
+  processedItems?: string | null;
+  totalItemsProcessed?: number | null;
   serviceOutlet?: IServiceOutlet | null;
   assetCategory?: IAssetCategory | null;
   depreciationMethod?: IDepreciationMethod | null;
@@ -39,6 +44,8 @@ export interface IDepreciationEntry {
   fiscalMonth?: IFiscalMonth | null;
   fiscalQuarter?: IFiscalQuarter | null;
   fiscalYear?: IFiscalYear | null;
+  depreciationJob?: IDepreciationJob | null;
+  depreciationBatchSequence?: IDepreciationBatchSequence | null;
 }
 
 export class DepreciationEntry implements IDepreciationEntry {
@@ -47,6 +54,9 @@ export class DepreciationEntry implements IDepreciationEntry {
     public postedAt?: dayjs.Dayjs | null,
     public depreciationAmount?: number | null,
     public assetNumber?: number | null,
+    public batchSequenceNumber?: number | null,
+    public processedItems?: string | null,
+    public totalItemsProcessed?: number | null,
     public serviceOutlet?: IServiceOutlet | null,
     public assetCategory?: IAssetCategory | null,
     public depreciationMethod?: IDepreciationMethod | null,
@@ -54,7 +64,9 @@ export class DepreciationEntry implements IDepreciationEntry {
     public depreciationPeriod?: IDepreciationPeriod | null,
     public fiscalMonth?: IFiscalMonth | null,
     public fiscalQuarter?: IFiscalQuarter | null,
-    public fiscalYear?: IFiscalYear | null
+    public fiscalYear?: IFiscalYear | null,
+    public depreciationJob?: IDepreciationJob | null,
+    public depreciationBatchSequence?: IDepreciationBatchSequence | null
   ) {}
 }
 

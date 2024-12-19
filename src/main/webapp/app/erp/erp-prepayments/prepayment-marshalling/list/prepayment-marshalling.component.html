@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 -->
 <div>
   <h2 id="page-heading" data-cy="PrepaymentMarshallingHeading">
-    <span>Prepayment Marshallings</span>
+    <span>Prepayment Marshalling Items</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
@@ -32,6 +32,7 @@
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-prepayment-marshalling"
         [routerLink]="['/prepayment-marshalling/new']"
+        (click)='createButtonEvent()'
       >
         <fa-icon icon="plus"></fa-icon>
         <span class="hidden-sm-down"> Create a new Prepayment Marshalling </span>
@@ -71,9 +72,12 @@
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="inactive"><span>Inactive</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="processed"><span>Processed</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="amortizationPeriods"><span>Amortization Periods</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="prepaymentAccount.catalogueNumber"><span>Prepayment Account</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="firstAmortizationPeriod.periodCode">
+            <span>First Amortization Period</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="firstFiscalMonth.startDate"><span>First Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="lastFiscalMonth.endDate"><span>Last Fiscal Month</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
@@ -84,9 +88,14 @@
           <td>
             <a [routerLink]="['/prepayment-marshalling', prepaymentMarshalling.id, 'view']">{{ prepaymentMarshalling.id }}</a>
           </td>
-          <td>{{ prepaymentMarshalling.inactive }}</td>
+          <td *ngIf=prepaymentMarshalling.inactive>Inactive</td>
+          <td *ngIf=!prepaymentMarshalling.inactive>Active</td>
+
+          <td *ngIf=prepaymentMarshalling.processed>Processed</td>
+          <td *ngIf=!prepaymentMarshalling.processed>Not processed</td>
+
           <td>{{ prepaymentMarshalling.amortizationPeriods }}</td>
-          <td>{{ prepaymentMarshalling.processed }}</td>
+
           <td>
             <div *ngIf="prepaymentMarshalling.prepaymentAccount">
               <a [routerLink]="['/prepayment-account', prepaymentMarshalling.prepaymentAccount?.id, 'view']">{{
@@ -94,6 +103,15 @@
               }}</a>
             </div>
           </td>
+
+          <td>
+            <div *ngIf="prepaymentMarshalling.firstAmortizationPeriod">
+              <a [routerLink]="['/amortization-period', prepaymentMarshalling.firstAmortizationPeriod?.id, 'view']">{{
+                prepaymentMarshalling.firstAmortizationPeriod?.periodCode
+                }}</a>
+            </div>
+          </td>
+
           <td>
             <div *ngIf="prepaymentMarshalling.firstFiscalMonth">
               <a [routerLink]="['/fiscal-month', prepaymentMarshalling.firstFiscalMonth?.id, 'view']">{{
@@ -117,22 +135,33 @@
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">View</span>
               </button>
 
               <button
                 type="submit"
                 [routerLink]="['/prepayment-marshalling', prepaymentMarshalling.id, 'edit']"
+                (click)='editButtonEvent(prepaymentMarshalling)'
                 class="btn btn-primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(prepaymentMarshalling)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline">Delete</span>
+              <button
+                type="submit"
+                [routerLink]="['/prepayment-marshalling', prepaymentMarshalling.id, 'copy']"
+                (click)='copyButtonEvent(prepaymentMarshalling)'
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="copy"></fa-icon>
+              </button>
+
+              <button
+                [hidden]="prepaymentMarshalling.processed"
+                type="submit" (click)="delete(prepaymentMarshalling)"
+                class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="trash"></fa-icon>
               </button>
             </div>
           </td>

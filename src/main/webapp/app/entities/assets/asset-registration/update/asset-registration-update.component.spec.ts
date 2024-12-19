@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { PaymentInvoiceService } from 'app/entities/settlement/payment-invoice/service/payment-invoice.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
@@ -45,14 +45,14 @@ import { IJobSheet } from 'app/entities/settlement/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/settlement/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from 'app/entities/assets/asset-warranty/service/asset-warranty.service';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IAssetAccessory } from 'app/entities/assets/asset-accessory/asset-accessory.model';
 import { AssetAccessoryService } from 'app/entities/assets/asset-accessory/service/asset-accessory.service';
 
@@ -152,14 +152,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call ServiceOutlet query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const serviceOutlets: IServiceOutlet[] = [{ id: 10495 }];
-      assetRegistration.serviceOutlets = serviceOutlets;
+      const otherRelatedServiceOutlets: IServiceOutlet[] = [{ id: 10495 }];
+      assetRegistration.otherRelatedServiceOutlets = otherRelatedServiceOutlets;
       const mainServiceOutlet: IServiceOutlet = { id: 12055 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
 
       const serviceOutletCollection: IServiceOutlet[] = [{ id: 40506 }];
       jest.spyOn(serviceOutletService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceOutletCollection })));
-      const additionalServiceOutlets = [...serviceOutlets, mainServiceOutlet];
+      const additionalServiceOutlets = [...otherRelatedServiceOutlets, mainServiceOutlet];
       const expectedCollection: IServiceOutlet[] = [...additionalServiceOutlets, ...serviceOutletCollection];
       jest.spyOn(serviceOutletService, 'addServiceOutletToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -176,12 +176,14 @@ describe('AssetRegistration Management Update Component', () => {
 
     it('Should call Settlement query and add missing value', () => {
       const assetRegistration: IAssetRegistration = { id: 456 };
-      const settlements: ISettlement[] = [{ id: 6062 }];
-      assetRegistration.settlements = settlements;
+      const otherRelatedSettlements: ISettlement[] = [{ id: 6062 }];
+      assetRegistration.otherRelatedSettlements = otherRelatedSettlements;
+      const acquiringTransaction: ISettlement = { id: 63020 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
 
-      const settlementCollection: ISettlement[] = [{ id: 63020 }];
+      const settlementCollection: ISettlement[] = [{ id: 26803 }];
       jest.spyOn(settlementService, 'query').mockReturnValue(of(new HttpResponse({ body: settlementCollection })));
-      const additionalSettlements = [...settlements];
+      const additionalSettlements = [...otherRelatedSettlements, acquiringTransaction];
       const expectedCollection: ISettlement[] = [...additionalSettlements, ...settlementCollection];
       jest.spyOn(settlementService, 'addSettlementToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -420,12 +422,14 @@ describe('AssetRegistration Management Update Component', () => {
       assetRegistration.placeholders = [placeholders];
       const paymentInvoices: IPaymentInvoice = { id: 92454 };
       assetRegistration.paymentInvoices = [paymentInvoices];
-      const serviceOutlets: IServiceOutlet = { id: 53824 };
-      assetRegistration.serviceOutlets = [serviceOutlets];
+      const otherRelatedServiceOutlets: IServiceOutlet = { id: 53824 };
+      assetRegistration.otherRelatedServiceOutlets = [otherRelatedServiceOutlets];
       const mainServiceOutlet: IServiceOutlet = { id: 72754 };
       assetRegistration.mainServiceOutlet = mainServiceOutlet;
-      const settlements: ISettlement = { id: 26803 };
-      assetRegistration.settlements = [settlements];
+      const otherRelatedSettlements: ISettlement = { id: 3742 };
+      assetRegistration.otherRelatedSettlements = [otherRelatedSettlements];
+      const acquiringTransaction: ISettlement = { id: 83854 };
+      assetRegistration.acquiringTransaction = acquiringTransaction;
       const assetCategory: IAssetCategory = { id: 64108 };
       assetRegistration.assetCategory = assetCategory;
       const purchaseOrders: IPurchaseOrder = { id: 76982 };
@@ -455,9 +459,10 @@ describe('AssetRegistration Management Update Component', () => {
       expect(comp.editForm.value).toEqual(expect.objectContaining(assetRegistration));
       expect(comp.placeholdersSharedCollection).toContain(placeholders);
       expect(comp.paymentInvoicesSharedCollection).toContain(paymentInvoices);
-      expect(comp.serviceOutletsSharedCollection).toContain(serviceOutlets);
+      expect(comp.serviceOutletsSharedCollection).toContain(otherRelatedServiceOutlets);
       expect(comp.serviceOutletsSharedCollection).toContain(mainServiceOutlet);
-      expect(comp.settlementsSharedCollection).toContain(settlements);
+      expect(comp.settlementsSharedCollection).toContain(otherRelatedSettlements);
+      expect(comp.settlementsSharedCollection).toContain(acquiringTransaction);
       expect(comp.assetCategoriesSharedCollection).toContain(assetCategory);
       expect(comp.purchaseOrdersSharedCollection).toContain(purchaseOrders);
       expect(comp.deliveryNotesSharedCollection).toContain(deliveryNotes);

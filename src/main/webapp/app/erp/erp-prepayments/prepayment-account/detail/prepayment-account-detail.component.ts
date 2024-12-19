@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,6 +21,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { IPrepaymentAccount } from '../prepayment-account.model';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../../store/global-store.definition';
+import {
+  prepaymentAccountCopyWorkflowInitiatedFromView,
+  prepaymentAccountEditWorkflowInitiatedFromView
+} from '../../../store/actions/prepayment-account-update-status.actions';
 
 @Component({
   selector: 'jhi-prepayment-account-detail',
@@ -29,12 +35,24 @@ import { DataUtils } from 'app/core/util/data-util.service';
 export class PrepaymentAccountDetailComponent implements OnInit {
   prepaymentAccount: IPrepaymentAccount | null = null;
 
-  constructor(protected dataUtils: DataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected dataUtils: DataUtils,
+    protected activatedRoute: ActivatedRoute,
+    protected store: Store<State>,) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ prepaymentAccount }) => {
       this.prepaymentAccount = prepaymentAccount;
     });
+  }
+
+  editButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentAccountEditWorkflowInitiatedFromView({editedInstance: instance}))
+  }
+
+  copyButtonEvent(instance: IPrepaymentAccount): void {
+    this.store.dispatch(prepaymentAccountCopyWorkflowInitiatedFromView({copiedInstance: instance}))
   }
 
   byteSize(base64String: string): string {

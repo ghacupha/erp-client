@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -29,11 +29,13 @@ import { IAssetAccessory } from '../asset-accessory/asset-accessory.model';
 import { IAssetWarranty } from '../asset-warranty/asset-warranty.model';
 import { ISettlementCurrency } from '../../erp-settlements/settlement-currency/settlement-currency.model';
 import { IWorkProjectRegister } from '../work-project-register/work-project-register.model';
+import * as dayjs from 'dayjs';
 
 export interface IWorkInProgressRegistration {
   id?: number;
   sequenceNumber?: string;
   particulars?: string | null;
+  instalmentDate?: dayjs.Dayjs | null;
   instalmentAmount?: number | null;
   commentsContentType?: string | null;
   comments?: string | null;
@@ -60,6 +62,7 @@ export class WorkInProgressRegistration implements IWorkInProgressRegistration {
     public id?: number,
     public sequenceNumber?: string,
     public particulars?: string | null,
+    public instalmentDate?: dayjs.Dayjs | null,
     public instalmentAmount?: number | null,
     public commentsContentType?: string | null,
     public comments?: string | null,

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {DealerPaymentsEffects} from "./effects/dealer-payments.effects";
 import {DealerInvoiceWorkflowEffects} from "./effects/dealer-invoice-workflow.effects";
 import { SettlementUpdatesEffects } from './effects/settlement-updates.effects';
+import { PrepaymentAccountWorkflowEffects } from './effects/prepayment-account-workflow.effects';
 
 import * as fromDealerInvoiceWorkflows from "./reducers/dealer-invoice-workflows-status.reducer";
 import * as fromDealerWorkflows from "./reducers/dealer-workflows-status.reducer";
@@ -31,12 +32,34 @@ import * as fromSettlementUpdates from "./reducers/settlement-update-menu-status
 import * as fromAssetRegistrationUpdates from "./reducers/asset-registration-workflow-status.reducer";
 import * as fromAssetAccessoryUpdates from "./reducers/asset-accessory-workflow-status.reducer";
 import * as fromWIPRegistrationUpdates from "./reducers/wip-registration-workflow-status.reducer";
+import * as fromPrepaymentAccountUpdates from "./reducers/prepayment-account-workflow-status.reducer";
+import * as fromPrepaymentMarshallingUpdates from "./reducers/prepayment-marshalling-workflow-status.reducer";
 import * as fromPaymentInvoiceUpdates from "./reducers/payment-invoice-workflow-status.reducer";
 import * as fromReportNavigationProfile from "./reducers/report-navigation-profile-status.reducer";
+import { Ifrs16LeaseModelWorkflowEffects } from './effects/ifrs16-lease-model-workflow.effects';
+import { RouModelMetadataWorkflowEffects } from './effects/rou-model-metadata-workflow.effects';
+import * as fromIfrs16LeaseModelUpdates from "./reducers/ifrs16-lease-model-workflow-status.reducer";
+import * as fromTAAmortizationUpdates from "./reducers/ta-amortization-rule-status.reducer";
+import * as fromTransactionAccountUpdates from "./reducers/transaction-account-update-status.reducer";
+import * as fromTransactionAccountReportDateUpdates from "./reducers/transaction-account-report-date-selection.reducer";
+import * as fromLeaseAmortizationCalculationState from "./reducers/lease-amortization-calculation.reducer";
+import * as fromLeaseLiabilityState from "./reducers/lease-liability.reducer";
+import * as fromLeasePaymentState from "./reducers/lease-payment.reducer";
+import * as fromRouModelMetadataUpdates from "./reducers/rou-model-metadata-workflow-status.reducer";
+import * as fromLeasePeriodIdSelectionUpdates from "./reducers/lease-period-selection-workflow-status.reducer";
+import * as fromLeasePeriodReportPathUpdates from "./reducers/lease-period-report-path-selection.reducer";
+import { PrepaymentMarshallingWorkflowEffects } from './effects/prepayment-marshalling-workflow.effects';
 
 @NgModule({
   imports: [
-    EffectsModule.forRoot([SettlementUpdatesEffects, DealerInvoiceWorkflowEffects, DealerPaymentsEffects]),
+    EffectsModule.forRoot([
+      SettlementUpdatesEffects,
+      PrepaymentAccountWorkflowEffects,
+      DealerInvoiceWorkflowEffects,
+      PrepaymentMarshallingWorkflowEffects,
+      Ifrs16LeaseModelWorkflowEffects,
+      RouModelMetadataWorkflowEffects,
+      DealerPaymentsEffects]),
     EffectsModule.forFeature([]),
     StoreModule.forRoot({}, {runtimeChecks: {
         strictStateImmutability: true,
@@ -48,7 +71,7 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
       }}),
     StoreDevtoolsModule.instrument({
       name: 'ERP App States',
-      maxAge: 25, // Retains last 25 states
+      maxAge: 100, // Retains last 100 states
     }),
     StoreModule.forFeature('recordDealerInvoiceWorkflows', fromDealerInvoiceWorkflows.dealerInvoiceWorkflowStateReducer),
     StoreModule.forFeature('paymentToDealerWorkflows', fromDealerWorkflows.dealerWorkflowStateReducer),
@@ -59,6 +82,18 @@ import * as fromReportNavigationProfile from "./reducers/report-navigation-profi
     StoreModule.forFeature('wipRegistrationUpdateForm', fromWIPRegistrationUpdates.wipRegistrationUpdateStateReducer),
     StoreModule.forFeature('paymentInvoiceUpdateForm', fromPaymentInvoiceUpdates.paymentInvoiceUpdateStateReducer),
     StoreModule.forFeature('reportNavigationProfileState', fromReportNavigationProfile.reportNavigationProfileStateReducer),
+    StoreModule.forFeature('prepaymentAccountUpdateForm', fromPrepaymentAccountUpdates.prepaymentAccountUpdateStateReducer),
+    StoreModule.forFeature('prepaymentMarshallingUpdateForm', fromPrepaymentMarshallingUpdates.prepaymentMarshallingUpdateStateReducer),
+    StoreModule.forFeature('ifrs16LeaseModelUpdateForm', fromIfrs16LeaseModelUpdates.ifrs16LeaseModelUpdateStateReducer),
+    StoreModule.forFeature('taAmortizationRuleUpdateForm', fromTAAmortizationUpdates.taAmortizationRuleUpdateStateReducer),
+    StoreModule.forFeature('transactionAccountUpdateForm', fromTransactionAccountUpdates.transactionAccountUpdateStateReducer),
+    StoreModule.forFeature('transactionAccountReportDateSelection', fromTransactionAccountReportDateUpdates.transactionAccountReportPathSelectionStateReducer),
+    StoreModule.forFeature('leaseAmortizationCalculationForm', fromLeaseAmortizationCalculationState.leaseAmortizationCalculationStateReducer),
+    StoreModule.forFeature('leaseLiabilityForm', fromLeaseLiabilityState.leaseLiabilityStateReducer),
+    StoreModule.forFeature('leasePaymentForm', fromLeasePaymentState.leasePaymentStateReducer),
+    StoreModule.forFeature('rouModelMetadataUpdateForm', fromRouModelMetadataUpdates.rouModelMetadataUpdateStateReducer),
+    StoreModule.forFeature('leasePeriodIdSelection', fromLeasePeriodIdSelectionUpdates.leasePeriodIdSelectionStateReducer),
+    StoreModule.forFeature('leasePeriodReportPath', fromLeasePeriodReportPathUpdates.leasePeriodReportPathSelectionStateReducer),
   ],
   exports: [
     EffectsModule,

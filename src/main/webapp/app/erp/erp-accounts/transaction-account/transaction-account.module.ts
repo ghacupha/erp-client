@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -24,9 +24,15 @@ import { TransactionAccountUpdateComponent } from './update/transaction-account-
 import { TransactionAccountDeleteDialogComponent } from './delete/transaction-account-delete-dialog.component';
 import { TransactionAccountRoutingModule } from './route/transaction-account-routing.module';
 import { ErpCommonModule } from '../../erp-common/erp-common.module';
+import { TransactionAccountRoutingCustomModule } from './route/transaction-account-routing-custom.module';
 
 @NgModule({
-  imports: [SharedModule, TransactionAccountRoutingModule, ErpCommonModule],
+  imports: [
+    SharedModule,
+    TransactionAccountRoutingModule,
+    TransactionAccountRoutingCustomModule,
+    ErpCommonModule
+  ],
   declarations: [
     TransactionAccountComponent,
     TransactionAccountDetailComponent,

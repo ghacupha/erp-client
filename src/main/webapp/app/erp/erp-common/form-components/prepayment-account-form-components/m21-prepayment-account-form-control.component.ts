@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -21,7 +21,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IPrepaymentAccount } from '../../../erp-prepayments/prepayment-account/prepayment-account.model';
-import { PrepaymentAccountSuggestionService } from '../../suggestion/prepayment-account-suggestion.service';
+import { PrepaymentAccountSuggestionService } from './prepayment-account-suggestion.service';
+import { PrepaymentAccountService } from '../../../erp-prepayments/prepayment-account/service/prepayment-account.service';
+import { DealerService } from '../../../erp-pages/dealers/dealer/service/dealer.service';
 
 /**
  * Many-to-one form control component for prepayment-account
@@ -43,6 +45,8 @@ export class M21PrepaymentAccountFormControlComponent implements OnInit, Control
 
   @Input() inputControlLabel = '';
 
+  @Input() disabledInput = false;
+
   @Output() valueSelected: EventEmitter<IPrepaymentAccount> = new EventEmitter<IPrepaymentAccount>();
 
   minAccountLengthTerm = 3;
@@ -51,6 +55,8 @@ export class M21PrepaymentAccountFormControlComponent implements OnInit, Control
   valueLookUps$: Observable<IPrepaymentAccount[]> = of([]);
 
   constructor(
+    protected dealerService: DealerService,
+    protected valueService: PrepaymentAccountService,
     protected valueSuggestionService: PrepaymentAccountSuggestionService
   ) {}
 
@@ -64,6 +70,21 @@ export class M21PrepaymentAccountFormControlComponent implements OnInit, Control
   ngOnInit(): void {
 
     this.loadValues();
+
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(res => {
+        if (res.body) {
+          this.inputValue = res.body;
+          if (this.inputValue.dealer?.id != null) {
+            this.dealerService.find(this.inputValue.dealer.id).subscribe(dealerResponse => {
+              if (dealerResponse.body) {
+                this.inputValue.dealer = dealerResponse.body;
+              }
+            });
+          }
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

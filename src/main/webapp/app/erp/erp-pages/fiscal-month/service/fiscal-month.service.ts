@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
 ///
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
@@ -35,6 +35,7 @@ export type EntityArrayResponseType = HttpResponse<IFiscalMonth[]>;
 @Injectable({ providedIn: 'root' })
 export class FiscalMonthService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/app/fiscal-months');
+  protected resourceLapsedPeriodsUrl = this.applicationConfigService.getEndpointFor('api/app/fiscal-months/lapsed-period');
   protected resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/app/_search/fiscal-months');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -71,6 +72,25 @@ export class FiscalMonthService {
     return this.http
       .get<IFiscalMonth[]>(this.resourceUrl, { params: options, observe: 'response' })
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  /**
+   * You have a specified fiscal-month, and this method provides the fiscal-month instance after
+   * the specified number of fiscal-periods have lapsed
+   * @param currentFiscalMonthId id of the current fiscal month
+   * @param fiscalPeriods number of periods lapsed
+   */
+  findFiscalMonthAfterGivenPeriods(currentFiscalMonthId: number, fiscalPeriods: number): Observable<EntityResponseType> {
+
+    const req = {
+      currentFiscalMonthId,
+      fiscalPeriods
+    }
+    const options: HttpParams = createRequestOption(req);
+
+    return this.http
+      .get<IFiscalMonth>(this.resourceLapsedPeriodsUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -142,6 +142,17 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
       loadChildren: () =>
         import('./work-in-progress-overview/work-in-progress-overview.module').then(
           m => m.WorkInProgressOverviewModule
+        ),
+    },
+    {
+      path: 'autonomous-report',
+      data: {
+        pageTitle: 'ERP | Auto Reports',
+      },
+      canActivate: [UserRouteAccessService],
+      loadChildren: () =>
+        import('./autonomous-report/autonomous-report.module').then(
+          m => m.AutonomousReportModule
         ),
     },
   ])

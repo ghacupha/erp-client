@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220301131552",
   "dto": "mapstruct",
-  "clientRootFolder": "gdi",
+  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "countyCode",

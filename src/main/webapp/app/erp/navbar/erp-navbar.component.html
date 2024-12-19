@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -46,9 +46,15 @@
         </a>
       </li>-->
 
-      <jhi-tables-nav></jhi-tables-nav>
+      <!--<jhi-tables-nav></jhi-tables-nav>-->
 
-      <jhi-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']"></jhi-reports-nav>
+      <jhi-rou-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_LEASE_MANAGER']">`</jhi-rou-reports-nav>
+
+      <jhi-lease-reports-nav *jhiHasAnyAuthority="['ROLE_DEV','ROLE_LEASE_MANAGER']">`</jhi-lease-reports-nav>
+
+      <ng-container *jhiHasAnyAuthority="['ROLE_DEV','ROLE_REPORT_ACCESSOR','ROLE_REPORT_DESIGNER']">
+        <jhi-reports-nav *jhiHideForRole="'ROLE_LEASE_MANAGER'"></jhi-reports-nav>
+      </ng-container>
 
       <jhi-payments-nav *jhiHasAnyAuthority="'ROLE_PAYMENTS_USER'"></jhi-payments-nav>
 
@@ -59,6 +65,8 @@
       <jhi-taxes-nav *jhiHasAnyAuthority="'ROLE_TAX_MODULE_USER'"></jhi-taxes-nav>
 
       <!--<jhi-granular-data-nav *jhiHasAnyAuthority="'ROLE_GRANULAR_REPORTS_USER'"></jhi-granular-data-nav>-->
+
+      <jhi-accounts-nav *jhiHasAnyAuthority="'ROLE_BOOK_KEEPING'"></jhi-accounts-nav>
 
       <jhi-prepayments-nav *jhiHasAnyAuthority="'ROLE_PREPAYMENTS_MODULE_USER'"></jhi-prepayments-nav>
 

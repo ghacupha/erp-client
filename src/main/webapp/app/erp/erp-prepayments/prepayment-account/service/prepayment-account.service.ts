@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -25,6 +25,9 @@ import { ApplicationConfigService } from 'app/core/config/application-config.ser
 import { createRequestOption } from 'app/core/request/request-util';
 import { SearchWithPagination } from 'app/core/request/request.model';
 import { IPrepaymentAccount, getPrepaymentAccountIdentifier } from '../prepayment-account.model';
+import { map } from 'rxjs/operators';
+import { DATE_FORMAT } from '../../../../config/input.constants';
+import * as dayjs from 'dayjs';
 
 export type EntityResponseType = HttpResponse<IPrepaymentAccount>;
 export type EntityArrayResponseType = HttpResponse<IPrepaymentAccount[]>;
@@ -37,32 +40,46 @@ export class PrepaymentAccountService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(prepaymentAccount: IPrepaymentAccount): Observable<EntityResponseType> {
-    return this.http.post<IPrepaymentAccount>(this.resourceUrl, prepaymentAccount, { observe: 'response' });
+    const copy = this.convertDateFromClient(prepaymentAccount);
+    return this.http
+      .post<IPrepaymentAccount>(this.resourceUrl, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   update(prepaymentAccount: IPrepaymentAccount): Observable<EntityResponseType> {
-    return this.http.put<IPrepaymentAccount>(
-      `${this.resourceUrl}/${getPrepaymentAccountIdentifier(prepaymentAccount) as number}`,
-      prepaymentAccount,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(prepaymentAccount);
+    return this.http
+      .put<IPrepaymentAccount>(`${this.resourceUrl}/${getPrepaymentAccountIdentifier(prepaymentAccount) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   partialUpdate(prepaymentAccount: IPrepaymentAccount): Observable<EntityResponseType> {
-    return this.http.patch<IPrepaymentAccount>(
-      `${this.resourceUrl}/${getPrepaymentAccountIdentifier(prepaymentAccount) as number}`,
-      prepaymentAccount,
-      { observe: 'response' }
-    );
+    const copy = this.convertDateFromClient(prepaymentAccount);
+    return this.http
+      .patch<IPrepaymentAccount>(`${this.resourceUrl}/${getPrepaymentAccountIdentifier(prepaymentAccount) as number}`, copy, {
+        observe: 'response',
+      })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IPrepaymentAccount>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<IPrepaymentAccount>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  getNextCatalogueNumber(): Observable<HttpResponse<number>> {
+    return this.http
+      .get<number>(`${this.resourceUrl}/next/catalogue-number`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IPrepaymentAccount[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IPrepaymentAccount[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -71,7 +88,9 @@ export class PrepaymentAccountService {
 
   search(req: SearchWithPagination): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IPrepaymentAccount[]>(this.resourceSearchUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<IPrepaymentAccount[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
   addPrepaymentAccountToCollectionIfMissing(
@@ -94,5 +113,27 @@ export class PrepaymentAccountService {
       return [...prepaymentAccountsToAdd, ...prepaymentAccountCollection];
     }
     return prepaymentAccountCollection;
+  }
+
+  protected convertDateFromClient(prepaymentAccount: IPrepaymentAccount): IPrepaymentAccount {
+    return Object.assign({}, prepaymentAccount, {
+      recognitionDate: prepaymentAccount.recognitionDate?.isValid() ? prepaymentAccount.recognitionDate.format(DATE_FORMAT) : undefined,
+    });
+  }
+
+  protected convertDateFromServer(res: EntityResponseType): EntityResponseType {
+    if (res.body) {
+      res.body.recognitionDate = res.body.recognitionDate ? dayjs(res.body.recognitionDate) : undefined;
+    }
+    return res;
+  }
+
+  protected convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
+    if (res.body) {
+      res.body.forEach((prepaymentAccount: IPrepaymentAccount) => {
+        prepaymentAccount.recognitionDate = prepaymentAccount.recognitionDate ? dayjs(prepaymentAccount.recognitionDate) : undefined;
+      });
+    }
+    return res;
   }
 }

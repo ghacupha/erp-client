@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
+import { AccountTypes } from 'app/entities/enumerations/account-types.model';
+import { AccountSubTypes } from 'app/entities/enumerations/account-sub-types.model';
 import { ITransactionAccount, TransactionAccount } from '../transaction-account.model';
 
 import { TransactionAccountService } from './transaction-account.service';
@@ -43,6 +45,9 @@ describe('TransactionAccount Service', () => {
       accountName: 'AAAAAAA',
       notesContentType: 'image/png',
       notes: 'AAAAAAA',
+      accountType: AccountTypes.ASSET,
+      accountSubType: AccountSubTypes.SETTLEMENT_ASSET,
+      dummyAccount: false,
     };
   });
 
@@ -81,6 +86,9 @@ describe('TransactionAccount Service', () => {
           accountNumber: 'BBBBBB',
           accountName: 'BBBBBB',
           notes: 'BBBBBB',
+          accountType: 'BBBBBB',
+          accountSubType: 'BBBBBB',
+          dummyAccount: true,
         },
         elemDefault
       );
@@ -99,6 +107,7 @@ describe('TransactionAccount Service', () => {
         {
           accountNumber: 'BBBBBB',
           accountName: 'BBBBBB',
+          accountType: 'BBBBBB',
         },
         new TransactionAccount()
       );
@@ -121,6 +130,9 @@ describe('TransactionAccount Service', () => {
           accountNumber: 'BBBBBB',
           accountName: 'BBBBBB',
           notes: 'BBBBBB',
+          accountType: 'BBBBBB',
+          accountSubType: 'BBBBBB',
+          dummyAccount: true,
         },
         elemDefault
       );
@@ -172,7 +184,7 @@ describe('TransactionAccount Service', () => {
       });
 
       it('should add only unique TransactionAccount to an array', () => {
-        const transactionAccountArray: ITransactionAccount[] = [{ id: 123 }, { id: 456 }, { id: 66591 }];
+        const transactionAccountArray: ITransactionAccount[] = [{ id: 123 }, { id: 456 }, { id: 45369 }];
         const transactionAccountCollection: ITransactionAccount[] = [{ id: 123 }];
         expectedResult = service.addTransactionAccountToCollectionIfMissing(transactionAccountCollection, ...transactionAccountArray);
         expect(expectedResult).toHaveLength(3);

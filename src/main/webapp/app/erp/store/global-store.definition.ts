@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,10 +23,22 @@ import { SettlementsFormState } from './reducers/settlement-update-menu-status.r
 import { AssetRegistrationFormState } from './reducers/asset-registration-workflow-status.reducer';
 import { AssetAccessoryFormState } from './reducers/asset-accessory-workflow-status.reducer';
 import { WIPRegistrationFormState } from './reducers/wip-registration-workflow-status.reducer';
+import { PrepaymentAccountFormState } from './reducers/prepayment-account-workflow-status.reducer';
+import { PrepaymentMarshallingFormState } from './reducers/prepayment-marshalling-workflow-status.reducer';
 import { PaymentInvoiceFormState } from './reducers/payment-invoice-workflow-status.reducer';
 import { ReportNavigationProfileState } from './reducers/report-navigation-profile-status.reducer';
 import dayjs from 'dayjs';
 import { DATE_FORMAT } from '../../config/input.constants';
+import { IFRS16LeaseModelFormState } from './reducers/ifrs16-lease-model-workflow-status.reducer';
+import { RouModelMetadataFormState } from './reducers/rou-model-metadata-workflow-status.reducer';
+import { LeasePeriodSelectionFormState } from './reducers/lease-period-selection-workflow-status.reducer';
+import { LeasePeriodReportPathSelectionState } from './reducers/lease-period-report-path-selection.reducer';
+import { LeaseAmortizationCalculationFormState } from './reducers/lease-amortization-calculation.reducer';
+import { LeaseLiabilityFormState } from './reducers/lease-liability.reducer';
+import { LeasePaymentFormState } from './reducers/lease-payment.reducer';
+import { TAAmortizationRuleFormState } from './reducers/ta-amortization-rule-status.reducer';
+import { TransactionAccountFormState } from './reducers/transaction-account-update-status.reducer';
+import { TransactionAccountReportDateSelectionState } from './reducers/transaction-account-report-date-selection.reducer';
 
 export interface State {
   paymentsFormState: PaymentsFormState,
@@ -35,9 +47,21 @@ export interface State {
   dealerInvoiceWorkflowState: DealerInvoiceWorkflowState,
   assetRegistrationFormState: AssetRegistrationFormState,
   assetAccessoryFormState: AssetAccessoryFormState,
-  wipRegistrationFormState: WIPRegistrationFormState
+  wipRegistrationFormState: WIPRegistrationFormState,
+  prepaymentAccountFormState: PrepaymentAccountFormState,
+  prepaymentMarshallingFormState: PrepaymentMarshallingFormState,
   paymentInvoiceFormState: PaymentInvoiceFormState,
   reportNavigationProfileState: ReportNavigationProfileState
+  ifrs16LeaseModelFormState: IFRS16LeaseModelFormState,
+  leaseAmortizationCalculationFormState: LeaseAmortizationCalculationFormState,
+  leaseLiabilityFormState: LeaseLiabilityFormState,
+  leasePaymentFormState: LeasePaymentFormState,
+  rouModelMetadataFormState: RouModelMetadataFormState,
+  leasePeriodSelectionIdFormState: LeasePeriodSelectionFormState,
+  leasePeriodReportPathSelectionState: LeasePeriodReportPathSelectionState,
+  taAmortizationRuleFormState: TAAmortizationRuleFormState,
+  transactionAccountFormState: TransactionAccountFormState,
+  transactionAccountReportDateSelectionState: TransactionAccountReportDateSelectionState
 }
 
 export const initialState: State = {
@@ -64,6 +88,78 @@ export const initialState: State = {
     weAreCreating: false,
   },
   wipRegistrationFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  prepaymentAccountFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  prepaymentMarshallingFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  ifrs16LeaseModelFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  taAmortizationRuleFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  transactionAccountFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leaseAmortizationCalculationFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leaseLiabilityFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leasePaymentFormState: {
+    selectedInstance: {},
+    browserHasBeenRefreshed: false,
+    backEndFetchComplete: false,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  rouModelMetadataFormState: {
     selectedInstance: {},
     browserHasBeenRefreshed: false,
     backEndFetchComplete: false,
@@ -107,5 +203,20 @@ export const initialState: State = {
     reportPath: '',
     reportTitle: 'ERP Reports',
     reportDate: dayjs().format(DATE_FORMAT)
+  },
+  leasePeriodSelectionIdFormState: {
+    selectedLeasePeriodId: undefined,
+    weAreCopying: false,
+    weAreEditing: false,
+    weAreCreating: false,
+  },
+  leasePeriodReportPathSelectionState: {
+    leasePeriodReportPath: '',
+    leasePeriodReportTitle: '',
+  },
+  transactionAccountReportDateSelectionState: {
+    transactionAccountReportPath: '',
+    transactionAccountReportTitle: '',
+    transactionAccountReportDate: dayjs(),
   }
 }

@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -32,8 +32,8 @@ import { IPlaceholder } from 'app/entities/system/placeholder/placeholder.model'
 import { PlaceholderService } from 'app/entities/system/placeholder/service/placeholder.service';
 import { IPaymentInvoice } from 'app/entities/settlement/payment-invoice/payment-invoice.model';
 import { PaymentInvoiceService } from 'app/entities/settlement/payment-invoice/service/payment-invoice.service';
-import { IServiceOutlet } from 'app/entities/gdi/service-outlet/service-outlet.model';
-import { ServiceOutletService } from 'app/entities/gdi/service-outlet/service/service-outlet.service';
+import { IServiceOutlet } from 'app/entities/system/service-outlet/service-outlet.model';
+import { ServiceOutletService } from 'app/entities/system/service-outlet/service/service-outlet.service';
 import { ISettlement } from 'app/entities/settlement/settlement/settlement.model';
 import { SettlementService } from 'app/entities/settlement/settlement/service/settlement.service';
 import { IAssetCategory } from 'app/entities/assets/asset-category/asset-category.model';
@@ -46,14 +46,14 @@ import { IJobSheet } from 'app/entities/settlement/job-sheet/job-sheet.model';
 import { JobSheetService } from 'app/entities/settlement/job-sheet/service/job-sheet.service';
 import { IDealer } from 'app/entities/people/dealer/dealer.model';
 import { DealerService } from 'app/entities/people/dealer/service/dealer.service';
-import { ISettlementCurrency } from 'app/entities/gdi/settlement-currency/settlement-currency.model';
-import { SettlementCurrencyService } from 'app/entities/gdi/settlement-currency/service/settlement-currency.service';
+import { ISettlementCurrency } from 'app/entities/system/settlement-currency/settlement-currency.model';
+import { SettlementCurrencyService } from 'app/entities/system/settlement-currency/service/settlement-currency.service';
 import { IBusinessDocument } from 'app/entities/documentation/business-document/business-document.model';
 import { BusinessDocumentService } from 'app/entities/documentation/business-document/service/business-document.service';
 import { IAssetWarranty } from 'app/entities/assets/asset-warranty/asset-warranty.model';
 import { AssetWarrantyService } from 'app/entities/assets/asset-warranty/service/asset-warranty.service';
-import { IUniversallyUniqueMapping } from 'app/entities/gdi/universally-unique-mapping/universally-unique-mapping.model';
-import { UniversallyUniqueMappingService } from 'app/entities/gdi/universally-unique-mapping/service/universally-unique-mapping.service';
+import { IUniversallyUniqueMapping } from 'app/entities/system/universally-unique-mapping/universally-unique-mapping.model';
+import { UniversallyUniqueMappingService } from 'app/entities/system/universally-unique-mapping/service/universally-unique-mapping.service';
 import { IAssetAccessory } from 'app/entities/assets/asset-accessory/asset-accessory.model';
 import { AssetAccessoryService } from 'app/entities/assets/asset-accessory/service/asset-accessory.service';
 
@@ -91,10 +91,12 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     serialNumber: [],
     remarks: [],
     capitalizationDate: [null, [Validators.required]],
+    historicalCost: [null, [Validators.required]],
+    registrationDate: [null, [Validators.required]],
     placeholders: [],
     paymentInvoices: [],
-    serviceOutlets: [],
-    settlements: [null, Validators.required],
+    otherRelatedServiceOutlets: [],
+    otherRelatedSettlements: [],
     assetCategory: [null, Validators.required],
     purchaseOrders: [],
     deliveryNotes: [],
@@ -107,6 +109,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     universallyUniqueMappings: [],
     assetAccessories: [],
     mainServiceOutlet: [],
+    acquiringTransaction: [null, Validators.required],
   });
 
   constructor(
@@ -391,10 +394,12 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       serialNumber: assetRegistration.serialNumber,
       remarks: assetRegistration.remarks,
       capitalizationDate: assetRegistration.capitalizationDate,
+      historicalCost: assetRegistration.historicalCost,
+      registrationDate: assetRegistration.registrationDate,
       placeholders: assetRegistration.placeholders,
       paymentInvoices: assetRegistration.paymentInvoices,
-      serviceOutlets: assetRegistration.serviceOutlets,
-      settlements: assetRegistration.settlements,
+      otherRelatedServiceOutlets: assetRegistration.otherRelatedServiceOutlets,
+      otherRelatedSettlements: assetRegistration.otherRelatedSettlements,
       assetCategory: assetRegistration.assetCategory,
       purchaseOrders: assetRegistration.purchaseOrders,
       deliveryNotes: assetRegistration.deliveryNotes,
@@ -407,6 +412,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: assetRegistration.universallyUniqueMappings,
       assetAccessories: assetRegistration.assetAccessories,
       mainServiceOutlet: assetRegistration.mainServiceOutlet,
+      acquiringTransaction: assetRegistration.acquiringTransaction,
     });
 
     this.placeholdersSharedCollection = this.placeholderService.addPlaceholderToCollectionIfMissing(
@@ -419,12 +425,13 @@ export class AssetRegistrationUpdateComponent implements OnInit {
     );
     this.serviceOutletsSharedCollection = this.serviceOutletService.addServiceOutletToCollectionIfMissing(
       this.serviceOutletsSharedCollection,
-      ...(assetRegistration.serviceOutlets ?? []),
+      ...(assetRegistration.otherRelatedServiceOutlets ?? []),
       assetRegistration.mainServiceOutlet
     );
     this.settlementsSharedCollection = this.settlementService.addSettlementToCollectionIfMissing(
       this.settlementsSharedCollection,
-      ...(assetRegistration.settlements ?? [])
+      ...(assetRegistration.otherRelatedSettlements ?? []),
+      assetRegistration.acquiringTransaction
     );
     this.assetCategoriesSharedCollection = this.assetCategoryService.addAssetCategoryToCollectionIfMissing(
       this.assetCategoriesSharedCollection,
@@ -500,7 +507,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
         map((serviceOutlets: IServiceOutlet[]) =>
           this.serviceOutletService.addServiceOutletToCollectionIfMissing(
             serviceOutlets,
-            ...(this.editForm.get('serviceOutlets')!.value ?? []),
+            ...(this.editForm.get('otherRelatedServiceOutlets')!.value ?? []),
             this.editForm.get('mainServiceOutlet')!.value
           )
         )
@@ -512,7 +519,11 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<ISettlement[]>) => res.body ?? []))
       .pipe(
         map((settlements: ISettlement[]) =>
-          this.settlementService.addSettlementToCollectionIfMissing(settlements, ...(this.editForm.get('settlements')!.value ?? []))
+          this.settlementService.addSettlementToCollectionIfMissing(
+            settlements,
+            ...(this.editForm.get('otherRelatedSettlements')!.value ?? []),
+            this.editForm.get('acquiringTransaction')!.value
+          )
         )
       )
       .subscribe((settlements: ISettlement[]) => (this.settlementsSharedCollection = settlements));
@@ -657,10 +668,12 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       serialNumber: this.editForm.get(['serialNumber'])!.value,
       remarks: this.editForm.get(['remarks'])!.value,
       capitalizationDate: this.editForm.get(['capitalizationDate'])!.value,
+      historicalCost: this.editForm.get(['historicalCost'])!.value,
+      registrationDate: this.editForm.get(['registrationDate'])!.value,
       placeholders: this.editForm.get(['placeholders'])!.value,
       paymentInvoices: this.editForm.get(['paymentInvoices'])!.value,
-      serviceOutlets: this.editForm.get(['serviceOutlets'])!.value,
-      settlements: this.editForm.get(['settlements'])!.value,
+      otherRelatedServiceOutlets: this.editForm.get(['otherRelatedServiceOutlets'])!.value,
+      otherRelatedSettlements: this.editForm.get(['otherRelatedSettlements'])!.value,
       assetCategory: this.editForm.get(['assetCategory'])!.value,
       purchaseOrders: this.editForm.get(['purchaseOrders'])!.value,
       deliveryNotes: this.editForm.get(['deliveryNotes'])!.value,
@@ -673,6 +686,7 @@ export class AssetRegistrationUpdateComponent implements OnInit {
       universallyUniqueMappings: this.editForm.get(['universallyUniqueMappings'])!.value,
       assetAccessories: this.editForm.get(['assetAccessories'])!.value,
       mainServiceOutlet: this.editForm.get(['mainServiceOutlet'])!.value,
+      acquiringTransaction: this.editForm.get(['acquiringTransaction'])!.value,
     };
   }
 }

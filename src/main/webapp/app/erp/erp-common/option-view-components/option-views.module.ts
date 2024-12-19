@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -29,10 +29,7 @@ import { SettlementSelectedOptionViewComponent } from './settlement-selected-opt
 import { PaymentInvoiceSelectedOptionViewComponent } from './payment-invoice-selected-option-view.component';
 import { JobSheetOptionViewComponent } from './job-sheet-option-view.component';
 import { DeliveryNoteOptionViewComponent } from './delivery-note-option-view.component';
-import { TransactionAccountOptionViewComponent } from './transaction-account-option-view.component';
-import { ServiceOutletOptionViewComponent } from './service-outlet-option-view.component';
 import { ApplicationUserOptionViewComponent } from './application-user-option-view.component';
-import { PrepaymentAccountOptionViewComponent } from './prepayment-account-option-view.component';
 import { ReportDesignOptionViewComponent } from './report-design-option-view.component';
 import { BusinessDocumentOptionViewComponent } from './business-document-option-view.component';
 import { ContractMetadataSelectedOptionViewComponent } from './contract-metadata-selected-option-view.component';
@@ -59,10 +56,7 @@ import { WipRegistrationOptionViewComponent } from './wip-registration-option-vi
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
-    TransactionAccountOptionViewComponent,
-    ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
-    PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
     BusinessDocumentOptionViewComponent,
     ContractMetadataSelectedOptionViewComponent,
@@ -91,10 +85,7 @@ import { WipRegistrationOptionViewComponent } from './wip-registration-option-vi
     SettlementSelectedOptionViewComponent,
     JobSheetOptionViewComponent,
     DeliveryNoteOptionViewComponent,
-    TransactionAccountOptionViewComponent,
-    ServiceOutletOptionViewComponent,
     ApplicationUserOptionViewComponent,
-    PrepaymentAccountOptionViewComponent,
     ReportDesignOptionViewComponent,
     BusinessDocumentOptionViewComponent,
     ContractMetadataSelectedOptionViewComponent,

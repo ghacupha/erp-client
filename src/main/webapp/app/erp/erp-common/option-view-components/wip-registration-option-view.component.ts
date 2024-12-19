@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -23,8 +23,7 @@ import { IWorkInProgressRegistration } from '../../erp-assets/work-in-progress-r
   selector: 'jhi-wip-registration-option-view',
   template: `
     <span class="ng-value-label">
-      #{{item!.sequenceNumber }} title: {{item!.sequenceNumber }}
-      #{{item!.particulars}}
+      #{{item!.sequenceNumber }} Cu: {{ item.instalmentAmount | currency }} date: {{item!.instalmentDate }} #{{item!.particulars}}
     </span>
   `
 })

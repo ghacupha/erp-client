@@ -1,7 +1,7 @@
 {
   "changelogDate": "20220301113744",
   "dto": "mapstruct",
-  "clientRootFolder": "gdi",
+  "clientRootFolder": "system",
   "fields": [
     {
       "fieldName": "outletTypeCode",

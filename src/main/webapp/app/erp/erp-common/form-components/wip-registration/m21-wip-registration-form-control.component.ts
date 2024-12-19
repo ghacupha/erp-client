@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -22,6 +22,9 @@ import { concat, Observable, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { IWorkInProgressRegistration } from '../../../erp-assets/work-in-progress-registration/work-in-progress-registration.model';
 import { WorkInProgressRegistrationSuggestionService } from '../../suggestion/work-in-progress-registration-suggestion.service';
+import {
+  WorkInProgressRegistrationService
+} from '../../../erp-assets/work-in-progress-registration/service/work-in-progress-registration.service';
 
 @Component({
   selector: 'jhi-m21-wip-registration-form-control',
@@ -48,6 +51,7 @@ export class M21WipRegistrationFormControlComponent implements OnInit, ControlVa
   valueLookUps$: Observable<IWorkInProgressRegistration[]> = of([]);
 
   constructor(
+    protected valueService: WorkInProgressRegistrationService,
     protected valueSuggestionService: WorkInProgressRegistrationSuggestionService
   ) {}
 
@@ -61,6 +65,13 @@ export class M21WipRegistrationFormControlComponent implements OnInit, ControlVa
   ngOnInit(): void {
 
     this.loadValues();
+    if (this.inputValue.id != null) {
+      this.valueService.find(this.inputValue.id).subscribe(valueResponse => {
+        if (valueResponse.body) {
+          this.inputValue = valueResponse.body;
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {

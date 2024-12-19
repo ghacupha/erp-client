@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -33,22 +33,28 @@ import { TablesNavComponent } from './tables-nav/tables-nav.component';
 import { ErpMaintenanceNavComponent } from './erp-maintenance/erp-maintenance-nav.component';
 import { GdiNavComponent } from './gdi-nav/gdi-nav.component';
 import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
+import { LeaseReportsNavComponent } from "./lease-reports-nav/lease-reports-nav.component";
+import { ROUReportsNavComponent } from './lease-reports-nav/rou-reports-nav.component';
+import { AccountsNavComponent } from './accounts-nav/accounts-nav.component';
 
 @NgModule({
   declarations: [
-    ErpFilesNavigationComponent,
-    PaymentsNavComponent,
     AssetsNavComponent,
-    TaxesNavComponent,
-    GranularDataNavComponent,
-    PrepaymentsNavComponent,
-    ReportsNavComponent,
-    SystemAdminNavComponent,
-    LeasesNavComponent,
-    TablesNavComponent,
+    ErpFilesNavigationComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
     GdiDataNavComponent,
+    GranularDataNavComponent,
+    LeaseReportsNavComponent,
+    LeasesNavComponent,
+    PaymentsNavComponent,
+    PrepaymentsNavComponent,
+    ReportsNavComponent,
+    ROUReportsNavComponent,
+    SystemAdminNavComponent,
+    TablesNavComponent,
+    TaxesNavComponent,
+    AccountsNavComponent,
   ],
   imports: [
     SharedModule,
@@ -59,6 +65,7 @@ import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
     ErpFilesNavigationComponent,
     PaymentsNavComponent,
     AssetsNavComponent,
+    LeaseReportsNavComponent,
     TaxesNavComponent,
     GranularDataNavComponent,
     PrepaymentsNavComponent,
@@ -66,9 +73,11 @@ import { GdiDataNavComponent } from './gdi-nav/gdi-data-nav.component';
     SystemAdminNavComponent,
     LeasesNavComponent,
     TablesNavComponent,
+    ROUReportsNavComponent,
     ErpMaintenanceNavComponent,
     GdiNavComponent,
     GdiDataNavComponent,
+    AccountsNavComponent,
   ]
 })
 export class ErpNavigationModule {}

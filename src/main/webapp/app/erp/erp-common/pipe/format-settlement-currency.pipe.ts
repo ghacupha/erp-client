@@ -1,6 +1,6 @@
 ///
-/// Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-/// Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+/// Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+/// Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 ///
 /// This program is free software: you can redistribute it and/or modify
 /// it under the terms of the GNU General Public License as published by
@@ -28,22 +28,11 @@ export class FormatSettlementCurrencyPipe implements PipeTransform {
 
     let detail = '';
 
-    if (value.iso4217CurrencyCode) {
+    if (value.numericCode) {
 
-      const limit = args.length > 0 ? parseInt(args[0], 10) : 3;
-      const trail = args.length > 1 ? args[1] : '...';
-
-      let desc = '';
-
-      if (value.iso4217CurrencyCode.length > limit) {
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        desc = value.iso4217CurrencyCode.substring(0, limit) + trail;
-      } else {
-        desc = value.iso4217CurrencyCode;
-      }
-
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      detail = `Id: ${value.id} | Name: ${value.currencyName} |${desc}`;
+      detail = `#: ${value.id} | ${value.currencyName} (${value.iso4217CurrencyCode}) ${value.country} | N-Code: ${value.numericCode}`;
+    } else {
+      detail = `#: ${value.id} | ${value.currencyName} (${value.iso4217CurrencyCode}) ${value.country}`;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

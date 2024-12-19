@@ -1,7 +1,7 @@
 <!--
 
-    Erp System - Mark VIII No 1 (Hilkiah Series) Client 1.5.9
-    Copyright © 2021 - 2023 Edwin Njeru (mailnjeru@gmail.com)
+    Erp System - Mark X No 10 (Jehoiada Series) Client 1.7.8
+    Copyright © 2021 - 2024 Edwin Njeru (mailnjeru@gmail.com)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,34 +70,21 @@
   <div class="table-responsive" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <!--<tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">-->
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="sequenceNumber">
             <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
           </th>
           <th scope="col" jhiSortBy="particulars"><span>Particulars</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="instalmentDate"><span>Instalment Date</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="instalmentAmount"><span>Instalment Amount</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="comments"><span>Comments</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="levelOfCompletion"><span>Level Of Completion</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="completed"><span>Completed</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="workInProgressGroup.sequenceNumber">
-            <span>Work In Progress Group</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col" jhiSortBy="settlementCurrency.iso4217CurrencyCode">
             <span>Settlement Currency</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="workProjectRegister.catalogueNumber">
-            <span>Work Project Register</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="invoice.invoiceNumber"><span>Invoice</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="outletCode.outletCode"><span>Outlet Code</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="settlementTransaction.paymentNumber">
             <span>Settlement Transaction</span> <fa-icon icon="sort"></fa-icon>
           </th>
-          <th scope="col" jhiSortBy="purchaseOrder.purchaseOrderNumber"><span>Purchase Order</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="deliveryNote.deliveryNoteNumber"><span>Delivery Note</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="jobSheet.serialNumber"><span>Job Sheet</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealer.dealerName"><span>Dealer</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
@@ -111,44 +98,12 @@
             </td>
             <td>{{ workInProgressRegistration.sequenceNumber }}</td>
             <td>{{ workInProgressRegistration.particulars }}</td>
+            <td>{{ workInProgressRegistration.instalmentDate | formatMediumDate }}</td>
             <td>{{ workInProgressRegistration.instalmentAmount | currency : ' ' : 'symbol': '0.2-2' }}</td>
-            <td>
-              <a
-                *ngIf="workInProgressRegistration.comments"
-                (click)="openFile(workInProgressRegistration.comments, workInProgressRegistration.commentsContentType)"
-              >open</a
-              >
-              <span *ngIf="workInProgressRegistration.comments"
-              >{{ workInProgressRegistration.commentsContentType }}, {{ byteSize(workInProgressRegistration.comments) }}</span
-              >
-            </td>
-            <td>{{ workInProgressRegistration.levelOfCompletion }}</td>
-            <td>{{ workInProgressRegistration.completed }}</td>
-            <td>
-              <div *ngIf="workInProgressRegistration.workInProgressGroup">
-                <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.workInProgressGroup?.id, 'view']">{{
-                  workInProgressRegistration.workInProgressGroup?.sequenceNumber
-                  }}</a>
-              </div>
-            </td>
             <td>
               <div *ngIf="workInProgressRegistration.settlementCurrency">
                 <a [routerLink]="['/settlement-currency', workInProgressRegistration.settlementCurrency?.id, 'view']">{{
                   workInProgressRegistration.settlementCurrency?.iso4217CurrencyCode
-                  }}</a>
-              </div>
-            </td>
-            <td>
-              <div *ngIf="workInProgressRegistration.workProjectRegister">
-                <a [routerLink]="['/work-project-register', workInProgressRegistration.workProjectRegister?.id, 'view']">{{
-                  workInProgressRegistration.workProjectRegister?.catalogueNumber
-                  }}</a>
-              </div>
-            </td>
-            <td>
-              <div *ngIf="workInProgressRegistration.invoice">
-                <a [routerLink]="['/payment-invoice', workInProgressRegistration.invoice?.id, 'view']">{{
-                  workInProgressRegistration.invoice?.invoiceNumber
                   }}</a>
               </div>
             </td>
@@ -163,27 +118,6 @@
               <div *ngIf="workInProgressRegistration.settlementTransaction">
                 <a [routerLink]="['/settlement', workInProgressRegistration.settlementTransaction?.id, 'view']">{{
                   workInProgressRegistration.settlementTransaction?.paymentNumber
-                  }}</a>
-              </div>
-            </td>
-            <td>
-              <div *ngIf="workInProgressRegistration.purchaseOrder">
-                <a [routerLink]="['/purchase-order', workInProgressRegistration.purchaseOrder?.id, 'view']">{{
-                  workInProgressRegistration.purchaseOrder?.purchaseOrderNumber
-                  }}</a>
-              </div>
-            </td>
-            <td>
-              <div *ngIf="workInProgressRegistration.deliveryNote">
-                <a [routerLink]="['/delivery-note', workInProgressRegistration.deliveryNote?.id, 'view']">{{
-                  workInProgressRegistration.deliveryNote?.deliveryNoteNumber
-                  }}</a>
-              </div>
-            </td>
-            <td>
-              <div *ngIf="workInProgressRegistration.jobSheet">
-                <a [routerLink]="['/job-sheet', workInProgressRegistration.jobSheet?.id, 'view']">{{
-                  workInProgressRegistration.jobSheet?.serialNumber
                   }}</a>
               </div>
             </td>
@@ -203,7 +137,7 @@
                   data-cy="entityDetailsButton"
                 >
                   <fa-icon icon="eye"></fa-icon>
-                  <span class="d-none d-md-inline">View</span>
+                  <span class="d-none d-md-inline"></span>
                 </button>
 
                 <button
@@ -211,14 +145,26 @@
                   [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'edit']"
                   class="btn btn-primary btn-sm"
                   data-cy="entityEditButton"
+                  (click)='editButtonEvent(workInProgressRegistration)'
                 >
                   <fa-icon icon="pencil-alt"></fa-icon>
-                  <span class="d-none d-md-inline">Edit</span>
+                  <span class="d-none d-md-inline"></span>
+                </button>
+
+                <button
+                  type="submit"
+                  [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'copy']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                  (click)='copyButtonEvent(workInProgressRegistration)'
+                >
+                  <fa-icon icon="copy"></fa-icon>
+                  <span class="d-none d-md-inline"></span>
                 </button>
 
                 <button type="submit" (click)="delete(workInProgressRegistration)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
                   <fa-icon icon="times"></fa-icon>
-                  <span class="d-none d-md-inline">Delete</span>
+                  <span class="d-none d-md-inline"></span>
                 </button>
               </div>
             </td>
@@ -227,21 +173,4 @@
     </table>
   </div>
 
-  <!--<div *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
-    <div class="row justify-content-center">
-      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
-    </div>
-
-    <div class="row justify-content-center">
-      <ngb-pagination
-        [collectionSize]="totalItems"
-        [(page)]="ngbPaginationPage"
-        [pageSize]="itemsPerPage"
-        [maxSize]="5"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        (pageChange)="loadPage($event)"
-      ></ngb-pagination>
-    </div>
-  </div>-->
 </div>
