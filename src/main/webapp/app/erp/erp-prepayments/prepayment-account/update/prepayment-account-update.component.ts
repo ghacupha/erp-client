@@ -293,7 +293,7 @@ export class PrepaymentAccountUpdateComponent implements OnInit {
 
   edit(): void {
     this.isSaving = true;
-    this.subscribeToSaveResponse(this.prepaymentAccountService.update(this.createFromForm()));
+    this.subscribeToSaveResponse(this.prepaymentAccountService.partialUpdate(this.createFromForm()));
   }
 
   copy(): void {

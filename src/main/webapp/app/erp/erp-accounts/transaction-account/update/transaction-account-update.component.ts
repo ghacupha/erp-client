@@ -161,7 +161,7 @@ export class TransactionAccountUpdateComponent implements OnInit {
 
   edit(): void {
     this.isSaving = true;
-    this.subscribeToSaveResponse(this.transactionAccountService.update(this.createFromForm()));
+    this.subscribeToSaveResponse(this.transactionAccountService.partialUpdate(this.createFromForm()));
   }
 
   copy(): void {
