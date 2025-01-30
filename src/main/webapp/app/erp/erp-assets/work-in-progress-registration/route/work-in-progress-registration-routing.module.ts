@@ -31,7 +31,7 @@ const workInProgressRegistrationRoute: Routes = [
     component: WorkInProgressRegistrationComponent,
     canActivate: [UserRouteAccessService],
     data: {
-      defaultSort: 'id,desc',
+      defaultSort: 'instalmentDate,desc',
     },
   },
   {

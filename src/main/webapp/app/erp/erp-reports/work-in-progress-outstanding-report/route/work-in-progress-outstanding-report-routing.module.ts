@@ -29,6 +29,9 @@ const workInProgressOutstandingReportRoute: Routes = [
     path: '',
     component: WorkInProgressOutstandingReportComponent,
     canActivate: [UserRouteAccessService],
+    data: {
+      defaultSort: "s.paymentDate, desc"
+    }
   },
   {
     path: ':id/view',

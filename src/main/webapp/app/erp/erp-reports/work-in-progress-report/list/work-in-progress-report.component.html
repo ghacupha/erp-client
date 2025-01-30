@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -82,8 +82,7 @@
   <div class="table-responsive" id="entities" *ngIf="workInProgressReports && workInProgressReports.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
-          <!--<th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>-->
+      <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="projectTitle"><span>Project Title</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="dealerName"><span>Dealer Name</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="numberOfItems"><span>Number Of Items</span> <fa-icon icon="sort"></fa-icon></th>
@@ -93,11 +92,8 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+      <tbody>
         <tr *ngFor="let workInProgressReport of workInProgressReports; trackBy: trackId" data-cy="entityTable">
-          <!--<td>
-            <a [routerLink]="['/work-in-progress-report', workInProgressReport.id, 'view']">{{ workInProgressReport.id }}</a>
-          </td>-->
           <td>{{ workInProgressReport.projectTitle }}</td>
           <td>{{ workInProgressReport.dealerName }}</td>
           <td>{{ workInProgressReport.numberOfItems }}</td>
@@ -120,5 +116,23 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="workInProgressReports && workInProgressReports.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>

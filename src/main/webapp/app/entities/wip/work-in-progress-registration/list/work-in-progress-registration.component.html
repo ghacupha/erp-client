@@ -22,7 +22,7 @@
     <span>Work In Progress Registrations</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="reset()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2" (click)="loadPage()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span>Refresh List</span>
       </button>
@@ -68,7 +68,7 @@
   <div class="table-responsive" id="entities" *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
-        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="reset()">
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="loadPage()">
           <th scope="col" jhiSortBy="id"><span>ID</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="sequenceNumber">
             <span>Sequence Number</span> <fa-icon *ngIf="!currentSearch" icon="sort"></fa-icon>
@@ -100,7 +100,7 @@
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+      <tbody>
         <tr *ngFor="let workInProgressRegistration of workInProgressRegistrations; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/work-in-progress-registration', workInProgressRegistration.id, 'view']">{{
@@ -224,5 +224,23 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div *ngIf="workInProgressRegistrations && workInProgressRegistrations.length > 0">
+    <div class="row justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="row justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [(page)]="ngbPaginationPage"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="loadPage($event)"
+      ></ngb-pagination>
+    </div>
   </div>
 </div>

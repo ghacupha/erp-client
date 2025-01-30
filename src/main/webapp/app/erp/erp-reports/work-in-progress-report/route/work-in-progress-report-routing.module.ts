@@ -29,6 +29,9 @@ const workInProgressReportRoute: Routes = [
     path: '',
     component: WorkInProgressReportComponent,
     canActivate: [UserRouteAccessService],
+    data: {
+      defaultSort: 'projectTitle,asc',
+    },
   },
   {
     path: ':id/view',

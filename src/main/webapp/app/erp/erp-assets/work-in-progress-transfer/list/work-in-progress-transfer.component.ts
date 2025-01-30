@@ -18,64 +18,62 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IWorkInProgressTransfer } from '../work-in-progress-transfer.model';
 
 import { ParseLinks } from 'app/core/util/parse-links.service';
-import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { WorkInProgressTransferService } from '../service/work-in-progress-transfer.service';
 import { WorkInProgressTransferDeleteDialogComponent } from '../delete/work-in-progress-transfer-delete-dialog.component';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'jhi-work-in-progress-transfer',
   templateUrl: './work-in-progress-transfer.component.html',
 })
 export class WorkInProgressTransferComponent implements OnInit {
-  workInProgressTransfers: IWorkInProgressTransfer[];
-  isLoading = false;
-  itemsPerPage: number;
-  links: { [key: string]: number };
-  page: number;
-  predicate: string;
-  ascending: boolean;
+  workInProgressTransfers?: IWorkInProgressTransfer[];
   currentSearch: string;
+  isLoading = false;
+  totalItems = 0;
+  itemsPerPage = ITEMS_PER_PAGE;
+  page?: number;
+  predicate!: string;
+  ascending!: boolean;
+  ngbPaginationPage = 1;
 
   constructor(
     protected workInProgressTransferService: WorkInProgressTransferService,
     protected modalService: NgbModal,
     protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router,
   ) {
-    this.workInProgressTransfers = [];
-    this.itemsPerPage = ITEMS_PER_PAGE;
-    this.page = 0;
-    this.links = {
-      last: 0,
-    };
-    this.predicate = 'transferDate';
-    this.ascending = false;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 
-  loadAll(): void {
+  loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
     if (this.currentSearch) {
       this.workInProgressTransferService
         .search({
+          page: pageToLoad - 1,
           query: this.currentSearch,
-          page: this.page,
           size: this.itemsPerPage,
           sort: this.sort(),
         })
         .subscribe(
           (res: HttpResponse<IWorkInProgressTransfer[]>) => {
             this.isLoading = false;
-            this.paginateWorkInProgressTransfers(res.body, res.headers);
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
           },
           () => {
             this.isLoading = false;
+            this.onError();
           }
         );
       return;
@@ -83,48 +81,33 @@ export class WorkInProgressTransferComponent implements OnInit {
 
     this.workInProgressTransferService
       .query({
-        page: this.page,
+        page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
       })
       .subscribe(
         (res: HttpResponse<IWorkInProgressTransfer[]>) => {
           this.isLoading = false;
-          this.paginateWorkInProgressTransfers(res.body, res.headers);
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
         },
         () => {
           this.isLoading = false;
+          this.onError();
         }
       );
   }
 
-  reset(): void {
-    this.page = 0;
-    this.workInProgressTransfers = [];
-    this.loadAll();
-  }
-
-  loadPage(page: number): void {
-    this.page = page;
-    this.loadAll();
-  }
-
   search(query: string): void {
-    this.workInProgressTransfers = [];
-    this.links = {
-      last: 0,
-    };
-    this.page = 0;
     if (query && ['description', 'targetAssetNumber', 'transferType'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
     this.currentSearch = query;
-    this.loadAll();
+    this.loadPage(1);
   }
 
   ngOnInit(): void {
-    this.loadAll();
+    this.handleNavigation();
   }
 
   trackId(index: number, item: IWorkInProgressTransfer): number {
@@ -137,7 +120,7 @@ export class WorkInProgressTransferComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
-        this.reset();
+        this.loadPage();
       }
     });
   }
@@ -150,19 +133,40 @@ export class WorkInProgressTransferComponent implements OnInit {
     return result;
   }
 
-  protected paginateWorkInProgressTransfers(data: IWorkInProgressTransfer[] | null, headers: HttpHeaders): void {
-    const linkHeader = headers.get('link');
-    if (linkHeader) {
-      this.links = this.parseLinks.parse(linkHeader);
-    } else {
-      this.links = {
-        last: 0,
-      };
-    }
-    if (data) {
-      for (const d of data) {
-        this.workInProgressTransfers.push(d);
+  protected handleNavigation(): void {
+    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+      const page = params.get('page');
+      const pageNumber = +(page ?? 1);
+      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
+      const predicate = sort[0];
+      const ascending = sort[1] === ASC;
+      if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+        this.predicate = predicate;
+        this.ascending = ascending;
+        this.loadPage(pageNumber, true);
       }
+    });
+  }
+
+  protected onSuccess(data: IWorkInProgressTransfer[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+    this.totalItems = Number(headers.get('X-Total-Count'));
+    this.page = page;
+    this.ngbPaginationPage = this.page;
+    if (navigate) {
+      this.router.navigate(['/work-in-progress-transfer'], {
+        queryParams: {
+          page: this.page,
+          size: this.itemsPerPage,
+          search: this.currentSearch,
+          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+        },
+      });
     }
+    this.workInProgressTransfers = data ?? [];
+    this.ngbPaginationPage = this.page;
+  }
+
+  protected onError(): void {
+    this.ngbPaginationPage = this.page ?? 1;
   }
 }

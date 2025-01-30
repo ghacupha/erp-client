@@ -18,61 +18,57 @@
 
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
 
 import { IWorkInProgressOutstandingReport } from '../work-in-progress-outstanding-report.model';
 
-import { ASC, DESC, ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/config/pagination.constants';
 import { WorkInProgressOutstandingReportService } from '../service/work-in-progress-outstanding-report.service';
-import { ParseLinks } from 'app/core/util/parse-links.service';
 
 @Component({
   selector: 'jhi-work-in-progress-outstanding-report',
   templateUrl: './work-in-progress-outstanding-report.component.html',
 })
 export class WorkInProgressOutstandingReportComponent implements OnInit {
-  workInProgressOutstandingReports: IWorkInProgressOutstandingReport[];
-  isLoading = false;
-  itemsPerPage: number;
-  links: { [key: string]: number };
-  page: number;
-  predicate: string;
-  ascending: boolean;
+  workInProgressOutstandingReports?: IWorkInProgressOutstandingReport[];
   currentSearch: string;
+  isLoading = false;
+  totalItems = 0;
+  itemsPerPage = ITEMS_PER_PAGE;
+  page?: number;
+  predicate!: string;
+  ascending!: boolean;
+  ngbPaginationPage = 1;
 
   constructor(
     protected workInProgressOutstandingReportService: WorkInProgressOutstandingReportService,
-    protected parseLinks: ParseLinks,
-    protected activatedRoute: ActivatedRoute
+    protected activatedRoute: ActivatedRoute,
+    protected router: Router
   ) {
-    this.workInProgressOutstandingReports = [];
-    this.itemsPerPage = ITEMS_PER_PAGE;
-    this.page = 0;
-    this.links = {
-      last: 0,
-    };
-    this.predicate = 'id';
-    this.ascending = true;
     this.currentSearch = this.activatedRoute.snapshot.queryParams['search'] ?? '';
   }
 
-  loadAll(): void {
+  loadPage(page?: number, dontNavigate?: boolean): void {
     this.isLoading = true;
+    const pageToLoad: number = page ?? this.page ?? 1;
+
     if (this.currentSearch) {
       this.workInProgressOutstandingReportService
         .search({
+          page: pageToLoad - 1,
           query: this.currentSearch,
-          page: this.page,
           size: this.itemsPerPage,
           sort: this.sort(),
         })
         .subscribe(
           (res: HttpResponse<IWorkInProgressOutstandingReport[]>) => {
             this.isLoading = false;
-            this.paginateWorkInProgressOutstandingReports(res.body, res.headers);
+            this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
           },
           () => {
             this.isLoading = false;
+            this.onError();
           }
         );
       return;
@@ -80,48 +76,33 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
 
     this.workInProgressOutstandingReportService
       .query({
-        page: this.page,
+        page: pageToLoad - 1,
         size: this.itemsPerPage,
         sort: this.sort(),
       })
       .subscribe(
         (res: HttpResponse<IWorkInProgressOutstandingReport[]>) => {
           this.isLoading = false;
-          this.paginateWorkInProgressOutstandingReports(res.body, res.headers);
+          this.onSuccess(res.body, res.headers, pageToLoad, !dontNavigate);
         },
         () => {
           this.isLoading = false;
+          this.onError();
         }
       );
   }
 
-  reset(): void {
-    this.page = 0;
-    this.workInProgressOutstandingReports = [];
-    this.loadAll();
-  }
-
-  loadPage(page: number): void {
-    this.page = page;
-    this.loadAll();
-  }
-
   search(query: string): void {
-    this.workInProgressOutstandingReports = [];
-    this.links = {
-      last: 0,
-    };
-    this.page = 0;
     if (query && ['sequenceNumber', 'particulars', 'dealerName', 'instalmentTransactionNumber', 'iso4217Code'].includes(this.predicate)) {
       this.predicate = 'id';
       this.ascending = true;
     }
     this.currentSearch = query;
-    this.loadAll();
+    this.loadPage(1);
   }
 
   ngOnInit(): void {
-    this.loadAll();
+    this.handleNavigation();
   }
 
   trackId(index: number, item: IWorkInProgressOutstandingReport): number {
@@ -136,19 +117,40 @@ export class WorkInProgressOutstandingReportComponent implements OnInit {
     return result;
   }
 
-  protected paginateWorkInProgressOutstandingReports(data: IWorkInProgressOutstandingReport[] | null, headers: HttpHeaders): void {
-    const linkHeader = headers.get('link');
-    if (linkHeader) {
-      this.links = this.parseLinks.parse(linkHeader);
-    } else {
-      this.links = {
-        last: 0,
-      };
-    }
-    if (data) {
-      for (const d of data) {
-        this.workInProgressOutstandingReports.push(d);
+  protected handleNavigation(): void {
+    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+      const page = params.get('page');
+      const pageNumber = +(page ?? 1);
+      const sort = (params.get(SORT) ?? data['defaultSort']).split(',');
+      const predicate = sort[0];
+      const ascending = sort[1] === ASC;
+      if (pageNumber !== this.page || predicate !== this.predicate || ascending !== this.ascending) {
+        this.predicate = predicate;
+        this.ascending = ascending;
+        this.loadPage(pageNumber, true);
       }
+    });
+  }
+
+  protected onSuccess(data: IWorkInProgressOutstandingReport[] | null, headers: HttpHeaders, page: number, navigate: boolean): void {
+    this.totalItems = Number(headers.get('X-Total-Count'));
+    this.page = page;
+    this.ngbPaginationPage = this.page;
+    if (navigate) {
+      this.router.navigate(['/work-in-progress-outstanding-report'], {
+        queryParams: {
+          page: this.page,
+          size: this.itemsPerPage,
+          search: this.currentSearch,
+          sort: this.predicate + ',' + (this.ascending ? ASC : DESC),
+        },
+      });
     }
+    this.workInProgressOutstandingReports = data ?? [];
+    this.ngbPaginationPage = this.page;
+  }
+
+  protected onError(): void {
+    this.ngbPaginationPage = this.page ?? 1;
   }
 }

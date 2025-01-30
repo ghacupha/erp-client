@@ -29,7 +29,7 @@
   "relationships": [],
   "service": "no",
   "readOnly": true,
-  "pagination": "infinite-scroll",
+  "pagination": "pagination",
   "name": "WorkInProgressReport",
   "changelogDate": "20231107053508",
   "incrementalChangelog": false
