@@ -358,6 +358,58 @@ import { UserRouteAccessService } from '../../core/auth/user-route-access.servic
         loadChildren: () =>
           import('./work-in-progress-outstanding-report-requisition/work-in-progress-outstanding-report-requisition.module').then(m => m.WorkInProgressOutstandingReportRequisitionModule),
       },
+      {
+        path: 'wip-list-item',
+        data: {
+          pageTitle: 'ERP | WIP List Items',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./wip-list-item/wip-list-item.module').then(m => m.WIPListItemModule),
+      },
+      {
+        path: 'wip-list-report',
+        data: {
+          pageTitle: 'ERP | WIP List Report',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./wip-list-report/wip-list-report.module').then(m => m.WIPListReportModule),
+      },
+      {
+        path: 'wip-transfer-list-item',
+        data: {
+          pageTitle: 'ERP | WIP Transfer List',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./wip-transfer-list-item/wip-transfer-list-item.module').then(m => m.WIPTransferListItemModule),
+      },
+      {
+        path: 'wip-transfer-list-report',
+        data: {
+          pageTitle: 'ERP | WIP Transfer Report',
+          authorities: [
+            'ROLE_FIXED_ASSETS_USER',
+            'ROLE_LEASE_MANAGER',
+          ],
+        },
+        canActivate: [UserRouteAccessService],
+        loadChildren: () =>
+          import('./wip-transfer-list-report/wip-transfer-list-report.module').then(m => m.WIPTransferListReportModule),
+      },
     ])
   ]
 })

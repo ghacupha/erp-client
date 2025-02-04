@@ -328,7 +328,11 @@
       "RouInitialDirectCost",
       "TransactionAccountLedger",
       "ReportingEntity",
-      "TransactionAccountReportItem"
+      "TransactionAccountReportItem",
+      "WIPListItem",
+      "WIPListReport",
+      "WIPTransferListItem",
+      "WIPTransferListReport"
     ],
     "lastLiquibaseTimestamp": 1728302935000,
     "monorepository": true,

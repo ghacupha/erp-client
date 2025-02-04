@@ -198,7 +198,55 @@
             (click)="collapseNavbar()"
           >
             <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-            <span>WIP list</span>
+            <span>WIP Outstanding List</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="wip-list-item"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP List</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="wip-transfer-list-item"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Transfers List</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="wip-list-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP List Report</span>
+          </a>
+        </li>
+        <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
+          <a
+            class="dropdown-item"
+            routerLink="wip-transfer-list-report"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="collapseNavbar()"
+          >
+            <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+            <span>WIP Transfers Report</span>
           </a>
         </li>
         <li *jhiHasAnyAuthority="['ROLE_FIXED_ASSETS_USER']">
