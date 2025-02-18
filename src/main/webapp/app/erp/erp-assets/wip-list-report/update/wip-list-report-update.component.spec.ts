@@ -16,6 +16,8 @@
 /// along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///
 
+import { ApplicationUserService } from '../../../erp-pages/application-user/service/application-user.service';
+
 jest.mock('@angular/router');
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -27,10 +29,9 @@ import { of, Subject } from 'rxjs';
 
 import { WIPListReportService } from '../service/wip-list-report.service';
 import { IWIPListReport, WIPListReport } from '../wip-list-report.model';
-import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
-import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
 
 import { WIPListReportUpdateComponent } from './wip-list-report-update.component';
+import { IApplicationUser } from '../../../erp-pages/application-user/application-user.model';
 
 describe('WIPListReport Management Update Component', () => {
   let comp: WIPListReportUpdateComponent;
