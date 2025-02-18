@@ -22,7 +22,6 @@
     {
       "fieldName": "filename",
       "fieldType": "UUID",
-      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "reportParameters",

@@ -33,6 +33,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IApplicationUser } from 'app/entities/people/application-user/application-user.model';
 import { ApplicationUserService } from 'app/entities/people/application-user/service/application-user.service';
+import { uuidv7 } from 'uuidv7';
 
 @Component({
   selector: 'jhi-wip-transfer-list-report-update',
@@ -68,8 +69,10 @@ export class WIPTransferListReportUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ wIPTransferListReport }) => {
       if (wIPTransferListReport.id === undefined) {
-        const today = dayjs().startOf('day');
+        const today = dayjs();
         wIPTransferListReport.timeOfRequest = today;
+        wIPTransferListReport.requestId = uuidv7();
+        wIPTransferListReport.filename = uuidv7();
       }
 
       this.updateForm(wIPTransferListReport);

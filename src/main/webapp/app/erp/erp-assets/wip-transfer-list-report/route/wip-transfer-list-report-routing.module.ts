@@ -30,7 +30,7 @@ const wIPTransferListReportRoute: Routes = [
     path: '',
     component: WIPTransferListReportComponent,
     data: {
-      defaultSort: 'id,asc',
+      defaultSort: 'id,desc',
     },
     canActivate: [UserRouteAccessService],
   },
