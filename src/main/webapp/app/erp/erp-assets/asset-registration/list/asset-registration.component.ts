@@ -90,7 +90,7 @@ export class AssetRegistrationComponent implements OnInit {
     this.assetRegistrationService
       .query({
         page: pageToLoad - 1,
-        size: this.itemsPerPage,
+        size: 50,
         sort: this.sort(),
       })
       .subscribe(
