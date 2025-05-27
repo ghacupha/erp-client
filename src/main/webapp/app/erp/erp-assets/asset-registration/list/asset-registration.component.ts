@@ -71,7 +71,7 @@ export class AssetRegistrationComponent implements OnInit {
         .search({
           page: pageToLoad - 1,
           query: this.currentSearch,
-          size: this.itemsPerPage,
+          size: 100,
           sort: this.sort(),
         })
         .subscribe(
